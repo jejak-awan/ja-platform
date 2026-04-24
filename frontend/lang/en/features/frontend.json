@@ -1,0 +1,126 @@
+{
+    "about": {
+        "placeholder": "This is a placeholder page. Content coming soon.",
+        "title": "About Us",
+        "welcome": "Welcome to JA-Edu - Modern Content Management System"
+    },
+    "blog": {
+        "empty": "No posts available yet.",
+        "pagination": {
+            "info": "Page {current} of {total}",
+            "next": "Next",
+            "previous": "Previous"
+        },
+        "readMore": "Read More",
+        "subtitle": "Latest articles and updates from our team",
+        "title": "Blog"
+    },
+    "comments": {
+        "comment": "Comment",
+        "email": "Email",
+        "empty": "No comments yet. Be the first to comment!",
+        "error": "Failed to post comment",
+        "leaveComment": "Leave a Comment",
+        "loading": "Loading comments...",
+        "name": "Name",
+        "submit": "Post Comment",
+        "submitting": "Posting...",
+        "success": "Comment posted successfully",
+        "title": "Comments"
+    },
+    "contact": {
+        "emailPlaceholder": "Enter your email",
+        "error": "Failed to send message. Please try again.",
+        "message": "Message",
+        "messagePlaceholder": "Write your message here...",
+        "namePlaceholder": "Enter your name",
+        "submit": "Send Message",
+        "subtitle": "Have questions or feedback? We'd love to hear from you.",
+        "success": "Message sent! We will get back to you soon.",
+        "title": "Get in Touch"
+    },
+    "footer": {
+        "about": {
+            "default": "Modern, clean, and powerful content management system built for the web."
+        },
+        "copyright": "All rights reserved.",
+        "headings": {
+            "about": "About",
+            "categories": "Categories",
+            "newsletter": "Newsletter",
+            "resources": "Resources"
+        },
+        "powered": "Powered by",
+        "privacy": "Privacy Policy",
+        "resources": {
+            "blog": "Blog",
+            "documentation": "Documentation",
+            "faq": "FAQ",
+            "support": "Support"
+        },
+        "system": "Modern Content Management System",
+        "terms": "Terms of Service"
+    },
+    "home": {
+        "actions": {
+            "contactUs": "Contact Us",
+            "dashboard": "Dashboard",
+            "explore": "Explore Content",
+            "getStarted": "Get Started",
+            "startReading": "Start Reading",
+            "viewAll": "View All Posts"
+        },
+        "sections": {
+            "cta": {
+                "text": "Join thousands of developers and creators using JA-Edu to build modern web experiences.",
+                "title": "Ready to Start Building?"
+            },
+            "featured": "Featured Stories",
+            "recent": "Latest Updates",
+            "recentSubtitle": "Stay up to date with our newest articles"
+        },
+        "stats": {
+            "categories": "Categories",
+            "content": "Published Content",
+            "visitors": "Total Visitors"
+        },
+        "subtitle": "Modern Content Management System",
+        "title": "JA-Edu"
+    },
+    "nav": {
+        "about": "About",
+        "blog": "Blog",
+        "contact": "Contact",
+        "dashboard": "Dashboard",
+        "getStarted": "Get Started",
+        "home": "Home",
+        "login": "Login",
+        "logout": "Logout",
+        "register": "Register",
+        "signIn": "Sign In"
+    },
+    "newsletter": {
+        "button": "Subscribe",
+        "description": "Subscribe to our newsletter for the latest updates and articles.",
+        "error": "Subscription failed. Please try again.",
+        "placeholder": "Email address",
+        "privacy": "By subscribing, you agree to our",
+        "privacyLink": "Privacy Policy",
+        "processing": "Subscribing...",
+        "success": "Subscribed successfully!",
+        "title": "Stay Updated"
+    },
+    "post": {
+        "backToBlog": "Back to Blog",
+        "loading": "Loading...",
+        "notFound": "Post not found",
+        "tags": "Tags:",
+        "views": "views"
+    },
+    "search": {
+        "empty": "No results found for \"{query}\"",
+        "loading": "Searching...",
+        "query": "Searching for:",
+        "title": "Search Results"
+    }
+}

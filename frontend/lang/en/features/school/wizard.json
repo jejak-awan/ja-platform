@@ -1,0 +1,41 @@
+{
+    "actions": {
+        "finish": "Finish Setup",
+        "next": "Next",
+        "prev": "Previous",
+        "processing": "Processing..."
+    },
+    "labels": {
+        "institutionName": "Official Institution Name",
+        "institutionNameHint": "Use full formal name (e.g., SMP NEGERI 1 JAKARTA or YAYASAN PENDIDIKAN ABC). Provide the official name for your educational institution.",
+        "institutionNamePlaceholder": "Enter official name...",
+        "levelSubtitle": "Select one starting level for registration.",
+        "levelTitle": "Select School Level",
+        "locationSubtitle": "Determine the number of operational locations.",
+        "locationTitle": "Institution Location",
+        "lockedByName": "Locked by Name Analysis",
+        "onlyForFoundations": "Only for Foundations",
+        "statusSubtitle": "Determine your institution legal status. Options are locked based on name analysis.",
+        "statusTitle": "Institution Status"
+    },
+    "options": {
+        "multiLocation": "Multi-Location",
+        "multiLocationDesc": "Institution has units/branches at different addresses.",
+        "sd": "Elementary School",
+        "sdDesc": "SD / MI",
+        "singleLocation": "Single Location",
+        "singleLocationDesc": "All operations are at the same address.",
+        "sma": "Senior High School",
+        "smaDesc": "SMA / MA",
+        "smk": "Vocational School",
+        "smkDesc": "SMK",
+        "smp": "Junior High School",
+        "smpDesc": "SMP / MTs"
+    },
+    "steps": {
+        "basic": "Basic",
+        "level": "Level",
+        "location": "Location",
+        "status": "Status"
+    }
+}

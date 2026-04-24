@@ -1,0 +1,41 @@
+{
+    "actions": {
+        "attendanceToday": "Attendance Today",
+        "manageSubjects": "Manage Subjects",
+        "registerStudent": "Register New Student"
+    },
+    "hints": {
+        "accreditationSubtitle": "Select latest official accreditation rank.",
+        "autoOwnershipStatus": "Ownership status is automatically managed based on institution type.",
+        "editNameViaWizard": "Institution name can only be changed through the settings wizard.",
+        "levelNameFormat": "Use official full name (e.g., TI Nurul Iman Vocational School).",
+        "npsnFormat": "NPSN must be 8 digits long.",
+        "statusLocked": "Institution status is locked after initial setup."
+    },
+    "organization": {
+        "backButton": "Back to Dashboard",
+        "comingSoon": "Organization Structure module is coming soon.",
+        "comingSoonDesc": "The Organization Structure module is currently under development and will be available soon to help you manage your administrative hierarchy.",
+        "description": "Manage the organizational structure and positions in your institution.",
+        "subtitle": "Manage the organizational structure and positions in your institution.",
+        "title": "Organization Structure"
+    },
+    "rbac": {
+        "noPermissionDelete": "Only Super Admin can delete institution.",
+        "noPermissionEdit": "Only Super Admin can edit institution identity.",
+        "noPermissionSetup": "Only Super Admin can setup new institution."
+    },
+    "stats": {
+        "assets": "Assets",
+        "studyGroups": "Groups",
+        "totalStaff": "Total Staff",
+        "totalStudents": "Total Students"
+    },
+    "subtitle": "Manage schools, foundations, or groups and their educational levels.",
+    "tabs": {
+        "identityConfig": "Identity",
+        "institution": "Institution Profile",
+        "levels": "Educational Levels"
+    },
+    "title": "Institutional Management"
+}

@@ -1,0 +1,17 @@
+{
+    "empty": "Tidak ada hasil ditemukan",
+    "filterBy": "Filter berdasarkan tipe:",
+    "initial": "Masukkan kata kunci untuk memulai",
+    "placeholder": "Cari...",
+    "resultsFor": "Hasil untuk:",
+    "searching": "Mencari...",
+    "title": "Hasil Pencarian",
+    "types": {
+        "category": "Kategori",
+        "content": "Konten",
+        "media": "Media",
+        "page": "Halaman",
+        "tag": "Tag",
+        "user": "Pengguna"
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "add": "Add Level",
+    "branchLocation": "Unit Location & Contact",
+    "branchLocationDesc": "Determine if this unit uses the primary address or a different one.",
+    "delete": "Delete Level",
+    "deleteConfirm": "Delete this level? All related data (students, classes) in this level will be affected.",
+    "deleteSuccess": "Level deleted successfully",
+    "edit": "Edit Level",
+    "empty": "No levels added yet.",
+    "emptyAction": "Add Now",
+    "errors": {
+        "nameRequired": "Level name is required"
+    },
+    "form": {
+        "addTitle": "Add Unit / Level",
+        "name": "Unit / Level Name",
+        "namePlaceholder": "Example: SMK IT Nurul Iman",
+        "npsn": "Level NPSN",
+        "npsnPlaceholder": "Example: 12345678",
+        "save": "Save Level",
+        "saving": "Saving...",
+        "type": "Level Type",
+        "typePlaceholder": "Select type"
+    },
+    "sections": {
+        "legality": "Legality & Finance",
+        "legalityDesc": "Establishment, operational licenses, and bank account info.",
+        "location": "Location & Contact",
+        "locationDesc": "Operational address and unit contact information.",
+        "profile": "Profile & History",
+        "profileDesc": "Vision, mission, history, and leadership information."
+    },
+    "selectPrompt": "Select a level on the left to manage its identity.",
+    "singleLevelInfo": {
+        "addTitle": "Add Level Unit",
+        "description": "Your institution is set as <b>Single-Level</b>. The primary level unit has been created and is ready to be managed. If you are a Foundation with multiple units, please activate Multi-Level mode in settings.",
+        "editDetail": "Change Level Details",
+        "title": "Unit Level Registered"
+    },
+    "subtitle": "Manage various educational levels (Elementary, Junior High, Senior High, Vocational) in your institution.",
+    "title": "Level Management",
+    "updateData": "Update Level Data",
+    "updateSuccess": "Level data updated successfully"
+}

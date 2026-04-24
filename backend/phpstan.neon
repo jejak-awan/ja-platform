@@ -1,0 +1,21 @@
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+        - Modules
+    
+    level: 9
+    
+    reportUnmatchedIgnoredErrors: false
+    
+    ignoreErrors:
+        - '#Parameter \#1 \$view of function view expects view-string\|null, string given#'
+        - '#Call to an undefined method Illuminate\\Http\\Request::cspNonce\(\)#'
+        - '#Call to an undefined method Illuminate\\Http\\Request::boolean\(\)#'
+        - '#Call to an undefined method Illuminate\\Contracts\\Auth\\(Guard|StatefulGuard)::user\(\)#'
+
+    excludePaths:
+        - Modules/*/database/*
+        - Modules/*/tests/*

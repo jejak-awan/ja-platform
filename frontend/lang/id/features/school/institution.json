@@ -1,0 +1,26 @@
+{
+    "addLevel": "Tambah Jenjang Baru",
+    "contactHeader": "Kontak Utama",
+    "deleteConfirm": "PERINGATAN: Menghapus lembaga akan menghapus seluruh data terkait (Jenjang, Siswa, Guru, dll). Lanjutkan?",
+    "deleteStrictAction": "Ya, Hapus Semua Data",
+    "deleteStrictConfirmPrompt": "Silakan ketik nama lembaga di bawah untuk mengonfirmasi penghapusan:",
+    "deleteStrictPlaceholder": "Ketik nama lembaga tepat sesuai di atas",
+    "deleteStrictTitle": "Hapus Lembaga & Seluruh Data",
+    "deleteStrictWarning": "Tindakan ini PERMANEN dan akan menghapus SELURUH data di modul sekolah (Siswa, Guru, Akademik, Sarpras, LMS, dll) yang terkait dengan lembaga ini.",
+    "empty": "Belum ada lembaga terdaftar.",
+    "emptyDescription": "Mulai pendaftaran lembaga pendidikan Anda (Sekolah, Yayasan, atau Group) untuk mengelola data akademik.",
+    "manageLevels": "Manajemen Jenjang",
+    "setupDescription": "Ikuti langkah-langkah di bawah untuk mendaftarkan lembaga Anda.",
+    "setupNew": "Setup Lembaga Baru",
+    "setupNow": "Setup Lembaga Sekarang",
+    "status": {
+        "negeri": "Sekolah Negeri",
+        "swasta": "Sekolah Swasta / Independen",
+        "yayasan": "Yayasan / Group",
+        "public": "Sekolah Negeri",
+        "private": "Sekolah Swasta",
+        "undefined": "Status Belum Ditentukan"
+    },
+    "subtitle": "Informasi dasar terkait legalitas utama lembaga.",
+    "title": "Manajemen Lembaga"
+}

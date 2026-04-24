@@ -1,0 +1,65 @@
+{
+    "actions": {
+        "delete": "Delete Task",
+        "run": "Run Task"
+    },
+    "confirm_delete": "Are you sure you want to delete task \"{name}\"?",
+    "confirm_run": "Are you sure you want to run task \"{name}\"?",
+    "create": "Create Task",
+    "description": "Manage scheduled tasks and cron jobs",
+    "edit": "Edit Task",
+    "form": {
+        "active": "Active",
+        "command": "Command",
+        "cron_help": "Format: minute hour day month weekday (e.g., 0 * * * * = every hour)",
+        "description": "Description",
+        "name": "Task Name",
+        "preset": "Quick preset",
+        "schedule": "Cron Schedule",
+        "select_command": "Select a command"
+    },
+    "help": {
+        "cron_desc": "Add this line to your server's crontab (run 'crontab -e'):",
+        "cron_hint": "This command tells your server to check for scheduled tasks every minute.",
+        "cron_title": "Server Cron Setup",
+        "intro": "Scheduled tasks allow you to automate routine commands like cache clearing, backups, and maintenance jobs.",
+        "req_1": "Task must be set to Active (click the status button)",
+        "req_2": "Valid cron schedule must be configured",
+        "req_3": "Server cron job must be running (see below)",
+        "requirements_title": "Requirements for Automatic Execution:",
+        "title": "How Scheduled Tasks Work"
+    },
+    "messages": {
+        "activated": "Task activated",
+        "created": "Task created successfully",
+        "deactivated": "Task deactivated",
+        "deleted": "Task deleted successfully",
+        "executed": "Task executed successfully",
+        "toggled": "Task status updated",
+        "updated": "Task updated successfully"
+    },
+    "no_tasks": "No scheduled tasks found",
+    "output": {
+        "title": "Task Output"
+    },
+    "status": {
+        "completed": "Completed",
+        "failed": "Failed",
+        "pending": "Pending",
+        "running": "Running"
+    },
+    "table": {
+        "actions": "Actions",
+        "active": "Active",
+        "command": "Command",
+        "last_run": "Last Run",
+        "name": "Name",
+        "schedule": "Schedule",
+        "status": "Status"
+    },
+    "title": "Scheduled Tasks",
+    "tooltips": {
+        "click_to_activate": "Click to activate - Task will run automatically based on schedule",
+        "click_to_deactivate": "Click to deactivate - Task will not run automatically"
+    }
+}

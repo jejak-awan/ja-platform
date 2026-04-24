@@ -1,0 +1,180 @@
+{
+    "options": {
+        "timezone": {
+            "utc": "UTC (Coordinated Universal Time)",
+            "jakarta": "Asia/Jakarta (WIB - GMT+7)",
+            "makassar": "Asia/Makassar (WITA - GMT+8)",
+            "jayapura": "Asia/Jayapura (WIT - GMT+9)",
+            "newyork": "America/New_York (EST/EDT)",
+            "chicago": "America/Chicago (CST/CDT)",
+            "losangeles": "America/Los_Angeles (PST/PDT)",
+            "london": "Europe/London (GMT/BST)",
+            "paris": "Europe/Paris (CET/CEST)",
+            "sydney": "Australia/Sydney (AEST/AEDT)",
+            "tokyo": "Asia/Tokyo (JST)",
+            "singapore": "Asia/Singapore (SGT)"
+        },
+        "dateFormat": {
+            "ymd": "2024-12-25 (Y-m-d)",
+            "dmy": "25/12/2024 (d/m/Y)",
+            "mdy": "12/25/2024 (m/d/Y)",
+            "dmyDash": "25-12-2024 (d-m-Y)",
+            "full": "December 25, 2024 (F j, Y)",
+            "fullReverse": "25 December 2024 (j F Y)"
+        },
+        "timeFormat": {
+            "24hSeconds": "23:59:59 (24-hour with seconds)",
+            "24h": "23:59 (24-hour)",
+            "12h": "11:59 PM (12-hour)",
+            "12hSeconds": "11:59:59 PM (12-hour with seconds)"
+        },
+        "itemsPerPage": {
+            "10": "10 items",
+            "15": "15 items",
+            "20": "20 items",
+            "25": "25 items",
+            "50": "50 items",
+            "100": "100 items"
+        },
+        "mailDriver": {
+            "smtp": "SMTP",
+            "sendmail": "Sendmail",
+            "mailgun": "Mailgun",
+            "ses": "Amazon SES",
+            "postmark": "Postmark",
+            "log": "Log (Testing)"
+        },
+        "mailEncryption": {
+            "tls": "TLS (Recommended)",
+            "ssl": "SSL",
+            "none": "None"
+        },
+        "mailPort": {
+            "25": "25 (No Encryption - Not Recommended)",
+            "465": "465 (No Encryption)",
+            "587": "587 (No Encryption)",
+            "2525": "2525 (TLS Alternative)",
+            "587tls": "587 (TLS Standard - Recommended)",
+            "25tls": "25 (Legacy with STARTTLS)",
+            "465tls": "465 (TLS over SSL Port)",
+            "465ssl": "465 (SSL Standard - Recommended)",
+            "587ssl": "587 (SSL Alternative)",
+            "25ssl": "25 (Legacy with SSL)",
+            "2525plain": "2525 (Alternative - No Encryption)"
+        },
+        "storageDriver": {
+            "local": "Local Storage",
+            "s3": "Amazon S3",
+            "ftp": "FTP Server",
+            "dropbox": "Dropbox",
+            "google": "Google Drive"
+        },
+        "thumbnailSize": {
+            "150": "150px",
+            "200": "200px",
+            "250": "250px",
+            "300": "300px",
+            "400": "400px",
+            "500": "500px"
+        },
+        "passwordMinLength": {
+            "6": "6 characters (minimum)",
+            "8": "8 characters (recommended)",
+            "10": "10 characters (strong)",
+            "12": "12 characters (very strong)",
+            "16": "16 characters (maximum security)"
+        },
+        "loginAttempts": {
+            "3": "3 attempts (strict)",
+            "5": "5 attempts (recommended)",
+            "10": "10 attempts (lenient)",
+            "unlimited": "Unlimited"
+        },
+        "blockDuration": {
+            "5": "5 minutes",
+            "15": "15 minutes (recommended)",
+            "30": "30 minutes",
+            "60": "1 hour",
+            "1440": "24 hours"
+        },
+        "sessionLifetime": {
+            "30": "30 minutes",
+            "60": "1 hour",
+            "120": "2 hours (recommended)",
+            "480": "8 hours (workday)",
+            "1440": "24 hours",
+            "10080": "7 days"
+        },
+        "maxSessions": {
+            "1": "1 session (strict)",
+            "2": "2 sessions",
+            "3": "3 sessions (recommended)",
+            "5": "5 sessions",
+            "unlimited": "Unlimited"
+        },
+        "logRetention": {
+            "7": "7 days",
+            "14": "14 days",
+            "30": "30 days (recommended)",
+            "60": "60 days",
+            "90": "90 days",
+            "365": "1 year",
+            "forever": "Keep forever"
+        },
+        "cacheTtl": {
+            "300": "5 minutes",
+            "600": "10 minutes",
+            "1800": "30 minutes",
+            "3600": "1 hour (recommended)",
+            "7200": "2 hours",
+            "86400": "24 hours"
+        },
+        "maxUploadSize": {
+            "1024": "1 MB",
+            "2048": "2 MB (recommended)",
+            "5120": "5 MB",
+            "10240": "10 MB",
+            "20480": "20 MB",
+            "51200": "50 MB",
+            "102400": "100 MB"
+        },
+        "twoFactorMethod": {
+            "app": "Authenticator App (TOTP)",
+            "email": "Email Code"
+        },
+        "twoFactorEnforced": {
+            "no": "Optional for all users",
+            "admin": "Mandatory for Admins",
+            "all": "Mandatory for All Users"
+        },
+        "captchaMethod": {
+            "slider": "Slider Verification",
+            "math": "Math Challenge",
+            "image": "Image Code"
+        },
+        "maintenanceTitlePresets": {
+            "coming_soon": "Coming Soon",
+            "under_maintenance": "Under Maintenance",
+            "launch_day": "Launch Day!",
+            "system_update": "System Update"
+        },
+        "maintenanceMessagePresets": {
+            "awesome": "We are currently working on something awesome. Please check back later.",
+            "inconvenience": "Sorry for the inconvenience. We're performing some maintenance and will be back shortly.",
+            "exciting": "Something exciting is coming! Stay tuned for our launch.",
+            "better_exp": "We are updating our system to provide you a better experience. We'll be back online soon."
+        },
+        "shieldProtectionMode": {
+            "off": "Disabled",
+            "suspicious": "Suspicious Traffic Only",
+            "always": "Always Challenge (Strict)"
+        },
+        "shieldProtectionDifficulty": {
+            "3": "3 - Very Light",
+            "4": "4 - Normal (Recommended)",
+            "5": "5 - Strict",
+            "6": "6 - Very Strict",
+            "7": "7 - Paranoid"
+        }
+    }
+}

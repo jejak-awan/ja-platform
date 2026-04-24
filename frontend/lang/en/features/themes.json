@@ -1,0 +1,48 @@
+{
+    "actions": {
+        "activate": "Activate",
+        "advanced": "Advanced",
+        "advancedConfig": "Advanced Configuration",
+        "customize": "Customize",
+        "preview": "Preview",
+        "quickSettings": "Quick Settings",
+        "settings": "Settings",
+        "validate": "Validate"
+    },
+    "list": {
+        "by": "by {author}",
+        "child": "Child",
+        "empty": "No themes found",
+        "emptySubtitle": "Get started by creating a new theme.",
+        "version": "v{version}"
+    },
+    "messages": {
+        "activateConfirm": "Are you sure you want to activate theme \"{name}\"?",
+        "activateFailed": "Failed to activate theme",
+        "activateSuccess": "Theme activated successfully",
+        "scanFailed": "Failed to scan themes",
+        "scanSuccess": "Scan completed! Found {count} theme(s).",
+        "validateError": "Failed to validate theme",
+        "validateFailed": "Theme validation failed:",
+        "validateSuccess": "Theme is valid!"
+    },
+    "modals": {
+        "previewTitle": "Theme Preview: {name}"
+    },
+    "scan": "Scan Themes",
+    "scanning": "Scanning...",
+    "status": {
+        "active": "Active",
+        "broken": "Broken",
+        "inactive": "Inactive",
+        "pending": "Pending"
+    },
+    "subtitle": "Manage and customize your themes",
+    "title": "Themes Management",
+    "types": {
+        "admin": "Admin",
+        "all": "All Types",
+        "email": "Email",
+        "frontend": "Frontend"
+    }
+}

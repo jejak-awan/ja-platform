@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /var/www/k2net/ja-apps/backend/Modules/Cms/app/Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../../_css/bootstrap.min.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../_css/nv.d3.min.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../_css/style.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../../../../index.html">/var/www/k2net/ja-apps/backend</a></li>
+         <li class="breadcrumb-item"><a href="../../../index.html">Modules</a></li>
+         <li class="breadcrumb-item"><a href="../../index.html">Cms</a></li>
+         <li class="breadcrumb-item"><a href="../index.html">app</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Services</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="AnalyticsService.php.html#9">Modules\Cms\Services\AnalyticsService</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CommentSecurityService.php.html#7">Modules\Cms\Services\CommentSecurityService</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#18">Modules\Cms\Services\ContentService</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DynamicTagService.php.html#8">Modules\Cms\Services\DynamicTagService</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#14">Modules\Cms\Services\MediaService</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SearchService.php.html#8">Modules\Cms\Services\SearchService</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#12">Modules\Cms\Services\ThemeCacheService</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#9">Modules\Cms\Services\ThemeHooksService</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#10">Modules\Cms\Services\ThemeService</a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="MediaService.php.html#14">Modules\Cms\Services\MediaService</a></td><td class="text-right">22350</td></tr>
+       <tr><td><a href="ThemeService.php.html#10">Modules\Cms\Services\ThemeService</a></td><td class="text-right">11772</td></tr>
+       <tr><td><a href="ContentService.php.html#18">Modules\Cms\Services\ContentService</a></td><td class="text-right">10506</td></tr>
+       <tr><td><a href="DynamicTagService.php.html#8">Modules\Cms\Services\DynamicTagService</a></td><td class="text-right">5112</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#12">Modules\Cms\Services\ThemeCacheService</a></td><td class="text-right">1260</td></tr>
+       <tr><td><a href="SearchService.php.html#8">Modules\Cms\Services\SearchService</a></td><td class="text-right">1122</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#9">Modules\Cms\Services\ThemeHooksService</a></td><td class="text-right">380</td></tr>
+       <tr><td><a href="CommentSecurityService.php.html#7">Modules\Cms\Services\CommentSecurityService</a></td><td class="text-right">240</td></tr>
+       <tr><td><a href="AnalyticsService.php.html#9">Modules\Cms\Services\AnalyticsService</a></td><td class="text-right">132</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="AnalyticsService.php.html#19"><abbr title="Modules\Cms\Services\AnalyticsService::trackEvent">trackEvent</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AnalyticsService.php.html#47"><abbr title="Modules\Cms\Services\AnalyticsService::trackBatch">trackBatch</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AnalyticsService.php.html#69"><abbr title="Modules\Cms\Services\AnalyticsService::trackContentInteraction">trackContentInteraction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AnalyticsService.php.html#85"><abbr title="Modules\Cms\Services\AnalyticsService::trackFormSubmission">trackFormSubmission</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AnalyticsService.php.html#101"><abbr title="Modules\Cms\Services\AnalyticsService::trackDownload">trackDownload</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AnalyticsService.php.html#117"><abbr title="Modules\Cms\Services\AnalyticsService::trackSearch">trackSearch</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AnalyticsService.php.html#132"><abbr title="Modules\Cms\Services\AnalyticsService::trackVideoPlay">trackVideoPlay</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AnalyticsService.php.html#148"><abbr title="Modules\Cms\Services\AnalyticsService::trackClick">trackClick</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CommentSecurityService.php.html#12"><abbr title="Modules\Cms\Services\CommentSecurityService::isSpam">isSpam</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CommentSecurityService.php.html#31"><abbr title="Modules\Cms\Services\CommentSecurityService::containsBannedWords">containsBannedWords</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CommentSecurityService.php.html#62"><abbr title="Modules\Cms\Services\CommentSecurityService::exceedsLinkLimit">exceedsLinkLimit</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CommentSecurityService.php.html#78"><abbr title="Modules\Cms\Services\CommentSecurityService::getInitialStatus">getInitialStatus</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#22"><abbr title="Modules\Cms\Services\ContentService::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#32"><abbr title="Modules\Cms\Services\ContentService::getPublishedContents">getPublishedContents</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#72"><abbr title="Modules\Cms\Services\ContentService::applyFilters">applyFilters</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#108"><abbr title="Modules\Cms\Services\ContentService::applySorting">applySorting</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#125"><abbr title="Modules\Cms\Services\ContentService::getRelatedContent">getRelatedContent</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#178"><abbr title="Modules\Cms\Services\ContentService::create">create</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#272"><abbr title="Modules\Cms\Services\ContentService::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#359"><abbr title="Modules\Cms\Services\ContentService::toggleFeatured">toggleFeatured</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#372"><abbr title="Modules\Cms\Services\ContentService::trackMediaUsage">trackMediaUsage</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#386"><abbr title="Modules\Cms\Services\ContentService::delete">delete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#404"><abbr title="Modules\Cms\Services\ContentService::duplicate">duplicate</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#429"><abbr title="Modules\Cms\Services\ContentService::bulkAction">bulkAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#486"><abbr title="Modules\Cms\Services\ContentService::saveCustomFields">saveCustomFields</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#505"><abbr title="Modules\Cms\Services\ContentService::createRevision">createRevision</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#529"><abbr title="Modules\Cms\Services\ContentService::indexForSearch">indexForSearch</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#543"><abbr title="Modules\Cms\Services\ContentService::isLockedByOther">isLockedByOther</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#551"><abbr title="Modules\Cms\Services\ContentService::lock">lock</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#562"><abbr title="Modules\Cms\Services\ContentService::unlock">unlock</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#573"><abbr title="Modules\Cms\Services\ContentService::clearContentCaches">clearContentCaches</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#582"><abbr title="Modules\Cms\Services\ContentService::generateUniqueSlug">generateUniqueSlug</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#598"><abbr title="Modules\Cms\Services\ContentService::restore">restore</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#615"><abbr title="Modules\Cms\Services\ContentService::forceDelete">forceDelete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ContentService.php.html#633"><abbr title="Modules\Cms\Services\ContentService::emptyTrash">emptyTrash</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DynamicTagService.php.html#18"><abbr title="Modules\Cms\Services\DynamicTagService::resolveBlocks">resolveBlocks</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DynamicTagService.php.html#30"><abbr title="Modules\Cms\Services\DynamicTagService::processBlocks">processBlocks</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="DynamicTagService.php.html#62"><abbr title="Modules\Cms\Services\DynamicTagService::resolveTag">resolveTag</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#18"><abbr title="Modules\Cms\Services\MediaService::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#28"><abbr title="Modules\Cms\Services\MediaService::upload">upload</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#110"><abbr title="Modules\Cms\Services\MediaService::optimizeImage">optimizeImage</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#142"><abbr title="Modules\Cms\Services\MediaService::convertToWebP">convertToWebP</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#183"><abbr title="Modules\Cms\Services\MediaService::generateThumbnail">generateThumbnail</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#249"><abbr title="Modules\Cms\Services\MediaService::resize">resize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#283"><abbr title="Modules\Cms\Services\MediaService::delete">delete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#339"><abbr title="Modules\Cms\Services\MediaService::forceDelete">forceDelete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#360"><abbr title="Modules\Cms\Services\MediaService::restore">restore</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#424"><abbr title="Modules\Cms\Services\MediaService::deleteVariants">deleteVariants</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#453"><abbr title="Modules\Cms\Services\MediaService::moveVariantsToTrash">moveVariantsToTrash</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#478"><abbr title="Modules\Cms\Services\MediaService::moveVariantsFromTrash">moveVariantsFromTrash</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#507"><abbr title="Modules\Cms\Services\MediaService::bulkAction">bulkAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#590"><abbr title="Modules\Cms\Services\MediaService::createZip">createZip</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#628"><abbr title="Modules\Cms\Services\MediaService::getUsageInfo">getUsageInfo</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#677"><abbr title="Modules\Cms\Services\MediaService::editImage">editImage</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#787"><abbr title="Modules\Cms\Services\MediaService::getImageDriver">getImageDriver</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#807"><abbr title="Modules\Cms\Services\MediaService::isImageProcessingAvailable">isImageProcessingAvailable</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#817"><abbr title="Modules\Cms\Services\MediaService::scan">scan</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#901"><abbr title="Modules\Cms\Services\MediaService::sanitizeSvg">sanitizeSvg</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MediaService.php.html#937"><abbr title="Modules\Cms\Services\MediaService::syncTags">syncTags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SearchService.php.html#18"><abbr title="Modules\Cms\Services\SearchService::search">search</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SearchService.php.html#91"><abbr title="Modules\Cms\Services\SearchService::applySearchLogic">applySearchLogic</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SearchService.php.html#124"><abbr title="Modules\Cms\Services\SearchService::applyFilters">applyFilters</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SearchService.php.html#144"><abbr title="Modules\Cms\Services\SearchService::searchByType">searchByType</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SearchService.php.html#156"><abbr title="Modules\Cms\Services\SearchService::getSuggestions">getSuggestions</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SearchService.php.html#198"><abbr title="Modules\Cms\Services\SearchService::prepareSearchQuery">prepareSearchQuery</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SearchService.php.html#222"><abbr title="Modules\Cms\Services\SearchService::reindexAll">reindexAll</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#51"><abbr title="Modules\Cms\Services\ThemeCacheService::getActiveTheme">getActiveTheme</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#69"><abbr title="Modules\Cms\Services\ThemeCacheService::tagsSupported">tagsSupported</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#82"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberSettings">rememberSettings</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#103"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberAssets">rememberAssets</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#124"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberManifest">rememberManifest</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#145"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberTemplates">rememberTemplates</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#165"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberPartials">rememberPartials</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#185"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberLayouts">rememberLayouts</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#205"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberWidgetArea">rememberWidgetArea</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#225"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberShortcode">rememberShortcode</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#235"><abbr title="Modules\Cms\Services\ThemeCacheService::clearTheme">clearTheme</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#263"><abbr title="Modules\Cms\Services\ThemeCacheService::clearAll">clearAll</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#280"><abbr title="Modules\Cms\Services\ThemeCacheService::clearWidgets">clearWidgets</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#306"><abbr title="Modules\Cms\Services\ThemeCacheService::clearByPrefix">clearByPrefix</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#318"><abbr title="Modules\Cms\Services\ThemeCacheService::getStats">getStats</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#20"><abbr title="Modules\Cms\Services\ThemeHooksService::addAction">addAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#40"><abbr title="Modules\Cms\Services\ThemeHooksService::doAction">doAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#54"><abbr title="Modules\Cms\Services\ThemeHooksService::addFilter">addFilter</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#78"><abbr title="Modules\Cms\Services\ThemeHooksService::applyFilter">applyFilter</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#94"><abbr title="Modules\Cms\Services\ThemeHooksService::removeAction">removeAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#111"><abbr title="Modules\Cms\Services\ThemeHooksService::removeFilter">removeFilter</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#128"><abbr title="Modules\Cms\Services\ThemeHooksService::hasAction">hasAction</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#136"><abbr title="Modules\Cms\Services\ThemeHooksService::hasFilter">hasFilter</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#146"><abbr title="Modules\Cms\Services\ThemeHooksService::getRegisteredHooks">getRegisteredHooks</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#16"><abbr title="Modules\Cms\Services\ThemeService::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#26"><abbr title="Modules\Cms\Services\ThemeService::getActiveTheme">getActiveTheme</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#38"><abbr title="Modules\Cms\Services\ThemeService::getMenuLocations">getMenuLocations</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#62"><abbr title="Modules\Cms\Services\ThemeService::activateTheme">activateTheme</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#136"><abbr title="Modules\Cms\Services\ThemeService::deactivateTheme">deactivateTheme</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#150"><abbr title="Modules\Cms\Services\ThemeService::getThemeSetting">getThemeSetting</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#191"><abbr title="Modules\Cms\Services\ThemeService::loadThemeAssets">loadThemeAssets</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#279"><abbr title="Modules\Cms\Services\ThemeService::validateTheme">validateTheme</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#287"><abbr title="Modules\Cms\Services\ThemeService::checkDependencies">checkDependencies</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#326"><abbr title="Modules\Cms\Services\ThemeService::getThemeCustomCss">getThemeCustomCss</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#349"><abbr title="Modules\Cms\Services\ThemeService::getThemeCssVariables">getThemeCssVariables</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#378"><abbr title="Modules\Cms\Services\ThemeService::clearThemeCache">clearThemeCache</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#390"><abbr title="Modules\Cms\Services\ThemeService::getThemeDirectory">getThemeDirectory</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#398"><abbr title="Modules\Cms\Services\ThemeService::ensureThemeDirectory">ensureThemeDirectory</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#414"><abbr title="Modules\Cms\Services\ThemeService::scanThemes">scanThemes</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ThemeService.php.html#480"><abbr title="Modules\Cms\Services\ThemeService::getDefaultSettingsSchema">getDefaultSettingsSchema</abbr></a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="DynamicTagService.php.html#62"><abbr title="Modules\Cms\Services\DynamicTagService::resolveTag">resolveTag</abbr></a></td><td class="text-right">3782</td></tr>
+       <tr><td><a href="ContentService.php.html#178"><abbr title="Modules\Cms\Services\ContentService::create">create</abbr></a></td><td class="text-right">552</td></tr>
+       <tr><td><a href="ThemeService.php.html#191"><abbr title="Modules\Cms\Services\ThemeService::loadThemeAssets">loadThemeAssets</abbr></a></td><td class="text-right">552</td></tr>
+       <tr><td><a href="ContentService.php.html#272"><abbr title="Modules\Cms\Services\ContentService::update">update</abbr></a></td><td class="text-right">420</td></tr>
+       <tr><td><a href="MediaService.php.html#507"><abbr title="Modules\Cms\Services\MediaService::bulkAction">bulkAction</abbr></a></td><td class="text-right">420</td></tr>
+       <tr><td><a href="MediaService.php.html#28"><abbr title="Modules\Cms\Services\MediaService::upload">upload</abbr></a></td><td class="text-right">342</td></tr>
+       <tr><td><a href="ContentService.php.html#429"><abbr title="Modules\Cms\Services\ContentService::bulkAction">bulkAction</abbr></a></td><td class="text-right">272</td></tr>
+       <tr><td><a href="MediaService.php.html#677"><abbr title="Modules\Cms\Services\MediaService::editImage">editImage</abbr></a></td><td class="text-right">272</td></tr>
+       <tr><td><a href="ThemeService.php.html#150"><abbr title="Modules\Cms\Services\ThemeService::getThemeSetting">getThemeSetting</abbr></a></td><td class="text-right">240</td></tr>
+       <tr><td><a href="ThemeService.php.html#414"><abbr title="Modules\Cms\Services\ThemeService::scanThemes">scanThemes</abbr></a></td><td class="text-right">240</td></tr>
+       <tr><td><a href="ThemeService.php.html#287"><abbr title="Modules\Cms\Services\ThemeService::checkDependencies">checkDependencies</abbr></a></td><td class="text-right">210</td></tr>
+       <tr><td><a href="MediaService.php.html#183"><abbr title="Modules\Cms\Services\MediaService::generateThumbnail">generateThumbnail</abbr></a></td><td class="text-right">132</td></tr>
+       <tr><td><a href="MediaService.php.html#628"><abbr title="Modules\Cms\Services\MediaService::getUsageInfo">getUsageInfo</abbr></a></td><td class="text-right">132</td></tr>
+       <tr><td><a href="ThemeService.php.html#349"><abbr title="Modules\Cms\Services\ThemeService::getThemeCssVariables">getThemeCssVariables</abbr></a></td><td class="text-right">132</td></tr>
+       <tr><td><a href="MediaService.php.html#817"><abbr title="Modules\Cms\Services\MediaService::scan">scan</abbr></a></td><td class="text-right">110</td></tr>
+       <tr><td><a href="DynamicTagService.php.html#30"><abbr title="Modules\Cms\Services\DynamicTagService::processBlocks">processBlocks</abbr></a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="MediaService.php.html#360"><abbr title="Modules\Cms\Services\MediaService::restore">restore</abbr></a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="ThemeService.php.html#62"><abbr title="Modules\Cms\Services\ThemeService::activateTheme">activateTheme</abbr></a></td><td class="text-right">72</td></tr>
+       <tr><td><a href="CommentSecurityService.php.html#31"><abbr title="Modules\Cms\Services\CommentSecurityService::containsBannedWords">containsBannedWords</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="ContentService.php.html#72"><abbr title="Modules\Cms\Services\ContentService::applyFilters">applyFilters</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="MediaService.php.html#590"><abbr title="Modules\Cms\Services\MediaService::createZip">createZip</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="SearchService.php.html#124"><abbr title="Modules\Cms\Services\SearchService::applyFilters">applyFilters</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="MediaService.php.html#142"><abbr title="Modules\Cms\Services\MediaService::convertToWebP">convertToWebP</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="MediaService.php.html#283"><abbr title="Modules\Cms\Services\MediaService::delete">delete</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="SearchService.php.html#18"><abbr title="Modules\Cms\Services\SearchService::search">search</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="SearchService.php.html#91"><abbr title="Modules\Cms\Services\SearchService::applySearchLogic">applySearchLogic</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="ThemeService.php.html#38"><abbr title="Modules\Cms\Services\ThemeService::getMenuLocations">getMenuLocations</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="ThemeService.php.html#326"><abbr title="Modules\Cms\Services\ThemeService::getThemeCustomCss">getThemeCustomCss</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="MediaService.php.html#110"><abbr title="Modules\Cms\Services\MediaService::optimizeImage">optimizeImage</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="MediaService.php.html#424"><abbr title="Modules\Cms\Services\MediaService::deleteVariants">deleteVariants</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="MediaService.php.html#901"><abbr title="Modules\Cms\Services\MediaService::sanitizeSvg">sanitizeSvg</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="SearchService.php.html#156"><abbr title="Modules\Cms\Services\SearchService::getSuggestions">getSuggestions</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#280"><abbr title="Modules\Cms\Services\ThemeCacheService::clearWidgets">clearWidgets</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="ContentService.php.html#32"><abbr title="Modules\Cms\Services\ContentService::getPublishedContents">getPublishedContents</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="ContentService.php.html#125"><abbr title="Modules\Cms\Services\ContentService::getRelatedContent">getRelatedContent</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="ContentService.php.html#486"><abbr title="Modules\Cms\Services\ContentService::saveCustomFields">saveCustomFields</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="MediaService.php.html#249"><abbr title="Modules\Cms\Services\MediaService::resize">resize</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="MediaService.php.html#787"><abbr title="Modules\Cms\Services\MediaService::getImageDriver">getImageDriver</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="SearchService.php.html#198"><abbr title="Modules\Cms\Services\SearchService::prepareSearchQuery">prepareSearchQuery</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="SearchService.php.html#222"><abbr title="Modules\Cms\Services\SearchService::reindexAll">reindexAll</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#235"><abbr title="Modules\Cms\Services\ThemeCacheService::clearTheme">clearTheme</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="AnalyticsService.php.html#19"><abbr title="Modules\Cms\Services\AnalyticsService::trackEvent">trackEvent</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="CommentSecurityService.php.html#12"><abbr title="Modules\Cms\Services\CommentSecurityService::isSpam">isSpam</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="CommentSecurityService.php.html#78"><abbr title="Modules\Cms\Services\CommentSecurityService::getInitialStatus">getInitialStatus</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="ContentService.php.html#108"><abbr title="Modules\Cms\Services\ContentService::applySorting">applySorting</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="ContentService.php.html#372"><abbr title="Modules\Cms\Services\ContentService::trackMediaUsage">trackMediaUsage</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="MediaService.php.html#453"><abbr title="Modules\Cms\Services\MediaService::moveVariantsToTrash">moveVariantsToTrash</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="MediaService.php.html#478"><abbr title="Modules\Cms\Services\MediaService::moveVariantsFromTrash">moveVariantsFromTrash</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="MediaService.php.html#937"><abbr title="Modules\Cms\Services\MediaService::syncTags">syncTags</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#51"><abbr title="Modules\Cms\Services\ThemeCacheService::getActiveTheme">getActiveTheme</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#263"><abbr title="Modules\Cms\Services\ThemeCacheService::clearAll">clearAll</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#40"><abbr title="Modules\Cms\Services\ThemeHooksService::doAction">doAction</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#78"><abbr title="Modules\Cms\Services\ThemeHooksService::applyFilter">applyFilter</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="AnalyticsService.php.html#47"><abbr title="Modules\Cms\Services\AnalyticsService::trackBatch">trackBatch</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="CommentSecurityService.php.html#62"><abbr title="Modules\Cms\Services\CommentSecurityService::exceedsLinkLimit">exceedsLinkLimit</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ContentService.php.html#404"><abbr title="Modules\Cms\Services\ContentService::duplicate">duplicate</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ContentService.php.html#543"><abbr title="Modules\Cms\Services\ContentService::isLockedByOther">isLockedByOther</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ContentService.php.html#582"><abbr title="Modules\Cms\Services\ContentService::generateUniqueSlug">generateUniqueSlug</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ContentService.php.html#598"><abbr title="Modules\Cms\Services\ContentService::restore">restore</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#69"><abbr title="Modules\Cms\Services\ThemeCacheService::tagsSupported">tagsSupported</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#82"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberSettings">rememberSettings</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#103"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberAssets">rememberAssets</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#124"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberManifest">rememberManifest</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#145"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberTemplates">rememberTemplates</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#165"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberPartials">rememberPartials</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#185"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberLayouts">rememberLayouts</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#205"><abbr title="Modules\Cms\Services\ThemeCacheService::rememberWidgetArea">rememberWidgetArea</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeCacheService.php.html#318"><abbr title="Modules\Cms\Services\ThemeCacheService::getStats">getStats</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#20"><abbr title="Modules\Cms\Services\ThemeHooksService::addAction">addAction</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#54"><abbr title="Modules\Cms\Services\ThemeHooksService::addFilter">addFilter</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#94"><abbr title="Modules\Cms\Services\ThemeHooksService::removeAction">removeAction</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#111"><abbr title="Modules\Cms\Services\ThemeHooksService::removeFilter">removeFilter</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#128"><abbr title="Modules\Cms\Services\ThemeHooksService::hasAction">hasAction</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeHooksService.php.html#136"><abbr title="Modules\Cms\Services\ThemeHooksService::hasFilter">hasFilter</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeService.php.html#378"><abbr title="Modules\Cms\Services\ThemeService::clearThemeCache">clearThemeCache</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ThemeService.php.html#398"><abbr title="Modules\Cms\Services\ThemeService::ensureThemeDirectory">ensureThemeDirectory</abbr></a></td><td class="text-right">6</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 11.0.12</a> using <a href="https://www.php.net/" target="_top">PHP 8.3.30</a> and <a href="https://phpunit.de/">PHPUnit 11.5.55</a> at Thu Apr 23 10:35:15 WIB 2026.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../../../../_js/jquery.min.js?v=11.0.12" type="text/javascript"></script>
+  <script src="../../../../_js/d3.min.js?v=11.0.12" type="text/javascript"></script>
+  <script src="../../../../_js/nv.d3.min.js?v=11.0.12" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([9,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([106,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[0,11,"<a href=\"AnalyticsService.php.html#9\">Modules\\Cms\\Services\\AnalyticsService<\/a>"],[0,15,"<a href=\"CommentSecurityService.php.html#7\">Modules\\Cms\\Services\\CommentSecurityService<\/a>"],[0,102,"<a href=\"ContentService.php.html#18\">Modules\\Cms\\Services\\ContentService<\/a>"],[0,71,"<a href=\"DynamicTagService.php.html#8\">Modules\\Cms\\Services\\DynamicTagService<\/a>"],[0,149,"<a href=\"MediaService.php.html#14\">Modules\\Cms\\Services\\MediaService<\/a>"],[0,33,"<a href=\"SearchService.php.html#8\">Modules\\Cms\\Services\\SearchService<\/a>"],[0,35,"<a href=\"ThemeCacheService.php.html#12\">Modules\\Cms\\Services\\ThemeCacheService<\/a>"],[0,19,"<a href=\"ThemeHooksService.php.html#9\">Modules\\Cms\\Services\\ThemeHooksService<\/a>"],[0,108,"<a href=\"ThemeService.php.html#10\">Modules\\Cms\\Services\\ThemeService<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,3,"<a href=\"AnalyticsService.php.html#19\">Modules\\Cms\\Services\\AnalyticsService::trackEvent<\/a>"],[0,2,"<a href=\"AnalyticsService.php.html#47\">Modules\\Cms\\Services\\AnalyticsService::trackBatch<\/a>"],[0,1,"<a href=\"AnalyticsService.php.html#69\">Modules\\Cms\\Services\\AnalyticsService::trackContentInteraction<\/a>"],[0,1,"<a href=\"AnalyticsService.php.html#85\">Modules\\Cms\\Services\\AnalyticsService::trackFormSubmission<\/a>"],[0,1,"<a href=\"AnalyticsService.php.html#101\">Modules\\Cms\\Services\\AnalyticsService::trackDownload<\/a>"],[0,1,"<a href=\"AnalyticsService.php.html#117\">Modules\\Cms\\Services\\AnalyticsService::trackSearch<\/a>"],[0,1,"<a href=\"AnalyticsService.php.html#132\">Modules\\Cms\\Services\\AnalyticsService::trackVideoPlay<\/a>"],[0,1,"<a href=\"AnalyticsService.php.html#148\">Modules\\Cms\\Services\\AnalyticsService::trackClick<\/a>"],[0,3,"<a href=\"CommentSecurityService.php.html#12\">Modules\\Cms\\Services\\CommentSecurityService::isSpam<\/a>"],[0,7,"<a href=\"CommentSecurityService.php.html#31\">Modules\\Cms\\Services\\CommentSecurityService::containsBannedWords<\/a>"],[0,2,"<a href=\"CommentSecurityService.php.html#62\">Modules\\Cms\\Services\\CommentSecurityService::exceedsLinkLimit<\/a>"],[0,3,"<a href=\"CommentSecurityService.php.html#78\">Modules\\Cms\\Services\\CommentSecurityService::getInitialStatus<\/a>"],[0,1,"<a href=\"ContentService.php.html#22\">Modules\\Cms\\Services\\ContentService::__construct<\/a>"],[0,4,"<a href=\"ContentService.php.html#32\">Modules\\Cms\\Services\\ContentService::getPublishedContents<\/a>"],[0,7,"<a href=\"ContentService.php.html#72\">Modules\\Cms\\Services\\ContentService::applyFilters<\/a>"],[0,3,"<a href=\"ContentService.php.html#108\">Modules\\Cms\\Services\\ContentService::applySorting<\/a>"],[0,4,"<a href=\"ContentService.php.html#125\">Modules\\Cms\\Services\\ContentService::getRelatedContent<\/a>"],[0,23,"<a href=\"ContentService.php.html#178\">Modules\\Cms\\Services\\ContentService::create<\/a>"],[0,20,"<a href=\"ContentService.php.html#272\">Modules\\Cms\\Services\\ContentService::update<\/a>"],[0,1,"<a href=\"ContentService.php.html#359\">Modules\\Cms\\Services\\ContentService::toggleFeatured<\/a>"],[0,3,"<a href=\"ContentService.php.html#372\">Modules\\Cms\\Services\\ContentService::trackMediaUsage<\/a>"],[0,1,"<a href=\"ContentService.php.html#386\">Modules\\Cms\\Services\\ContentService::delete<\/a>"],[0,2,"<a href=\"ContentService.php.html#404\">Modules\\Cms\\Services\\ContentService::duplicate<\/a>"],[0,16,"<a href=\"ContentService.php.html#429\">Modules\\Cms\\Services\\ContentService::bulkAction<\/a>"],[0,4,"<a href=\"ContentService.php.html#486\">Modules\\Cms\\Services\\ContentService::saveCustomFields<\/a>"],[0,1,"<a href=\"ContentService.php.html#505\">Modules\\Cms\\Services\\ContentService::createRevision<\/a>"],[0,1,"<a href=\"ContentService.php.html#529\">Modules\\Cms\\Services\\ContentService::indexForSearch<\/a>"],[0,2,"<a href=\"ContentService.php.html#543\">Modules\\Cms\\Services\\ContentService::isLockedByOther<\/a>"],[0,1,"<a href=\"ContentService.php.html#551\">Modules\\Cms\\Services\\ContentService::lock<\/a>"],[0,1,"<a href=\"ContentService.php.html#562\">Modules\\Cms\\Services\\ContentService::unlock<\/a>"],[0,1,"<a href=\"ContentService.php.html#573\">Modules\\Cms\\Services\\ContentService::clearContentCaches<\/a>"],[0,2,"<a href=\"ContentService.php.html#582\">Modules\\Cms\\Services\\ContentService::generateUniqueSlug<\/a>"],[0,2,"<a href=\"ContentService.php.html#598\">Modules\\Cms\\Services\\ContentService::restore<\/a>"],[0,1,"<a href=\"ContentService.php.html#615\">Modules\\Cms\\Services\\ContentService::forceDelete<\/a>"],[0,1,"<a href=\"ContentService.php.html#633\">Modules\\Cms\\Services\\ContentService::emptyTrash<\/a>"],[0,1,"<a href=\"DynamicTagService.php.html#18\">Modules\\Cms\\Services\\DynamicTagService::resolveBlocks<\/a>"],[0,9,"<a href=\"DynamicTagService.php.html#30\">Modules\\Cms\\Services\\DynamicTagService::processBlocks<\/a>"],[0,61,"<a href=\"DynamicTagService.php.html#62\">Modules\\Cms\\Services\\DynamicTagService::resolveTag<\/a>"],[0,1,"<a href=\"MediaService.php.html#18\">Modules\\Cms\\Services\\MediaService::__construct<\/a>"],[0,18,"<a href=\"MediaService.php.html#28\">Modules\\Cms\\Services\\MediaService::upload<\/a>"],[0,5,"<a href=\"MediaService.php.html#110\">Modules\\Cms\\Services\\MediaService::optimizeImage<\/a>"],[0,6,"<a href=\"MediaService.php.html#142\">Modules\\Cms\\Services\\MediaService::convertToWebP<\/a>"],[0,11,"<a href=\"MediaService.php.html#183\">Modules\\Cms\\Services\\MediaService::generateThumbnail<\/a>"],[0,4,"<a href=\"MediaService.php.html#249\">Modules\\Cms\\Services\\MediaService::resize<\/a>"],[0,6,"<a href=\"MediaService.php.html#283\">Modules\\Cms\\Services\\MediaService::delete<\/a>"],[0,1,"<a href=\"MediaService.php.html#339\">Modules\\Cms\\Services\\MediaService::forceDelete<\/a>"],[0,9,"<a href=\"MediaService.php.html#360\">Modules\\Cms\\Services\\MediaService::restore<\/a>"],[0,5,"<a href=\"MediaService.php.html#424\">Modules\\Cms\\Services\\MediaService::deleteVariants<\/a>"],[0,3,"<a href=\"MediaService.php.html#453\">Modules\\Cms\\Services\\MediaService::moveVariantsToTrash<\/a>"],[0,3,"<a href=\"MediaService.php.html#478\">Modules\\Cms\\Services\\MediaService::moveVariantsFromTrash<\/a>"],[0,20,"<a href=\"MediaService.php.html#507\">Modules\\Cms\\Services\\MediaService::bulkAction<\/a>"],[0,7,"<a href=\"MediaService.php.html#590\">Modules\\Cms\\Services\\MediaService::createZip<\/a>"],[0,11,"<a href=\"MediaService.php.html#628\">Modules\\Cms\\Services\\MediaService::getUsageInfo<\/a>"],[0,16,"<a href=\"MediaService.php.html#677\">Modules\\Cms\\Services\\MediaService::editImage<\/a>"],[0,4,"<a href=\"MediaService.php.html#787\">Modules\\Cms\\Services\\MediaService::getImageDriver<\/a>"],[0,1,"<a href=\"MediaService.php.html#807\">Modules\\Cms\\Services\\MediaService::isImageProcessingAvailable<\/a>"],[0,10,"<a href=\"MediaService.php.html#817\">Modules\\Cms\\Services\\MediaService::scan<\/a>"],[0,5,"<a href=\"MediaService.php.html#901\">Modules\\Cms\\Services\\MediaService::sanitizeSvg<\/a>"],[0,3,"<a href=\"MediaService.php.html#937\">Modules\\Cms\\Services\\MediaService::syncTags<\/a>"],[0,6,"<a href=\"SearchService.php.html#18\">Modules\\Cms\\Services\\SearchService::search<\/a>"],[0,6,"<a href=\"SearchService.php.html#91\">Modules\\Cms\\Services\\SearchService::applySearchLogic<\/a>"],[0,7,"<a href=\"SearchService.php.html#124\">Modules\\Cms\\Services\\SearchService::applyFilters<\/a>"],[0,1,"<a href=\"SearchService.php.html#144\">Modules\\Cms\\Services\\SearchService::searchByType<\/a>"],[0,5,"<a href=\"SearchService.php.html#156\">Modules\\Cms\\Services\\SearchService::getSuggestions<\/a>"],[0,4,"<a href=\"SearchService.php.html#198\">Modules\\Cms\\Services\\SearchService::prepareSearchQuery<\/a>"],[0,4,"<a href=\"SearchService.php.html#222\">Modules\\Cms\\Services\\SearchService::reindexAll<\/a>"],[0,3,"<a href=\"ThemeCacheService.php.html#51\">Modules\\Cms\\Services\\ThemeCacheService::getActiveTheme<\/a>"],[0,2,"<a href=\"ThemeCacheService.php.html#69\">Modules\\Cms\\Services\\ThemeCacheService::tagsSupported<\/a>"],[0,2,"<a href=\"ThemeCacheService.php.html#82\">Modules\\Cms\\Services\\ThemeCacheService::rememberSettings<\/a>"],[0,2,"<a href=\"ThemeCacheService.php.html#103\">Modules\\Cms\\Services\\ThemeCacheService::rememberAssets<\/a>"],[0,2,"<a href=\"ThemeCacheService.php.html#124\">Modules\\Cms\\Services\\ThemeCacheService::rememberManifest<\/a>"],[0,2,"<a href=\"ThemeCacheService.php.html#145\">Modules\\Cms\\Services\\ThemeCacheService::rememberTemplates<\/a>"],[0,2,"<a href=\"ThemeCacheService.php.html#165\">Modules\\Cms\\Services\\ThemeCacheService::rememberPartials<\/a>"],[0,2,"<a href=\"ThemeCacheService.php.html#185\">Modules\\Cms\\Services\\ThemeCacheService::rememberLayouts<\/a>"],[0,2,"<a href=\"ThemeCacheService.php.html#205\">Modules\\Cms\\Services\\ThemeCacheService::rememberWidgetArea<\/a>"],[0,1,"<a href=\"ThemeCacheService.php.html#225\">Modules\\Cms\\Services\\ThemeCacheService::rememberShortcode<\/a>"],[0,4,"<a href=\"ThemeCacheService.php.html#235\">Modules\\Cms\\Services\\ThemeCacheService::clearTheme<\/a>"],[0,3,"<a href=\"ThemeCacheService.php.html#263\">Modules\\Cms\\Services\\ThemeCacheService::clearAll<\/a>"],[0,5,"<a href=\"ThemeCacheService.php.html#280\">Modules\\Cms\\Services\\ThemeCacheService::clearWidgets<\/a>"],[0,1,"<a href=\"ThemeCacheService.php.html#306\">Modules\\Cms\\Services\\ThemeCacheService::clearByPrefix<\/a>"],[0,2,"<a href=\"ThemeCacheService.php.html#318\">Modules\\Cms\\Services\\ThemeCacheService::getStats<\/a>"],[0,2,"<a href=\"ThemeHooksService.php.html#20\">Modules\\Cms\\Services\\ThemeHooksService::addAction<\/a>"],[0,3,"<a href=\"ThemeHooksService.php.html#40\">Modules\\Cms\\Services\\ThemeHooksService::doAction<\/a>"],[0,2,"<a href=\"ThemeHooksService.php.html#54\">Modules\\Cms\\Services\\ThemeHooksService::addFilter<\/a>"],[0,3,"<a href=\"ThemeHooksService.php.html#78\">Modules\\Cms\\Services\\ThemeHooksService::applyFilter<\/a>"],[0,2,"<a href=\"ThemeHooksService.php.html#94\">Modules\\Cms\\Services\\ThemeHooksService::removeAction<\/a>"],[0,2,"<a href=\"ThemeHooksService.php.html#111\">Modules\\Cms\\Services\\ThemeHooksService::removeFilter<\/a>"],[0,2,"<a href=\"ThemeHooksService.php.html#128\">Modules\\Cms\\Services\\ThemeHooksService::hasAction<\/a>"],[0,2,"<a href=\"ThemeHooksService.php.html#136\">Modules\\Cms\\Services\\ThemeHooksService::hasFilter<\/a>"],[0,1,"<a href=\"ThemeHooksService.php.html#146\">Modules\\Cms\\Services\\ThemeHooksService::getRegisteredHooks<\/a>"],[0,1,"<a href=\"ThemeService.php.html#16\">Modules\\Cms\\Services\\ThemeService::__construct<\/a>"],[0,1,"<a href=\"ThemeService.php.html#26\">Modules\\Cms\\Services\\ThemeService::getActiveTheme<\/a>"],[0,6,"<a href=\"ThemeService.php.html#38\">Modules\\Cms\\Services\\ThemeService::getMenuLocations<\/a>"],[0,8,"<a href=\"ThemeService.php.html#62\">Modules\\Cms\\Services\\ThemeService::activateTheme<\/a>"],[0,1,"<a href=\"ThemeService.php.html#136\">Modules\\Cms\\Services\\ThemeService::deactivateTheme<\/a>"],[0,15,"<a href=\"ThemeService.php.html#150\">Modules\\Cms\\Services\\ThemeService::getThemeSetting<\/a>"],[0,23,"<a href=\"ThemeService.php.html#191\">Modules\\Cms\\Services\\ThemeService::loadThemeAssets<\/a>"],[0,1,"<a href=\"ThemeService.php.html#279\">Modules\\Cms\\Services\\ThemeService::validateTheme<\/a>"],[0,14,"<a href=\"ThemeService.php.html#287\">Modules\\Cms\\Services\\ThemeService::checkDependencies<\/a>"],[0,6,"<a href=\"ThemeService.php.html#326\">Modules\\Cms\\Services\\ThemeService::getThemeCustomCss<\/a>"],[0,11,"<a href=\"ThemeService.php.html#349\">Modules\\Cms\\Services\\ThemeService::getThemeCssVariables<\/a>"],[0,2,"<a href=\"ThemeService.php.html#378\">Modules\\Cms\\Services\\ThemeService::clearThemeCache<\/a>"],[0,1,"<a href=\"ThemeService.php.html#390\">Modules\\Cms\\Services\\ThemeService::getThemeDirectory<\/a>"],[0,2,"<a href=\"ThemeService.php.html#398\">Modules\\Cms\\Services\\ThemeService::ensureThemeDirectory<\/a>"],[0,15,"<a href=\"ThemeService.php.html#414\">Modules\\Cms\\Services\\ThemeService::scanThemes<\/a>"],[0,1,"<a href=\"ThemeService.php.html#480\">Modules\\Cms\\Services\\ThemeService::getDefaultSettingsSchema<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

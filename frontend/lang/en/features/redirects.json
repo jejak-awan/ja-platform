@@ -1,0 +1,54 @@
+{
+    "actions": {
+        "delete": "Delete",
+        "edit": "Edit"
+    },
+    "empty": "No redirects found",
+    "loading": "Loading...",
+    "messages": {
+        "deleteConfirm": "Are you sure you want to delete redirect from \"{from}\"?",
+        "deleteFailed": "Failed to delete redirect",
+        "saveFailed": "Failed to save redirect"
+    },
+    "modals": {
+        "redirect": {
+            "active": "Active",
+            "code": "Status Code",
+            "codes": {
+                "p301": "301 - Permanent Redirect",
+                "p308": "308 - Permanent Redirect (Preserve Method)",
+                "t302": "302 - Temporary Redirect",
+                "t307": "307 - Temporary Redirect (Preserve Method)"
+            },
+            "from": "From URL",
+            "fromHint": "The source URL path (e.g., /old-page)",
+            "fromPlaceholder": "/old-path",
+            "saving": "Saving...",
+            "titleCreate": "Create Redirect",
+            "titleEdit": "Edit Redirect",
+            "to": "To URL",
+            "toHint": "The destination URL path or full URL",
+            "toPlaceholder": "/new-path"
+        }
+    },
+    "new": "New Redirect",
+    "search": "Search redirects...",
+    "statistics": {
+        "active": "Active Redirects",
+        "hits": "Total Hits",
+        "total": "Total Redirects"
+    },
+    "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+    },
+    "table": {
+        "actions": "Actions",
+        "code": "Status Code",
+        "from": "From URL",
+        "hits": "Hits",
+        "status": "Status",
+        "to": "To URL"
+    },
+    "title": "Redirects"
+}

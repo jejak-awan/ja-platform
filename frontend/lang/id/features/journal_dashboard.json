@@ -1,0 +1,33 @@
+{
+    "cards": {
+        "activity": {
+            "description": "Aktivitas pengguna dan perubahan data",
+            "title": "Jurnal Aktivitas",
+            "total": "total aktivitas"
+        },
+        "login": {
+            "description": "Semua aktivitas login pengguna",
+            "title": "Riwayat Akses",
+            "total": "total login"
+        },
+        "security": {
+            "description": "Event keamanan dan percobaan login",
+            "title": "Jurnal Keamanan",
+            "total": "total event"
+        },
+        "system": {
+            "description": "Log aplikasi Laravel",
+            "files": "file log",
+            "title": "Jurnal Sistem"
+        }
+    },
+    "description": "Lihat ringkasan dan akses cepat ke semua sistem log",
+    "empty": "Tidak ada data",
+    "loading": "Memuat...",
+    "recent": {
+        "activity": "Aktivitas Terbaru",
+        "security": "Event Keamanan Terbaru"
+    },
+    "title": "Dasbor Jurnal",
+    "viewAll": "Lihat Semua"
+}

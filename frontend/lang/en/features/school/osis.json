@@ -1,0 +1,47 @@
+{
+    "title": "OSIS Management",
+    "subtitle": "Organization structure, work programs, and OSIS finances.",
+    "dashboard": {
+        "title": "OSIS Activities",
+        "subtitle": "Performance monitoring and student participation."
+    },
+    "tabs": {
+        "programs": "Work Programs",
+        "members": "Membership",
+        "finances": "Finances",
+        "suggestions": "Suggestion Box"
+    },
+    "stats": {
+        "workPrograms": "Work Programs",
+        "completed": "Completed",
+        "members": "Total Members",
+        "pendingSuggestions": "New Suggestions"
+    },
+    "programs": {
+        "emptyTitle": "No Programs Yet",
+        "emptyDesc": "Start by creating your first work program (Proker).",
+        "estimatedBudget": "Est. Budget"
+    },
+    "members": {
+        "name": "Member Name",
+        "position": "Position",
+        "period": "Period",
+        "remove": "Remove"
+    },
+    "finances": {
+        "title": "Financial Journal",
+        "income": "Total Income",
+        "expense": "Total Expense",
+        "empty": "No transaction records found."
+    },
+    "suggestions": {
+        "officialResponse": "Official Response",
+        "empty": "Suggestion box is empty.",
+        "respond": "Respond",
+        "archive": "Archive"
+    },
+    "actions": {
+        "newActivity": "New Activity",
+        "reload": "Reload"
+    }
+}

@@ -1,0 +1,45 @@
+{
+    "actions": {
+        "delete": "Hapus",
+        "edit": "Ubah"
+    },
+    "empty": "Tidak ada widget ditemukan",
+    "loading": "Memuat...",
+    "messages": {
+        "deleteConfirm": "Apakah Anda yakin ingin menghapus widget \"{title}\"?",
+        "deleteFailed": "Gagal menghapus widget",
+        "saveFailed": "Gagal menyimpan widget"
+    },
+    "modals": {
+        "widget": {
+            "active": "Aktif",
+            "content": "Konten",
+            "location": "Lokasi",
+            "locationPlaceholder": "sidebar, footer, dll.",
+            "positionPlaceholder": "sidebar, footer, etc.",
+            "saving": "Menyimpan...",
+            "title": "Judul",
+            "titleCreate": "Buat Widget",
+            "titleEdit": "Ubah Widget",
+            "type": "Tipe"
+        }
+    },
+    "new": "Widget Baru",
+    "table": {
+        "actions": "Aksi",
+        "location": "Lokasi",
+        "status": {
+            "inactive": "Tidak Aktif"
+        },
+        "title": "Judul",
+        "type": "Tipe"
+    },
+    "types": {
+        "categories": "Kategori",
+        "custom": "Kustom",
+        "html": "HTML",
+        "recent_posts": "Postingan Terbaru",
+        "text": "Teks"
+    },
+    "title": "Widget"
+}

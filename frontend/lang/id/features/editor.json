@@ -1,0 +1,56 @@
+{
+    "actions": {
+        "cancel": "Batal",
+        "constrainProportions": "Kunci proporsi",
+        "fit": "Sesuaikan Konten (Reset)",
+        "interact": "Interaksi dengan konten",
+        "save": "Simpan Perubahan",
+        "stopInteraction": "Hentikan interaksi"
+    },
+    "embed": {
+        "configure": "Klik ganda untuk konfigurasi",
+        "empty": "HTML Embed Kosong"
+    },
+    "fields": {
+        "alignment": "Perataan",
+        "altText": "Teks Alt",
+        "autoplay": "Putar Otomatis",
+        "borderColor": "Warna Border",
+        "borderRadius": "Radius (px)",
+        "borderWidth": "Border (px)",
+        "controls": "Kontrol",
+        "displayMode": "Mode Tampilan",
+        "height": "Tinggi",
+        "loop": "Putar Berulang",
+        "margin": "Jarak Wrap (px)",
+        "source": "URL Sumber",
+        "width": "Lebar"
+    },
+    "placeholder": {
+        "text": "Mulai menulis..."
+    },
+    "placeholders": {
+        "alt": "Deskripsi...",
+        "auto": "otomatis",
+        "html": "Tempel kode HTML di sini...",
+        "none": "Tidak ada",
+        "src": "https://..."
+    },
+    "properties": {
+        "appearance": "Tampilan",
+        "dimensions": "Dimensi",
+        "general": "Pengaturan Umum",
+        "html": "Konten HTML",
+        "title": "Properti",
+        "video": "Pemutaran Video"
+    },
+    "values": {
+        "block": "Blok",
+        "center": "Tengah",
+        "floatLeft": "Rata Kiri (Wrap)",
+        "floatRight": "Rata Kanan (Wrap)",
+        "inline": "Inline",
+        "left": "Kiri",
+        "right": "Kanan"
+    }
+}

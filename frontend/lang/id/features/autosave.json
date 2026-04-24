@@ -1,0 +1,9 @@
+{
+    "agoMinutes": "{minutes}m yang lalu",
+    "agoSeconds": "{seconds}d yang lalu",
+    "failed": "Gagal menyimpan",
+    "justNow": "baru saja",
+    "notSaved": "Belum disimpan",
+    "savedAt": "Disimpan pada {time}",
+    "saving": "Menyimpan otomatis..."
+}

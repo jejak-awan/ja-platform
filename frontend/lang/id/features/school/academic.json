@@ -1,0 +1,67 @@
+{
+    "actions": {
+        "manageMembers": "Kelola Anggota",
+        "setSchedule": "Atur Jadwal"
+    },
+    "labels": {
+        "day": "Hari",
+        "endTime": "Waktu Selesai",
+        "group": "Kelompok",
+        "groupName": "Nama Rombel",
+        "homeroomTeacher": "Wali Kelas",
+        "kkm": "KKM",
+        "room": "Ruangan (Opsional)",
+        "startTime": "Waktu Mulai",
+        "subject": "Mata Pelajaran",
+        "subjectCode": "Kode Mapel",
+        "subjectName": "Nama Mata Pelajaran",
+        "teacher": "Guru / Pengajar",
+        "time": "WAKTU",
+        "groupA": "Kelompok A (Wajib)",
+        "groupB": "Kelompok B (Wajib)",
+        "groupC": "Kelompok C (Peminatan)",
+        "localContent": "Muatan Lokal",
+        "setActiveYear": "Set sebagai Tahun Aktif",
+        "noMembers": "Belum ada anggota di rombel ini.",
+        "manageGroupMembers": "Kelola Anggota: {name}",
+        "manageGroupMembersDesc": "Tambahkan atau hapus siswa dari rombongan belajar ini."
+    },
+    "messages": {
+        "addSuccess": "Data berhasil ditambahkan",
+        "deleteConfirm": "Apakah Anda yakin ingin menghapus \"{name}\"?",
+        "deleteSuccess": "Data berhasil dihapus",
+        "scheduleAddSuccess": "Jadwal berhasil ditambahkan",
+        "scheduleDeleteSuccess": "Jadwal berhasil dihapus",
+        "scheduleUpdateSuccess": "Jadwal berhasil diperbarui",
+        "selectGroupToView": "Pilih rombongan belajar untuk melihat jadwal",
+        "setupScheduleDescription": "Silakan lengkapi detail jadwal pelajaran di bawah ini.",
+        "studentAddSuccess": "Siswa berhasil ditambahkan ke rombel",
+        "studentRemoveSuccess": "Siswa berhasil dikeluarkan dari rombel",
+        "updateSuccess": "Data berhasil diperbarui"
+    },
+    "placeholders": {
+        "select": "Pilih...",
+        "selectDay": "Pilih Hari",
+        "selectGroup": "Pilih Rombel",
+        "selectLevel": "Pilih Jenjang",
+        "selectRoom": "Pilih Ruangan",
+        "selectSubject": "Pilih Mata Pelajaran",
+        "selectTeacher": "Pilih Guru",
+        "selectYear": "Pilih Tahun",
+        "selectStudentToAdd": "Pilih siswa untuk ditambahkan",
+        "selectSubjectGroup": "Pilih Kelompok",
+        "notesHint": "Keterangan tambahan..."
+    },
+    "subtitle": "Kelola kurikulum, rombongan belajar, dan kalender akademik.",
+    "tabs": {
+        "studyGroups": "Rombongan Belajar",
+        "subjects": "Mata Pelajaran",
+        "group": "Rombel",
+        "timetable": "Jadwal Pelajaran",
+        "years": "Tahun Ajaran"
+    },
+    "title": "Akademik",
+    "tooltips": {
+        "overCapacity": "Kapasitas Berlebih"
+    }
+}

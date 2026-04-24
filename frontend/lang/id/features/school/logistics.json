@@ -1,0 +1,138 @@
+{
+    "labels": {
+        "careerCenter": "Career Center",
+        "hostel": "Asrama",
+        "hostelManagement": "Manajemen Asrama",
+        "inventory": "Inventaris",
+        "logisticsEcosystem": "Logistik & Ekosistem",
+        "room": "Kamar",
+        "transport": "Transportasi"
+    },
+    "hostel": {
+        "actions": {
+            "addBlock": "Tambah Blok",
+            "addRoom": "Tambah Kamar",
+            "releaseStudent": "Keluarkan Siswa",
+            "allocateStudent": "Alokasi Siswa",
+            "confirmAllocation": "Konfirmasi Alokasi"
+        },
+        "labels": {
+            "available": "Tersedia",
+            "bed": "BED",
+            "hostelBlock": "Blok Asrama",
+            "room": "Kamar",
+            "standardFacility": "Fasilitas Standar",
+            "allocateStudentTitle": "Alokasi Siswa ke Bed",
+            "occupancyStartDate": "Tanggal Mulai Menempati"
+        },
+        "placeholders": {
+            "searchStudent": "Cari nama siswa..."
+        },
+        "messages": {
+            "releaseConfirm": "Apakah Anda yakin ingin mengeluarkan siswa dari bed ini?",
+            "selectBlockFirst": "Pilih blok asrama untuk melihat data kamar"
+        }
+    },
+    "transport": {
+        "actions": {
+            "busFleet": "Armada Bus",
+            "routeData": "Data Rute",
+            "registerTransport": "Daftar Antar Jemput"
+        },
+        "labels": {
+            "driver": "Driver",
+            "seatCapacity": "Kapasitas Kursi",
+            "studentList": "Daftar Siswa Antar Jemput",
+            "studentListDesc": "Siswa yang terdaftar dalam layanan transportasi sekolah.",
+            "pickupPoint": "Titik Jemput",
+            "vehicle": "Kendaraan"
+        }
+    },
+    "inventory": {
+        "actions": {
+            "newItem": "Barang Baru",
+            "updateStock": "Update Stok"
+        },
+        "labels": {
+            "item": "Barang",
+            "lastLogisticsTransaction": "Transaksi Logistik Terakhir",
+            "lowStock": "Stok Menipis",
+            "minimumStock": "Stok Minimum",
+            "quantity": "Jumlah",
+            "reference": "Ref",
+            "time": "Waktu"
+        },
+        "placeholders": {
+            "searchSKU": "Cari SKU atau Nama..."
+        }
+    },
+    "career": {
+        "actions": {
+            "postVacancy": "Posting Lowongan",
+            "viewApplicants": "Lihat Pelamar"
+        },
+        "labels": {
+            "applicant": "Pelamar",
+            "applicants": "Pelamar"
+        }
+    },
+    "subtitle": "Kelola asrama, transportasi, dan inventaris sekolah.",
+    "sarpras": {
+        "title": "Sarana & Prasarana",
+        "subtitle": "Kelola data aset tanah, bangunan, ruangan, dan inventaris sekolah.",
+        "tabs": {
+            "land": "Tanah",
+            "building": "Bangunan",
+            "room": "Ruangan",
+            "asset": "Aset / Inventaris",
+            "maintenance": "Pemeliharaan"
+        },
+        "labels": {
+            "landName": "Nama Lahan",
+            "area": "Luas",
+            "certificateNumber": "No. Sertifikat",
+            "buildingName": "Nama Bangunan",
+            "location": "Lokasi Lahan",
+            "condition": "Kondisi",
+            "roomName": "Nama Ruang",
+            "roomType": "Jenis Ruang",
+            "assetName": "Nama Barang",
+            "assetCode": "Kode Barang",
+            "priority": "Prioritas",
+            "reporter": "Pelapor",
+            "floorCount": "Jml Lantai",
+            "yearBuilt": "Tahun Bangun"
+        },
+        "actions": {
+            "addLand": "Tambah Lahan",
+            "editLand": "Edit Lahan",
+            "addBuilding": "Tambah Bangunan",
+            "editBuilding": "Edit Bangunan",
+            "addRoom": "Tambah Ruangan",
+            "editRoom": "Edit Ruangan",
+            "addAsset": "Tambah Aset",
+            "editAsset": "Edit Aset",
+            "addMaintenance": "Tambah Pemeliharaan",
+            "editMaintenance": "Edit Pemeliharaan",
+            "createMaintenance": "Buat Tiket Pemeliharaan",
+            "updateMaintenance": "Update Tiket Pemeliharaan",
+            "sendReport": "Kirim Laporan"
+        },
+        "placeholders": {
+            "landNameHint": "Contoh: Kampus Utama",
+            "roomNameHint": "Contoh: Ruang Kelas X-1",
+            "selectLand": "Pilih Lahan",
+            "selectBuilding": "Pilih Bangunan",
+            "selectRoom": "Pilih Ruangan",
+            "selectAsset": "Pilih Aset",
+            "selectStaff": "Pilih Staff",
+            "selectCondition": "Pilih Kondisi",
+            "selectPriority": "Pilih Prioritas",
+            "issueDescriptionHint": "Jelaskan detail kerusakan...",
+            "resolutionNotesHint": "Catatan hasil perbaikan..."
+        },
+        "descriptions": {
+            "maintenance": "Laporkan kerusakan atau ajukan pemeliharaan untuk aset sekolah."
+        }
+    }
+}

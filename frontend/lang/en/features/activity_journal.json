@@ -1,0 +1,50 @@
+{
+    "export": {
+        "button": "Export CSV",
+        "exporting": "Exporting...",
+        "failed": "Failed to export activity logs"
+    },
+    "filters": {
+        "allTypes": "All Types",
+        "allUsers": "All Users",
+        "clear": "Clear",
+        "dateFrom": "From",
+        "dateTo": "To",
+        "perPage": "Per page",
+        "search": "Search activities...",
+        "types": {
+            "bulk_action_media": "Bulk Media Action",
+            "created": "Created",
+            "delete_permanent": "Permanently Deleted",
+            "deleted": "Deleted",
+            "emptied_trash": "Emptied Trash",
+            "login": "Login",
+            "login_failed": "Login Failed",
+            "login_success": "Login Success",
+            "logout": "Logout",
+            "published": "Published",
+            "session_invalidated": "Session Invalidated",
+            "soft_deleted_file": "Moved File to Trash",
+            "soft_deleted_folder": "Moved Folder to Trash",
+            "soft_deleted_media": "Moved Media to Trash",
+            "unpublished": "Unpublished",
+            "updated": "Updated",
+            "uploaded_media": "Uploaded Media",
+            "viewed": "Viewed"
+        }
+    },
+    "messages": {
+        "empty": "No activity logs found",
+        "loading": "Loading...",
+        "system": "System",
+        "unknown": "Unknown",
+        "viewDetails": "View Details"
+    },
+    "stats": {
+        "activeUsers": "Active Users",
+        "thisWeek": "This Week",
+        "today": "Today",
+        "total": "Total Activities"
+    },
+    "title": "Activity Journal"
+}

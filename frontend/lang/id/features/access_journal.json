@@ -1,0 +1,47 @@
+{
+    "alerts": {
+        "severity": {
+            "high": "Tinggi",
+            "low": "Rendah",
+            "medium": "Sedang"
+        },
+        "title": "Peringatan Aktivitas Mencurigakan",
+        "types": {
+            "brute_force": "Potensi Brute Force",
+            "new_ip": "Alamat IP Baru",
+            "shared_ip": "Kemungkinan Berbagi Akun"
+        }
+    },
+    "description": "Lihat semua aktivitas login dari pengguna",
+    "export": {
+        "button": "Ekspor CSV",
+        "exporting": "Mengekspor...",
+        "failed": "Gagal mengekspor riwayat login"
+    },
+    "filters": {
+        "allStatus": "Semua Status",
+        "allUsers": "Semua Pengguna",
+        "dateFrom": "Dari",
+        "dateTo": "Sampai"
+    },
+    "messages": {
+        "empty": "Tidak ada riwayat login ditemukan",
+        "loading": "Memuat..."
+    },
+    "pagination": {
+        "showing": "Menampilkan {count} dari {total} record"
+    },
+    "stats": {
+        "activeSessions": "Sesi Aktif",
+        "failedLogins": "Login Gagal",
+        "suspiciousCount": "Aktivitas Mencurigakan",
+        "todayLogins": "Login Hari Ini",
+        "totalLogins": "Total Login Berhasil",
+        "uniqueIps": "IP Unik Hari Ini"
+    },
+    "status": {
+        "failed": "Gagal",
+        "success": "Berhasil"
+    },
+    "title": "Riwayat Akses"
+}

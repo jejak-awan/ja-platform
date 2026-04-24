@@ -1,0 +1,183 @@
+{
+    "title": "Pengaturan",
+    "description": "Kelola pengaturan aplikasi Anda",
+    "loading": "Memuat pengaturan...",
+    "noSettings": "Tidak ada pengaturan ditemukan di tab ini.",
+    "tabs": {
+        "identity": "Identitas",
+        "general": "Umum",
+        "email": "Email",
+        "seo": "SEO",
+        "security": "Keamanan",
+        "comments": "Diskusi",
+        "performance": "Performa",
+        "media": "Media",
+        "ai": "Bantuan AI",
+        "analytics": "Analitik"
+    },
+    "groups": {
+        "ai": {
+            "title": "Bantuan AI",
+            "description": "Konfigurasi fitur AI untuk pembuatan konten.",
+            "enable_ai": "Aktifkan Fitur AI",
+            "enable_ai_desc": "Aktifkan atau nonaktifkan bantuan AI di editor.",
+            "default_provider": "Provider Default",
+            "default_provider_desc": "Pilih provider AI yang akan digunakan secara default.",
+            "providers": "Provider AI",
+            "api_key": "API Key",
+            "api_key_placeholder": "Masukkan API Key",
+            "model_select": "Model Default",
+            "select_model": "Pilih Model",
+            "loading_models": "Memuat...",
+            "enter_api_key_to_select": "Masukkan API Key untuk memilih model.",
+            "test_connection": "Tes Koneksi",
+            "fetch_models": "Ambil Model",
+            "using_model": "Menggunakan: {model}",
+            "connection_success": "Koneksi berhasil",
+            "fetch_success": "Model berhasil diambil"
+        },
+        "siteInfo": {
+            "title": "Informasi Situs",
+            "description": "Informasi dasar tentang situs web Anda"
+        },
+        "editor": {
+            "title": "Preferensi Editor",
+            "description": "Kontrol perilaku editor konten"
+        },
+        "localization": {
+            "title": "Lokalisasi",
+            "description": "Pengaturan regional dan preferensi format"
+        },
+        "smtp": {
+            "title": "Konfigurasi SMTP",
+            "description": "Pengaturan koneksi server email"
+        },
+        "identity": {
+            "title": "Identitas Email",
+            "description": "Informasi pengirim default untuk email keluar"
+        },
+        "meta": {
+            "title": "Tag Meta",
+            "description": "Informasi meta default untuk mesin pencari"
+        },
+        "searchEngines": {
+            "title": "Mesin Pencari",
+            "description": "Integrasi dengan Google dan alat mesin pencari"
+        },
+        "authentication": {
+            "title": "Autentikasi & 2FA",
+            "description": "Pengaturan pendaftaran pengguna dan autentikasi dua faktor"
+        },
+        "password": {
+            "title": "Kebijakan Kata Sandi",
+            "description": "Persyaratan kekuatan dan kompleksitas kata sandi"
+        },
+        "session": {
+            "title": "Manajemen Sesi",
+            "description": "Kontrol durasi dan batasan sesi login"
+        },
+        "access": {
+            "title": "Pembatasan Akses",
+            "description": "Pengaturan untuk membakasi akses mencurigakan"
+        },
+        "captcha": {
+            "title": "Perlindungan Anti-Bot",
+            "description": "Verifikasi captcha untuk mencegah serangan otomatis"
+        },
+        "upload": {
+            "title": "Pengaturan Unggahan",
+            "description": "Batas unggahan file dan tipe file yang diizinkan"
+        },
+        "imageProcessing": {
+            "title": "Pemrosesan Gambar",
+            "description": "Pengaturan pembuatan thumbnail dan watermark"
+        },
+        "s3": {
+            "title": "Konfigurasi S3",
+            "description": "Konfigurasi detail koneksi bucket S3"
+        },
+        "google": {
+            "title": "Konfigurasi Google Drive",
+            "description": "Konfigurasi detail Google Drive API"
+        },
+        "ftp": {
+            "title": "Konfigurasi FTP",
+            "description": "Konfigurasi detail server FTP"
+        },
+        "dropbox": {
+            "title": "Konfigurasi Dropbox",
+            "description": "Konfigurasi token API Dropbox"
+        },
+        "migration": {
+            "title": "Migrasi Penyimpanan",
+            "description": "Migrasi file dari Penyimpanan Lokal ke {driver}. Ini akan menyalin file yang ada ke penyimpanan baru.",
+            "start": "Mulai Migrasi",
+            "stop": "Berhenti",
+            "scanning": "Memindai file lokal...",
+            "migrating": "Memigrasi: {processed} / {total} file",
+            "no_files": "Tidak ada file untuk dimigrasi.",
+            "stopped": "Migrasi dihentikan oleh pengguna.",
+            "batch_failed": "Batch gagal",
+            "success": "Migrasi selesai dengan sukses.",
+            "confirm_title": "Migrasi Penyimpanan",
+            "confirm_message": "Ini akan menyalin semua file dari Penyimpanan Lokal ke Penyimpanan Eksternal yang dikonfigurasi saat ini. Proses ini mungkin memakan waktu. Lanjutkan?"
+        },
+        "test": {
+            "button": "Tes Koneksi",
+            "testing": "Mengetes...",
+            "failed": "Koneksi gagal. Silakan periksa kredensial Anda."
+        },
+        "discussion": {
+            "title": "Pengaturan Diskusi",
+            "description": "Konfigurasi sistem komentar"
+        },
+        "moderation": {
+            "title": "Moderasi",
+            "description": "Keamanan konten dan perlindungan spam"
+        },
+        "maintenance": {
+            "title": "Mode Maintenance",
+            "description": "Konfigurasi halaman Coming Soon / Under Maintenance."
+        },
+        "botShield": {
+            "title": "Bot Shield (Keamanan Lanjutan)",
+            "description": "Perlindungan Proof-of-Work terhadap AI scrapers, bots, dan serangan otomatis."
+        },
+        "scannerProtection": {
+            "title": "Perlindungan Scanner",
+            "description": "Pembelajaran dinamis dan pemblokiran otomatis untuk pemindai path berbahaya."
+        },
+        "threatIntel": {
+            "title": "Intelijen Ancaman",
+            "description": "Pengaturan reputasi IP dan AbuseIPDB"
+        },
+        "securityNotifications": {
+            "title": "Notifikasi Keamanan",
+            "description": "Peringatan via Telegram, Email, dan Webhook"
+        },
+        "analytics": {
+            "retentionTitle": "Retensi Data",
+            "description": "Konfigurasi berapa lama data analitik harus disimpan di database.",
+            "cleanupTitle": "Pembersihan Data Manual",
+            "cleanupDescription": "Jalankan pembersihan manual data analitik lama berdasarkan pengaturan retensi. Proses ini akan menghapus data yang lebih tua dari periode retensi yang ditentukan secara permanen.",
+            "cleanupButton": "Jalankan Pembersihan Sekarang",
+            "cleaningNow": "Membersihkan...",
+            "cleanupConfirm": "Apakah Anda yakin ingin menghapus data analitik lama sekarang?",
+            "cleanupSuccess": "Berhasil membersihkan {count} data.",
+            "purgeTitle": "Hapus semua data analitik",
+            "purgeConfirm": "Ini akan menghapus permanen semua kunjungan, event, dan sesi analitik (termasuk hari ini). Penghitung tayang di konten CMS tidak ikut direset. Lanjutkan?",
+            "purgeButton": "Hapus semua analitik",
+            "purgingNow": "Menghapus...",
+            "purgeSuccess": "{count} rekaman analitik dihapus. Dashboard akan menampilkan data kosong."
+        }
+    },
+    "enabled": "Aktif",
+    "disabled": "Nonaktif",
+    "current": "Saat ini",
+    "reset": "Atur Ulang",
+    "save": "Simpan Pengaturan",
+    "saving": "Menyimpan...",
+    "saved": "Pengaturan berhasil disimpan",
+    "failed": "Gagal menyimpan pengaturan",
+    "jsonPlaceholder": "Masukkan format JSON yang valid"
+}

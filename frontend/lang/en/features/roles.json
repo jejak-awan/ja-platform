@@ -1,0 +1,79 @@
+{
+    "actions": {
+        "delete": "Delete",
+        "duplicate": "Duplicate",
+        "edit": "Edit"
+    },
+    "create": "Create Role",
+    "edit": "Edit Role",
+    "form": {
+        "cancel": "Cancel",
+        "deselectAll": "Deselect All",
+        "name": "Role Name",
+        "namePlaceholder": "Enter role name",
+        "save": "Save",
+        "saving": "Saving...",
+        "selectAll": "Select All"
+    },
+    "list": {
+        "empty": "No roles found",
+        "loading": "Loading roles...",
+        "more": "+{count} more",
+        "permissionsCount": "{count} permissions",
+        "usersCount": "Users: {count}"
+    },
+    "messages": {
+        "deleteConfirm": "Delete role \"{name}\"? This cannot be undone.",
+        "deleteFailed": "Failed to delete role",
+        "deleteSuccess": "Role deleted successfully",
+        "duplicateFailed": "Failed to duplicate role",
+        "enterName": "Please enter a role name",
+        "fetchFailed": "Failed to fetch roles",
+        "saveFailed": "Failed to save role",
+        "saveSuccess": "Role saved successfully"
+    },
+    "permissions": "Permissions",
+    "subtitle": "Manage user roles and their permissions",
+    "title": "Roles & Permissions",
+    "title_singular": "Role",
+    "workspace": {
+        "clearSelection": "Clear Selection",
+        "comparison": {
+            "exit": "Exit Comparison",
+            "mode": "Comparison Mode",
+            "subtitle": "Permission Comparison Matrix",
+            "syncing": "Syncing {count} Roles",
+            "title": "Role Comparison Matrix"
+        },
+        "create": {
+            "title": "Create New Role"
+        },
+        "duplicate": "Duplicate role",
+        "edit": {
+            "mode": "Edit Mode"
+        },
+        "identity": "Role Identity",
+        "liveEditing": "Live Editing",
+        "matrix": {
+            "available": "{count} permissions available",
+            "collapseAll": "Collapse All",
+            "deselectCategory": "Deselect Category",
+            "expandAll": "Expand All",
+            "selectCategory": "Select Category",
+            "title": "Permissions Matrix"
+        },
+        "placeholder": "Select a role to start managing permissions",
+        "reset": "Reset Changes",
+        "save": "Save Configuration",
+        "saving": {
+            "subtitle": "Applying permissions across roles...",
+            "title": "Saving Security Configuration"
+        },
+        "synced": "Configuration synced",
+        "unsavedChanges": "Unsaved changes detected",
+        "welcome": {
+            "description": "Click on a role in the sidebar to edit its permissions, or select multiple roles use the checkbox to compare them side-by-side.",
+            "title": "Role Management Workspace"
+        }
+    }
+}

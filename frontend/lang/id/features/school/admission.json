@@ -1,0 +1,37 @@
+{
+    "actions": {
+        "manualRegister": "Registrasi Manual"
+    },
+    "admitted": "Diterima",
+    "applicants": "Pendaftar",
+    "labels": {
+        "admitted": "Diterima",
+        "applicantDetail": "Detail Pelamar",
+        "full_name": "Nama Lengkap",
+        "new": "Baru",
+        "personalData": "Data Pribadi",
+        "previousSchool": "Sekolah Asal",
+        "regNumber": "No. Registrasi",
+        "rejected": "Ditolak",
+        "conversion": "Konversi",
+        "registrationStatus": "Status Pendaftaran",
+        "selection": "Seleksi",
+        "supportingDocuments": "Dokumen Pendukung",
+        "targetAcademicYear": "Tahun Ajaran Tujuan",
+        "totalApplicants": "Total Pelamar",
+        "verified": "Terverifikasi",
+        "nisn": "NISN"
+    },
+    "placeholders": {
+        "fullNameHint": "Sesuai Ijazah / Akta",
+        "noDocuments": "Belum ada dokumen yang diunggah.",
+        "search": "Cari pelamar...",
+        "selectGender": "Pilih Jenis Kelamin",
+        "selectYear": "Pilih Tahun",
+        "nisnHint": "10 Digit NISN",
+        "emailHint": "contoh@email.com",
+        "previousSchoolHint": "Nama sekolah sebelumnya"
+    },
+    "subtitle": "Kelola pendaftaran, verifikasi dokumen, dan proses seleksi calon siswa.",
+    "title": "Penerimaan Siswa Baru (PPDB)"
+}

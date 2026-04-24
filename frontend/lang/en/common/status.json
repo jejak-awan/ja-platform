@@ -1,0 +1,10 @@
+{
+    "active": "Active",
+    "all": "All",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "failed": "Failed",
+    "not_configured": "Not configured",
+    "online": "Online",
+    "success": "Success"
+}

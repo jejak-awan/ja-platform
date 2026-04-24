@@ -1,0 +1,180 @@
+{
+    "actions": {
+        "approve": "Approve",
+        "duplicate": "Duplicate",
+        "emptyTrash": "Empty Trash",
+        "moveToTrash": "Move to Trash",
+        "publishNow": "Publish Now",
+        "reject": "Reject",
+        "restore": "Restore",
+        "saveDraft": "Save as Draft",
+        "schedule": "Schedule",
+        "unpublish": "Unpublish"
+    },
+    "title_singular": "Content",
+    "title_plural": "Contents",
+    "form": {
+        "addTags": "Add Tags",
+        "allowComments": "Allow Comments",
+        "allowCommentsDesc": "Enable or disable comments for this content item.",
+        "back": "Back to Contents",
+        "body": "Content Body",
+        "cancel": "Cancel",
+        "category": "Category",
+        "chooseEditorDesc": "Choose between the standard text editor or our visual drag-and-drop builder.",
+        "create": "Create Content",
+        "createAndEdit": "Create & Open Builder",
+        "creating": "Creating...",
+        "details": "Content Details",
+        "discussion": "Discussion",
+        "editTitle": "Edit Content",
+        "excerpt": "Excerpt",
+        "excerptPlaceholder": "Brief summary of the content",
+        "intro": "Intro",
+        "introPlaceholder": "Opening paragraph below page title (supports bold, italic, link)",
+        "featured": "Featured Content",
+        "featuredDesc": "Pin this content to the top",
+        "featuredImage": "Featured Image",
+        "keywordsPlaceholder": "Enter meta keywords separated by commas",
+        "loading": "Loading content...",
+        "locked": "Locked",
+        "lockedBy": "by {name}",
+        "maxSizeHint": "Max Size: {size}MB | {extensions}",
+        "metaDescription": "Meta Description",
+        "metaKeywords": "Meta Keywords",
+        "metaTitle": "Meta Title",
+        "minHint": "(Min: {dimensions})",
+        "ogImage": "Open Graph Image",
+        "preview": "Preview",
+        "publishDate": "Publish Date",
+        "publishImmediatelyHelp": "Leave empty to publish immediately",
+        "publishing": "Publishing",
+        "recommendedHint": "Recommended: {dimensions}",
+        "remove": "Remove",
+        "removeImage": "Remove Image",
+        "selectCategory": "Select Category",
+        "selectImage": "Select Image",
+        "selectOgImage": "Select OG Image",
+        "selectTag": "Select a tag...",
+        "seoSettings": "SEO Settings",
+        "sidebar": {
+            "addToMenu": "Add to Menu",
+            "addToMenuDesc": "Add this content to a menu",
+            "comments": "Comments"
+        },
+        "slug": "Slug",
+        "slugPlaceholder": "auto-generated-from-title",
+        "status": "Status",
+        "switchModeDescription": "You're about to switch to a different editor mode. Content is stored separately for each mode.",
+        "switchModeTitle": "Switch Editor Mode",
+        "switchToBuilderWarning": "Your classic editor content will remain saved, but won't be visible in the builder. The builder will start empty unless you've already added blocks.",
+        "switchToClassicWarning": "Your builder blocks will remain saved, but won't be visible in the classic editor. The classic editor will show previously saved content or be empty.",
+        "tagInputHint": "Press Enter to add a new tag, or click a suggestion",
+        "tagInputPlaceholder": "Type to add or search tags...",
+        "tags": "Tags",
+        "taxonomy": "Taxonomy",
+        "title": "Content Title",
+        "titlePlaceholder": "Enter content title",
+        "type": "Type",
+        "unlock": "Unlock",
+        "unlocked": "Unlocked",
+        "update": "Update Content",
+        "updating": "Updating...",
+        "urlFriendlyHelp": "URL-friendly version of the title",
+        "useBuilder": "Use JA-Builder",
+        "useDefault": "Use Classic Editor",
+        "welcomeToBuilder": "Build your layout"
+    },
+    "list": {
+        "bulkActions": "Bulk Actions",
+        "createNew": "Create New Content",
+        "description": "Manage your content, blog posts, and pages",
+        "filterByStatus": "Filter by status",
+        "empty": "No content found",
+        "revisions": "Revisions",
+        "selected": "{count} selected",
+        "subtitle": "Manage your content library",
+        "templates": "Templates",
+        "title": "All Contents"
+    },
+    "messages": {
+        "approveFailed": "Failed to approve content",
+        "approved": "Content approved successfully",
+        "conflictResolveFailed": "Failed to remove conflicting item. Please rename your current page.",
+        "conflictResolved": "Conflict resolved: Previous item deleted.",
+        "createFailed": "Failed to create content",
+        "duplicateFailed": "Failed to duplicate content",
+        "loadFailed": "Failed to load content",
+        "pendingNotice": "This content is currently pending review and will be published once approved by an editor.",
+        "previewFailed": "Failed to preview content",
+        "publishFailed": "Failed to publish content",
+        "publishSuccess": "Content published successfully",
+        "rejectFailed": "Failed to reject content",
+        "rejectReason": "Please provide a reason for rejection",
+        "rejected": "Content rejected successfully",
+        "rescheduleFailed": "Failed to reschedule content",
+        "restoreFailed": "Failed to restore content",
+        "unlockFailed": "Failed to unlock content",
+        "unsavedChanges": "You have unsaved changes. Are you sure you want to leave?",
+        "updateFailed": "Failed to update content"
+    },
+    "placeholders": {
+        "rejectionReason": "Enter rejection reason here..."
+    },
+    "seo": {
+        "metaDescription": "SEO Description",
+        "metaTitle": "SEO Title",
+        "seoDescPlaceholder": "SEO description (defaults to excerpt)",
+        "seoTitlePlaceholder": "SEO title (defaults to content title)"
+    },
+    "revisions": {
+        "actions": {
+            "restore": "Restore",
+            "view": "View"
+        },
+        "badge": {
+            "current": "Current"
+        },
+        "empty": {
+            "description": "This content hasn't been modified yet.",
+            "title": "No revisions found"
+        },
+        "loading": "Loading revisions...",
+        "messages": {
+            "noChanges": "No changes summary",
+            "restoreConfirm": "Are you sure you want to restore revision v{version}? This will replace the current content.",
+            "restoreTitle": "Restore Revision"
+        },
+        "modal": {
+            "close": "Close",
+            "fields": {
+                "body": "Body Content",
+                "status": "Status",
+                "title": "Title",
+                "type": "Tipe"
+            },
+            "restore": "Restore This Version",
+            "title": "Revision v{version}"
+        },
+        "table": {
+            "actions": "Actions",
+            "author": "Author",
+            "changes": "Changes",
+            "date": "Date",
+            "version": "Version"
+        }
+    },
+    "status": {
+        "archived": "Archived",
+        "draft": "Draft",
+        "pending": "Pending Review",
+        "published": "Published",
+        "scheduled": "Scheduled",
+        "trashed": "Trashed"
+    },
+    "tabs": {
+        "content": "Content",
+        "seo": "SEO",
+        "settings": "Settings"
+    }
+}

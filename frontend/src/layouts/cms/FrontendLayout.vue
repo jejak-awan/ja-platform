@@ -1,0 +1,364 @@
+<template>
+  <div 
+    ref="layoutRoot"
+    class="frontend-layout min-h-screen flex flex-col bg-background text-foreground"
+    :class="[rootClasses, activeThemeClass]"
+    :style="[rootStyles, janariRootStyleVars]"
+    v-bind="janariRootDataAttrs"
+  >
+    <!-- CASE 1: FULL WIDTH (Default) & HYBRID -->
+    <!-- For Hybrid: Header/Footer are here (full), Main is constrained below -->
+    <!-- For Full: Everything is here -->
+    <template v-if="activeTheme && (layoutStyle === 'full' || layoutStyle === 'hybrid')">
+      <ThemePageResolver page="components/Header" />
+      
+      <!-- Main Content -->
+      <!-- Hybrid: Main is boxed | Full: Main is full -->
+      <main
+        class="main-content flex-1 w-full"
+        :class="{ 'pt-24': headerSticky }"
+      >
+        <div
+          :class="{
+            'container mx-auto': layoutStyle === 'hybrid',
+            'px-6 md:px-12 lg:px-20': layoutStyle === 'hybrid', // Increased padding
+            'w-full': layoutStyle === 'full'
+          }"
+          :style="hybridContentStyles"
+        >
+          <router-view v-slot="{ Component, route }">
+            <div
+              :key="route.path"
+              class="w-full h-full flex-1 flex flex-col page-enter"
+            >
+              <component :is="Component" />
+            </div>
+          </router-view>
+        </div>
+      </main>
+
+      <div class="mt-auto">
+        <ThemePageResolver page="components/Footer" />
+      </div>
+    </template>
+
+
+    <!-- CASE 2: BOXED, WIDE, FRAMED -->
+    <!-- Everything wraps inside a container -->
+    <div 
+      v-else-if="activeTheme"
+      class="layout-wrapper mx-auto flex flex-col min-h-screen bg-background shadow-xl"
+      :class="wrapperClasses"
+      :style="wrapperStyles"
+    >
+      <ThemePageResolver page="components/Header" />
+      
+      <main
+        class="main-content flex-1 px-6 md:px-12 lg:px-16 py-8"
+        :class="{ 'pt-20': headerSticky }"
+      >
+        <!-- Added padding here too -->
+        <router-view v-slot="{ Component, route }">
+          <div
+            :key="route.path"
+            class="w-full h-full flex-1 flex flex-col page-enter"
+          >
+            <component :is="Component" />
+          </div>
+        </router-view>
+      </main>
+
+      <div class="mt-auto">
+        <ThemePageResolver page="components/Footer" />
+      </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button
+      v-if="showBackToTop"
+      class="fixed bottom-6 right-6 z-50 p-3 rounded-full shadow-lg transition-colors duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+      :class="layoutStyle === 'framed' ? 'bg-primary text-primary-foreground' : 'bg-primary/90 text-primary-foreground backdrop-blur-sm hover:bg-primary'"
+      title="Back to Top"
+      @click="scrollToTop"
+    >
+      <ArrowUp class="w-5 h-5" />
+    </button>
+    
+    <!-- FALLBACK: Loading State if Theme is missing/loading -->
+    <div 
+      v-else
+      class="flex-1 flex flex-col items-center justify-center bg-background p-12 text-center"
+    >
+      <div class="w-20 h-20 relative mb-8">
+        <div class="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
+        <div class="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      </div>
+      <h2 class="text-2xl font-black tracking-tighter uppercase mb-4">Initializing Portal</h2>
+      <p class="text-muted-foreground text-sm max-w-sm mx-auto">
+        Preparing your experience. If this takes longer than 10 seconds, please refresh the page.
+      </p>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, onMounted, ref, onUnmounted, watch } from 'vue'
+import { useTheme } from '@/composables/useTheme'
+import { useGsapInteractiveUi } from '@/composables/useGsapInteractiveUi'
+import ThemePageResolver from '@/components/shared/ThemePageResolver.vue'
+import ArrowUp from 'lucide-vue-next/dist/esm/icons/arrow-up.js';
+import { JANARI_PRESETS } from '@/modules/Cms/config/janariPresets';
+
+const { activeTheme, getSetting } = useTheme()
+
+const activeThemeSlug = computed(
+  () => (activeTheme.value as { slug?: string } | null)?.slug ?? '',
+)
+
+const activeThemeClass = computed(() => {
+  const slug = activeThemeSlug.value
+  if (!slug) return []
+  const classes = [`theme-${slug}`]
+  if (slug.startsWith('janari')) {
+    classes.push('theme-janari')
+  }
+  return classes
+})
+
+/** Janari: neutral canvas + preset/intensity/texture from customizer (see css/themes/janari.css) */
+const janariRootDataAttrs = computed((): Record<string, string> => {
+  if (!activeThemeSlug.value.startsWith('janari')) return {}
+  const validPresets = new Set([
+    'custom',
+    'monochrome_clean',
+    'oceanic_clean',
+    'emerald_fresh',
+    'royal_violet',
+    'sunset_coral',
+    'midnight_cyan',
+    'forest_earth',
+    'ruby_night',
+    'aurora_mint',
+    'slate_indigo',
+    'arctic_blue',
+    'sand_stone',
+  ])
+  const validMono = new Set(['clean', 'soft', 'matte', 'high_contrast'])
+  const validIntensity = new Set(['soft', 'balanced', 'vibrant'])
+  const validTexture = new Set(['clean', 'dots', 'grain'])
+
+  const presetRaw = String(getSetting('color_preset', 'custom') ?? 'custom')
+  const monoRaw = String(getSetting('monochrome_variant', 'clean') ?? 'clean')
+  const intensityRaw = String(getSetting('color_intensity', 'balanced') ?? 'balanced')
+  const textureRaw = String(getSetting('monochrome_texture', 'clean') ?? 'clean')
+  const textureStrengthRaw = Number(getSetting('monochrome_texture_strength', 8) ?? 8)
+
+  const normalizePreset = (value: string): string => {
+    const normalized = value.trim().toLowerCase().replace(/[\s-]+/g, '_')
+    const aliases: Record<string, string> = {
+      monochrome: 'monochrome_clean',
+      mono: 'monochrome_clean',
+      oceanic: 'oceanic_clean',
+      emerald: 'emerald_fresh',
+      violet: 'royal_violet',
+      coral: 'sunset_coral',
+      cyan: 'midnight_cyan',
+      forest: 'forest_earth',
+      ruby: 'ruby_night',
+      mint: 'aurora_mint',
+      indigo: 'slate_indigo',
+      arctic: 'arctic_blue',
+      sand: 'sand_stone',
+    }
+    return aliases[normalized] ?? normalized
+  }
+
+  const styleRaw = String(getSetting('theme_style', 'clean') ?? 'clean')
+  const navRaw = String(getSetting('nav_style', 'glass') ?? 'glass')
+  const btnRadiusRaw = String(getSetting('button_radius', '8px') ?? '8px')
+  const btnShadowRaw = String(getSetting('button_shadow', 'subtle') ?? 'subtle')
+
+  // Background color settings
+  const bgLightColor = String(getSetting('bg_light_color', 'white') ?? 'white')
+  const bgLightVariant = String(getSetting('bg_light_variant', 'clean') ?? 'clean')
+  const bgDarkColor = String(getSetting('bg_dark_color', 'black') ?? 'black')
+  const bgDarkVariant = String(getSetting('bg_dark_variant', 'clean') ?? 'clean')
+
+  const presetCandidate = normalizePreset(presetRaw)
+  const preset = validPresets.has(presetCandidate) ? presetCandidate : 'custom'
+  const mono = validMono.has(monoRaw) ? monoRaw : 'clean'
+  const intensity = validIntensity.has(intensityRaw) ? intensityRaw : 'balanced'
+  const texture = validTexture.has(textureRaw) ? textureRaw : 'clean'
+  const textureStrength = String(Math.min(35, Math.max(0, Number.isFinite(textureStrengthRaw) ? textureStrengthRaw : 8)))
+  const isMonochromePreset = preset === 'monochrome_clean'
+
+  const attrs: Record<string, string> = {
+    'data-janari-preset': preset,
+    'data-janari-intensity': intensity,
+    'data-janari-style': styleRaw,
+    'data-janari-nav': navRaw,
+    'data-janari-button-radius': btnRadiusRaw,
+    'data-janari-button-shadow': btnShadowRaw,
+    'data-janari-texture': texture,
+    'data-janari-texture-strength': textureStrength,
+    'data-janari-bg-light': bgLightColor,
+    'data-janari-bg-light-v': bgLightVariant,
+    'data-janari-bg-dark': bgDarkColor,
+    'data-janari-bg-dark-v': bgDarkVariant,
+  }
+
+  if (isMonochromePreset) {
+    attrs['data-janari-mono'] = mono
+  }
+
+  return attrs
+})
+
+const janariRootStyleVars = computed((): Record<string, string> => {
+  if (!activeThemeSlug.value.startsWith('janari')) return {}
+
+  const preset = String(janariRootDataAttrs.value['data-janari-preset'] || 'custom')
+
+  const resolvedPresets: Record<string, { light: string; dark: string }> = {
+    custom: {
+      light: 'var(--theme-color-primary-hsl, var(--theme-primary-color-hsl, 0 0% 0%))',
+      dark: 'var(--theme-color-primary-hsl, var(--theme-primary-color-hsl, 0 0% 100%))',
+    }
+  }
+
+  // Hydrate from shared config
+  Object.entries(JANARI_PRESETS).forEach(([key, val]) => {
+    resolvedPresets[key] = { light: val.hslLight, dark: val.hslDark }
+  })
+
+  const resolved = resolvedPresets[preset] ?? resolvedPresets.custom ?? { light: '0 0% 0%', dark: '0 0% 100%' }
+  return {
+    '--janari-accent-hsl-inline': resolved.light,
+    '--janari-accent-hsl-inline-dark': resolved.dark,
+  }
+})
+
+// Layout settings
+const layoutStyle = computed(() => getSetting('layout_style', 'full') as string)
+const containerMaxWidth = computed(() => getSetting('container_max_width', 1400) as number)
+const boxedBgColor = computed(() => getSetting('boxed_bg_color', '#f1f5f9') as string)
+const boxedShadow = computed(() => getSetting('boxed_shadow', 'lg') as string)
+
+// ROOT CLASSES (Outer most div)
+const rootClasses = computed(() => {
+  const style = layoutStyle.value
+  return {
+    'bg-page-background': style === 'boxed' || style === 'wide' || style === 'framed',
+    'p-4 md:p-8': style === 'framed', // Visible padding for framed
+  }
+})
+
+const rootStyles = computed(() => {
+  const style = layoutStyle.value
+  if (style === 'boxed' || style === 'wide' || style === 'framed') {
+    return { backgroundColor: boxedBgColor.value }
+  }
+  return {}
+})
+
+// wrapper classes for Boxed/Wide/Framed
+const wrapperClasses = computed(() => {
+  const shadow = boxedShadow.value
+  return {
+    'rounded-xl': layoutStyle.value === 'framed',
+    [`shadow-${shadow}`]: shadow !== 'none'
+  }
+})
+
+const wrapperStyles = computed(() => {
+  if (['boxed', 'wide', 'framed'].includes(layoutStyle.value)) {
+    return { 
+      maxWidth: `${containerMaxWidth.value}px`,
+      width: '100%' 
+    }
+  }
+  return {}
+})
+
+const hybridContentStyles = computed(() => {
+  if (layoutStyle.value === 'hybrid') {
+    return { maxWidth: `${containerMaxWidth.value}px` }
+  }
+  return {}
+})
+
+const enableBackToTop = computed(() => getSetting('back_to_top', true) as boolean)
+const headerSticky = computed(() => getSetting('header_sticky', true) as boolean)
+const showBackToTop = ref(false)
+const layoutRoot = ref<HTMLElement | null>(null)
+const { setup: setupInteractiveUi, cleanup: cleanupInteractiveUi } = useGsapInteractiveUi(layoutRoot)
+
+const handleScroll = () => {
+  if (window.scrollY > 300 && enableBackToTop.value) {
+    showBackToTop.value = true
+  } else {
+    showBackToTop.value = false
+  }
+}
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+// React immediately to back_to_top setting changes
+watch(enableBackToTop, (enabled) => {
+    if (!enabled) showBackToTop.value = false;
+    else handleScroll();
+});
+
+// Imperative CSS var injection — bypasses Vue :style race condition
+watch(janariRootStyleVars, (vars) => {
+  const el = layoutRoot.value
+  if (!el || !Object.keys(vars).length) return
+  Object.entries(vars).forEach(([key, val]) => {
+    el.style.setProperty(key, val)
+  })
+}, { immediate: true, flush: 'post' })
+
+onMounted(async () => {
+  window.addEventListener('scroll', handleScroll)
+  setupInteractiveUi()
+
+  // Apply janari vars immediately on mount
+  const el = layoutRoot.value
+  const vars = janariRootStyleVars.value
+  if (el && Object.keys(vars).length) {
+    Object.entries(vars).forEach(([key, val]) => {
+      el.style.setProperty(key, val)
+    })
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+  cleanupInteractiveUi()
+})
+</script>
+
+<style scoped>
+/* Page enter animation — pure CSS, no Vue transition lifecycle hooks */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.page-enter {
+  animation: pageEnter 0.25s ease-out;
+}
+
+/* Shadow utilities re-implementation because tailwind classes might be purged if dynamic */
+.shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+.shadow-md { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+.shadow-lg { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
+.shadow-xl { box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+</style>

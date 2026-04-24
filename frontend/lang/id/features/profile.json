@@ -1,0 +1,33 @@
+{
+    "form": {
+        "bio": "Bio",
+        "changePassword": "Ganti Kata Sandi",
+        "changing": "Mengganti...",
+        "confirmPassword": "Konfirmasi Kata Sandi Baru",
+        "currentPassword": "Kata Sandi Saat Ini",
+        "email": "Email",
+        "location": "Lokasi",
+        "name": "Nama",
+        "newPassword": "Kata Sandi Baru",
+        "passwordHelp": "Harus minimal 8 karakter dengan huruf besar, huruf kecil, dan angka",
+        "phone": "Telepon",
+        "save": "Simpan Perubahan",
+        "saving": "Menyimpan...",
+        "twoFactorDescription": "Amankan akun Anda dengan Autentikasi Dua Faktor."
+    },
+    "messages": {
+        "passwordFailed": "Gagal mengubah kata sandi",
+        "passwordSuccess": "Kata sandi berhasil diubah",
+        "updateFailed": "Gagal memperbarui profil",
+        "updateSuccess": "Profil berhasil diperbarui"
+    },
+    "subtitle": "Kelola informasi akun dan keamanan Anda",
+    "tabs": {
+        "history": "Riwayat Login",
+        "password": "Ganti Kata Sandi",
+        "profile": "Informasi Profil",
+        "two-factor": "Dua Faktor",
+        "twoFactor": "Otentikasi Dua Faktor"
+    },
+    "title": "Profil Saya"
+}

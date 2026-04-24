@@ -1,0 +1,65 @@
+{
+    "actions": {
+        "delete": "Hapus Tugas",
+        "run": "Jalankan Tugas"
+    },
+    "confirm_delete": "Yakin ingin menghapus tugas \"{name}\"?",
+    "confirm_run": "Yakin ingin menjalankan tugas \"{name}\"?",
+    "create": "Buat Tugas",
+    "description": "Kelola tugas terjadwal dan cron jobs",
+    "edit": "Edit Tugas",
+    "form": {
+        "active": "Aktif",
+        "command": "Perintah",
+        "cron_help": "Format: menit jam hari bulan hari-minggu (mis., 0 * * * * = setiap jam)",
+        "description": "Deskripsi",
+        "name": "Nama Tugas",
+        "preset": "Preset cepat",
+        "schedule": "Jadwal Cron",
+        "select_command": "Pilih perintah"
+    },
+    "help": {
+        "cron_desc": "Tambahkan baris ini ke crontab server Anda (jalankan 'crontab -e'):",
+        "cron_hint": "Perintah ini memberitahu server untuk memeriksa tugas terjadwal setiap menit.",
+        "cron_title": "Pengaturan Cron Server",
+        "intro": "Tugas terjadwal memungkinkan Anda mengotomatisasi perintah rutin seperti pembersihan cache, backup, dan pekerjaan pemeliharaan.",
+        "req_1": "Tugas harus di-set ke Active (klik tombol status)",
+        "req_2": "Jadwal cron yang valid harus dikonfigurasi",
+        "req_3": "Cron job server harus berjalan (lihat di bawah)",
+        "requirements_title": "Syarat agar Tugas Berjalan Otomatis:",
+        "title": "Cara Kerja Tugas Terjadwal"
+    },
+    "messages": {
+        "activated": "Tugas diaktifkan",
+        "created": "Tugas berhasil dibuat",
+        "deactivated": "Tugas dinonaktifkan",
+        "deleted": "Tugas berhasil dihapus",
+        "executed": "Tugas berhasil dijalankan",
+        "toggled": "Status tugas diperbarui",
+        "updated": "Tugas berhasil diperbarui"
+    },
+    "no_tasks": "Tidak ada tugas terjadwal",
+    "output": {
+        "title": "Output Tugas"
+    },
+    "status": {
+        "completed": "Selesai",
+        "failed": "Gagal",
+        "pending": "Menunggu",
+        "running": "Berjalan"
+    },
+    "table": {
+        "actions": "Aksi",
+        "active": "Aktif",
+        "command": "Perintah",
+        "last_run": "Terakhir Dijalankan",
+        "name": "Nama",
+        "schedule": "Jadwal",
+        "status": "Status"
+    },
+    "title": "Tugas Terjadwal",
+    "tooltips": {
+        "click_to_activate": "Klik untuk mengaktifkan - Tugas akan berjalan otomatis sesuai jadwal",
+        "click_to_deactivate": "Klik untuk menonaktifkan - Tugas tidak akan berjalan otomatis"
+    }
+}

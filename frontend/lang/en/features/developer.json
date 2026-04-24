@@ -1,0 +1,194 @@
+{
+    "custom_fields": {
+        "description": "Manage reusable field groups and custom fields for your content models",
+        "create_field": "New Field",
+        "create_group": "New Field Group",
+        "fields": {
+            "actions": {
+                "delete": "Delete",
+                "edit": "Edit"
+            },
+            "confirm": {
+                "delete": "Are you sure you want to delete field \"{label}\"?"
+            },
+            "empty": "No custom fields found",
+            "messages": {
+                "delete_failed": "Failed to delete field",
+                "save_failed": "Failed to save field"
+            },
+            "modal": {
+                "cancel": "Cancel",
+                "create": "Create",
+                "default_label": "Default Value",
+                "default_placeholder": "Default value",
+                "group_label": "Field Group",
+                "group_none": "No Group",
+                "instructions_label": "Instructions",
+                "instructions_placeholder": "Field instructions for users",
+                "label_label": "Label",
+                "label_placeholder": "Field label",
+                "name_help": "Field identifier (snake_case)",
+                "name_label": "Name",
+                "name_placeholder": "field_name",
+                "options_help": "Comma-separated values",
+                "options_label": "Options (for select, radio, checkbox)",
+                "options_placeholder": "option1,option2,option3",
+                "required_label": "Required",
+                "saving": "Saving...",
+                "searchable_label": "Searchable",
+                "title_create": "Create Custom Field",
+                "title_edit": "Edit Custom Field",
+                "type_label": "Type",
+                "update": "Update"
+            },
+            "search": "Search fields...",
+            "table": {
+                "actions": "Actions",
+                "group": "Group",
+                "label": "Label",
+                "name": "Name",
+                "type": "Type"
+            }
+        },
+        "groups": {
+            "actions": {
+                "delete": "Delete",
+                "edit": "Edit"
+            },
+            "confirm": {
+                "delete": "Are you sure you want to delete field group \"{name}\"?"
+            },
+            "empty": "No field groups found",
+            "messages": {
+                "delete_failed": "Failed to delete field group",
+                "save_failed": "Failed to save field group"
+            },
+            "modal": {
+                "attach_label": "Attach To",
+                "attach_options": {
+                    "category": "Category",
+                    "content": "Content",
+                    "media": "Media",
+                    "none": "None"
+                },
+                "cancel": "Cancel",
+                "create": "Create",
+                "description_label": "Description",
+                "description_placeholder": "Field group description",
+                "name_label": "Name",
+                "name_placeholder": "Field group name",
+                "saving": "Saving...",
+                "title_create": "Create Field Group",
+                "title_edit": "Edit Field Group",
+                "update": "Update"
+            },
+            "table": {
+                "actions": "Actions",
+                "attached_to": "Attached To",
+                "fields": "Fields",
+                "name": "Name"
+            }
+        },
+        "tabs": {
+            "fields": "Custom Fields",
+            "groups": "Field Groups"
+        },
+        "title": "Custom Fields"
+    },
+    "plugins": {
+        "actions": {
+            "activate": "Activate",
+            "close": "Close",
+            "deactivate": "Deactivate",
+            "settings": "Settings"
+        },
+        "empty": "No plugins found",
+        "loading": "Loading...",
+        "messages": {
+            "failed_activate": "Failed to activate plugin",
+            "failed_deactivate": "Failed to deactivate plugin"
+        },
+        "modal": {
+            "close": "Close",
+            "settings_placeholder": "Plugin settings will be loaded here",
+            "settings_title": "Settings: {name}"
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "table": {
+            "actions": "Actions",
+            "name": "Name",
+            "status": "Status",
+            "version": "Version"
+        },
+        "title": "Plugins"
+    },
+    "webhooks": {
+        "actions": {
+            "delete": "Delete",
+            "edit": "Edit",
+            "test": "Test"
+        },
+        "confirm": {
+            "delete": "Are you sure you want to delete webhook \"{name}\"?"
+        },
+        "create": "New Webhook",
+        "empty": "No webhooks found",
+        "events": {
+            "comment": {
+                "approved": "Comment Approved",
+                "created": "Comment Created"
+            },
+            "content": {
+                "created": "Content Created",
+                "deleted": "Content Deleted",
+                "updated": "Content Updated"
+            },
+            "user": {
+                "created": "User Created",
+                "updated": "User Updated"
+            }
+        },
+        "loading": "Loading...",
+        "messages": {
+            "delete_failed": "Failed to delete webhook",
+            "save_failed": "Failed to save webhook",
+            "test_failed": "Failed to test webhook",
+            "test_success": "Webhook test sent successfully"
+        },
+        "modal": {
+            "active_label": "Active",
+            "cancel": "Cancel",
+            "create": "Create",
+            "events_label": "Events",
+            "name_label": "Name",
+            "name_placeholder": "Webhook name",
+            "saving": "Saving...",
+            "secret_label": "Secret Key",
+            "secret_placeholder": "Optional secret key for signing",
+            "title_create": "Create Webhook",
+            "title_edit": "Edit Webhook",
+            "update": "Update",
+            "url_label": "URL",
+            "url_placeholder": "https://example.com/webhook"
+        },
+        "search": "Search webhooks...",
+        "stats": {
+            "active": "Active",
+            "failed_calls": "Failed Calls",
+            "total": "Total Webhooks",
+            "total_calls": "Total Calls"
+        },
+        "table": {
+            "actions": "Actions",
+            "calls": "Calls",
+            "events": "Events",
+            "name": "Name",
+            "status": "Status",
+            "url": "URL"
+        },
+        "title": "Webhooks"
+    }
+}

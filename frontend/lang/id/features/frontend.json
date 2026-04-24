@@ -1,0 +1,126 @@
+{
+    "about": {
+        "placeholder": "Ini adalah halaman placeholder. Konten akan segera hadir.",
+        "title": "Tentang Kami",
+        "welcome": "Selamat datang di JA-Edu - Sistem Manajemen Konten Modern"
+    },
+    "blog": {
+        "empty": "Belum ada postingan yang tersedia.",
+        "pagination": {
+            "info": "Halaman {current} dari {total}",
+            "next": "Berikutnya",
+            "previous": "Sebelumnya"
+        },
+        "readMore": "Baca Selengkapnya",
+        "subtitle": "Artikel dan pembaruan terbaru dari tim kami",
+        "title": "Blog"
+    },
+    "comments": {
+        "comment": "Komentar",
+        "email": "Email",
+        "empty": "Belum ada komentar. Jadilah yang pertama memberikan komentar!",
+        "error": "Gagal mengirim komentar",
+        "leaveComment": "Tinggalkan Komentar",
+        "loading": "Memuat komentar...",
+        "name": "Nama",
+        "submit": "Kirim Komentar",
+        "submitting": "Mengirim...",
+        "success": "Komentar berhasil dikirim",
+        "title": "Komentar"
+    },
+    "contact": {
+        "emailPlaceholder": "Masukkan email Anda",
+        "error": "Gagal mengirim pesan. Silakan coba lagi.",
+        "message": "Pesan",
+        "messagePlaceholder": "Tulis pesan Anda di sini...",
+        "namePlaceholder": "Masukkan nama Anda",
+        "submit": "Kirim Pesan",
+        "subtitle": "Punya pertanyaan atau masukan? Kami ingin mendengar dari Anda.",
+        "success": "Pesan terkirim! Kami akan segera menghubungi Anda.",
+        "title": "Hubungi Kami"
+    },
+    "footer": {
+        "about": {
+            "default": "Sistem manajemen konten modern, bersih, dan kuat yang dibangun untuk web."
+        },
+        "copyright": "Hak cipta dilindungi undang-undang.",
+        "headings": {
+            "about": "Tentang",
+            "categories": "Kategori",
+            "newsletter": "Newsletter",
+            "resources": "Sumber Daya"
+        },
+        "powered": "Ditenagai oleh",
+        "privacy": "Kebijakan Privasi",
+        "resources": {
+            "blog": "Blog",
+            "documentation": "Dokumentasi",
+            "faq": "FAQ",
+            "support": "Dukungan"
+        },
+        "system": "Sistem Manajemen Konten Modern",
+        "terms": "Ketentuan Layanan"
+    },
+    "home": {
+        "actions": {
+            "contactUs": "Hubungi Kami",
+            "dashboard": "Dashboard",
+            "explore": "Jelajahi Konten",
+            "getStarted": "Mulai Sekarang",
+            "startReading": "Mulai Membaca",
+            "viewAll": "Lihat Semua Postingan"
+        },
+        "sections": {
+            "cta": {
+                "text": "Bergabunglah dengan ribuan pengembang dan kreator yang menggunakan JA-Edu untuk membangun pengalaman web modern.",
+                "title": "Siap untuk Memulai?"
+            },
+            "featured": "Konten Unggulan",
+            "recent": "Postingan Terbaru",
+            "recentSubtitle": "Tetap update dengan artikel terbaru kami"
+        },
+        "stats": {
+            "categories": "Kategori",
+            "content": "Konten Terbit",
+            "visitors": "Total Pengunjung"
+        },
+        "subtitle": "Sistem Manajemen Konten Modern",
+        "title": "JA-Edu"
+    },
+    "nav": {
+        "about": "Tentang",
+        "blog": "Blog",
+        "contact": "Kontak",
+        "dashboard": "Dashboard",
+        "getStarted": "Mulai Sekarang",
+        "home": "Beranda",
+        "login": "Masuk",
+        "logout": "Keluar",
+        "register": "Daftar",
+        "signIn": "Masuk"
+    },
+    "newsletter": {
+        "button": "Berlangganan",
+        "description": "Berlangganan newsletter kami untuk mendapatkan update dan artikel terbaru.",
+        "error": "Gagal berlangganan. Silakan coba lagi.",
+        "placeholder": "Alamat email",
+        "privacy": "Dengan berlangganan, Anda menyetujui",
+        "privacyLink": "Kebijakan Privasi",
+        "processing": "Memproses...",
+        "success": "Berhasil berlangganan!",
+        "title": "Tetap Update"
+    },
+    "post": {
+        "backToBlog": "Kembali ke Blog",
+        "loading": "Memuat...",
+        "notFound": "Postingan tidak ditemukan",
+        "tags": "Tag:",
+        "views": "tayangan"
+    },
+    "search": {
+        "empty": "Tidak ada hasil untuk \"{query}\"",
+        "loading": "Mencari...",
+        "query": "Mencari:",
+        "title": "Hasil Pencarian"
+    }
+}

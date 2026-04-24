@@ -1,0 +1,180 @@
+{
+    "options": {
+        "timezone": {
+            "utc": "UTC (Waktu Universal Terkoordinasi)",
+            "jakarta": "Asia/Jakarta (WIB - GMT+7)",
+            "makassar": "Asia/Makassar (WITA - GMT+8)",
+            "jayapura": "Asia/Jayapura (WIT - GMT+9)",
+            "newyork": "America/New_York (EST/EDT)",
+            "chicago": "America/Chicago (CST/CDT)",
+            "losangeles": "America/Los_Angeles (PST/PDT)",
+            "london": "Europe/London (GMT/BST)",
+            "paris": "Europe/Paris (CET/CEST)",
+            "sydney": "Australia/Sydney (AEST/AEDT)",
+            "tokyo": "Asia/Tokyo (JST)",
+            "singapore": "Asia/Singapura (SGT)"
+        },
+        "dateFormat": {
+            "ymd": "2024-12-25 (Y-m-d)",
+            "dmy": "25/12/2024 (d/m/Y)",
+            "mdy": "12/25/2024 (m/d/Y)",
+            "dmyDash": "25-12-2024 (d-m-Y)",
+            "full": "Desember 25, 2024 (F j, Y)",
+            "fullReverse": "25 Desember 2024 (j F Y)"
+        },
+        "timeFormat": {
+            "24hSeconds": "23:59:59 (24 jam dengan detik)",
+            "24h": "23:59 (24 jam)",
+            "12h": "11:59 PM (12 jam)",
+            "12hSeconds": "11:59:59 PM (12 jam dengan detik)"
+        },
+        "itemsPerPage": {
+            "10": "10 item",
+            "15": "15 item",
+            "20": "20 item",
+            "25": "25 item",
+            "50": "50 item",
+            "100": "100 item"
+        },
+        "mailDriver": {
+            "smtp": "SMTP",
+            "sendmail": "Sendmail",
+            "mailgun": "Mailgun",
+            "ses": "Amazon SES",
+            "postmark": "Postmark",
+            "log": "Log (Pengujian)"
+        },
+        "mailEncryption": {
+            "tls": "TLS (Direkomendasikan)",
+            "ssl": "SSL",
+            "none": "Tidak Ada"
+        },
+        "mailPort": {
+            "25": "25 (Tanpa Enkripsi - Tidak Direkomendasikan)",
+            "465": "465 (Tanpa Enkripsi)",
+            "587": "587 (Tanpa Enkripsi)",
+            "2525": "2525 (TLS Alternatif)",
+            "587tls": "587 (TLS Standar - Direkomendasikan)",
+            "25tls": "25 (Legacy dengan STARTTLS)",
+            "465tls": "465 (TLS via Port SSL)",
+            "465ssl": "465 (SSL Standar - Direkomendasikan)",
+            "587ssl": "587 (SSL Alternatif)",
+            "25ssl": "25 (Legacy dengan SSL)",
+            "2525plain": "2525 (Alternatif - Tanpa Enkripsi)"
+        },
+        "storageDriver": {
+            "local": "Penyimpanan Lokal",
+            "s3": "Amazon S3",
+            "ftp": "Server FTP",
+            "dropbox": "Dropbox",
+            "google": "Google Drive"
+        },
+        "thumbnailSize": {
+            "150": "150px",
+            "200": "200px",
+            "250": "250px",
+            "300": "300px",
+            "400": "400px",
+            "500": "500px"
+        },
+        "passwordMinLength": {
+            "6": "6 karakter (minimum)",
+            "8": "8 karakter (direkomendasikan)",
+            "10": "10 karakter (kuat)",
+            "12": "12 karakter (sangat kuat)",
+            "16": "16 karakter (keamanan maksimal)"
+        },
+        "loginAttempts": {
+            "3": "3 percobaan (ketat)",
+            "5": "5 percobaan (direkomendasikan)",
+            "10": "10 percobaan (longgar)",
+            "unlimited": "Tidak Terbatas"
+        },
+        "blockDuration": {
+            "5": "5 menit",
+            "15": "15 menit (direkomendasikan)",
+            "30": "30 menit",
+            "60": "1 jam",
+            "1440": "24 jam"
+        },
+        "sessionLifetime": {
+            "30": "30 menit",
+            "60": "1 jam",
+            "120": "2 jam (direkomendasikan)",
+            "480": "8 jam (hari kerja)",
+            "1440": "24 jam",
+            "10080": "7 hari"
+        },
+        "maxSessions": {
+            "1": "1 sesi (ketat)",
+            "2": "2 sesi",
+            "3": "3 sesi (direkomendasikan)",
+            "5": "5 sesi",
+            "unlimited": "Tidak Terbatas"
+        },
+        "logRetention": {
+            "7": "7 hari",
+            "14": "14 hari",
+            "30": "30 hari (direkomendasikan)",
+            "60": "60 hari",
+            "90": "90 hari",
+            "365": "1 tahun",
+            "forever": "Simpan Selamanya"
+        },
+        "cacheTtl": {
+            "300": "5 menit",
+            "600": "10 menit",
+            "1800": "30 menit",
+            "3600": "1 jam (direkomendasikan)",
+            "7200": "2 jam",
+            "86400": "24 jam"
+        },
+        "maxUploadSize": {
+            "1024": "1 MB",
+            "2048": "2 MB (direkomendasikan)",
+            "5120": "5 MB",
+            "10240": "10 MB",
+            "20480": "20 MB",
+            "51200": "50 MB",
+            "102400": "100 MB"
+        },
+        "captchaMethod": {
+            "slider": "Verifikasi Slider",
+            "math": "Tantangan Matematika",
+            "image": "Kode Gambar"
+        },
+        "twoFactorMethod": {
+            "app": "Authenticator App (TOTP)",
+            "email": "Email Code"
+        },
+        "twoFactorEnforced": {
+            "no": "Opsional untuk semua pengguna",
+            "admin": "Wajib untuk Admin",
+            "all": "Wajib untuk Semua Pengguna"
+        },
+        "maintenanceTitlePresets": {
+            "coming_soon": "Segera Hadir",
+            "under_maintenance": "Dalam Perbaikan",
+            "launch_day": "Hari Peluncuran!",
+            "system_update": "Pembaruan Sistem"
+        },
+        "maintenanceMessagePresets": {
+            "awesome": "Kami sedang mengerjakan sesuatu yang luar biasa. Silakan cek kembali nanti.",
+            "inconvenience": "Mohon maaf atas ketidaknyamanannya. Kami sedang melakukan pemeliharaan dan akan segera kembali.",
+            "exciting": "Sesuatu yang menarik akan segera hadir! Nantikan peluncuran kami.",
+            "better_exp": "Kami sedang memperbarui sistem untuk memberikan pengalaman yang lebih baik. Kami akan segera online kembali."
+        },
+        "shieldProtectionMode": {
+            "off": "Nonaktif",
+            "suspicious": "Hanya Trafik Mencurigakan",
+            "always": "Selalu Tantang (Sangat Ketat)"
+        },
+        "shieldProtectionDifficulty": {
+            "3": "3 - Sangat Ringan",
+            "4": "4 - Normal (Direkomendasikan)",
+            "5": "5 - Ketat",
+            "6": "6 - Sangat Ketat",
+            "7": "7 - Paranoid"
+        }
+    }
+}

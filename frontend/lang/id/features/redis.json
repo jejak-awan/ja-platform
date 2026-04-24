@@ -1,0 +1,103 @@
+{
+    "cache": {
+        "actions": {
+            "all": {
+                "button": "Bersihkan Semua",
+                "desc": "Bersihkan semua data cache termasuk config, route, dan view",
+                "title": "Bersihkan Semua Cache"
+            },
+            "cache": {
+                "button": "Bersihkan Cache",
+                "desc": "Bersihkan cache aplikasi saja",
+                "title": "Cache Aplikasi"
+            },
+            "config": {
+                "button": "Bersihkan Config",
+                "desc": "Bersihkan cache konfigurasi",
+                "title": "Cache Konfigurasi"
+            },
+            "route": {
+                "button": "Bersihkan Route",
+                "desc": "Bersihkan cache route",
+                "title": "Cache Route"
+            },
+            "view": {
+                "button": "Bersihkan View",
+                "desc": "Bersihkan template view yang dikompilasi",
+                "title": "Cache View"
+            },
+            "warm": {
+                "button": "Warm Cache",
+                "desc": "Regenerasi file cache yang dioptimalkan",
+                "title": "Warm Cache",
+                "warming": "Memproses..."
+            }
+        },
+        "stats": {
+            "expired": "Key Kedaluwarsa",
+            "keys": "Total Key",
+            "size": "Ukuran Cache",
+            "table": {
+                "key": "Key",
+                "size": "Ukuran",
+                "ttl": "TTL"
+            },
+            "title": "Statistik Cache",
+            "topKeys": "Key Teratas berdasarkan Ukuran"
+        },
+        "title": "Manajemen Cache"
+    },
+    "description": "Kelola konfigurasi server Redis dan monitor performa cache",
+    "messages": {
+        "flushConfirm": "Apakah Anda yakin ingin menghapus cache {type}?",
+        "flushConfirmLogout": "Peringatan: Menghapus semua cache juga akan menghapus sesi pengguna. Anda akan segera logout. Apakah Anda yakin ingin melanjutkan?",
+        "flushFailed": "Gagal membersihkan cache",
+        "flushSuccess": "Cache {type} berhasil dibersihkan!",
+        "loading": "Memuat...",
+        "saveFailed": "Gagal menyimpan pengaturan",
+        "saveSuccess": "Pengaturan berhasil disimpan!",
+        "testFailed": "Koneksi gagal",
+        "testSuccess": "Koneksi berhasil",
+        "warmConfirm": "Apakah Anda yakin ingin memanaskan ulang cache? Ini akan meregenerasi cache konfigurasi, route, dan view.",
+        "warmConfirmLogout": "Peringatan: Memanaskan ulang cache memerlukan penghapusan terlebih dahulu, yang akan menghapus sesi pengguna. Anda akan segera logout. Apakah Anda yakin ingin melanjutkan?",
+        "warmFailed": "Gagal melakukan warm cache",
+        "warmSuccess": "Cache berhasil di-warm!"
+    },
+    "settings": {
+        "cancel": "Reset",
+        "connection": "Pengaturan Koneksi",
+        "disabled": "Dinonaktifkan",
+        "enabled": "Diaktifkan",
+        "save": "Simpan Pengaturan",
+        "saving": "Menyimpan...",
+        "select": "Pilih...",
+        "test": "Uji Koneksi",
+        "testing": "Menguji..."
+    },
+    "statistics": {
+        "autoRefresh": "Segarkan otomatis setiap 30 detik",
+        "grid": {
+            "clients": "Klien Terhubung",
+            "commands": "Total Perintah",
+            "hitRate": "Hit Rate",
+            "keys": "Total Key",
+            "memory": "Memori Digunakan",
+            "ops": "Operasi/Detik",
+            "uptime": "Uptime",
+            "version": "Versi Redis"
+        },
+        "hitMiss": {
+            "hitRate": "Hit Rate",
+            "hits": "Cache Hit",
+            "misses": "Cache Miss",
+            "title": "Statistik Cache Hit/Miss"
+        },
+        "refresh": "Segarkan Statistik"
+    },
+    "tabs": {
+        "cache": "Manajemen Cache",
+        "settings": "Pengaturan",
+        "statistics": "Statistik"
+    },
+    "title": "Manajemen Redis"
+}

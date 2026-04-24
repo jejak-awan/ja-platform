@@ -1,0 +1,36 @@
+{
+    "actions": {
+        "delete": "Delete",
+        "export": "Export CSV"
+    },
+    "confirm": {
+        "delete": "Are you sure you want to delete {email}?",
+        "forceDelete": "Are you sure you want to PERMANENTLY delete {email}?",
+        "bulkForceDelete": "Are you sure you want to PERMANENTLY delete {count} subscribers?",
+        "restore": "Restore {email}?"
+    },
+    "filters": {
+        "allStatus": "All Status",
+        "search": "Search email or name...",
+        "subscribed": "Subscribed",
+        "unsubscribed": "Unsubscribed"
+    },
+    "messages": {
+        "delete_failed": "Failed to delete subscriber",
+        "delete_success": "Subscriber deleted successfully",
+        "empty": "No subscribers found",
+        "export_failed": "Failed to export subscribers",
+        "loading": "Loading subscribers...",
+        "noName": "No Name",
+        "selected": "{count} selected"
+    },
+    "subtitle": "Manage your newsletter subscribers",
+    "table": {
+        "actions": "Actions",
+        "joinedAt": "Joined At",
+        "source": "Source",
+        "status": "Status",
+        "subscriber": "Subscriber"
+    },
+    "title": "Newsletter Subscribers"
+}

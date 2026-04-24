@@ -1,0 +1,84 @@
+{
+    "attendance": {
+        "title": "Presensi Siswa",
+        "subtitle": "Kelola kehadiran harian siswa per rombongan belajar.",
+        "pilihRombel": "Pilih Rombel",
+        "pilihRombelPlaceholder": "Pilih Rombongan Belajar",
+        "tanggal": "Tanggal",
+        "btnShow": "Tampilkan Data",
+        "btnSaveAll": "Simpan Semua Perubahan",
+        "emptyHint": "Klik \"Tampilkan Data\" untuk memuat daftar siswa.",
+        "labels": {
+            "studentName": "Nama Siswa",
+            "status": "Status",
+            "notes": "Keterangan"
+        },
+        "status": {
+            "H": "Hadir",
+            "S": "Sakit",
+            "I": "Izin",
+            "A": "Alpa"
+        },
+        "messages": {
+            "saveSuccess": "Data presensi berhasil disimpan!"
+        }
+    },
+    "affairs": {
+        "title": "Kesiswaan",
+        "subtitle": "Kelola catatan pelanggaran dan prestasi siswa.",
+        "btnAdd": "Tambah Catatan",
+        "tabs": {
+            "violation": "Pelanggaran",
+            "achievement": "Prestasi",
+            "counseling": "Konseling BK"
+        },
+        "labels": {
+            "studentName": "Nama Siswa",
+            "points": "Poin",
+            "date": "Tanggal",
+            "level": "Tingkat",
+            "type": "Jenis",
+            "status": "Status",
+            "description": {
+                "violation": "Keterangan Pelanggaran",
+                "achievement": "Keterangan Prestasi"
+            }
+        },
+        "messages": {
+            "saveSuccess": "Data berhasil disimpan",
+            "updateSuccess": "Data berhasil diperbarui",
+            "deleteSuccess": "Data berhasil dihapus",
+            "deleteConfirmTitle": "Hapus Data",
+            "deleteConfirmMessage": "Apakah Anda yakin ingin menghapus catatan kesiswaan ini?"
+        }
+    },
+    "visitors": {
+        "title": "Buku Tamu (VMS)",
+        "subtitle": "Kelola log pengunjung dan keamanan institusi.",
+        "btnAdd": "Check-In Tamu",
+        "filters": {
+            "all": "Semua",
+            "checked_in": "Sedang Berkunjung",
+            "checked_out": "Selesai"
+        },
+        "labels": {
+            "visitorName": "Nama Pengunjung",
+            "purpose": "Keperluan",
+            "targetPerson": "Bertemu Dengan",
+            "checkIn": "Check-In",
+            "status": "Status"
+        },
+        "status": {
+            "checked_in": "Berkunjung",
+            "checked_out": "Selesai"
+        },
+        "actions": {
+            "checkOut": "Check-Out",
+            "checkOutConfirm": "Konfirmasi tamu telah selesai berkunjung?"
+        },
+        "messages": {
+            "registerSuccess": "Tamu berhasil didaftarkan",
+            "checkOutSuccess": "Check-out berhasil"
+        }
+    }
+}

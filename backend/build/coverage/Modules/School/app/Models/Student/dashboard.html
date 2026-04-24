@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /var/www/k2net/ja-apps/backend/Modules/School/app/Models/Student</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../../../_css/bootstrap.min.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../../_css/nv.d3.min.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../../_css/style.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../../../../../index.html">/var/www/k2net/ja-apps/backend</a></li>
+         <li class="breadcrumb-item"><a href="../../../../index.html">Modules</a></li>
+         <li class="breadcrumb-item"><a href="../../../index.html">School</a></li>
+         <li class="breadcrumb-item"><a href="../../index.html">app</a></li>
+         <li class="breadcrumb-item"><a href="../index.html">Models</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Student</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Achievement.php.html#20">Modules\School\Models\Student\Achievement</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Alumni.php.html#18">Modules\School\Models\Student\Alumni</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CounselingRecord.php.html#27">Modules\School\Models\Student\CounselingRecord</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#76">Modules\School\Models\Student\Student</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TracerStudy.php.html#23">Modules\School\Models\Student\TracerStudy</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Violation.php.html#19">Modules\School\Models\Student\Violation</a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Achievement.php.html#39"><abbr title="Modules\School\Models\Student\Achievement::student">student</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Alumni.php.html#35"><abbr title="Modules\School\Models\Student\Alumni::student">student</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CounselingRecord.php.html#53"><abbr title="Modules\School\Models\Student\CounselingRecord::school">school</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CounselingRecord.php.html#61"><abbr title="Modules\School\Models\Student\CounselingRecord::level">level</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CounselingRecord.php.html#69"><abbr title="Modules\School\Models\Student\CounselingRecord::student">student</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="CounselingRecord.php.html#77"><abbr title="Modules\School\Models\Student\CounselingRecord::counselor">counselor</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#128"><abbr title="Modules\School\Models\Student\Student::school">school</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#136"><abbr title="Modules\School\Models\Student\Student::level">level</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#144"><abbr title="Modules\School\Models\Student\Student::department">department</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#152"><abbr title="Modules\School\Models\Student\Student::studyGroups">studyGroups</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#160"><abbr title="Modules\School\Models\Student\Student::attendances">attendances</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#168"><abbr title="Modules\School\Models\Student\Student::violations">violations</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#176"><abbr title="Modules\School\Models\Student\Student::achievements">achievements</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#184"><abbr title="Modules\School\Models\Student\Student::examResults">examResults</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#192"><abbr title="Modules\School\Models\Student\Student::uksVisits">uksVisits</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#200"><abbr title="Modules\School\Models\Student\Student::bills">bills</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#208"><abbr title="Modules\School\Models\Student\Student::user">user</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#216"><abbr title="Modules\School\Models\Student\Student::grades">grades</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Student.php.html#224"><abbr title="Modules\School\Models\Student\Student::activeEnrollment">activeEnrollment</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TracerStudy.php.html#50"><abbr title="Modules\School\Models\Student\TracerStudy::alumni">alumni</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Violation.php.html#37"><abbr title="Modules\School\Models\Student\Violation::student">student</abbr></a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 11.0.12</a> using <a href="https://www.php.net/" target="_top">PHP 8.3.30</a> and <a href="https://phpunit.de/">PHPUnit 11.5.55</a> at Thu Apr 23 10:35:15 WIB 2026.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../../../../../_js/jquery.min.js?v=11.0.12" type="text/javascript"></script>
+  <script src="../../../../../_js/d3.min.js?v=11.0.12" type="text/javascript"></script>
+  <script src="../../../../../_js/nv.d3.min.js?v=11.0.12" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([6,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([21,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[0,1,"<a href=\"Achievement.php.html#20\">Modules\\School\\Models\\Student\\Achievement<\/a>"],[0,1,"<a href=\"Alumni.php.html#18\">Modules\\School\\Models\\Student\\Alumni<\/a>"],[0,4,"<a href=\"CounselingRecord.php.html#27\">Modules\\School\\Models\\Student\\CounselingRecord<\/a>"],[0,13,"<a href=\"Student.php.html#76\">Modules\\School\\Models\\Student\\Student<\/a>"],[0,1,"<a href=\"TracerStudy.php.html#23\">Modules\\School\\Models\\Student\\TracerStudy<\/a>"],[0,1,"<a href=\"Violation.php.html#19\">Modules\\School\\Models\\Student\\Violation<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,1,"<a href=\"Achievement.php.html#39\">Modules\\School\\Models\\Student\\Achievement::student<\/a>"],[0,1,"<a href=\"Alumni.php.html#35\">Modules\\School\\Models\\Student\\Alumni::student<\/a>"],[0,1,"<a href=\"CounselingRecord.php.html#53\">Modules\\School\\Models\\Student\\CounselingRecord::school<\/a>"],[0,1,"<a href=\"CounselingRecord.php.html#61\">Modules\\School\\Models\\Student\\CounselingRecord::level<\/a>"],[0,1,"<a href=\"CounselingRecord.php.html#69\">Modules\\School\\Models\\Student\\CounselingRecord::student<\/a>"],[0,1,"<a href=\"CounselingRecord.php.html#77\">Modules\\School\\Models\\Student\\CounselingRecord::counselor<\/a>"],[0,1,"<a href=\"Student.php.html#128\">Modules\\School\\Models\\Student\\Student::school<\/a>"],[0,1,"<a href=\"Student.php.html#136\">Modules\\School\\Models\\Student\\Student::level<\/a>"],[0,1,"<a href=\"Student.php.html#144\">Modules\\School\\Models\\Student\\Student::department<\/a>"],[0,1,"<a href=\"Student.php.html#152\">Modules\\School\\Models\\Student\\Student::studyGroups<\/a>"],[0,1,"<a href=\"Student.php.html#160\">Modules\\School\\Models\\Student\\Student::attendances<\/a>"],[0,1,"<a href=\"Student.php.html#168\">Modules\\School\\Models\\Student\\Student::violations<\/a>"],[0,1,"<a href=\"Student.php.html#176\">Modules\\School\\Models\\Student\\Student::achievements<\/a>"],[0,1,"<a href=\"Student.php.html#184\">Modules\\School\\Models\\Student\\Student::examResults<\/a>"],[0,1,"<a href=\"Student.php.html#192\">Modules\\School\\Models\\Student\\Student::uksVisits<\/a>"],[0,1,"<a href=\"Student.php.html#200\">Modules\\School\\Models\\Student\\Student::bills<\/a>"],[0,1,"<a href=\"Student.php.html#208\">Modules\\School\\Models\\Student\\Student::user<\/a>"],[0,1,"<a href=\"Student.php.html#216\">Modules\\School\\Models\\Student\\Student::grades<\/a>"],[0,1,"<a href=\"Student.php.html#224\">Modules\\School\\Models\\Student\\Student::activeEnrollment<\/a>"],[0,1,"<a href=\"TracerStudy.php.html#50\">Modules\\School\\Models\\Student\\TracerStudy::alumni<\/a>"],[0,1,"<a href=\"Violation.php.html#37\">Modules\\School\\Models\\Student\\Violation::student<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

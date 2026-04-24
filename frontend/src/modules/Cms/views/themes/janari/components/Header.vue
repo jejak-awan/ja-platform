@@ -1,0 +1,687 @@
+<template>
+  <header 
+    ref="headerRef"
+    :class="[
+      headerSticky ? 'fixed top-0 left-0 w-full z-[100]' : 'relative z-40',
+      headerStyleClasses
+    ]"
+  >
+    <!-- Main Header Container -->
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="flex items-center justify-between py-3 transition-all duration-500">
+        <!-- Branding: Logo + Name + Official (always horizontal) -->
+        <router-link
+          to="/"
+          class="branding-link flex items-center gap-3 group shrink-0"
+        >
+          <img 
+            v-if="siteLogo && brandingDisplay !== 'text_only'" 
+            :src="siteLogo" 
+            class="h-8 w-auto object-contain brightness-100 group-hover:brightness-110 transition-all duration-300" 
+            :alt="siteName"
+          >
+          <div 
+            v-else-if="brandingDisplay !== 'text_only'"
+            class="w-7 h-7 bg-foreground flex items-center justify-center text-background font-black text-sm shrink-0"
+          >
+            {{ siteName.substring(0, 1).toUpperCase() }}
+          </div>
+          <template v-if="brandingDisplay !== 'logo_only'">
+            <span class="text-lg md:text-xl font-heading font-black tracking-tight uppercase text-foreground leading-none whitespace-nowrap">
+              {{ siteName }}
+            </span>
+            <div class="h-5 w-px bg-foreground/20 hidden sm:block" />
+            <span class="text-[7px] font-black tracking-[0.35em] uppercase text-foreground/40 leading-tight whitespace-nowrap hidden sm:block">
+              OFFICIAL<br>WEBSITE
+            </span>
+          </template>
+        </router-link>
+
+        <!-- Desktop Nav -->
+        <nav
+          v-if="isDesktop"
+          class="flex items-center ml-auto pr-8"
+        >
+          <template
+            v-for="(item, index) in navItems"
+            :key="String(item.id || item.title)"
+          >
+            <span
+              v-if="index > 0"
+              class="text-foreground mx-1"
+            >|</span>
+            <div
+              v-if="item.children && item.children.length > 0"
+              class="group relative"
+            >
+              <button :class="[getNavItemClasses(isParentActive(item)), 'group/btn']">
+                <span class="relative z-10">{{ item.title }}</span>
+              </button>
+              <div class="absolute top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div class="bg-background border border-border p-6 min-w-[240px]">
+                  <div class="flex flex-col gap-2 text-foreground/70">
+                    <template
+                      v-for="child in item.children"
+                      :key="String(child.id || child.title)"
+                    >
+                      <a
+                        v-if="isExternalLink(child.url)"
+                        :href="child.url || '#'"
+                        target="_blank"
+                        class="text-[10px] uppercase tracking-widest hover:text-primary transition-colors py-1"
+                      >
+                        {{ child.title }}
+                      </a>
+                      <router-link
+                        v-else
+                        :to="getInternalUrl(child.url)"
+                        class="text-[10px] uppercase tracking-widest hover:text-primary transition-colors py-1"
+                      >
+                        {{ child.title }}
+                      </router-link>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <template v-else>
+              <a
+                v-if="isExternalLink(item.url)"
+                :href="item.url || '#'"
+                target="_blank"
+                :class="[getNavItemClasses(false), 'group/link']"
+                :data-title="item.title"
+              >
+                <span class="relative z-10">{{ item.title }}</span>
+              </a>
+              <router-link
+                v-else
+                :to="getInternalUrl(item.url)"
+                :class="[getNavItemClasses(false), 'group/link']"
+                exact-active-class="!text-primary is-active"
+                :data-title="item.title"
+              >
+                <span class="relative z-10">{{ item.title }}</span>
+              </router-link>
+            </template>
+          </template>
+        </nav>
+
+        <!-- Desktop Language & Login & Theme -->
+        <div
+          v-if="isDesktop"
+          class="flex items-center gap-6 pl-6 border-l border-border"
+        >
+          <button
+            class="text-foreground hover:text-primary transition-colors"
+            title="Toggle theme"
+            @click="toggleMode"
+          >
+            <Sun
+              v-if="isDark"
+              class="w-4 h-4"
+            />
+            <Moon
+              v-else
+              class="w-4 h-4"
+            />
+          </button>
+          <div class="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-foreground">
+            <button class="hover:text-primary transition-colors">
+              ID
+            </button>
+            <span>|</span>
+            <button class="hover:text-primary transition-colors">
+              EN
+            </button>
+          </div>
+          <a
+            :href="loginUrl"
+            class="text-[9px] font-black uppercase tracking-[0.3em] text-foreground hover:text-primary transition-colors"
+          >
+            Login
+          </a>
+        </div>
+
+        <!-- Mobile Burger -->
+        <button
+          v-if="!isDesktop"
+          class="p-2 text-foreground/70 hover:text-foreground relative z-[200]"
+          @click="toggleMenu"
+        >
+          <MenuIcon class="w-7 h-7" />
+        </button>
+      </div>
+    </div>
+
+    <!-- 2nd Header: Transparent Gradient Artist Bar (Desktop) -->
+    <div
+      v-if="isDesktop"
+      class="artist-bar relative overflow-hidden bg-transparent border-b border-primary/25"
+    >
+      <div class="absolute inset-0 bg-gradient-to-r from-primary/12 via-background/10 to-primary/12 dark:from-primary/45 dark:via-background/20 dark:to-primary/45 backdrop-blur-md pointer-events-none -z-10 border-t border-primary/20" />
+      <div class="container mx-auto px-8 flex justify-between items-center py-2 relative z-10">
+        <div class="flex-1 overflow-hidden h-5 flex items-center">
+          <div
+            v-if="isHomePage"
+            class="whitespace-nowrap flex items-center gap-12 marquee-track animate-marquee"
+          >
+            <span
+              v-for="i in 5"
+              :key="'m'+i"
+              class="text-[10px] font-bold tracking-normal text-foreground/70 flex items-center gap-6"
+            >
+              <span class="bg-foreground/10 px-2 py-0.5 text-primary text-[8px] font-black uppercase tracking-widest">NEWS</span>
+              {{ latestNewsText }}
+              <span class="opacity-20 mx-2">|</span>
+            </span>
+          </div>
+          <JanariBreadcrumbs v-else />
+        </div>
+        <div class="flex items-center gap-3 bg-primary/8 backdrop-blur-sm px-4 py-1.5 border border-primary/45 rounded-sm shadow-[0_0_18px_hsl(var(--primary)/0.12)]">
+          <div
+            ref="socialLinksWrap"
+            class="flex items-center gap-5 overflow-visible"
+            @mousemove="handleSocialDockMove"
+            @mouseleave="resetSocialDock"
+          >
+            <a 
+              v-for="(link, idx) in socialLinks" 
+              :key="idx"
+              :href="resolveSocialHref(link)"
+              :target="getSocialTarget(link)"
+              :rel="getSocialRel(link)"
+              data-social-icon="true"
+              class="social-dock-icon text-foreground/80 hover:text-primary transition-colors"
+            >
+              <component
+                :is="getSocialIcon(link.icon)"
+                class="w-4 h-4"
+              />
+            </a>
+            <div
+              v-if="socialLinks.length > 0"
+              class="w-px h-3 bg-foreground/20"
+            />
+          </div>
+          <button
+            class="flex items-center gap-2 group/p focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+            type="button"
+            data-gsap-interactive="off"
+            @click="toggleSocialLinks"
+          >
+            <span class="text-[9px] font-black uppercase tracking-[0.35em] text-foreground/75 group-hover/p:text-foreground transition-colors">SOCIAL</span>
+            <ChevronDown
+              class="w-3 h-3 mt-[1px] text-primary transition-transform duration-300"
+              :class="{ 'rotate-180': socialExpanded }"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom accent -->
+    <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent z-50 dark:block hidden" />
+  </header>
+
+  <!-- ========== MOBILE MENU OVERLAY (teleported outside header) ========== -->
+  <teleport to="body">
+    <transition name="mobile-menu">
+      <div
+        v-if="isOpen && !isDesktop"
+        class="fixed inset-0 z-[9999] flex flex-col overflow-y-auto"
+      >
+        <!-- Mobile Header -->
+        <div class="mobile-menu-header px-6 py-5 flex items-center justify-between shrink-0">
+          <router-link
+            to="/"
+            class="flex items-center gap-3"
+            @click="isOpen = false"
+          >
+            <img
+              v-if="siteLogo"
+              :src="siteLogo"
+              class="h-8 w-auto object-contain"
+              :alt="siteName"
+            >
+            <span class="text-lg font-heading font-black tracking-tight uppercase text-white leading-none">{{ siteName }}</span>
+            <div class="h-4 w-px bg-white/20" />
+            <span class="text-[7px] font-black tracking-[0.35em] uppercase text-white/40 leading-tight">OFFICIAL<br>WEBSITE</span>
+          </router-link>
+          <button
+            class="text-white/70 hover:text-white p-1"
+            @click="isOpen = false"
+          >
+            <X class="w-8 h-8" />
+          </button>
+        </div>
+
+        <!-- Language/Theme Switcher -->
+        <div class="px-8 py-4 bg-black/40 backdrop-blur-md flex items-center justify-end gap-6 shrink-0">
+          <button
+            class="text-white/60 hover:text-white transition-colors mr-auto flex items-center gap-2 text-sm"
+            @click="toggleMode"
+          >
+            <Sun
+              v-if="isDark"
+              class="w-4 h-4"
+            />
+            <Moon
+              v-else
+              class="w-4 h-4"
+            />
+            <span v-if="isDark">Light</span><span v-else>Dark</span>
+          </button>
+          <Globe class="w-4 h-4 text-white/30" />
+          <button class="text-sm text-white/60 hover:text-white transition-colors">
+            ID
+          </button>
+          <button class="text-sm text-white/60 hover:text-white transition-colors">
+            EN
+          </button>
+        </div>
+
+        <!-- Primary Links (Dark Section) -->
+        <div class="flex-1 bg-black/95 backdrop-blur-xl px-8 py-8">
+          <div class="grid grid-cols-2 gap-x-8 gap-y-5">
+            <template
+              v-for="item in navItems"
+              :key="'mob-'+String(item.id || item.title)"
+            >
+              <a 
+                v-if="isExternalLink(item.url)" 
+                :href="item.url || '#'" 
+                target="_blank"
+                class="flex items-center gap-3 text-white/80 hover:text-white transition-colors group/link"
+                @click="isOpen = false"
+              >
+                <ChevronRight class="w-3 h-3 text-primary group-hover/link:translate-x-1 transition-transform" />
+                <span class="text-sm font-medium">{{ item.title }}</span>
+              </a>
+              <router-link 
+                v-else
+                :to="getInternalUrl(item.url)" 
+                class="flex items-center gap-3 text-white/80 hover:text-white transition-colors group/link"
+                @click="isOpen = false"
+              >
+                <ChevronRight class="w-3 h-3 text-primary group-hover/link:translate-x-1 transition-transform" />
+                <span class="text-sm font-medium">{{ item.title }}</span>
+              </router-link>
+            </template>
+          </div>
+        </div>
+
+        <!-- Accent band (Portal Member) — follows theme primary -->
+        <div class="mobile-accent-section px-8 py-8 shrink-0">
+          <p class="text-[10px] uppercase tracking-[0.3em] text-primary-foreground/55 mb-3">
+            Portal Member
+          </p>
+          <div class="flex items-center gap-4 mb-6">
+            <span class="text-2xl font-black text-primary-foreground tracking-tight uppercase">{{ siteName }}</span>
+            <div class="h-5 w-px bg-primary-foreground/25" />
+            <a
+              :href="loginUrl"
+              class="bg-primary-foreground text-primary text-xs font-bold px-4 py-2 rounded-sm hover:bg-primary-foreground/90 transition-colors"
+              @click="isOpen = false"
+            >
+              Login
+            </a>
+          </div>
+          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
+            <router-link
+              to="/"
+              class="flex items-center gap-3 text-primary-foreground/70 hover:text-primary-foreground text-sm"
+              @click="isOpen = false"
+            >
+              <ChevronRight class="w-3 h-3" /> Top
+            </router-link>
+            <router-link
+              to="/blog"
+              class="flex items-center gap-3 text-primary-foreground/70 hover:text-primary-foreground text-sm"
+              @click="isOpen = false"
+            >
+              <ChevronRight class="w-3 h-3" /> News
+            </router-link>
+            <router-link
+              to="/profil"
+              class="flex items-center gap-3 text-primary-foreground/70 hover:text-primary-foreground text-sm"
+              @click="isOpen = false"
+            >
+              <ChevronRight class="w-3 h-3" /> Profile
+            </router-link>
+            <router-link
+              to="/kontak"
+              class="flex items-center gap-3 text-primary-foreground/70 hover:text-primary-foreground text-sm"
+              @click="isOpen = false"
+            >
+              <ChevronRight class="w-3 h-3" /> Contact
+            </router-link>
+          </div>
+        </div>
+
+        <!-- Social Footer -->
+        <div class="bg-black py-6 px-8 flex items-center justify-center gap-6 shrink-0">
+          <a 
+            v-for="(link, idx) in socialLinks" 
+            :key="idx"
+            :href="resolveSocialHref(link)"
+            :target="getSocialTarget(link)"
+            :rel="getSocialRel(link)"
+            class="text-white/40 hover:text-white transition-colors"
+          >
+            <component
+              :is="getSocialIcon(link.icon)"
+              class="w-5 h-5"
+            />
+          </a>
+        </div>
+      </div>
+    </transition>
+  </teleport>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { useTheme } from '@/composables/useTheme';
+import { useMenu } from '@/composables/useMenu';
+import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useResponsiveDevice } from '@/composables/useResponsiveDevice';
+import { useGsapAnimations } from '@/composables/useGsapAnimations';
+import { useRoute } from 'vue-router';
+import { useDarkMode } from '@/composables/useDarkMode';
+import { SECURITY_ROUTES } from '@/config/security';
+import { useJanariIdentity, trimStr, toWhatsAppDialDigits } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity';
+import JanariBreadcrumbs from '@/modules/Cms/views/themes/janari/components/JanariBreadcrumbs.vue';
+
+import ChevronRight from 'lucide-vue-next/dist/esm/icons/chevron-right.js';
+import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js';
+import Twitter from 'lucide-vue-next/dist/esm/icons/twitter.js';
+import Instagram from 'lucide-vue-next/dist/esm/icons/instagram.js';
+import Facebook from 'lucide-vue-next/dist/esm/icons/facebook.js';
+import Youtube from 'lucide-vue-next/dist/esm/icons/youtube.js';
+import Linkedin from 'lucide-vue-next/dist/esm/icons/linkedin.js';
+import Github from 'lucide-vue-next/dist/esm/icons/github.js';
+import Music2 from 'lucide-vue-next/dist/esm/icons/music-2.js';
+import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
+import MessageCircle from 'lucide-vue-next/dist/esm/icons/message-circle.js';
+import Globe from 'lucide-vue-next/dist/esm/icons/globe.js';
+import MenuIcon from 'lucide-vue-next/dist/esm/icons/menu.js';
+import X from 'lucide-vue-next/dist/esm/icons/x.js';
+import Sun from 'lucide-vue-next/dist/esm/icons/sun.js';
+import Moon from 'lucide-vue-next/dist/esm/icons/moon.js';
+import type { MenuItem } from '@/types/cms/menu';
+
+const { getSetting } = useTheme();
+const { menus, fetchMenuByIdentifier } = useMenu();
+const device = useResponsiveDevice();
+const { gsap } = useGsapAnimations();
+const route = useRoute();
+const { isDark, toggleMode } = useDarkMode('frontend');
+
+const isOpen = ref(false);
+const loginUrl = SECURITY_ROUTES.login;
+const headerRef = ref<HTMLElement>();
+const isDesktop = computed(() => device.value === 'desktop');
+const isHomePage = computed(() => route.path === '/');
+
+const headerSticky = computed(() => getSetting('header_sticky', true));
+const headerStyle = computed(() => getSetting('header_style', 'glass'));
+const brandingDisplay = computed(() => getSetting('branding_display', 'logo_only'));
+
+const cmsStore = useCmsStore();
+const siteSettings = computed(() => cmsStore.siteSettings);
+const { displaySiteName } = useJanariIdentity();
+const siteName = computed(() => displaySiteName.value);
+const siteLogo = computed(() => {
+    const logo = (getSetting('brand_logo') as string) || siteSettings.value?.site_logo || '';
+    // In monolithic setup, /storage is relative to root
+    return logo;
+});
+
+const socialLinks = computed(() => (getSetting('social_links') as any[]) || []);
+
+const getSocialIcon = (key: string) => {
+    switch (key) {
+        case 'Twitter': return Twitter;
+        case 'Instagram': return Instagram;
+        case 'Facebook': return Facebook;
+        case 'Youtube': return Youtube;
+        case 'Linkedin': return Linkedin;
+        case 'Github': return Github;
+        case 'Music2': return Music2;
+        case 'MessageCircle':
+        case 'WhatsApp':
+            return MessageCircle;
+        case 'Mail': return Mail;
+        case 'Email': return Mail;
+        default: return Globe;
+    }
+};
+
+const resolveSocialHref = (link: { icon?: string; url?: string }) => {
+    const icon = trimStr(link?.icon);
+    const raw = trimStr(link?.url);
+    if (!raw) return '#';
+
+    if (icon === 'Mail' || icon === 'Email') {
+        if (raw.startsWith('mailto:')) return raw;
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw)) return `mailto:${raw}`;
+        return raw;
+    }
+
+    if (icon === 'MessageCircle' || icon === 'WhatsApp') {
+        if (raw.includes('wa.me/') || raw.includes('api.whatsapp.com/') || raw.includes('whatsapp.com/')) {
+            return raw.startsWith('http') ? raw : `https://${raw.replace(/^\/+/, '')}`;
+        }
+        const digits = toWhatsAppDialDigits(raw);
+        return digits ? `https://wa.me/${digits}` : '#';
+    }
+
+    return raw;
+};
+
+const getSocialTarget = (link: { icon?: string; url?: string }) => {
+    const href = resolveSocialHref(link);
+    if (href.startsWith('mailto:') || href.startsWith('tel:') || href === '#') return undefined;
+    return '_blank';
+};
+
+const getSocialRel = (link: { icon?: string; url?: string }) => {
+    return getSocialTarget(link) ? 'noopener noreferrer' : undefined;
+};
+
+const latestNewsText = ref('Latest Updates: 35th L\'Anniversary Year - Arena Tour 2026 Underground Announced');
+const socialExpanded = ref(true);
+const socialLinksWrap = ref<HTMLElement>();
+
+const headerStyleClasses = computed(() => {
+    switch (headerStyle.value) {
+        case 'solid': return 'bg-background border-b border-border';
+        case 'transparent': return 'bg-transparent';
+        default: return 'bg-background/90 backdrop-blur-3xl border-b border-border shadow-xs';
+    }
+});
+
+const getNavItemClasses = (isActive: boolean) => {
+    const base = 'px-4 py-2 text-[10.5px] font-black uppercase tracking-[0.35em] transition-all duration-300 relative inline-block';
+    if (isActive) return `${base} text-primary`;
+    return `${base} text-foreground hover:text-primary`;
+};
+
+const isParentActive = (_item: MenuItem) => false;
+const normalizeMenuSetting = (value: unknown, fallback: string): string => {
+    if (value === null || value === undefined || value === '' || value === 'none') {
+        return fallback;
+    }
+    return String(value);
+};
+const currentMenuLocation = computed(() => {
+    const routeMenu = route.meta?.menu_location as string | undefined;
+    if (routeMenu) return routeMenu;
+    return normalizeMenuSetting(getSetting('menu_location_header', 'header'), 'header');
+});
+
+const navItems = computed<MenuItem[]>(() => {
+    const menu = menus.value.header || menus.value[currentMenuLocation.value];
+    return (menu?.items || []) as MenuItem[];
+});
+
+const toggleMenu = () => {
+    isOpen.value = !isOpen.value;
+};
+
+const toggleSocialLinks = () => {
+    const wrap = socialLinksWrap.value;
+    if (!wrap) return;
+
+    if (socialExpanded.value) {
+        gsap.to(wrap, {
+            scaleX: 0,
+            opacity: 0,
+            x: 10,
+            transformOrigin: 'right center',
+            duration: 0.3,
+            ease: 'power2.out',
+            onComplete: () => {
+                wrap.style.display = 'none';
+            },
+        });
+        socialExpanded.value = false;
+        return;
+    }
+
+    wrap.style.display = 'flex';
+    gsap.set(wrap, { scaleX: 0, opacity: 0, x: 10, transformOrigin: 'right center' });
+    gsap.to(wrap, {
+        scaleX: 1,
+        opacity: 1,
+        x: 0,
+        duration: 0.35,
+        ease: 'power2.out',
+    });
+    socialExpanded.value = true;
+};
+
+const handleSocialDockMove = (event: MouseEvent) => {
+    if (!socialExpanded.value) return;
+    const wrap = socialLinksWrap.value;
+    if (!wrap) return;
+
+    const icons = Array.from(wrap.querySelectorAll<HTMLElement>('[data-social-icon="true"]'));
+    if (!icons.length) return;
+
+    const pointerX = event.clientX;
+    const maxDistance = 120;
+
+    icons.forEach((icon) => {
+        const rect = icon.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const distance = Math.abs(pointerX - centerX);
+        const intensity = Math.max(0, 1 - distance / maxDistance);
+
+        gsap.to(icon, {
+            scale: 1 + (intensity * 0.5),
+            y: -(intensity * 8),
+            duration: 0.18,
+            ease: 'power3.out',
+            overwrite: 'auto',
+        });
+    });
+};
+
+const resetSocialDock = () => {
+    const wrap = socialLinksWrap.value;
+    if (!wrap) return;
+    const icons = Array.from(wrap.querySelectorAll<HTMLElement>('[data-social-icon="true"]'));
+    icons.forEach((icon) => {
+        gsap.to(icon, {
+            scale: 1,
+            y: 0,
+            duration: 0.22,
+            ease: 'power3.out',
+            overwrite: 'auto',
+        });
+    });
+};
+
+// URL Helpers
+const isExternalLink = (url?: string | null) => {
+    if (!url) return false;
+    return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('mailto:') || url.startsWith('tel:');
+};
+
+const getInternalUrl = (url?: string | null) => {
+    if (!url) return '/';
+    if (url.startsWith('http')) return url; // Let standard anchors handle it if missed
+    if (!url.startsWith('/')) return `/${url}`;
+    return url;
+};
+
+// Use a watch for more robust body scroll locking
+watch(isOpen, (newValue) => {
+    if (!isDesktop.value) {
+        document.body.style.overflow = newValue ? 'hidden' : '';
+    } else {
+        document.body.style.overflow = '';
+    }
+});
+
+// Close menu on route change
+watch(() => route.path, () => {
+    isOpen.value = false;
+    document.body.style.overflow = '';
+});
+
+// Use a local ref to prevent redundant triggers if something else changes the location
+const menuFetched = ref<Set<string>>(new Set());
+watch(currentMenuLocation, async (newLoc) => { 
+    if (!newLoc || menuFetched.value.has(newLoc)) return;
+    menuFetched.value.add(newLoc);
+    await fetchMenuByIdentifier(newLoc, 'header');
+}, { immediate: true });
+
+onMounted(() => {
+    const topMenuIdentifier = normalizeMenuSetting(getSetting('menu_location_header_top', 'header_top'), 'header_top');
+    fetchMenuByIdentifier(topMenuIdentifier, 'header_top');
+    if (headerRef.value) {
+        // Use set to ensure visibility before animation
+        gsap.set(headerRef.value, { y: -100, opacity: 0 });
+        gsap.to(headerRef.value, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', clearProps: 'all' });
+    }
+});
+
+onUnmounted(() => {
+    document.body.style.overflow = '';
+});
+</script>
+
+<style scoped>
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+  display: inline-flex;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+.mobile-menu-header {
+    background: hsl(var(--card));
+    border-bottom: 2px solid hsl(var(--border));
+}
+.mobile-accent-section {
+    background: linear-gradient(180deg, hsl(var(--primary) / 0.88), hsl(var(--primary)));
+}
+.mobile-menu-enter-active { transition: opacity 0.3s ease; }
+.mobile-menu-leave-active { transition: opacity 0.2s ease; }
+.mobile-menu-enter-from, .mobile-menu-leave-to { opacity: 0; }
+.social-dock-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center bottom;
+  will-change: transform;
+}
+</style>

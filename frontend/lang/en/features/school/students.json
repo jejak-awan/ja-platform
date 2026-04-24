@@ -1,0 +1,35 @@
+{
+    "actions": {
+        "add": "Add Student",
+        "editProfile": "Edit Profile",
+        "export": "Export CSV",
+        "printID": "Print Student Card",
+        "printProfile": "Print Profile",
+        "printSKL": "Print SKL"
+    },
+    "labels": {
+        "academicHistory": "Academic History",
+        "address": "Address",
+        "attendanceSummary": "Attendance Summary",
+        "biodata": "Biodata",
+        "disciplineRecord": "Discipline Record",
+        "fatherName": "Father's Name",
+        "fatherOccupation": "Father's Occupation",
+        "genderShort": "Gender",
+        "level": "Level",
+        "motherName": "Mother's Name",
+        "parentInfo": "Parent Information",
+        "personalInfo": "Personal Information",
+        "religion": "Religion",
+        "rombel": "Study Group",
+        "studentData": "Student Data",
+        "totalStudents": "Total: {total} students"
+    },
+    "messages": {
+        "academicHistoryEmpty": "Academic history will be displayed here.",
+        "attendanceEmpty": "Attendance summary will be displayed here.",
+        "disciplineEmpty": "Violation and achievement records will be displayed here."
+    },
+    "subtitle": "Manage all student data and their detailed profile information.",
+    "title": "Student Data"
+}

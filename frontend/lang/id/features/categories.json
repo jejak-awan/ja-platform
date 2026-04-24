@@ -1,0 +1,70 @@
+{
+    "actions": {
+        "delete": "Hapus",
+        "edit": "Edit",
+        "move": "Pindah"
+    },
+    "createNew": "Kategori Baru",
+    "description": "Kelola kategori konten",
+    "empty": "Tidak ada kategori ditemukan",
+    "form": {
+        "active": "Aktif",
+        "cancel": "Batal",
+        "create": "Buat",
+        "createDescription": "Tambahkan kategori baru ke struktur konten Anda.",
+        "createTitle": "Buat Kategori",
+        "description": "Deskripsi",
+        "descriptionPlaceholder": "Deskripsi kategori",
+        "details": "Detail Kategori",
+        "editDescription": "Perbarui informasi dan pengaturan kategori.",
+        "editTitle": "Edit Kategori",
+        "image": "Gambar",
+        "name": "Nama",
+        "namePlaceholder": "Nama kategori",
+        "noParent": "Tanpa Induk (Kategori Root)",
+        "parent": "Kategori Induk",
+        "removeImage": "Hapus Gambar",
+        "saveError": "Gagal menyimpan kategori",
+        "saving": "Menyimpan...",
+        "selectImage": "Pilih Gambar",
+        "slug": "Slug",
+        "slugHelp": "Versi ramah URL",
+        "slugPlaceholder": "slug-kategori",
+        "sortOrder": "Urutan",
+        "sortOrderHelp": "Angka lebih kecil muncul lebih dulu",
+        "update": "Perbarui"
+    },
+    "loading": "Memuat kategori...",
+    "messages": {
+        "deleteConfirm": "Apakah Anda yakin ingin menghapus \"{name}\" dan semua subkategorinya?",
+        "deleteError": "Gagal menghapus kategori"
+    },
+    "move": {
+        "cancel": "Batal",
+        "description": "Pindahkan \"{name}\" ke:",
+        "error": "Gagal memindahkan kategori",
+        "moving": "Memindahkan...",
+        "newParent": "Kategori Induk Baru",
+        "submit": "Pindahkan Kategori",
+        "title": "Pindahkan Kategori"
+    },
+    "search": "Cari kategori...",
+    "status": {
+        "active": "Aktif",
+        "inactive": "Tidak Aktif"
+    },
+    "table": {
+        "actions": "Aksi",
+        "contents": "Konten",
+        "name": "Nama",
+        "parent": "Induk",
+        "slug": "Slug",
+        "status": "Status"
+    },
+    "title": "Kategori",
+    "title_singular": "Kategori",
+    "viewMode": {
+        "list": "Tampilan Daftar",
+        "tree": "Tampilan Pohon"
+    }
+}

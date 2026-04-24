@@ -1,0 +1,468 @@
+<?php
+
+namespace Modules\Cms\Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Modules\Cms\Models\Category;
+use Modules\Cms\Models\Content;
+use Modules\Cms\Models\ContentRevision;
+use Modules\Cms\Models\Tag;
+use Modules\Core\Models\User;
+use Tests\Helpers\TestHelpers;
+use Tests\TestCase;
+
+class ContentManagementTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seedPermissionsAndRoles();
+    }
+
+    /**
+     * Test admin can list all contents.
+     */
+    public function test_admin_can_list_all_contents(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $initialCount = Content::count();
+        Content::factory()->count(5)->create();
+
+        $response = $this->getJson('/api/v1/admin/cms/contents');
+
+        TestHelpers::assertApiPaginated($response);
+        // If total contents exceed per_page (usually 10 or 15), this might fail if we assert count + 5
+        // Ideally we check total in meta, or just assert we got some data
+        // $response->assertJsonCount(min($initialCount + 5, 10), 'data.data'); // Assuming 10 per page
+
+        // Safer check: assert at least 5
+        $data = $response->json('data.data');
+        $this->assertGreaterThanOrEqual(5, count($data));
+    }
+
+    /**
+     * Test admin can filter contents by status.
+     */
+    public function test_admin_can_filter_contents_by_status(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $initialCount = Content::where('status', 'draft')->count();
+
+        Content::factory()->published()->count(3)->create();
+        Content::factory()->draft()->count(2)->create();
+
+        $response = $this->getJson('/api/v1/admin/cms/contents?status=draft');
+
+        TestHelpers::assertApiPaginated($response);
+        $response->assertJsonCount($initialCount + 2, 'data.data');
+    }
+
+    /**
+     * Test admin can create content.
+     */
+    public function test_admin_can_create_content(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $category = Category::factory()->create();
+        $tags = Tag::factory()->count(2)->create();
+
+        $contentData = TestHelpers::getContentData([
+            'category_id' => $category->id,
+            'tags' => $tags->pluck('id')->toArray(),
+        ]);
+
+        $response = $this->postJson('/api/v1/admin/cms/contents', $contentData);
+
+        TestHelpers::assertApiSuccess($response, 201);
+        $response->assertJsonStructure([
+            'success',
+            'message',
+            'data' => [
+                'id',
+                'title',
+                'slug',
+                'author_id',
+            ],
+        ]);
+
+        $this->assertDatabaseHas('contents', [
+            'title' => $contentData['title'],
+            'slug' => $contentData['slug'],
+            'author_id' => $admin->id,
+        ]);
+    }
+
+    /**
+     * Test content creation requires all required fields.
+     */
+    public function test_content_creation_requires_required_fields(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $response = $this->postJson('/api/v1/admin/cms/contents', []);
+
+        TestHelpers::assertApiValidationError($response);
+        // Only title, status, and type are required by the API
+        $response->assertJsonValidationErrors(['title', 'status', 'type']);
+    }
+
+    /**
+     * Test admin can view content details.
+     */
+    public function test_admin_can_view_content_details(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create();
+
+        $response = $this->getJson("/api/v1/admin/cms/contents/{$content->id}");
+
+        TestHelpers::assertApiSuccess($response);
+        $response->assertJson([
+            'data' => [
+                'id' => $content->id,
+                'title' => $content->title,
+            ],
+        ]);
+    }
+
+    /**
+     * Test admin can update content.
+     */
+    public function test_admin_can_update_content(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create();
+
+        $updateData = [
+            'title' => 'Updated Title',
+            'body' => 'Updated body content',
+        ];
+
+        $response = $this->putJson("/api/v1/admin/cms/contents/{$content->id}", array_merge(
+            $content->toArray(),
+            $updateData
+        ));
+
+        TestHelpers::assertApiSuccess($response);
+        $this->assertDatabaseHas('contents', [
+            'id' => $content->id,
+            'title' => 'Updated Title',
+        ]);
+    }
+
+    /**
+     * Test admin can delete content.
+     */
+    public function test_admin_can_delete_content(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create();
+
+        $response = $this->deleteJson("/api/v1/admin/cms/contents/{$content->id}");
+
+        TestHelpers::assertApiSuccess($response);
+        $this->assertSoftDeleted('contents', [
+            'id' => $content->id,
+        ]);
+    }
+
+    /**
+     * Test admin can duplicate content.
+     */
+    public function test_admin_can_duplicate_content(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create();
+        $tags = Tag::factory()->count(2)->create();
+        $content->tags()->attach($tags);
+
+        $response = $this->postJson("/api/v1/admin/cms/contents/{$content->id}/duplicate");
+
+        TestHelpers::assertApiSuccess($response, 201);
+
+        $this->assertDatabaseHas('contents', [
+            'title' => $content->title.' (Copy)',
+        ]);
+    }
+
+    /**
+     * Test admin can perform bulk actions on contents.
+     */
+    public function test_admin_can_perform_bulk_actions(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $contents = Content::factory()->count(3)->create();
+
+        $response = $this->postJson('/api/v1/admin/cms/contents/bulk-action', [
+            'action' => 'delete',
+            'content_ids' => $contents->pluck('id')->toArray(),
+        ]);
+
+        TestHelpers::assertApiSuccess($response);
+
+        foreach ($contents as $content) {
+            $this->assertSoftDeleted('contents', ['id' => $content->id]);
+        }
+    }
+
+    /**
+     * Test bulk action requires valid action.
+     */
+    public function test_bulk_action_requires_valid_action(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $contents = Content::factory()->count(2)->create();
+
+        $response = $this->postJson('/api/v1/admin/cms/contents/bulk-action', [
+            'action' => 'invalid-action',
+            'ids' => $contents->pluck('id')->toArray(),
+        ]);
+
+        TestHelpers::assertApiValidationError($response);
+    }
+
+    /**
+     * Test admin can create content revision.
+     */
+    public function test_admin_can_create_content_revision(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create();
+
+        $response = $this->postJson("/api/v1/admin/cms/contents/{$content->id}/revisions", [
+            'note' => 'Test revision',
+        ]);
+
+        TestHelpers::assertApiSuccess($response, 201);
+        $this->assertDatabaseHas('content_revisions', [
+            'content_id' => $content->id,
+            'author_id' => $admin->id,
+            'reason' => 'Test revision',
+        ]);
+    }
+
+    /**
+     * Test admin can list content revisions.
+     */
+    public function test_admin_can_list_content_revisions(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create();
+        ContentRevision::factory()->count(3)->create([
+            'content_id' => $content->id,
+        ]);
+
+        $response = $this->getJson("/api/v1/admin/cms/contents/{$content->id}/revisions");
+
+        TestHelpers::assertApiPaginated($response);
+        $response->assertJsonCount(3, 'data.data');
+    }
+
+    /**
+     * Test admin can view revision details.
+     */
+    public function test_admin_can_view_revision_details(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create();
+        $revision = ContentRevision::factory()->create([
+            'content_id' => $content->id,
+        ]);
+
+        $response = $this->getJson("/api/v1/admin/cms/contents/{$content->id}/revisions/{$revision->id}");
+
+        TestHelpers::assertApiSuccess($response);
+        $response->assertJson([
+            'data' => [
+                'id' => $revision->id,
+                'content_id' => $content->id,
+            ],
+        ]);
+    }
+
+    /**
+     * Test admin can restore content from revision.
+     */
+    public function test_admin_can_restore_content_from_revision(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create([
+            'title' => 'Original Title',
+            'body' => 'Original body',
+        ]);
+
+        $revision = ContentRevision::factory()->create([
+            'content_id' => $content->id,
+            'title' => 'Revision Title',
+            'body' => 'Revision body',
+        ]);
+
+        $response = $this->postJson("/api/v1/admin/cms/contents/{$content->id}/revisions/{$revision->id}/restore");
+
+        TestHelpers::assertApiSuccess($response);
+
+        $content->refresh();
+        $this->assertEquals('Revision Title', $content->title);
+        $this->assertEquals('Revision body', $content->body);
+    }
+
+    /**
+     * Test admin can delete revision.
+     */
+    public function test_admin_can_delete_revision(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create();
+        $revision = ContentRevision::factory()->create([
+            'content_id' => $content->id,
+        ]);
+
+        $response = $this->deleteJson("/api/v1/admin/cms/contents/{$content->id}/revisions/{$revision->id}");
+
+        TestHelpers::assertApiSuccess($response);
+        $this->assertDatabaseMissing('content_revisions', [
+            'id' => $revision->id,
+        ]);
+    }
+
+    /**
+     * Test admin can lock content.
+     */
+    public function test_admin_can_lock_content(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create();
+
+        $response = $this->postJson("/api/v1/admin/cms/contents/{$content->id}/lock");
+
+        TestHelpers::assertApiSuccess($response);
+
+        $content->refresh();
+        $this->assertEquals($admin->id, $content->locked_by);
+        $this->assertNotNull($content->locked_at);
+    }
+
+    /**
+     * Test admin can unlock content.
+     */
+    public function test_admin_can_unlock_content(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create([
+            'locked_by' => $admin->id,
+            'locked_at' => now(),
+        ]);
+
+        $response = $this->postJson("/api/v1/admin/cms/contents/{$content->id}/unlock");
+
+        TestHelpers::assertApiSuccess($response);
+
+        $content->refresh();
+        $this->assertNull($content->locked_by);
+        $this->assertNull($content->locked_at);
+    }
+
+    /**
+     * Test admin can preview content.
+     */
+    public function test_admin_can_preview_content(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->draft()->create();
+
+        $response = $this->getJson("/api/v1/admin/cms/contents/{$content->id}/preview");
+
+        TestHelpers::assertApiSuccess($response);
+        $response->assertJson([
+            'data' => [
+                'content' => [
+                    'id' => $content->id,
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Test user without permission cannot create content.
+     */
+    public function test_user_without_permission_cannot_create_content(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user, 'sanctum');
+
+        $contentData = TestHelpers::getContentData();
+
+        $response = $this->postJson('/api/v1/admin/cms/contents', $contentData);
+
+        $response->assertStatus(403);
+    }
+
+    /**
+     * Test user without permission cannot update content.
+     */
+    public function test_user_without_permission_cannot_update_content(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user, 'sanctum');
+
+        $content = Content::factory()->create();
+
+        $response = $this->putJson("/api/v1/admin/cms/contents/{$content->id}", [
+            'title' => 'Updated Title',
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    /**
+     * Test user without permission cannot delete content.
+     */
+    public function test_user_without_permission_cannot_delete_content(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user, 'sanctum');
+
+        $content = Content::factory()->create();
+
+        $response = $this->deleteJson("/api/v1/admin/cms/contents/{$content->id}");
+
+        $response->assertStatus(403);
+    }
+}

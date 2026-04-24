@@ -1,0 +1,16 @@
+{
+    "hide": "Hide",
+    "severity": {
+        "critical": "Critical",
+        "info": "Info",
+        "warning": "Warning"
+    },
+    "show": "Show Details",
+    "title": "Security Alerts",
+    "types": {
+        "brute_force": "Brute Force Attack",
+        "failed_login": "Multiple Failed Logins",
+        "ip_blocked": "IP Blocked",
+        "multiple_ip_login": "Login from Multiple IPs"
+    }
+}

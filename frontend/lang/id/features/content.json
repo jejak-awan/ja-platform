@@ -1,0 +1,178 @@
+{
+    "actions": {
+        "approve": "Setujui",
+        "duplicate": "Duplikat",
+        "emptyTrash": "Kosongkan Sampah",
+        "moveToTrash": "Pindahkan ke Sampah",
+        "publishNow": "Terbitkan Sekarang",
+        "reject": "Tolak",
+        "restore": "Pulihkan",
+        "saveDraft": "Simpan Draf",
+        "schedule": "Jadwalkan",
+        "unpublish": "Batalkan Terbit"
+    },
+    "form": {
+        "addTags": "Tambah Tag",
+        "allowComments": "Izinkan Komentar",
+        "allowCommentsDesc": "Aktifkan atau nonaktifkan komentar untuk item konten ini.",
+        "back": "Kembali ke Konten",
+        "body": "Isi Konten",
+        "cancel": "Batal",
+        "category": "Kategori",
+        "chooseEditorDesc": "Pilih antara editor teks standar atau desain visual drag-and-drop kami.",
+        "create": "Buat Konten",
+        "createAndEdit": "Buat & Buka Builder",
+        "creating": "Membuat...",
+        "details": "Detail Konten",
+        "discussion": "Diskusi",
+        "editTitle": "Ubah Konten",
+        "excerpt": "Kutipan",
+        "excerptPlaceholder": "Ringkasan singkat konten...",
+        "intro": "Intro",
+        "introPlaceholder": "Paragraf pembuka di bawah judul halaman (mendukung bold, italic, link)",
+        "featured": "Konten Unggulan",
+        "featuredDesc": "Sematkan konten ini di bagian atas",
+        "featuredImage": "Gambar Unggulan",
+        "keywordsPlaceholder": "Masukkan kata kunci meta dipisahkan dengan koma",
+        "loading": "Memuat konten...",
+        "locked": "Terkunci",
+        "lockedBy": "oleh {name}",
+        "maxSizeHint": "Ukuran Maks: {size}MB | {extensions}",
+        "metaDescription": "Deskripsi Meta",
+        "metaKeywords": "Kata Kunci Meta",
+        "metaTitle": "Judul Meta",
+        "minHint": "(Min: {dimensions})",
+        "ogImage": "Gambar Open Graph",
+        "preview": "Pratinjau",
+        "publishDate": "Tanggal Terbit",
+        "publishImmediatelyHelp": "Biarkan kosong untuk terbit segera",
+        "publishing": "Publikasi",
+        "recommendedHint": "Rekomendasi: {dimensions}",
+        "remove": "Hapus",
+        "removeImage": "Hapus Gambar",
+        "selectCategory": "Pilih Kategori",
+        "selectImage": "Pilih Gambar",
+        "selectOgImage": "Pilih Gambar OG",
+        "selectTag": "Pilih tag...",
+        "seoSettings": "Pengaturan SEO",
+        "sidebar": {
+            "addToMenu": "Tambahkan ke Menu",
+            "addToMenuDesc": "Tambahkan konten ini ke menu",
+            "comments": "Komentar"
+        },
+        "slug": "Slug",
+        "slugPlaceholder": "dibuat-otomatis-dari-judul",
+        "status": "Status",
+        "switchModeDescription": "Anda akan beralih ke mode editor yang berbeda. Konten disimpan terpisah untuk setiap mode.",
+        "switchModeTitle": "Ganti Mode Editor",
+        "switchToBuilderWarning": "Konten editor klasik Anda akan tetap tersimpan, tetapi tidak akan terlihat di builder. Builder akan mulai kosong kecuali Anda sudah menambahkan blok sebelumnya.",
+        "switchToClassicWarning": "Blok builder Anda akan tetap tersimpan, tetapi tidak akan terlihat di editor klasik. Editor klasik akan menampilkan konten yang tersimpan sebelumnya atau kosong.",
+        "tagInputHint": "Tekan Enter untuk menambah tag baru, atau klik saran",
+        "tagInputPlaceholder": "Ketik untuk menambah atau cari tag...",
+        "tags": "Tag",
+        "taxonomy": "Taksonomi",
+        "title": "Judul Konten",
+        "titlePlaceholder": "Masukkan judul konten",
+        "type": "Tipe",
+        "unlock": "Buka Kunci",
+        "unlocked": "Terbuka",
+        "update": "Perbarui Konten",
+        "updating": "Memperbarui...",
+        "urlFriendlyHelp": "Versi ramah URL dari judul",
+        "useBuilder": "Gunakan JA-Builder",
+        "useDefault": "Gunakan Editor Klasik",
+        "welcomeToBuilder": "Bangun tata letak Anda"
+    },
+    "list": {
+        "bulkActions": "Aksi Massal",
+        "createNew": "Buat Konten Baru",
+        "description": "Kelola konten, postingan blog, dan halaman Anda",
+        "filterByStatus": "Saring berdasarkan status",
+        "empty": "Tidak ada konten ditemukan",
+        "revisions": "Revisi",
+        "selected": "{count} dipilih",
+        "subtitle": "Kelola perpustakaan konten Anda",
+        "templates": "Template",
+        "title": "Semua Konten"
+    },
+    "messages": {
+        "approveFailed": "Gagal menyetujui konten",
+        "approved": "Konten berhasil disetujui",
+        "conflictResolveFailed": "Gagal menghapus item yang berkonflik. Silakan ubah nama halaman Anda saat ini.",
+        "conflictResolved": "Konflik berhasil diselesaikan: Item sebelumnya telah dihapus.",
+        "createFailed": "Gagal membuat konten",
+        "duplicateFailed": "Gagal menduplikasi konten",
+        "loadFailed": "Gagal memuat konten",
+        "pendingNotice": "Konten ini sedang menunggu peninjauan dan akan diterbitkan setelah disetujui oleh editor.",
+        "previewFailed": "Gagal mempratinjau konten",
+        "publishFailed": "Gagal menerbitkan konten",
+        "publishSuccess": "Konten berhasil diterbitkan",
+        "rejectFailed": "Gagal menolak konten",
+        "rejectReason": "Silakan berikan alasan penolakan",
+        "rejected": "Konten berhasil ditolak",
+        "rescheduleFailed": "Gagal menjadwalkan ulang konten",
+        "restoreFailed": "Gagal memulihkan konten",
+        "unlockFailed": "Gagal membuka kunci konten",
+        "unsavedChanges": "Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin meninggalkan halaman ini?",
+        "updateFailed": "Gagal memperbarui konten"
+    },
+    "placeholders": {
+        "rejectionReason": "Masukkan alasan penolakan di sini..."
+    },
+    "seo": {
+        "metaDescription": "Deskripsi SEO",
+        "metaTitle": "Judul SEO",
+        "seoDescPlaceholder": "Deskripsi SEO (bawaan dari kutipan)",
+        "seoTitlePlaceholder": "Judul SEO (bawaan dari judul konten)"
+    },
+    "revisions": {
+        "actions": {
+            "restore": "Pulihkan",
+            "view": "Lihat"
+        },
+        "badge": {
+            "current": "Saat Ini"
+        },
+        "empty": {
+            "description": "Konten ini belum pernah diubah.",
+            "title": "Tidak ada revisi ditemukan"
+        },
+        "loading": "Memuat revisi...",
+        "messages": {
+            "noChanges": "Tidak ada ringkasan perubahan",
+            "restoreConfirm": "Apakah Anda yakin ingin memulihkan revisi v{version}? Ini akan menggantikan konten saat ini.",
+            "restoreTitle": "Pulihkan Revisi"
+        },
+        "modal": {
+            "close": "Tutup",
+            "fields": {
+                "body": "Isi Konten",
+                "status": "Status",
+                "title": "Judul",
+                "type": "Tipe"
+            },
+            "restore": "Pulihkan Versi Ini",
+            "title": "Revisi v{version}"
+        },
+        "table": {
+            "actions": "Aksi",
+            "author": "Penulis",
+            "changes": "Perubahan",
+            "date": "Tanggal",
+            "version": "Versi"
+        }
+    },
+    "status": {
+        "archived": "Diarsipkan",
+        "draft": "Draf",
+        "pending": "Menunggu Tinjauan",
+        "published": "Diterbitkan",
+        "scheduled": "Dijadwalkan",
+        "trashed": "Sampah"
+    },
+    "tabs": {
+        "content": "Konten",
+        "seo": "SEO",
+        "settings": "Pengaturan"
+    }
+}

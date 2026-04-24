@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /var/www/k2net/ja-apps/backend/Modules/School/app/Models/Academic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../../../_css/bootstrap.min.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../../_css/nv.d3.min.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../../_css/style.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../../../../../index.html">/var/www/k2net/ja-apps/backend</a></li>
+         <li class="breadcrumb-item"><a href="../../../../index.html">Modules</a></li>
+         <li class="breadcrumb-item"><a href="../../../index.html">School</a></li>
+         <li class="breadcrumb-item"><a href="../../index.html">app</a></li>
+         <li class="breadcrumb-item"><a href="../index.html">Models</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Academic</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="AcademicYear.php.html#20">Modules\School\Models\Academic\AcademicYear</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Attendance.php.html#24">Modules\School\Models\Academic\Attendance</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClassHistory.php.html#20">Modules\School\Models\Academic\ClassHistory</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Department.php.html#19">Modules\School\Models\Academic\Department</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#40">Modules\School\Models\Academic\Grade</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Schedule.php.html#38">Modules\School\Models\Academic\Schedule</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Semester.php.html#17">Modules\School\Models\Academic\Semester</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="StudyGroup.php.html#31">Modules\School\Models\Academic\StudyGroup</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Subject.php.html#20">Modules\School\Models\Academic\Subject</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TeachingJournal.php.html#28">Modules\School\Models\Academic\TeachingJournal</a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Grade.php.html#40">Modules\School\Models\Academic\Grade</a></td><td class="text-right">462</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="AcademicYear.php.html#41"><abbr title="Modules\School\Models\Academic\AcademicYear::school">school</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AcademicYear.php.html#49"><abbr title="Modules\School\Models\Academic\AcademicYear::semesters">semesters</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AcademicYear.php.html#57"><abbr title="Modules\School\Models\Academic\AcademicYear::activeSemester">activeSemester</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Attendance.php.html#44"><abbr title="Modules\School\Models\Academic\Attendance::student">student</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Attendance.php.html#52"><abbr title="Modules\School\Models\Academic\Attendance::academicYear">academicYear</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Attendance.php.html#60"><abbr title="Modules\School\Models\Academic\Attendance::semester">semester</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClassHistory.php.html#35"><abbr title="Modules\School\Models\Academic\ClassHistory::student">student</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClassHistory.php.html#43"><abbr title="Modules\School\Models\Academic\ClassHistory::studyGroup">studyGroup</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ClassHistory.php.html#51"><abbr title="Modules\School\Models\Academic\ClassHistory::academicYear">academicYear</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Department.php.html#36"><abbr title="Modules\School\Models\Academic\Department::level">level</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#85"><abbr title="Modules\School\Models\Academic\Grade::student">student</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#93"><abbr title="Modules\School\Models\Academic\Grade::subject">subject</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#101"><abbr title="Modules\School\Models\Academic\Grade::academicYear">academicYear</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#109"><abbr title="Modules\School\Models\Academic\Grade::semester">semester</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#117"><abbr title="Modules\School\Models\Academic\Grade::studyGroup">studyGroup</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#125"><abbr title="Modules\School\Models\Academic\Grade::teacher">teacher</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#133"><abbr title="Modules\School\Models\Academic\Grade::calculateKnowledgeScore">calculateKnowledgeScore</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#145"><abbr title="Modules\School\Models\Academic\Grade::calculateSkillScore">calculateSkillScore</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#161"><abbr title="Modules\School\Models\Academic\Grade::getGradeLetter">getGradeLetter</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Grade.php.html#175"><abbr title="Modules\School\Models\Academic\Grade::getPredicate">getPredicate</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Schedule.php.html#67"><abbr title="Modules\School\Models\Academic\Schedule::school">school</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Schedule.php.html#75"><abbr title="Modules\School\Models\Academic\Schedule::level">level</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Schedule.php.html#83"><abbr title="Modules\School\Models\Academic\Schedule::academicYear">academicYear</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Schedule.php.html#91"><abbr title="Modules\School\Models\Academic\Schedule::semester">semester</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Schedule.php.html#99"><abbr title="Modules\School\Models\Academic\Schedule::studyGroup">studyGroup</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Schedule.php.html#107"><abbr title="Modules\School\Models\Academic\Schedule::subject">subject</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Schedule.php.html#115"><abbr title="Modules\School\Models\Academic\Schedule::staff">staff</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Schedule.php.html#123"><abbr title="Modules\School\Models\Academic\Schedule::room">room</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Schedule.php.html#131"><abbr title="Modules\School\Models\Academic\Schedule::journals">journals</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Semester.php.html#38"><abbr title="Modules\School\Models\Academic\Semester::academicYear">academicYear</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="StudyGroup.php.html#50"><abbr title="Modules\School\Models\Academic\StudyGroup::school">school</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="StudyGroup.php.html#58"><abbr title="Modules\School\Models\Academic\StudyGroup::level">level</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="StudyGroup.php.html#66"><abbr title="Modules\School\Models\Academic\StudyGroup::department">department</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="StudyGroup.php.html#74"><abbr title="Modules\School\Models\Academic\StudyGroup::academicYear">academicYear</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="StudyGroup.php.html#82"><abbr title="Modules\School\Models\Academic\StudyGroup::homeroomTeacher">homeroomTeacher</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="StudyGroup.php.html#90"><abbr title="Modules\School\Models\Academic\StudyGroup::students">students</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Subject.php.html#38"><abbr title="Modules\School\Models\Academic\Subject::school">school</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TeachingJournal.php.html#55"><abbr title="Modules\School\Models\Academic\TeachingJournal::school">school</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TeachingJournal.php.html#63"><abbr title="Modules\School\Models\Academic\TeachingJournal::level">level</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TeachingJournal.php.html#71"><abbr title="Modules\School\Models\Academic\TeachingJournal::schedule">schedule</abbr></a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Grade.php.html#161"><abbr title="Modules\School\Models\Academic\Grade::getGradeLetter">getGradeLetter</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Grade.php.html#175"><abbr title="Modules\School\Models\Academic\Grade::getPredicate">getPredicate</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Grade.php.html#145"><abbr title="Modules\School\Models\Academic\Grade::calculateSkillScore">calculateSkillScore</abbr></a></td><td class="text-right">6</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 11.0.12</a> using <a href="https://www.php.net/" target="_top">PHP 8.3.30</a> and <a href="https://phpunit.de/">PHPUnit 11.5.55</a> at Thu Apr 23 10:35:15 WIB 2026.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../../../../../_js/jquery.min.js?v=11.0.12" type="text/javascript"></script>
+  <script src="../../../../../_js/d3.min.js?v=11.0.12" type="text/javascript"></script>
+  <script src="../../../../../_js/nv.d3.min.js?v=11.0.12" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([10,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([40,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[0,3,"<a href=\"AcademicYear.php.html#20\">Modules\\School\\Models\\Academic\\AcademicYear<\/a>"],[0,3,"<a href=\"Attendance.php.html#24\">Modules\\School\\Models\\Academic\\Attendance<\/a>"],[0,3,"<a href=\"ClassHistory.php.html#20\">Modules\\School\\Models\\Academic\\ClassHistory<\/a>"],[0,1,"<a href=\"Department.php.html#19\">Modules\\School\\Models\\Academic\\Department<\/a>"],[0,21,"<a href=\"Grade.php.html#40\">Modules\\School\\Models\\Academic\\Grade<\/a>"],[0,9,"<a href=\"Schedule.php.html#38\">Modules\\School\\Models\\Academic\\Schedule<\/a>"],[0,1,"<a href=\"Semester.php.html#17\">Modules\\School\\Models\\Academic\\Semester<\/a>"],[0,6,"<a href=\"StudyGroup.php.html#31\">Modules\\School\\Models\\Academic\\StudyGroup<\/a>"],[0,1,"<a href=\"Subject.php.html#20\">Modules\\School\\Models\\Academic\\Subject<\/a>"],[0,3,"<a href=\"TeachingJournal.php.html#28\">Modules\\School\\Models\\Academic\\TeachingJournal<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,1,"<a href=\"AcademicYear.php.html#41\">Modules\\School\\Models\\Academic\\AcademicYear::school<\/a>"],[0,1,"<a href=\"AcademicYear.php.html#49\">Modules\\School\\Models\\Academic\\AcademicYear::semesters<\/a>"],[0,1,"<a href=\"AcademicYear.php.html#57\">Modules\\School\\Models\\Academic\\AcademicYear::activeSemester<\/a>"],[0,1,"<a href=\"Attendance.php.html#44\">Modules\\School\\Models\\Academic\\Attendance::student<\/a>"],[0,1,"<a href=\"Attendance.php.html#52\">Modules\\School\\Models\\Academic\\Attendance::academicYear<\/a>"],[0,1,"<a href=\"Attendance.php.html#60\">Modules\\School\\Models\\Academic\\Attendance::semester<\/a>"],[0,1,"<a href=\"ClassHistory.php.html#35\">Modules\\School\\Models\\Academic\\ClassHistory::student<\/a>"],[0,1,"<a href=\"ClassHistory.php.html#43\">Modules\\School\\Models\\Academic\\ClassHistory::studyGroup<\/a>"],[0,1,"<a href=\"ClassHistory.php.html#51\">Modules\\School\\Models\\Academic\\ClassHistory::academicYear<\/a>"],[0,1,"<a href=\"Department.php.html#36\">Modules\\School\\Models\\Academic\\Department::level<\/a>"],[0,1,"<a href=\"Grade.php.html#85\">Modules\\School\\Models\\Academic\\Grade::student<\/a>"],[0,1,"<a href=\"Grade.php.html#93\">Modules\\School\\Models\\Academic\\Grade::subject<\/a>"],[0,1,"<a href=\"Grade.php.html#101\">Modules\\School\\Models\\Academic\\Grade::academicYear<\/a>"],[0,1,"<a href=\"Grade.php.html#109\">Modules\\School\\Models\\Academic\\Grade::semester<\/a>"],[0,1,"<a href=\"Grade.php.html#117\">Modules\\School\\Models\\Academic\\Grade::studyGroup<\/a>"],[0,1,"<a href=\"Grade.php.html#125\">Modules\\School\\Models\\Academic\\Grade::teacher<\/a>"],[0,1,"<a href=\"Grade.php.html#133\">Modules\\School\\Models\\Academic\\Grade::calculateKnowledgeScore<\/a>"],[0,2,"<a href=\"Grade.php.html#145\">Modules\\School\\Models\\Academic\\Grade::calculateSkillScore<\/a>"],[0,6,"<a href=\"Grade.php.html#161\">Modules\\School\\Models\\Academic\\Grade::getGradeLetter<\/a>"],[0,6,"<a href=\"Grade.php.html#175\">Modules\\School\\Models\\Academic\\Grade::getPredicate<\/a>"],[0,1,"<a href=\"Schedule.php.html#67\">Modules\\School\\Models\\Academic\\Schedule::school<\/a>"],[0,1,"<a href=\"Schedule.php.html#75\">Modules\\School\\Models\\Academic\\Schedule::level<\/a>"],[0,1,"<a href=\"Schedule.php.html#83\">Modules\\School\\Models\\Academic\\Schedule::academicYear<\/a>"],[0,1,"<a href=\"Schedule.php.html#91\">Modules\\School\\Models\\Academic\\Schedule::semester<\/a>"],[0,1,"<a href=\"Schedule.php.html#99\">Modules\\School\\Models\\Academic\\Schedule::studyGroup<\/a>"],[0,1,"<a href=\"Schedule.php.html#107\">Modules\\School\\Models\\Academic\\Schedule::subject<\/a>"],[0,1,"<a href=\"Schedule.php.html#115\">Modules\\School\\Models\\Academic\\Schedule::staff<\/a>"],[0,1,"<a href=\"Schedule.php.html#123\">Modules\\School\\Models\\Academic\\Schedule::room<\/a>"],[0,1,"<a href=\"Schedule.php.html#131\">Modules\\School\\Models\\Academic\\Schedule::journals<\/a>"],[0,1,"<a href=\"Semester.php.html#38\">Modules\\School\\Models\\Academic\\Semester::academicYear<\/a>"],[0,1,"<a href=\"StudyGroup.php.html#50\">Modules\\School\\Models\\Academic\\StudyGroup::school<\/a>"],[0,1,"<a href=\"StudyGroup.php.html#58\">Modules\\School\\Models\\Academic\\StudyGroup::level<\/a>"],[0,1,"<a href=\"StudyGroup.php.html#66\">Modules\\School\\Models\\Academic\\StudyGroup::department<\/a>"],[0,1,"<a href=\"StudyGroup.php.html#74\">Modules\\School\\Models\\Academic\\StudyGroup::academicYear<\/a>"],[0,1,"<a href=\"StudyGroup.php.html#82\">Modules\\School\\Models\\Academic\\StudyGroup::homeroomTeacher<\/a>"],[0,1,"<a href=\"StudyGroup.php.html#90\">Modules\\School\\Models\\Academic\\StudyGroup::students<\/a>"],[0,1,"<a href=\"Subject.php.html#38\">Modules\\School\\Models\\Academic\\Subject::school<\/a>"],[0,1,"<a href=\"TeachingJournal.php.html#55\">Modules\\School\\Models\\Academic\\TeachingJournal::school<\/a>"],[0,1,"<a href=\"TeachingJournal.php.html#63\">Modules\\School\\Models\\Academic\\TeachingJournal::level<\/a>"],[0,1,"<a href=\"TeachingJournal.php.html#71\">Modules\\School\\Models\\Academic\\TeachingJournal::schedule<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

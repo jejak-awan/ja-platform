@@ -1,0 +1,47 @@
+{
+    "analysis": {
+        "analyzing": "Menganalisis...",
+        "failed": "Gagal menjalankan analisis SEO",
+        "placeholder": "Pilih konten...",
+        "results": "Hasil Analisis",
+        "run": "Jalankan Analisis",
+        "score": "Skor: {score}/100",
+        "selectContent": "Pilih Konten untuk Dianalisis",
+        "title": "Analisis SEO"
+    },
+    "robots": {
+        "contentLabel": "Konten Robots.txt",
+        "placeholder": "User-agent: *\nDisallow: /admin\nAllow: /",
+        "reload": "Muat Ulang",
+        "save": "Simpan Robots.txt",
+        "saved": "Robots.txt berhasil disimpan",
+        "saving": "Menyimpan...",
+        "title": "Editor Robots.txt"
+    },
+    "schema": {
+        "copy": "Salin ke Papan Klip",
+        "copySuccess": "JSON Skema disalin ke papan klip!",
+        "failed": "Gagal menghasilkan skema",
+        "generate": "Hasilkan Skema",
+        "generating": "Menghasilkan...",
+        "jsonTitle": "JSON Skema yang Dihasilkan",
+        "selectContent": "Pilih Konten",
+        "title": "Generator Markup Skema"
+    },
+    "sitemap": {
+        "copySuccess": "URL Sitemap disalin ke papan klip!",
+        "copyUrl": "Salin URL",
+        "generate": "Hasilkan Sitemap",
+        "generated": "Sitemap berhasil dihasilkan",
+        "generating": "Menghasilkan...",
+        "title": "Manajemen Sitemap",
+        "urlLabel": "URL Sitemap"
+    },
+    "tabs": {
+        "analysis": "Analisis SEO",
+        "robots": "Robots.txt",
+        "schema": "Generasi Skema",
+        "sitemap": "Sitemap"
+    },
+    "title": "Peralatan SEO"
+}

@@ -1,0 +1,35 @@
+{
+    "welcome": "Welcome, {name}",
+    "subtitle": "Overview of your academic activities and classes today.",
+    "stats": {
+        "totalClasses": "Total Classes",
+        "activeStudents": "Active Students",
+        "submittedJournals": "Journals Submitted",
+        "gradingQueue": "Grading Queue"
+    },
+    "sections": {
+        "schedule": {
+            "title": "Teaching Schedule",
+            "desc": "Teaching sessions currently in progress or scheduled for today.",
+            "empty": "No teaching schedule for today."
+        },
+        "recentJournals": {
+            "title": "Recent Teaching Journals",
+            "desc": "Summary of material and progress from previous sessions.",
+            "empty": "No recent teaching journals yet."
+        },
+        "actionRequired": {
+            "title": "Action Required",
+            "attendanceShortage": "{count} Students have not taken attendance in {class}",
+            "pendingTasks": "{count} New assignments require grading",
+            "btnAction": "Handle Now"
+        },
+        "quickLinks": {
+            "title": "Quick Access",
+            "inputJournal": "Input Daily Journal",
+            "classAttendance": "Class Attendance",
+            "courseManage": "Course Management",
+            "examResults": "Exam Results"
+        }
+    }
+}

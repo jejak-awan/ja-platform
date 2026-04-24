@@ -1,0 +1,47 @@
+{
+    "analysis": {
+        "analyzing": "Analyzing...",
+        "failed": "Failed to run SEO analysis",
+        "placeholder": "Select content...",
+        "results": "Analysis Results",
+        "run": "Run Analysis",
+        "score": "Score: {score}/100",
+        "selectContent": "Select Content to Analyze",
+        "title": "SEO Analysis"
+    },
+    "robots": {
+        "contentLabel": "Robots.txt Content",
+        "placeholder": "User-agent: *\nDisallow: /admin\nAllow: /",
+        "reload": "Reload",
+        "save": "Save Robots.txt",
+        "saved": "Robots.txt saved successfully",
+        "saving": "Saving...",
+        "title": "Robots.txt Editor"
+    },
+    "schema": {
+        "copy": "Copy to Clipboard",
+        "copySuccess": "Schema JSON copied to clipboard!",
+        "failed": "Failed to generate schema",
+        "generate": "Generate Schema",
+        "generating": "Generating...",
+        "jsonTitle": "Generated Schema JSON",
+        "selectContent": "Select Content",
+        "title": "Schema Markup Generator"
+    },
+    "sitemap": {
+        "copySuccess": "Sitemap URL copied to clipboard!",
+        "copyUrl": "Copy URL",
+        "generate": "Generate Sitemap",
+        "generated": "Sitemap generated successfully",
+        "generating": "Generating...",
+        "title": "Sitemap Management",
+        "urlLabel": "Sitemap URL"
+    },
+    "tabs": {
+        "analysis": "SEO Analysis",
+        "robots": "Robots.txt",
+        "schema": "Schema Generation",
+        "sitemap": "Sitemap"
+    },
+    "title": "SEO Tools"
+}

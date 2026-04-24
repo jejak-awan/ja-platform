@@ -1,0 +1,125 @@
+{
+    "actions": {
+        "forceLogout": "Force Logout",
+        "verify": "Verify Email"
+    },
+    "allRoles": "All Roles",
+    "createNew": "Create New User",
+    "empty": "No users found.",
+    "filters": {
+        "all": "All",
+        "unverifiedOnly": "Unverified Only",
+        "verifiedOnly": "Verified Only"
+    },
+    "form": {
+        "avatar": "Avatar",
+        "avatarPreview": "Avatar Preview",
+        "bio": "Bio",
+        "email": "Email",
+        "emailPlaceholder": "user{'@'}teladan.com",
+        "hints": {
+            "passwordUpdate": "Leave empty if you don't want to change password"
+        },
+        "location": "Location",
+        "name": "Name",
+        "namePlaceholder": "Nama lengkap",
+        "password": "Password",
+        "passwordConfirmation": "Confirm Password",
+        "phone": "Phone",
+        "placeholders": {
+            "bio": "User biography",
+            "email": "user{'@'}example.com",
+            "location": "City, Country",
+            "name": "Full name",
+            "password": "Minimum 8 characters",
+            "passwordConfirmation": "Repeat password",
+            "passwordCurrent": "Kata sandi",
+            "phone": "+1234567890",
+            "website": "https://example.com"
+        },
+        "removeAvatar": "Remove Avatar",
+        "roles": "Roles",
+        "selectAvatar": "Select Avatar",
+        "titleCreate": "Buat Pengguna",
+        "titleEdit": "Ubah Pengguna",
+        "verified": "Verified",
+        "website": "Website"
+    },
+    "loading": "Loading users...",
+    "messages": {
+        "bulkForceLogoutConfirm": "Are you sure you want to force logout {count} selected users?",
+        "bulkVerifyConfirm": "Are you sure you want to verify {count} selected users?",
+        "cannotDeleteLastSuperAdmin": "Cannot delete the last super-admin account",
+        "cannotManageSuperAdmin": "You cannot manage super-admin accounts",
+        "createFailed": "Failed to create user",
+        "create_success": "User created successfully",
+        "deleteConfirm": "Are you sure you want to delete user \"{name}\"?",
+        "deleteFailed": "Failed to delete user",
+        "fetchFailed": "Failed to fetch user data",
+        "forceLogoutConfirm": "Are you sure you want to force logout user \"{name}\" from all devices?",
+        "forceLogoutFailed": "Failed to force logout user",
+        "forceLogoutSessions": "User logged out from {count} device(s)",
+        "forceLogoutSuccess": "Force Logout Successful",
+        "hierarchy_restriction": "You can only manage users with a lower rank than yours",
+        "passwordRequired": "Password is required for new users",
+        "roleRequired": "Please select at least one role",
+        "saveFailed": "Failed to save user",
+        "saveSuccess": "User saved successfully",
+        "updateFailed": "Failed to update user",
+        "update_success": "User updated successfully",
+        "verifySuccess": "User verified successfully"
+    },
+    "modals": {
+        "user": {
+            "avatar": "Avatar",
+            "bio": "Bio",
+            "bioPlaceholder": "User biography",
+            "email": "Email",
+            "emailPlaceholder": "user{'@'}example.com",
+            "loadingRoles": "Loading roles...",
+            "location": "Location",
+            "locationPlaceholder": "City, Country",
+            "name": "Name",
+            "namePlaceholder": "Full name",
+            "noRoles": "No roles available",
+            "password": "Password",
+            "passwordHint": "Leave empty when editing to keep current password",
+            "passwordPlaceholder": "Minimum 8 characters",
+            "phone": "Phone",
+            "phonePlaceholder": "+1234567890",
+            "removeAvatar": "Remove Avatar",
+            "roles": "Roles",
+            "saving": "Saving...",
+            "selectAvatar": "Select Avatar",
+            "titleCreate": "Create User",
+            "titleEdit": "Edit User",
+            "website": "Website",
+            "websitePlaceholder": "https://example.com"
+        }
+    },
+    "search": "Search user by name, email or phone...",
+    "stats": {
+        "active": "Active (30 Days)",
+        "recent": "New (7 Days)",
+        "total": "Total Users",
+        "unverified": "Unverified",
+        "verified": "Verified"
+    },
+    "status": {
+        "never": "Never",
+        "noRoles": "No roles assigned",
+        "unverified": "Unverified",
+        "verified": "Verified"
+    },
+    "subtitle": "Manage users, roles, and access permissions within the system.",
+    "subtitleCreate": "Fill in the information below to create a new user.",
+    "subtitleEdit": "Update user information to adjust profile and access.",
+    "table": {
+        "actions": "Actions",
+        "email": "Email",
+        "lastLogin": "Last Login",
+        "roles": "Roles",
+        "user": "User"
+    },
+    "title": "Users"
+}

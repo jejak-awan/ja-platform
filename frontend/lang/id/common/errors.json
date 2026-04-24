@@ -1,0 +1,9 @@
+{
+    "forbidden": "Akses dilarang.",
+    "generic": "Terjadi kesalahan. Silakan coba lagi.",
+    "maintenance": "Sistem sedang dalam pemeliharaan.",
+    "notFound": "Sumber daya tidak ditemukan.",
+    "title": "Kesalahan",
+    "unauthorized": "Akses tidak sah.",
+    "validation": "Kesalahan validasi."
+}

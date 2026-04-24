@@ -1,0 +1,125 @@
+{
+    "actions": {
+        "forceLogout": "Logout Paksa",
+        "verify": "Verifikasi Email"
+    },
+    "allRoles": "Semua Peran",
+    "createNew": "Buat Pengguna Baru",
+    "empty": "Tidak ada pengguna ditemukan.",
+    "filters": {
+        "all": "Semua",
+        "unverifiedOnly": "Belum Terverifikasi Saja",
+        "verifiedOnly": "Terverifikasi Saja"
+    },
+    "form": {
+        "avatar": "Avatar",
+        "avatarPreview": "Pratinjau Avatar",
+        "bio": "Bio",
+        "email": "Email",
+        "emailPlaceholder": "user{'@'}teladan.com",
+        "hints": {
+            "passwordUpdate": "Biarkan kosong jika tidak ingin mengubah kata sandi"
+        },
+        "location": "Lokasi",
+        "name": "Nama",
+        "namePlaceholder": "Nama lengkap",
+        "password": "Kata Sandi",
+        "passwordConfirmation": "Konfirmasi Kata Sandi",
+        "phone": "Telepon",
+        "placeholders": {
+            "bio": "Biografi pengguna",
+            "email": "user{'@'}teladan.com",
+            "location": "Kota, Negara",
+            "name": "Nama lengkap",
+            "password": "Minimal 8 karakter",
+            "passwordConfirmation": "Ulangi kata sandi",
+            "passwordCurrent": "Kata sandi",
+            "phone": "+6281234567890",
+            "website": "https://contoh.com"
+        },
+        "removeAvatar": "Hapus Avatar",
+        "roles": "Peran",
+        "selectAvatar": "Pilih Avatar",
+        "titleCreate": "Buat Pengguna",
+        "titleEdit": "Ubah Pengguna",
+        "verified": "Terverifikasi",
+        "website": "Situs Web"
+    },
+    "loading": "Memuat pengguna...",
+    "messages": {
+        "bulkForceLogoutConfirm": "Apakah Anda yakin ingin melogout paksa {count} pengguna yang dipilih?",
+        "bulkVerifyConfirm": "Apakah Anda yakin ingin memverifikasi {count} pengguna yang dipilih?",
+        "cannotDeleteLastSuperAdmin": "Tidak dapat menghapus satu-satunya akun super-admin",
+        "cannotManageSuperAdmin": "Anda tidak dapat mengelola akun super-admin",
+        "createFailed": "Gagal membuat pengguna",
+        "create_success": "Pengguna berhasil dibuat",
+        "deleteConfirm": "Apakah Anda yakin ingin menghapus pengguna \"{name}\"?",
+        "deleteFailed": "Gagal menghapus pengguna",
+        "fetchFailed": "Gagal memuat data pengguna",
+        "forceLogoutConfirm": "Apakah Anda yakin ingin melogout paksa pengguna \"{name}\" dari semua perangkat?",
+        "forceLogoutFailed": "Gagal melogout paksa pengguna",
+        "forceLogoutSessions": "Pengguna berhasil dilogout dari {count} perangkat",
+        "forceLogoutSuccess": "Berhasil Logout Paksa",
+        "hierarchy_restriction": "Anda hanya dapat mengelola pengguna dengan peringkat lebih rendah dari Anda",
+        "passwordRequired": "Kata sandi wajib diisi untuk pengguna baru",
+        "roleRequired": "Harap pilih setidaknya satu peran",
+        "saveFailed": "Gagal menyimpan pengguna",
+        "saveSuccess": "Pengguna berhasil disimpan",
+        "updateFailed": "Gagal memperbarui pengguna",
+        "update_success": "Pengguna berhasil diperbarui",
+        "verifySuccess": "Pengguna berhasil diverifikasi"
+    },
+    "modals": {
+        "user": {
+            "avatar": "Avatar",
+            "bio": "Bio",
+            "bioPlaceholder": "Biografi pengguna",
+            "email": "Email",
+            "emailPlaceholder": "user{'@'}teladan.com",
+            "loadingRoles": "Memuat peran...",
+            "location": "Lokasi",
+            "locationPlaceholder": "Kota, Negara",
+            "name": "Nama",
+            "namePlaceholder": "Nama lengkap",
+            "noRoles": "Tidak ada peran tersedia",
+            "password": "Kata Sandi",
+            "passwordHint": "Biarkan kosong saat mengubah untuk tetap menggunakan kata sandi saat ini",
+            "passwordPlaceholder": "Minimal 8 karakter",
+            "phone": "Telepon",
+            "phonePlaceholder": "+6281234567890",
+            "removeAvatar": "Hapus Avatar",
+            "roles": "Peran",
+            "saving": "Menyimpan...",
+            "selectAvatar": "Pilih Avatar",
+            "titleCreate": "Buat Pengguna",
+            "titleEdit": "Ubah Pengguna",
+            "website": "Situs Web",
+            "websitePlaceholder": "https://contoh.com"
+        }
+    },
+    "search": "Cari pengguna berdasarkan nama, email atau telepon...",
+    "stats": {
+        "active": "Aktif (30 Hari)",
+        "recent": "Baru (7 Hari)",
+        "total": "Total Pengguna",
+        "unverified": "Belum Diverifikasi",
+        "verified": "Terverifikasi"
+    },
+    "status": {
+        "never": "Belum pernah",
+        "noRoles": "Tidak ada peran yang ditetapkan",
+        "unverified": "Belum Terverifikasi",
+        "verified": "Terverifikasi"
+    },
+    "subtitle": "Kelola pengguna, peran, dan izin akses dalam sistem.",
+    "subtitleCreate": "Isi informasi di bawah ini untuk membuat pengguna baru.",
+    "subtitleEdit": "Perbarui informasi pengguna untuk menyesuaikan profil dan akses.",
+    "table": {
+        "actions": "Aksi",
+        "email": "Email",
+        "lastLogin": "Login Terakhir",
+        "roles": "Peran",
+        "user": "Pengguna"
+    },
+    "title": "Pengguna"
+}

@@ -1,0 +1,41 @@
+{
+    "actions": {
+        "attendanceToday": "Absensi Hari Ini",
+        "manageSubjects": "Kelola Mata Pelajaran",
+        "registerStudent": "Daftar Siswa Baru"
+    },
+    "hints": {
+        "accreditationSubtitle": "Pilih peringkat akreditasi terakhir yang resmi.",
+        "autoOwnershipStatus": "Status kepemilikan diatur otomatis berdasarkan tipe lembaga.",
+        "editNameViaWizard": "Nama lembaga hanya dapat diubah melalui wizard pengaturan.",
+        "levelNameFormat": "Gunakan nama lengkap resmi unit (contoh: SMK TI Nurul Iman).",
+        "npsnFormat": "NPSN harus terdiri dari 8 digit angka.",
+        "statusLocked": "Status lembaga dikunci setelah setup awal."
+    },
+    "organization": {
+        "backButton": "Kembali ke Dashboard",
+        "comingSoon": "Modul Struktur Organisasi akan segera hadir.",
+        "comingSoonDesc": "Modul Struktur Organisasi sedang dalam tahap pengembangan dan akan segera tersedia untuk membantu Anda mengelola hierarki jabatan.",
+        "description": "Kelola struktur organisasi dan jabatan di lembaga Anda.",
+        "subtitle": "Kelola struktur organisasi dan jabatan di lembaga Anda.",
+        "title": "Struktur Organisasi"
+    },
+    "rbac": {
+        "noPermissionDelete": "Hanya Super Admin yang dapat menghapus lembaga.",
+        "noPermissionEdit": "Hanya Super Admin yang dapat mengubah identitas lembaga.",
+        "noPermissionSetup": "Hanya Super Admin yang dapat melakukan setup lembaga baru."
+    },
+    "stats": {
+        "assets": "Aset Sarpras",
+        "studyGroups": "Rombel",
+        "totalStaff": "Total Guru/PTK",
+        "totalStudents": "Total Siswa"
+    },
+    "subtitle": "Kelola sekolah, yayasan, atau group beserta jenjang pendidikannya.",
+    "tabs": {
+        "identityConfig": "Identitas",
+        "institution": "Profil Lembaga",
+        "levels": "Unit Jenjang"
+    },
+    "title": "Manajemen Lembaga"
+}

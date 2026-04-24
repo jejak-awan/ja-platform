@@ -1,0 +1,9 @@
+{
+    "forbidden": "Access forbidden.",
+    "generic": "Something went wrong. Please try again.",
+    "maintenance": "System under maintenance.",
+    "notFound": "Resource not found.",
+    "title": "Errors",
+    "unauthorized": "Unauthorized access.",
+    "validation": "Validation error."
+}

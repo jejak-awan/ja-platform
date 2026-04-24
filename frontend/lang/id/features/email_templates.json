@@ -1,0 +1,49 @@
+{
+    "form": {
+        "availableVariables": "Variabel Tersedia",
+        "body": "Isi Email",
+        "bodyPlaceholder": "Masukkan isi email (mendukung HTML)...",
+        "content": "Konten",
+        "createTitle": "Buat Template Email",
+        "details": "Detail Template",
+        "hideVariables": "Sembunyikan Variabel",
+        "name": "Nama Template",
+        "namePlaceholder": "contoh: Email Selamat Datang",
+        "previewFailed": "Gagal melihat pratinjau",
+        "showVariables": "Tampilkan Variabel",
+        "subject": "Subjek",
+        "subjectPlaceholder": "Masukkan subjek email...",
+        "type": "Tipe",
+        "editTitle": "Edit Template Email",
+        "sendTest": "Tes Kirim"
+    },
+    "types": {
+        "custom": "Kustom",
+        "notification": "Notifikasi",
+        "transactional": "Transaksional"
+    },
+    "list": {
+        "create": "Template Baru",
+        "empty": "Tidak ada template ditemukan",
+        "search": "Cari template...",
+        "title": "Template Email"
+    },
+    "table": {
+        "actions": "Aksi",
+        "name": "Nama",
+        "subject": "Subjek",
+        "type": "Tipe",
+        "updated": "Diperbarui"
+    },
+    "actions": {
+        "test": "Tes Kirim"
+    },
+    "confirm_delete": "Apakah Anda yakin ingin menghapus template \"{name}\"?",
+    "messages": {
+        "delete_failed": "Gagal menghapus template",
+        "delete_success": "Template berhasil dihapus",
+        "preview_failed": "Gagal melihat pratinjau template",
+        "send_test_failed": "Gagal mengirim email tes",
+        "send_test_success": "Email tes berhasil dikirim"
+    }
+}

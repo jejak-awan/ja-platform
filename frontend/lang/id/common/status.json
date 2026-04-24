@@ -1,0 +1,10 @@
+{
+    "active": "Aktif",
+    "all": "Semua",
+    "connected": "Terhubung",
+    "disconnected": "Terputus",
+    "failed": "Gagal",
+    "not_configured": "Belum dikonfigurasi",
+    "online": "Online",
+    "success": "Berhasil"
+}

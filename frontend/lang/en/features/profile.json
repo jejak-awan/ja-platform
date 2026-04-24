@@ -1,0 +1,33 @@
+{
+    "form": {
+        "bio": "Bio",
+        "changePassword": "Change Password",
+        "changing": "Changing...",
+        "confirmPassword": "Confirm New Password",
+        "currentPassword": "Current Password",
+        "email": "Email",
+        "location": "Location",
+        "name": "Name",
+        "newPassword": "New Password",
+        "passwordHelp": "Must be at least 8 characters with uppercase, lowercase, and number",
+        "phone": "Phone",
+        "save": "Save Changes",
+        "saving": "Saving...",
+        "twoFactorDescription": "Secure your account with Two-Factor Authentication."
+    },
+    "messages": {
+        "passwordFailed": "Failed to change password",
+        "passwordSuccess": "Password changed successfully",
+        "updateFailed": "Failed to update profile",
+        "updateSuccess": "Profile updated successfully"
+    },
+    "subtitle": "Manage your account information and security",
+    "tabs": {
+        "history": "Login History",
+        "password": "Change Password",
+        "profile": "Profile Information",
+        "two-factor": "Two-Factor",
+        "twoFactor": "Two-Factor Authentication"
+    },
+    "title": "My Profile"
+}

@@ -1,0 +1,87 @@
+PHPUnit 11.5.55 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.3.30 with PCOV 1.0.12
+Configuration: /var/www/k2net/ja-apps/backend/phpunit.xml
+
+E                                                                   1 / 1 (100%)
+
+Time: 00:01.989, Memory: 28.00 MB
+
+There was 1 error:
+
+1) Modules\Cms\Tests\Feature\CommentSystemTest::test_user_can_post_comment_on_published_content
+Illuminate\Database\Eloquent\MassAssignmentException: Add [body] to fillable property to allow mass assignment on [Modules\Cms\Models\Comment].
+
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php:624
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php:713
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php:1747
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php:1218
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php:23
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php:2540
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php:2556
+/var/www/k2net/ja-apps/backend/Modules/Cms/app/Http/Controllers/Api/CommentController.php:101
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:46
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php:265
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php:211
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php:822
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:180
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php:50
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php:166
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php:93
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php:166
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php:93
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/sanctum/src/Http/Middleware/EnsureFrontendRequestsAreStateful.php:26
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:180
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+/var/www/k2net/ja-apps/backend/vendor/laravel/sanctum/src/Http/Middleware/EnsureFrontendRequestsAreStateful.php:25
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php:821
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php:800
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php:764
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php:753
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:200
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:180
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php:21
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php:31
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php:21
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php:51
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php:27
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php:109
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php:74
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php:58
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php:22
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php:26
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/Modules/Core/app/Http/Middleware/VerifyConnection.php:55
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/Modules/Core/app/Http/Middleware/BlockMaliciousBots.php:130
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/Modules/Core/app/Http/Middleware/WafMiddleware.php:148
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/Modules/Core/app/Http/Middleware/HoneypotMiddleware.php:62
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/Modules/Core/app/Http/Middleware/TrustProxies.php:58
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:219
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:175
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:144
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php:607
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php:573
+/var/www/k2net/ja-apps/backend/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php:411
+/var/www/k2net/ja-apps/backend/Modules/Cms/tests/Feature/CommentSystemTest.php:36
+
+ERRORS!
+Tests: 1, Assertions: 0, Errors: 1.
+
+Generating code coverage report in HTML format ... done [00:03.789]

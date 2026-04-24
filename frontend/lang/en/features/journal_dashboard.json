@@ -1,0 +1,33 @@
+{
+    "cards": {
+        "activity": {
+            "description": "User activities and data changes",
+            "title": "Activity Journal",
+            "total": "total activities"
+        },
+        "login": {
+            "description": "All user login activities",
+            "title": "Access History",
+            "total": "total logins"
+        },
+        "security": {
+            "description": "Security events and login attempts",
+            "title": "Security Journal",
+            "total": "total events"
+        },
+        "system": {
+            "description": "Laravel application logs",
+            "files": "log files",
+            "title": "System Journal"
+        }
+    },
+    "description": "View summary and quick access to all log systems",
+    "empty": "No data",
+    "loading": "Loading...",
+    "recent": {
+        "activity": "Recent Activities",
+        "security": "Recent Security Events"
+    },
+    "title": "Journal Dashboard",
+    "viewAll": "View All"
+}

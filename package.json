@@ -1,0 +1,15 @@
+{
+  "name": "ja-apps",
+  "private": true,
+  "engines": {
+    "node": ">=20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "quality:frontend": "npm --prefix frontend run quality:frontend",
+    "quality:backend": "cd backend && composer run quality",
+    "quality:all": "npm run quality:frontend && npm run quality:backend",
+    "test:e2e:list": "npm --prefix frontend run test:e2e:list",
+    "test:e2e:smoke": "npm --prefix frontend run test:e2e:smoke",
+    "test:e2e:auth": "npm --prefix frontend run test:e2e:auth"
+  }
+}

@@ -1,0 +1,70 @@
+{
+    "actions": {
+        "delete": "Delete",
+        "edit": "Edit",
+        "move": "Move"
+    },
+    "createNew": "New Category",
+    "description": "Manage content categories",
+    "empty": "No categories found",
+    "form": {
+        "active": "Active",
+        "cancel": "Cancel",
+        "create": "Create",
+        "createDescription": "Add a new category to your content structure.",
+        "createTitle": "Create Category",
+        "description": "Description",
+        "descriptionPlaceholder": "Category description",
+        "details": "Category Details",
+        "editDescription": "Update category information and settings.",
+        "editTitle": "Edit Category",
+        "image": "Image",
+        "name": "Name",
+        "namePlaceholder": "Category name",
+        "noParent": "No Parent (Root Category)",
+        "parent": "Parent Category",
+        "removeImage": "Remove Image",
+        "saveError": "Failed to save category",
+        "saving": "Saving...",
+        "selectImage": "Select Image",
+        "slug": "Slug",
+        "slugHelp": "URL-friendly version",
+        "slugPlaceholder": "category-slug",
+        "sortOrder": "Sort Order",
+        "sortOrderHelp": "Lower numbers appear first",
+        "update": "Update"
+    },
+    "loading": "Loading categories...",
+    "messages": {
+        "deleteConfirm": "Are you sure you want to delete \"{name}\" and all its subcategories?",
+        "deleteError": "Failed to delete category"
+    },
+    "move": {
+        "cancel": "Cancel",
+        "description": "Move \"{name}\" to:",
+        "error": "Failed to move category",
+        "moving": "Moving...",
+        "newParent": "New Parent Category",
+        "submit": "Move Category",
+        "title": "Move Category"
+    },
+    "search": "Search categories...",
+    "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+    },
+    "table": {
+        "actions": "Actions",
+        "contents": "Contents",
+        "name": "Name",
+        "parent": "Parent",
+        "slug": "Slug",
+        "status": "Status"
+    },
+    "title": "Categories",
+    "title_singular": "Category",
+    "viewMode": {
+        "list": "List View",
+        "tree": "Tree View"
+    }
+}

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /var/www/k2net/ja-apps/backend/Modules/School/app/Models/Logistics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../../../_css/bootstrap.min.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../../_css/nv.d3.min.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../../_css/style.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../../../../../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../../../../../index.html">/var/www/k2net/ja-apps/backend</a></li>
+         <li class="breadcrumb-item"><a href="../../../../index.html">Modules</a></li>
+         <li class="breadcrumb-item"><a href="../../../index.html">School</a></li>
+         <li class="breadcrumb-item"><a href="../../index.html">app</a></li>
+         <li class="breadcrumb-item"><a href="../index.html">Models</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Logistics</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Building.php.html#21">Modules\School\Models\Logistics\Building</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelAllocation.php.html#21">Modules\School\Models\Logistics\HostelAllocation</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelBed.php.html#17">Modules\School\Models\Logistics\HostelBed</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelBlock.php.html#19">Modules\School\Models\Logistics\HostelBlock</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelRoom.php.html#20">Modules\School\Models\Logistics\HostelRoom</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InventoryCategory.php.html#18">Modules\School\Models\Logistics\InventoryCategory</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InventoryItem.php.html#25">Modules\School\Models\Logistics\InventoryItem</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InventoryTransaction.php.html#21">Modules\School\Models\Logistics\InventoryTransaction</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="LandAsset.php.html#20">Modules\School\Models\Logistics\LandAsset</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MaintenanceTicket.php.html#31">Modules\School\Models\Logistics\MaintenanceTicket</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Room.php.html#20">Modules\School\Models\Logistics\Room</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SchoolAsset.php.html#20">Modules\School\Models\Logistics\SchoolAsset</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TransportRegistration.php.html#24">Modules\School\Models\Logistics\TransportRegistration</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vehicle.php.html#22">Modules\School\Models\Logistics\Vehicle</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="VehicleRoute.php.html#22">Modules\School\Models\Logistics\VehicleRoute</a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Building.php.html#40"><abbr title="Modules\School\Models\Logistics\Building::landAsset">landAsset</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Building.php.html#48"><abbr title="Modules\School\Models\Logistics\Building::rooms">rooms</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelAllocation.php.html#38"><abbr title="Modules\School\Models\Logistics\HostelAllocation::student">student</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelAllocation.php.html#46"><abbr title="Modules\School\Models\Logistics\HostelAllocation::bed">bed</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelBed.php.html#34"><abbr title="Modules\School\Models\Logistics\HostelBed::room">room</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelBed.php.html#42"><abbr title="Modules\School\Models\Logistics\HostelBed::allocation">allocation</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelBlock.php.html#35"><abbr title="Modules\School\Models\Logistics\HostelBlock::rooms">rooms</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelRoom.php.html#40"><abbr title="Modules\School\Models\Logistics\HostelRoom::block">block</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="HostelRoom.php.html#48"><abbr title="Modules\School\Models\Logistics\HostelRoom::beds">beds</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InventoryCategory.php.html#33"><abbr title="Modules\School\Models\Logistics\InventoryCategory::items">items</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InventoryItem.php.html#46"><abbr title="Modules\School\Models\Logistics\InventoryItem::category">category</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InventoryItem.php.html#54"><abbr title="Modules\School\Models\Logistics\InventoryItem::transactions">transactions</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InventoryTransaction.php.html#38"><abbr title="Modules\School\Models\Logistics\InventoryTransaction::item">item</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="InventoryTransaction.php.html#46"><abbr title="Modules\School\Models\Logistics\InventoryTransaction::student">student</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="LandAsset.php.html#38"><abbr title="Modules\School\Models\Logistics\LandAsset::school">school</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="LandAsset.php.html#46"><abbr title="Modules\School\Models\Logistics\LandAsset::buildings">buildings</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MaintenanceTicket.php.html#59"><abbr title="Modules\School\Models\Logistics\MaintenanceTicket::school">school</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MaintenanceTicket.php.html#67"><abbr title="Modules\School\Models\Logistics\MaintenanceTicket::level">level</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MaintenanceTicket.php.html#75"><abbr title="Modules\School\Models\Logistics\MaintenanceTicket::asset">asset</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="MaintenanceTicket.php.html#83"><abbr title="Modules\School\Models\Logistics\MaintenanceTicket::reporter">reporter</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Room.php.html#38"><abbr title="Modules\School\Models\Logistics\Room::building">building</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Room.php.html#46"><abbr title="Modules\School\Models\Logistics\Room::assets">assets</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SchoolAsset.php.html#39"><abbr title="Modules\School\Models\Logistics\SchoolAsset::room">room</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TransportRegistration.php.html#43"><abbr title="Modules\School\Models\Logistics\TransportRegistration::student">student</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TransportRegistration.php.html#51"><abbr title="Modules\School\Models\Logistics\TransportRegistration::vehicle">vehicle</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TransportRegistration.php.html#59"><abbr title="Modules\School\Models\Logistics\TransportRegistration::route">route</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vehicle.php.html#41"><abbr title="Modules\School\Models\Logistics\Vehicle::registrations">registrations</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="VehicleRoute.php.html#46"><abbr title="Modules\School\Models\Logistics\VehicleRoute::registrations">registrations</abbr></a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 11.0.12</a> using <a href="https://www.php.net/" target="_top">PHP 8.3.30</a> and <a href="https://phpunit.de/">PHPUnit 11.5.55</a> at Thu Apr 23 10:35:15 WIB 2026.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../../../../../_js/jquery.min.js?v=11.0.12" type="text/javascript"></script>
+  <script src="../../../../../_js/d3.min.js?v=11.0.12" type="text/javascript"></script>
+  <script src="../../../../../_js/nv.d3.min.js?v=11.0.12" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([15,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([28,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[0,2,"<a href=\"Building.php.html#21\">Modules\\School\\Models\\Logistics\\Building<\/a>"],[0,2,"<a href=\"HostelAllocation.php.html#21\">Modules\\School\\Models\\Logistics\\HostelAllocation<\/a>"],[0,2,"<a href=\"HostelBed.php.html#17\">Modules\\School\\Models\\Logistics\\HostelBed<\/a>"],[0,1,"<a href=\"HostelBlock.php.html#19\">Modules\\School\\Models\\Logistics\\HostelBlock<\/a>"],[0,2,"<a href=\"HostelRoom.php.html#20\">Modules\\School\\Models\\Logistics\\HostelRoom<\/a>"],[0,1,"<a href=\"InventoryCategory.php.html#18\">Modules\\School\\Models\\Logistics\\InventoryCategory<\/a>"],[0,2,"<a href=\"InventoryItem.php.html#25\">Modules\\School\\Models\\Logistics\\InventoryItem<\/a>"],[0,2,"<a href=\"InventoryTransaction.php.html#21\">Modules\\School\\Models\\Logistics\\InventoryTransaction<\/a>"],[0,2,"<a href=\"LandAsset.php.html#20\">Modules\\School\\Models\\Logistics\\LandAsset<\/a>"],[0,4,"<a href=\"MaintenanceTicket.php.html#31\">Modules\\School\\Models\\Logistics\\MaintenanceTicket<\/a>"],[0,2,"<a href=\"Room.php.html#20\">Modules\\School\\Models\\Logistics\\Room<\/a>"],[0,1,"<a href=\"SchoolAsset.php.html#20\">Modules\\School\\Models\\Logistics\\SchoolAsset<\/a>"],[0,3,"<a href=\"TransportRegistration.php.html#24\">Modules\\School\\Models\\Logistics\\TransportRegistration<\/a>"],[0,1,"<a href=\"Vehicle.php.html#22\">Modules\\School\\Models\\Logistics\\Vehicle<\/a>"],[0,1,"<a href=\"VehicleRoute.php.html#22\">Modules\\School\\Models\\Logistics\\VehicleRoute<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,1,"<a href=\"Building.php.html#40\">Modules\\School\\Models\\Logistics\\Building::landAsset<\/a>"],[0,1,"<a href=\"Building.php.html#48\">Modules\\School\\Models\\Logistics\\Building::rooms<\/a>"],[0,1,"<a href=\"HostelAllocation.php.html#38\">Modules\\School\\Models\\Logistics\\HostelAllocation::student<\/a>"],[0,1,"<a href=\"HostelAllocation.php.html#46\">Modules\\School\\Models\\Logistics\\HostelAllocation::bed<\/a>"],[0,1,"<a href=\"HostelBed.php.html#34\">Modules\\School\\Models\\Logistics\\HostelBed::room<\/a>"],[0,1,"<a href=\"HostelBed.php.html#42\">Modules\\School\\Models\\Logistics\\HostelBed::allocation<\/a>"],[0,1,"<a href=\"HostelBlock.php.html#35\">Modules\\School\\Models\\Logistics\\HostelBlock::rooms<\/a>"],[0,1,"<a href=\"HostelRoom.php.html#40\">Modules\\School\\Models\\Logistics\\HostelRoom::block<\/a>"],[0,1,"<a href=\"HostelRoom.php.html#48\">Modules\\School\\Models\\Logistics\\HostelRoom::beds<\/a>"],[0,1,"<a href=\"InventoryCategory.php.html#33\">Modules\\School\\Models\\Logistics\\InventoryCategory::items<\/a>"],[0,1,"<a href=\"InventoryItem.php.html#46\">Modules\\School\\Models\\Logistics\\InventoryItem::category<\/a>"],[0,1,"<a href=\"InventoryItem.php.html#54\">Modules\\School\\Models\\Logistics\\InventoryItem::transactions<\/a>"],[0,1,"<a href=\"InventoryTransaction.php.html#38\">Modules\\School\\Models\\Logistics\\InventoryTransaction::item<\/a>"],[0,1,"<a href=\"InventoryTransaction.php.html#46\">Modules\\School\\Models\\Logistics\\InventoryTransaction::student<\/a>"],[0,1,"<a href=\"LandAsset.php.html#38\">Modules\\School\\Models\\Logistics\\LandAsset::school<\/a>"],[0,1,"<a href=\"LandAsset.php.html#46\">Modules\\School\\Models\\Logistics\\LandAsset::buildings<\/a>"],[0,1,"<a href=\"MaintenanceTicket.php.html#59\">Modules\\School\\Models\\Logistics\\MaintenanceTicket::school<\/a>"],[0,1,"<a href=\"MaintenanceTicket.php.html#67\">Modules\\School\\Models\\Logistics\\MaintenanceTicket::level<\/a>"],[0,1,"<a href=\"MaintenanceTicket.php.html#75\">Modules\\School\\Models\\Logistics\\MaintenanceTicket::asset<\/a>"],[0,1,"<a href=\"MaintenanceTicket.php.html#83\">Modules\\School\\Models\\Logistics\\MaintenanceTicket::reporter<\/a>"],[0,1,"<a href=\"Room.php.html#38\">Modules\\School\\Models\\Logistics\\Room::building<\/a>"],[0,1,"<a href=\"Room.php.html#46\">Modules\\School\\Models\\Logistics\\Room::assets<\/a>"],[0,1,"<a href=\"SchoolAsset.php.html#39\">Modules\\School\\Models\\Logistics\\SchoolAsset::room<\/a>"],[0,1,"<a href=\"TransportRegistration.php.html#43\">Modules\\School\\Models\\Logistics\\TransportRegistration::student<\/a>"],[0,1,"<a href=\"TransportRegistration.php.html#51\">Modules\\School\\Models\\Logistics\\TransportRegistration::vehicle<\/a>"],[0,1,"<a href=\"TransportRegistration.php.html#59\">Modules\\School\\Models\\Logistics\\TransportRegistration::route<\/a>"],[0,1,"<a href=\"Vehicle.php.html#41\">Modules\\School\\Models\\Logistics\\Vehicle::registrations<\/a>"],[0,1,"<a href=\"VehicleRoute.php.html#46\">Modules\\School\\Models\\Logistics\\VehicleRoute::registrations<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

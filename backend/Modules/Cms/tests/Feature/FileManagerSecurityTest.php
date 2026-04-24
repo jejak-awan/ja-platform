@@ -1,0 +1,99 @@
+<?php
+
+namespace Modules\Cms\Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Modules\Core\Models\User;
+use Spatie\Permission\Models\Permission;
+use Tests\TestCase;
+
+class FileManagerSecurityTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected $admin;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seedPermissionsAndRoles();
+
+        // Reserve ID 1 for superadmin test
+        User::factory()->create(['id' => 1]);
+
+        // Create normal admin with permission (Force ID 2)
+        $this->admin = User::factory()->create(['id' => 2]);
+        $permission = Permission::firstOrCreate(['name' => 'manage files']);
+        $this->admin->givePermissionTo($permission);
+    }
+
+    public function test_cannot_access_unauthorized_disk()
+    {
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->getJson('/api/v1/admin/core/file-manager?disk=local');
+
+        // Should return validation error for 'disk'
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['disk']);
+    }
+
+    public function test_cannot_traverse_path_in_list()
+    {
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->getJson('/api/v1/admin/core/file-manager?path=../private');
+
+        $response->assertStatus(403);
+    }
+
+    public function test_cannot_upload_to_traversal_path()
+    {
+        Storage::fake('public');
+
+        $file = UploadedFile::fake()->image('test.jpg');
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->postJson('/api/v1/admin/core/file-manager/upload', [
+                'file' => $file,
+                'path' => '../',
+                'disk' => 'public',
+            ]);
+
+        $response->assertStatus(403);
+    }
+
+    public function test_cannot_move_files_to_restricted_disk()
+    {
+        Storage::fake('public');
+        Storage::put('test.txt', 'content');
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->postJson('/api/v1/admin/core/file-manager/move', [
+                'source' => 'test.txt',
+                'destination' => 'new.txt',
+                'type' => 'file',
+                'disk' => 'local', // Restricted
+            ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['disk']);
+    }
+
+    public function test_super_admin_can_access_any_disk()
+    {
+        // User ID 1 is super admin
+        $superAdmin = User::find(1);
+        $superAdmin->givePermissionTo('manage files');
+
+        // Mock local disk to avoid real error
+        Storage::fake('local');
+
+        // Use correct URL for index
+        $response = $this->actingAs($superAdmin, 'sanctum')
+            ->getJson('/api/v1/admin/core/file-manager?disk=local');
+
+        // Should NOT be 422.
+        $response->assertSuccessful();
+    }
+}

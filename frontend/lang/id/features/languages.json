@@ -1,0 +1,57 @@
+{
+    "actions": {
+        "confirmDelete": "Hapus bahasa \"{name}\"?",
+        "delete": "Hapus",
+        "export": "Ekspor",
+        "setDefault": "Jadikan Default"
+    },
+    "add": "Tambah Bahasa",
+    "create": {
+        "code": "Kode Bahasa",
+        "fromTemplate": "Buat terjemahan dari template (Bahasa Inggris)",
+        "name": "Nama Bahasa",
+        "title": "Tambah Bahasa Baru"
+    },
+    "import": {
+        "button": "Impor",
+        "description": "Unggah file ZIP yang berisi file terjemahan bahasa.",
+        "file": "Pilih File ZIP",
+        "title": "Impor Paket Bahasa"
+    },
+    "importPack": "Impor Paket",
+    "list": {
+        "default": "Default",
+        "description": "Bahasa yang terdaftar di sistem",
+        "empty": "Tidak ada bahasa ditemukan",
+        "headers": {
+            "actions": "Aksi",
+            "code": "Kode",
+            "default": "Default",
+            "name": "Nama"
+        },
+        "title": "Bahasa Terdaftar"
+    },
+    "messages": {
+        "createFailed": "Gagal membuat bahasa",
+        "createSuccess": "Bahasa berhasil dibuat",
+        "deleteFailed": "Gagal menghapus bahasa",
+        "exportFailed": "Gagal mengekspor paket bahasa",
+        "fetchFailed": "Gagal memuat bahasa",
+        "importFailed": "Gagal mengimpor paket bahasa",
+        "importSuccess": "Paket bahasa berhasil diimpor",
+        "setDefaultFailed": "Gagal mengatur bahasa default"
+    },
+    "subtitle": "Kelola bahasa aplikasi",
+    "title": "Bahasa",
+    "uiLanguages": {
+        "active": "Aktif",
+        "available": "Tersedia",
+        "browserDetected": "Bahasa Browser",
+        "description": "Bahasa yang tersedia untuk antarmuka pengguna. Perubahan langsung berlaku.",
+        "hasUiTranslations": "Dukungan UI",
+        "keys": "kunci",
+        "notAvailable": "Tidak Tersedia",
+        "title": "Terjemahan UI",
+        "translationKeys": "Kunci Terjemahan"
+    }
+}

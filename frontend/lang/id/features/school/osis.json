@@ -1,0 +1,47 @@
+{
+    "title": "Manajemen OSIS",
+    "subtitle": "Informasi organisasi, program kerja, dan anggaran OSIS.",
+    "dashboard": {
+        "title": "Aktivitas OSIS",
+        "subtitle": "Monitoring kinerja dan partisipasi siswa."
+    },
+    "tabs": {
+        "programs": "Program Kerja",
+        "members": "Kepengurusan",
+        "finances": "Keuangan",
+        "suggestions": "Kotak Aspirasi"
+    },
+    "stats": {
+        "workPrograms": "Program Kerja",
+        "completed": "Selesai",
+        "members": "Jumlah Anggota",
+        "pendingSuggestions": "Aspirasi Baru"
+    },
+    "programs": {
+        "emptyTitle": "Belum Ada Program",
+        "emptyDesc": "Mulai dengan membuat program kerja (Proker) pertama Anda.",
+        "estimatedBudget": "Est. Anggaran"
+    },
+    "members": {
+        "name": "Nama Pengurus",
+        "position": "Jabatan",
+        "period": "Masa Bakti",
+        "remove": "Keluarkan"
+    },
+    "finances": {
+        "title": "Jurnal Keuangan",
+        "income": "Total Pemasukan",
+        "expense": "Total Pengeluaran",
+        "empty": "Belum ada catatan transaksi."
+    },
+    "suggestions": {
+        "officialResponse": "Tanggapan Resmi",
+        "empty": "Kotak aspirasi masih kosong.",
+        "respond": "Tanggapi",
+        "archive": "Arsipkan"
+    },
+    "actions": {
+        "newActivity": "Kegiatan Baru",
+        "reload": "Muat Ulang"
+    }
+}

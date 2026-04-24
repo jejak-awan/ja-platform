@@ -1,0 +1,53 @@
+{
+    "actions": {
+        "delete": "Delete",
+        "edit": "Edit"
+    },
+    "createNew": "New Tag",
+    "description": "Manage content tags",
+    "empty": "No tags found",
+    "filters": {
+        "all": "All",
+        "unused": "Unused Only",
+        "usage": "Usage",
+        "used": "Used Only"
+    },
+    "form": {
+        "cancel": "Cancel",
+        "create": "Create",
+        "createDescription": "Create a new tag to organize content.",
+        "createTitle": "Create Tag",
+        "description": "Description",
+        "descriptionPlaceholder": "Tag description",
+        "editDescription": "Update tag details.",
+        "editTitle": "Edit Tag",
+        "name": "Name",
+        "namePlaceholder": "Tag name",
+        "saveError": "Failed to save tag",
+        "saving": "Saving...",
+        "slug": "Slug",
+        "slugHelp": "URL-friendly version",
+        "slugPlaceholder": "tag-slug",
+        "update": "Update"
+    },
+    "loading": "Loading tags...",
+    "messages": {
+        "deleteConfirm": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+        "deleteError": "Failed to delete tag"
+    },
+    "search": "Search tags...",
+    "stats": {
+        "total": "Total Tags",
+        "usage": "Total Usage",
+        "used": "Used Tags"
+    },
+    "table": {
+        "actions": "Actions",
+        "description": "Description",
+        "name": "Name",
+        "slug": "Slug",
+        "usage": "Usage"
+    },
+    "title": "Tags",
+    "title_singular": "Tag"
+}

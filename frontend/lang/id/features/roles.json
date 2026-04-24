@@ -1,0 +1,79 @@
+{
+    "actions": {
+        "delete": "Hapus",
+        "duplicate": "Duplikasi",
+        "edit": "Edit"
+    },
+    "create": "Buat Peran",
+    "edit": "Edit Peran",
+    "form": {
+        "cancel": "Batal",
+        "deselectAll": "Batalkan Semua",
+        "name": "Nama Peran",
+        "namePlaceholder": "Masukkan nama peran",
+        "save": "Simpan",
+        "saving": "Menyimpan...",
+        "selectAll": "Pilih Semua"
+    },
+    "list": {
+        "empty": "Tidak ada peran ditemukan",
+        "loading": "Memuat peran...",
+        "more": "+{count} lagi",
+        "permissionsCount": "{count} izin",
+        "usersCount": "Pengguna: {count}"
+    },
+    "messages": {
+        "deleteConfirm": "Hapus peran \"{name}\"? Tindakan ini tidak dapat dibatalkan.",
+        "deleteFailed": "Gagal menghapus peran",
+        "deleteSuccess": "Peran berhasil dihapus",
+        "duplicateFailed": "Gagal menduplikasi peran",
+        "enterName": "Mohon masukkan nama peran",
+        "fetchFailed": "Gagal memuat peran",
+        "saveFailed": "Gagal menyimpan peran",
+        "saveSuccess": "Peran berhasil disimpan"
+    },
+    "permissions": "Izin",
+    "subtitle": "Kelola peran pengguna dan izin akses mereka",
+    "title": "Peran & Izin",
+    "title_singular": "Peran",
+    "workspace": {
+        "clearSelection": "Bersihkan Pilihan",
+        "comparison": {
+            "exit": "Keluar Perbandingan",
+            "mode": "Mode Perbandingan",
+            "subtitle": "Matriks Perbandingan Izin",
+            "syncing": "Menyinkronkan {count} Peran",
+            "title": "Matriks Perbandingan Peran"
+        },
+        "create": {
+            "title": "Buat Peran Baru"
+        },
+        "duplicate": "Duplikat peran",
+        "edit": {
+            "mode": "Mode Edit"
+        },
+        "identity": "Identitas Peran",
+        "liveEditing": "Penyuntingan Langsung",
+        "matrix": {
+            "available": "{count} izin tersedia",
+            "collapseAll": "Tutup Semua",
+            "deselectCategory": "Batalkan Kategori",
+            "expandAll": "Buka Semua",
+            "selectCategory": "Pilih Kategori",
+            "title": "Matriks Izin"
+        },
+        "placeholder": "Pilih peran untuk mulai mengelola izin",
+        "reset": "Reset Perubahan",
+        "save": "Simpan Konfigurasi",
+        "saving": {
+            "subtitle": "Menerapkan izin di seluruh peran...",
+            "title": "Menyimpan Konfigurasi Keamanan"
+        },
+        "synced": "Konfigurasi sinkron",
+        "unsavedChanges": "Deteksi perubahan belum disimpan",
+        "welcome": {
+            "description": "Klik pada peran di sidebar untuk mengedit izinnya, atau pilih beberapa peran menggunakan kotak centang untuk membandingkannya secara berdampingan.",
+            "title": "Ruang Kerja Manajemen Peran"
+        }
+    }
+}

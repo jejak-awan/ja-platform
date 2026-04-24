@@ -1,0 +1,16 @@
+export const JANARI_PRESETS = {
+    monochrome_clean: { light: '#000000', dark: '#ffffff', hslLight: '0 0% 0%', hslDark: '0 0% 100%' },
+    oceanic_clean: { light: '#0974db', dark: '#4db1ff', hslLight: '212 92% 45%', hslDark: '206 100% 65%' },
+    emerald_fresh: { light: '#17a05e', dark: '#1aff8a', hslLight: '158 75% 36%', hslDark: '150 100% 55%' },
+    royal_violet: { light: '#7c1fff', dark: '#b275ff', hslLight: '265 82% 52%', hslDark: '265 92% 72%' },
+    sunset_coral: { light: '#f9452e', dark: '#ff6f5c', hslLight: '12 95% 58%', hslDark: '12 100% 68%' },
+    midnight_cyan: { light: '#059ab7', dark: '#1affef', hslLight: '192 95% 42%', hslDark: '188 100% 55%' },
+    forest_earth: { light: '#23a950', dark: '#63f191', hslLight: '142 65% 40%', hslDark: '142 85% 60%' },
+    ruby_night: { light: '#ea1535', dark: '#ff4d6a', hslLight: '350 85% 50%', hslDark: '350 100% 65%' },
+    aurora_mint: { light: '#14cc96', dark: '#60f9cc', hslLight: '162 82% 44%', hslDark: '162 92% 64%' },
+    slate_indigo: { light: '#4d61f5', dark: '#8aa3ff', hslLight: '235 85% 60%', hslDark: '235 95% 75%' },
+    arctic_blue: { light: '#0699ed', dark: '#5cbdff', hslLight: '202 95% 48%', hslDark: '202 100% 68%' },
+    sand_stone: { light: '#d69d1f', dark: '#f5c55c', hslLight: '35 75% 48%', hslDark: '35 95% 68%' },
+} as const;
+
+export type JanariPresetKey = keyof typeof JANARI_PRESETS;

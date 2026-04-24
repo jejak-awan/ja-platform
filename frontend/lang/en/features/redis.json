@@ -1,0 +1,103 @@
+{
+    "cache": {
+        "actions": {
+            "all": {
+                "button": "Clear All",
+                "desc": "Clear all cached data including config, routes, and views",
+                "title": "Clear All Cache"
+            },
+            "cache": {
+                "button": "Clear Cache",
+                "desc": "Clear application cache only",
+                "title": "Application Cache"
+            },
+            "config": {
+                "button": "Clear Config",
+                "desc": "Clear configuration cache",
+                "title": "Configuration Cache"
+            },
+            "route": {
+                "button": "Clear Routes",
+                "desc": "Clear route cache",
+                "title": "Route Cache"
+            },
+            "view": {
+                "button": "Clear Views",
+                "desc": "Clear compiled view templates",
+                "title": "View Cache"
+            },
+            "warm": {
+                "button": "Warm Cache",
+                "desc": "Regenerate optimized cache files",
+                "title": "Warm Cache",
+                "warming": "Warming..."
+            }
+        },
+        "stats": {
+            "expired": "Expired Keys",
+            "keys": "Total Keys",
+            "size": "Cache Size",
+            "table": {
+                "key": "Key",
+                "size": "Size",
+                "ttl": "TTL"
+            },
+            "title": "Cache Statistics",
+            "topKeys": "Top Keys by Size"
+        },
+        "title": "Cache Management"
+    },
+    "description": "Manage Redis server configuration and monitor cache performance",
+    "messages": {
+        "flushConfirm": "Are you sure you want to clear {type} cache?",
+        "flushConfirmLogout": "Warning: Clearing all cache will also clear user sessions. You will be logged out immediately. Are you sure you want to proceed?",
+        "flushFailed": "Failed to flush cache",
+        "flushSuccess": "{type} cache cleared successfully!",
+        "loading": "Loading...",
+        "saveFailed": "Failed to save settings",
+        "saveSuccess": "Settings saved successfully!",
+        "testFailed": "Connection failed",
+        "testSuccess": "Connection successful",
+        "warmConfirm": "Are you sure you want to warm the cache? This will regenerate config, route, and view caches.",
+        "warmConfirmLogout": "Warning: Warming the cache requires clearing it first, which will clear user sessions. You will be logged out immediately. Are you sure you want to proceed?",
+        "warmFailed": "Failed to warm cache",
+        "warmSuccess": "Cache warmed successfully!"
+    },
+    "settings": {
+        "cancel": "Reset",
+        "connection": "Connection Settings",
+        "disabled": "Disabled",
+        "enabled": "Enabled",
+        "save": "Save Settings",
+        "saving": "Saving...",
+        "select": "Select...",
+        "test": "Test Connection",
+        "testing": "Testing..."
+    },
+    "statistics": {
+        "autoRefresh": "Auto-refresh every 30 seconds",
+        "grid": {
+            "clients": "Connected Clients",
+            "commands": "Total Commands",
+            "hitRate": "Hit Rate",
+            "keys": "Total Keys",
+            "memory": "Memory Used",
+            "ops": "Operations/Sec",
+            "uptime": "Uptime",
+            "version": "Redis Version"
+        },
+        "hitMiss": {
+            "hitRate": "Hit Rate",
+            "hits": "Cache Hits",
+            "misses": "Cache Misses",
+            "title": "Cache Hit/Miss Statistics"
+        },
+        "refresh": "Refresh Stats"
+    },
+    "tabs": {
+        "cache": "Cache Management",
+        "settings": "Settings",
+        "statistics": "Statistics"
+    },
+    "title": "Redis Management"
+}

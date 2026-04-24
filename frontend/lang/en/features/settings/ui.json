@@ -1,0 +1,183 @@
+{
+    "title": "Settings",
+    "description": "Manage your application settings",
+    "loading": "Loading settings...",
+    "noSettings": "No settings found in this tab.",
+    "tabs": {
+        "identity": "Identity",
+        "general": "General",
+        "email": "Email",
+        "seo": "SEO",
+        "security": "Security",
+        "comments": "Discussion",
+        "performance": "Performance",
+        "media": "Media",
+        "ai": "AI Assistance",
+        "analytics": "Analytics"
+    },
+    "groups": {
+        "ai": {
+            "title": "AI Assistance",
+            "description": "Configure AI features for content generation.",
+            "enable_ai": "Enable AI Features",
+            "enable_ai_desc": "Enable or disable AI assistance in the editor.",
+            "default_provider": "Default Provider",
+            "default_provider_desc": "Select which AI provider to use by default.",
+            "providers": "AI Providers",
+            "api_key": "API Key",
+            "api_key_placeholder": "Enter API Key",
+            "model_select": "Default Model",
+            "select_model": "Select Model",
+            "loading_models": "Loading...",
+            "enter_api_key_to_select": "Enter API Key to select model.",
+            "test_connection": "Test Connection",
+            "fetch_models": "Fetch Models",
+            "using_model": "Using: {model}",
+            "connection_success": "Connection successful",
+            "fetch_success": "Models fetched successfully"
+        },
+        "siteInfo": {
+            "title": "Site Information",
+            "description": "Basic information about your website"
+        },
+        "editor": {
+            "title": "Editor Preferences",
+            "description": "Control content editor behavior"
+        },
+        "localization": {
+            "title": "Localization",
+            "description": "Regional settings and formatting preferences"
+        },
+        "smtp": {
+            "title": "SMTP Configuration",
+            "description": "Mail server connection settings"
+        },
+        "identity": {
+            "title": "Email Identity",
+            "description": "Default sender information for outgoing emails"
+        },
+        "meta": {
+            "title": "Meta Tags",
+            "description": "Default meta information for search engines"
+        },
+        "searchEngines": {
+            "title": "Search Engines",
+            "description": "Integration with Google and search engine tools"
+        },
+        "authentication": {
+            "title": "Authentication & 2FA",
+            "description": "User registration and two-factor authentication settings"
+        },
+        "password": {
+            "title": "Password Policy",
+            "description": "Password strength and complexity requirements"
+        },
+        "session": {
+            "title": "Session Management",
+            "description": "Control login session duration and limits"
+        },
+        "access": {
+            "title": "Access Restriction",
+            "description": "Settings to restrict suspicious access"
+        },
+        "captcha": {
+            "title": "Anti-Bot Protection",
+            "description": "Captcha verification to prevent automated attacks"
+        },
+        "upload": {
+            "title": "Upload Settings",
+            "description": "File upload limits and allowed file types"
+        },
+        "imageProcessing": {
+            "title": "Image Processing",
+            "description": "Thumbnail generation and watermark settings"
+        },
+        "s3": {
+            "title": "S3 Configuration",
+            "description": "Configure S3 bucket connection details"
+        },
+        "google": {
+            "title": "Google Drive Configuration",
+            "description": "Configure Google Drive API details"
+        },
+        "ftp": {
+            "title": "FTP Configuration",
+            "description": "Configure FTP server details"
+        },
+        "dropbox": {
+            "title": "Dropbox Configuration",
+            "description": "Configure Dropbox API token"
+        },
+        "migration": {
+            "title": "Storage Migration",
+            "description": "Migrate files from Local Storage to {driver}. This will copy existing files to the new storage.",
+            "start": "Start Migration",
+            "stop": "Stop",
+            "scanning": "Scanning local files...",
+            "migrating": "Migrating: {processed} / {total} files",
+            "no_files": "No files to migrate.",
+            "stopped": "Migration stopped by user.",
+            "batch_failed": "Batch failed",
+            "success": "Migration completed successfully.",
+            "confirm_title": "Storage Migration",
+            "confirm_message": "This will copy all files from Local Storage to the currently configured External Storage. Process may take time. Continue?"
+        },
+        "test": {
+            "button": "Test Connection",
+            "testing": "Testing...",
+            "failed": "Connection failed. Please check your credentials."
+        },
+        "discussion": {
+            "title": "Discussion Settings",
+            "description": "Configure comment system behavior"
+        },
+        "moderation": {
+            "title": "Moderation",
+            "description": "Content safety and spam protection"
+        },
+        "maintenance": {
+            "title": "Maintenance Mode",
+            "description": "Configure Coming Soon / Under Maintenance page."
+        },
+        "botShield": {
+            "title": "Bot Shield (Anti-Scraper)",
+            "description": "Proof-of-Work protection against AI scrapers and automated bots."
+        },
+        "scannerProtection": {
+            "title": "Scanner Protection",
+            "description": "Dynamic learning and auto-blocking for malicious path scanners."
+        },
+        "threatIntel": {
+            "title": "Threat Intelligence",
+            "description": "AbuseIPDB and IP reputation settings"
+        },
+        "securityNotifications": {
+            "title": "Security Notifications",
+            "description": "Telegram, Email, and Webhook alerts"
+        },
+        "analytics": {
+            "retentionTitle": "Data Retention",
+            "description": "Configure how long analytics data should be kept in the database.",
+            "cleanupTitle": "Manual Data Cleanup",
+            "cleanupDescription": "Trigger a manual cleanup of old analytics data based on the retention settings. This will permanently delete data older than the specified retention periods.",
+            "cleanupButton": "Run Cleanup Now",
+            "cleaningNow": "Cleaning...",
+            "cleanupConfirm": "Are you sure you want to delete old analytics data now?",
+            "cleanupSuccess": "Successfully cleaned up {count} records.",
+            "purgeTitle": "Reset all analytics",
+            "purgeConfirm": "This permanently deletes every visit, event, and session in analytics (including today). Content page view counters are not changed. Continue?",
+            "purgeButton": "Delete all analytics",
+            "purgingNow": "Deleting...",
+            "purgeSuccess": "Removed {count} analytics records. Dashboards will reflect empty data immediately."
+        }
+    },
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "current": "Current",
+    "reset": "Reset",
+    "save": "Save Settings",
+    "saving": "Saving...",
+    "saved": "Settings saved successfully",
+    "failed": "Failed to save settings",
+    "jsonPlaceholder": "Enter valid JSON format"
+}

@@ -1,0 +1,78 @@
+{
+    "quickActions": "Aksi Cepat",
+    "subtitle": "Ringkasan data dan aktivitas operasional sekolah.",
+    "title": "Dashboard Sekolah",
+    "setup": {
+        "title": "Panduan Pengaturan",
+        "subtitle": "Selesaikan langkah-langkah berikut untuk melengkapi data sekolah.",
+        "completed": "Selesai",
+        "steps": {
+            "school_profile": { "label": "Profil Sekolah", "desc": "Identitas utama sekolah" },
+            "school_levels": { "label": "Jenjang Pendidikan", "desc": "SD, SMP, SMA, dsb" },
+            "academic_year": { "label": "Tahun Ajaran", "desc": "Kalender akademik aktif" },
+            "semesters": { "label": "Semester", "desc": "Ganjil / Genap" },
+            "departments": { "label": "Program Keahlian", "desc": "Jurusan siswa" },
+            "study_groups": { "label": "Rombongan Belajar", "desc": "Kelas belajar siswa" }
+        }
+    },
+    "v2": {
+        "hero": {
+            "title": "Pusat Komando Administrasi",
+            "subtitle": "Monitor ekosistem pendidikan Anda dengan presisi data real-time dan analitik cerdas.",
+            "badge": "Command Center • V2.0",
+            "actions": {
+                "config": "Konfigurasi Cepat",
+                "reports": "Laporan Tahunan"
+            }
+        },
+        "hr_presence": {
+            "title": "Kehadiran Guru & Staf",
+            "subtitle": "Data kehadiran harian pendidik dan tenaga kependidikan.",
+            "status": {
+                "on_time": "Hadir Tepat Waktu",
+                "late": "Terlambat",
+                "present": "Hadir"
+            }
+        },
+        "alerts": {
+            "title": "Sistem Peringatan Dinamis",
+            "recap": "Catatan kedisiplinan dan prestasi siswa hari ini.",
+            "types": {
+                "urgent": "Penting",
+                "info": "Informasi",
+                "warning": "Peringatan"
+            }
+        },
+        "academic": {
+            "hero_title": "Optimalisasi Kurikulum Unggul.",
+            "hero_subtitle": "Kelola jadwal, silabus, dan progres akademik secara komprehensif.",
+            "hero_badge": "Academic & Curriculum Hub",
+            "popular_subjects": "Mata Pelajaran Populer",
+            "popular_desc": "Statistik peminatan dan performa mata pelajaran semester ini.",
+            "agenda": "Agenda Akademik",
+            "actions": {
+                "schedule": "Kelola Jadwal",
+                "bank": "Bank Soal",
+                "calendar": "Lihat Kalender"
+            }
+        },
+        "student_affairs": {
+            "hero_title": "Empati & Pengembangan Siswa.",
+            "hero_subtitle": "Pantau kedisiplinan, kembangkan kreativitas OSIS, dan pastikan kesejahteraan siswa.",
+            "hero_badge": "Student Affairs & OSIS Hub",
+            "activity_log": "Log Aktivitas Siswa",
+            "activity_desc": "Catatan kedisiplinan dan prestasi siswa hari ini.",
+            "osis_highlight": "Status Organisasi (OSIS)",
+            "on_going_program": "Program Kerja Berjalan",
+            "actions": {
+                "discipline": "Input Kedisiplinan",
+                "osis_program": "Program Kerja OSIS",
+                "details": "Detail Kesiswaan"
+            },
+            "stats": {
+                "osis_candidates": "Kandidat Ketua",
+                "upcoming_events": "Event Mendatang"
+            }
+        }
+    }
+}

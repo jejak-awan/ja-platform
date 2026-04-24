@@ -1,0 +1,48 @@
+{
+    "actions": {
+        "activate": "Aktifkan",
+        "advanced": "Lanjutan",
+        "advancedConfig": "Konfigurasi Lanjutan",
+        "customize": "Sesuaikan",
+        "preview": "Pratinjau",
+        "quickSettings": "Pengaturan Cepat",
+        "settings": "Pengaturan",
+        "validate": "Validasi"
+    },
+    "list": {
+        "by": "oleh {author}",
+        "child": "Anak",
+        "empty": "Tidak ada tema ditemukan",
+        "emptySubtitle": "Mulai dengan membuat tema baru.",
+        "version": "v{version}"
+    },
+    "messages": {
+        "activateConfirm": "Apakah Anda yakin ingin mengaktifkan tema \"{name}\"?",
+        "activateFailed": "Gagal mengaktifkan tema",
+        "activateSuccess": "Tema berhasil diaktifkan",
+        "scanFailed": "Gagal memindai tema",
+        "scanSuccess": "Pemindaian selesai! Menemukan {count} tema.",
+        "validateError": "Gagal memvalidasi tema",
+        "validateFailed": "Validasi tema gagal:",
+        "validateSuccess": "Tema valid!"
+    },
+    "modals": {
+        "previewTitle": "Pratinjau Tema: {name}"
+    },
+    "scan": "Pindai Tema",
+    "scanning": "Memindai...",
+    "status": {
+        "active": "Aktif",
+        "broken": "Rusak",
+        "inactive": "Tidak Aktif",
+        "pending": "Menunggu"
+    },
+    "subtitle": "Kelola dan sesuaikan tema Anda",
+    "title": "Manajemen Tema",
+    "types": {
+        "admin": "Admin",
+        "all": "Semua Tipe",
+        "email": "Email",
+        "frontend": "Frontend"
+    }
+}

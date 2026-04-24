@@ -1,0 +1,245 @@
+{
+    "backups": {
+        "actions": {
+            "delete": "Hapus Cadangan",
+            "restore": "Pulihkan Cadangan"
+        },
+        "confirm": {
+            "delete": "Apakah Anda yakin ingin menghapus cadangan \"{name}\"?",
+            "restore": "Apakah Anda yakin ingin memulihkan cadangan \"{name}\"? Ini akan menggantikan semua data saat ini.",
+            "restore_warning": "Tindakan ini tidak dapat dibatalkan. Apakah Anda benar-benar yakin?"
+        },
+        "create": "Buat Cadangan",
+        "creating": "Membuat...",
+        "description": "Kelola cadangan sistem dan titik pemulihan",
+        "empty": "Tidak ada cadangan ditemukan",
+        "loading": "Memuat...",
+        "messages": {
+            "created": "Cadangan berhasil dibuat",
+            "failed_create": "Gagal membuat cadangan",
+            "failed_download": "Gagal mengunduh cadangan",
+            "failed_restore": "Gagal memulihkan cadangan",
+            "failed_save": "Gagal menyimpan jadwal",
+            "restored": "Cadangan berhasil dipulihkan. Silakan refresh halaman.",
+            "saved": "Jadwal berhasil disimpan"
+        },
+        "schedule": {
+            "configure": "Konfigurasi",
+            "days": "hari",
+            "frequencies": {
+                "daily": "Harian",
+                "monthly": "Bulanan",
+                "weekly": "Mingguan"
+            },
+            "frequency": "Frekuensi",
+            "modal": {
+                "cancel": "Batal",
+                "enable": "Aktifkan cadangan otomatis",
+                "max": "Makimal Cadangan",
+                "save": "Simpan",
+                "saving": "Menyimpan...",
+                "title": "Pengaturan Jadwal Cadangan"
+            },
+            "retention": "Retensi",
+            "status": "Status",
+            "time": "Waktu",
+            "title": "Jadwal Cadangan"
+        },
+        "search": "Cari cadangan...",
+        "stats": {
+            "auto": "Cadangan Otomatis",
+            "disabled": "Tidak Aktif",
+            "enabled": "Aktif",
+            "last": "Cadangan Terakhir",
+            "never": "Belum Pernah",
+            "size": "Total Ukuran",
+            "total": "Total Cadangan"
+        },
+        "table": {
+            "actions": "Aksi",
+            "created": "Dibuat",
+            "delete": "Hapus",
+            "download": "Unduh",
+            "name": "Nama",
+            "restore": "Pulihkan",
+            "size": "Ukuran"
+        },
+        "title": "Cadangan"
+    },
+    "info": {
+        "cache": {
+            "active": "Aktif",
+            "clear": "Bersihkan Cache",
+            "clearing": "Membersihkan...",
+            "failed": "Gagal membersihkan cache",
+            "manage": "Kelola Cache",
+            "success": "Cache berhasil dibersihkan",
+            "title": "Status Cache"
+        },
+        "health": {
+            "critical": "Kritis",
+            "healthy": "Sehat",
+            "title": "Kesehatan Sistem",
+            "warning": "Peringatan"
+        },
+        "quickActions": {
+            "backups": "Cadangan",
+            "commandRunner": "Penjalan Perintah",
+            "emailSettings": "Pengaturan Email",
+            "emailTemplates": "Template Email",
+            "notifications": "Manajer Notifikasi",
+            "redis": "Cache Redis",
+            "scheduledTasks": "Tugas Terjadwal",
+            "settings": "Pengaturan",
+            "title": "Aksi Cepat"
+        },
+        "sections": {
+            "application": "Aplikasi",
+            "database": "Database",
+            "debugMode": "Mode Debug",
+            "disabled": "Tidak Aktif",
+            "diskUsage": "Penggunaan Disk",
+            "enabled": "Aktif",
+            "environment": "Environment",
+            "laravelVersion": "Versi Laravel",
+            "memoryUsage": "Penggunaan Memori",
+            "phpVersion": "Versi PHP",
+            "server": "Server",
+            "serverSoftware": "Software Server"
+        },
+        "statistics": {
+            "contents": "Total Konten",
+            "media": "Total Media",
+            "title": "Statistik Sistem",
+            "users": "Total Pengguna",
+            "visits": "Total Kunjungan"
+        },
+        "title": "Informasi Sistem",
+        "uptime": "Waktu Operasional"
+    },
+    "logs": {
+        "actions": {
+            "clear": "Bersihkan Log"
+        },
+        "clear": "Bersihkan Log",
+        "clearing": "Membersihkan...",
+        "confirm": {
+            "clear": "Apakah Anda yakin ingin membersihkan semua log? Tindakan ini tidak dapat dibatalkan."
+        },
+        "empty": "Pilih file log untuk melihat",
+        "failed_load": "Gagal memuat konten log",
+        "files": "File Log",
+        "loading": "Memuat file log...",
+        "messages": {
+            "cleared": "Log berhasil dibersihkan",
+            "failed_clear": "Gagal membersihkan log",
+            "failed_download": "Gagal mengunduh file log"
+        },
+        "refresh": "Segarkan",
+        "search": "Cari di log...",
+        "select": "Pilih file log",
+        "title": "Jurnal Sistem"
+    },
+    "notifications": {
+        "confirm": {
+            "revoke": "Apakah Anda yakin ingin menarik broadcast ini? Semua notifikasi terkait akan dihapus dari kotak masuk penerima.",
+            "send": "Apakah Anda yakin ingin mengirim notifikasi ini ke semua target yang dipilih?"
+        },
+        "create": {
+            "title": "Kirim Notifikasi"
+        },
+        "form": {
+            "message": "Pesan",
+            "process_async": "Proses di Background (Queue)",
+            "revoke": "Tarik Notifikasi",
+            "revoking": "Menarik...",
+            "send": "Kirim Notifikasi",
+            "sending": "Mengirim...",
+            "target_id": "Target Spesifik",
+            "target_type": "Target Audiens",
+            "targets": {
+                "all": "Semua Pengguna",
+                "role": "Role Spesifik",
+                "user": "Pengguna Spesifik"
+            },
+            "title": "Judul",
+            "type": "Tipe"
+        },
+        "history": {
+            "title": "Riwayat Siaran"
+        },
+        "messages": {
+            "failed": "Gagal mengirim notifikasi.",
+            "revoked": "Broadcast berhasil ditarik.",
+            "sent": "Notifikasi telah masuk antrean untuk dikirim."
+        },
+        "queue": {
+            "inactive_message": "Worker tidak terdeteksi. Notifikasi akan masuk antrean tapi tidak akan terkirim sampai worker dijalankan. Matikan opsi ini untuk kirim langsung.",
+            "inactive_title": "Antrean Tidak Aktif"
+        },
+        "table": {
+            "message": "Pesan",
+            "recipients": "Penerima",
+            "send": "Kirim Notifikasi",
+            "sending": "Mengirim...",
+            "sent_at": "Dikirim Pada",
+            "title": "Judul",
+            "type": "Tipe"
+        },
+        "title": "Manajer Notifikasi"
+    },
+    "scheduled_tasks": {
+        "confirm": {
+            "delete": "Apakah Anda yakin ingin menghapus tugas \"{name}\"?",
+            "run": "Apakah Anda yakin ingin menjalankan tugas \"{name}\" sekarang?"
+        },
+        "create": "Tugas Baru",
+        "empty": "Tidak ada tugas terjadwal ditemukan",
+        "filters": {
+            "active": "Aktif",
+            "all": "Semua Status",
+            "inactive": "Tidak Aktif"
+        },
+        "loading": "Memuat...",
+        "messages": {
+            "executed": "Tugas berhasil dijalankan",
+            "failed_execute": "Gagal menjalankan tugas",
+            "failed_save": "Gagal menyimpan tugas",
+            "saved": "Tugas berhasil disimpan"
+        },
+        "modal": {
+            "active_label": "Aktif",
+            "cancel": "Batal",
+            "command_help": "Perintah Laravel artisan atau skrip PHP",
+            "command_label": "Perintah (mis. emails:send)",
+            "command_placeholder": "artisan:command atau php script.php",
+            "create_action": "Buat",
+            "description_label": "Deskripsi",
+            "description_placeholder": "Deskripsi tugas",
+            "name_label": "Nama Tugas",
+            "name_placeholder": "Nama tugas",
+            "save": "Simpan Tugas",
+            "saving": "Menyimpan...",
+            "schedule_help": "Ekspresi Cron (contoh: \"0 * * * *\" untuk setiap jam, \"0 0 * * *\" untuk setiap hari)",
+            "schedule_label": "Ekspresi Jadwal (Cron)",
+            "schedule_placeholder": "0 * * * *",
+            "title_create": "Buat Tugas Baru",
+            "title_edit": "Edit Tugas",
+            "update": "Perbarui"
+        },
+        "search": "Cari tugas...",
+        "table": {
+            "actions": "Aksi",
+            "command": "Perintah",
+            "delete": "Hapus",
+            "edit": "Edit",
+            "last_run": "Terakhir Dijalankan",
+            "name": "Nama",
+            "never": "Belum Pernah",
+            "run": "Jalankan",
+            "schedule": "Jadwal",
+            "status": "Status"
+        },
+        "title": "Tugas Terjadwal"
+    }
+}

@@ -1,0 +1,236 @@
+<?php
+
+namespace Modules\Core\Providers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+use Modules\Core\Console\Commands\AutoTuneSecurityCommand;
+use Modules\Core\Console\Commands\AssignSecurityOfficer;
+use Modules\Core\Console\Commands\CheckFileIntegrity;
+use Modules\Core\Console\Commands\CheckThreatIntel;
+use Modules\Core\Console\Commands\CleanupCspReports;
+use Modules\Core\Console\Commands\CleanupOldLogs;
+use Modules\Core\Console\Commands\CleanupSlowQueryLogs;
+use Modules\Core\Console\Commands\CleanupTempMedia;
+use Modules\Core\Console\Commands\ClearBlockedIPs;
+use Modules\Core\Console\Commands\ClearCache;
+use Modules\Core\Console\Commands\ClearRateLimit;
+use Modules\Core\Console\Commands\CreateAdminUser;
+use Modules\Core\Console\Commands\CreateBackup;
+use Modules\Core\Console\Commands\GenerateMediaThumbnails;
+use Modules\Core\Console\Commands\SecurityAuditDependencies;
+use Modules\Core\Console\Commands\SecurityCleanupLogs;
+use Modules\Core\Console\Commands\SecurityKpiReport;
+use Modules\Core\Console\Commands\SecurityMaintenanceCommand;
+use Modules\Core\Console\Commands\SecurityRecoveryDrill;
+use Modules\Core\Console\Commands\SecuritySmokeCheck;
+use Modules\Core\Console\Commands\SecuritySelfHealing;
+use Modules\Core\Console\Commands\SystemHealthCheck;
+use Modules\Core\Console\Commands\ThemeMake;
+use Modules\Core\Console\Commands\UpdateCloudflareIps;
+use Modules\Core\Console\Commands\WarmCache;
+use Nwidart\Modules\Traits\PathNamespace;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
+class CoreServiceProvider extends ServiceProvider
+{
+    use PathNamespace;
+
+    protected string $name = 'Core';
+
+    protected string $nameLower = 'core';
+
+    /**
+     * Boot the application events.
+     */
+    public function boot(): void
+    {
+        Gate::before(function ($user, $capability) {
+            return $user->hasRole('super-admin') ? true : null;
+        });
+
+        // Register Request Macro for CSP Nonce
+        Request::macro('cspNonce', function () {
+            /** @var Request $this */
+            if (! $this->has('__csp_nonce')) {
+                $this->attributes->set('__csp_nonce', Str::random(32));
+            }
+
+            return $this->attributes->get('__csp_nonce');
+        });
+
+        $this->registerCommands();
+        $this->registerCommandSchedules();
+        $this->registerTranslations();
+        $this->registerConfig();
+        $this->registerViews();
+        $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+    }
+
+    /**
+     * Register the service provider.
+     */
+    public function register(): void
+    {
+        $this->app->register(EventServiceProvider::class);
+        $this->app->register(RouteServiceProvider::class);
+    }
+
+    /**
+     * Register commands in the format of Command::class
+     */
+    protected function registerCommands(): void
+    {
+        $this->commands([
+            AutoTuneSecurityCommand::class,
+            AssignSecurityOfficer::class,
+            CheckFileIntegrity::class,
+            CheckThreatIntel::class,
+            CleanupCspReports::class,
+            CleanupOldLogs::class,
+            CleanupSlowQueryLogs::class,
+            CleanupTempMedia::class,
+            ClearBlockedIPs::class,
+            ClearCache::class,
+            ClearRateLimit::class,
+            CreateAdminUser::class,
+            CreateBackup::class,
+            GenerateMediaThumbnails::class,
+            SecurityAuditDependencies::class,
+            SecurityCleanupLogs::class,
+            SecurityKpiReport::class,
+            SecurityMaintenanceCommand::class,
+            SecurityRecoveryDrill::class,
+            SecuritySmokeCheck::class,
+            SecuritySelfHealing::class,
+            SystemHealthCheck::class,
+            ThemeMake::class,
+            UpdateCloudflareIps::class,
+            WarmCache::class,
+        ]);
+    }
+
+    /**
+     * Register command Schedules.
+     */
+    protected function registerCommandSchedules(): void
+    {
+        // $this->app->booted(function () {
+        //     $schedule = $this->app->make(Schedule::class);
+        //     $schedule->command('inspire')->hourly();
+        // });
+    }
+
+    /**
+     * Register translations.
+     */
+    public function registerTranslations(): void
+    {
+        $langPath = resource_path('lang/modules/'.$this->nameLower);
+
+        if (is_dir($langPath)) {
+            $this->loadTranslationsFrom($langPath, $this->nameLower);
+            $this->loadJsonTranslationsFrom($langPath);
+        } else {
+            $this->loadTranslationsFrom(module_path($this->name, 'lang'), $this->nameLower);
+            $this->loadJsonTranslationsFrom(module_path($this->name, 'lang'));
+        }
+    }
+
+    /**
+     * Register config.
+     */
+    protected function registerConfig(): void
+    {
+        /** @var string $configPathRelative */
+        $configPathRelative = config('modules.paths.generator.config.path');
+        $configPath = module_path($this->name, $configPathRelative);
+
+        if (is_dir($configPath)) {
+            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
+
+            foreach ($iterator as $file) {
+                /** @var \SplFileInfo $file */
+                if ($file->isFile() && $file->getExtension() === 'php') {
+                    $config = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $config_key = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $config);
+                    $segments = explode('.', (string) $this->nameLower.'.'.$config_key);
+
+                    // Remove duplicated adjacent segments
+                    $normalized = [];
+                    foreach ($segments as $segment) {
+                        if (end($normalized) !== $segment) {
+                            $normalized[] = $segment;
+                        }
+                    }
+
+                    $key = ($config === 'config.php') ? $this->nameLower : implode('.', $normalized);
+
+                    $this->publishes([$file->getPathname() => config_path($config)], 'config');
+                    $this->merge_config_from($file->getPathname(), $key);
+                }
+            }
+        }
+    }
+
+    /**
+     * Merge config from the given path recursively.
+     */
+    protected function merge_config_from(string $path, string $key): void
+    {
+        $existing = config($key, []);
+        $existing = is_array($existing) ? $existing : [];
+        $module_config = require $path;
+        $module_config = is_array($module_config) ? $module_config : [];
+
+        config([$key => array_replace_recursive($existing, $module_config)]);
+    }
+
+    /**
+     * Register views.
+     */
+    public function registerViews(): void
+    {
+        $viewPath = resource_path('views/modules/'.$this->nameLower);
+        $sourcePath = module_path($this->name, 'resources/views');
+
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower.'-module-views']);
+
+        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
+
+        /** @var string $namespace */
+        $namespace = config('modules.namespace');
+        Blade::componentNamespace($namespace.'\\'.$this->name.'\\View\\Components', $this->nameLower);
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function provides(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function getPublishableViewPaths(): array
+    {
+        $paths = [];
+        $viewPaths = config('view.paths');
+        if (is_iterable($viewPaths)) {
+            foreach ($viewPaths as $path) {
+                $path = (string) $path;
+                if (is_dir($path.'/modules/'.$this->nameLower)) {
+                    $paths[] = $path.'/modules/'.$this->nameLower;
+                }
+            }
+        }
+
+        return $paths;
+    }
+}

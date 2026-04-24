@@ -1,0 +1,35 @@
+{
+    "welcome": "Selamat Datang, {name}",
+    "subtitle": "Pandangan umum aktivitas akademik dan kelas Anda hari ini.",
+    "stats": {
+        "totalClasses": "Total Kelas",
+        "activeStudents": "Siswa Aktif",
+        "submittedJournals": "Jurnal Masuk",
+        "gradingQueue": "Koreksi Nilai"
+    },
+    "sections": {
+        "schedule": {
+            "title": "Jadwal Mengajar",
+            "desc": "Sesi pembelajaran yang sedang atau akan berlangsung hari ini.",
+            "empty": "Tidak ada jadwal mengajar hari ini."
+        },
+        "recentJournals": {
+            "title": "Jurnal Mengajar Terakhir",
+            "desc": "Ringkasan materi dan progres dari sesi sebelumnya.",
+            "empty": "Belum ada jurnal mengajar terbaru."
+        },
+        "actionRequired": {
+            "title": "Perlu Tindakan",
+            "attendanceShortage": "{count} Siswa belum presensi di {class}",
+            "pendingTasks": "{count} Tugas baru memerlukan koreksi",
+            "btnAction": "Tangani Sekarang"
+        },
+        "quickLinks": {
+            "title": "Akses Cepat",
+            "inputJournal": "Input Jurnal Harian",
+            "classAttendance": "Presensi Kelas",
+            "courseManage": "Manajemen Kursus",
+            "examResults": "Hasil Ujian"
+        }
+    }
+}

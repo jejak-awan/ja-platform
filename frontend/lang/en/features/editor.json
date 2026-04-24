@@ -1,0 +1,56 @@
+{
+    "actions": {
+        "cancel": "Cancel",
+        "constrainProportions": "Constrain proportions",
+        "fit": "Fit to Content (Reset Size)",
+        "interact": "Interact with content",
+        "save": "Save changes",
+        "stopInteraction": "Stop interaction"
+    },
+    "embed": {
+        "configure": "Double click to configure",
+        "empty": "Empty HTML Embed"
+    },
+    "fields": {
+        "alignment": "Alignment",
+        "altText": "Alt text",
+        "autoplay": "Autoplay",
+        "borderColor": "Border color",
+        "borderRadius": "Radius (px)",
+        "borderWidth": "Border (px)",
+        "controls": "Controls",
+        "displayMode": "Display mode",
+        "height": "Height",
+        "loop": "Loop",
+        "margin": "Wrap spacing (px)",
+        "source": "Source URL",
+        "width": "Width"
+    },
+    "placeholder": {
+        "text": "Start writing..."
+    },
+    "placeholders": {
+        "alt": "Description...",
+        "auto": "auto",
+        "html": "Paste your HTML code here...",
+        "none": "None",
+        "src": "https://..."
+    },
+    "properties": {
+        "appearance": "Appearance",
+        "dimensions": "Dimensions",
+        "general": "General Settings",
+        "html": "HTML Content",
+        "title": "Properties",
+        "video": "Video Playback"
+    },
+    "values": {
+        "block": "Block",
+        "center": "Center",
+        "floatLeft": "Wrap Left",
+        "floatRight": "Wrap Right",
+        "inline": "Inline",
+        "left": "Left",
+        "right": "Right"
+    }
+}

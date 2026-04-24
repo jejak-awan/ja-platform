@@ -1,0 +1,68 @@
+{
+    "actions": {
+        "createContent": "Buat Konten",
+        "delete": "Hapus",
+        "edit": "Edit"
+    },
+    "create": "Templat Baru",
+    "description": "Buat dan kelola templat yang dapat digunakan kembali untuk konten Anda",
+    "empty": "Tidak ada templat ditemukan",
+    "form": {
+        "back": "Kembali ke Templat",
+        "body": "Isi",
+        "bodyPlaceholder": "Masukkan isi konten...",
+        "cancel": "Batal",
+        "content": "Isi Templat",
+        "createTitle": "Buat Templat Konten",
+        "description": "Deskripsi",
+        "descriptionPlaceholder": "Deskripsi templat",
+        "details": "Detail Templat",
+        "editTitle": "Edit Templat Konten",
+        "excerpt": "Kutipan",
+        "excerptPlaceholder": "Kutipan konten",
+        "name": "Nama",
+        "namePlaceholder": "Nama templat",
+        "save": "Buat Templat",
+        "saving": "Membuat...",
+        "slug": "Slug",
+        "slugHelp": "Versi ramah URL",
+        "titleLabel": "Judul",
+        "titlePlaceholder": "Templat judul konten",
+        "type": "Tipe",
+        "update": "Perbarui Templat",
+        "updating": "Memperbarui..."
+    },
+    "loading": "Memuat...",
+    "messages": {
+        "bulkDeleteSuccess": "Templat terpilih berhasil dihapus",
+        "createContentSuccess": "Konten berhasil dibuat dari templat",
+        "createError": "Gagal membuat konten dari templat",
+        "createSuccess": "Templat berhasil dibuat",
+        "deleteConfirm": "Apakah Anda yakin ingin menghapus \"{name}\"?",
+        "deleteError": "Gagal menghapus templat",
+        "deleteSuccess": "Templat berhasil dihapus",
+        "forceDeleteConfirm": "Apakah Anda yakin ingin menghapus \"{name}\" secara permanen? Tindakan ini tidak dapat dibatalkan.",
+        "loadError": "Gagal memuat templat",
+        "restoreConfirm": "Pulihkan \"{name}\"?",
+        "saveError": "Gagal membuat templat",
+        "updateError": "Gagal memperbarui templat",
+        "updateSuccess": "Templat berhasil diperbarui"
+    },
+    "search": "Cari templat...",
+    "table": {
+        "actions": "Aksi",
+        "description": "Deskripsi",
+        "name": "Nama",
+        "selected": "{count} dipilih",
+        "type": "Tipe",
+        "updated": "Diperbarui"
+    },
+    "title": "Templat Konten",
+    "title_singular": "Templat",
+    "types": {
+        "all": "Semua Tipe",
+        "custom": "Kustom",
+        "page": "Halaman",
+        "post": "Pos"
+    }
+}

@@ -1,0 +1,67 @@
+{
+    "actions": {
+        "manageMembers": "Manage Members",
+        "setSchedule": "Set Schedule"
+    },
+    "labels": {
+        "day": "Day",
+        "endTime": "End Time",
+        "group": "Group",
+        "groupName": "Group Name",
+        "homeroomTeacher": "Homeroom Teacher",
+        "kkm": "KKM",
+        "room": "Room (Optional)",
+        "startTime": "Start Time",
+        "subject": "Subject",
+        "subjectCode": "Subject Code",
+        "subjectName": "Subject Name",
+        "teacher": "Teacher / Instructor",
+        "time": "TIME",
+        "groupA": "Group A (Compulsory)",
+        "groupB": "Group B (Compulsory)",
+        "groupC": "Group C (Specialization)",
+        "localContent": "Local Content",
+        "setActiveYear": "Set as Active Year",
+        "noMembers": "No members in this study group yet.",
+        "manageGroupMembers": "Manage Members: {name}",
+        "manageGroupMembersDesc": "Add or remove students from this study group."
+    },
+    "messages": {
+        "addSuccess": "Data added successfully",
+        "deleteConfirm": "Are you sure you want to delete \"{name}\"?",
+        "deleteSuccess": "Data deleted successfully",
+        "scheduleAddSuccess": "Schedule added successfully",
+        "scheduleDeleteSuccess": "Schedule deleted successfully",
+        "scheduleUpdateSuccess": "Schedule updated successfully",
+        "selectGroupToView": "Select a study group to view schedule",
+        "setupScheduleDescription": "Please complete the lesson schedule details below.",
+        "studentAddSuccess": "Student added to study group successfully",
+        "studentRemoveSuccess": "Student removed from study group successfully",
+        "updateSuccess": "Data updated successfully"
+    },
+    "placeholders": {
+        "select": "Select...",
+        "selectDay": "Select Day",
+        "selectGroup": "Select Group",
+        "selectLevel": "Select Level",
+        "selectRoom": "Select Room",
+        "selectSubject": "Select Subject",
+        "selectTeacher": "Select Teacher",
+        "selectYear": "Select Year",
+        "selectStudentToAdd": "Select student to add",
+        "selectSubjectGroup": "Select Group",
+        "notesHint": "Additional notes..."
+    },
+    "subtitle": "Manage curriculum, study groups, and academic calendar.",
+    "tabs": {
+        "studyGroups": "Study Groups",
+        "subjects": "Subjects",
+        "group": "Study Group",
+        "timetable": "Timetable",
+        "years": "Academic Years"
+    },
+    "title": "Academic",
+    "tooltips": {
+        "overCapacity": "Over Capacity"
+    }
+}

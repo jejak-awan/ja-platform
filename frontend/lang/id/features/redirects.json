@@ -1,0 +1,54 @@
+{
+    "actions": {
+        "delete": "Hapus",
+        "edit": "Ubah"
+    },
+    "empty": "Tidak ada pengalihan ditemukan",
+    "loading": "Memuat...",
+    "messages": {
+        "deleteConfirm": "Apakah Anda yakin ingin menghapus pengalihan dari \"{from}\"?",
+        "deleteFailed": "Gagal menghapus pengalihan",
+        "saveFailed": "Gagal menyimpan pengalihan"
+    },
+    "modals": {
+        "redirect": {
+            "active": "Aktif",
+            "code": "Kode Status",
+            "codes": {
+                "p301": "301 - Pengalihan Permanen",
+                "p308": "308 - Pengalihan Permanen (Pertahankan Metode)",
+                "t302": "302 - Pengalihan Sementara",
+                "t307": "307 - Pengalihan Sementara (Pertahankan Metode)"
+            },
+            "from": "URL Asal",
+            "fromHint": "Jalur URL sumber (misal, /halaman-lama)",
+            "fromPlaceholder": "/jalur-lama",
+            "saving": "Menyimpan...",
+            "titleCreate": "Buat Pengalihan",
+            "titleEdit": "Ubah Pengalihan",
+            "to": "URL Tujuan",
+            "toHint": "Jalur URL tujuan atau URL lengkap",
+            "toPlaceholder": "/jalur-baru"
+        }
+    },
+    "new": "Pengalihan Baru",
+    "search": "Cari pengalihan...",
+    "statistics": {
+        "active": "Pengalihan Aktif",
+        "hits": "Total Klik",
+        "total": "Total Pengalihan"
+    },
+    "status": {
+        "active": "Aktif",
+        "inactive": "Tidak Aktif"
+    },
+    "table": {
+        "actions": "Aksi",
+        "code": "Kode Status",
+        "from": "URL Asal",
+        "hits": "Klik",
+        "status": "Status",
+        "to": "URL Tujuan"
+    },
+    "title": "Pengalihan"
+}

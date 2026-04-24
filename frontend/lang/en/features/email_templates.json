@@ -1,0 +1,49 @@
+{
+    "form": {
+        "availableVariables": "Available Variables",
+        "body": "Body",
+        "bodyPlaceholder": "Enter email body (HTML supported)...",
+        "content": "Content",
+        "createTitle": "Create Email Template",
+        "details": "Template Details",
+        "hideVariables": "Hide Variables",
+        "name": "Template Name",
+        "namePlaceholder": "e.g., Welcome Email",
+        "previewFailed": "Failed to preview template",
+        "showVariables": "Show Variables",
+        "subject": "Subject",
+        "subjectPlaceholder": "Enter email subject...",
+        "type": "Type",
+        "editTitle": "Edit Email Template",
+        "sendTest": "Send Test"
+    },
+    "types": {
+        "custom": "Custom",
+        "notification": "Notification",
+        "transactional": "Transactional"
+    },
+    "list": {
+        "create": "New Template",
+        "empty": "No templates found",
+        "search": "Search templates...",
+        "title": "Email Templates"
+    },
+    "table": {
+        "actions": "Actions",
+        "name": "Name",
+        "subject": "Subject",
+        "type": "Type",
+        "updated": "Updated"
+    },
+    "actions": {
+        "test": "Test Send"
+    },
+    "confirm_delete": "Are you sure you want to delete template \"{name}\"?",
+    "messages": {
+        "delete_failed": "Failed to delete template",
+        "delete_success": "Template deleted successfully",
+        "preview_failed": "Failed to preview template",
+        "send_test_failed": "Failed to send test email",
+        "send_test_success": "Test email sent successfully"
+    }
+}

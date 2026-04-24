@@ -1,0 +1,17 @@
+{
+    "title": "Log Audit & Keamanan",
+    "subtitle": "Pantau aktivitas administratif dan perubahan sistem.",
+    "labels": {
+        "details": "Detail Log",
+        "causer": "Pelaksana",
+        "time": "Waktu",
+        "description": "Deskripsi",
+        "properties": "Properti Data",
+        "admin": "Administrator",
+        "activity": "Aktivitas",
+        "module": "Modul"
+    },
+    "placeholders": {
+        "search": "Cari aktivitas..."
+    }
+}

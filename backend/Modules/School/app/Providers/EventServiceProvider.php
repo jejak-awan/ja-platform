@@ -1,0 +1,40 @@
+<?php
+
+namespace Modules\School\Providers;
+
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+
+class EventServiceProvider extends ServiceProvider
+{
+    /**
+     * The event handler mappings for the application.
+     *
+     * @var array<string, array<int, string>>
+     */
+    protected $listen = [
+        \Modules\School\Events\StudentCreated::class => [
+            \Modules\School\Listeners\LogStudentActivity::class . '@handleStudentCreated',
+        ],
+        \Modules\School\Events\StudentDeleted::class => [
+            \Modules\School\Listeners\LogStudentActivity::class . '@handleStudentDeleted',
+        ],
+        \Modules\School\Events\BillPaid::class => [
+            \Modules\School\Listeners\LogFinancialActivity::class,
+        ],
+        \Modules\School\Events\AttendanceMarked::class => [
+            \Modules\School\Listeners\LogAcademicActivity::class,
+        ],
+    ];
+
+    /**
+     * Indicates if events should be discovered.
+     *
+     * @var bool
+     */
+    protected static $shouldDiscoverEvents = true;
+
+    /**
+     * Configure the proper event listeners for email verification.
+     */
+    protected function configureEmailVerification(): void {}
+}

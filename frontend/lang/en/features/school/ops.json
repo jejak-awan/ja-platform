@@ -1,0 +1,84 @@
+{
+    "attendance": {
+        "title": "Student Attendance",
+        "subtitle": "Manage daily student attendance per study group.",
+        "pilihRombel": "Select Group",
+        "pilihRombelPlaceholder": "Select Study Group",
+        "tanggal": "Date",
+        "btnShow": "Show Data",
+        "btnSaveAll": "Save All Changes",
+        "emptyHint": "Click \"Show Data\" to load student list.",
+        "labels": {
+            "studentName": "Student Name",
+            "status": "Status",
+            "notes": "Notes"
+        },
+        "status": {
+            "H": "Present",
+            "S": "Sick",
+            "I": "Permit",
+            "A": "Absent"
+        },
+        "messages": {
+            "saveSuccess": "Attendance data saved successfully!"
+        }
+    },
+    "affairs": {
+        "title": "Student Affairs",
+        "subtitle": "Manage student violations and achievements.",
+        "btnAdd": "Add Record",
+        "tabs": {
+            "violation": "Violations",
+            "achievement": "Achievements",
+            "counseling": "BK Counseling"
+        },
+        "labels": {
+            "studentName": "Student Name",
+            "points": "Points",
+            "date": "Date",
+            "level": "Level",
+            "type": "Type",
+            "status": "Status",
+            "description": {
+                "violation": "Violation Details",
+                "achievement": "Achievement Details"
+            }
+        },
+        "messages": {
+            "saveSuccess": "Data saved successfully",
+            "updateSuccess": "Data updated successfully",
+            "deleteSuccess": "Data deleted successfully",
+            "deleteConfirmTitle": "Delete Data",
+            "deleteConfirmMessage": "Are you sure you want to delete this record?"
+        }
+    },
+    "visitors": {
+        "title": "Visitor Log (VMS)",
+        "subtitle": "Manage visitor logs and institution security.",
+        "btnAdd": "Check-In Visitor",
+        "filters": {
+            "all": "All",
+            "checked_in": "Visiting",
+            "checked_out": "Finished"
+        },
+        "labels": {
+            "visitorName": "Visitor Name",
+            "purpose": "Purpose",
+            "targetPerson": "Meet With",
+            "checkIn": "Check-In",
+            "status": "Status"
+        },
+        "status": {
+            "checked_in": "Visiting",
+            "checked_out": "Finished"
+        },
+        "actions": {
+            "checkOut": "Check-Out",
+            "checkOutConfirm": "Confirm visitor has finished visiting?"
+        },
+        "messages": {
+            "registerSuccess": "Visitor registered successfully",
+            "checkOutSuccess": "Check-out successful"
+        }
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "title": "Kepegawaian",
+    "actions": {
+        "addShift": "Tambah Shift",
+        "inputLeave": "Input Cuti (Manual)"
+    },
+    "labels": {
+        "advancedHR": "Manajemen Kepegawaian Lanjutan",
+        "from": "Dari",
+        "leaveApplications": "Permohonan Cuti",
+        "shiftSettings": "Pengaturan Shift",
+        "staffName": "Nama PTK",
+        "to": "Sampai",
+        "type": "Jenis"
+    },
+    "staff": {
+        "title": "Data PTK",
+        "subtitle": "Pendidik dan Tenaga Kependidikan (Guru & Staff).",
+        "btnAdd": "Tambah PTK",
+        "btnGeneratePayroll": "Generate Gaji",
+        "tabs": {
+            "staff": "Data PTK",
+            "salary": "Struktur Gaji",
+            "payroll": "Riwayat Gaji"
+        },
+        "labels": {
+            "nuptk": "NUPTK",
+            "fullName": "Nama Lengkap",
+            "ptkType": "Jenis PTK",
+            "salarySetting": "Pengaturan Gaji",
+            "period": "Periode",
+            "netSalary": "Gaji Bersih",
+            "total": "Total: {total} orang"
+        },
+        "actions": {
+            "setupSalary": "Atur Komponen"
+        },
+        "messages": {
+            "exportSuccess": "Data berhasil diekspor ke CSV",
+            "deleteConfirmTitle": "Hapus Data Staff",
+            "deleteConfirmMessage": "Apakah Anda yakin ingin menghapus data staff ini?",
+            "deleteSuccess": "Staff berhasil dihapus",
+            "generatePayrollConfirm": "Generate gaji untuk periode {period}?",
+            "generatePayrollSuccess": "Gaji berhasil digenerate",
+            "saveSalarySuccess": "Struktur gaji berhasil disimpan"
+        }
+    },
+    "subtitle": "Kelola jam kerja (shift) dan permohonan cuti/izin PTK."
+}

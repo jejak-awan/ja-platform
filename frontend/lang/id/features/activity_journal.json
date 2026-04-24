@@ -1,0 +1,50 @@
+{
+    "export": {
+        "button": "Ekspor CSV",
+        "exporting": "Mengekspor...",
+        "failed": "Gagal mengekspor log aktivitas"
+    },
+    "filters": {
+        "allTypes": "Semua Tipe",
+        "allUsers": "Semua Pengguna",
+        "clear": "Hapus",
+        "dateFrom": "Dari",
+        "dateTo": "Sampai",
+        "perPage": "Per halaman",
+        "search": "Cari aktivitas...",
+        "types": {
+            "bulk_action_media": "Aksi Masal Media",
+            "created": "Dibuat",
+            "delete_permanent": "Dihapus Permanen",
+            "deleted": "Dihapus",
+            "emptied_trash": "Kosongkan Sampah",
+            "login": "Masuk",
+            "login_failed": "Login Gagal",
+            "login_success": "Login Berhasil",
+            "logout": "Keluar",
+            "published": "Diterbitkan",
+            "session_invalidated": "Sesi Berakhir",
+            "soft_deleted_file": "Pindahkan File ke Sampah",
+            "soft_deleted_folder": "Pindahkan Folder ke Sampah",
+            "soft_deleted_media": "Pindahkan Media ke Sampah",
+            "unpublished": "Tidak Diterbitkan",
+            "updated": "Diperbarui",
+            "uploaded_media": "Unggah Media",
+            "viewed": "Dilihat"
+        }
+    },
+    "messages": {
+        "empty": "Tidak ada log aktivitas ditemukan",
+        "loading": "Memuat...",
+        "system": "Sistem",
+        "unknown": "Tidak Diketahui",
+        "viewDetails": "Lihat Detail"
+    },
+    "stats": {
+        "activeUsers": "Pengguna Aktif",
+        "thisWeek": "Minggu Ini",
+        "today": "Hari Ini",
+        "total": "Total Aktivitas"
+    },
+    "title": "Jurnal Aktivitas"
+}

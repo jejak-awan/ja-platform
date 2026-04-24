@@ -1,0 +1,41 @@
+{
+    "actions": {
+        "finish": "Selesaikan Setup",
+        "next": "Selanjutnya",
+        "prev": "Sebelumnya",
+        "processing": "Memproses..."
+    },
+    "labels": {
+        "institutionName": "Nama Resmi Lembaga",
+        "institutionNameHint": "Gunakan nama lengkap resmi (contoh: SMP NEGERI 1 JAKARTA atau YAYASAN PENDIDIKAN ABC). Berikan nama resmi untuk lembaga pendidikan Anda.",
+        "institutionNamePlaceholder": "Masukkan nama resmi...",
+        "levelSubtitle": "Pilih satu jenjang awal untuk pendaftaran.",
+        "levelTitle": "Pilih Jenjang Sekolah",
+        "locationSubtitle": "Tentukan jumlah lokasi operasional lembaga.",
+        "locationTitle": "Lokasi Lembaga",
+        "lockedByName": "Dikunci oleh Analisis Nama",
+        "onlyForFoundations": "Hanya untuk Yayasan",
+        "statusSubtitle": "Tentukan status hukum lembaga Anda. Opsi dikunci berdasarkan analisis nama.",
+        "statusTitle": "Status Lembaga"
+    },
+    "options": {
+        "multiLocation": "Banyak Cabang",
+        "multiLocationDesc": "Lembaga memiliki unit/cabang di alamat berbeda.",
+        "sd": "SD / MI",
+        "sdDesc": "Sekolah Dasar",
+        "singleLocation": "Satu Lokasi",
+        "singleLocationDesc": "Seluruh kegiatan berada dalam satu alamat yang sama.",
+        "sma": "SMA / MA",
+        "smaDesc": "Sekolah Menengah Atas",
+        "smk": "SMK",
+        "smkDesc": "Sekolah Menengah Kejuruan",
+        "smp": "SMP / MTs",
+        "smpDesc": "Sekolah Menengah Pertama"
+    },
+    "steps": {
+        "basic": "Dasar",
+        "level": "Jenjang",
+        "location": "Lokasi",
+        "status": "Status"
+    }
+}

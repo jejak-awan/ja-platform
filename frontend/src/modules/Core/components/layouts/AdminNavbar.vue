@@ -1,0 +1,431 @@
+<template>
+  <header class="sticky top-0 z-40 bg-card border-b border-border">
+    <div class="flex items-center justify-between h-16 px-6">
+      <!-- Left Group: Mobile Toggle + Breadcrumb -->
+      <div class="flex items-center space-x-4">
+        <!-- Mobile Menu Toggle -->
+        <button
+          class="lg:hidden text-muted-foreground hover:text-foreground"
+          @click="$emit('toggle-sidebar')"
+        >
+          <Menu class="w-6 h-6" />
+        </button>
+
+        <!-- Breadcrumb (Desktop Only) -->
+        <Breadcrumbs
+          compact
+          class="hidden lg:flex"
+        />
+      </div>
+
+      <!-- Right: Search, Notifications, User Menu -->
+      <div class="flex items-center space-x-4 ml-auto">
+        <!-- Search -->
+        <div class="relative">
+          <!-- Global Search Trigger -->
+          <button
+            data-slot="search-trigger"
+            class="hidden md:flex items-center w-64 px-3 py-2 text-sm text-muted-foreground bg-transparent border border-border/40 rounded-lg hover:bg-muted/5 hover:text-foreground"
+            @click="showGlobalSearch = true"
+          >
+            <Search class="mr-2 w-4 h-4 opacity-50" />
+            <span>{{ t('common.actions.search') }}...</span>
+            <kbd class="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded-md border-border/40 bg-background px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 uppercase">
+              <span class="text-[10px]">Ctrl</span>
+              <span class="text-[10px]">K</span>
+            </kbd>
+          </button>
+
+          <!-- Mobile Search Trigger -->
+          <button
+            class="md:hidden p-2 text-muted-foreground hover:text-foreground rounded-xl hover:bg-accent"
+            @click="showGlobalSearch = true"
+          >
+            <Search class="w-5 h-5" />
+          </button>
+
+          <!-- Global Search Component -->
+          <GlobalSearch 
+            v-model:is-open="showGlobalSearch" 
+          />
+        </div>
+                
+        <!-- Level Switcher -->
+        <LevelSwitcher />
+
+        <!-- Notifications -->
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <button
+              class="relative p-2 text-muted-foreground hover:text-foreground dark:hover:text-foreground focus:outline-none"
+            >
+              <Bell class="w-6 h-6" />
+              <span
+                v-if="unreadNotificationsCount > 0"
+                class="absolute top-0 right-0 block h-5 w-5 rounded-full bg-destructive text-destructive-foreground text-xs flex items-center justify-center border-2 border-card"
+              >
+                {{ unreadNotificationsCount > 99 ? '99+' : unreadNotificationsCount }}
+              </span>
+            </button>
+          </DropdownMenuTrigger>
+                    
+          <DropdownMenuContent
+            class="w-80 p-0"
+            align="end"
+            :side-offset="8"
+          >
+            <div class="p-4 border-b border-border flex items-center justify-between">
+              <h3 class="text-sm font-semibold text-foreground">
+                {{ t('common.labels.notifications') }}
+              </h3>
+              <router-link
+                :to="{ name: 'notifications' }"
+                class="text-xs text-primary hover:text-primary/80"
+              >
+                {{ t('common.actions.viewAll') }}
+              </router-link>
+            </div>
+            <div class="max-h-96 overflow-y-auto py-1">
+              <div
+                v-if="loadingNotifications"
+                class="p-4 text-center text-sm text-muted-foreground"
+              >
+                {{ t('common.messages.loading.default') }}
+              </div>
+              <div
+                v-else-if="recentNotifications.length === 0"
+                class="p-4 text-center text-sm text-muted-foreground"
+              >
+                {{ t('common.messages.empty.default') }}
+              </div>
+              <div v-else>
+                <DropdownMenuItem
+                  v-for="notification in recentNotifications"
+                  :key="notification.id"
+                  class="p-4 cursor-pointer focus:bg-muted"
+                  :class="{ 'bg-primary/5': !notification.read_at }"
+                  @click="handleNotificationClick(notification)"
+                >
+                  <div class="flex items-start w-full">
+                    <span
+                      v-if="!notification.read_at"
+                      class="h-2 w-2 bg-primary rounded-full mt-2 mr-2 flex-shrink-0"
+                    />
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-medium text-foreground line-clamp-1">
+                        {{ notification.title }}
+                      </p>
+                      <p class="text-xs text-muted-foreground mt-1 line-clamp-2 leading-relaxed">
+                        {{ notification.message }}
+                      </p>
+                      <p class="text-[10px] text-muted-foreground/60 mt-1.5">
+                        {{ formatNotificationDate(notification.created_at) }}
+                      </p>
+                    </div>
+                  </div>
+                </DropdownMenuItem>
+              </div>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <!-- Dark Mode Toggle -->
+        <DarkModeToggle />
+
+        <!-- User Menu -->
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <button
+              class="flex items-center space-x-3 px-3 py-2 rounded-xl hover:bg-accent focus:outline-none transition-colors"
+            >
+              <img
+                v-if="userAvatar"
+                :src="userAvatar"
+                :alt="user?.name"
+                class="w-8 h-8 rounded-full object-cover ring-2 ring-border/20"
+                @error="avatarError = true"
+              >
+              <div
+                v-else
+                class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold text-sm"
+              >
+                {{ userInitial }}
+              </div>
+              <div class="hidden md:block text-left">
+                <p class="text-sm font-medium text-foreground">
+                  {{ user?.name || t('common.labels.user') }}
+                </p>
+                <p class="text-xs text-muted-foreground truncate max-w-[120px]">
+                  {{ user?.email || '' }}
+                </p>
+              </div>
+              <ChevronDown class="w-4 h-4 text-muted-foreground opacity-50" />
+            </button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent
+            class="w-56 mt-1"
+            align="end"
+            :side-offset="8"
+          >
+            <div class="p-3 border-b border-border mb-1">
+              <p class="text-sm font-semibold text-foreground truncate">
+                {{ user?.name || t('common.labels.user') }}
+              </p>
+              <p class="text-xs text-muted-foreground truncate mt-0.5">
+                {{ user?.email || '' }}
+              </p>
+            </div>
+
+            <DropdownMenuItem as-child>
+              <router-link
+                :to="{ name: 'profile' }"
+                class="flex items-center w-full cursor-pointer"
+              >
+                <UserIcon class="w-4 h-4 mr-3 opacity-70" />
+                <span>{{ t('common.labels.myProfile') }}</span>
+              </router-link>
+            </DropdownMenuItem>
+                        
+            <DropdownMenuItem
+              v-if="authStore.hasPermission('manage settings')"
+              as-child
+            >
+              <router-link
+                :to="{ name: 'settings' }"
+                class="flex items-center w-full cursor-pointer"
+              >
+                <Settings class="w-4 h-4 mr-3 opacity-70" />
+                <span>{{ t('common.labels.settings') }}</span>
+              </router-link>
+            </DropdownMenuItem>
+                        
+            <DropdownMenuSeparator />
+                        
+            <!-- Language Selection Submenu -->
+            <DropdownMenuLabel class="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              {{ t('common.labels.language') }}
+            </DropdownMenuLabel>
+                        
+            <DropdownMenuItem
+              v-for="lang in languages"
+              :key="lang.id"
+              class="flex items-center cursor-pointer"
+              :class="{ 'bg-primary/5 text-primary font-medium': currentLanguage?.code === lang.code }"
+              @click="selectLanguage(lang)"
+            >
+              <span class="mr-3 text-base leading-none">{{ getLanguageFlag(lang) }}</span>
+              <span class="flex-1">{{ lang.native_name }}</span>
+              <Check
+                v-if="currentLanguage?.code === lang.code"
+                class="ml-auto w-4 h-4"
+              />
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem
+              class="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer"
+              @click="handleLogout"
+            >
+              <LogOut class="w-4 h-4 mr-3" />
+              <span>{{ t('common.navigation.menu.logout') }}</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
+
+    <!-- Mobile Breadcrumb (below navbar, full width) -->
+    <div class="lg:hidden border-t border-border px-6 py-2">
+      <Breadcrumbs compact />
+    </div>
+  </header>
+</template>
+
+<script setup lang="ts">
+import { logger } from '@/utils/logger';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useLanguage, type Language } from '@/composables/useLanguage';
+import api from '@/services/api';
+import { getResponseList } from '@/utils/responseParser';
+import Breadcrumbs from '@/modules/Core/components/layout/Breadcrumbs.vue';
+import DarkModeToggle from '@/components/shared/DarkModeToggle.vue';
+import GlobalSearch from '@/components/shared/GlobalSearch.vue';
+import LevelSwitcher from '@/modules/School/components/LevelSwitcher.vue';
+
+import Menu from 'lucide-vue-next/dist/esm/icons/menu.js';
+import Search from 'lucide-vue-next/dist/esm/icons/search.js';
+import Bell from 'lucide-vue-next/dist/esm/icons/bell.js';
+import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js';
+import UserIcon from 'lucide-vue-next/dist/esm/icons/user.js';
+import Settings from 'lucide-vue-next/dist/esm/icons/settings.js';
+import LogOut from 'lucide-vue-next/dist/esm/icons/log-out.js';
+import Check from 'lucide-vue-next/dist/esm/icons/check.js';
+
+import { 
+    DropdownMenu, 
+    DropdownMenuTrigger, 
+    DropdownMenuContent, 
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuLabel
+} from '@/components/ui';
+
+import type { User } from '@/types/core/auth';
+
+interface Notification {
+    id: number;
+    title: string;
+    message: string;
+    read_at: string | null;
+    created_at: string;
+    [key: string]: unknown;
+}
+
+// router is unused here but kept if needed for future navigation
+// const router = useRouter();
+const authStore = useAuthStore();
+const { t } = useI18n();
+
+// Language Composable
+const {
+    currentLanguage,
+    languages,
+    setLanguage,
+    getLanguageFlag,
+    initializeLanguage,
+} = useLanguage();
+
+const props = withDefaults(defineProps<{
+    isAuthenticated?: boolean;
+    user?: User | null;
+}>(), {
+    isAuthenticated: false,
+    user: null,
+});
+
+const emit = defineEmits<{
+    (e: 'toggle-sidebar'): void;
+    (e: 'logout'): void;
+}>();
+
+const notifications = ref<Notification[]>([]);
+const loadingNotifications = ref(false);
+const notificationInterval = ref<ReturnType<typeof setInterval> | null>(null);
+const avatarError = ref(false);
+const showGlobalSearch = ref(false);
+
+const selectLanguage = async (lang: Language) => {
+    await setLanguage(lang.code);
+};
+
+const unreadNotificationsCount = computed(() => {
+    return notifications.value.filter(n => !n.read_at).length;
+});
+
+const recentNotifications = computed(() => {
+    return notifications.value.slice(0, 5);
+});
+
+const userAvatar = computed(() => {
+    if (!props.user?.avatar || avatarError.value) return null;
+
+    const formatUrl = (path: unknown) => {
+        if (!path || typeof path !== 'string') return null;
+        if (path.startsWith('http') || path.startsWith('/storage/')) return path;
+        return `/storage/${path.replace(/^\//, '')}`;
+    };
+
+    const avatar = props.user.avatar;
+    if (typeof avatar === 'string') return formatUrl(avatar);
+    if (typeof avatar === 'object') {
+        return formatUrl(avatar.url || avatar.path);
+    }
+    return null;
+});
+
+const userInitial = computed(() => {
+    if (!props.user?.name) return 'U';
+    return props.user.name.charAt(0).toUpperCase();
+});
+
+const fetchNotifications = async () => {
+    if (!props.isAuthenticated || (window as unknown as { __isSessionTerminated?: boolean }).__isSessionTerminated) return;
+    
+    loadingNotifications.value = true;
+    try {
+        const response = await api.get('/admin/core/notifications?limit=5');
+        notifications.value = getResponseList<Notification>(response.data);
+    } catch (error) {
+        logger.error('Failed to fetch notifications:', error);
+        notifications.value = [];
+    } finally {
+        loadingNotifications.value = false;
+    }
+};
+
+const handleNotificationClick = async (notification: Notification) => {
+    if (!notification.read_at) {
+        try {
+            await api.put(`/admin/core/notifications/${notification.id}/read`);
+            notification.read_at = new Date().toISOString();
+        } catch (error) {
+            logger.error('Failed to mark notification as read:', error);
+        }
+    }
+};
+
+const formatNotificationDate = (date: string) => {
+    if (!date) return '';
+    const now = new Date();
+    const notifDate = new Date(date);
+    const diffMs = now.getTime() - notifDate.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 1) return t('common.messages.time.justNow');
+    if (diffMins < 60) return t('common.messages.time.ago', { time: `${diffMins}m` });
+    if (diffHours < 24) return t('common.messages.time.ago', { time: `${diffHours}h` });
+    if (diffDays < 7) return t('common.messages.time.ago', { time: `${diffDays}d` });
+    return notifDate.toLocaleDateString();
+};
+
+const handleLogout = () => {
+    emit('logout');
+};
+
+watch(() => props.isAuthenticated, (isAuth) => {
+    if (isAuth) {
+        fetchNotifications();
+        notificationInterval.value = setInterval(fetchNotifications, 120000);
+    } else {
+        if (notificationInterval.value) {
+            clearInterval(notificationInterval.value);
+            notificationInterval.value = null;
+        }
+    }
+});
+
+onMounted(() => {
+    if (props.isAuthenticated) {
+        fetchNotifications();
+        // Poll faster (every 30s) instead of 2 minutes
+        notificationInterval.value = setInterval(fetchNotifications, 30000);
+    }
+    initializeLanguage();
+    // Listen for manual triggers from other components
+    window.addEventListener('notification:sent', fetchNotifications);
+});
+
+onUnmounted(() => {
+    if (notificationInterval.value) {
+        clearInterval(notificationInterval.value);
+    }
+    window.removeEventListener('notification:sent', fetchNotifications);
+});
+</script>
+

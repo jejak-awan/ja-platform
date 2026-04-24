@@ -1,0 +1,10 @@
+{
+    "description": "Ruang kerja terpadu untuk mengelola semua konten digital, kategori, dan tag Anda.",
+    "studio_sidebar": "Studio",
+    "tabs": {
+        "categories": "Kategori",
+        "contents": "Semua Konten",
+        "tags": "Tag"
+    },
+    "title": "Content Studio"
+}

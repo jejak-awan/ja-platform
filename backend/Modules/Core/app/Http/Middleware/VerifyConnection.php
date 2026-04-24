@@ -1,0 +1,399 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\Core\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Modules\Core\Helpers\IpHelper;
+use Modules\Core\Models\IpList;
+use Modules\Core\Models\Setting;
+use Modules\Core\Services\AnomalyDetectionService;
+use Modules\Core\Services\GeoIpService;
+use Modules\Core\Services\SecurityService;
+use Modules\Core\Traits\MaintenanceBypass;
+use Symfony\Component\HttpFoundation\Response;
+
+class VerifyConnection
+{
+    use MaintenanceBypass;
+    protected SecurityService $securityService;
+
+    protected AnomalyDetectionService $anomalyService;
+
+    /**
+     * Known search engine bot User-Agent patterns.
+     * These will be verified via rDNS to prevent spoofing.
+     *
+     * @var array<string, list<string>>
+     */
+    protected array $searchBotPatterns = [
+        'Googlebot' => ['googlebot.com', 'google.com'],
+        'Bingbot' => ['search.msn.com'],
+        'Baiduspider' => ['baidu.com', 'baidu.jp'],
+        'YandexBot' => ['yandex.ru', 'yandex.net', 'yandex.com'],
+        'DuckDuckBot' => ['duckduckgo.com'],
+        'Applebot' => ['applebot.apple.com'],
+    ];
+
+    public function __construct(SecurityService $securityService, AnomalyDetectionService $anomalyService)
+    {
+        $this->securityService = $securityService;
+        $this->anomalyService = $anomalyService;
+    }
+
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        $mode = Setting::get('shield_protection_mode', 'off');
+
+        // Bypasses
+        if ($mode === 'off') {
+            return $next($request);
+        }
+
+        // Bypass shield ONLY if the module is explicitly paused via emergency switch
+        if (app(\Modules\Core\Services\SecurityMaintenanceService::class)->isModulePaused('shield')) {
+            return $next($request);
+        }
+
+        // 1. Static assets, OPTIONS requests, and safe/public/auth API bypass
+        if ($request->isMethod('OPTIONS') || 
+            $this->isStaticAssetRequest($request) || 
+            $request->is('api/v1/admin/*') ||
+            $request->is('api/v1/dashboard/*') ||
+            $request->is('api/v1/public/*') ||
+            $request->is('api/v1/analytics/*') ||
+            $request->is('api/v1/ja/*') ||
+            $request->is('api/v1/captcha/*') ||
+            $request->is('api/v1/journal/frontend') ||
+            $request->is('api/v1/user') ||
+            $request->is('api/v1/logout') ||
+            $request->is('api/v1/profile*') ||
+            $request->is('api/v1/login*') ||
+            $request->is('api/v1/register*') ||
+            $request->is('api/v1/forgot-password') ||
+            $request->is('api/v1/reset-password') ||
+            $request->is('api/v1/verify-email') ||
+            $request->is('api/v1/resend-verification') ||
+            $request->is('api/v1/password/*')) {
+            return $next($request);
+        }
+
+        // 2. IP Bypasses (Whitelisted or Protected)
+        $ip = IpHelper::getClientIp($request);
+        if ($this->securityService->isProtectedIp($ip) || IpList::isWhitelisted($ip)) {
+            return $next($request);
+        }
+
+        // 3. Internal Polling request bypass (Prevent 429 anomaly blocks on dashboard metric polling)
+        if ($this->isInternalPollingRequest($request)) {
+            return $next($request);
+        }
+
+        // 4. Admin user bypass
+        if (Auth::check()) {
+            $authUser = Auth::user();
+            if ($authUser instanceof \Modules\Core\Models\User && ($authUser->hasRole('admin') || $authUser->hasRole('super-admin'))) {
+                return $next($request);
+            }
+        }
+
+        // 4. Verified search engine bot bypass (with rDNS verification)
+        if ($this->isVerifiedSearchBot($request)) {
+            return $next($request);
+        }
+
+        // 5. Verify existing trust session
+        if ($this->securityService->isShieldVerified($ip, (string) $request->userAgent())) {
+            return $next($request);
+        }
+
+        // 6. Advanced Security Checks (DNSBL & Geolocation)
+        if (! $request->is('api/v1/security/verify-connection')) {
+            // Check Global Blacklist
+            if (Setting::get('shield_enable_ip_intelligence', false)) {
+                if ($this->securityService->isIpInGlobalBlacklist($ip)) {
+                    $this->securityService->recordGlobalBlacklistHit($ip, 'Detected in global blacklist (Spamhaus) - Proceeding to challenge');
+                    // We DO NOT block permanently here anymore.
+                    // Let the challenge logic handle the verification.
+                }
+            }
+
+            // Check Geolocation
+            $geoIpService = app(GeoIpService::class);
+            if (! $geoIpService->isCountryAllowed($ip)) {
+                // Soft enforcement: do not permanently block on geolocation mismatch.
+                // Route request to challenge flow to reduce false positives (e.g. VPN/WARP users).
+                $this->securityService->recordCountryBlock($ip, 'Geolocation mismatch detected; challenge required');
+            }
+        }
+
+        // 7. Verification endpoint bypass (must allow the verification itself)
+        if ($request->is('api/v1/security/verify-connection')) {
+            return $next($request);
+        }
+
+        // 8. Suspicious Only mode — challenge only genuinely suspicious requests
+        if ($mode === 'suspicious') {
+            $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_' . md5($ip . ($request->userAgent() ?? ''));
+
+            if ($this->anomalyService->shouldBlock($ip, $sessionId)) {
+                $this->securityService->blockIpPermanently($ip, 'Extreme statistical anomaly score detected');
+
+                return response()->json(['message' => 'Your connection has been flagged and blocked.'], 403);
+            }
+
+            if ($this->anomalyService->shouldChallenge($ip, $sessionId) || $this->isSuspiciousRequest($request, $ip)) {
+                // Proceed to challenge
+            } else {
+                return $next($request);
+            }
+        }
+
+        // ISSUE CHALLENGE
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return $this->issueAjaxChallenge($request, $ip);
+        }
+
+        return $this->issueHtmlChallenge($request, $ip);
+    }
+
+    /**
+     * Check if this is a static asset or resource request that should bypass the shield.
+     */
+    protected function isStaticAssetRequest(Request $request): bool
+    {
+        return $request->is(
+            'assets/*',
+            'storage/*',
+            '*/favicon.ico',
+            'build/*',
+            'fonts/*',
+            'images/*',
+            'css/*',
+            'js/*',
+            '_debugbar/*',
+            'sanctum/csrf-cookie',
+            'cdn-cgi*'
+        );
+    }
+
+    /**
+     * Check if the request is an internal high-frequency polling endpoint (like dashboard cache stats).
+     * Bypassing these prevents the anomaly detector from issuing 429 Security Challenges.
+     */
+    protected function isInternalPollingRequest(Request $request): bool
+    {
+        return $request->is(
+            'api/v1/admin/core/system/cache-status',
+            'api/v1/admin/core/redis/cache-stats',
+            'api/v1/admin/core/system/cache/warm',
+            'api/v1/admin/core/redis/warm-cache',
+            'api/v1/admin/core/redis/flush-cache',
+            // Security dashboard polling and operator actions
+            'api/v1/admin/core/security/health',
+            'api/v1/admin/core/security/file-integrity',
+            'api/v1/admin/core/security/run-integrity-check',
+            'api/v1/admin/core/security/file-integrity/resync'
+        );
+    }
+
+    /**
+     * Check if the request is from a verified search engine bot.
+     * Uses User-Agent pattern matching first, then verifies via reverse DNS
+     * to prevent User-Agent spoofing.
+     */
+    protected function isVerifiedSearchBot(Request $request): bool
+    {
+        $userAgent = (string) $request->userAgent();
+        if (empty($userAgent)) {
+            return false;
+        }
+
+        $ip = IpHelper::getClientIp($request);
+
+        // Check cache first to avoid repeated DNS lookups
+        $cacheKey = "shield:bot_verified:{$ip}";
+        $cached = Cache::get($cacheKey);
+        if ($cached !== null) {
+            return (bool) $cached;
+        }
+
+        // Check if User-Agent matches any known bot pattern
+        $matchedDomains = null;
+        foreach ($this->searchBotPatterns as $botName => $validDomains) {
+            if (stripos($userAgent, $botName) !== false) {
+                $matchedDomains = $validDomains;
+                break;
+            }
+        }
+
+        if ($matchedDomains === null) {
+            return false;
+        }
+
+        // Verify via reverse DNS lookup to prevent spoofing
+        $isVerified = $this->verifyBotIpViaDns($ip, $matchedDomains);
+
+        // Cache the result for 6 hours
+        Cache::put($cacheKey, $isVerified, now()->addHours(6));
+
+        return $isVerified;
+    }
+
+    /**
+     * Verify a bot's IP via reverse DNS lookup.
+     * Steps: IP → rDNS hostname → check domain → forward DNS → compare IP.
+     *
+     * @param  array<string>  $validDomains
+     */
+    protected function verifyBotIpViaDns(string $ip, array $validDomains): bool
+    {
+        $hostname = gethostbyaddr($ip);
+
+        // gethostbyaddr returns the IP itself if lookup fails
+        if ($hostname === $ip || $hostname === false) {
+            return false;
+        }
+
+        // Check if hostname ends with one of the valid domains
+        $domainMatch = false;
+        foreach ($validDomains as $domain) {
+            if (str_ends_with($hostname, '.'.$domain) || $hostname === $domain) {
+                $domainMatch = true;
+                break;
+            }
+        }
+
+        if (! $domainMatch) {
+            return false;
+        }
+
+        // Forward DNS verification: hostname should resolve back to the original IP
+        $forwardIp = gethostbyname($hostname);
+
+        return $forwardIp === $ip;
+    }
+
+    /**
+     * Determine if a request appears suspicious based on heuristics.
+     * Used in "suspicious" mode to only challenge requests that exhibit bot-like signals.
+     */
+    protected function isSuspiciousRequest(Request $request, string $ip): bool
+    {
+        $suspicionScore = 0;
+
+        $userAgent = (string) $request->userAgent();
+
+        // 1. Missing or empty User-Agent (high signal)
+        if (empty($userAgent)) {
+            $suspicionScore += 3;
+            $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_' . md5($ip);
+            $this->anomalyService->trackEvent('suspicious_ua', $ip, $sessionId);
+        }
+
+        // 2. Missing Accept-Language header (browsers always send this)
+        if (! $request->header('Accept-Language')) {
+            $suspicionScore += 2;
+            $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_' . md5($ip);
+            $this->anomalyService->trackEvent('missing_headers', $ip, $sessionId);
+        }
+
+        // 3. Missing Accept header
+        if (! $request->header('Accept')) {
+            $suspicionScore += 1;
+        }
+
+        // 4. Suspicious User-Agent patterns (known scanners/tools)
+        $suspiciousUaPatterns = [
+            'curl/', 'wget/', 'python-requests/', 'httpie/', 'postman',
+            'scrapy/', 'httpclient/', 'java/', 'go-http-client/',
+            'node-fetch/', 'libwww-perl/', 'mechanize', 'phantom', 'headless',
+        ];
+        foreach ($suspiciousUaPatterns as $pattern) {
+            if (stripos($userAgent, $pattern) !== false) {
+                $suspicionScore += 2;
+                break;
+            }
+        }
+
+        // 5. High request rate from this IP (>120 req/min = suspicious)
+        $rateKey = "shield:rate:{$ip}";
+        $rawRate = Cache::get($rateKey, 0);
+        $currentRate = is_numeric($rawRate) ? (int) $rawRate : 0;
+        Cache::put($rateKey, $currentRate + 1, now()->addMinute());
+        if ($currentRate > 120) {
+            $suspicionScore += 2;
+        }
+
+        // Threshold: score of 3 or higher means suspicious
+        return $suspicionScore >= 3;
+    }
+
+    /**
+     * Issue a challenge for AJAX/API requests.
+     */
+    protected function issueAjaxChallenge(Request $request, string $ip): Response
+    {
+        $nonce = $this->securityService->generateShieldNonce($ip);
+        
+        $sessionId = 'stateless_' . md5($ip . ($request->userAgent() ?? ''));
+        try {
+            if ($request->hasSession()) {
+                $sessionId = $request->session()->getId();
+            }
+        } catch (\Throwable $e) {
+            // Keep stateless ID
+        }
+
+        $difficulty = $this->securityService->getShieldDifficulty($ip, $sessionId);
+
+        return response()->json([
+            'message' => 'Connection verification required',
+            'challenge' => [
+                'nonce' => $nonce,
+                'difficulty' => $difficulty,
+            ],
+        ], 429)->withHeaders([
+            'X-Shield-Challenge' => $nonce,
+            'X-Shield-Difficulty' => $difficulty,
+        ]);
+    }
+
+    /**
+     * Issue a challenge for direct HTML requests.
+     */
+    protected function issueHtmlChallenge(Request $request, string $ip): Response
+    {
+        $nonce = $this->securityService->generateShieldNonce($ip);
+        
+        $sessionId = 'stateless_' . md5($ip . ($request->userAgent() ?? ''));
+        try {
+            if ($request->hasSession()) {
+                $sessionId = $request->session()->getId();
+            }
+        } catch (\Throwable $e) {
+            // Keep stateless ID
+        }
+
+        $difficulty = $this->securityService->getShieldDifficulty($ip, $sessionId);
+
+        // Pass target URL to the view to allow redirection after verification
+        // Using strict anti-cache headers to prevent Android built-in browsers from infinity-looping on cached 429s
+        return response()->view('errors.security.challenge', [
+            'nonce' => $nonce,
+            'difficulty' => $difficulty,
+            'redirectTo' => $request->fullUrl(),
+        ], 429)->withHeaders([
+            'Cache-Control' => 'no-cache, no-store, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => 'Fri, 01 Jan 1990 00:00:00 GMT',
+        ]);
+    }
+}

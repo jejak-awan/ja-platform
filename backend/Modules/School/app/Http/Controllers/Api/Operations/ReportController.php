@@ -1,0 +1,113 @@
+<?php
+
+namespace Modules\School\Http\Controllers\Api\Operations;
+
+use Illuminate\Http\Request;
+use Modules\School\Http\Controllers\Api\Common\BaseController;
+use Modules\School\Models\Student\Student;
+use Modules\School\Models\Finance\PaymentTransaction;
+use Modules\School\Models\Institution\School;
+use Mpdf\Mpdf;
+
+class ReportController extends BaseController
+{
+    public function studentProfile(int $id): \Illuminate\Http\Response
+    {
+        $this->authorize('view', Student::class);
+        /** @var Student $student */
+        $student = Student::with(['department', 'school'])->findOrFail($id);
+        $school = $student->school;
+
+        $verificationUrl = $student->getVerificationUrl('profile');
+        $html = view('school::reports.student_profile', compact('student', 'school', 'verificationUrl'))->render();
+
+        $mpdf = new Mpdf([
+            'format' => 'A4',
+            'margin_left' => 15,
+            'margin_right' => 15,
+            'margin_top' => 15,
+            'margin_bottom' => 15,
+        ]);
+
+        $mpdf->WriteHTML($html);
+        
+        return response((string)$mpdf->Output('student_profile.pdf', 'S'), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="student_profile.pdf"');
+    }
+
+    public function paymentReceipt(int $id): \Illuminate\Http\Response
+    {
+        $this->authorize('view', PaymentTransaction::class);
+        /** @var PaymentTransaction $transaction */
+        $transaction = PaymentTransaction::with(['bill.student', 'bill.feeType', 'school'])->findOrFail($id);
+        $school = $transaction->school;
+
+        $verificationUrl = $transaction->getVerificationUrl('receipt');
+        $html = view('school::reports.receipt', compact('transaction', 'school', 'verificationUrl'))->render();
+
+        $mpdf = new Mpdf([
+            'format' => [148, 210], // A5 Landscape
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 10,
+            'margin_bottom' => 10,
+        ]);
+
+        $mpdf->WriteHTML($html);
+
+        return response((string)$mpdf->Output('kwitansi.pdf', 'S'), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="kwitansi.pdf"');
+    }
+
+    public function studentIdCard(int $id): \Illuminate\Http\Response
+    {
+        $this->authorize('view', Student::class);
+        /** @var Student $student */
+        $student = Student::with(['school', 'activeEnrollment'])->findOrFail($id);
+        $school = $student->school;
+
+        $verificationUrl = $student->getVerificationUrl('id_card');
+        $html = view('school::reports.id_card', compact('student', 'school', 'verificationUrl'))->render();
+
+        $mpdf = new Mpdf([
+            'format' => [86, 54], // ID-1 standard size 85.60 × 53.98 mm
+            'margin_left' => 0,
+            'margin_right' => 0,
+            'margin_top' => 0,
+            'margin_bottom' => 0,
+        ]);
+
+        $mpdf->WriteHTML($html);
+
+        return response((string)$mpdf->Output('id_card.pdf', 'S'), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="id_card.pdf"');
+    }
+
+    public function graduationCertificate(int $id): \Illuminate\Http\Response
+    {
+        $this->authorize('view', Student::class);
+        /** @var Student $student */
+        $student = Student::with(['school', 'department'])->findOrFail($id);
+        $school = $student->school;
+
+        $verificationUrl = $student->getVerificationUrl('skl');
+        $html = view('school::reports.graduation_skl', compact('student', 'school', 'verificationUrl'))->render();
+
+        $mpdf = new Mpdf([
+            'format' => 'A4',
+            'margin_left' => 20,
+            'margin_right' => 20,
+            'margin_top' => 20,
+            'margin_bottom' => 20,
+        ]);
+
+        $mpdf->WriteHTML($html);
+
+        return response((string)$mpdf->Output('skl.pdf', 'S'), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="skl.pdf"');
+    }
+}

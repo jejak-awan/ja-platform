@@ -1,0 +1,28 @@
+{
+    "access_denied": "Akses Ditolak",
+    "clear": "Bersihkan",
+    "description": "Jalankan perintah artisan secara manual (Super Admin saja)",
+    "execute": "Jalankan Perintah",
+    "executed_error": "Perintah dijalankan dengan error",
+    "executed_success": "Perintah berhasil dijalankan",
+    "executing": "Menjalankan perintah...",
+    "history": "Riwayat Perintah",
+    "no_history": "Belum ada perintah yang dijalankan",
+    "output": "Output",
+    "parameters": "Parameter",
+    "parameters_placeholder": "Parameter opsional (mis., --force)",
+    "run": "Jalankan",
+    "running": "Menjalankan...",
+    "select_command": "Pilih Perintah",
+    "select_placeholder": "Pilih perintah untuk dijalankan...",
+    "super_admin": "Super Admin Saja",
+    "super_admin_only": "Fitur ini hanya tersedia untuk super administrator",
+    "table": {
+        "command": "Perintah",
+        "date": "Tanggal",
+        "parameters": "Parameter",
+        "runner": "Pelaksana",
+        "status": "Status"
+    },
+    "title": "Command Runner"
+}

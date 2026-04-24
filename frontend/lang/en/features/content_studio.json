@@ -1,0 +1,10 @@
+{
+    "description": "Unified workspace for managing all your digital content, categories, and tags.",
+    "studio_sidebar": "Studio",
+    "tabs": {
+        "categories": "Categories",
+        "contents": "All Content",
+        "tags": "Tags"
+    },
+    "title": "Content Studio"
+}

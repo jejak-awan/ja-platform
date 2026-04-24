@@ -1,0 +1,15 @@
+{
+    "entries": "data",
+    "first": "Pertama",
+    "last": "Terakhir",
+    "next": "Selanjutnya",
+    "noData": "Tidak ada data",
+    "of": "dari",
+    "page": "Halaman",
+    "perPage": "Per Halaman",
+    "previous": "Sebelumnya",
+    "rowsPerPage": "Baris per halaman",
+    "show": "Tampilkan",
+    "showing": "Menampilkan",
+    "total": "Total"
+}

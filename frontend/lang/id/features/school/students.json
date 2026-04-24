@@ -1,0 +1,35 @@
+{
+    "actions": {
+        "add": "Tambah Siswa",
+        "editProfile": "Edit Profil",
+        "export": "Ekspor CSV",
+        "printID": "Cetak Kartu Pelajar",
+        "printProfile": "Cetak Profil",
+        "printSKL": "Cetak SKL"
+    },
+    "labels": {
+        "academicHistory": "Riwayat Akademik",
+        "address": "Alamat",
+        "attendanceSummary": "Ringkasan Kehadiran",
+        "biodata": "Biodata",
+        "disciplineRecord": "Catatan Kedisiplinan",
+        "fatherName": "Nama Ayah",
+        "fatherOccupation": "Pekerjaan Ayah",
+        "genderShort": "JK",
+        "level": "Jenjang",
+        "motherName": "Nama Ibu",
+        "parentInfo": "Informasi Orang Tua",
+        "personalInfo": "Informasi Pribadi",
+        "religion": "Agama",
+        "rombel": "Rombel",
+        "studentData": "Data Siswa",
+        "totalStudents": "Total: {total} siswa"
+    },
+    "messages": {
+        "academicHistoryEmpty": "Riwayat akademik akan ditampilkan di sini.",
+        "attendanceEmpty": "Ringkasan kehadiran akan ditampilkan di sini.",
+        "disciplineEmpty": "Catatan pelanggaran dan prestasi akan ditampilkan di sini."
+    },
+    "subtitle": "Kelola data seluruh siswa dan informasi profil detail mereka.",
+    "title": "Data Siswa"
+}

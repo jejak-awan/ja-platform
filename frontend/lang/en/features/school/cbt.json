@@ -1,0 +1,40 @@
+{
+    "title": "CBT (Computer Based Testing)",
+    "subtitle": "Manage formal exams, session schedules, and proctor monitoring.",
+    "management": {
+        "title": "CBT Management",
+        "subtitle": "Schedule Exam Sessions (PTS/UAS) and monitor student attendance.",
+        "createSession": "Create Exam Session",
+        "stats": {
+            "totalExams": "Total Exams",
+            "activeSessions": "Active Sessions",
+            "totalParticipants": "Total Participants",
+            "completedExams": "Completed Exams"
+        },
+        "labels": {
+            "sessionDetails": "Session Details",
+            "examTitle": "Exam Title",
+            "studyGroup": "Class / Study Group",
+            "startTime": "Starts At",
+            "endTime": "Ends At",
+            "token": "Session Token",
+            "status": "Status",
+            "actions": "Actions",
+            "generateToken": "Generate Token",
+            "monitorSession": "Monitor Session",
+            "editSession": "Edit Session",
+            "active": "Active",
+            "inactive": "Inactive",
+            "selectExam": "Select Exam",
+            "selectGroup": "Select Group"
+        },
+        "placeholders": {
+            "sessionTitleHint": "e.g., Odd Semester Math Exam Class X",
+            "tokenHint": "Click generate for token"
+        },
+        "messages": {
+            "noSessions": "No exam sessions scheduled yet.",
+            "confirmDelete": "Are you sure you want to delete this exam session?"
+        }
+    }
+}

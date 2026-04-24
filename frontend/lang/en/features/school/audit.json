@@ -1,0 +1,17 @@
+{
+    "title": "Audit & Security Logs",
+    "subtitle": "Monitor administrative activities and system changes.",
+    "labels": {
+        "details": "Log Details",
+        "causer": "Causer",
+        "time": "Time",
+        "description": "Description",
+        "properties": "Data Properties",
+        "admin": "Administrator",
+        "activity": "Activity",
+        "module": "Module"
+    },
+    "placeholders": {
+        "search": "Search activities..."
+    }
+}

@@ -1,0 +1,95 @@
+{
+    "creatorSubtitle": "Here is how your content is performing",
+    "stats": {
+        "activeUsers": "Active users",
+        "creator": {
+            "awaitingApproval": "Awaiting approval",
+            "contentStatus": "Content Status Distribution",
+            "drafts": "Drafts",
+            "myContent": "My Content",
+            "myMedia": "My Media",
+            "pendingReview": "Pending Review",
+            "published": "Published",
+            "recentActivity": "Recent Activity",
+            "topContent": "Top Content",
+            "uploadedFiles": "Uploaded files",
+            "workInProgress": "Work in progress"
+        },
+        "mediaFiles": "Media Files",
+        "pendingContent": "Pending Content",
+        "published": "published",
+        "requiresReview": "Requires review",
+        "totalContents": "Total Contents",
+        "totalUsers": "Total Users",
+        "activeUsersFallback": "Active now"
+    },
+    "table": {
+        "content": "Content",
+        "status": "Status",
+        "views": "Views"
+    },
+    "title": "Dashboard",
+    "traffic": {
+        "filters": {
+            "last30Days": "Last 30 Days",
+            "last7Days": "Last 7 Days",
+            "last90Days": "Last 3 Months"
+        },
+        "last7Days": "Last 7 Days",
+        "noData": "No traffic data available",
+        "overview": "Traffic statistics overview",
+        "title": "Traffic Overview",
+        "visits": "Visits",
+        "labels": {
+            "desktop": "Desktop",
+            "mobile": "Mobile"
+        }
+    },
+    "welcome": "Welcome back, {name}!",
+    "widgets": {
+        "quickActions": {
+            "commandRunner": "Command Runner",
+            "createCategory": "Create Category",
+            "createPage": "Create Page",
+            "createPost": "Create Post",
+            "createTag": "Create Tag",
+            "manageUsers": "Manage Users",
+            "recentActions": "Recent Actions",
+            "settings": "Settings",
+            "title": "Quick Actions",
+            "uploadMedia": "Upload Media",
+            "viewComments": "View Comments"
+        },
+        "recentActivity": {
+            "description": "Latest system activities",
+            "empty": "No recent activity found",
+            "live": "Live",
+            "loading": "Loading activities...",
+            "time": {
+                "ago": "{time} ago",
+                "justNow": "Just now"
+            },
+            "title": "Recent Activity",
+            "viewAll": "View All Activity"
+        },
+        "systemHealth": {
+            "cpu": "CPU",
+            "database": "Database",
+            "disk": "Disk",
+            "lastUpdated": "Last updated: {time}",
+            "memory": "Memory",
+            "overallStatus": "Overall Status",
+            "redis": "Redis",
+            "status": {
+                "critical": "Critical",
+                "disabled": "Disabled",
+                "error": "Error",
+                "healthy": "Healthy",
+                "ok": "OK",
+                "unknown": "Unknown",
+                "warning": "Warning"
+            },
+            "title": "System Health"
+        }
+    }
+}

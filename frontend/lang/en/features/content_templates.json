@@ -1,0 +1,68 @@
+{
+    "actions": {
+        "createContent": "Create Content",
+        "delete": "Delete",
+        "edit": "Edit"
+    },
+    "create": "New Template",
+    "description": "Create and manage reuseable templates for your content",
+    "empty": "No templates found",
+    "form": {
+        "back": "Back to Templates",
+        "body": "Body",
+        "bodyPlaceholder": "Enter content body...",
+        "cancel": "Cancel",
+        "content": "Template Content",
+        "createTitle": "Create Content Template",
+        "description": "Description",
+        "descriptionPlaceholder": "Template description",
+        "details": "Template Details",
+        "editTitle": "Edit Content Template",
+        "excerpt": "Excerpt",
+        "excerptPlaceholder": "Content excerpt",
+        "name": "Name",
+        "namePlaceholder": "Template name",
+        "save": "Create Template",
+        "saving": "Creating...",
+        "slug": "Slug",
+        "slugHelp": "URL-friendly version",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Content title template",
+        "type": "Type",
+        "update": "Update Template",
+        "updating": "Updating..."
+    },
+    "loading": "Loading...",
+    "messages": {
+        "bulkDeleteSuccess": "Selected templates deleted successfully",
+        "createContentSuccess": "Content created from template successfully",
+        "createError": "Failed to create content from template",
+        "createSuccess": "Template created successfully",
+        "deleteConfirm": "Are you sure you want to delete \"{name}\"?",
+        "deleteError": "Failed to delete template",
+        "deleteSuccess": "Template deleted successfully",
+        "forceDeleteConfirm": "Are you sure you want to PERMANENTLY delete \"{name}\"? This action cannot be undone.",
+        "loadError": "Failed to load template",
+        "restoreConfirm": "Restore \"{name}\"?",
+        "saveError": "Failed to create template",
+        "updateError": "Failed to update template",
+        "updateSuccess": "Template updated successfully"
+    },
+    "search": "Search templates...",
+    "table": {
+        "actions": "Actions",
+        "description": "Description",
+        "name": "Name",
+        "selected": "{count} selected",
+        "type": "Type",
+        "updated": "Updated"
+    },
+    "title": "Content Templates",
+    "title_singular": "Template",
+    "types": {
+        "all": "All Types",
+        "custom": "Custom",
+        "page": "Page",
+        "post": "Post"
+    }
+}

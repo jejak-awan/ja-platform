@@ -1,0 +1,95 @@
+{
+    "creatorSubtitle": "Berikut performa konten Anda",
+    "stats": {
+        "activeUsers": "Pengguna aktif",
+        "creator": {
+            "awaitingApproval": "Menunggu persetujuan",
+            "contentStatus": "Distribusi Status Konten",
+            "drafts": "Draf",
+            "myContent": "Konten Saya",
+            "myMedia": "Media Saya",
+            "pendingReview": "Menunggu Tinjauan",
+            "published": "Diterbitkan",
+            "recentActivity": "Aktivitas Terkini",
+            "topContent": "Konten Terpopuler",
+            "uploadedFiles": "File diunggah",
+            "workInProgress": "Dalam pengerjaan"
+        },
+        "mediaFiles": "File Media",
+        "pendingContent": "Konten Tertunda",
+        "published": "diterbitkan",
+        "requiresReview": "Butuh tinjauan",
+        "totalContents": "Total Konten",
+        "totalUsers": "Total Pengguna",
+        "activeUsersFallback": "Aktif sekarang"
+    },
+    "table": {
+        "content": "Konten",
+        "status": "Status",
+        "views": "Dilihat"
+    },
+    "title": "Dasbor",
+    "traffic": {
+        "filters": {
+            "last30Days": "30 Hari Terakhir",
+            "last7Days": "7 Hari Terakhir",
+            "last90Days": "3 Bulan Terakhir"
+        },
+        "last7Days": "7 Hari Terakhir",
+        "noData": "Tidak ada data trafik",
+        "overview": "Ringkasan statistik trafik",
+        "title": "Ringkasan Trafik",
+        "visits": "Kunjungan",
+        "labels": {
+            "desktop": "Desktop",
+            "mobile": "Seluler"
+        }
+    },
+    "welcome": "Selamat datang kembali, {name}!",
+    "widgets": {
+        "quickActions": {
+            "commandRunner": "Runner Perintah",
+            "createCategory": "Buat Kategori",
+            "createPage": "Buat Halaman",
+            "createPost": "Buat Artikel",
+            "createTag": "Buat Tag",
+            "manageUsers": "Kelola Pengguna",
+            "recentActions": "Aksi Terakhir",
+            "settings": "Pengaturan",
+            "title": "Aksi Cepat",
+            "uploadMedia": "Unggah Media",
+            "viewComments": "Lihat Komentar"
+        },
+        "recentActivity": {
+            "description": "Aktivitas sistem terbaru",
+            "empty": "Tidak ada aktivitas terkini",
+            "live": "Langsung",
+            "loading": "Memuat aktivitas...",
+            "time": {
+                "ago": "{time} yang lalu",
+                "justNow": "Baru saja"
+            },
+            "title": "Aktivitas Terkini",
+            "viewAll": "Lihat Semua Aktivitas"
+        },
+        "systemHealth": {
+            "cpu": "CPU",
+            "database": "Database",
+            "disk": "Disk",
+            "lastUpdated": "Terakhir diperbarui: {time}",
+            "memory": "Memori",
+            "overallStatus": "Status Keseluruhan",
+            "redis": "Redis",
+            "status": {
+                "critical": "Kritis",
+                "disabled": "Nonaktif",
+                "error": "Error",
+                "healthy": "Sehat",
+                "ok": "OK",
+                "unknown": "Tidak Diketahui",
+                "warning": "Peringatan"
+            },
+            "title": "Kesehatan Sistem"
+        }
+    }
+}

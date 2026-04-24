@@ -1,0 +1,287 @@
+<?php
+
+namespace Modules\Cms\Tests\Feature;
+
+use Modules\Cms\Models\Category;
+use Modules\Cms\Models\Content;
+use Modules\Core\Models\User;
+use Tests\Helpers\TestHelpers;
+use Tests\TestCase;
+
+class CategoryTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seedPermissionsAndRoles();
+    }
+
+    /**
+     * Test admin can list all categories.
+     */
+    public function test_admin_can_list_all_categories(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        Category::factory()->count(3)->create();
+
+        $response = $this->getJson('/api/v1/admin/cms/categories');
+
+        TestHelpers::assertApiSuccess($response);
+        $this->assertIsArray($response->json('data'));
+    }
+
+    /**
+     * Test admin can get categories as tree.
+     */
+    public function test_admin_can_get_categories_tree(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $parent = Category::factory()->create(['parent_id' => null]);
+        Category::factory()->count(2)->create(['parent_id' => $parent->id]);
+
+        $response = $this->getJson('/api/v1/admin/cms/categories?tree=1');
+
+        TestHelpers::assertApiSuccess($response);
+    }
+
+    /**
+     * Test admin can create category.
+     */
+    public function test_admin_can_create_category(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $categoryData = [
+            'name' => 'Test Category '.uniqid(),
+            'slug' => 'test-category-'.uniqid(),
+            'description' => 'Test description',
+            'is_active' => true,
+            'sort_order' => 1,
+        ];
+
+        $response = $this->postJson('/api/v1/admin/cms/categories', $categoryData);
+
+        TestHelpers::assertApiSuccess($response, 201);
+        $this->assertDatabaseHas('categories', [
+            'name' => $categoryData['name'],
+            'slug' => $categoryData['slug'],
+        ]);
+    }
+
+    /**
+     * Test category creation requires name and slug.
+     */
+    public function test_category_creation_requires_name_and_slug(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $response = $this->postJson('/api/v1/admin/cms/categories', []);
+
+        TestHelpers::assertApiValidationError($response);
+        $response->assertJsonValidationErrors(['name', 'slug']);
+    }
+
+    /**
+     * Test category slug must be unique.
+     */
+    public function test_category_slug_must_be_unique(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $existing = Category::factory()->create();
+
+        $response = $this->postJson('/api/v1/admin/cms/categories', [
+            'name' => 'New Category',
+            'slug' => $existing->slug, // Duplicate slug
+        ]);
+
+        TestHelpers::assertApiValidationError($response);
+        $response->assertJsonValidationErrors(['slug']);
+    }
+
+    /**
+     * Test admin can view category details.
+     */
+    public function test_admin_can_view_category_details(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $category = Category::factory()->create();
+
+        $response = $this->getJson("/api/v1/admin/cms/categories/{$category->id}");
+
+        TestHelpers::assertApiSuccess($response);
+        $response->assertJson([
+            'data' => [
+                'id' => $category->id,
+                'name' => $category->name,
+            ],
+        ]);
+    }
+
+    /**
+     * Test admin can update category.
+     */
+    public function test_admin_can_update_category(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $category = Category::factory()->create();
+
+        $response = $this->putJson("/api/v1/admin/cms/categories/{$category->id}", [
+            'name' => 'Updated Category Name',
+        ]);
+
+        TestHelpers::assertApiSuccess($response);
+        $this->assertDatabaseHas('categories', [
+            'id' => $category->id,
+            'name' => 'Updated Category Name',
+        ]);
+    }
+
+    /**
+     * Test category cannot be its own parent.
+     */
+    public function test_category_cannot_be_its_own_parent(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $category = Category::factory()->create();
+
+        $response = $this->putJson("/api/v1/admin/cms/categories/{$category->id}", [
+            'parent_id' => $category->id,
+        ]);
+
+        TestHelpers::assertApiValidationError($response);
+    }
+
+    /**
+     * Test admin can delete empty category.
+     */
+    public function test_admin_can_delete_empty_category(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $category = Category::factory()->create();
+
+        $response = $this->deleteJson("/api/v1/admin/cms/categories/{$category->id}");
+
+        TestHelpers::assertApiSuccess($response);
+        $this->assertSoftDeleted('categories', [
+            'id' => $category->id,
+        ]);
+    }
+
+    /**
+     * Test cannot delete category with children.
+     */
+    public function test_cannot_delete_category_with_children(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $parent = Category::factory()->create();
+        Category::factory()->create(['parent_id' => $parent->id]);
+
+        $response = $this->deleteJson("/api/v1/admin/cms/categories/{$parent->id}");
+
+        TestHelpers::assertApiValidationError($response);
+    }
+
+    /**
+     * Test cannot delete category with contents.
+     */
+    public function test_cannot_delete_category_with_contents(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $category = Category::factory()->create();
+        Content::factory()->create(['category_id' => $category->id]);
+
+        $response = $this->deleteJson("/api/v1/admin/cms/categories/{$category->id}");
+
+        TestHelpers::assertApiValidationError($response);
+    }
+
+    /**
+     * Test admin can move category.
+     */
+    public function test_admin_can_move_category(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $parent = Category::factory()->create();
+        $category = Category::factory()->create();
+
+        $response = $this->postJson("/api/v1/admin/cms/categories/{$category->id}/move", [
+            'parent_id' => $parent->id,
+            'sort_order' => 5,
+        ]);
+
+        TestHelpers::assertApiSuccess($response);
+
+        $category->refresh();
+        $this->assertEquals($parent->id, $category->parent_id);
+        $this->assertEquals(5, $category->sort_order);
+    }
+
+    /**
+     * Test admin can bulk delete categories.
+     */
+    public function test_admin_can_bulk_delete_categories(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $categories = Category::factory()->count(3)->create();
+        $ids = $categories->pluck('id')->toArray();
+
+        $response = $this->postJson('/api/v1/admin/cms/categories/bulk-destroy', [
+            'ids' => $ids,
+        ]);
+
+        TestHelpers::assertApiSuccess($response);
+    }
+
+    /**
+     * Test unauthenticated user cannot manage categories.
+     */
+    public function test_unauthenticated_user_cannot_manage_categories(): void
+    {
+        $response = $this->postJson('/api/v1/admin/cms/categories', [
+            'name' => 'Test',
+            'slug' => 'test',
+        ]);
+
+        $response->assertStatus(401);
+    }
+
+    /**
+     * Test user without permission cannot manage categories.
+     */
+    public function test_user_without_permission_cannot_manage_categories(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user, 'sanctum');
+
+        $response = $this->postJson('/api/v1/admin/cms/categories', [
+            'name' => 'Test',
+            'slug' => 'test-'.uniqid(),
+        ]);
+
+        $response->assertStatus(403);
+    }
+}

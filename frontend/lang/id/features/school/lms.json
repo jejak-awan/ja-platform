@@ -1,0 +1,102 @@
+{
+    "title": "LMS & CBT",
+    "subtitle": "Kelola bank soal, ujian daring, dan hasil evaluasi siswa.",
+    "tabs": {
+        "bank": "Materi Bank Soal",
+        "exam": "Kuis & Ulangan Harian",
+        "course": "Katalog Kursus"
+    },
+    "management": {
+        "title": "Manajemen LMS",
+        "subtitle": "Kelola kursus, kurikulum, dan pantau keberhasilan siswa.",
+        "createCourse": "Buat Kursus Baru",
+        "stats": {
+            "totalCourses": "Total Kursus",
+            "totalStudents": "Total Siswa",
+            "avgProgress": "Rata-rata Progres",
+            "activeSessions": "Sesi Aktif"
+        },
+        "labels": {
+            "courseDetails": "Detail Kursus",
+            "enrolled": "Terdaftar",
+            "avgProgress": "Rata-rata Progres",
+            "status": "Status",
+            "actions": "Aksi",
+            "yourCourses": "Kursus Anda",
+            "searchPlaceholder": "Cari kursus...",
+            "monitorProgress": "Pantau Progres",
+            "editContent": "Edit Konten",
+            "editCurriculum": "Edit Kurikulum",
+            "mainInfo": "Informasi Utama",
+            "courseTitle": "Judul Kursus",
+            "shortDescription": "Deskripsi Singkat",
+            "curriculumSections": "Bab Kurikulum",
+            "addSection": "Tambah Bab",
+            "addLesson": "Tambah Materi",
+            "lessonName": "Nama Materi",
+            "lessonType": "Tipe Materi",
+            "selectType": "Pilih Tipe",
+            "selectExam": "Pilih Ujian/Kuis",
+            "enrollmentList": "Daftar Pendaftaran",
+            "studentName": "Nama Siswa",
+            "enrollmentDate": "Tanggal Daftar",
+            "lastActivity": "Aktivitas Terakhir",
+            "completed": "Selesai",
+            "examReference": "Referensi Ujian"
+        },
+        "placeholders": {
+            "courseTitleHint": "Contoh: Dasar-dasar Vue.js",
+            "descriptionHint": "Jelaskan apa yang akan dipelajari siswa..."
+        },
+        "messages": {
+            "noLessons": "Belum ada materi di bab ini.",
+            "noStudents": "Belum ada siswa yang terdaftar."
+        }
+    },
+    "labels": {
+        "bankName": "Nama Bank Soal",
+        "questionCount": "Jumlah Soal",
+        "examName": "Nama Kuis/Ulangan",
+        "startTime": "Mulai",
+        "endTime": "Waktu Selesai",
+        "duration": "Durasi",
+        "minutes": "Menit",
+        "passingGrade": "Passing Grade",
+        "active": "Aktif",
+        "draft": "Draft",
+        "activateExam": "Aktifkan Ujian",
+        "questionContent": "Konten Pertanyaan",
+        "questionType": "Tipe Pertanyaan",
+        "complexityLevel": "Tingkat Kesulitan",
+        "answerOptions": "Opsi Jawaban",
+        "correctAnswer": "Jawaban Benar",
+        "essayHint": "Kunci Jawaban / Petunjuk Jawaban",
+        "easy": "Mudah",
+        "medium": "Sedang",
+        "hard": "Sulit",
+        "types": {
+            "multiple_choice": "Pilihan Ganda",
+            "essay": "Esai",
+            "true_false": "Benar / Salah"
+        }
+    },
+    "actions": {
+        "addBank": "Tambah Bank Soal",
+        "editBank": "Edit Bank Soal",
+        "addExam": "Tambah Ujian",
+        "editExam": "Edit Ujian",
+        "addQuestion": "Tambah Soal",
+        "editQuestion": "Edit Pertanyaan",
+        "manageQuestions": "Kelola Soal"
+    },
+    "placeholders": {
+        "selectSubject": "Pilih Mapel",
+        "bankNameHint": "Contoh: Soal UTS Matematika Genap",
+        "examTitleHint": "Contoh: Ujian Tengah Semester IPA",
+        "questionHint": "Ketik pertanyaan di sini...",
+        "optionHint": "Ketik opsi...",
+        "selectType": "Pilih Tipe",
+        "selectLevel": "Pilih Level",
+        "selectAnswer": "Pilih Jawaban"
+    }
+}

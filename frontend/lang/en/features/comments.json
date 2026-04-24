@@ -1,0 +1,60 @@
+{
+    "actions": {
+        "approve": "Approve",
+        "approveAll": "Approve All",
+        "bulkAction": "Bulk Action",
+        "delete": "Delete",
+        "markSpam": "Mark as Spam",
+        "reject": "Reject",
+        "rejectAll": "Reject All",
+        "reply": "Reply"
+    },
+    "detail": {
+        "anonymous": "Anonymous",
+        "author": "Author",
+        "email": "Email",
+        "no_email": "No email",
+        "postedOn": "Posted on",
+        "repliesCount": "{count} reply | {count} replies",
+        "reply": "Reply",
+        "replies": "Replies"
+    },
+    "filter": {
+        "allStatus": "All Status",
+        "searchPlaceholder": "Search comments..."
+    },
+    "list": {
+        "empty": "No comments found",
+        "on": "On",
+        "replyTo": "Reply to",
+        "selected": "{count} selected",
+        "subtitle": "Manage and moderate comments",
+        "title": "All Comments"
+    },
+    "title_singular": "Comment",
+    "messages": {
+        "approveFailed": "Failed to approve comment",
+        "bulkApproveConfirm": "Approve {count} comments?",
+        "bulkDeleteConfirm": "Delete {count} comments? This cannot be undone.",
+        "bulkFailed": "Failed to perform bulk action",
+        "bulkRejectConfirm": "Reject {count} comments?",
+        "bulkSpamConfirm": "Mark {count} comments as spam?",
+        "deleteConfirm": "Are you sure you want to delete this comment?",
+        "deleteFailed": "Failed to delete comment",
+        "rejectFailed": "Failed to reject comment",
+        "spamFailed": "Failed to mark comment as spam"
+    },
+    "stats": {
+        "approved": "Approved",
+        "pending": "Pending",
+        "rejected": "Rejected",
+        "spam": "Spam",
+        "total": "Total"
+    },
+    "status": {
+        "approved": "Approved",
+        "pending": "Pending",
+        "rejected": "Rejected",
+        "spam": "Spam"
+    }
+}

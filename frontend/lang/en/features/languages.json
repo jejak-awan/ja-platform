@@ -1,0 +1,57 @@
+{
+    "actions": {
+        "confirmDelete": "Delete language \"{name}\"?",
+        "delete": "Delete",
+        "export": "Export",
+        "setDefault": "Set Default"
+    },
+    "add": "Add Language",
+    "create": {
+        "code": "Language Code",
+        "fromTemplate": "Create translations from template (English)",
+        "name": "Language Name",
+        "title": "Add New Language"
+    },
+    "import": {
+        "button": "Import",
+        "description": "Upload a ZIP file containing language translation files.",
+        "file": "Select ZIP File",
+        "title": "Import Language Pack"
+    },
+    "importPack": "Import Pack",
+    "list": {
+        "default": "Default",
+        "description": "Languages registered in the system",
+        "empty": "No languages found",
+        "headers": {
+            "actions": "Actions",
+            "code": "Code",
+            "default": "Default",
+            "name": "Name"
+        },
+        "title": "Registered Languages"
+    },
+    "messages": {
+        "createFailed": "Failed to create language",
+        "createSuccess": "Language created successfully",
+        "deleteFailed": "Failed to delete language",
+        "exportFailed": "Failed to export language pack",
+        "fetchFailed": "Failed to fetch languages",
+        "importFailed": "Failed to import language pack",
+        "importSuccess": "Language pack imported successfully",
+        "setDefaultFailed": "Failed to set default language"
+    },
+    "subtitle": "Manage application languages",
+    "title": "Languages",
+    "uiLanguages": {
+        "active": "Active",
+        "available": "Available",
+        "browserDetected": "Browser Language",
+        "description": "Languages available for the user interface. Changes take effect immediately.",
+        "hasUiTranslations": "UI Support",
+        "keys": "keys",
+        "notAvailable": "Not Available",
+        "title": "UI Translations",
+        "translationKeys": "Translation Keys"
+    }
+}

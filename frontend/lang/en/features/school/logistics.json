@@ -1,0 +1,138 @@
+{
+    "labels": {
+        "careerCenter": "Career Center",
+        "hostel": "Hostel",
+        "hostelManagement": "Hostel Management",
+        "inventory": "Inventory",
+        "logisticsEcosystem": "Logistics & Ecosystem",
+        "room": "Room",
+        "transport": "Transport"
+    },
+    "hostel": {
+        "actions": {
+            "addBlock": "Add Block",
+            "addRoom": "Add Room",
+            "releaseStudent": "Release Student",
+            "allocateStudent": "Allocate Student",
+            "confirmAllocation": "Confirm Allocation"
+        },
+        "labels": {
+            "available": "Available",
+            "bed": "BED",
+            "hostelBlock": "Hostel Block",
+            "room": "Room",
+            "standardFacility": "Standard Facility",
+            "allocateStudentTitle": "Allocate Student to Bed",
+            "occupancyStartDate": "Occupancy Start Date"
+        },
+        "placeholders": {
+            "searchStudent": "Search student name..."
+        },
+        "messages": {
+            "releaseConfirm": "Are you sure you want to release the student from this bed?",
+            "selectBlockFirst": "Select hostel block to view room data"
+        }
+    },
+    "transport": {
+        "actions": {
+            "busFleet": "Bus Fleet",
+            "routeData": "Route Data",
+            "registerTransport": "Register Transport"
+        },
+        "labels": {
+            "driver": "Driver",
+            "seatCapacity": "Seat Capacity",
+            "studentList": "Transport Student List",
+            "studentListDesc": "Students registered for school transportation service.",
+            "pickupPoint": "Pickup Point",
+            "vehicle": "Vehicle"
+        }
+    },
+    "inventory": {
+        "actions": {
+            "newItem": "New Item",
+            "updateStock": "Update Stock"
+        },
+        "labels": {
+            "item": "Item",
+            "lastLogisticsTransaction": "Last Logistics Transactions",
+            "lowStock": "Low Stock",
+            "minimumStock": "Min Stock",
+            "quantity": "Quantity",
+            "reference": "Ref",
+            "time": "Time"
+        },
+        "placeholders": {
+            "searchSKU": "Search SKU or Name..."
+        }
+    },
+    "career": {
+        "actions": {
+            "postVacancy": "Post Vacancy",
+            "viewApplicants": "View Applicants"
+        },
+        "labels": {
+            "applicant": "Applicant",
+            "applicants": "Applicants"
+        }
+    },
+    "subtitle": "Manage school hostels, transportation, and inventory.",
+    "sarpras": {
+        "title": "Facilities & Assets",
+        "subtitle": "Manage land, buildings, rooms, and school inventory assets.",
+        "tabs": {
+            "land": "Land",
+            "building": "Building",
+            "room": "Room",
+            "asset": "Asset / Inventory",
+            "maintenance": "Maintenance"
+        },
+        "labels": {
+            "landName": "Land Name",
+            "area": "Area",
+            "certificateNumber": "Certificate No.",
+            "buildingName": "Building Name",
+            "location": "Land Location",
+            "condition": "Condition",
+            "roomName": "Room Name",
+            "roomType": "Room Type",
+            "assetName": "Item Name",
+            "assetCode": "Item Code",
+            "priority": "Priority",
+            "reporter": "Reporter",
+            "floorCount": "Floors",
+            "yearBuilt": "Year Built"
+        },
+        "actions": {
+            "addLand": "Add Land",
+            "editLand": "Edit Land",
+            "addBuilding": "Add Building",
+            "editBuilding": "Edit Building",
+            "addRoom": "Add Room",
+            "editRoom": "Edit Room",
+            "addAsset": "Add Asset",
+            "editAsset": "Edit Asset",
+            "addMaintenance": "Add Maintenance",
+            "editMaintenance": "Edit Maintenance",
+            "createMaintenance": "Create Maintenance Ticket",
+            "updateMaintenance": "Update Maintenance Ticket",
+            "sendReport": "Send Report"
+        },
+        "placeholders": {
+            "landNameHint": "e.g., Main Campus",
+            "roomNameHint": "e.g., Classroom X-1",
+            "selectLand": "Select Land",
+            "selectBuilding": "Select Building",
+            "selectRoom": "Select Room",
+            "selectAsset": "Select Asset",
+            "selectStaff": "Select Staff",
+            "selectCondition": "Select Condition",
+            "selectPriority": "Select Priority",
+            "issueDescriptionHint": "Explain damage details...",
+            "resolutionNotesHint": "Repair result notes..."
+        },
+        "descriptions": {
+            "maintenance": "Report damage or request maintenance for school assets."
+        }
+    }
+}

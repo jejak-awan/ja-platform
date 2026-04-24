@@ -1,0 +1,245 @@
+{
+    "backups": {
+        "actions": {
+            "delete": "Delete Backup",
+            "restore": "Restore Backup"
+        },
+        "confirm": {
+            "delete": "Are you sure you want to delete backup \"{name}\"?",
+            "restore": "Are you sure you want to restore backup \"{name}\"? This will replace all current data.",
+            "restore_warning": "This action cannot be undone. Are you absolutely sure?"
+        },
+        "create": "Create Backup",
+        "creating": "Creating...",
+        "description": "Manage system backups and restoration points",
+        "empty": "No backups found",
+        "loading": "Loading...",
+        "messages": {
+            "created": "Backup created successfully",
+            "failed_create": "Failed to create backup",
+            "failed_download": "Failed to download backup",
+            "failed_restore": "Failed to restore backup",
+            "failed_save": "Failed to save schedule",
+            "restored": "Backup restored successfully. Please refresh the page.",
+            "saved": "Schedule saved successfully"
+        },
+        "schedule": {
+            "configure": "Configure",
+            "days": "days",
+            "frequencies": {
+                "daily": "Daily",
+                "monthly": "Monthly",
+                "weekly": "Weekly"
+            },
+            "frequency": "Frequency",
+            "modal": {
+                "cancel": "Cancel",
+                "enable": "Enable automatic backups",
+                "max": "Max Backups",
+                "save": "Save",
+                "saving": "Saving...",
+                "title": "Backup Schedule Settings"
+            },
+            "retention": "Retention",
+            "status": "Status",
+            "time": "Time",
+            "title": "Backup Schedule"
+        },
+        "search": "Search backups...",
+        "stats": {
+            "auto": "Auto Backup",
+            "disabled": "Disabled",
+            "enabled": "Enabled",
+            "last": "Last Backup",
+            "never": "Never",
+            "size": "Total Size",
+            "total": "Total Backups"
+        },
+        "table": {
+            "actions": "Actions",
+            "created": "Created",
+            "delete": "Delete",
+            "download": "Download",
+            "name": "Name",
+            "restore": "Restore",
+            "size": "Size"
+        },
+        "title": "Backups"
+    },
+    "info": {
+        "cache": {
+            "active": "Active",
+            "clear": "Clear Cache",
+            "clearing": "Clearing...",
+            "failed": "Failed to clear cache",
+            "manage": "Manage Cache",
+            "success": "Cache cleared successfully",
+            "title": "Cache Status"
+        },
+        "health": {
+            "critical": "Critical",
+            "healthy": "Healthy",
+            "title": "System Health",
+            "warning": "Warning"
+        },
+        "quickActions": {
+            "backups": "Backups",
+            "commandRunner": "Command Runner",
+            "emailSettings": "Email Settings",
+            "emailTemplates": "Email Templates",
+            "notifications": "Notification Manager",
+            "redis": "Redis Cache",
+            "scheduledTasks": "Scheduled Tasks",
+            "settings": "Settings",
+            "title": "Quick Actions"
+        },
+        "sections": {
+            "application": "Application",
+            "database": "Database",
+            "debugMode": "Debug Mode",
+            "disabled": "Disabled",
+            "diskUsage": "Disk Usage",
+            "enabled": "Enabled",
+            "environment": "Environment",
+            "laravelVersion": "Laravel Version",
+            "memoryUsage": "Memory Usage",
+            "phpVersion": "PHP Version",
+            "server": "Server",
+            "serverSoftware": "Server Software"
+        },
+        "statistics": {
+            "contents": "Total Contents",
+            "media": "Total Media",
+            "title": "System Statistics",
+            "users": "Total Users",
+            "visits": "Total Visits"
+        },
+        "title": "System Information",
+        "uptime": "Uptime"
+    },
+    "logs": {
+        "actions": {
+            "clear": "Clear Logs"
+        },
+        "clear": "Clear Logs",
+        "clearing": "Clearing...",
+        "confirm": {
+            "clear": "Are you sure you want to clear all logs? This action cannot be undone."
+        },
+        "empty": "Select a log file to view",
+        "failed_load": "Failed to load log content",
+        "files": "Log Files",
+        "loading": "Loading log file...",
+        "messages": {
+            "cleared": "Logs cleared successfully",
+            "failed_clear": "Failed to clear logs",
+            "failed_download": "Failed to download log file"
+        },
+        "refresh": "Refresh",
+        "search": "Search in log...",
+        "select": "Select a log file",
+        "title": "System Journal"
+    },
+    "notifications": {
+        "confirm": {
+            "revoke": "Are you sure you want to revoke this broadcast? All associated notifications will be deleted from recipients' inboxes.",
+            "send": "Are you sure you want to send this notification to all selected targets?"
+        },
+        "create": {
+            "title": "Send Notification"
+        },
+        "form": {
+            "message": "Message",
+            "process_async": "Process in Background (Queue)",
+            "revoke": "Revoke Broadcast",
+            "revoking": "Revoking...",
+            "send": "Send Notification",
+            "sending": "Sending...",
+            "target_id": "Specific Target",
+            "target_type": "Target Audience",
+            "targets": {
+                "all": "All Users",
+                "role": "Specific Role",
+                "user": "Specific User"
+            },
+            "title": "Title",
+            "type": "Type"
+        },
+        "history": {
+            "title": "Broadcast History"
+        },
+        "messages": {
+            "failed": "Failed to send notification.",
+            "revoked": "Broadcast successfully revoked.",
+            "sent": "Notification has been queued for delivery."
+        },
+        "queue": {
+            "inactive_message": "No worker detected. Notifications will be queued but not delivered until a worker is running. Disable this option to send immediately.",
+            "inactive_title": "Queue Inactive"
+        },
+        "table": {
+            "message": "Message",
+            "recipients": "Recipients",
+            "send": "Kirim Notifikasi",
+            "sending": "Mengirim...",
+            "sent_at": "Sent At",
+            "title": "Title",
+            "type": "Type"
+        },
+        "title": "Notification Manager"
+    },
+    "scheduled_tasks": {
+        "confirm": {
+            "delete": "Are you sure you want to delete task \"{name}\"?",
+            "run": "Are you sure you want to run task \"{name}\" now?"
+        },
+        "create": "New Task",
+        "empty": "No scheduled tasks found",
+        "filters": {
+            "active": "Active",
+            "all": "All Status",
+            "inactive": "Inactive"
+        },
+        "loading": "Loading...",
+        "messages": {
+            "executed": "Task executed successfully",
+            "failed_execute": "Failed to run task",
+            "failed_save": "Failed to save task",
+            "saved": "Task saved successfully"
+        },
+        "modal": {
+            "active_label": "Active",
+            "cancel": "Cancel",
+            "command_help": "Laravel artisan command or PHP script",
+            "command_label": "Command (e.g., emails:send)",
+            "command_placeholder": "artisan:command or php script.php",
+            "create_action": "Create",
+            "description_label": "Description",
+            "description_placeholder": "Task description",
+            "name_label": "Task Name",
+            "name_placeholder": "Task name",
+            "save": "Save Task",
+            "saving": "Saving...",
+            "schedule_help": "Cron expression (e.g., \"0 * * * *\" for hourly, \"0 0 * * *\" for daily)",
+            "schedule_label": "Schedule Expression (Cron)",
+            "schedule_placeholder": "0 * * * *",
+            "title_create": "Create New Task",
+            "title_edit": "Edit Task",
+            "update": "Update"
+        },
+        "search": "Search tasks...",
+        "table": {
+            "actions": "Actions",
+            "command": "Command",
+            "delete": "Delete",
+            "edit": "Edit",
+            "last_run": "Last Run",
+            "name": "Name",
+            "never": "Never",
+            "run": "Run Now",
+            "schedule": "Schedule",
+            "status": "Status"
+        },
+        "title": "Scheduled Tasks"
+    }
+}

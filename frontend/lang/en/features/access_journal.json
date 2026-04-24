@@ -1,0 +1,47 @@
+{
+    "alerts": {
+        "severity": {
+            "high": "High",
+            "low": "Low",
+            "medium": "Medium"
+        },
+        "title": "Suspicious Activity Alerts",
+        "types": {
+            "brute_force": "Potential Brute Force",
+            "new_ip": "New IP Address",
+            "shared_ip": "Possible Account Sharing"
+        }
+    },
+    "description": "View all login activities from users",
+    "export": {
+        "button": "Export CSV",
+        "exporting": "Exporting...",
+        "failed": "Failed to export login history"
+    },
+    "filters": {
+        "allStatus": "All Status",
+        "allUsers": "All Users",
+        "dateFrom": "From",
+        "dateTo": "To"
+    },
+    "messages": {
+        "empty": "No login history found",
+        "loading": "Loading..."
+    },
+    "pagination": {
+        "showing": "Showing {count} of {total} records"
+    },
+    "stats": {
+        "activeSessions": "Active Sessions",
+        "failedLogins": "Failed Logins",
+        "suspiciousCount": "Suspicious Activity",
+        "todayLogins": "Logins Today",
+        "totalLogins": "Total Successful Logins",
+        "uniqueIps": "Unique IPs Today"
+    },
+    "status": {
+        "failed": "Failed",
+        "success": "Success"
+    },
+    "title": "Access History"
+}

@@ -1,0 +1,376 @@
+import { logger } from '@/utils/logger';
+import { defineStore } from 'pinia';
+import type { AxiosResponse } from 'axios';
+import { isCancel, isAxiosError } from 'axios';
+import api, { getCsrfCookie, type ApiRequestConfig } from '@/services/api';
+import type { User, Role, AuthState, AuthResponse, LoginCredentials, RegisterData, ResetPasswordData } from '@/types/core/auth';
+import { userModelSchema, authResponseSchema } from '@/schemas';
+
+interface ApiErrorResponse {
+    message?: string;
+    errors?: Record<string, string[]>;
+    retry_after?: string | number;
+    requires_verification?: boolean;
+    user_id?: number | string;
+    requires_two_factor?: boolean;
+}
+
+export const ROLE_RANKS: Record<string, number> = {
+    'super-admin': 100,
+    'superadmin': 100,
+    'super_admin': 100,
+    'supe_admin': 100,
+    'kepala-sekolah': 90,
+    'admin-sekolah': 90,
+    'admin-kurikulum': 85,
+    'admin-kesiswaan': 85,
+    'admin-sarpras': 85,
+    'admin-humas': 85,
+    'admin-bk': 85,
+    'guru': 70,
+    'wali-kelas': 75,
+    'admin': 80,
+    'editor': 60,
+    'admin-osis': 50,
+    'author': 40,
+    'orang-tua': 30,
+    'member': 20,
+    'siswa': 20,
+};
+
+// Define extended window interface for circuit breaker flags
+declare global {
+    interface Window {
+        __isSessionTerminated?: boolean;
+        __is403Blocked?: boolean;
+    }
+}
+
+
+export const useAuthStore = defineStore('auth', {
+    state: (): AuthState & { initialized: boolean } => ({
+        user: null,
+        isAuthenticated: false,
+        initialized: false,
+    }),
+
+    getters: {
+        // Helper to calculate role rank from a user object
+        getRoleRank: (state) => (user: User | null = null): number => {
+            const targetUser = user || state.user;
+            if (!targetUser || !targetUser.roles) return 0;
+
+            let maxRank = 0;
+            targetUser.roles.forEach((role: Role) => {
+                const rank = ROLE_RANKS[role.name] || 0;
+                if (rank > maxRank) maxRank = rank;
+            });
+
+            return maxRank;
+        },
+
+        // Check if current user has at least the specified role level
+        isAtLeastRole: (state) => (roleName: string): boolean => {
+            if (!state.user || !state.user.roles) return false;
+
+            const minRank = ROLE_RANKS[roleName] || 0;
+
+            let myRank = 0;
+            state.user.roles.forEach((role: Role) => {
+                const rank = ROLE_RANKS[role.name] || 0;
+                if (rank > myRank) myRank = rank;
+            });
+
+            return myRank >= minRank;
+        },
+
+        // Check if current user has higher rank than another user
+        isHigherThan: (state) => (otherUser: User): boolean => {
+            if (!otherUser) return true;
+            if (!state.user || !state.user.roles) return false;
+
+            // Calculate my rank
+            let myRank = 0;
+            state.user.roles.forEach((role: Role) => {
+                const rank = ROLE_RANKS[role.name] || 0;
+                if (rank > myRank) myRank = rank;
+            });
+
+            // Calculate other user's rank
+            let otherRank = 0;
+            if (otherUser.roles) {
+                otherUser.roles.forEach((role: Role) => {
+                    const rank = ROLE_RANKS[role.name] || 0;
+                    if (rank > otherRank) otherRank = rank;
+                });
+            }
+
+            return myRank > otherRank;
+        },
+
+        isAdmin: (state): boolean => {
+            if (!state.user || !state.user.roles) return false;
+            return state.user.roles.some((role: Role) => 
+                role.name === 'admin' || 
+                (ROLE_RANKS[role.name] || 0) >= 100
+            );
+        },
+
+        hasPermission: (state) => (permission: string): boolean => {
+            if (!state.user) return false;
+            // Super-admin (rank 100) always has all permissions
+            if (state.user.roles?.some((role: Role) => (ROLE_RANKS[role.name] || 0) >= 100)) return true;
+            return state.user.permissions?.some(perm => perm.name === permission) || false;
+        },
+    },
+
+    actions: {
+        async login(credentials: LoginCredentials): Promise<AuthResponse> {
+            try {
+                // Ensure CSRF cookie is fresh before login
+                await getCsrfCookie();
+
+                const response: AxiosResponse<{ data?: unknown; user?: User; requires_two_factor?: boolean; user_id?: number | string; message?: string }> = await api.post('/login', credentials, {
+                    _schema: authResponseSchema
+                } as ApiRequestConfig);
+                // Handle different response structures
+                const responseData = response.data;
+
+                // Handle 2FA requirement
+                if (responseData && responseData.requires_two_factor) {
+                    const parsedUserId = Number(responseData.user_id);
+                    return {
+                        success: true,
+                        requiresTwoFactor: true,
+                        userId: Number.isNaN(parsedUserId) ? undefined : parsedUserId,
+                        message: response.data.message
+                    };
+                }
+
+                if (responseData && responseData.user) {
+                    const authData: { user: User; token?: string; redirect_to?: string } = {
+                        user: responseData.user
+                    };
+                    this.setAuth({ user: authData.user });
+                    return { success: true, data: authData };
+                } else {
+                    throw new Error('Invalid response format from server');
+                }
+            } catch (error: unknown) {
+                // Handle different error statuses
+                const axiosError = isAxiosError(error) ? error : null;
+                const errorData = (axiosError?.response?.data as ApiErrorResponse) || {};
+                const errors = errorData.errors || {};
+                const status = axiosError?.response?.status;
+                const headers = axiosError?.response?.headers || {};
+
+                // Handle rate limiting (429)
+                if (status === 429) {
+                    // Try to get retry-after from various sources
+                    let retryAfter = 60; // Default 60 seconds
+
+                    // Try from response body first
+                    if (errorData.retry_after) {
+                        retryAfter = parseInt(String(errorData.retry_after), 10);
+                    }
+                    // Try from headers (axios lowercases header names)
+                    else if (headers['retry-after']) {
+                        retryAfter = parseInt(String(headers['retry-after']), 10);
+                    }
+
+                    const retryAfterSeconds = retryAfter;
+                    const retryAfterMinutes = Math.ceil(retryAfterSeconds / 60);
+
+                    return {
+                        success: false,
+                        message: `Too many login attempts. Please try again in ${retryAfterMinutes} minute${retryAfterMinutes > 1 ? 's' : ''}.`,
+                        errors: {},
+                        rateLimited: true,
+                        retryAfter: retryAfterSeconds,
+                    };
+                }
+
+                // Handle different error statuses
+                if (status === 403) {
+                    // Email not verified
+                    return {
+                        success: false,
+                        message: errorData.message || 'Please verify your email address before logging in.',
+                        errors: {},
+                        requiresVerification: errorData.requires_verification || false,
+                    };
+                }
+
+                // Extract first error message if available
+                let errorMessage = errorData.message;
+                if (!errorMessage && errors.email && Array.isArray(errors.email) && errors.email.length > 0) {
+                    errorMessage = errors.email[0];
+                } else if (!errorMessage && errors.password && Array.isArray(errors.password) && errors.password.length > 0) {
+                    errorMessage = errors.password[0];
+                } else if (!errorMessage) {
+                    errorMessage = 'Login failed. Please check your credentials.';
+                }
+
+                return {
+                    success: false,
+                    message: errorMessage,
+                    errors: errors,
+                };
+            }
+        },
+
+        async register(userData: RegisterData): Promise<AuthResponse> {
+            try {
+                // Ensure CSRF cookie is fresh before register
+                await getCsrfCookie();
+
+                const response: AxiosResponse<{ user: User }> = await api.post('/register', userData);
+                this.setAuth(response.data);
+                return { success: true, data: response.data };
+            } catch (error: unknown) {
+                const axiosError = isAxiosError(error) ? error : null;
+                const responseData = (axiosError?.response?.data as ApiErrorResponse) || {};
+                return {
+                    success: false,
+                    message: responseData.message || 'Registration failed',
+                    errors: responseData.errors,
+                };
+            }
+        },
+
+        async logout() {
+            try {
+                // Skip 401 handler redirect - logout is intentionally ending session
+                await api.post('/logout', {}, { _skipManualRedirect: true } as ApiRequestConfig);
+            } catch (error: unknown) {
+                // Silence session errors (401/419) and cancellations during logout
+                // These are expected if the session is already terminated.
+                const axiosError = isAxiosError(error) ? error : null;
+                const status = axiosError?.response?.status;
+
+                const isSilentError = status === 401 || status === 419 || isCancel(error);
+
+                if (!isSilentError) {
+                    logger.error('Logout error:', error);
+                }
+            } finally {
+                this.clearAuth();
+                // Reset all circuit breaker flags
+                if (typeof window !== 'undefined') {
+                    window.__isSessionTerminated = false;
+                    window.__is403Blocked = false;
+                }
+
+                // Redirect to homepage after logout
+                window.location.href = '/';
+            }
+        },
+
+        async fetchUser(): Promise<AuthResponse> {
+            try {
+                const response: AxiosResponse<{ data?: User } | User> = await api.get('/user', {
+                    _schema: userModelSchema
+                } as ApiRequestConfig);
+                const userData = (response.data as any)?.data || response.data;
+                this.user = userData as User;
+                this.isAuthenticated = true;
+                // Update localStorage
+                if (userData) {
+                    this.setAuth({ user: userData as User });
+                }
+                return { success: true, data: { user: userData as User } };
+            } catch (error: unknown) {
+                const axiosError = isAxiosError(error) ? error : null;
+                const status = axiosError?.response?.status;
+                
+                // If it's a 403 or 503, it might be maintenance mode/WAF block.
+                // We should NOT clear auth immediately, as we want to preserve the isAdmin state 
+                // for the frontend bypass logic.
+                if (status !== 403 && status !== 503) {
+                    this.clearAuth();
+                }
+                
+                const responseData = (axiosError?.response?.data as ApiErrorResponse) || {};
+                return { success: false, message: responseData.message };
+            }
+        },
+
+        async forgotPassword(data: { email: string; captcha_token?: string; captcha_answer?: string }): Promise<AuthResponse> {
+            try {
+                const response: AxiosResponse<{ message: string }> = await api.post('/forgot-password', data);
+                return { success: true, message: response.data.message };
+            } catch (error: unknown) {
+                const axiosError = isAxiosError(error) ? error : null;
+                const responseData = (axiosError?.response?.data as ApiErrorResponse) || {};
+                return {
+                    success: false,
+                    message: responseData.message || 'Failed to send reset link',
+                };
+            }
+        },
+
+        async resetPassword(data: ResetPasswordData): Promise<AuthResponse> {
+            try {
+                const response: AxiosResponse<{ message: string }> = await api.post('/reset-password', data);
+                return { success: true, message: response.data.message };
+            } catch (error: unknown) {
+                const axiosError = isAxiosError(error) ? error : null;
+                const responseData = (axiosError?.response?.data as ApiErrorResponse) || {};
+                return {
+                    success: false,
+                    message: responseData.message || 'Password reset failed',
+                    errors: responseData.errors,
+                };
+            }
+        },
+
+        setAuth(data: { user: User }) {
+            this.user = data.user;
+            this.isAuthenticated = true;
+            localStorage.setItem('user', JSON.stringify(data.user));
+            // Reset circuit breaker flags on successful auth
+            if (typeof window !== 'undefined') {
+                window.__isSessionTerminated = false;
+                window.__is403Blocked = false;
+            }
+        },
+
+        clearAuth() {
+            this.user = null;
+            this.isAuthenticated = false;
+            localStorage.removeItem('user');
+        },
+
+        initAuth() {
+            if (this.initialized) return;
+            this.initialized = true;
+
+            try {
+                const user = localStorage.getItem('user');
+                if (user) {
+                    // Try to parse user JSON, clear if invalid
+                    try {
+                        const parsedUser = JSON.parse(user);
+                        if (parsedUser && typeof parsedUser === 'object') {
+                            this.user = parsedUser;
+                            this.isAuthenticated = true;
+                        } else {
+                            this.clearAuth();
+                        }
+                    } catch (parseError) {
+                        // Invalid JSON in localStorage, clear it
+                        if (import.meta.env.DEV) {
+                            logger.warning('Invalid user data in localStorage, clearing:', parseError);
+                        }
+                        this.clearAuth();
+                    }
+                }
+            } catch (error) {
+                if (import.meta.env.DEV) {
+                    logger.warning('Error initializing auth:', error);
+                }
+                this.clearAuth();
+            }
+        },
+    },
+});

@@ -1,0 +1,53 @@
+{
+    "actions": {
+        "delete": "Hapus",
+        "edit": "Edit"
+    },
+    "createNew": "Tag Baru",
+    "description": "Kelola tag konten",
+    "empty": "Tidak ada tag ditemukan",
+    "filters": {
+        "all": "Semua",
+        "unused": "Tidak Digunakan",
+        "usage": "Penggunaan",
+        "used": "Hanya Digunakan"
+    },
+    "form": {
+        "cancel": "Batal",
+        "create": "Buat",
+        "createDescription": "Buat tag baru untuk mengelompokkan konten.",
+        "createTitle": "Buat Tag",
+        "description": "Deskripsi",
+        "descriptionPlaceholder": "Deskripsi tag",
+        "editDescription": "Perbarui informasi tag.",
+        "editTitle": "Edit Tag",
+        "name": "Nama",
+        "namePlaceholder": "Nama tag",
+        "saveError": "Gagal menyimpan tag",
+        "saving": "Menyimpan...",
+        "slug": "Slug",
+        "slugHelp": "Versi ramah URL",
+        "slugPlaceholder": "slug-tag",
+        "update": "Perbarui"
+    },
+    "loading": "Memuat tag...",
+    "messages": {
+        "deleteConfirm": "Apakah Anda yakin ingin menghapus \"{name}\"? Tindakan ini tidak dapat dibatalkan.",
+        "deleteError": "Gagal menghapus tag"
+    },
+    "search": "Cari tag...",
+    "stats": {
+        "total": "Total Tag",
+        "usage": "Total Penggunaan",
+        "used": "Tag Digunakan"
+    },
+    "table": {
+        "actions": "Aksi",
+        "description": "Deskripsi",
+        "name": "Nama",
+        "slug": "Slug",
+        "usage": "Penggunaan"
+    },
+    "title": "Tag",
+    "title_singular": "Tag"
+}

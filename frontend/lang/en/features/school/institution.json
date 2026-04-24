@@ -1,0 +1,26 @@
+{
+    "addLevel": "Add New Level",
+    "contactHeader": "Primary Contact",
+    "deleteConfirm": "WARNING: Deleting an institution will delete all related data (Levels, Students, Teachers, etc.). Continue?",
+    "deleteStrictAction": "Yes, Delete All Data",
+    "deleteStrictConfirmPrompt": "Please type the institution name below to confirm deletion:",
+    "deleteStrictPlaceholder": "Type institution name exactly as shown",
+    "deleteStrictTitle": "Delete Institution & All Data",
+    "deleteStrictWarning": "This action is PERMANENT and will delete ALL data in the school module (Students, Staff, Academic, Facilities, LMS, etc.) associated with this institution.",
+    "empty": "No registered institution found.",
+    "emptyDescription": "Start registering your educational institution (School, Foundation, or Group) to manage academic data.",
+    "manageLevels": "Manage Levels",
+    "setupDescription": "Follow the steps below to register your institution.",
+    "setupNew": "Setup New Institution",
+    "setupNow": "Setup Institution Now",
+    "status": {
+        "negeri": "Public School",
+        "swasta": "Private / Independent School",
+        "yayasan": "Foundation / Group",
+        "public": "Public School",
+        "private": "Private School",
+        "undefined": "Status Not Defined"
+    },
+    "subtitle": "Basic information related to the primary legality of the institution.",
+    "title": "Institution Management"
+}

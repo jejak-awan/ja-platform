@@ -1,0 +1,60 @@
+{
+    "actions": {
+        "approve": "Setujui",
+        "approveAll": "Setujui Semua",
+        "bulkAction": "Aksi Massal",
+        "delete": "Hapus",
+        "markSpam": "Tandai Spam",
+        "reject": "Tolak",
+        "rejectAll": "Tolak Semua",
+        "reply": "Balas"
+    },
+    "detail": {
+        "anonymous": "Anonim",
+        "author": "Penulis",
+        "email": "Email",
+        "no_email": "Tidak ada email",
+        "postedOn": "Dipostal pada",
+        "repliesCount": "{count} balasan",
+        "reply": "Balasan",
+        "replies": "Balasan"
+    },
+    "filter": {
+        "allStatus": "Semua Status",
+        "searchPlaceholder": "Cari komentar..."
+    },
+    "list": {
+        "empty": "Tidak ada komentar ditemukan",
+        "on": "Pada",
+        "replyTo": "Balas ke",
+        "selected": "{count} dipilih",
+        "subtitle": "Kelola dan moderasi komentar",
+        "title": "Semua Komentar"
+    },
+    "title_singular": "Komentar",
+    "messages": {
+        "approveFailed": "Gagal menyetujui komentar",
+        "bulkApproveConfirm": "Setujui {count} komentar?",
+        "bulkDeleteConfirm": "Hapus {count} komentar? Tindakan ini tidak dapat dibatalkan.",
+        "bulkFailed": "Gagal melakukan aksi massal",
+        "bulkRejectConfirm": "Tolak {count} komentar?",
+        "bulkSpamConfirm": "Tandai {count} komentar sebagai spam?",
+        "deleteConfirm": "Apakah Anda yakin ingin menghapus komentar ini?",
+        "deleteFailed": "Gagal menghapus komentar",
+        "rejectFailed": "Gagal menolak komentar",
+        "spamFailed": "Gagal menandai komentar sebagai spam"
+    },
+    "stats": {
+        "approved": "Disetujui",
+        "pending": "Tertunda",
+        "rejected": "Ditolak",
+        "spam": "Spam",
+        "total": "Total"
+    },
+    "status": {
+        "approved": "Disetujui",
+        "pending": "Tertunda",
+        "rejected": "Ditolak",
+        "spam": "Spam"
+    }
+}

@@ -1,0 +1,78 @@
+{
+    "quickActions": "Quick Actions",
+    "subtitle": "Manage student profiles, academic, and discipline.",
+    "title": "School Dashboard",
+    "setup": {
+        "title": "Setup Wizard",
+        "subtitle": "Complete these steps to complete your school data.",
+        "completed": "Completed",
+        "steps": {
+            "school_profile": { "label": "School Profile", "desc": "Main school identity" },
+            "school_levels": { "label": "Education Levels", "desc": "SD, SMP, SMA, etc" },
+            "academic_year": { "label": "Academic Year", "desc": "Active academic calendar" },
+            "semesters": { "label": "Semesters", "desc": "Odd / Even" },
+            "departments": { "label": "Departments", "desc": "Student majors" },
+            "study_groups": { "label": "Study Groups", "desc": "Student study classes" }
+        }
+    },
+    "v2": {
+        "hero": {
+            "title": "Administrative Command Center",
+            "subtitle": "Monitor your educational ecosystem with real-time data precision and smart analytics.",
+            "badge": "Command Center • V2.0",
+            "actions": {
+                "config": "Quick Config",
+                "reports": "Annual Reports"
+            }
+        },
+        "hr_presence": {
+            "title": "Teacher & Staff Presence",
+            "subtitle": "Daily attendance data for educators and education personnel.",
+            "status": {
+                "on_time": "On Time",
+                "late": "Late",
+                "present": "Present"
+            }
+        },
+        "alerts": {
+            "title": "Dynamic Alert System",
+            "recap": "Today's student discipline and achievement logs.",
+            "types": {
+                "urgent": "Urgent",
+                "info": "Info",
+                "warning": "Warning"
+            }
+        },
+        "academic": {
+            "hero_title": "Superior Curriculum Optimization.",
+            "hero_subtitle": "Manage schedules, syllabuses, and academic progress comprehensively.",
+            "hero_badge": "Academic & Curriculum Hub",
+            "popular_subjects": "Popular Subjects",
+            "popular_desc": "Statistics on interest and performance of subjects this semester.",
+            "agenda": "Academic Agenda",
+            "actions": {
+                "schedule": "Manage Schedule",
+                "bank": "Question Bank",
+                "calendar": "View Calendar"
+            }
+        },
+        "student_affairs": {
+            "hero_title": "Empathy & Student Development.",
+            "hero_subtitle": "Monitor discipline, develop OSIS creativity, and ensure student well-being.",
+            "hero_badge": "Student Affairs & OSIS Hub",
+            "activity_log": "Student Activity Log",
+            "activity_desc": "Today's student discipline and achievement logs.",
+            "osis_highlight": "Organization Status (OSIS)",
+            "on_going_program": "Work Program in Progress",
+            "actions": {
+                "discipline": "Input Discipline",
+                "osis_program": "OSIS Programs",
+                "details": "Student Details"
+            },
+            "stats": {
+                "osis_candidates": "OSIS Candidates",
+                "upcoming_events": "Upcoming Events"
+            }
+        }
+    }
+}
