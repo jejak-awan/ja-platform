@@ -16,6 +16,11 @@ class ThemeCacheService
      */
     const PREFIX_ACTIVE = 'theme.active.';
 
+    /**
+     * Serialized public JSON payload for ThemeController::getActive (per type).
+     */
+    const PREFIX_ACTIVE_API_PAYLOAD = 'theme.active.api.payload.';
+
     const PREFIX_SETTINGS = 'theme.settings.';
 
     const PREFIX_ASSETS = 'theme.assets.';
@@ -234,23 +239,23 @@ class ThemeCacheService
      */
     public function clearTheme(Theme $theme): void
     {
+        // Always drop active-theme keys (including API payload); not tag-scoped and must clear
+        // even if tagged flush below fails (e.g. Redis unavailable while config says redis).
+        foreach (['frontend', 'admin', 'email'] as $type) {
+            try {
+                Cache::forget(self::PREFIX_ACTIVE.$type);
+                Cache::forget(self::PREFIX_ACTIVE_API_PAYLOAD.$type);
+            } catch (\Exception $e) {
+                Log::warning('Failed to forget active theme cache key: '.$e->getMessage());
+            }
+        }
+
         try {
             if ($this->tagsSupported()) {
                 // Clear specific theme caches using tags
                 Cache::tags(["theme.{$theme->id}"])->flush();
             } else {
-                // Fallback: clear individual cache keys
-                Cache::forget(self::PREFIX_SETTINGS.$theme->id);
-                Cache::forget(self::PREFIX_ASSETS.$theme->id);
-                Cache::forget(self::PREFIX_MANIFEST.$theme->id);
-                Cache::forget(self::PREFIX_TEMPLATES.$theme->id);
-                Cache::forget(self::PREFIX_PARTIALS.$theme->id);
-                Cache::forget(self::PREFIX_LAYOUTS.$theme->id);
-            }
-
-            // Clear active theme cache for all types
-            foreach (['frontend', 'admin', 'email'] as $type) {
-                Cache::forget(self::PREFIX_ACTIVE.$type);
+                $this->forgetThemeScopedKeys((int) $theme->id);
             }
         } catch (\Exception $e) {
             Log::warning('Failed to clear theme cache: '.$e->getMessage());
@@ -262,12 +267,22 @@ class ThemeCacheService
      */
     public function clearAll(): void
     {
+        foreach (['frontend', 'admin', 'email'] as $type) {
+            try {
+                Cache::forget(self::PREFIX_ACTIVE.$type);
+                Cache::forget(self::PREFIX_ACTIVE_API_PAYLOAD.$type);
+            } catch (\Exception $e) {
+                Log::warning('Failed to forget active theme cache key: '.$e->getMessage());
+            }
+        }
+
         try {
             if ($this->tagsSupported()) {
                 Cache::tags(['theme'])->flush();
             } else {
-                // Fallback: clear all cache (less efficient but works)
-                Cache::flush();
+                foreach (Theme::query()->cursor() as $t) {
+                    $this->forgetThemeScopedKeys((int) $t->id);
+                }
             }
         } catch (\Exception $e) {
             Log::warning('Failed to clear all theme caches: '.$e->getMessage());
@@ -301,13 +316,20 @@ class ThemeCacheService
     }
 
     /**
-     * Clear cache by prefix (fallback for non-tagged cache)
+     * Forget per-theme cache keys (non–tag-aware drivers).
      */
-    protected function clearByPrefix(string $prefix): void
+    protected function forgetThemeScopedKeys(int $themeId): void
     {
-        // This is a fallback method
-        // In production with Redis, use tags instead
-        Log::info('Clearing cache by prefix: '.$prefix);
+        try {
+            Cache::forget(self::PREFIX_SETTINGS.$themeId);
+            Cache::forget(self::PREFIX_ASSETS.$themeId);
+            Cache::forget(self::PREFIX_MANIFEST.$themeId);
+            Cache::forget(self::PREFIX_TEMPLATES.$themeId);
+            Cache::forget(self::PREFIX_PARTIALS.$themeId);
+            Cache::forget(self::PREFIX_LAYOUTS.$themeId);
+        } catch (\Exception $e) {
+            Log::warning('Failed to forget theme-scoped cache keys: '.$e->getMessage());
+        }
     }
 
     /**
@@ -322,7 +344,7 @@ class ThemeCacheService
 
         return [
             'driver' => $driverStr,
-            'tags_supported' => $driverStr === 'redis',
+            'tags_supported' => $this->tagsSupported(),
             'ttl_short' => self::TTL_SHORT,
             'ttl_medium' => self::TTL_MEDIUM,
             'ttl_long' => self::TTL_LONG,

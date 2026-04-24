@@ -55,20 +55,23 @@ class AppServiceProvider extends ServiceProvider
 
         /** Authenticated CMS media: one POST per file — default 30/min is too low for gallery batches. */
         RateLimiter::for('media-upload', function (Request $request) {
-            $uid = $request->user()?->getAuthIdentifier();
+            $authId = $request->user()?->getAuthIdentifier();
+            $uid = is_scalar($authId) ? (string) $authId : null;
 
             return Limit::perMinute(240)->by('media-upload|'.($uid !== null ? 'u:'.$uid : 'ip:'.$request->ip()));
         });
 
         RateLimiter::for('media-upload-multiple', function (Request $request) {
-            $uid = $request->user()?->getAuthIdentifier();
+            $authId = $request->user()?->getAuthIdentifier();
+            $uid = is_scalar($authId) ? (string) $authId : null;
 
             return Limit::perMinute(60)->by('media-upload-multi|'.($uid !== null ? 'u:'.$uid : 'ip:'.$request->ip()));
         });
 
         /** Whole admin CMS JSON surface (SPA + uploads); per authenticated user to avoid one IP starving many staff. */
         RateLimiter::for('admin-cms', function (Request $request) {
-            $uid = $request->user()?->getAuthIdentifier();
+            $authId = $request->user()?->getAuthIdentifier();
+            $uid = is_scalar($authId) ? (string) $authId : null;
 
             return Limit::perMinute(900)->by('admin-cms|'.($uid !== null ? 'u:'.$uid : 'ip:'.$request->ip()));
         });
@@ -143,8 +146,15 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('forms-track', function (Request $request) {
             // Reduce false 429s for legitimate users behind shared IP/proxy.
             $clientIp = (string) ($request->header('CF-Connecting-IP') ?: $request->ip());
-            $sessionHint = (string) ($request->cookie('shield_trust') ?: $request->cookie('XSRF-TOKEN') ?: '');
-            $formSlug = (string) optional($request->route('form'))->slug;
+            $shieldCookie = $request->cookie('shield_trust');
+            $csrfCookie = $request->cookie('XSRF-TOKEN');
+            $sessionHint = is_string($shieldCookie) && $shieldCookie !== ''
+                ? $shieldCookie
+                : (is_string($csrfCookie) ? $csrfCookie : '');
+            $formRouteParam = $request->route('form');
+            $formSlug = is_object($formRouteParam) && isset($formRouteParam->slug) && is_scalar($formRouteParam->slug)
+                ? (string) $formRouteParam->slug
+                : '';
             $fingerprint = 'forms-track|'.$clientIp.'|'.substr(
                 sha1((string) $request->userAgent().'|'.$sessionHint.'|'.$formSlug),
                 0,
@@ -162,7 +172,8 @@ class AppServiceProvider extends ServiceProvider
          * Use a generous per-user/per-IP limiter to prevent false 429 while preserving abuse protection.
          */
         RateLimiter::for('admin-journal-clear', function (Request $request) {
-            $uid = $request->user()?->getAuthIdentifier();
+            $authId = $request->user()?->getAuthIdentifier();
+            $uid = is_scalar($authId) ? (string) $authId : null;
             $key = $uid !== null ? 'u:'.$uid : 'ip:'.$request->ip();
 
             return [
@@ -173,7 +184,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Backward compatibility for any route still referencing old key.
         RateLimiter::for('system-journal-clear', function (Request $request) {
-            $uid = $request->user()?->getAuthIdentifier();
+            $authId = $request->user()?->getAuthIdentifier();
+            $uid = is_scalar($authId) ? (string) $authId : null;
             $key = $uid !== null ? 'u:'.$uid : 'ip:'.$request->ip();
 
             return [

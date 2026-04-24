@@ -101,7 +101,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useTheme } from '@/composables/useTheme';
 import PageDisabled from './components/PageDisabled.vue';
-import { useAdvancedBindings } from '@/modules/Cms/composables/useAdvancedBindings';
+import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings';
 import Trophy from 'lucide-vue-next/dist/esm/icons/trophy.js';
 
 const { getSetting } = useTheme();
@@ -121,8 +121,8 @@ onMounted(() => {
 const activeCategory = ref('Semua');
 const categories = ['Semua', 'Akademik', 'Olahraga', 'Seni', 'Vokasi'];
 
-// Advanced Bindings for Achievements
-const { data: dynamicAchievements, hasBinding } = useAdvancedBindings('achievements', 'list');
+// Theme data bindings for achievements list
+const { data: dynamicAchievements, hasBinding } = useThemeDataBindings('achievements', 'list');
 
 const mockAchievements = [
   { 

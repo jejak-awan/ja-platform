@@ -67,12 +67,10 @@ Memisahkan akses keamanan kritikal dari permission umum `manage settings`.
   - `SECURITY_ALERT_WINDOW_MINUTES=90`
 
 ## PCOV Toggle Saat Coverage Test
-- Jalankan coverage test dengan wrapper aman:
-  - `composer test:coverage`
-- Wrapper ini:
-  - Mengaktifkan PCOV hanya untuk proses test (tidak mengubah php.ini global).
-  - Menonaktifkan JIT khusus saat proses coverage.
-  - Setelah proses selesai, PCOV otomatis kembali nonaktif.
+- Di server LMS umumnya **pcov dimatikan** di `php.ini` agar **JIT Opcache** tetap aktif; itu normal.
+- Tes harian (`composer test` / `php artisan test`) memakai **`phpunit.xml`** tanpa blok coverage, sehingga **tidak** memerlukan driver pcov/xdebug dan tidak memunculkan peringatan coverage.
+- Coverage hanya saat diminta:
+  - `composer test:coverage` memakai `scripts/test-with-pcov.sh` + **`phpunit.coverage.xml`** (pcov di-override lewat CLI, JIT dimatikan hanya untuk proses itu).
 - Validasi/force off (opsional):
   - `composer pcov:off`
 

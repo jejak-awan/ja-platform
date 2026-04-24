@@ -13,7 +13,7 @@ class StoreJournalRequest extends FormRequest
     {
         return [
             'school_id' => 'required|exists:sch_ins_schools,id',
-            'school_level_id' => 'required|exists:sch_ins_school_levels,id',
+            'school_level_id' => 'required|exists:sch_ins_levels,id',
             'schedule_id' => 'required|exists:sch_acad_schedules,id',
             'date' => 'required|date',
             'topic' => 'required|string|max:255',

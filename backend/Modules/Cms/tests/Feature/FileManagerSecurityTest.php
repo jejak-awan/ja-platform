@@ -7,6 +7,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Modules\Core\Models\User;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class FileManagerSecurityTest extends TestCase
@@ -82,9 +83,11 @@ class FileManagerSecurityTest extends TestCase
 
     public function test_super_admin_can_access_any_disk()
     {
-        // User ID 1 is super admin
+        // User ID 1: needs super-admin role so FileManagerController allows any configured disk.
         $superAdmin = User::find(1);
         $superAdmin->givePermissionTo('manage files');
+        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
+        $superAdmin->assignRole($superAdminRole);
 
         // Mock local disk to avoid real error
         Storage::fake('local');

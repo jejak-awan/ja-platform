@@ -106,7 +106,8 @@ class AnalyticsController extends BaseApiController
 
         // Optimized: Use content.views column instead of N+1 visits queries
         // For more accurate date-filtered stats, use subquery or pre-aggregated table
-        $cacheEpoch = (int) Cache::get('analytics_cache_epoch', 0);
+        $cacheEpochRaw = Cache::get('analytics_cache_epoch', 0);
+        $cacheEpoch = is_numeric($cacheEpochRaw) ? (int) $cacheEpochRaw : 0;
         $cacheKey = 'analytics_top_content_'.$cacheEpoch.'_'.((string) $dateFrom).'_'.((string) $dateTo).'_'.((string) $limit);
         $topContent = Cache::remember(
             $cacheKey,

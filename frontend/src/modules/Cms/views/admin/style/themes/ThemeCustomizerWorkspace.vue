@@ -6,14 +6,14 @@
         <Button
           variant="ghost"
           size="icon"
-          :title="t('features.theme_builder.actions.back_tooltip')"
+          :title="t('features.theme_customizer.actions.back_tooltip')"
           @click="handleBack"
         >
           <ArrowLeft class="w-5 h-5" />
         </Button>
         <div>
           <h1 class="text-lg font-bold tracking-tight">
-            {{ t('features.theme_builder.title') }}
+            {{ t('features.theme_customizer.title') }}
           </h1>
           <p class="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">
             {{ theme?.name || t('common.labels.loading') }}
@@ -27,7 +27,7 @@
           <button 
             :disabled="!canUndo" 
             class="p-1.5 hover:bg-muted text-muted-foreground hover:text-foreground disabled:opacity-20 transition-colors"
-            :title="t('features.theme_builder.actions.undo')"
+            :title="t('features.theme_customizer.actions.undo')"
             @click="undo"
           >
             <Undo2 class="w-4 h-4" />
@@ -36,7 +36,7 @@
           <button 
             :disabled="!canRedo" 
             class="p-1.5 hover:bg-muted text-muted-foreground hover:text-foreground disabled:opacity-20 transition-colors"
-            :title="t('features.theme_builder.actions.redo')"
+            :title="t('features.theme_customizer.actions.redo')"
             @click="redo"
           >
             <Redo2 class="w-4 h-4" />
@@ -51,7 +51,7 @@
             class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-bold animate-pulse"
           >
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500" />
-            {{ t('features.theme_builder.status.unsaved') }}
+            {{ t('features.theme_customizer.status.unsaved') }}
           </span>
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
@@ -61,7 +61,7 @@
                 :disabled="!isDirty"
               >
                 <RotateCcw class="w-3.5 h-3.5 mr-1.5" />
-                {{ t('features.theme_builder.actions.revert') }}
+                {{ t('features.theme_customizer.actions.revert') }}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -70,14 +70,14 @@
             >
               <DropdownMenuItem @click="resetToInitial">
                 <History class="w-4 h-4 mr-2" />
-                {{ t('features.theme_builder.revert.session_start') }}
+                {{ t('features.theme_customizer.revert.session_start') }}
               </DropdownMenuItem>
               <DropdownMenuItem
                 class="text-destructive"
                 @click="resetToDefaults"
               >
                 <Zap class="w-4 h-4 mr-2" />
-                {{ t('features.theme_builder.revert.theme_defaults') }}
+                {{ t('features.theme_customizer.revert.theme_defaults') }}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -95,7 +95,7 @@
               v-else
               class="w-3.5 h-3.5 mr-1.5 animate-spin"
             />
-            {{ saving ? t('features.theme_builder.status.saving') : t('features.theme_builder.actions.publish') }}
+            {{ saving ? t('features.theme_customizer.status.saving') : t('features.theme_customizer.actions.publish') }}
           </Button>
         </div>
       </div>
@@ -111,7 +111,7 @@
           <div class="absolute inset-0 rounded-full border-4 border-primary/20" />
           <div class="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin" />
         </div>
-        <span class="text-sm font-medium animate-pulse text-muted-foreground">{{ t('features.theme_builder.status.initializing') }}</span>
+        <span class="text-sm font-medium animate-pulse text-muted-foreground">{{ t('features.theme_customizer.status.initializing') }}</span>
       </div>
     </div>
 
@@ -127,7 +127,7 @@
             <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input 
               v-model="searchQuery" 
-              :placeholder="t('features.theme_builder.sidebar.search_placeholder')" 
+              :placeholder="t('features.theme_customizer.sidebar.search_placeholder')" 
               class="w-full pl-9 pr-4 py-2 bg-background border rounded-lg text-xs focus:ring-2 focus:ring-primary/20 outline-none transition-all"
             >
           </div>
@@ -226,14 +226,14 @@
               class="relative"
             >
               <div class="absolute top-4 right-4 z-10 flex items-center gap-2">
-                <span class="text-[10px] px-2 py-0.5 rounded bg-muted font-mono text-muted-foreground">{{ t('features.theme_builder.editor.css.label') }}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-muted font-mono text-muted-foreground">{{ t('features.theme_customizer.editor.css.label') }}</span>
               </div>
               <div class="bg-card border-border border-2 rounded-2xl overflow-hidden shadow-2xl shadow-primary/5">
                 <textarea
                   v-model="customCss"
                   rows="24"
                   class="w-full p-6 bg-background text-sm font-mono leading-relaxed focus:outline-none resize-none min-h-[500px] border-0 custom-scrollbar selection:bg-primary/20"
-                  :placeholder="t('features.theme_builder.editor.css.placeholder')"
+                  :placeholder="t('features.theme_customizer.editor.css.placeholder')"
                   spellcheck="false"
                 />
               </div>
@@ -246,7 +246,7 @@
             >
               <h4 class="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2 px-1">
                 <Settings2 class="w-3 h-3" />
-                {{ t('features.theme_builder.editor.sections.visual') }}
+                {{ t('features.theme_customizer.editor.sections.visual') }}
               </h4>
               <div class="bg-card border-border border-2 rounded-2xl p-8 shadow-2xl shadow-primary/5 space-y-8">
                 <div
@@ -273,7 +273,7 @@
             >
               <h4 class="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2 px-1">
                 <MenuIcon class="w-3 h-3" />
-                {{ t('features.theme_builder.editor.sections.menus') }}
+                {{ t('features.theme_customizer.editor.sections.menus') }}
               </h4>
               <div class="bg-card border-border border-2 rounded-2xl p-8 shadow-2xl shadow-primary/5 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div
@@ -293,7 +293,7 @@
                     @update:model-value="(val: string) => recordSettingChange(menuSetting.key, val)"
                   >
                     <SelectTrigger class="w-full bg-background border-border/50">
-                      <SelectValue :placeholder="t('features.theme_builder.editor.menus.placeholder')" />
+                      <SelectValue :placeholder="t('features.theme_customizer.editor.menus.placeholder')" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem
@@ -312,7 +312,7 @@
               </div>
             </section>
 
-            <!-- Type 4: Advanced Bindings -->
+            <!-- Type 4: component data bindings (theme settings) -->
             <section
               v-if="selectedItem.bindingComponent"
               class="space-y-4"
@@ -320,9 +320,9 @@
               <div class="flex items-center justify-between px-1">
                 <h4 class="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                   <Database class="w-3 h-3 text-primary" />
-                  {{ t('features.theme_builder.editor.sections.bindings') }}
+                  {{ t('features.theme_customizer.editor.sections.bindings') }}
                 </h4>
-                <span class="text-[10px] text-primary/70 font-mono">{{ t('features.theme_builder.editor.bindings.subtitle') }}</span>
+                <span class="text-[10px] text-primary/70 font-mono">{{ t('features.theme_customizer.editor.bindings.subtitle') }}</span>
               </div>
                             
               <div class="space-y-4">
@@ -345,7 +345,7 @@
                       <div class="text-left">
                         <span class="font-bold text-base tracking-tight">{{ slot.label }}</span>
                         <div class="flex items-center gap-2 mt-0.5">
-                          <span class="text-[10px] uppercase font-bold text-muted-foreground/50">{{ t('features.theme_builder.editor.bindings.source_label') }}</span>
+                          <span class="text-[10px] uppercase font-bold text-muted-foreground/50">{{ t('features.theme_customizer.editor.bindings.source_label') }}</span>
                           <span
                             class="text-[10px] uppercase font-black"
                             :class="getSlotConfig(selectedItem.bindingComponent.id, slot.id).sourceType !== 'static' ? 'text-primary' : 'text-muted-foreground'"
@@ -367,7 +367,7 @@
                   >
                     <!-- Source Type Selection -->
                     <div class="p-6 bg-muted/20 rounded-2xl border border-border/50">
-                      <label class="text-[11px] font-black uppercase tracking-tighter text-muted-foreground/70 mb-3 block">{{ t('features.theme_builder.editor.bindings.source_title') }}</label>
+                      <label class="text-[11px] font-black uppercase tracking-tighter text-muted-foreground/70 mb-3 block">{{ t('features.theme_customizer.editor.bindings.source_title') }}</label>
                       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <button 
                           v-for="src in ['static', 'api_posts', 'api_pages', 'api_categories']" 
@@ -397,7 +397,7 @@
                         <div class="space-y-4">
                           <h5 class="text-[11px] font-black text-foreground uppercase tracking-wider flex items-center gap-2">
                             <Filter class="w-3 h-3 text-primary" />
-                            {{ t('features.theme_builder.editor.bindings.query_title') }}
+                            {{ t('features.theme_customizer.editor.bindings.query_title') }}
                           </h5>
                                                     
                           <!-- api_posts filters -->
@@ -429,7 +429,7 @@
                               <div class="space-y-1.5">
                                 <div class="flex items-center justify-between mb-4">
                                   <label class="text-[10px] font-bold text-muted-foreground uppercase">{{ t('common.labels.limit') }}</label>
-                                  <span class="text-[10px] text-muted-foreground font-mono">{{ t('features.theme_builder.editor.bindings.items_found') }}</span>
+                                  <span class="text-[10px] text-muted-foreground font-mono">{{ t('features.theme_customizer.editor.bindings.items_found') }}</span>
                                 </div>
                                 <div class="flex items-center gap-3">
                                   <Input
@@ -445,17 +445,17 @@
                                 <label class="text-[10px] font-bold text-muted-foreground uppercase">{{ t('common.labels.sort') }}</label>
                                 <Select v-model="getSlotConfig(selectedItem.bindingComponent.id, slot.id).orderBy">
                                   <SelectTrigger class="w-full h-8 text-xs bg-background">
-                                    <SelectValue :placeholder="t('features.theme_builder.editor.bindings.sort_options.latest')" />
+                                    <SelectValue :placeholder="t('features.theme_customizer.editor.bindings.sort_options.latest')" />
                                   </SelectTrigger>
                                   <SelectContent>
                                     <SelectItem value="published_at">
-                                      {{ t('features.theme_builder.editor.bindings.sort_options.published_at') }}
+                                      {{ t('features.theme_customizer.editor.bindings.sort_options.published_at') }}
                                     </SelectItem>
                                     <SelectItem value="title">
-                                      {{ t('features.theme_builder.editor.bindings.sort_options.title') }}
+                                      {{ t('features.theme_customizer.editor.bindings.sort_options.title') }}
                                     </SelectItem>
                                     <SelectItem value="views">
-                                      {{ t('features.theme_builder.editor.bindings.sort_options.views') }}
+                                      {{ t('features.theme_customizer.editor.bindings.sort_options.views') }}
                                     </SelectItem>
                                   </SelectContent>
                                 </Select>
@@ -493,7 +493,7 @@
                         >
                           <h5 class="text-[11px] font-black text-foreground uppercase tracking-wider flex items-center gap-2">
                             <Link2 class="w-3 h-3 text-primary" />
-                            {{ t('features.theme_builder.editor.bindings.mapping_title') }}
+                            {{ t('features.theme_customizer.editor.bindings.mapping_title') }}
                           </h5>
                           <div class="space-y-2 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
                             <div
@@ -518,7 +518,7 @@
                                 }"
                               >
                                 <SelectTrigger class="h-7 border-0 bg-muted/40 text-[10px]">
-                                  <SelectValue :placeholder="t('features.theme_builder.editor.bindings.field_placeholder')" />
+                                  <SelectValue :placeholder="t('features.theme_customizer.editor.bindings.field_placeholder')" />
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectItem
@@ -545,7 +545,7 @@
                           @click="previewSlotData(slot.id)"
                         >
                           <Eye class="w-3 h-3 mr-2 group-hover:scale-125 transition-transform" />
-                          {{ t('features.theme_builder.editor.bindings.probe_button') }}
+                          {{ t('features.theme_customizer.editor.bindings.probe_button') }}
                           <Loader2
                             v-if="previewLoading === slot.id"
                             class="ml-2 w-3 h-3 animate-spin"
@@ -560,9 +560,9 @@
                           <div class="flex items-center justify-between mb-4 relative z-10 border-b border-white/10 pb-2">
                             <div class="flex items-center gap-2">
                               <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
-                              <span class="text-[10px] font-mono font-bold text-green-500 uppercase">{{ t('features.theme_builder.editor.bindings.inspector_title') }}</span>
+                              <span class="text-[10px] font-mono font-bold text-green-500 uppercase">{{ t('features.theme_customizer.editor.bindings.inspector_title') }}</span>
                             </div>
-                            <span class="text-[10px] font-mono text-white/40 uppercase">{{ previewResults[slot.id]?.length ?? 0 }} {{ t('features.theme_builder.editor.bindings.items_found') }}</span>
+                            <span class="text-[10px] font-mono text-white/40 uppercase">{{ previewResults[slot.id]?.length ?? 0 }} {{ t('features.theme_customizer.editor.bindings.items_found') }}</span>
                           </div>
                                                     
                           <div class="space-y-4 max-h-60 overflow-y-auto custom-scrollbar pr-2 relative z-10">
@@ -576,7 +576,7 @@
                               </div>
                               <div class="flex-1 min-w-0">
                                 <p class="text-[11px] font-bold text-white mb-1 truncate">
-                                  {{ (item as any).title || (item as any).name || t('features.theme_builder.editor.bindings.object_data') }}
+                                  {{ (item as any).title || (item as any).name || t('features.theme_customizer.editor.bindings.object_data') }}
                                 </p>
                                 <div class="flex flex-wrap gap-2">
                                   <span
@@ -594,7 +594,7 @@
                             class="absolute bottom-4 right-6 text-[10px] font-bold text-white/20 hover:text-white/90 transition-colors uppercase tracking-widest"
                             @click="delete previewResults[slot.id]"
                           >
-                            {{ t('features.theme_builder.editor.bindings.clear_buffer') }}
+                            {{ t('features.theme_customizer.editor.bindings.clear_buffer') }}
                           </button>
                         </div>
                       </div>
@@ -616,10 +616,10 @@
             <LayoutTemplate class="w-24 h-24 mb-4 relative opacity-40 text-primary" />
           </div>
           <h3 class="text-2xl font-black text-foreground tracking-tight">
-            {{ t('features.theme_builder.empty_state.title') }}
+            {{ t('features.theme_customizer.empty_state.title') }}
           </h3>
           <p class="text-sm mt-3 max-w-sm font-medium">
-            {{ t('features.theme_builder.empty_state.description') }}
+            {{ t('features.theme_customizer.empty_state.description') }}
           </p>
         </div>
       </main>
@@ -638,7 +638,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, reactive, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { 
@@ -658,34 +658,39 @@ import {
     Award, Briefcase
 } from 'lucide-vue-next';
 
-import { JANARI_PRESETS, type JanariPresetKey } from '@/modules/Cms/config/janariPresets';
 import api from '@/services/api'
 import toast from '@/services/toast'
 import type { ThemeSection } from '@/types/cms/theme'
-import type { SlotBinding } from '@/modules/Cms/composables/useAdvancedBindings'
+import type { SlotBinding } from '@/modules/Cms/composables/useThemeDataBindings'
 import { THEME_BINDING_REGISTRY } from '@/modules/Cms/config/themeBindingsRegistry'
+import { useThemeCustomizer } from '@/modules/Cms/composables/useThemeCustomizer'
+import { themeUsesJanariCanvas } from '@/modules/Cms/utils/themeManifest'
 
 const { t, te } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const slug = route.params.slug as string
 
-// ─────────────────────────────────────────────
-// Core State
-// ─────────────────────────────────────────────
-const theme = ref<any>(null)
-const loading = ref(true)
-const saving = ref(false)
-const formValues = ref<Record<string, unknown>>({})
-const customCss = ref('')
-const bindings = ref<Record<string, { slots: Record<string, SlotBinding> }>>({})
+const {
+    theme,
+    loading,
+    saving,
+    formValues,
+    customCss,
+    bindings,
+    isDirty,
+    canUndo,
+    canRedo,
+    fetchThemeData,
+    saveAll,
+    resetToInitial,
+    resetToDefaults,
+    undo,
+    redo,
+    saveHistory,
+    recordSettingChange,
+} = useThemeCustomizer(slug, t)
 const availableMenus = ref<{ value: string | number; label: string }[]>([])
-
-// Snapshots and History
-const initialDataSnapshot = ref('')
-const history = ref<string[]>([])
-const historyIndex = ref(-1)
-const isInternalChange = ref(false)
 
 // ─────────────────────────────────────────────
 // Schema & Organization
@@ -772,27 +777,27 @@ const sidebarGroups = computed(() => {
     const groups = [
         { 
             id: 'identity', 
-            label: t('features.theme_builder.sidebar.categories.identity'), 
+            label: t('features.theme_customizer.sidebar.categories.identity'), 
             items: [
-                { id: 'identity-general', label: t('features.theme_builder.sidebar.items.general'), description: t('features.theme_builder.sidebar.items.general_desc'), icon: Globe, manifestSections: findSections(['General']), hasBinding: false },
-                { id: 'identity-edu', label: t('features.theme_builder.sidebar.items.edu'), description: t('features.theme_builder.sidebar.items.edu_desc'), icon: Sparkles, manifestSections: findSections(['Education Info']), hasBinding: false },
-                { id: 'identity-menus', label: t('features.theme_builder.sidebar.items.menus.title'), description: t('features.theme_builder.sidebar.items.menus.description'), icon: MenuIcon, hasBinding: false },
-                { id: 'identity-social', label: t('features.theme_builder.sidebar.items.social'), description: t('features.theme_builder.sidebar.items.social_desc'), icon: Share2, manifestSections: findSections(['Social Media']), hasBinding: false },
+                { id: 'identity-general', label: t('features.theme_customizer.sidebar.items.general'), description: t('features.theme_customizer.sidebar.items.general_desc'), icon: Globe, manifestSections: findSections(['General']), hasBinding: false },
+                { id: 'identity-edu', label: t('features.theme_customizer.sidebar.items.edu'), description: t('features.theme_customizer.sidebar.items.edu_desc'), icon: Sparkles, manifestSections: findSections(['Education Info']), hasBinding: false },
+                { id: 'identity-menus', label: t('features.theme_customizer.sidebar.items.menus.title'), description: t('features.theme_customizer.sidebar.items.menus.description'), icon: MenuIcon, hasBinding: false },
+                { id: 'identity-social', label: t('features.theme_customizer.sidebar.items.social'), description: t('features.theme_customizer.sidebar.items.social_desc'), icon: Share2, manifestSections: findSections(['Social Media']), hasBinding: false },
             ] 
         },
         { 
             id: 'design', 
-            label: t('features.theme_builder.sidebar.categories.design'), 
+            label: t('features.theme_customizer.sidebar.categories.design'), 
             items: [
-                { id: 'design-branding', label: t('features.theme_builder.sidebar.items.styles'), description: t('features.theme_builder.sidebar.items.styles_desc'), icon: Palette, manifestSections: findSections(['Appearance', 'Buttons']), hasBinding: false },
-                { id: 'design-colors', label: t('features.theme_builder.sidebar.items.palette'), description: t('features.theme_builder.sidebar.items.palette_desc'), icon: Sparkles, manifestSections: findSections(['Colors']), hasBinding: false },
-                { id: 'design-typo', label: t('features.theme_builder.sidebar.items.typo'), description: t('features.theme_builder.sidebar.items.typo_desc'), icon: Type, manifestSections: findSections(['Typography', 'Fonts']), hasBinding: false },
-                { id: 'styling-css', label: t('features.theme_builder.sidebar.items.css'), description: t('features.theme_builder.sidebar.items.css_desc'), icon: Code2, hasBinding: false },
+                { id: 'design-branding', label: t('features.theme_customizer.sidebar.items.styles'), description: t('features.theme_customizer.sidebar.items.styles_desc'), icon: Palette, manifestSections: findSections(['Appearance', 'Buttons']), hasBinding: false },
+                { id: 'design-colors', label: t('features.theme_customizer.sidebar.items.palette'), description: t('features.theme_customizer.sidebar.items.palette_desc'), icon: Sparkles, manifestSections: findSections(['Colors']), hasBinding: false },
+                { id: 'design-typo', label: t('features.theme_customizer.sidebar.items.typo'), description: t('features.theme_customizer.sidebar.items.typo_desc'), icon: Type, manifestSections: findSections(['Typography', 'Fonts']), hasBinding: false },
+                { id: 'styling-css', label: t('features.theme_customizer.sidebar.items.css'), description: t('features.theme_customizer.sidebar.items.css_desc'), icon: Code2, hasBinding: false },
             ] 
         },
         { 
             id: 'components', 
-            label: t('features.theme_builder.sidebar.categories.components'), 
+            label: t('features.theme_customizer.sidebar.categories.components'), 
             items: themeComponents.value.map(comp => ({
                 id: `comp-${comp.id}`,
                 label: comp.name,
@@ -808,26 +813,26 @@ const sidebarGroups = computed(() => {
         },
         { 
             id: 'interaction', 
-            label: t('features.theme_builder.sidebar.categories.interaction'), 
+            label: t('features.theme_customizer.sidebar.categories.interaction'), 
             items: [
-                { id: 'ux-layout', label: t('features.theme_builder.sidebar.items.layout'), description: t('features.theme_builder.sidebar.items.layout_desc'), icon: PanelsTopLeft, manifestSections: findSections(['Layout']), hasBinding: false },
-                { id: 'ux-motion', label: t('features.theme_builder.sidebar.items.motion'), description: t('features.theme_builder.sidebar.items.motion_desc'), icon: Sparkles, manifestSections: findSections(['Animations']), hasBinding: false },
-                { id: 'ux-footer', label: t('features.theme_builder.sidebar.items.footer'), description: t('features.theme_builder.sidebar.items.footer_desc'), icon: PanelBottom, manifestSections: findSections(['Footer']), hasBinding: false },
+                { id: 'ux-layout', label: t('features.theme_customizer.sidebar.items.layout'), description: t('features.theme_customizer.sidebar.items.layout_desc'), icon: PanelsTopLeft, manifestSections: findSections(['Layout']), hasBinding: false },
+                { id: 'ux-motion', label: t('features.theme_customizer.sidebar.items.motion'), description: t('features.theme_customizer.sidebar.items.motion_desc'), icon: Sparkles, manifestSections: findSections(['Animations']), hasBinding: false },
+                { id: 'ux-footer', label: t('features.theme_customizer.sidebar.items.footer'), description: t('features.theme_customizer.sidebar.items.footer_desc'), icon: PanelBottom, manifestSections: findSections(['Footer']), hasBinding: false },
             ] 
         },
         { 
             id: 'special-pages', 
-            label: t('features.theme_builder.sidebar.categories.special_pages'), 
+            label: t('features.theme_customizer.sidebar.categories.special_pages'), 
             items: [
-                { id: 'page-management', label: t('features.theme_builder.sidebar.items.page_management', 'Lifecycle & Controls'), description: 'Manage enable/disable status for all pages', icon: Settings2, manifestSections: findSections(['Page Management']), hasBinding: false },
-                { id: 'page-ppdb', label: t('features.theme_builder.sidebar.items.page_ppdb'), description: t('features.theme_builder.sidebar.items.page_ppdb_desc'), icon: GraduationCap, manifestSections: findSections(['PPDB Page']), hasBinding: false },
-                { id: 'page-about', label: t('features.theme_builder.sidebar.items.page_about', 'About Page'), description: 'Customize the About/Profile page', icon: UserCircle, manifestSections: findSections(['About Page']), hasBinding: false },
-                { id: 'page-academic', label: t('features.theme_builder.sidebar.items.page_academic', 'Academic Page'), description: 'Customize the Academic & Curriculum page', icon: GraduationCap, manifestSections: findSections(['Academic Page']), hasBinding: false },
-                { id: 'page-achievement', label: t('features.theme_builder.sidebar.items.page_achievement', 'Achievement Page'), description: 'Customize the Student Achievements page', icon: Award, manifestSections: findSections(['Achievement Page']), hasBinding: false },
-                { id: 'page-vocation', label: t('features.theme_builder.sidebar.items.page_vocation', 'Vocational Page'), description: 'Customize the Majors/Program Keahlian page', icon: GraduationCap, manifestSections: findSections(['Vocational Page']), hasBinding: false },
-                { id: 'page-career', label: t('features.theme_builder.sidebar.items.page_career', 'Career Center'), description: 'Customize the BKK / Career Center page', icon: Briefcase, manifestSections: findSections(['Career Center Page']), hasBinding: false },
-                { id: 'page-blog', label: t('features.theme_builder.sidebar.items.page_blog', 'Blog Page'), description: 'Customize the News & Information page', icon: Newspaper, manifestSections: findSections(['Blog Page']), hasBinding: false },
-                { id: 'page-contact', label: t('features.theme_builder.sidebar.items.page_contact', 'Contact Page'), description: 'Customize the Contact Us page', icon: Globe, manifestSections: findSections(['Contact Page']), hasBinding: false },
+                { id: 'page-management', label: t('features.theme_customizer.sidebar.items.page_management', 'Lifecycle & Controls'), description: 'Manage enable/disable status for all pages', icon: Settings2, manifestSections: findSections(['Page Management']), hasBinding: false },
+                { id: 'page-ppdb', label: t('features.theme_customizer.sidebar.items.page_ppdb'), description: t('features.theme_customizer.sidebar.items.page_ppdb_desc'), icon: GraduationCap, manifestSections: findSections(['PPDB Page']), hasBinding: false },
+                { id: 'page-about', label: t('features.theme_customizer.sidebar.items.page_about', 'About Page'), description: 'Customize the About/Profile page', icon: UserCircle, manifestSections: findSections(['About Page']), hasBinding: false },
+                { id: 'page-academic', label: t('features.theme_customizer.sidebar.items.page_academic', 'Academic Page'), description: 'Customize the Academic & Curriculum page', icon: GraduationCap, manifestSections: findSections(['Academic Page']), hasBinding: false },
+                { id: 'page-achievement', label: t('features.theme_customizer.sidebar.items.page_achievement', 'Achievement Page'), description: 'Customize the Student Achievements page', icon: Award, manifestSections: findSections(['Achievement Page']), hasBinding: false },
+                { id: 'page-vocation', label: t('features.theme_customizer.sidebar.items.page_vocation', 'Vocational Page'), description: 'Customize the Majors/Program Keahlian page', icon: GraduationCap, manifestSections: findSections(['Vocational Page']), hasBinding: false },
+                { id: 'page-career', label: t('features.theme_customizer.sidebar.items.page_career', 'Career Center'), description: 'Customize the BKK / Career Center page', icon: Briefcase, manifestSections: findSections(['Career Center Page']), hasBinding: false },
+                { id: 'page-blog', label: t('features.theme_customizer.sidebar.items.page_blog', 'Blog Page'), description: 'Customize the News & Information page', icon: Newspaper, manifestSections: findSections(['Blog Page']), hasBinding: false },
+                { id: 'page-contact', label: t('features.theme_customizer.sidebar.items.page_contact', 'Contact Page'), description: 'Customize the Contact Us page', icon: Globe, manifestSections: findSections(['Contact Page']), hasBinding: false },
             ] 
         }
     ]
@@ -892,8 +897,8 @@ function findSections(catLabels: string[]): ThemeSection[] {
                 .replace(/[^a-z0-9]+/g, '_')
                 .replace(/^_+|_+$/g, '');
                 
-            const translatedLabel = te(`features.theme_builder.items.manifest_categories.${catKey}`) 
-                ? t(`features.theme_builder.items.manifest_categories.${catKey}`) 
+            const translatedLabel = te(`features.theme_customizer.items.manifest_categories.${catKey}`) 
+                ? t(`features.theme_customizer.items.manifest_categories.${catKey}`) 
                 : cat;
 
             if (!sections[cat]) sections[cat] = { id: cat, label: translatedLabel, settings: [] }
@@ -905,8 +910,7 @@ function findSections(catLabels: string[]): ThemeSection[] {
 
 function getVisibleSettings(settings: any[]) {
     if (!Array.isArray(settings)) return [];
-    const isJanari = String(theme.value?.slug || '').startsWith('janari');
-    if (!isJanari) return settings;
+    if (!themeUsesJanariCanvas(theme.value)) return settings;
 
     const preset = String(formValues.value.color_preset || 'custom');
     const isMonochromePreset = preset === 'monochrome_clean';
@@ -919,7 +923,7 @@ function getVisibleSettings(settings: any[]) {
         // Skip hidden settings
         if (setting.hidden) return false;
 
-        // Legacy color_background replaced by bg_light/bg_dark system
+        // color_background is hidden schema; UI uses bg_light/bg_dark tokens instead
         if (key === 'color_background') return false;
 
         // monochrome_variant only makes sense for monochrome preset
@@ -983,7 +987,8 @@ function ensureComponentBindings(compId: string) {
 function hasComponentBindings(compId: string): boolean {
     const b = bindings.value[compId];
     if (!b || !b.slots) return false;
-    return Object.values(b.slots).some(s => s.sourceType !== 'static');
+    const slots = b.slots as Record<string, SlotBinding>;
+    return Object.values(slots).some((slot) => slot.sourceType !== 'static');
 }
 
 function toggleSlot(slotId: string) {
@@ -993,10 +998,10 @@ function toggleSlot(slotId: string) {
 
 function getSourceLabel(src: string) {
     return ({ 
-        static: t('features.theme_builder.sources.static'), 
-        api_posts: t('features.theme_builder.sources.api_posts'), 
-        api_pages: t('features.theme_builder.sources.api_pages'), 
-        api_categories: t('features.theme_builder.sources.api_categories') 
+        static: t('features.theme_customizer.sources.static'), 
+        api_posts: t('features.theme_customizer.sources.api_posts'), 
+        api_pages: t('features.theme_customizer.sources.api_pages'), 
+        api_categories: t('features.theme_customizer.sources.api_categories') 
     } as any)[src] || src
 }
 
@@ -1006,24 +1011,24 @@ function getSourceIcon(src: string) {
 
 function getFieldsForSource(src: string) {
     if (src === 'api_posts') return [
-        { value: 'title', label: t('features.theme_builder.items.news_title') }, 
-        { value: 'excerpt', label: t('features.theme_builder.items.short_info') }, 
-        { value: 'content', label: t('features.theme_builder.items.message') },
-        { value: 'thumbnail', label: t('features.theme_builder.items.thumbnail') }, 
-        { value: 'published_at', label: t('features.theme_builder.items.date') },
+        { value: 'title', label: t('features.theme_customizer.items.news_title') }, 
+        { value: 'excerpt', label: t('features.theme_customizer.items.short_info') }, 
+        { value: 'content', label: t('features.theme_customizer.items.message') },
+        { value: 'thumbnail', label: t('features.theme_customizer.items.thumbnail') }, 
+        { value: 'published_at', label: t('features.theme_customizer.items.date') },
         { value: 'category.name', label: t('common.labels.category') }, 
-        { value: 'slug', label: t('features.theme_builder.items.path') },
-        { value: 'views', label: t('features.theme_builder.editor.bindings.sort_options.views') }
+        { value: 'slug', label: t('features.theme_customizer.items.path') },
+        { value: 'views', label: t('features.theme_customizer.editor.bindings.sort_options.views') }
     ]
     if (src === 'api_pages') return [
-        { value: 'title', label: t('features.theme_builder.items.title') }, 
-        { value: 'thumbnail', label: t('features.theme_builder.items.thumbnail') }, 
-        { value: 'slug', label: t('features.theme_builder.items.path') }
+        { value: 'title', label: t('features.theme_customizer.items.title') }, 
+        { value: 'thumbnail', label: t('features.theme_customizer.items.thumbnail') }, 
+        { value: 'slug', label: t('features.theme_customizer.items.path') }
     ]
     if (src === 'api_categories') return [
         { value: 'name', label: t('common.labels.name') }, 
-        { value: 'slug', label: t('features.theme_builder.items.path') },
-        { value: 'posts_count', label: t('features.theme_builder.items.counter') }
+        { value: 'slug', label: t('features.theme_customizer.items.path') },
+        { value: 'posts_count', label: t('features.theme_customizer.items.counter') }
     ]
     return []
 }
@@ -1050,7 +1055,7 @@ async function previewSlotData(slotId: string) {
             results = res.data || []
         }
         previewResults[slotId] = results
-    } catch { toast.error(t('features.theme_builder.messages.error'), t('features.theme_builder.messages.probe_failed')) }
+    } catch { toast.error(t('features.theme_customizer.messages.error'), t('features.theme_customizer.messages.probe_failed')) }
     finally { previewLoading.value = null }
 }
 
@@ -1062,110 +1067,8 @@ function filterPreviewFields(item: any) {
 }
 
 // ─────────────────────────────────────────────
-// History & Change Management
-// ─────────────────────────────────────────────
-const isDirty = computed(() => {
-    const current = JSON.stringify({ f: formValues.value, c: customCss.value, b: bindings.value });
-    return current !== initialDataSnapshot.value;
-});
-
-const canUndo = computed(() => historyIndex.value > 0);
-const canRedo = computed(() => historyIndex.value < history.value.length - 1);
-
-function recordSettingChange(key: string, val: any) {
-    formValues.value[key] = val;
-    
-    // 1. Sync Color -> Preset (Switch to custom if color deviates from preset)
-    if (key === 'color_primary' && formValues.value.color_preset !== 'custom') {
-        const currentPreset = String(formValues.value.color_preset || '');
-        const presetColor = JANARI_PRESETS[currentPreset as JanariPresetKey]?.light.toLowerCase();
-        if (String(val).toLowerCase() !== presetColor) {
-            formValues.value.color_preset = 'custom';
-        }
-    }
-    
-    // 2. Sync Preset -> Color (Update picker if preset is selected)
-    if (key === 'color_preset' && val !== 'custom') {
-        const presetColor = JANARI_PRESETS[val as JanariPresetKey]?.light;
-        if (presetColor) {
-            formValues.value.color_primary = presetColor;
-        }
-    }
-
-    saveHistory();
-}
-
-watch(customCss, (newV, oldV) => {
-    if (!isInternalChange.value && newV !== oldV) saveHistory();
-});
-
-function saveHistory() {
-    if (isInternalChange.value) return;
-    const state = JSON.stringify({ f: formValues.value, c: customCss.value, b: bindings.value });
-    
-    // Don't save duplicate states
-    if (history.value[historyIndex.value] === state) return;
-
-    // Cut any "redos" if we diverge
-    if (historyIndex.value < history.value.length - 1) {
-        history.value = history.value.slice(0, historyIndex.value + 1);
-    }
-    
-    history.value.push(state);
-    if (history.value.length > 50) history.value.shift();
-    else historyIndex.value++;
-}
-
-function undo() {
-    if (!canUndo.value) return;
-    historyIndex.value--;
-    restoreState(history.value[historyIndex.value]!);
-}
-
-function redo() {
-    if (!canRedo.value) return;
-    historyIndex.value++;
-    restoreState(history.value[historyIndex.value]!);
-}
-
-function restoreState(stateStr: string) {
-    isInternalChange.value = true;
-    const state = JSON.parse(stateStr);
-    formValues.value = JSON.parse(JSON.stringify(state.f));
-    customCss.value = state.c;
-    bindings.value = JSON.parse(JSON.stringify(state.b));
-    setTimeout(() => { isInternalChange.value = false; }, 0);
-}
-
-// ─────────────────────────────────────────────
 // Actions
 // ─────────────────────────────────────────────
-async function fetchThemeData() {
-    loading.value = true
-    try {
-        const response = await api.get(`/admin/cms/themes/${slug}`)
-        theme.value = response.data
-        
-        // Initial defaults from manifest
-        const defaults: any = {}
-        const schema = theme.value?.manifest?.settings_schema || {}
-        Object.keys(schema).forEach(k => { if (schema[k]) defaults[k] = schema[k].default ?? '' })
-        
-        formValues.value = { ...defaults, ...(theme.value?.settings || {}) }
-        customCss.value = theme.value?.custom_css || ''
-        
-        if (theme.value?.settings?._advanced_bindings) {
-            bindings.value = JSON.parse(JSON.stringify(theme.value.settings._advanced_bindings))
-        }
-
-        const state = JSON.stringify({ f: formValues.value, c: customCss.value, b: bindings.value });
-        initialDataSnapshot.value = state;
-        history.value = [state];
-        historyIndex.value = 0;
-        
-    } catch { toast.error(t('features.theme_builder.messages.error'), t('features.theme_builder.messages.init_failed')) }
-    finally { loading.value = false }
-}
 
 async function fetchCategories() {
     try {
@@ -1179,7 +1082,7 @@ async function fetchMenus() {
         const r = await api.get('/admin/cms/menus')
         const data = r.data.data || r.data
         availableMenus.value = (Array.isArray(data) ? data : []).map((m: any) => ({ value: m.id, label: m.name }))
-        availableMenus.value.unshift({ value: 'none', label: t('features.theme_builder.editor.menus.placeholder') })
+        availableMenus.value.unshift({ value: 'none', label: t('features.theme_customizer.editor.menus.placeholder') })
     } catch { /* silent */ }
 }
 
@@ -1194,7 +1097,7 @@ const menuSections = computed(() => {
     if (!theme.value?.manifest?.menus) return []
     const menus = theme.value.manifest.menus
     return Object.entries(menus).map(([locKey, locLabel]) => {
-        const locTransKey = `features.theme_builder.items.menus.locations.${locKey}`;
+        const locTransKey = `features.theme_customizer.items.menus.locations.${locKey}`;
         const finalLabel = te(locTransKey) ? t(locTransKey) : String(locLabel);
 
         return {
@@ -1203,48 +1106,14 @@ const menuSections = computed(() => {
             type: 'select',
             category: 'Menus',
             options: availableMenus.value,
-            description: t('features.theme_builder.editor.menus.description', { label: finalLabel })
+            description: t('features.theme_customizer.editor.menus.description', { label: finalLabel })
         };
     })
 })
 
-async function saveAll() {
-    saving.value = true
-    try {
-        const payload = { ...formValues.value, _advanced_bindings: bindings.value }
-        await api.put(`/admin/cms/themes/${slug}/settings`, { settings: payload })
-        await api.put(`/admin/cms/themes/${slug}/custom-css`, { custom_css: customCss.value })
-        
-        const state = JSON.stringify({ f: formValues.value, c: customCss.value, b: bindings.value });
-        initialDataSnapshot.value = state;
-        toast.success(t('features.theme_builder.messages.success'), t('features.theme_builder.messages.published'));
-    } catch { toast.error(t('features.theme_builder.messages.error'), t('features.theme_builder.messages.publish_failed')) }
-    finally { saving.value = false }
-}
-
-function resetToInitial() {
-    restoreState(initialDataSnapshot.value);
-    saveHistory();
-}
-
-function resetToDefaults() {
-    if (!theme.value?.manifest?.settings_schema) return
-    const defaults: any = {}
-    const schema = theme.value.manifest.settings_schema
-    Object.keys(schema).forEach(k => { if (schema[k]) defaults[k] = schema[k].default ?? '' })
-    
-    isInternalChange.value = true;
-    formValues.value = defaults;
-    customCss.value = '';
-    bindings.value = {};
-    saveHistory();
-    setTimeout(() => { isInternalChange.value = false; }, 0);
-    toast.info(t('features.theme_builder.messages.info'), t('features.theme_builder.messages.reset_done'));
-}
-
 function handleBack() {
     if (isDirty.value) {
-        if (confirm(t('features.theme_builder.messages.confirm_exit'))) router.push({ name: 'themes' })
+        if (confirm(t('features.theme_customizer.messages.confirm_exit'))) router.push({ name: 'themes' })
     } else router.push({ name: 'themes' })
 }
 

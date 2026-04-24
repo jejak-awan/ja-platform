@@ -35,7 +35,7 @@ class ThemeController extends BaseApiController
 
     public function show(Theme $theme): \Illuminate\Http\JsonResponse
     {
-        $this->normalizeThemeAdvancedBindings($theme);
+        $this->themeService->normalizeThemeDataBindings($theme);
 
         // Load theme assets
         $assets = $this->themeService->loadThemeAssets($theme);
@@ -136,27 +136,37 @@ class ThemeController extends BaseApiController
 
     public function getActive(Request $request): \Illuminate\Http\JsonResponse
     {
+        $profile = (bool) config('cms.profile_public_theme_api', false);
+        $t0 = $profile ? microtime(true) : 0.0;
+
         try {
             $typeRaw = $request->input('type', 'frontend');
             $type = is_string($typeRaw) ? $typeRaw : 'frontend';
-            $theme = $this->themeService->getActiveTheme($type);
 
-            if (! $theme) {
-                // Return null instead of 404 for public endpoint
-                // Frontend can work without theme
+            $payload = $this->themeService->getActiveThemePublicPayload($type);
+
+            if ($payload === null) {
                 return $this->success(null, 'No active theme found');
             }
 
-            $this->normalizeThemeAdvancedBindings($theme);
+            $response = $this->success($payload, 'Active theme retrieved successfully');
 
-            // Load assets
-            $assets = $this->themeService->loadThemeAssets($theme);
-            $theme->assets = $assets;
+            $maxAgeRaw = config('cms.public_active_theme_http_cache_max_age', 0);
+            $maxAge = is_int($maxAgeRaw) ? $maxAgeRaw : (is_numeric($maxAgeRaw) ? (int) $maxAgeRaw : 0);
+            $maxAge = max(0, $maxAge);
+            if ($maxAge > 0 && $request->is('api/v1/ja/*')) {
+                $response->headers->set(
+                    'Cache-Control',
+                    'public, max-age='.$maxAge.', stale-while-revalidate='.min(600, $maxAge * 5)
+                );
+            }
 
-            // Load manifest
-            $theme->manifest = $theme->getManifest();
+            if ($profile && $t0 > 0 && $request->is('api/v1/ja/*')) {
+                $durMs = round((microtime(true) - $t0) * 1000, 2);
+                $response->headers->set('Server-Timing', 'theme-active;dur='.$durMs);
+            }
 
-            return $this->success($theme, 'Active theme retrieved successfully');
+            return $response;
         } catch (\Exception $e) {
             Log::error('Failed to get active theme: '.$e->getMessage());
 
@@ -177,7 +187,7 @@ class ThemeController extends BaseApiController
             $settingsInput = is_array($validated['settings']) ? $validated['settings'] : [];
 
             $newSettings = array_merge($existingSettings, $settingsInput);
-            $newSettings = $this->normalizeAdvancedBindingsInSettings($newSettings);
+            $newSettings = $this->themeService->normalizeThemeDataBindingsInSettings($newSettings);
 
             $theme->update(['settings' => $newSettings]);
 
@@ -348,95 +358,4 @@ class ThemeController extends BaseApiController
         }
     }
 
-    /**
-     * Normalize legacy advanced binding keys in theme settings.
-     *
-     * @param  array<string, mixed>  $settings
-     * @return array<string, mixed>
-     */
-    private function normalizeAdvancedBindingsInSettings(array $settings): array
-    {
-        $bindings = $settings['_advanced_bindings'] ?? null;
-        if (! is_array($bindings)) {
-            return $settings;
-        }
-
-        /** @var array<string, array<int, string>> $componentAliases */
-        $componentAliases = [
-            'majors' => ['programs'],
-            'partners' => ['partner'],
-        ];
-
-        /** @var array<string, array<string, array<int, string>>> $slotAliases */
-        $slotAliases = [
-            'majors' => ['programs' => ['default']],
-            'stats' => ['counters' => ['default']],
-            'testimonials' => ['items' => ['default']],
-            'partners' => ['partners' => ['default']],
-        ];
-
-        /** @var array<string, mixed> $normalized */
-        $normalized = [];
-
-        foreach ($bindings as $componentId => $componentConfig) {
-            if (! is_array($componentConfig)) {
-                continue;
-            }
-
-            $targetComponentId = $componentId;
-            foreach ($componentAliases as $canonical => $aliases) {
-                if ($componentId === $canonical || in_array($componentId, $aliases, true)) {
-                    $targetComponentId = $canonical;
-                    break;
-                }
-            }
-
-            $existingComponent = $normalized[$targetComponentId] ?? ['slots' => []];
-            $slotsInput = $componentConfig['slots'] ?? [];
-            if (! is_array($slotsInput)) {
-                $slotsInput = [];
-            }
-
-            foreach ($slotsInput as $slotId => $slotConfig) {
-                if (! is_array($slotConfig)) {
-                    continue;
-                }
-
-                $targetSlotId = $slotId;
-                $slotMap = $slotAliases[$targetComponentId] ?? [];
-                foreach ($slotMap as $canonicalSlot => $aliases) {
-                    if ($slotId === $canonicalSlot || in_array($slotId, $aliases, true)) {
-                        $targetSlotId = $canonicalSlot;
-                        break;
-                    }
-                }
-
-                // Normalize api_pages selector to slug key while keeping backward compatibility.
-                if (! isset($slotConfig['pageSlug']) && isset($slotConfig['pageId']) && is_scalar($slotConfig['pageId'])) {
-                    $slotConfig['pageSlug'] = (string) $slotConfig['pageId'];
-                }
-
-                if (! isset($slotConfig['propMapping']) || ! is_array($slotConfig['propMapping'])) {
-                    $slotConfig['propMapping'] = [];
-                }
-
-                $existingComponent['slots'][$targetSlotId] = array_merge(
-                    is_array($existingComponent['slots'][$targetSlotId] ?? null) ? $existingComponent['slots'][$targetSlotId] : [],
-                    $slotConfig
-                );
-            }
-
-            $normalized[$targetComponentId] = array_merge($componentConfig, $existingComponent);
-        }
-
-        $settings['_advanced_bindings'] = $normalized;
-
-        return $settings;
-    }
-
-    private function normalizeThemeAdvancedBindings(Theme $theme): void
-    {
-        $settings = is_array($theme->settings) ? $theme->settings : [];
-        $theme->settings = $this->normalizeAdvancedBindingsInSettings($settings);
-    }
 }

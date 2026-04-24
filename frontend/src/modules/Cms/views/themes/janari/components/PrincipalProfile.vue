@@ -6,7 +6,7 @@
         ref="leftCard"
         class="relative min-h-[500px] md:min-h-[650px] overflow-hidden group border-b lg:border-b-0 lg:border-r border-border"
       >
-        <!-- Section background (Advanced Customizer: principal_section_background → school_image → placeholder) -->
+        <!-- Section background (Theme Customizer: principal_section_background → school_image → placeholder) -->
         <div class="absolute inset-0 z-0">
           <img 
             :src="sanitizeImageUrl(sectionBackgroundUrl, '/assets/themes/janari/hero-placeholder.png')" 
@@ -187,14 +187,14 @@ const principalBiographyLink = computed(() =>
     resolveThemeLink('principal_biography_link', 'principal_biography_page_slug', 'profil')
 );
 
-/** Dedicated media in Advanced Customizer; falls back to legacy school_image, then empty → placeholder in template */
+/** Principal section background media, then school_image if unset; template uses placeholders when empty. */
 const sectionBackgroundUrl = computed(() => {
     const dedicated = getSetting('principal_section_background') as string | undefined;
     if (dedicated) return dedicated;
     return (getSetting('school_image') as string) || '';
 });
 
-// Guard to replace legacy Unsplash/external URLs with local placeholders
+// Replace known external stock URLs with theme placeholders
 const sanitizeImageUrl = (url: string | null | undefined, fallback: string) => {
     if (!url) return fallback
     if (url.includes('unsplash.com') || url.includes('placehold.co')) return fallback

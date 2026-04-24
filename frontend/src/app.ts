@@ -1,7 +1,5 @@
 import './bootstrap';
 import '../css/app.css';
-import '../css/themes/janari.css';
-import '../css/editor.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -12,6 +10,15 @@ import App from './App.vue';
 import lazyLoad from '@/utils/directives/lazyLoad';
 import i18n from './i18n';
 import { useAuthStore } from '@/modules/Core/stores/auth';
+
+// Keep admin/dashboard and public theme styles isolated.
+const isAdminRoute = window.location.pathname.startsWith('/dash');
+if (isAdminRoute) {
+    void import('../css/editor.css');
+} else {
+    // Current active public theme stylesheet (Janari for now).
+    void import('../css/themes/janari.css');
+}
 
 // Initialization Fail-Safe Logger
 window.onerror = function(message, source, lineno, colno, error) {
@@ -49,7 +56,6 @@ const initLayout = () => {
     document.documentElement.classList.add('no-transitions');
 
     // 2. Init Dark Mode
-    const isAdminRoute = window.location.pathname.startsWith('/dash');
     const THEME_KEY = isAdminRoute ? 'admin-dark-mode' : 'frontend-dark-mode';
     const saved = localStorage.getItem(THEME_KEY);
     

@@ -23,7 +23,7 @@ export function toWhatsAppDialDigits(input: string): string {
 }
 
 /**
- * Theme (Advanced Customizer) overrides first, then Identity / public settings.
+ * Theme Customizer overrides first, then Identity / public settings.
  */
 export function useJanariIdentity() {
     const { getSetting } = useTheme()

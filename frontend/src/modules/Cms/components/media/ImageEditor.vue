@@ -785,3 +785,10 @@ input[type=range]::-webkit-slider-thumb {
     scrollbar-width: none;
 }
 </style>
+
+<style>
+/* cropperjs uses image-orientation: 0deg; strict engines reject the value — none is equivalent here */
+.cropper-container img {
+    image-orientation: none;
+}
+</style>

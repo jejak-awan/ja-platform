@@ -198,11 +198,6 @@ README;
             $errors[] = 'assets directory not found';
         }
 
-        // Check for templates directory
-        if (! is_dir("{$themePath}/templates")) {
-            $errors[] = 'templates directory not found';
-        }
-
         return $errors;
     }
 }

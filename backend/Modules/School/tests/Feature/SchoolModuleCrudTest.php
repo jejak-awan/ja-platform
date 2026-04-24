@@ -3,9 +3,10 @@
 namespace Modules\School\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\School\Models\Department;
-use Modules\School\Models\School;
-use Modules\School\Models\SchoolLevel;
+use Modules\School\Models\Academic\Department;
+use Modules\School\Models\Institution\School;
+use Modules\School\Models\Institution\SchoolLevel;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SchoolModuleCrudTest extends TestCase
@@ -18,10 +19,10 @@ class SchoolModuleCrudTest extends TestCase
         $this->seedPermissionsAndRoles();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_perform_academic_year_crud()
     {
-        $school = School::create(['name' => 'Test School', 'address' => 'Test Address']);
+        $school = School::factory()->create();
 
         // Create
         $response = $this->actingAsAdmin()->postJson('/api/v1/admin/academic/years', [
@@ -49,13 +50,13 @@ class SchoolModuleCrudTest extends TestCase
         $response = $this->actingAsAdmin()->deleteJson("/api/v1/admin/academic/years/{$yearId}");
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('academic_years', ['id' => $yearId]);
+        $this->assertDatabaseMissing('sch_acad_years', ['id' => $yearId]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_perform_subject_crud()
     {
-        $school = School::create(['name' => 'Test School', 'address' => 'Test Address']);
+        $school = School::factory()->create();
 
         // Create
         $response = $this->actingAsAdmin()->postJson('/api/v1/admin/academic/subjects', [
@@ -83,15 +84,15 @@ class SchoolModuleCrudTest extends TestCase
         $response = $this->actingAsAdmin()->deleteJson("/api/v1/admin/academic/subjects/{$subjectId}");
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('subjects', ['id' => $subjectId]);
+        $this->assertDatabaseMissing('sch_acad_subjects', ['id' => $subjectId]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_perform_student_crud()
     {
-        $school = School::create(['name' => 'Test School', 'address' => 'Test Address']);
-        $level = SchoolLevel::create(['school_id' => $school->id, 'level' => 'SMK', 'name' => 'High School']);
-        $dept = Department::create(['school_level_id' => $level->id, 'name' => 'Science']);
+        $school = School::factory()->create();
+        $level = SchoolLevel::factory()->forSchool($school)->smk()->create();
+        $dept = Department::create(['school_level_id' => $level->id, 'name' => 'Science', 'code' => 'SCI']);
 
         // Create
         $response = $this->actingAsAdmin()->postJson('/api/v1/admin/students', [
@@ -121,6 +122,6 @@ class SchoolModuleCrudTest extends TestCase
         $response = $this->actingAsAdmin()->deleteJson("/api/v1/admin/students/{$studentId}");
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('students', ['id' => $studentId]);
+        $this->assertSoftDeleted('sch_std_students', ['id' => $studentId]);
     }
 }

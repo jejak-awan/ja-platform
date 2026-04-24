@@ -429,14 +429,21 @@ router.afterEach((to, from) => {
     lastTrackedPath = to.path;
     lastTrackedAt = now;
 
-    api.post('/analytics/track-visit', {
+    const payload = {
         url: window.location.href,
         path: to.path,
-        title: document.title
-    }).catch(err => {
-        // Silently fail for analytics errors
-        logger.debug('Analytics tracking failed:', err);
-    });
+        title: document.title,
+    };
+    const send = () => {
+        api.post('/analytics/track-visit', payload).catch((err) => {
+            logger.debug('Analytics tracking failed:', err);
+        });
+    };
+    if (typeof requestIdleCallback === 'function') {
+        requestIdleCallback(send, { timeout: 2500 });
+    } else {
+        requestAnimationFrame(send);
+    }
 });
 
 export default router;

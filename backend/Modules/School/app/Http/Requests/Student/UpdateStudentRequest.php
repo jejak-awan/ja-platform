@@ -17,7 +17,7 @@ class UpdateStudentRequest extends FormRequest
         $studentId = is_numeric($id) ? (int)$id : 0;
 
         return [
-            'level_id' => 'nullable|exists:sch_ins_school_levels,id',
+            'level_id' => 'nullable|exists:sch_ins_levels,id',
             'department_id' => 'nullable|exists:sch_acad_departments,id',
 
             // Biography

@@ -21,8 +21,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SchoolLevel extends Model
 {
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<\Modules\School\Database\Factories\SchoolLevelFactory> */
     use HasFactory;
+
+    protected static function newFactory(): \Modules\School\Database\Factories\SchoolLevelFactory
+    {
+        return \Modules\School\Database\Factories\SchoolLevelFactory::new();
+    }
 
     protected $table = 'sch_ins_levels';
 

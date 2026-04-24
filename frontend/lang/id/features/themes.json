@@ -1,11 +1,10 @@
 {
     "actions": {
         "activate": "Aktifkan",
-        "advanced": "Lanjutan",
-        "advancedConfig": "Konfigurasi Lanjutan",
+        "customizer": "Customizer Tema",
         "customize": "Sesuaikan",
+        "openCustomizer": "Buka Customizer",
         "preview": "Pratinjau",
-        "quickSettings": "Pengaturan Cepat",
         "settings": "Pengaturan",
         "validate": "Validasi"
     },

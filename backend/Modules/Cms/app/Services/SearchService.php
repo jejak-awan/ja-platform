@@ -105,7 +105,8 @@ class SearchService
             
             // For PostgreSQL, if it's not strict (loose search), apply fuzzy wildcard
             if ($driver === 'pgsql' && !$strict) {
-                $chars = str_split(preg_replace('/[^a-zA-Z0-9]/', '', $query));
+                $normalized = preg_replace('/[^a-zA-Z0-9]/', '', $query);
+                $chars = str_split(is_string($normalized) ? $normalized : '');
                 $fuzzyQuery = '%' . implode('%', $chars) . '%';
                 
                 $queryBuilder->where(function ($q) use ($fuzzyQuery, $operator) {
@@ -217,7 +218,8 @@ class SearchService
         if ($suggestions->isEmpty()) {
             if ($driver === 'pgsql') {
                 // PostgreSQL: Ultra-loose matching (e.g., "lorm" -> "%l%o%r%m%")
-                $chars = str_split(preg_replace('/[^a-zA-Z0-9]/', '', $queryClean));
+                $normalized = preg_replace('/[^a-zA-Z0-9]/', '', $queryClean);
+                $chars = str_split(is_string($normalized) ? $normalized : '');
                 $fuzzyQuery = '%' . implode('%', $chars) . '%';
                 
                 if (count($chars) >= 2) {
@@ -232,8 +234,8 @@ class SearchService
                         ->limit($limit)
                         ->get();
                 }
-            } else {
-                // MySQL: SOUNDEX fallback
+            } elseif (in_array($driver, ['mysql', 'mariadb'], true)) {
+                // MySQL / MariaDB: SOUNDEX (tidak tersedia di SQLite testing)
                 $suggestionQuery = SearchIndex::query();
                 $suggestionQuery->whereRaw('SOUNDEX(title) = SOUNDEX(?)', [$queryClean]);
                 $this->applyFilters($suggestionQuery, $filters);
@@ -242,6 +244,25 @@ class SearchService
                     ->distinct()
                     ->limit($limit)
                     ->get();
+            } else {
+                // SQLite & driver lain: fuzzy wildcard tanpa SOUNDEX
+                $normalized = preg_replace('/[^a-zA-Z0-9]/', '', $queryClean);
+                $chars = str_split(is_string($normalized) ? $normalized : '');
+                if (count($chars) >= 2) {
+                    $fuzzyQuery = '%'.implode('%', $chars).'%';
+                    $queryLower = mb_strtolower($fuzzyQuery, 'UTF-8');
+                    $suggestionQuery = SearchIndex::query();
+                    $suggestionQuery->where(function ($q) use ($queryLower) {
+                        $q->whereRaw('LOWER(title) LIKE ?', [$queryLower])
+                            ->orWhereRaw('LOWER(content) LIKE ?', [$queryLower]);
+                    });
+                    $this->applyFilters($suggestionQuery, $filters);
+                    $suggestions = $suggestionQuery
+                        ->select('title', 'type', 'url')
+                        ->distinct()
+                        ->limit($limit)
+                        ->get();
+                }
             }
         }
 

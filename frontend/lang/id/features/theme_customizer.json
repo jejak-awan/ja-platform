@@ -1,8 +1,8 @@
 {
-  "title": "Pembangun Tema Profesional",
-  "subtitle": "Bentuk dan konfigurasi tema Anda dengan presisi.",
+  "title": "Customizer Tema",
+  "subtitle": "Atur warna, tata letak, menu, dan data dinamis untuk tema aktif.",
   "status": {
-    "initializing": "Menginisialisasi Lingkungan Builder...",
+    "initializing": "Memuat workspace…",
     "unsaved": "PERUBAHAN BELUM DISIMPAN",
     "saving": "Menyimpan Build...",
     "published": "Build Diterbitkan",
@@ -44,7 +44,7 @@
       "palette_desc": "Warna utama dan tambahan.",
       "typo": "Tipografi",
       "typo_desc": "Font dan keluarga antarmuka.",
-      "css": "Gaya Lanjutan",
+      "css": "CSS Kustom",
       "css_desc": "Override CSS/SCSS langsung.",
       "layout": "Layout Master",
       "layout_desc": "Gaya kontainer dan header.",

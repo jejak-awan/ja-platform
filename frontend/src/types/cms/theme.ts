@@ -27,6 +27,7 @@ export interface ThemeSetting {
 export interface ThemeManifest {
     settings_schema?: Record<string, ThemeSetting>;
     menus?: Record<string, string>;
+    supports?: Record<string, boolean | string | number>;
     [key: string]: unknown;
 }
 
@@ -35,6 +36,7 @@ export interface Theme {
     name: string;
     slug: string;
     manifest?: ThemeManifest;
+    supports?: Record<string, boolean | string | number>;
     settings?: Record<string, unknown>;
     custom_css?: string;
     css_variables?: string;

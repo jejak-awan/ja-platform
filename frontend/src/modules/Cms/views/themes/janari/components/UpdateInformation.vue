@@ -212,10 +212,10 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, computed } from 'vue'
 import { useGsapAnimations } from '@/composables/useGsapAnimations'
-import { useComponentBindings } from '@/modules/Cms/composables/useAdvancedBindings'
+import { useThemeComponentBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 
 // Dynamic Data Integration
-const { slots: dynamicSlots, hasAnyBinding } = useComponentBindings('info')
+const { slots: dynamicSlots, hasAnyBinding } = useThemeComponentBindings('info')
 
 // Fallback Mock Data
 const mockAnnouncements = [

@@ -426,8 +426,10 @@ class FormSubmissionController extends BaseApiController
     private function resolveStatisticsDateRange(Request $request): array
     {
         if ($request->filled('date_from') && $request->filled('date_to')) {
-            $from = Carbon::parse((string) $request->input('date_from'))->startOfDay();
-            $to = Carbon::parse((string) $request->input('date_to'))->endOfDay();
+            $dateFromInput = $request->input('date_from');
+            $dateToInput = $request->input('date_to');
+            $from = Carbon::parse(is_string($dateFromInput) ? $dateFromInput : now()->toDateString())->startOfDay();
+            $to = Carbon::parse(is_string($dateToInput) ? $dateToInput : now()->toDateString())->endOfDay();
             if ($from->gt($to)) {
                 return [$to->copy()->startOfDay(), $from->copy()->endOfDay()];
             }
@@ -457,7 +459,7 @@ class FormSubmissionController extends BaseApiController
             $cursor->addDay();
         }
 
-        foreach ($rangeQuery->cursor(['created_at']) as $row) {
+        foreach ($rangeQuery->select('created_at')->cursor() as $row) {
             $d = $row->created_at?->toDateString();
             if ($d !== null && array_key_exists($d, $counts)) {
                 $counts[$d]++;
@@ -492,7 +494,7 @@ class FormSubmissionController extends BaseApiController
             ->keyBy(static function (FormAnalytics $r): string {
                 $d = $r->date;
 
-                return $d instanceof Carbon ? $d->format('Y-m-d') : Carbon::parse((string) $d)->format('Y-m-d');
+                return $d->format('Y-m-d');
             });
 
         $out = [];
@@ -513,12 +515,10 @@ class FormSubmissionController extends BaseApiController
     private function buildHourlySubmissionStats(\Illuminate\Database\Eloquent\Builder $rangeQuery): array
     {
         $bins = array_fill(0, 24, 0);
-        foreach ($rangeQuery->cursor(['created_at']) as $row) {
+        foreach ($rangeQuery->select('created_at')->cursor() as $row) {
             if ($row->created_at) {
                 $h = (int) $row->created_at->format('G');
-                if ($h >= 0 && $h <= 23) {
-                    $bins[$h]++;
-                }
+                $bins[$h]++;
             }
         }
 
@@ -541,7 +541,7 @@ class FormSubmissionController extends BaseApiController
     {
         $labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         $bins = array_fill(0, 7, 0);
-        foreach ($rangeQuery->cursor(['created_at']) as $row) {
+        foreach ($rangeQuery->select('created_at')->cursor() as $row) {
             if ($row->created_at) {
                 $w = (int) $row->created_at->format('w');
                 $bins[$w]++;
@@ -563,8 +563,8 @@ class FormSubmissionController extends BaseApiController
     private function buildFieldDistribution(\Illuminate\Database\Eloquent\Builder $rangeQuery, string $fieldName): array
     {
         $buckets = [];
-        foreach ($rangeQuery->cursor(['data']) as $row) {
-            $data = is_array($row->data) ? $row->data : [];
+        foreach ($rangeQuery->select('data')->cursor() as $row) {
+            $data = $row->data;
             $raw = $data[$fieldName] ?? null;
             $parts = $this->distributionBucketKeys($raw);
             foreach ($parts as $p) {
@@ -603,13 +603,18 @@ class FormSubmissionController extends BaseApiController
             }
             $keys = [];
             foreach ($raw as $item) {
-                $keys[] = is_scalar($item) ? (string) $item : json_encode($item);
+                if (is_scalar($item)) {
+                    $keys[] = (string) $item;
+                } else {
+                    $encoded = json_encode($item);
+                    $keys[] = is_string($encoded) ? $encoded : '(invalid)';
+                }
             }
 
             return $keys;
         }
 
-        return [(string) $raw];
+        return [is_scalar($raw) ? (string) $raw : '(invalid)'];
     }
 
     /**

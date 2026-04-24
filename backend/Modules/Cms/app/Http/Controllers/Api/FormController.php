@@ -194,7 +194,8 @@ class FormController extends BaseApiController
         $type = (string) $validated['type'];
         $options = $this->normalizeFieldOptions($type, $validated['options'] ?? null);
 
-        $maxOrder = (int) $form->fields()->max('sort_order');
+        $maxOrderRaw = $form->fields()->max('sort_order');
+        $maxOrder = is_numeric($maxOrderRaw) ? (int) $maxOrderRaw : 0;
 
         /** @var FormField $field */
         $field = $form->fields()->create([
@@ -295,8 +296,6 @@ class FormController extends BaseApiController
 
     /**
      * Persist field order (drag-and-drop).
-     *
-     * @param  array<int, int>  $order
      */
     public function reorderFields(Request $request, Form $form): JsonResponse
     {
@@ -316,13 +315,23 @@ class FormController extends BaseApiController
         ]);
 
         /** @var array<int, int> $order */
-        $order = array_values(array_map('intval', $validated['order']));
+        $order = array_values(array_map(
+            static fn ($id): int => is_numeric($id) ? (int) $id : 0,
+            $validated['order']
+        ));
+        $order = array_values(array_filter($order, static fn (int $id): bool => $id > 0));
 
         if ($order === []) {
             return $this->success($form->fields()->orderBy('sort_order')->get(), 'Field order unchanged');
         }
 
-        $ids = $form->fields()->whereIn('id', $order)->pluck('id')->map(static fn ($id): int => (int) $id)->all();
+        $ids = $form->fields()
+            ->whereIn('id', $order)
+            ->pluck('id')
+            ->map(static fn ($id): int => is_numeric($id) ? (int) $id : 0)
+            ->filter(static fn (int $id): bool => $id > 0)
+            ->values()
+            ->all();
 
         if (count($ids) !== count($order)) {
             return $this->validationError(['order' => ['All IDs must belong to this form']], 'Invalid field order');
@@ -523,10 +532,11 @@ class FormController extends BaseApiController
                 $uploaded = $request->file($key);
                 if ($uploaded !== null && $uploaded->isValid()) {
                     $path = $uploaded->store('form-uploads/'.$form->id, 'public');
+                    $uploadedUrl = is_string($path) ? Storage::disk('public')->url($path) : '';
                     $submissionPayload[$key] = [
                         'type' => 'upload',
                         'path' => $path,
-                        'url' => Storage::disk('public')->url($path),
+                        'url' => $uploadedUrl,
                         'original_name' => $uploaded->getClientOriginalName(),
                         'size' => $uploaded->getSize(),
                         'mime_type' => $uploaded->getMimeType(),
@@ -689,8 +699,8 @@ class FormController extends BaseApiController
         foreach ($raw as $item) {
             if (is_string($item)) {
                 $parts = array_map('trim', explode('|', $item, 2));
-                $label = $parts[0] ?? '';
-                $value = $parts[1] ?? $parts[0] ?? '';
+                $label = $parts[0];
+                $value = $parts[1] ?? $parts[0];
                 if ($label !== '' || $value !== '') {
                     $out[] = ['label' => $label !== '' ? $label : $value, 'value' => $value !== '' ? $value : Str::slug($label, '_')];
                 }
@@ -698,8 +708,8 @@ class FormController extends BaseApiController
                 continue;
             }
             if (is_array($item)) {
-                $label = isset($item['label']) ? (string) $item['label'] : '';
-                $value = isset($item['value']) ? (string) $item['value'] : $label;
+                $label = isset($item['label']) && is_scalar($item['label']) ? (string) $item['label'] : '';
+                $value = isset($item['value']) && is_scalar($item['value']) ? (string) $item['value'] : $label;
                 if ($label !== '' || $value !== '') {
                     $out[] = ['label' => $label !== '' ? $label : $value, 'value' => $value !== '' ? $value : Str::slug($label, '_')];
                 }

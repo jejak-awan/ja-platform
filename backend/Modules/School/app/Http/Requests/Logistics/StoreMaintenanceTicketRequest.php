@@ -13,7 +13,7 @@ class StoreMaintenanceTicketRequest extends FormRequest
     {
         return [
             'school_id' => 'required|exists:sch_ins_schools,id',
-            'school_level_id' => 'required|exists:sch_ins_school_levels,id',
+            'school_level_id' => 'required|exists:sch_ins_levels,id',
             'school_asset_id' => 'required|exists:sch_log_assets,id',
             'reported_by' => 'required|exists:sch_hr_staff,id',
             'date_reported' => 'required|date',

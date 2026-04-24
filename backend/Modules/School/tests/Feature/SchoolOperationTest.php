@@ -3,12 +3,13 @@
 namespace Modules\School\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\School\Models\AcademicYear;
-use Modules\School\Models\School;
-use Modules\School\Models\SchoolLevel;
-use Modules\School\Models\Semester;
-use Modules\School\Models\Student;
-use Modules\School\Models\Violation;
+use Modules\School\Models\Academic\AcademicYear;
+use Modules\School\Models\Academic\Semester;
+use Modules\School\Models\Institution\School;
+use Modules\School\Models\Institution\SchoolLevel;
+use Modules\School\Models\Student\Student;
+use Modules\School\Models\Student\Violation;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SchoolOperationTest extends TestCase
@@ -28,7 +29,7 @@ class SchoolOperationTest extends TestCase
         parent::setUp();
         $this->seedPermissionsAndRoles();
 
-        $this->school = School::create(['name' => 'Test School', 'address' => 'Test Address']);
+        $this->school = School::factory()->create();
         $this->academicYear = AcademicYear::create([
             'school_id' => $this->school->id,
             'year' => '2023/2024',
@@ -40,16 +41,14 @@ class SchoolOperationTest extends TestCase
             'is_active' => true,
         ]);
 
-        $level = SchoolLevel::create(['school_id' => $this->school->id, 'level' => 'SMK', 'name' => 'High School']);
-        $this->student = Student::create([
-            'school_id' => $this->school->id,
-            'school_level_id' => $level->id,
+        $level = SchoolLevel::factory()->forSchool($this->school)->smk()->create();
+        $this->student = Student::factory()->forSchool($this->school)->forLevel($level)->create([
             'full_name' => 'John Doe',
             'gender' => 'L',
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_record_attendance()
     {
         $response = $this->actingAsAdmin()->postJson('/api/v1/admin/operations/attendance', [
@@ -64,13 +63,13 @@ class SchoolOperationTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonPath('success', true);
 
-        $this->assertDatabaseHas('attendances', [
+        $this->assertDatabaseHas('sch_acad_attendances', [
             'student_id' => $this->student->id,
             'status' => 'H',
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_record_violation_and_calculate_points()
     {
         // Record first violation

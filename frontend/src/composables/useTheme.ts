@@ -2,17 +2,31 @@ import { logger } from '@/utils/logger';
 import { ref, computed } from 'vue';
 import api from '@/services/api';
 import { JANARI_PRESETS, type JanariPresetKey } from '@/modules/Cms/config/janariPresets';
+import { themeUsesJanariCanvas } from '@/modules/Cms/utils/themeManifest';
 
 export interface ThemeManifest {
     name?: string;
     version?: string;
     author?: string;
+    /** Feature flags for runtime (e.g. janari_canvas for layout + accent pipeline). */
+    supports?: Record<string, boolean | string | number>;
     settings_schema?: Record<string, ThemeSettingSchema>;
     [key: string]: unknown;
 }
 
 export interface ThemeSettingSchema {
-    type: 'text' | 'color' | 'font' | 'typography' | 'select' | 'boolean';
+    type:
+        | 'text'
+        | 'textarea'
+        | 'color'
+        | 'font'
+        | 'typography'
+        | 'select'
+        | 'boolean'
+        | 'checkbox'
+        | 'checkbox_list'
+        | 'range'
+        | 'media';
     label?: string;
     default?: unknown;
     options?: unknown[];
@@ -29,6 +43,11 @@ export interface Theme {
         js?: string[];
     };
     custom_css?: string;
+    /** DB column merged into API payload; mirrors manifest.supports for some installs */
+    supports?: Record<string, boolean | string | number>;
+    /** When present (API), used to detect theme row updates without deep-comparing manifest */
+    updated_at?: string;
+    parent_theme?: string | null;
     [key: string]: unknown;
 }
 
@@ -77,11 +96,26 @@ export function useTheme() {
             const data = response.data;
 
             // Handle null response (no active theme)
-            // Stability: Deep compare before setting to avoid unnecessary reactive triggers
-            const newDataString = JSON.stringify(data);
-            const oldDataString = JSON.stringify(activeTheme.value);
+            // Compare fields that affect UI; avoid stringifying entire payload (manifest is large).
+            const prev = activeTheme.value
+            const nextSlug = (data as Theme)?.slug
+            const nextSettings = JSON.stringify((data as Theme)?.settings ?? {})
+            const prevSettings = JSON.stringify(prev?.settings ?? {})
+            const nextCss = String((data as Theme)?.custom_css ?? '')
+            const prevCss = String(prev?.custom_css ?? '')
+            const nextAssetsSig = JSON.stringify({
+                css: (data as Theme)?.assets?.css ?? [],
+                js: (data as Theme)?.assets?.js ?? [],
+            })
+            const prevAssetsSig = JSON.stringify({
+                css: (prev as Theme | null)?.assets?.css ?? [],
+                js: (prev as Theme | null)?.assets?.js ?? [],
+            })
+            const nextUpdated = typeof (data as Theme)?.updated_at === 'string' ? (data as Theme).updated_at : ''
+            const prevUpdated = typeof prev?.updated_at === 'string' ? prev.updated_at : ''
 
-            if (newDataString !== oldDataString) {
+            if (!prev || prev.slug !== nextSlug || nextSettings !== prevSettings || nextCss !== prevCss
+                || nextAssetsSig !== prevAssetsSig || nextUpdated !== prevUpdated) {
                 activeTheme.value = data;
                 themeSettings.value = data.settings || {};
             }
@@ -100,9 +134,8 @@ export function useTheme() {
 
             applyThemeStyles();
 
-            // Sync Janari Styles (Accent + Background) on initial load
-            const slug = data.slug || '';
-            if (slug.startsWith('janari')) {
+            // Sync Janari canvas accent variables when theme declares support (or legacy janari* slug)
+            if (themeUsesJanariCanvas(data as Theme)) {
                 syncJanariStyles(themeSettings.value);
             }
 
@@ -111,7 +144,11 @@ export function useTheme() {
                 if (themeUpdateListener) {
                     window.removeEventListener('message', themeUpdateListener);
                 }
+                const allowedOrigin = window.location.origin;
                 themeUpdateListener = (event: MessageEvent) => {
+                    if (event.origin !== allowedOrigin) {
+                        return;
+                    }
                     if (event.data && event.data.type === 'THEME_UPDATE') {
                         // Merge the new settings reactively
                         if (event.data.settings) {
@@ -120,11 +157,8 @@ export function useTheme() {
                                 ...event.data.settings
                             };
 
-                            // Batch update for Janari Styles (Accent + Background)
-                            const slug = activeTheme.value?.slug || '';
-                            if (slug.startsWith('janari')) {
+                            if (themeUsesJanariCanvas(activeTheme.value)) {
                                 requestAnimationFrame(() => {
-                                    // Consolidated sync
                                     syncJanariStyles(themeSettings.value);
                                 });
                             }
@@ -269,11 +303,15 @@ export function useTheme() {
     };
 
     /**
-     * Consolidated Janari Style Sync
-     * Handles Accents, Backgrounds, and Surfaces in one atomic update.
+     * Consolidated Janari style sync.
+     *
+     * NOTE:
+     * Layout-level Janari data attributes in `FrontendLayout` are the single source of truth
+     * for background/surface variants. This function intentionally syncs accent variables only
+     * to avoid races between multiple CSS injectors updating the same tokens.
      */
     const syncJanariStyles = (settings: Record<string, unknown>) => {
-        // 1. RESOLVE ACCENTS
+        // Resolve accent variables
         const preset = String(settings.color_preset || 'custom');
         let lAcc: string;
         let dAcc: string;
@@ -289,71 +327,15 @@ export function useTheme() {
             dAcc = hsl.replace(/\d+%/g, (m, i) => i === 2 ? '100%' : m); // Boost brightness for dark mode custom
         }
 
-        // 2. RESOLVE BACKGROUNDS
-        const lightBg = String(settings.bg_light_color || 'white');
-        const lightV = String(settings.bg_light_variant || 'clean');
-        const darkBg = String(settings.bg_dark_color || 'black');
-        const darkV = String(settings.bg_dark_variant || 'clean');
-
-        const lMap: Record<string, Record<string, string>> = {
-            white: { clean: '0 0% 100%', soft: '0 0% 96%', matte: '0 0% 92%', warm: '30 15% 96%' },
-            cream: { clean: '42 33% 96%', soft: '40 28% 92%', matte: '38 22% 88%', warm: '45 38% 94%' },
-            cool_gray: { clean: '210 12% 97%', soft: '215 10% 93%', matte: '220 8% 89%', warm: '205 14% 95%' },
-            warm_gray: { clean: '30 6% 96%', soft: '25 8% 92%', matte: '20 5% 88%', warm: '35 10% 94%' },
-            mint: { clean: '152 18% 96%', soft: '155 14% 92%', matte: '148 10% 88%', warm: '160 20% 94%' },
-            lavender: { clean: '262 18% 97%', soft: '265 14% 93%', matte: '258 10% 89%', warm: '270 20% 95%' },
-            blush: { clean: '350 18% 97%', soft: '345 14% 93%', matte: '355 10% 89%', warm: '348 22% 95%' },
-            sky: { clean: '200 20% 97%', soft: '205 16% 93%', matte: '198 12% 89%', warm: '195 22% 95%' },
-            sand: { clean: '35 25% 95%', soft: '32 20% 91%', matte: '38 16% 87%', warm: '40 30% 93%' }
-        };
-
-        const dMap: Record<string, Record<string, string>> = {
-            black: { clean: '0 0% 0%', soft: '0 0% 8%', matte: '0 0% 15%', deep: '0 0% 2%' },
-            charcoal: { clean: '0 0% 12%', soft: '0 0% 18%', matte: '210 3% 25%', deep: '220 5% 8%' },
-            navy: { clean: '222 25% 8%', soft: '220 20% 15%', matte: '215 15% 22%', deep: '225 30% 5%' },
-            slate: { clean: '215 16% 14%', soft: '220 12% 22%', matte: '210 10% 28%', deep: '220 20% 10%' },
-            forest: { clean: '150 20% 8%', soft: '155 15% 15%', matte: '145 12% 22%', deep: '160 25% 5%' },
-            wine: { clean: '350 25% 8%', soft: '345 20% 15%', matte: '355 15% 22%', deep: '350 30% 5%' },
-            midnight: { clean: '230 30% 6%', soft: '235 25% 12%', matte: '225 20% 18%', deep: '240 35% 4%' },
-            plum: { clean: '280 22% 8%', soft: '275 18% 15%', matte: '285 14% 22%', deep: '290 28% 5%' },
-            earth: { clean: '25 20% 8%', soft: '30 16% 15%', matte: '20 12% 22%', deep: '28 25% 5%' }
-        };
-
-        const getHsl = (map: Record<string, Record<string, string>>, c: string, v: string, f: string) => {
-            const colors = map[c] || map[Object.keys(map)[0] || 'white'];
-            if (!colors) return f;
-            return colors[v] || colors['clean'] || f;
-        };
-
-        const lHsl = getHsl(lMap, lightBg, lightV, '0 0% 100%');
-        const dHsl = getHsl(dMap, darkBg, darkV, '0 0% 0%');
-
-        const parseHsl = (str: string) => {
-            const p = str.match(/(\d+)\s+(\d+)%\s+(\d+)%/);
-            if (!p || p.length < 4) return { h: 0, s: 0, l: 0 };
-            return { h: parseInt(p[1] || '0'), s: parseInt(p[2] || '0'), l: parseInt(p[3] || '0') };
-        };
-
-        const l = parseHsl(lHsl);
-        const d = parseHsl(dHsl);
-
-        // 3. GENERATE CONSOLIDATED CSS
+        // Keep this injector narrowly scoped to accent-only variables.
         const css = `
             .theme-janari {
                 --janari-accent-hsl-inline: ${lAcc};
                 --janari-accent-hsl-inline-dark: ${dAcc};
-                --background: ${lHsl};
-                --card: ${l.h} ${l.s}% ${Math.min(l.l + 2, 100)}%;
-                --popover: ${l.h} ${l.s}% ${Math.min(l.l + 1, 100)}%;
-                --muted: ${l.h} ${Math.max(l.s - 5, 0)}% ${Math.max(l.l - 5, 0)}%;
-                --border: ${l.h} ${l.s}% ${Math.max(l.l - 8, 0)}%;
             }
             .dark .theme-janari {
-                --background: ${dHsl};
-                --card: ${d.h} ${d.s}% ${Math.min(d.l + 6, 100)}%;
-                --popover: ${d.h} ${d.s}% ${Math.min(d.l + 4, 100)}%;
-                --muted: ${d.h} ${d.s}% ${Math.min(d.l + 12, 100)}%;
-                --border: ${d.h} ${d.s}% ${Math.min(d.l + 18, 100)}%;
+                --janari-accent-hsl-inline: ${lAcc};
+                --janari-accent-hsl-inline-dark: ${dAcc};
             }
         `;
 
@@ -374,14 +356,18 @@ export function useTheme() {
     const injectCssFiles = (cssFiles: string[]) => {
         if (!document.head) return;
         cssFiles.forEach((cssFile, index) => {
+            const href = cssFile.startsWith('http') || cssFile.startsWith('/') ? cssFile : `/${cssFile}`;
             const linkId = `theme-css-${index}`;
-            const existing = document.getElementById(linkId);
+            const existing = document.getElementById(linkId) as HTMLLinkElement | null;
+            if (existing && existing.getAttribute('href') === href) {
+                return;
+            }
             if (existing) existing.remove();
 
             const link = document.createElement('link');
             link.id = linkId;
             link.rel = 'stylesheet';
-            link.href = cssFile.startsWith('http') || cssFile.startsWith('/') ? cssFile : `/${cssFile}`;
+            link.href = href;
             document.head.appendChild(link);
         });
     };
@@ -392,13 +378,17 @@ export function useTheme() {
     const injectJsFiles = (jsFiles: string[]) => {
         if (!document.head) return;
         jsFiles.forEach((jsFile, index) => {
+            const src = jsFile.startsWith('http') || jsFile.startsWith('/') ? jsFile : `/${jsFile}`;
             const scriptId = `theme-js-${index}`;
-            const existing = document.getElementById(scriptId);
+            const existing = document.getElementById(scriptId) as HTMLScriptElement | null;
+            if (existing && existing.getAttribute('src') === src) {
+                return;
+            }
             if (existing) existing.remove();
 
             const script = document.createElement('script');
             script.id = scriptId;
-            script.src = jsFile.startsWith('http') || jsFile.startsWith('/') ? jsFile : `/${jsFile}`;
+            script.src = src;
             script.defer = true;
             document.head.appendChild(script);
         });

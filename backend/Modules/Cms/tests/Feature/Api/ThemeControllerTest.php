@@ -3,7 +3,9 @@
 namespace Modules\Cms\Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Modules\Cms\Models\Theme;
+use Modules\Cms\Services\ThemeCacheService;
 use Modules\Core\Models\User;
 use Tests\TestCase;
 
@@ -16,6 +18,12 @@ class ThemeControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        foreach (['frontend', 'admin', 'email'] as $type) {
+            Cache::forget(ThemeCacheService::PREFIX_ACTIVE.$type);
+            Cache::forget(ThemeCacheService::PREFIX_ACTIVE_API_PAYLOAD.$type);
+        }
+
         $this->admin = User::factory()->create();
         $permission = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'manage themes', 'guard_name' => 'web']);
         $this->admin->givePermissionTo($permission);
@@ -24,12 +32,13 @@ class ThemeControllerTest extends TestCase
 
     public function test_index()
     {
+        $before = Theme::ofType('frontend')->count();
         Theme::factory()->count(3)->create(['type' => 'frontend']);
 
         $response = $this->getJson('/api/v1/admin/cms/themes?type=frontend');
 
         $response->assertStatus(200)
-            ->assertJsonCount(3, 'data');
+            ->assertJsonCount($before + 3, 'data');
     }
 
     public function test_show()

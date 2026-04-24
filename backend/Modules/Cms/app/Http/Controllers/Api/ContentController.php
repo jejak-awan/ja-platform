@@ -54,9 +54,10 @@ class ContentController extends BaseApiController
             }
         }
 
-        if ($request->has('tags') && is_array($request->input('tags'))) {
+        $tagsInput = $request->input('tags');
+        if (is_array($tagsInput)) {
             $ids = [];
-            foreach ($request->input('tags', []) as $id) {
+            foreach ($tagsInput as $id) {
                 if (is_int($id) || (is_string($id) && ctype_digit($id))) {
                     $n = (int) $id;
                     if ($n > 0) {

@@ -117,17 +117,17 @@
             <Button
               v-if="theme.is_active"
               size="sm"
-              @click="openCustomizer(theme)"
+              @click="openThemeCustomizer(theme)"
             >
-              {{ $t('features.themes.actions.customize') }}
+              {{ $t('features.themes.actions.openCustomizer') }}
             </Button>
             <Button
               v-if="theme.is_active"
               size="sm"
               variant="default"
-              @click="router.push({ name: 'themes.advanced', params: { slug: theme.slug } })"
+              @click="openThemeCustomizer(theme)"
             >
-              {{ $t('features.themes.actions.advanced') }}
+              {{ $t('features.themes.actions.customizer') }}
             </Button>
           </div>
         </div>
@@ -176,10 +176,10 @@
                 <Button
                   v-if="theme.is_active"
                   class="flex-1"
-                  @click="openCustomizer(theme)"
+                  @click="openThemeCustomizer(theme)"
                 >
                   <Palette class="w-4 h-4 mr-2" />
-                  {{ $t('features.themes.actions.quickSettings') }}
+                  {{ $t('features.themes.actions.openCustomizer') }}
                 </Button>
                 <Button
                   v-else
@@ -194,10 +194,10 @@
                 v-if="theme.is_active"
                 class="w-full border-cyan-500 text-cyan-500 hover:bg-cyan-500/10"
                 variant="outline"
-                @click="router.push({ name: 'themes.advanced', params: { slug: theme.slug } })"
+                @click="openThemeCustomizer(theme)"
               >
                 <LayoutTemplate class="w-4 h-4 mr-2" />
-                {{ $t('features.themes.actions.advancedConfig') }}
+                {{ $t('features.themes.actions.customizer') }}
               </Button>
             </div>
 
@@ -251,20 +251,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Customizer Modal -->
-    <div
-      v-if="showCustomizerModal"
-      class="fixed inset-0 z-50"
-    >
-      <ThemeCustomizer
-        v-if="selectedTheme"
-        :theme="selectedTheme"
-        preview-url="/"
-        @close="showCustomizerModal = false"
-        @saved="handleCustomizerSaved"
-      />
-    </div>
   </div>
 </template>
 
@@ -283,7 +269,6 @@ import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
 import CheckCircle from 'lucide-vue-next/dist/esm/icons/circle-check.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import ThemePreview from '@/modules/Cms/components/themes/ThemePreview.vue';
-import ThemeCustomizer from '@/modules/Cms/components/themes/ThemeCustomizer.vue';
 import LayoutTemplate from 'lucide-vue-next/dist/esm/icons/layout-template.js';
 
 import { useI18n } from 'vue-i18n';
@@ -311,7 +296,6 @@ const themes = ref<Theme[]>([]);
 const selectedType = ref('all');
 const scanning = ref(false);
 const showPreviewModal = ref(false);
-const showCustomizerModal = ref(false);
 const selectedTheme = ref<Theme | null>(null);
 
 const fetchThemes = async () => {
@@ -387,13 +371,10 @@ const openPreview = (theme: Theme) => {
     showPreviewModal.value = true;
 };
 
-const openCustomizer = (theme: Theme) => {
-    selectedTheme.value = { ...toRaw(theme) };
-    showCustomizerModal.value = true;
-};
-
-const handleCustomizerSaved = () => {
-    fetchThemes();
+const openThemeCustomizer = (theme: Theme) => {
+    const themeData = { ...toRaw(theme) };
+    selectedTheme.value = themeData;
+    router.push({ name: 'themes.customizer', params: { slug: themeData.slug } });
 };
 
 onMounted(() => {

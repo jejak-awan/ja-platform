@@ -5,6 +5,8 @@ namespace Modules\Cms\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Modules\Cms\Services\ThemeCacheService;
+use Modules\Cms\Support\ThemeViews;
 
 /**
  * @property int $id
@@ -94,43 +96,41 @@ class Theme extends Model
      */
     public static function getActiveTheme(string $type = 'frontend'): ?self
     {
-        return Cache::remember("theme.active.{$type}", 3600, function () use ($type) {
-            $activeTheme = self::where('is_active', true)
-                ->where('type', $type)
-                ->where('status', 'active')
+        $activeTheme = self::where('is_active', true)
+            ->where('type', $type)
+            ->where('status', 'active')
+            ->first();
+
+        // If no active theme, try to auto-activate default theme
+        if (! $activeTheme) {
+            $defaultTheme = self::where('type', $type)
+                ->where('slug', 'default')
                 ->first();
 
-            // If no active theme, try to auto-activate default theme
-            if (! $activeTheme) {
+            // If no default theme, get first available theme
+            if (! $defaultTheme) {
                 $defaultTheme = self::where('type', $type)
-                    ->where('slug', 'default')
+                    ->orderBy('id')
                     ->first();
-
-                // If no default theme, get first available theme
-                if (! $defaultTheme) {
-                    $defaultTheme = self::where('type', $type)
-                        ->orderBy('id')
-                        ->first();
-                }
-
-                // Auto-activate if found
-                if ($defaultTheme) {
-                    try {
-                        $defaultTheme->update([
-                            'is_active' => true,
-                            'status' => 'active',
-                        ]);
-                        Cache::forget("theme.active.{$type}");
-
-                        return $defaultTheme->fresh();
-                    } catch (\Exception $e) {
-                        \Log::warning('Failed to auto-activate default theme: '.$e->getMessage());
-                    }
-                }
             }
 
-            return $activeTheme;
-        });
+            // Auto-activate if found
+            if ($defaultTheme) {
+                try {
+                    $defaultTheme->update([
+                        'is_active' => true,
+                        'status' => 'active',
+                    ]);
+                    Cache::forget(ThemeCacheService::PREFIX_ACTIVE.$type);
+
+                    return $defaultTheme->fresh();
+                } catch (\Exception $e) {
+                    \Log::warning('Failed to auto-activate default theme: '.$e->getMessage());
+                }
+            }
+        }
+
+        return $activeTheme;
     }
 
     /**
@@ -169,7 +169,7 @@ class Theme extends Model
         ]);
 
         // Clear cache
-        Cache::forget("theme.active.{$this->type}");
+        Cache::forget(ThemeCacheService::PREFIX_ACTIVE.$this->type);
 
         return true;
     }
@@ -180,7 +180,7 @@ class Theme extends Model
     public function deactivate(): bool
     {
         $this->update(['is_active' => false]);
-        Cache::forget("theme.active.{$this->type}");
+        Cache::forget(ThemeCacheService::PREFIX_ACTIVE.$this->type);
 
         return true;
     }
@@ -192,7 +192,7 @@ class Theme extends Model
     {
         // Code-First themes are located in frontend/src/modules/Cms/views/themes
         // We use slug as the reliable folder name. Path is relative to project root.
-        return base_path("../frontend/src/modules/Cms/views/themes/{$this->slug}");
+        return ThemeViews::pathForSlug($this->slug);
     }
 
     /**

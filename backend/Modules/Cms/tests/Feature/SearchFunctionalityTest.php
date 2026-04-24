@@ -2,7 +2,10 @@
 
 namespace Modules\Cms\Tests\Feature;
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Modules\Cms\Models\Content;
 use Modules\Core\Models\SearchIndex;
 use Tests\Helpers\TestHelpers;
@@ -125,12 +128,15 @@ class SearchFunctionalityTest extends TestCase
      */
     public function test_search_is_rate_limited(): void
     {
-        // Make 31 requests (limit is 30 per minute)
-        for ($i = 0; $i < 31; $i++) {
+        // Production limiter is generous (burst + 10‑min window); override for a fast, deterministic check.
+        RateLimiter::for('search-public', function (Request $request) {
+            return Limit::perMinute(5)->by('search-public-test|'.$request->ip());
+        });
+
+        for ($i = 0; $i < 6; $i++) {
             $response = $this->getJson('/api/v1/ja/search?q=test');
         }
 
-        // 31st request should be rate limited
         $response->assertStatus(429);
     }
 
