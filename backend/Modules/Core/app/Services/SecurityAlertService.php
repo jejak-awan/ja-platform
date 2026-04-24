@@ -53,8 +53,10 @@ class SecurityAlertService
      * Resolve environment-aware threshold in this order:
      * 1) DB setting by env suffix (`<key>_<env>`)
      * 2) Base DB setting (`<key>`)
-     * 3) Environment variable (`$envVar`)
+     * 3) Config override (`security.alert_env.<ENV_VAR_NAME>`)
      * 4) Environment profile default map
+     *
+     * @param  array<string, int>  $defaultsByEnv
      */
     private function resolveIntSetting(string $baseKey, string $envVar, array $defaultsByEnv, int $min): int
     {
@@ -71,7 +73,7 @@ class SecurityAlertService
             return max($min, (int) $baseSetting);
         }
 
-        $envValue = env($envVar);
+        $envValue = config('security.alert_env.'.$envVar);
         if (is_numeric($envValue)) {
             return max($min, (int) $envValue);
         }
@@ -200,6 +202,7 @@ class SecurityAlertService
 
             foreach ($blockedIps as $log) {
                 $count = is_numeric($log->getAttribute('count')) ? (int) $log->getAttribute('count') : 0;
+                $latestRaw = $log->getAttribute('latest');
                 $alerts[] = [
                     'id' => 'blocked_ip_'.md5((string) ($log->ip_address ?? 'unknown')),
                     'type' => 'ip_blocked',
@@ -208,7 +211,7 @@ class SecurityAlertService
                     'message' => "IP {$log->ip_address} blocked {$count} time(s) in the alert window",
                     'ip_address' => $log->ip_address,
                     'count' => $count,
-                    'timestamp' => $log->latest ? Carbon::parse((string) $log->latest)->toISOString() : now()->toISOString(),
+                    'timestamp' => is_string($latestRaw) ? Carbon::parse($latestRaw)->toISOString() : now()->toISOString(),
                 ];
             }
         } catch (\Exception $e) {

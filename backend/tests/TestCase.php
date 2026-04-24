@@ -14,10 +14,31 @@ abstract class TestCase extends BaseTestCase
     use RefreshDatabase, WithFaker;
 
     /**
+     * Hapus artefak bootstrap/cache agar phpunit.xml (sqlite :memory:, dll.) dipakai,
+     * bukan konfigurasi hasil `config:cache` dari lingkungan dev (mis. pgsql).
+     */
+    protected static function purgeBootstrapCachesBeforeApplicationBoot(): void
+    {
+        $dir = dirname(__DIR__).'/bootstrap/cache';
+        if (! is_dir($dir)) {
+            return;
+        }
+
+        foreach (['config.php', 'routes-v7.php', 'routes.php', 'events.php'] as $name) {
+            $path = $dir.DIRECTORY_SEPARATOR.$name;
+            if (is_file($path)) {
+                @unlink($path);
+            }
+        }
+    }
+
+    /**
      * Setup the test environment.
      */
     protected function setUp(): void
     {
+        static::purgeBootstrapCachesBeforeApplicationBoot();
+
         parent::setUp();
 
         // Initialize session for tests that need it (login, etc.)

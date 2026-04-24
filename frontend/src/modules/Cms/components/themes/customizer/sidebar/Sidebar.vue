@@ -11,7 +11,7 @@
       >
         <div>
           <h2 class="font-semibold text-lg tracking-tight whitespace-nowrap">
-            {{ $t('features.theme_builder.actions.quick_settings') }}
+            {{ $t('features.theme_customizer.actions.quick_settings') }}
           </h2>
           <p class="text-xs text-muted-foreground truncate max-w-[150px]">
             {{ themeName }}
@@ -23,7 +23,7 @@
         <!-- Collapse Button -->
         <button 
           class="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
-          :title="isCollapsed ? $t('features.theme_builder.sidebar.items.expand') : $t('features.theme_builder.sidebar.items.collapse')"
+          :title="isCollapsed ? $t('features.theme_customizer.sidebar.items.expand') : $t('features.theme_customizer.sidebar.items.collapse')"
           @click="isCollapsed = !isCollapsed"
         >
           <ChevronsLeft 
@@ -41,7 +41,7 @@
             <button 
               :disabled="!canUndo" 
               class="p-1.5 hover:bg-muted text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
-              :title="$t('features.theme_builder.actions.undo')"
+              :title="$t('features.theme_customizer.actions.undo')"
               @click="$emit('undo')"
             >
               <Undo2 class="w-4 h-4" />
@@ -50,7 +50,7 @@
             <button 
               :disabled="!canRedo" 
               class="p-1.5 hover:bg-muted text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
-              :title="$t('features.theme_builder.actions.redo')"
+              :title="$t('features.theme_customizer.actions.redo')"
               @click="$emit('redo')"
             >
               <Redo2 class="w-4 h-4" />
@@ -59,7 +59,7 @@
 
           <button 
             class="p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-muted"
-            :title="$t('features.theme_builder.actions.revert')"
+            :title="$t('features.theme_customizer.actions.revert')"
             @click="$emit('reset')"
           >
             <RotateCcw class="w-4 h-4" />
@@ -132,7 +132,7 @@
             class="w-full flex items-center justify-between py-2 text-sm font-medium hover:text-primary transition-colors"
             @click="showCustomCss = !showCustomCss"
           >
-            <span>{{ $t('features.theme_builder.sidebar.items.custom_css.title') }}</span>
+            <span>{{ $t('features.theme_customizer.sidebar.items.custom_css.title') }}</span>
             <span class="text-[10px] bg-muted px-2 py-0.5 rounded text-muted-foreground font-mono">&lt;/&gt;</span>
           </button>
                     
@@ -144,7 +144,7 @@
               :value="customCss"
               rows="8"
               class="w-full p-3 bg-background border rounded-lg text-xs font-mono custom-scrollbar focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-colors leading-relaxed"
-              :placeholder="$t('features.theme_builder.sidebar.items.custom_css.placeholder')"
+              :placeholder="$t('features.theme_customizer.sidebar.items.custom_css.placeholder')"
               spellcheck="false"
               @input="$emit('update:customCss', ($event.target as HTMLTextAreaElement).value)"
               @change="$emit('change')"
@@ -168,7 +168,7 @@
           v-if="saving"
           class="w-4 h-4 animate-spin"
         />
-        <span>{{ saving ? $t('features.theme_builder.status.saving') : $t('features.theme_builder.actions.publish') }}</span>
+        <span>{{ saving ? $t('features.theme_customizer.status.saving') : $t('features.theme_customizer.actions.publish') }}</span>
       </button>
     </div>
 

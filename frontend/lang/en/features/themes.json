@@ -1,11 +1,10 @@
 {
     "actions": {
         "activate": "Activate",
-        "advanced": "Advanced",
-        "advancedConfig": "Advanced Configuration",
+        "customizer": "Theme Customizer",
         "customize": "Customize",
+        "openCustomizer": "Open Customizer",
         "preview": "Preview",
-        "quickSettings": "Quick Settings",
         "settings": "Settings",
         "validate": "Validate"
     },

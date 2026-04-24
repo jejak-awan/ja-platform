@@ -1,8 +1,8 @@
 {
-  "title": "Professional Theme Builder",
-  "subtitle": "Sculpt and configure your theme with precision.",
+  "title": "Theme Customizer",
+  "subtitle": "Configure colors, layout, menus, and dynamic data bindings for your active theme.",
   "status": {
-    "initializing": "Initializing Builder Environment...",
+    "initializing": "Loading workspace…",
     "unsaved": "UNSAVED CHANGES",
     "saving": "Saving Build...",
     "published": "Build Published",
@@ -44,7 +44,7 @@
       "palette_desc": "Primary and auxiliary colors.",
       "typo": "Typography",
       "typo_desc": "Interface fonts and families.",
-      "css": "Advanced Styling",
+      "css": "Custom CSS",
       "css_desc": "Direct CSS/SCSS overrides.",
       "layout": "Master Layout",
       "layout_desc": "Container and header styles.",

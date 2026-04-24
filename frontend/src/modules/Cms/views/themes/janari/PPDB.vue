@@ -141,7 +141,7 @@
               v-else
               class="text-sm text-background/65 max-w-xs text-center md:text-left"
             >
-              Atur nomor WhatsApp di Advanced Customizer (PPDB) atau isi Telepon di Contact / Identitas situs.
+              Atur nomor WhatsApp di Theme Customizer (bagian PPDB) atau isi Telepon di Contact / Identitas situs.
             </p>
           </div>
         </div>

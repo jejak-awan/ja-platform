@@ -40,7 +40,8 @@ class ThemeCacheServiceTest extends TestCase
 
     public function test_remember_methods_no_tags()
     {
-        Config::set('cache.default', 'file');
+        // array driver: no tags, no filesystem paths (file cache needs storage/framework/cache)
+        Config::set('cache.default', 'array');
         $theme = Theme::factory()->create();
 
         // rememberSettings
@@ -95,10 +96,16 @@ class ThemeCacheServiceTest extends TestCase
 
     public function test_clear_all_and_widgets()
     {
+        Config::set('cache.default', 'array');
+        $theme = Theme::factory()->create();
+        Cache::put('theme.settings.'.$theme->id, 'theme-data');
         Cache::put('key', 'val');
+
         $this->service->clearAll();
-        // Since tags aren't used here (file driver), it clears everything if clearAll() calls Cache::flush()
-        $this->assertFalse(Cache::has('key'));
+
+        $this->assertFalse(Cache::has('theme.settings.'.$theme->id));
+        $this->assertTrue(Cache::has('key'));
+        $this->assertSame('val', Cache::get('key'));
 
         Cache::put('theme.widgets.header', 'content');
         $this->service->clearWidgets('header');
@@ -172,17 +179,13 @@ class ThemeCacheServiceTest extends TestCase
         $this->assertEquals('redis', $stats['driver']);
         $this->assertTrue($stats['tags_supported']);
 
+        Config::set('cache.default', 'memcached');
+        $stats = $this->service->getStats();
+        $this->assertTrue($stats['tags_supported']);
+
         Config::set('cache.default', 'file');
         $stats = $this->service->getStats();
         $this->assertFalse($stats['tags_supported']);
-    }
-
-    public function test_clear_by_prefix_fallback()
-    {
-        $method = new \ReflectionMethod(ThemeCacheService::class, 'clearByPrefix');
-        $method->setAccessible(true);
-        $method->invoke($this->service, 'test_');
-        $this->assertTrue(true);
     }
 
     public function test_get_active_theme_with_callback_null()

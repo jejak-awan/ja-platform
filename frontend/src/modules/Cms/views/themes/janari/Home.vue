@@ -12,7 +12,7 @@
       <!-- Default Janari home: render immediately to avoid full-viewport layout swap (CLS) -->
       <div
         v-else
-        class="flex-1 flex flex-col theme-janari"
+        class="flex-1 flex flex-col"
       >
         <section class="flex-1 flex flex-col">
           <!-- LCP-critical: keep eager -->
@@ -59,7 +59,7 @@ const CtaSection = defineAsyncComponent(() => import('./components/CtaSection.vu
 
 // Helpers
 import { useGsapAnimations } from '@/composables/useGsapAnimations'
-import { useAdvancedBindings } from '@/modules/Cms/composables/useAdvancedBindings'
+import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 import { useTheme } from '@/composables/useTheme';
 
 const { getSetting } = useTheme();
@@ -79,7 +79,7 @@ interface CmsPageData {
 
 const isComponentActive = ref(true);
 
-const { data: dynamicTestimonials } = useAdvancedBindings('testimonials', 'items')
+const { data: dynamicTestimonials } = useThemeDataBindings('testimonials', 'items')
 
 const activeSections = computed(() => (getSetting('home_sections') as string[]) || ['hero', 'principal', 'programs', 'stats', 'partners', 'testimonials', 'news', 'cta']);
 const isSectionActive = (section: string) => activeSections.value.includes(section);

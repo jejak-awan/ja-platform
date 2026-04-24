@@ -216,7 +216,7 @@ class AcademicController extends BaseController
         /** @var array{school_id: int, school_level_id: int, department_id?: int|null, academic_year_id: int, homeroom_teacher_id?: int|null, name: string} $validated */
         $validated = $request->validate([
             'school_id' => 'required|exists:sch_ins_schools,id',
-            'school_level_id' => 'required|exists:sch_ins_school_levels,id',
+            'school_level_id' => 'required|exists:sch_ins_levels,id',
             'department_id' => 'nullable|exists:sch_acad_departments,id',
             'academic_year_id' => 'required|exists:sch_acad_years,id',
             'homeroom_teacher_id' => 'nullable|exists:sch_hr_staff,id',
@@ -238,7 +238,7 @@ class AcademicController extends BaseController
 
         /** @var array{school_level_id: int, department_id?: int|null, academic_year_id: int, homeroom_teacher_id?: int|null, name: string} $validated */
         $validated = $request->validate([
-            'school_level_id' => 'required|exists:sch_ins_school_levels,id',
+            'school_level_id' => 'required|exists:sch_ins_levels,id',
             'department_id' => 'nullable|exists:sch_acad_departments,id',
             'academic_year_id' => 'required|exists:sch_acad_years,id',
             'homeroom_teacher_id' => 'nullable|exists:sch_hr_staff,id',
@@ -319,7 +319,7 @@ class AcademicController extends BaseController
 
         /** @var array{school_level_id: int, name: string, code: string, description?: string|null} $validated */
         $validated = $request->validate([
-            'school_level_id' => 'required|exists:sch_ins_school_levels,id',
+            'school_level_id' => 'required|exists:sch_ins_levels,id',
             'name' => 'required|string|max:150',
             'code' => 'required|string|max:50',
             'description' => 'nullable|string',
@@ -338,7 +338,7 @@ class AcademicController extends BaseController
 
         /** @var array{school_level_id: int, name: string, code: string, description?: string|null} $validated */
         $validated = $request->validate([
-            'school_level_id' => 'required|exists:sch_ins_school_levels,id',
+            'school_level_id' => 'required|exists:sch_ins_levels,id',
             'name' => 'required|string|max:150',
             'code' => 'required|string|max:50',
             'description' => 'nullable|string',

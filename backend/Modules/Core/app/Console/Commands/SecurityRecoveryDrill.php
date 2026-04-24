@@ -117,7 +117,8 @@ class SecurityRecoveryDrill extends Command
         ];
 
         $reportPath = 'security/recovery-drills/'.$startedAt->format('Ymd_His').'.json';
-        Storage::disk('local')->put($reportPath, json_encode($report, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $payload = json_encode($report, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        Storage::disk('local')->put($reportPath, is_string($payload) ? $payload : '{}');
 
         $this->newLine();
         $this->info('Observed RTO: '.$rtoSeconds.'s (target <= '.$maxRtoSeconds.'s)');

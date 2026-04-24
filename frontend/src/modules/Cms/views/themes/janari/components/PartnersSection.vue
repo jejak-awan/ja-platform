@@ -37,13 +37,13 @@
 import { ref, computed, onMounted } from 'vue'
 import { useTheme } from '@/composables/useTheme'
 import { useGsapAnimations } from '@/composables/useGsapAnimations'
-import { useAdvancedBindings } from '@/modules/Cms/composables/useAdvancedBindings'
+import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 
 const { getSetting } = useTheme()
 const { marquee } = useGsapAnimations()
 
 const marqueeRef = ref<HTMLElement>()
-const { data: dynamicItems } = useAdvancedBindings('partners', 'partners')
+const { data: dynamicItems } = useThemeDataBindings('partners', 'partners')
 
 const schoolLevel = computed(() => (getSetting('school_level') as string) || 'smk')
 const titleText = computed(() => (getSetting('partners_title') as string) || 'LINK & MATCH INDUSTRI')

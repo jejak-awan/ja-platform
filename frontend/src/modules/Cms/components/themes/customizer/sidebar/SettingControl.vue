@@ -2,7 +2,7 @@
   <div class="space-y-2">
     <div class="flex items-center justify-between">
       <label class="text-xs font-medium text-foreground tracking-wide">
-        {{ setting.key && $te('features.theme_builder.items.' + setting.key) ? $t('features.theme_builder.items.' + setting.key) : setting.label }}
+        {{ setting.key && $te('features.theme_customizer.items.' + setting.key) ? $t('features.theme_customizer.items.' + setting.key) : setting.label }}
       </label>
       <span
         v-if="setting.required"
@@ -47,7 +47,7 @@
         @update:model-value="(val) => { handleInput(val); $emit('change'); }"
       >
         <SelectTrigger class="h-9">
-          <SelectValue :placeholder="setting.placeholder ? $t('features.theme_builder.items.' + setting.key + '_placeholder') : $t('features.theme_builder.editor.menus.placeholder')" />
+          <SelectValue :placeholder="setting.placeholder ? $t('features.theme_customizer.items.' + setting.key + '_placeholder') : $t('features.theme_customizer.editor.menus.placeholder')" />
         </SelectTrigger>
         <SelectContent v-if="Array.isArray(setting.options)">
           <SelectItem
@@ -98,7 +98,7 @@
       class="flex items-center justify-between p-3 border rounded-lg bg-muted/20 hover:bg-muted/30 transition-colors"
     >
       <span class="text-sm font-medium text-foreground select-none">
-        {{ modelValue ? $t('features.theme_builder.items.common_options.enabled') : $t('features.theme_builder.items.common_options.disabled') }}
+        {{ modelValue ? $t('features.theme_customizer.items.common_options.enabled') : $t('features.theme_customizer.items.common_options.disabled') }}
       </span>
       <Switch 
         :checked="Boolean(modelValue)"
@@ -156,14 +156,14 @@
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
           <button
             class="p-2 bg-white/20 hover:bg-white/40 rounded-full text-white backdrop-blur-sm transition-colors"
-            :title="$t('features.theme_builder.items.common_options.change_image')"
+            :title="$t('features.theme_customizer.items.common_options.change_image')"
             @click="$emit('pick-media')"
           >
             <Pencil class="w-4 h-4" />
           </button>
           <button
             class="p-2 bg-white/20 hover:bg-white/40 rounded-full text-white backdrop-blur-sm transition-colors"
-            :title="$t('features.theme_builder.items.common_options.remove')"
+            :title="$t('features.theme_customizer.items.common_options.remove')"
             @click="handleInput(''); $emit('change')"
           >
             <Trash2 class="w-4 h-4" />
@@ -176,7 +176,7 @@
         @click="$emit('pick-media')"
       >
         <Image class="w-5 h-5" />
-        <span class="text-[10px] font-medium">{{ $t('features.theme_builder.items.common_options.select_media') }}</span>
+        <span class="text-[10px] font-medium">{{ $t('features.theme_customizer.items.common_options.select_media') }}</span>
       </button>
     </div>
 
@@ -391,7 +391,7 @@
       v-if="setting.description"
       class="text-[10px] text-muted-foreground leading-snug"
     >
-      {{ setting.key && $te('features.theme_builder.items.' + setting.key + '_hint') ? $t('features.theme_builder.items.' + setting.key + '_hint') : setting.description }}
+      {{ setting.key && $te('features.theme_customizer.items.' + setting.key + '_hint') ? $t('features.theme_customizer.items.' + setting.key + '_hint') : setting.description }}
     </p>
   </div>
 </template>
@@ -481,7 +481,7 @@ const translateOption = (label: string) => {
         .replace(/[^a-z0-9]+/g, '_')
         .replace(/^_+|_+$/g, '');
         
-    const fullKey = `features.theme_builder.items.common_options.${key}`;
+    const fullKey = `features.theme_customizer.items.common_options.${key}`;
     return te(fullKey) ? t(fullKey) : label;
 };
 
@@ -493,7 +493,7 @@ const translateLabel = (label: string) => {
         .replace(/[^a-z0-9]+/g, '_')
         .replace(/^_+|_+$/g, '');
         
-    const commonKey = `features.theme_builder.items.common_options.${key}`;
+    const commonKey = `features.theme_customizer.items.common_options.${key}`;
     if (te(commonKey)) return t(commonKey);
     
     // Fallback to just returning the label

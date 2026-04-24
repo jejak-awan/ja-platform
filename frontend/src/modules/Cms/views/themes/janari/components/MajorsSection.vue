@@ -55,7 +55,7 @@ import { ref, computed, onMounted, markRaw } from 'vue'
 import JanariSplitText from './JanariSplitText.vue'
 import { useTheme } from '@/composables/useTheme'
 import { useGsapAnimations } from '@/composables/useGsapAnimations'
-import { useAdvancedBindings } from '@/modules/Cms/composables/useAdvancedBindings'
+import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 import Monitor from 'lucide-vue-next/dist/esm/icons/monitor.js'
 import Cpu from 'lucide-vue-next/dist/esm/icons/cpu.js'
 import Layers from 'lucide-vue-next/dist/esm/icons/layers.js'
@@ -67,7 +67,7 @@ const { getSetting } = useTheme()
 const { staggerChildren } = useGsapAnimations()
 
 const gridRef = ref<HTMLElement>()
-const { data: dynamicItems } = useAdvancedBindings('majors', 'programs')
+const { data: dynamicItems } = useThemeDataBindings('majors', 'programs')
 
 const iconMap: Record<string, any> = {
     Monitor: markRaw(Monitor), Cpu: markRaw(Cpu), Layers: markRaw(Layers), 

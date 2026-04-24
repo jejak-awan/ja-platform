@@ -16,18 +16,8 @@
             <directory>Modules/*/tests/Unit</directory>
         </testsuite>
     </testsuites>
-    <coverage>
-        <report>
-            <html outputDirectory="build/coverage"/>
-            <text outputFile="build/coverage.txt"/>
-        </report>
-    </coverage>
-    <source>
-        <include>
-            <directory>app</directory>
-            <directory>Modules/*/app</directory>
-        </include>
-    </source>
+    <!-- Coverage (pcov/xdebug) hanya lewat phpunit.coverage.xml + composer test:coverage
+         supaya server dengan pcov off + JIT on tidak kena peringatan driver setiap artisan test. -->
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>

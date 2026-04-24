@@ -286,7 +286,7 @@ import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import JanariSplitText from './JanariSplitText.vue'
 import { useTheme } from '@/composables/useTheme'
 import { useGsapAnimations } from '@/composables/useGsapAnimations'
-import { useAdvancedBindings } from '@/modules/Cms/composables/useAdvancedBindings'
+import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 import api from '@/services/api'
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity'
 
@@ -299,7 +299,7 @@ const heroBadge = ref<HTMLElement>()
 const heroTitleRef = ref<HTMLElement>()
 const slideElements = ref<HTMLElement[]>([])
 
-const { data: dynamicHeroNews, hasBinding: hasHeroNewsBinding } = useAdvancedBindings('hero', 'news')
+const { data: dynamicHeroNews, hasBinding: hasHeroNewsBinding } = useThemeDataBindings('hero', 'news')
 
 const schoolLevel = computed(() => (getSetting('school_level') as string) || 'smk');
 const schoolStatus = computed(() => (getSetting('school_status') as string) || 'negeri');

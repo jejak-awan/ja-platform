@@ -116,7 +116,7 @@
                     v-else
                     class="text-sm text-muted-foreground"
                   >
-                    Atur di Pengaturan → Identitas atau di Advanced Customizer (Contact).
+                    Atur di Pengaturan → Identitas atau di Theme Customizer (bagian Contact).
                   </p>
                 </div>
               </div>
@@ -211,7 +211,7 @@
                     v-else
                     class="text-sm text-muted-foreground"
                   >
-                    Atur di Pengaturan → Identitas atau di Advanced Customizer (Contact).
+                    Atur di Pengaturan → Identitas atau di Theme Customizer (bagian Contact).
                   </p>
                 </div>
               </div>
@@ -544,7 +544,7 @@
 
 <script setup lang="ts">
 import { logger } from '@/utils/logger';
-import { ref, onMounted, computed, nextTick } from 'vue'
+import { ref, onMounted, computed, nextTick, defineAsyncComponent } from 'vue'
 import axios from 'axios'
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue'
 import { useRouter } from 'vue-router'
@@ -578,8 +578,11 @@ import MapPin from 'lucide-vue-next/dist/esm/icons/map-pin.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import { useToast } from '@/composables/useToast'
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity'
-import CaptchaWrapper from '@/modules/Core/components/captcha/CaptchaWrapper.vue'
 import type { CaptchaPayload } from '@/modules/Core/components/captcha/CaptchaWrapper.vue'
+
+const CaptchaWrapper = defineAsyncComponent(() => import('@/modules/Core/components/captcha/CaptchaWrapper.vue'))
+
+type MotionApi = ReturnType<typeof useGsapAnimations>
 
 import type { Content } from '@/types/cms/cms'
 
@@ -620,10 +623,11 @@ const formFiles = ref<Record<string, File | null>>({})
 const fieldErrors = ref<Record<string, string>>({})
 const submitting = ref(false)
 const captchaPayload = ref<CaptchaPayload | null>(null)
-const captchaRef = ref<InstanceType<typeof CaptchaWrapper> | null>(null)
+const captchaRef = ref<{ refresh?: () => Promise<void> } | null>(null)
 const startTracked = ref(false)
 const pageData = ref<PageData | null>(null)
 const { getSetting } = useTheme()
+const motionApi: MotionApi = useGsapAnimations()
 const router = useRouter()
 const cmsStore = useCmsStore()
 const toast = useToast()
@@ -709,7 +713,6 @@ const canSubmit = computed(() => {
     return true
 })
 
-const { fadeInLeft, fadeInRight, staggerChildren, gsap } = useGsapAnimations()
 const infoCol = ref<HTMLElement>()
 const contactCard = ref<HTMLElement>()
 const formCol = ref<HTMLElement>()
@@ -717,7 +720,7 @@ const formCol = ref<HTMLElement>()
 function onInfoItemEnter(event: Event): void {
     const el = event.currentTarget as HTMLElement | null
     if (!el) return
-    gsap.to(el, {
+    motionApi.gsap.to(el, {
         x: 10,
         duration: 0.35,
         ease: 'power3.out',
@@ -727,7 +730,7 @@ function onInfoItemEnter(event: Event): void {
 function onInfoItemLeave(event: Event): void {
     const el = event.currentTarget as HTMLElement | null
     if (!el) return
-    gsap.to(el, {
+    motionApi.gsap.to(el, {
         x: 0,
         scale: 1,
         duration: 0.4,
@@ -738,7 +741,7 @@ function onInfoItemLeave(event: Event): void {
 function onInfoItemPress(event: Event): void {
     const el = event.currentTarget as HTMLElement | null
     if (!el) return
-    gsap.to(el, {
+    motionApi.gsap.to(el, {
         scale: 0.985,
         duration: 0.12,
         ease: 'power2.out',
@@ -748,7 +751,7 @@ function onInfoItemPress(event: Event): void {
 function onInfoItemRelease(event: Event): void {
     const el = event.currentTarget as HTMLElement | null
     if (!el) return
-    gsap.to(el, {
+    motionApi.gsap.to(el, {
         scale: 1,
         duration: 0.2,
         ease: 'power2.out',
@@ -1120,47 +1123,62 @@ async function submitForm(): Promise<void> {
     }
 }
 
+function scheduleContactEnterMotion() {
+    const motion = motionApi
+    const { fadeInLeft, fadeInRight, staggerChildren } = motion
+    const run = () => {
+        void nextTick(() => {
+            if (infoCol.value) {
+                fadeInLeft(infoCol.value, { distance: 50, duration: 0.8 })
+            }
+            if (contactCard.value) {
+                const cardEl = (contactCard.value as unknown as { $el: HTMLElement }).$el || contactCard.value
+                staggerChildren(cardEl as HTMLElement, ':scope > div', {
+                    distance: 30,
+                    stagger: 0.12,
+                    delay: 0.3,
+                })
+            }
+            if (formCol.value) {
+                fadeInRight(formCol.value, { distance: 50, duration: 0.8, delay: 0.2 })
+            }
+        })
+    }
+    requestAnimationFrame(() => {
+        requestAnimationFrame(run)
+    })
+}
+
 onMounted(async () => {
     if (!isEnabled.value && behavior.value === 'redirect') {
         router.push('/')
         return
     }
-  
+
     if (!isEnabled.value) {
         loading.value = false
         return
     }
 
+    const bootstrap: Promise<unknown>[] = [
+        api.get('/ja/contents/contact').then((r) => {
+            pageData.value = r.data as PageData
+        }).catch((e) => {
+            logger.warning('[Contact] Content fetch skipped:', e)
+        }),
+        loadContactForm(),
+    ]
+    if (!cmsStore.publicSettingsLoaded) {
+        bootstrap.unshift(cmsStore.fetchPublicSettings())
+    }
+
     try {
-        await cmsStore.fetchPublicSettings()
-        await Promise.all([
-            api.get('/ja/contents/contact').then((r) => {
-                pageData.value = r.data as PageData
-            }).catch((e) => {
-                logger.warning('[Contact] Content fetch skipped:', e)
-            }),
-            loadContactForm(),
-        ])
+        await Promise.all(bootstrap)
     } catch (error) {
         logger.warning('[Contact] Init error:', error)
     } finally {
         loading.value = false
-
-        await nextTick()
-        if (infoCol.value) {
-            fadeInLeft(infoCol.value, { distance: 50, duration: 0.8 })
-        }
-        if (contactCard.value) {
-            const cardEl = (contactCard.value as unknown as { $el: HTMLElement }).$el || contactCard.value
-            staggerChildren(cardEl, ':scope > div', {
-                distance: 30,
-                stagger: 0.12,
-                delay: 0.3,
-            })
-        }
-        if (formCol.value) {
-            fadeInRight(formCol.value, { distance: 50, duration: 0.8, delay: 0.2 })
-        }
+        scheduleContactEnterMotion()
     }
 })
 </script>

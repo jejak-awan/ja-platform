@@ -19,18 +19,30 @@ class SecurityKpiReport extends Command
 
     public function handle(): int
     {
-        $days = max(1, (int) $this->option('days'));
-        $maxRto = max(1, (float) $this->option('max-rto-seconds'));
-        $maxRpo = max(1, (float) $this->option('max-rpo-minutes'));
-        $maxNoiseRate = min(1, max(0, (float) $this->option('max-noise-rate')));
+        $daysRaw = $this->option('days');
+        $days = max(1, is_numeric($daysRaw) ? (int) $daysRaw : 30);
+        $maxRtoRaw = $this->option('max-rto-seconds');
+        $maxRto = max(1, is_numeric($maxRtoRaw) ? (float) $maxRtoRaw : 600.0);
+        $maxRpoRaw = $this->option('max-rpo-minutes');
+        $maxRpo = max(1, is_numeric($maxRpoRaw) ? (float) $maxRpoRaw : 1440.0);
+        $maxNoiseRateRaw = $this->option('max-noise-rate');
+        $maxNoiseRate = min(1.0, max(0.0, is_numeric($maxNoiseRateRaw) ? (float) $maxNoiseRateRaw : 0.70));
         $since = now()->subDays($days);
 
         $drills = $this->loadDrillsSince($since);
         $drillCount = count($drills);
         $passCount = count(array_filter($drills, fn (array $d) => (bool) data_get($d, 'results.overall_pass', false)));
         $passRate = $drillCount > 0 ? $passCount / $drillCount : 0.0;
-        $avgRto = $this->avg(array_map(fn (array $d) => (float) data_get($d, 'results.observed_rto_seconds', 0), $drills));
-        $avgRpo = $this->avg(array_map(fn (array $d) => (float) data_get($d, 'results.observed_rpo_minutes', 0), $drills));
+        $avgRto = $this->avg(array_map(static function (array $d): float {
+            $value = data_get($d, 'results.observed_rto_seconds', 0);
+
+            return is_numeric($value) ? (float) $value : 0.0;
+        }, $drills));
+        $avgRpo = $this->avg(array_map(static function (array $d): float {
+            $value = data_get($d, 'results.observed_rpo_minutes', 0);
+
+            return is_numeric($value) ? (float) $value : 0.0;
+        }, $drills));
 
         // Proxy noise ratio: low-confidence signals compared to high-confidence security events.
         $signalInfo = SecurityLog::query()
@@ -46,7 +58,7 @@ class SecurityKpiReport extends Command
         $rtoOk = $drillCount > 0 && $avgRto <= $maxRto;
         $rpoOk = $drillCount > 0 && $avgRpo <= $maxRpo;
         $noiseOk = $noiseRate <= $maxNoiseRate;
-        $overallOk = $rtoOk && $rpoOk && $noiseOk && $drillCount > 0;
+        $overallOk = $rtoOk && $rpoOk && $noiseOk;
 
         $report = [
             'generated_at' => now()->toISOString(),
@@ -77,7 +89,8 @@ class SecurityKpiReport extends Command
         ];
 
         $path = 'security/kpi/security-kpi-'.now()->format('Ymd_His').'.json';
-        Storage::disk('local')->put($path, json_encode($report, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $payload = json_encode($report, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        Storage::disk('local')->put($path, is_string($payload) ? $payload : '{}');
 
         $this->info('Security KPI report generated.');
         $this->line('Period: last '.$days.' days');
@@ -99,6 +112,9 @@ class SecurityKpiReport extends Command
 
         foreach ($files as $file) {
             $raw = Storage::disk('local')->get($file);
+            if (! is_string($raw)) {
+                continue;
+            }
             $json = json_decode($raw, true);
             if (! is_array($json)) {
                 continue;

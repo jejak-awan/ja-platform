@@ -36,7 +36,8 @@ class SecuritySmokeCheck extends Command
         }
 
         $issues = [];
-        $securityRoutes = collect(Route::getRoutes())
+        $allRoutes = Route::getRoutes()->getRoutes();
+        $securityRoutes = collect($allRoutes)
             ->filter(fn ($route) => str_starts_with($route->uri(), 'api/v1/admin/core/security'))
             ->values();
 

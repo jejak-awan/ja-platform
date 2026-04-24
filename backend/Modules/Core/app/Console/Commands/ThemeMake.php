@@ -87,7 +87,7 @@ class ThemeMake extends Command
             'name' => $name,
             'slug' => $slug,
             'type' => $type,
-            'path' => $themePath,
+            'path' => $slug,
             'version' => '1.0.0',
             'parent_theme' => $parent,
             'status' => 'active',

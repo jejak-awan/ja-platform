@@ -739,8 +739,16 @@ class SecurityController extends BaseApiController
         $drillCount = count($drills);
         $passCount = count(array_filter($drills, fn (array $d): bool => (bool) data_get($d, 'results.overall_pass', false)));
         $passRate = $drillCount > 0 ? round(($passCount / $drillCount) * 100, 2) : 0.0;
-        $avgRto = $this->avg(array_map(fn (array $d): float => (float) data_get($d, 'results.observed_rto_seconds', 0), $drills));
-        $avgRpo = $this->avg(array_map(fn (array $d): float => (float) data_get($d, 'results.observed_rpo_minutes', 0), $drills));
+        $avgRto = $this->avg(array_map(static function (array $d): float {
+            $value = data_get($d, 'results.observed_rto_seconds', 0);
+
+            return is_numeric($value) ? (float) $value : 0.0;
+        }, $drills));
+        $avgRpo = $this->avg(array_map(static function (array $d): float {
+            $value = data_get($d, 'results.observed_rpo_minutes', 0);
+
+            return is_numeric($value) ? (float) $value : 0.0;
+        }, $drills));
 
         $signalInfo = SecurityLog::query()
             ->where('created_at', '>=', $since)
@@ -788,6 +796,9 @@ class SecurityController extends BaseApiController
 
         foreach ($files as $file) {
             $raw = Storage::disk('local')->get($file);
+            if (! is_string($raw)) {
+                continue;
+            }
             $json = json_decode($raw, true);
             if (! is_array($json)) {
                 continue;

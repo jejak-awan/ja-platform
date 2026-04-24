@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Aktifkan pcov + matikan JIT hanya untuk proses PHPUnit ini (override CLI, bukan php.ini global).
+# Konfigurasi coverage ada di phpunit.coverage.xml agar phpunit.xml default aman untuk pcov off (JIT LMS).
 
 set -euo pipefail
 
@@ -7,8 +9,9 @@ cd "$ROOT_DIR"
 
 PHP_BIN="${PHP_BIN:-php}"
 PCOV_DIR="${PCOV_DIRECTORY:-$ROOT_DIR}"
+PHPUNIT_COV="${PHPUNIT_COVERAGE_CONFIG:-$ROOT_DIR/phpunit.coverage.xml}"
 
-BASE_ARGS=(
+PHP_D_ARGS=(
   "-d" "pcov.enabled=1"
   "-d" "pcov.directory=${PCOV_DIR}"
   "-d" "opcache.jit=0"
@@ -26,7 +29,8 @@ fi
 echo "[pcov] Enable untuk sesi test ini (auto-disable setelah proses selesai)."
 
 if [ "$#" -eq 0 ]; then
-  exec "$PHP_BIN" "${EXTRA_ARGS[@]}" "${BASE_ARGS[@]}" ./vendor/bin/phpunit --coverage-text
+  exec "$PHP_BIN" "${EXTRA_ARGS[@]}" "${PHP_D_ARGS[@]}" ./vendor/bin/phpunit -c "${PHPUNIT_COV}" --coverage-text
 else
-  exec "$PHP_BIN" "${EXTRA_ARGS[@]}" "${BASE_ARGS[@]}" ./vendor/bin/phpunit "$@" --coverage-text
+  # Argumen tambahan (filter path, dll.) diletakkan sebelum --coverage-text.
+  exec "$PHP_BIN" "${EXTRA_ARGS[@]}" "${PHP_D_ARGS[@]}" ./vendor/bin/phpunit -c "${PHPUNIT_COV}" "$@" --coverage-text
 fi

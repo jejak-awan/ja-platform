@@ -143,9 +143,9 @@ const cmsRoutes: RouteRecordRaw[] = [
         meta: { permission: 'manage themes' },
     },
     {
-        path: 'themes/:slug/advanced',
-        name: 'themes.advanced',
-        component: () => import('@/modules/Cms/views/admin/style/themes/AdvancedCustomizerPage.vue'),
+        path: 'themes/:slug/customizer',
+        name: 'themes.customizer',
+        component: () => import('@/modules/Cms/views/admin/style/themes/ThemeCustomizerWorkspace.vue'),
         meta: { permission: 'manage themes' },
     },
     {

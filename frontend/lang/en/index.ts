@@ -46,7 +46,7 @@ import profile from './features/profile.json';
 import content_studio from './features/content_studio.json';
 import autosave from './features/autosave.json';
 import securityAlerts from './features/security_alerts.json';
-import theme_builder from './features/theme_builder.json';
+import theme_customizer from './features/theme_customizer.json';
 
 
 import scheduled_tasks from './features/scheduled_tasks.json';
@@ -106,7 +106,7 @@ export default {
         content_studio,
         autosave,
         security_alerts: securityAlerts,
-        theme_builder,
+        theme_customizer,
 
         scheduled_tasks,
         command_runner,

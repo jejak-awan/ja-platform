@@ -27,9 +27,10 @@ class AssignSecurityOfficer extends Command
     public function handle(): int
     {
         $emailsRaw = $this->option('emails');
+        $configuredOfficerEmails = config('security.officer_emails', '');
         $emailsInput = is_string($emailsRaw) && trim($emailsRaw) !== ''
             ? $emailsRaw
-            : (string) env('SECURITY_OFFICER_EMAILS', '');
+            : (is_string($configuredOfficerEmails) ? $configuredOfficerEmails : '');
 
         $emails = collect(explode(',', $emailsInput))
             ->map(fn ($v) => trim((string) $v))
@@ -57,8 +58,11 @@ class AssignSecurityOfficer extends Command
             }
         }
 
-        $foundEmails = $users->pluck('email')->all();
-        $missingEmails = array_values(array_diff($emails->all(), $foundEmails));
+        /** @var array<int, string> $foundEmails */
+        $foundEmails = $users->pluck('email')->filter(static fn ($v): bool => is_string($v))->values()->all();
+        /** @var array<int, string> $requestedEmails */
+        $requestedEmails = $emails->all();
+        $missingEmails = array_values(array_diff($requestedEmails, $foundEmails));
 
         $this->info("Role '{$role->name}' assignment completed.");
         $this->line('Requested: '.count($emails));

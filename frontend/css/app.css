@@ -65,7 +65,14 @@
     }
 
     body {
-        @apply bg-background text-foreground antialiased subpixel-antialiased;
+        @apply bg-background text-foreground;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    @supports (-moz-osx-font-smoothing: grayscale) {
+        body {
+            -moz-osx-font-smoothing: grayscale;
+        }
     }
 
     /* Global Form Resets for Anti-Flash & Consistency */
@@ -437,8 +444,14 @@
     /* Subpixel antialiasing for thinner, sharper text on dark backgrounds */
     .text-sharp {
         -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
+    }
+
+    /* Firefox / macOS only — keeps Chromium from logging “unknown property” for -moz-* */
+    @supports (-moz-osx-font-smoothing: grayscale) {
+        .text-sharp {
+            -moz-osx-font-smoothing: grayscale;
+        }
     }
 
     .noise-overlay {

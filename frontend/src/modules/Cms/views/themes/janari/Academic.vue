@@ -148,7 +148,7 @@ import { useRouter } from 'vue-router';
 import { useTheme } from '@/composables/useTheme';
 import PageDisabled from './components/PageDisabled.vue';
 import api from '@/services/api';
-import { useAdvancedBindings } from '@/modules/Cms/composables/useAdvancedBindings';
+import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings';
 import BookOpen from 'lucide-vue-next/dist/esm/icons/book-open.js';
 import GraduationCap from 'lucide-vue-next/dist/esm/icons/graduation-cap.js';
 import Calendar from 'lucide-vue-next/dist/esm/icons/calendar.js';
@@ -175,7 +175,7 @@ const activeTab = ref('curriculum');
 
 // Optional: Binding for sub-categories if we want to make tabs dynamic
 // For now we keep the structure but allow individual content blocks to be dynamic
-const { data: curriculumItems } = useAdvancedBindings('academic', 'curriculum');
+const { data: curriculumItems } = useThemeDataBindings('academic', 'curriculum');
 
 const tabs = [
   { id: 'curriculum', label: 'Kurikulum', icon: markRaw(GraduationCap) },

@@ -13,7 +13,7 @@ class StoreStudentRequest extends FormRequest
     {
         return [
             'school_id' => 'required|exists:sch_ins_schools,id',
-            'level_id' => 'nullable|exists:sch_ins_school_levels,id',
+            'level_id' => 'nullable|exists:sch_ins_levels,id',
             'department_id' => 'nullable|exists:sch_acad_departments,id',
 
             // Biography

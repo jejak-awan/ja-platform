@@ -77,8 +77,13 @@ class Student extends Model
 {
     protected $table = 'sch_std_students';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<\Modules\School\Database\Factories\StudentFactory> */
     use HasFactory, SoftDeletes, ScopedBySchool, ScopedByLevel, HasVerificationHash;
+
+    protected static function newFactory(): \Modules\School\Database\Factories\StudentFactory
+    {
+        return \Modules\School\Database\Factories\StudentFactory::new();
+    }
 
     protected $fillable = [
         'school_id',

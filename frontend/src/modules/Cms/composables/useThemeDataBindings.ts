@@ -1,7 +1,8 @@
-import { ref, onMounted, nextTick, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useTheme } from '@/composables/useTheme'
 import api from '@/services/api'
 import { logger } from '@/utils/logger'
+import { THEME_DATA_BINDINGS_KEY, isPlainSettingsObject } from '@/modules/Cms/constants/themeBindings'
 
 export interface SlotBinding {
     sourceType: 'static' | 'api_posts' | 'api_pages' | 'api_categories'
@@ -21,19 +22,25 @@ export interface ComponentBindings {
 }
 
 /**
- * Get all advanced bindings from theme settings
+ * Theme data bindings from active theme `settings.theme_data_bindings`.
  */
-export function getAdvancedBindings(): Record<string, ComponentBindings> {
+export function getThemeDataBindings(): Record<string, ComponentBindings> {
     const { getSetting } = useTheme()
-    const bindings = getSetting('_advanced_bindings', {})
-    return (bindings as Record<string, ComponentBindings>) || {}
+    const bindings = getSetting(THEME_DATA_BINDINGS_KEY, {})
+
+    if (isPlainSettingsObject(bindings)) {
+        return bindings as Record<string, ComponentBindings>
+    }
+
+    return {}
 }
 
 /**
- * Get bindings for a specific component
+ * Bindings for a single theme component id.
  */
-export function getComponentBindings(componentId: string): ComponentBindings | null {
-    const all = getAdvancedBindings()
+export function getThemeComponentBindings(componentId: string): ComponentBindings | null {
+    const all = getThemeDataBindings()
+
     return all[componentId] || null
 }
 
@@ -62,6 +69,7 @@ async function resolveSlotData(binding: SlotBinding): Promise<unknown[]> {
             }
             const response = await api.get('/ja/contents', { params })
             const data = response.data
+
             return Array.isArray(data) ? data : data?.data || []
         }
 
@@ -69,6 +77,7 @@ async function resolveSlotData(binding: SlotBinding): Promise<unknown[]> {
             if (binding.pageSlug) {
                 const response = await api.get(`/ja/contents/${binding.pageSlug}`)
                 const data = response.data
+
                 return data ? [data] : []
             }
             const params: Record<string, unknown> = {
@@ -78,16 +87,18 @@ async function resolveSlotData(binding: SlotBinding): Promise<unknown[]> {
             }
             const response = await api.get('/ja/contents', { params })
             const data = response.data
+
             return Array.isArray(data) ? data : data?.data || []
         }
 
         if (binding.sourceType === 'api_categories') {
             const response = await api.get('/ja/categories')
             const data = response.data
+
             return Array.isArray(data) ? data : []
         }
     } catch (e) {
-        logger.error(`[useAdvancedBindings] Failed to resolve slot data:`, e)
+        logger.error(`[useThemeDataBindings] Failed to resolve slot data:`, e)
     }
 
     return []
@@ -100,6 +111,7 @@ export function mapDataToProps(rawData: Record<string, unknown>[], propMapping: 
     if (!propMapping || Object.keys(propMapping).length === 0) {
         return rawData
     }
+
     return rawData.map(item => {
         const mapped: Record<string, unknown> = { _raw: item }
         for (const [propKey, dataField] of Object.entries(propMapping)) {
@@ -116,14 +128,15 @@ export function mapDataToProps(rawData: Record<string, unknown>[], propMapping: 
             }
             mapped[propKey] = value
         }
+
         return mapped
     })
 }
 
 /**
- * Main composable: resolve data for a specific component slot
+ * Resolve reactive data for one component slot from theme bindings.
  */
-export function useAdvancedBindings(componentId: string, slotId: string = 'default') {
+export function useThemeDataBindings(componentId: string, slotId: string = 'default') {
     const data = ref<unknown[]>([])
     const loading = ref(false)
     const error = ref<string | null>(null)
@@ -133,14 +146,16 @@ export function useAdvancedBindings(componentId: string, slotId: string = 'defau
     const resolve = async () => {
         if (isUnmounted.value) return
 
-        const compBindings = getComponentBindings(componentId)
+        const compBindings = getThemeComponentBindings(componentId)
         if (!compBindings?.slots?.[slotId]) {
             if (!isUnmounted.value) hasBinding.value = false
+
             return
         }
         const slotBinding = compBindings.slots[slotId]
         if (slotBinding.sourceType === 'static') {
             if (!isUnmounted.value) hasBinding.value = false
+
             return
         }
 
@@ -161,15 +176,15 @@ export function useAdvancedBindings(componentId: string, slotId: string = 'defau
         } catch (e) {
             if (isUnmounted.value) return
             error.value = e instanceof Error ? e.message : 'Failed to resolve data'
-            logger.error(`[useAdvancedBindings] Error for ${componentId}/${slotId}:`, e)
+            logger.error(`[useThemeDataBindings] Error for ${componentId}/${slotId}:`, e)
         } finally {
             if (!isUnmounted.value) loading.value = false
         }
     }
 
     onMounted(() => {
-        nextTick(() => {
-            resolve()
+        requestAnimationFrame(() => {
+            void resolve()
         })
     })
 
@@ -187,9 +202,9 @@ export function useAdvancedBindings(componentId: string, slotId: string = 'defau
 }
 
 /**
- * Composable to resolve ALL slots for a component at once
+ * Resolve all non-static slots for a component at once.
  */
-export function useComponentBindings(componentId: string) {
+export function useThemeComponentBindings(componentId: string) {
     const slots = ref<Record<string, unknown[]>>({})
     const loading = ref(false)
     const hasAnyBinding = ref(false)
@@ -198,9 +213,10 @@ export function useComponentBindings(componentId: string) {
     const resolve = async () => {
         if (isUnmounted.value) return
 
-        const compBindings = getComponentBindings(componentId)
+        const compBindings = getThemeComponentBindings(componentId)
         if (!compBindings || !compBindings.slots) {
             if (!isUnmounted.value) hasAnyBinding.value = false
+
             return
         }
 
@@ -208,6 +224,7 @@ export function useComponentBindings(componentId: string) {
         const hasNonStatic = slotEntries.some(([_, b]) => b && b.sourceType !== 'static')
         if (!hasNonStatic) {
             if (!isUnmounted.value) hasAnyBinding.value = false
+
             return
         }
 
@@ -236,15 +253,15 @@ export function useComponentBindings(componentId: string) {
             if (!isUnmounted.value) slots.value = results
         } catch (e) {
             if (isUnmounted.value) return
-            logger.error(`[useComponentBindings] Error for ${componentId}:`, e)
+            logger.error(`[useThemeComponentBindings] Error for ${componentId}:`, e)
         } finally {
             if (!isUnmounted.value) loading.value = false
         }
     }
 
     onMounted(() => {
-        nextTick(() => {
-            resolve()
+        requestAnimationFrame(() => {
+            void resolve()
         })
     })
 

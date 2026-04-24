@@ -8,28 +8,28 @@
           :key="mode.id" 
           :class="activeDevice === mode.id ? 'bg-primary/10 text-primary ring-1 ring-primary/20' : 'text-muted-foreground hover:bg-muted'"
           class="p-2 rounded-md transition-colors flex items-center gap-2"
-          :title="$t('features.theme_builder.editor.preview.devices.' + mode.id)"
+          :title="$t('features.theme_customizer.editor.preview.devices.' + mode.id)"
           @click="activeDevice = mode.id"
         >
           <component
             :is="mode.icon"
             class="w-5 h-5"
           />
-          <span class="text-xs font-medium hidden sm:block">{{ $t('features.theme_builder.editor.preview.devices.' + mode.id) }}</span>
+          <span class="text-xs font-medium hidden sm:block">{{ $t('features.theme_customizer.editor.preview.devices.' + mode.id) }}</span>
         </button>
       </div>
 
       <button 
         :disabled="isRefreshing"
         class="p-2 text-muted-foreground hover:text-primary hover:bg-muted rounded-md transition-colors flex items-center gap-2 bg-background border hover:border-primary/50"
-        :title="$t('features.theme_builder.editor.preview.refresh')"
+        :title="$t('features.theme_customizer.editor.preview.refresh')"
         @click="refreshPreview"
       >
         <RotateCcw
           class="w-4 h-4"
           :class="{'animate-spin': isRefreshing}"
         />
-        <span class="text-xs font-medium">{{ $t('features.theme_builder.editor.preview.refresh') }}</span>
+        <span class="text-xs font-medium">{{ $t('features.theme_customizer.editor.preview.refresh') }}</span>
       </button>
     </div>
 

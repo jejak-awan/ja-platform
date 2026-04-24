@@ -113,7 +113,8 @@ class ThemeService
                     'status' => 'active',
                 ]);
 
-                Cache::forget("theme.active.{$theme->type}");
+                Cache::forget(ThemeCacheService::PREFIX_ACTIVE.$theme->type);
+                Cache::forget(ThemeCacheService::PREFIX_ACTIVE_API_PAYLOAD.$theme->type);
             } else {
                 throw $e;
             }
@@ -389,7 +390,7 @@ class ThemeService
      */
     public function getThemeDirectory(): string
     {
-        return base_path('resources/js/views/cms/themes');
+        return \Modules\Cms\Support\ThemeViews::rootPath();
     }
 
     /**
@@ -475,6 +476,148 @@ class ThemeService
      * Get default settings schema for themes without manifest
      * Optimized for "Janari" theme with modern UI/UX
      *
+     * @return array<string, array<string, mixed>>
+     */
+    private const THEME_DATA_BINDINGS_KEY = 'theme_data_bindings';
+
+    /**
+     * Normalize slot binding shapes inside `theme_data_bindings` for persistence/API output.
+     *
+     * @param  array<string, mixed>  $settings
+     * @return array<string, mixed>
+     */
+    public function normalizeThemeDataBindingsInSettings(array $settings): array
+    {
+        $bindings = $settings[self::THEME_DATA_BINDINGS_KEY] ?? null;
+        if (! is_array($bindings)) {
+            return $settings;
+        }
+
+        /** @var array<string, array<int, string>> $componentAliases */
+        $componentAliases = [
+            'majors' => ['programs'],
+            'partners' => ['partner'],
+        ];
+
+        /** @var array<string, array<string, array<int, string>>> $slotAliases */
+        $slotAliases = [
+            'majors' => ['programs' => ['default']],
+            'stats' => ['counters' => ['default']],
+            'testimonials' => ['items' => ['default']],
+            'partners' => ['partners' => ['default']],
+        ];
+
+        /** @var array<string, mixed> $normalized */
+        $normalized = [];
+
+        foreach ($bindings as $componentId => $componentConfig) {
+            if (! is_array($componentConfig)) {
+                continue;
+            }
+
+            $targetComponentId = $componentId;
+            foreach ($componentAliases as $canonical => $aliases) {
+                if ($componentId === $canonical || in_array($componentId, $aliases, true)) {
+                    $targetComponentId = $canonical;
+                    break;
+                }
+            }
+
+            /** @var array<string, mixed> $existingComponent */
+            $existingComponent = isset($normalized[$targetComponentId]) && is_array($normalized[$targetComponentId])
+                ? $normalized[$targetComponentId]
+                : ['slots' => []];
+            if (! isset($existingComponent['slots']) || ! is_array($existingComponent['slots'])) {
+                $existingComponent['slots'] = [];
+            }
+            $slotsInput = $componentConfig['slots'] ?? [];
+            if (! is_array($slotsInput)) {
+                $slotsInput = [];
+            }
+
+            foreach ($slotsInput as $slotId => $slotConfig) {
+                if (! is_array($slotConfig)) {
+                    continue;
+                }
+
+                $targetSlotId = $slotId;
+                $slotMap = $slotAliases[$targetComponentId] ?? [];
+                foreach ($slotMap as $canonicalSlot => $aliases) {
+                    if ($slotId === $canonicalSlot || in_array($slotId, $aliases, true)) {
+                        $targetSlotId = $canonicalSlot;
+                        break;
+                    }
+                }
+
+                if (! isset($slotConfig['pageSlug']) && isset($slotConfig['pageId']) && is_scalar($slotConfig['pageId'])) {
+                    $slotConfig['pageSlug'] = (string) $slotConfig['pageId'];
+                }
+
+                if (! isset($slotConfig['propMapping']) || ! is_array($slotConfig['propMapping'])) {
+                    $slotConfig['propMapping'] = [];
+                }
+
+                $existingSlot = $existingComponent['slots'][$targetSlotId] ?? null;
+                $existingComponent['slots'][$targetSlotId] = array_merge(
+                    is_array($existingSlot) ? $existingSlot : [],
+                    $slotConfig
+                );
+            }
+
+            $normalized[$targetComponentId] = array_merge($componentConfig, $existingComponent);
+        }
+
+        $settings[self::THEME_DATA_BINDINGS_KEY] = $normalized;
+
+        return $settings;
+    }
+
+    public function normalizeThemeDataBindings(Theme $theme): void
+    {
+        $settings = is_array($theme->settings) ? $theme->settings : [];
+        $theme->settings = $this->normalizeThemeDataBindingsInSettings($settings);
+    }
+
+    /**
+     * Cached JSON-serializable payload for public GET /themes/active (same shape as Theme Eloquent + assets + manifest).
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getActiveThemePublicPayload(string $type): ?array
+    {
+        $theme = $this->getActiveTheme($type);
+        if (! $theme) {
+            return null;
+        }
+
+        try {
+            return Cache::remember(
+                ThemeCacheService::PREFIX_ACTIVE_API_PAYLOAD.$type,
+                ThemeCacheService::TTL_LONG,
+                function () use ($type): array {
+                    $fresh = $this->getActiveTheme($type);
+                    if (! $fresh) {
+                        throw new \LogicException('no_active_theme');
+                    }
+                    $this->normalizeThemeDataBindings($fresh);
+                    $assets = $this->loadThemeAssets($fresh);
+                    $fresh->setAttribute('assets', $assets);
+                    $fresh->setAttribute('manifest', $fresh->getManifest());
+
+                    /** @var array<string, mixed> */
+                    return $fresh->toArray();
+                }
+            );
+        } catch (\LogicException $e) {
+            if ($e->getMessage() === 'no_active_theme') {
+                return null;
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
      * @return array<string, array<string, mixed>>
      */
     public function getDefaultSettingsSchema(): array

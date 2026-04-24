@@ -41,6 +41,11 @@ export default defineConfig({
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
         manualChunks: (id) => {
+          // Janari theme pages: keep heavy CMS theme views out of the main entry chunk.
+          if (id.includes('/modules/Cms/views/themes/janari/') && id.endsWith('.vue')) {
+            return 'theme-janari'
+          }
+
           if (!id.includes('node_modules')) {
             return;
           }

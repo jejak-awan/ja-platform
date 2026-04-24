@@ -5,6 +5,9 @@
     "type": "frontend",
     "description": "Janari Theme - A modern, elegant theme for JA-Edu",
     "author": "Jejakawan",
+    "supports": {
+        "janari_canvas": true
+    },
     "settings_schema": {
         "site_title": {
             "label": "Site Title",
@@ -294,11 +297,12 @@
             "category": "Colors"
         },
         "color_background": {
-            "label": "Background Color (Legacy)",
+            "label": "Background Color (stored)",
             "type": "color",
             "default": "#f9fafb",
             "category": "Colors",
-            "hidden": true
+            "hidden": true,
+            "description": "Hidden; light/dark backgrounds use bg_light_color / bg_dark_color in the customizer."
         },
         "bg_light_color": {
             "label": "Light Mode Background",
@@ -653,13 +657,13 @@
             "label": "Principal section — background image",
             "type": "media",
             "category": "Education Info",
-            "description": "Large photo behind the headmaster portrait (school building, campus). Shown in Advanced Customizer. If empty, uses School image (below), then default."
+            "description": "Large photo behind the headmaster portrait (school building, campus). Configured in Theme Customizer. If empty, uses School image (below), then default."
         },
         "school_image": {
-            "label": "School / campus image (fallback)",
+            "label": "School / campus image",
             "type": "media",
             "category": "Education Info",
-            "description": "Used when Principal section background is not set. Also legacy key for older sites."
+            "description": "Used when Principal section background is not set."
         },
         "hero_title": {
             "label": "Hero Title",

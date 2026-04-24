@@ -26,11 +26,8 @@
           }"
           :style="hybridContentStyles"
         >
-          <router-view v-slot="{ Component, route }">
-            <div
-              :key="route.path"
-              class="w-full h-full flex-1 flex flex-col page-enter"
-            >
+          <router-view v-slot="{ Component }">
+            <div class="w-full h-full flex-1 flex flex-col page-enter">
               <component :is="Component" />
             </div>
           </router-view>
@@ -58,11 +55,8 @@
         :class="{ 'pt-20': headerSticky }"
       >
         <!-- Added padding here too -->
-        <router-view v-slot="{ Component, route }">
-          <div
-            :key="route.path"
-            class="w-full h-full flex-1 flex flex-col page-enter"
-          >
+        <router-view v-slot="{ Component }">
+          <div class="w-full h-full flex-1 flex flex-col page-enter">
             <component :is="Component" />
           </div>
         </router-view>
@@ -108,6 +102,7 @@ import { useGsapInteractiveUi } from '@/composables/useGsapInteractiveUi'
 import ThemePageResolver from '@/components/shared/ThemePageResolver.vue'
 import ArrowUp from 'lucide-vue-next/dist/esm/icons/arrow-up.js';
 import { JANARI_PRESETS } from '@/modules/Cms/config/janariPresets';
+import { themeUsesJanariCanvas } from '@/modules/Cms/utils/themeManifest';
 
 const { activeTheme, getSetting } = useTheme()
 
@@ -115,19 +110,21 @@ const activeThemeSlug = computed(
   () => (activeTheme.value as { slug?: string } | null)?.slug ?? '',
 )
 
+const usesJanariCanvas = computed(() => themeUsesJanariCanvas(activeTheme.value))
+
 const activeThemeClass = computed(() => {
   const slug = activeThemeSlug.value
   if (!slug) return []
   const classes = [`theme-${slug}`]
-  if (slug.startsWith('janari')) {
+  if (usesJanariCanvas.value) {
     classes.push('theme-janari')
   }
   return classes
 })
 
-/** Janari: neutral canvas + preset/intensity/texture from customizer (see css/themes/janari.css) */
+/** Janari canvas: neutral preset/intensity/texture from customizer (see css/themes/janari.css) */
 const janariRootDataAttrs = computed((): Record<string, string> => {
-  if (!activeThemeSlug.value.startsWith('janari')) return {}
+  if (!usesJanariCanvas.value) return {}
   const validPresets = new Set([
     'custom',
     'monochrome_clean',
@@ -215,7 +212,7 @@ const janariRootDataAttrs = computed((): Record<string, string> => {
 })
 
 const janariRootStyleVars = computed((): Record<string, string> => {
-  if (!activeThemeSlug.value.startsWith('janari')) return {}
+  if (!usesJanariCanvas.value) return {}
 
   const preset = String(janariRootDataAttrs.value['data-janari-preset'] || 'custom')
 

@@ -36,13 +36,13 @@
 import { ref, computed, onMounted } from 'vue'
 import { useTheme } from '@/composables/useTheme'
 import { useGsapAnimations } from '@/composables/useGsapAnimations'
-import { useAdvancedBindings } from '@/modules/Cms/composables/useAdvancedBindings'
+import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 
 const { getSetting } = useTheme()
 const { staggerChildren, counterUp } = useGsapAnimations()
 
 const gridRef = ref<HTMLElement>()
-const { data: dynamicItems } = useAdvancedBindings('stats', 'counters')
+const { data: dynamicItems } = useThemeDataBindings('stats', 'counters')
 
 const sectionTitle = computed(() => (getSetting('stats_title') as string) || '')
 const items = computed(() => dynamicItems.value.map((item: any) => ({ 

@@ -25,7 +25,17 @@ backend/node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/dist-ssr/
+# Vite must not copy stale hashed bundles from here into dist (keep only static subtrees e.g. themes/)
+frontend/public/assets/*
+!frontend/public/assets/themes/
+!frontend/public/assets/themes/**
 ja-backup/
+
+# Local lint / analysis dumps (not source)
+frontend/eslint-current.json
+frontend/lint_report_final.json
+frontend/unused_vars.txt
+frontend/public/stats.html
 
 # Runtime/cache artifacts
 backend/storage/logs/*.log

@@ -100,7 +100,8 @@ class ContentService
         }
 
         if ($request->filled('search')) {
-            $search = (string) $request->input('search');
+            $searchRaw = $request->input('search');
+            $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                     ->orWhere('body', 'like', "%{$search}%")
@@ -544,8 +545,8 @@ class ContentService
      */
     public function indexForSearch(Content $content): void
     {
-        $categoryName = $content->category ? $content->category->name : '';
-        $authorName = $content->author ? $content->author->name : '';
+        $categoryName = $content->category !== null ? (string) $content->category->name : '';
+        $authorName = (string) $content->author->name;
         
         SearchIndex::index($content, [
             'title' => $content->title,

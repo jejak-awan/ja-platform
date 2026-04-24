@@ -149,7 +149,7 @@ class FinanceController extends BaseController
         /** @var array{school_id: int, school_level_id: int, category: string, amount: float, date: string, description: string, attachment_path?: string} $validated */
         $validated = $request->validate([
             'school_id' => 'required|exists:sch_ins_schools,id',
-            'school_level_id' => 'required|exists:sch_ins_school_levels,id',
+            'school_level_id' => 'required|exists:sch_ins_levels,id',
             'category' => 'required|string|max:100',
             'amount' => 'required|numeric|min:0',
             'date' => 'required|date',
@@ -196,7 +196,7 @@ class FinanceController extends BaseController
         /** @var array{school_id: int, school_level_id: int, academic_year_id: int, category: string, planned_amount: float, notes?: string|null} $validated */
         $validated = $request->validate([
             'school_id' => 'required|exists:sch_ins_schools,id',
-            'school_level_id' => 'required|exists:sch_ins_school_levels,id',
+            'school_level_id' => 'required|exists:sch_ins_levels,id',
             'academic_year_id' => 'required|exists:sch_acad_years,id',
             'category' => 'required|string|max:100',
             'planned_amount' => 'required|numeric|min:0',

@@ -26,6 +26,7 @@
 import { logger } from '@/utils/logger';
 import { ref, watch, toRaw } from 'vue';
 import type { Theme } from '@/types/cms/theme';
+import { themeUsesJanariCanvas } from '@/modules/Cms/utils/themeManifest';
 
 const props = defineProps<{
     theme: Theme;
@@ -113,7 +114,7 @@ const injectThemeStyles = () => {
                 css += `:root {\n  ${variables.join('\n  ')}\n}\n`;
             }
 
-            // Global Typography Fallbacks
+            // Preview: heading/body font-family from theme settings
             if (settings.font_heading) {
                 css += `h1, h2, h3, h4, h5, h6 { font-family: '${settings.font_heading}', sans-serif; }\n`;
             }
@@ -143,7 +144,7 @@ const injectThemeStyles = () => {
         const slug = props.theme.slug || '';
         if (slug) {
             iframeDoc.body.classList.add(`theme-${slug}`);
-            if (slug.startsWith('janari')) {
+            if (themeUsesJanariCanvas(props.theme)) {
                 iframeDoc.body.classList.add('theme-janari');
             }
         }

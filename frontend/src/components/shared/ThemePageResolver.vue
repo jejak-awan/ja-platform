@@ -51,27 +51,31 @@ const componentCache = new Map<string, Component>();
 // Glob all theme views using a relative path for better environment compatibility
 const viewModules = import.meta.glob('../../modules/Cms/views/themes/**/*.vue') as Record<string, () => Promise<{ default: Component }>>
 
+function findKeyForThemeSlug(slug: string, pageName: string): string | undefined {
+  if (!slug) return undefined
+  const expectedSuffix = `themes/${slug}/${pageName}.vue`.toLowerCase()
+  return Object.keys(viewModules).find((key) => {
+    const k = key.toLowerCase()
+    return k.endsWith(expectedSuffix) || k.includes(`/${slug}/${pageName.toLowerCase()}.vue`)
+  })
+}
+
 function resolveView() {
   if (isDestroyed.value) return
 
-  const themeSlug = activeTheme.value?.slug || 'janari'
   const pageName = props.page
-  
-  // CONSTRUCTION: Try to find a matching module key
-  // We search for a key that ends with "themes/{slug}/{page}.vue"
-  const expectedSuffix = `themes/${themeSlug}/${pageName}.vue`.toLowerCase()
-  const fallbackSuffix = `themes/janari/${pageName}.vue`.toLowerCase()
+  const themeSlug =
+    typeof activeTheme.value?.slug === 'string' && activeTheme.value.slug.trim() !== ''
+      ? activeTheme.value.slug.trim()
+      : ''
+  const parentSlug =
+    typeof activeTheme.value?.parent_theme === 'string' && activeTheme.value.parent_theme.trim() !== ''
+      ? activeTheme.value.parent_theme.trim()
+      : ''
 
-  let matchingKey = Object.keys(viewModules).find(key => {
-    const k = key.toLowerCase();
-    return k.endsWith(expectedSuffix) || k.includes(`/${themeSlug}/${pageName.toLowerCase()}.vue`);
-  });
-  
-  if (!matchingKey && themeSlug !== 'janari') {
-    matchingKey = Object.keys(viewModules).find(key => {
-        const k = key.toLowerCase();
-        return k.endsWith(fallbackSuffix) || k.includes(`/janari/${pageName.toLowerCase()}.vue`);
-    });
+  let matchingKey = findKeyForThemeSlug(themeSlug, pageName)
+  if (!matchingKey && parentSlug && parentSlug !== themeSlug) {
+    matchingKey = findKeyForThemeSlug(parentSlug, pageName)
   }
 
   const resolveId = ++currentResolveId
@@ -85,8 +89,14 @@ function resolveView() {
   }
   
   const loader = viewModules[matchingKey]
-  
-  // Create a new async component definition and cache it
+
+  const cacheKey = `${themeSlug}|${parentSlug}|${pageName}|${matchingKey}`
+  const cached = componentCache.get(cacheKey)
+  if (cached) {
+    resolvedComponent.value = cached
+    return
+  }
+
   const asyncComponent = defineAsyncComponent({
     loader: () => {
       const id = resolveId
@@ -111,17 +121,22 @@ function resolveView() {
     }
   })
 
-  componentCache.set(`${themeSlug}:${pageName}:${matchingKey}`, asyncComponent)
+  componentCache.set(cacheKey, asyncComponent)
   resolvedComponent.value = asyncComponent
 }
 
-const currentThemeSlug = computed(() => activeTheme.value?.slug || 'janari')
+const themeResolveKey = computed(() => {
+  const t = activeTheme.value
+  const slug = t && typeof t.slug === 'string' ? t.slug : ''
+  const parent = t && typeof t.parent_theme === 'string' ? t.parent_theme : ''
+  return `${slug}\n${parent}`
+})
 
 onBeforeUnmount(() => {
   isDestroyed.value = true
   currentResolveId++
 })
 
-watch([currentThemeSlug, () => props.page], resolveView, { immediate: true })
+watch([themeResolveKey, () => props.page], resolveView, { immediate: true })
 </script>
 

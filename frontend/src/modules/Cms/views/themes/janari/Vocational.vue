@@ -133,7 +133,7 @@ import { computed, markRaw, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useTheme } from '@/composables/useTheme';
 import PageDisabled from './components/PageDisabled.vue';
-import { useAdvancedBindings } from '@/modules/Cms/composables/useAdvancedBindings';
+import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings';
 import Cpu from 'lucide-vue-next/dist/esm/icons/cpu.js';
 import Car from 'lucide-vue-next/dist/esm/icons/car.js';
 import Code from 'lucide-vue-next/dist/esm/icons/code.js';
@@ -156,8 +156,8 @@ const behavior = computed(() => getSetting('disabled_page_behavior', 'message'))
 const pageTitle = computed(() => getSetting('page_vocation_title') as string);
 const pageSubtitle = computed(() => getSetting('page_vocation_subtitle') as string);
 
-// Advanced Bindings for Programs
-const { data: dynamicMajors, hasBinding } = useAdvancedBindings('majors', 'programs');
+// Theme data bindings for programs section
+const { data: dynamicMajors, hasBinding } = useThemeDataBindings('majors', 'programs');
 
 // Icon Mapping
 const iconMap: Record<string, any> = {
