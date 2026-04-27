@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import { logger } from '@/utils/logger';
 import { computed, shallowRef, watch, type HTMLAttributes, type Component } from 'vue'
-import * as LucideIcons from 'lucide-vue-next'
 
 const props = withDefaults(defineProps<{
   name: string;
@@ -76,6 +75,14 @@ const ICON_ALIASES: Record<string, string> = {
 
 import { nextTick } from 'vue';
 
+let lucideModulePromise: Promise<Record<string, unknown>> | null = null;
+const getLucideModule = () => {
+  if (!lucideModulePromise) {
+    lucideModulePromise = import('lucide-vue-next') as Promise<Record<string, unknown>>;
+  }
+  return lucideModulePromise;
+};
+
 watch(() => props.name, async (name) => {
   if (!name) {
     iconComponent.value = null;
@@ -98,7 +105,7 @@ watch(() => props.name, async (name) => {
   }
   
   try {
-    const module = LucideIcons as unknown as Record<string, unknown>;
+    const module = await getLucideModule();
     const icon = module[pascalName];
     
     if (icon) {

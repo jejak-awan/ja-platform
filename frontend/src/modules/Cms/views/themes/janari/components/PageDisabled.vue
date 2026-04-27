@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { Construction } from 'lucide-vue-next';
+import Construction from 'lucide-vue-next/dist/esm/icons/construction.js';
 
 defineProps<{
   title: string;

@@ -649,14 +649,42 @@ import SettingControl from '@/modules/Cms/components/themes/customizer/sidebar/S
 import MediaPicker from '@/modules/Cms/components/media/MediaPicker.vue'
 
 // Icons
-import { 
-    ArrowLeft, ArrowRight, Save, RotateCcw, LayoutTemplate, ChevronDown, Eye, Link2, 
-    CodeXml as Code2, Menu as MenuIcon, Settings2, PanelsTopLeft, Palette,
-    Type, Image as ImageIcon, Share2, PanelBottom, UserCircle, Newspaper, 
-    GraduationCap, BarChart3, MessageSquare, Megaphone, Search, Database, 
-    Filter, Layout, Zap, History, Undo2, Redo2, Loader2, Globe, Sparkles,
-    Award, Briefcase
-} from 'lucide-vue-next';
+import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
+import ArrowRight from 'lucide-vue-next/dist/esm/icons/arrow-right.js';
+import Save from 'lucide-vue-next/dist/esm/icons/save.js';
+import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
+import LayoutTemplate from 'lucide-vue-next/dist/esm/icons/layout-template.js';
+import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js';
+import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
+import Link2 from 'lucide-vue-next/dist/esm/icons/link-2.js';
+import Code2 from 'lucide-vue-next/dist/esm/icons/code-xml.js';
+import MenuIcon from 'lucide-vue-next/dist/esm/icons/menu.js';
+import Settings2 from 'lucide-vue-next/dist/esm/icons/settings-2.js';
+import PanelsTopLeft from 'lucide-vue-next/dist/esm/icons/panels-top-left.js';
+import Palette from 'lucide-vue-next/dist/esm/icons/palette.js';
+import Type from 'lucide-vue-next/dist/esm/icons/type.js';
+import ImageIcon from 'lucide-vue-next/dist/esm/icons/image.js';
+import Share2 from 'lucide-vue-next/dist/esm/icons/share-2.js';
+import PanelBottom from 'lucide-vue-next/dist/esm/icons/panel-bottom.js';
+import UserCircle from 'lucide-vue-next/dist/esm/icons/circle-user.js';
+import Newspaper from 'lucide-vue-next/dist/esm/icons/newspaper.js';
+import GraduationCap from 'lucide-vue-next/dist/esm/icons/graduation-cap.js';
+import BarChart3 from 'lucide-vue-next/dist/esm/icons/chart-column.js';
+import MessageSquare from 'lucide-vue-next/dist/esm/icons/message-square.js';
+import Megaphone from 'lucide-vue-next/dist/esm/icons/megaphone.js';
+import Search from 'lucide-vue-next/dist/esm/icons/search.js';
+import Database from 'lucide-vue-next/dist/esm/icons/database.js';
+import Filter from 'lucide-vue-next/dist/esm/icons/list-filter.js';
+import Layout from 'lucide-vue-next/dist/esm/icons/layout-dashboard.js';
+import Zap from 'lucide-vue-next/dist/esm/icons/zap.js';
+import History from 'lucide-vue-next/dist/esm/icons/history.js';
+import Undo2 from 'lucide-vue-next/dist/esm/icons/undo-2.js';
+import Redo2 from 'lucide-vue-next/dist/esm/icons/redo-2.js';
+import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
+import Globe from 'lucide-vue-next/dist/esm/icons/globe.js';
+import Sparkles from 'lucide-vue-next/dist/esm/icons/sparkles.js';
+import Award from 'lucide-vue-next/dist/esm/icons/award.js';
+import Briefcase from 'lucide-vue-next/dist/esm/icons/briefcase.js';
 
 import api from '@/services/api'
 import toast from '@/services/toast'

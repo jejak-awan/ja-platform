@@ -21,7 +21,10 @@ class SecurityHeaders
         Vite::useCspNonce($nonce);
         $configCsp = config('security.headers.csp');
         $csp = is_string($configCsp) ? $configCsp : $this->getContentSecurityPolicy($nonce);
-        $reportOnly = filter_var((string) env('CSP_REPORT_ONLY', 'false'), FILTER_VALIDATE_BOOLEAN);
+        $reportOnlyRaw = env('CSP_REPORT_ONLY');
+        $reportOnly = $reportOnlyRaw === null
+            ? app()->environment('production')
+            : filter_var((string) $reportOnlyRaw, FILTER_VALIDATE_BOOLEAN);
         if ($reportOnly) {
             $response->headers->set('Content-Security-Policy-Report-Only', $csp);
         } else {
