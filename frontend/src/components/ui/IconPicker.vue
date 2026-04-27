@@ -118,6 +118,7 @@ import TabsTrigger from './TabsTrigger.vue';
 import ChevronsUpDown from 'lucide-vue-next/dist/esm/icons/chevrons-up-down.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import Circle from 'lucide-vue-next/dist/esm/icons/circle.js';
+import * as LucideIcons from 'lucide-vue-next';
 import { iconCategories } from '@/config/icon-categories';
 
 import type { Component } from 'vue';
@@ -143,30 +144,18 @@ const activeTab = ref('General');
 
 const selectedIcon = computed(() => props.modelValue);
 
-const LucideIconsBatch = ref<Record<string, unknown> | null>(null);
-const isLoadingIcons = ref(false);
-
-const loadIcons = async () => {
-    if (LucideIconsBatch.value || isLoadingIcons.value) return;
-    isLoadingIcons.value = true;
-    try {
-        LucideIconsBatch.value = await import('lucide-vue-next') as unknown as Record<string, unknown>;
-    } catch (err) {
-        logger.error('Failed to load icons:', err);
-    } finally {
-        isLoadingIcons.value = false;
-    }
-};
+const LucideIconsBatch = ref<Record<string, unknown>>(LucideIcons as unknown as Record<string, unknown>);
 
 // Start loading when popover opens
 import { watch } from 'vue';
 watch(open, (isOpen) => {
-    if (isOpen) loadIcons();
+    if (isOpen && !LucideIconsBatch.value) {
+        logger.warning('Lucide icon module is unexpectedly unavailable');
+    }
 });
 
 // Get ALL icon names from Lucide once loaded
 const allIconNames = computed(() => {
-    if (!LucideIconsBatch.value) return [];
     return Object.keys(LucideIconsBatch.value).filter(key => {
         if (key === 'default' || key === 'createLucideIcon' || key === 'Icon' || !/^[A-Z]/.test(key)) {
             return false;

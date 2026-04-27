@@ -21,7 +21,12 @@ class SecurityHeaders
         Vite::useCspNonce($nonce);
         $configCsp = config('security.headers.csp');
         $csp = is_string($configCsp) ? $configCsp : $this->getContentSecurityPolicy($nonce);
-        $response->headers->set('Content-Security-Policy', $csp);
+        $reportOnly = filter_var((string) env('CSP_REPORT_ONLY', 'false'), FILTER_VALIDATE_BOOLEAN);
+        if ($reportOnly) {
+            $response->headers->set('Content-Security-Policy-Report-Only', $csp);
+        } else {
+            $response->headers->set('Content-Security-Policy', $csp);
+        }
 
         // Standard Security Headers
         $response->headers->set('X-Content-Type-Options', 'nosniff');
@@ -41,9 +46,8 @@ class SecurityHeaders
         // Remove server signature
         $response->headers->remove('X-Powered-By');
 
-        // Force remove upstream/conflicting Report-Only headers
+        // Force remove upstream/conflicting legacy CSP headers
         // These are often added by Cloudflare or Nginx proxies and can be too strict ('none')
-        $response->headers->remove('Content-Security-Policy-Report-Only');
         $response->headers->remove('X-Content-Security-Policy');
         $response->headers->remove('X-WebKit-CSP');
 

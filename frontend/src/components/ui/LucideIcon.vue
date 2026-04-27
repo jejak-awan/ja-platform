@@ -12,6 +12,7 @@
 <script setup lang="ts">
 import { logger } from '@/utils/logger';
 import { computed, shallowRef, watch, type HTMLAttributes, type Component } from 'vue'
+import * as LucideIcons from 'lucide-vue-next'
 
 const props = withDefaults(defineProps<{
   name: string;
@@ -73,16 +74,6 @@ const ICON_ALIASES: Record<string, string> = {
     'Layout': 'LayoutDashboard'
 };
 
-// Load icon dynamically - using main entry point for reliability with manual chunks
-// Use a module-level promise to ensure we only import lucide-vue-next once
-let lucideModulePromise: Promise<Record<string, unknown>> | null = null;
-const getLucideModule = () => {
-  if (!lucideModulePromise) {
-    lucideModulePromise = import('lucide-vue-next') as Promise<Record<string, unknown>>;
-  }
-  return lucideModulePromise;
-};
-
 import { nextTick } from 'vue';
 
 watch(() => props.name, async (name) => {
@@ -107,8 +98,7 @@ watch(() => props.name, async (name) => {
   }
   
   try {
-    // Import from shared promise - ensures only one import happens
-    const module = await getLucideModule();
+    const module = LucideIcons as unknown as Record<string, unknown>;
     const icon = module[pascalName];
     
     if (icon) {

@@ -213,27 +213,29 @@ function enhanceCodeBlocks() {
         // Create header
         const header = document.createElement('div');
         header.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; background: #2d2d3a; border-bottom: 1px solid #313244;';
-        header.innerHTML = `
-            <span style="font-size: 0.75rem; font-family: monospace; color: #a6adc8;">Code (${totalLines} lines)</span>
-            <button class="copy-code-btn" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; background: #3d3d4a; border: 1px solid #45475a; color: #a6adc8; border-radius: 0.25rem; cursor: pointer;">Copy</button>
-        `;
+        const title = document.createElement('span');
+        title.style.cssText = 'font-size: 0.75rem; font-family: monospace; color: #a6adc8;';
+        title.textContent = `Code (${totalLines} lines)`;
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-code-btn';
+        copyBtn.style.cssText = 'padding: 0.25rem 0.5rem; font-size: 0.7rem; background: #3d3d4a; border: 1px solid #45475a; color: #a6adc8; border-radius: 0.25rem; cursor: pointer;';
+        copyBtn.textContent = 'Copy';
+        header.appendChild(title);
+        header.appendChild(copyBtn);
         
         // Copy button functionality
-        const copyBtn = header.querySelector('.copy-code-btn') as HTMLButtonElement;
-        if (copyBtn) {
-            copyBtn.addEventListener('click', () => {
-                navigator.clipboard.writeText(content).then(() => {
-                    copyBtn.textContent = 'Copied!';
-                    copyBtn.style.background = '#22c55e';
-                    copyBtn.style.color = '#fff';
-                    setTimeout(() => {
-                        copyBtn.textContent = 'Copy';
-                        copyBtn.style.background = '#3d3d4a';
-                        copyBtn.style.color = '#a6adc8';
-                    }, 2000);
-                });
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(content).then(() => {
+                copyBtn.textContent = 'Copied!';
+                copyBtn.style.background = '#22c55e';
+                copyBtn.style.color = '#fff';
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.style.background = '#3d3d4a';
+                    copyBtn.style.color = '#a6adc8';
+                }, 2000);
             });
-        }
+        });
         
         // Create code content with line numbers
         const codeContainer = document.createElement('div');
@@ -243,12 +245,22 @@ function enhanceCodeBlocks() {
         // Line numbers
         const lineNums = document.createElement('div');
         lineNums.style.cssText = 'padding: 0.75rem 0; text-align: right; user-select: none; background: rgba(45, 45, 58, 0.5); border-right: 1px solid #313244; flex-shrink: 0;';
-        lineNums.innerHTML = lines.map((_, i) => `<div style="padding: 0 0.5rem; font-size: 0.75rem; line-height: 1.5rem; color: #6c7086; font-family: monospace;">${i + 1}</div>`).join('');
+        lines.forEach((_, i) => {
+            const lineNumber = document.createElement('div');
+            lineNumber.style.cssText = 'padding: 0 0.5rem; font-size: 0.75rem; line-height: 1.5rem; color: #6c7086; font-family: monospace;';
+            lineNumber.textContent = String(i + 1);
+            lineNums.appendChild(lineNumber);
+        });
         
         // Code content
         const codeContent = document.createElement('div');
         codeContent.style.cssText = 'padding: 0.75rem 1rem; overflow-x: auto; flex: 1;';
-        codeContent.innerHTML = lines.map(line => `<div style="font-size: 0.875rem; line-height: 1.5rem; font-family: ui-monospace, monospace; color: #cdd6f4; white-space: pre;">${escapeHtml(line) || ' '}</div>`).join('');
+        lines.forEach((line) => {
+            const lineElement = document.createElement('div');
+            lineElement.style.cssText = 'font-size: 0.875rem; line-height: 1.5rem; font-family: ui-monospace, monospace; color: #cdd6f4; white-space: pre;';
+            lineElement.textContent = line || ' ';
+            codeContent.appendChild(lineElement);
+        });
         
         codeContainer.appendChild(lineNums);
         codeContainer.appendChild(codeContent);
@@ -278,12 +290,6 @@ function enhanceCodeBlocks() {
             pre.parentNode.replaceChild(wrapper, pre);
         }
     });
-}
-
-function escapeHtml(text: string) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
 }
 
 watch(() => props.show, (newVal) => {

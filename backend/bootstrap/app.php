@@ -45,6 +45,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Modules\Core\Http\Middleware\BlockMaliciousBots::class,
             \Modules\Core\Http\Middleware\WafMiddleware::class,
             \Modules\Core\Http\Middleware\HoneypotMiddleware::class,
+            \Modules\Core\Http\Middleware\NormalizePaginationParams::class,
         ], append: [
             \Modules\Core\Http\Middleware\SecurityHeaders::class,
             \Modules\Core\Http\Middleware\CheckMaintenanceMode::class,
