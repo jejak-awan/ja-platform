@@ -461,9 +461,9 @@ class FileManagerController extends BaseApiController
 
         \Illuminate\Support\Facades\Log::info('FileManagerController::delete called', [
             'method' => $request->method(),
-            'input' => $request->all(),
-            'query' => $request->query(),
-            'user' => $user->id,
+            'user_id' => $user->id,
+            'has_path' => $request->filled('path'),
+            'permanent' => $request->boolean('permanent'),
         ]);
 
         if (! $user->can('manage files')) {
@@ -579,9 +579,9 @@ class FileManagerController extends BaseApiController
 
         \Illuminate\Support\Facades\Log::info('FileManagerController::deleteFolder called', [
             'method' => $request->method(),
-            'input' => $request->all(),
-            'query' => $request->query(),
-            'user' => $user->id,
+            'user_id' => $user->id,
+            'has_path' => $request->filled('path'),
+            'permanent' => $request->boolean('permanent'),
         ]);
 
         if (! $user->can('manage files')) {
@@ -1204,9 +1204,8 @@ class FileManagerController extends BaseApiController
 
         \Illuminate\Support\Facades\Log::info('FileManagerController::deletePermanently called', [
             'method' => $request->method(),
-            'input' => $request->all(),
-            'query' => $request->query(),
-            'user' => $user->id,
+            'user_id' => $user->id,
+            'deleted_file_id' => $request->input('id'),
         ]);
 
         if (! $user->can('manage files')) {

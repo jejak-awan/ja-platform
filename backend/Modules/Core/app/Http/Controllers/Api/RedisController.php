@@ -221,16 +221,16 @@ class RedisController extends BaseApiController
                 throw $e;
             }
 
-            $keys = $redis->keys('*');
-
             $prefixRaw = config('database.redis.options.prefix');
             $prefix = is_string($prefixRaw) ? $prefixRaw : null;
+            $totalKeys = $this->getDatabaseSize($redis);
 
             $stats = [
-                'total_keys' => count($keys),
-                'cache_size' => $this->getCacheSize($redis, $keys, $prefix),
+                'total_keys' => $totalKeys,
+                'cache_size' => 'Estimated via Redis INFO only',
                 'expired_keys' => $this->getExpiredKeysCount($redis),
-                'top_keys' => $this->getTopKeys($redis, $keys, 10, $prefix),
+                'top_keys' => [],
+                'key_prefix' => $prefix,
             ];
 
             return $this->success($stats, 'Cache statistics retrieved successfully');
@@ -253,16 +253,12 @@ class RedisController extends BaseApiController
         $count = 0;
         // Try to count keys from both default and cache connections
         try {
-            /** @var array<string> $keys */
-            $keys = Redis::connection('default')->keys('*');
-            $count += count($keys);
+            $count += $this->getDatabaseSize(Redis::connection('default'));
         } catch (\Exception $e) {
         }
 
         try {
-            /** @var array<string> $keysCache */
-            $keysCache = Redis::connection('cache')->keys('*');
-            $count += count($keysCache);
+            $count += $this->getDatabaseSize(Redis::connection('cache'));
         } catch (\Exception $e) {
         }
 
@@ -290,48 +286,6 @@ class RedisController extends BaseApiController
     }
 
     /**
-     * Helper: Get cache size.
-     *
-     * @param  \Illuminate\Redis\Connections\Connection  $redis
-     * @param  array<string>  $keys
-     */
-    private function getCacheSize($redis, array $keys, ?string $prefix = null): string
-    {
-        try {
-            $size = 0;
-            foreach (array_slice($keys, 0, 100) as $key) { // Sample first 100 keys
-                // Strip prefix if present to avoid double prefixing by the client
-                $lookupKey = ($prefix && str_starts_with($key, $prefix))
-                    ? substr($key, strlen($prefix))
-                    : $key;
-
-                $value = $redis->get($lookupKey);
-                $size += strlen(is_string($value) ? $value : '');
-            }
-
-            return $this->formatBytes($size);
-        } catch (\Exception $e) {
-            return 'Unknown';
-        }
-    }
-
-    /**
-     * Helper: Format bytes to human readable.
-     *
-     * @param  int|float  $bytes
-     */
-    private function formatBytes($bytes): string
-    {
-        $units = ['B', 'KB', 'MB', 'GB'];
-        $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-        $pow = min((int) $pow, count($units) - 1);
-        $bytes /= pow(1024, $pow);
-
-        return round($bytes, 2).' '.$units[$pow];
-    }
-
-    /**
      * Helper: Get expired keys count.
      *
      * @param  \Illuminate\Redis\Connections\Connection  $redis
@@ -347,50 +301,11 @@ class RedisController extends BaseApiController
         }
     }
 
-    /**
-     * Helper: Get top keys.
-     *
-     * @param  \Illuminate\Redis\Connections\Connection  $redis
-     * @param  array<string>  $keys
-     * @return array<int, array<string, mixed>>
-     */
-    private function getTopKeys($redis, array $keys, int $limit = 10, ?string $prefix = null): array
+    private function getDatabaseSize(\Illuminate\Redis\Connections\Connection $redis): int
     {
-        $topKeys = [];
+        $size = $redis->dbsize();
 
-        foreach (array_slice($keys, 0, min(count($keys), 100)) as $key) {
-            try {
-                // Strip prefix for lookup
-                $lookupKey = ($prefix && str_starts_with($key, $prefix))
-                    ? substr($key, strlen($prefix))
-                    : $key;
-
-                $ttl = $redis->ttl($lookupKey);
-                $value = $redis->get($lookupKey);
-                $size = strlen(is_string($value) ? $value : '');
-
-                $topKeys[] = [
-                    'key' => $key, // Show full key for display
-                    'size' => $this->formatBytes($size),
-                    'ttl' => $ttl > 0 ? $ttl.'s' : ($ttl === -1 ? 'Never' : 'Expired'),
-                    'size_bytes' => $size,
-                ];
-            } catch (\Exception $e) {
-                continue;
-            }
-        }
-
-        // Sort by size (descending)
-        usort($topKeys, function ($a, $b) {
-            return $b['size_bytes'] <=> $a['size_bytes'];
-        });
-
-        // Remove size_bytes helper key
-        return array_map(function ($item) {
-            unset($item['size_bytes']);
-
-            return $item;
-        }, array_slice($topKeys, 0, $limit));
+        return is_numeric($size) ? (int) $size : 0;
     }
 
     /**
@@ -399,48 +314,17 @@ class RedisController extends BaseApiController
     public function warmCache(): \Illuminate\Http\JsonResponse
     {
         try {
-            $basePath = base_path();
-            $php = PHP_BINARY;
-
-            // In some web environments, PHP_BINARY might point to php-fpm or cgi
-            if (str_contains($php, 'fpm') || str_contains($php, 'cgi')) {
-                $php = 'php';
-            }
-
             $commands = [
                 'config:cache',
                 'route:cache',
                 'view:cache',
             ];
 
-            $executedSuccessfully = true;
-            $outputs = [];
-
             foreach ($commands as $cmd) {
-                $output = [];
-                $resultCode = 0;
-                // Run via shell to ensure fresh process and bypass OPcache issues in Laravel 12
-                @exec("$php $basePath/artisan $cmd 2>&1", $output, $resultCode);
-
-                if ($resultCode !== 0) {
-                    $executedSuccessfully = false;
-                    $outputs[$cmd] = implode("\n", $output);
-                    break;
-                }
+                Artisan::call($cmd);
             }
 
-            if ($executedSuccessfully) {
-                return $this->success(null, 'Cache warmed successfully via CLI');
-            }
-
-            // Fallback to Artisan::call if CLI execution failed
-            \Illuminate\Support\Facades\Artisan::call('config:clear');
-            \Illuminate\Support\Facades\Artisan::call('route:clear');
-            \Illuminate\Support\Facades\Artisan::call('config:cache');
-            \Illuminate\Support\Facades\Artisan::call('route:cache');
-            \Illuminate\Support\Facades\Artisan::call('view:cache');
-
-            return $this->success(null, 'Cache warmed successfully via fallback');
+            return $this->success(null, 'Cache warmed successfully');
         } catch (\Throwable $e) {
             return $this->error('Failed to warm cache: '.$e->getMessage(), 500);
         }

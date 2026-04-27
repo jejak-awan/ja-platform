@@ -149,6 +149,7 @@ class MediaController extends BaseApiController
 
         $perPageRaw = $request->input('per_page', 24);
         $perPage = is_numeric($perPageRaw) ? (int) $perPageRaw : 24;
+        $perPage = max(1, min($perPage, 100));
         $media = $query->latest()->paginate($perPage);
 
         return $this->paginated($media, 'Media retrieved successfully');
