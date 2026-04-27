@@ -39,5 +39,43 @@ export default tseslint.config(
             'vue/attributes-order': 'off',
             'no-unused-vars': 'off',
         },
+    },
+    {
+        files: ['src/**/*.{ts,vue,js}'],
+        ignores: [
+            'src/modules/Cms/views/themes/janari/**',
+            'src/composables/useGsapAnimations.ts',
+            'src/lib/gsap.ts',
+        ],
+        rules: {
+            'no-restricted-imports': ['error', {
+                paths: [
+                    {
+                        name: 'gsap',
+                        message: 'GSAP only allowed inside Janari theme.',
+                    },
+                    {
+                        name: 'gsap/ScrollTrigger',
+                        message: 'GSAP plugins only allowed inside Janari theme.',
+                    },
+                    {
+                        name: 'gsap/Flip',
+                        message: 'GSAP plugins only allowed inside Janari theme.',
+                    },
+                    {
+                        name: 'gsap/Observer',
+                        message: 'GSAP plugins only allowed inside Janari theme.',
+                    },
+                    {
+                        name: '@/lib/gsap',
+                        message: 'Use GSAP only from Janari theme files.',
+                    },
+                    {
+                        name: '@/composables/useGsapAnimations',
+                        message: 'useGsapAnimations is restricted to Janari theme.',
+                    },
+                ],
+            }],
+        },
     }
 );

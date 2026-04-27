@@ -16,6 +16,7 @@
         "test:e2e:public": "PLAYWRIGHT_WEB_SERVER=1 playwright test tests/e2e/theme-contact-public.spec.ts",
         "test:e2e:auth": "playwright test tests/e2e/auth-probe-notfound.spec.ts tests/e2e/login.spec.ts",
         "quality:frontend": "eslint src tests --max-warnings=0 && vue-tsc -b && npm run test:e2e:list",
+        "quality:perf": "node ./scripts/check-perf-budget.mjs",
         "clean:ts": "rm -rf node_modules/.tmp",
         "clean:vite": "rm -rf node_modules/.vite",
         "clean:dist": "rm -rf dist",

@@ -54,7 +54,27 @@
               v-if="item.children && item.children.length > 0"
               class="group relative"
             >
-              <button :class="[getNavItemClasses(isParentActive(item)), 'group/btn']">
+              <a
+                v-if="isExternalLink(item.url)"
+                :href="item.url || '#'"
+                target="_blank"
+                rel="noopener noreferrer"
+                :class="[getNavItemClasses(isParentActive(item)), 'group/btn']"
+              >
+                <span class="relative z-10">{{ item.title }}</span>
+              </a>
+              <router-link
+                v-else-if="item.url"
+                :to="getInternalUrl(item.url)"
+                :class="[getNavItemClasses(isParentActive(item)), 'group/btn']"
+              >
+                <span class="relative z-10">{{ item.title }}</span>
+              </router-link>
+              <button
+                v-else
+                type="button"
+                :class="[getNavItemClasses(isParentActive(item)), 'group/btn']"
+              >
                 <span class="relative z-10">{{ item.title }}</span>
               </button>
               <div class="absolute top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
@@ -75,7 +95,10 @@
                       <router-link
                         v-else
                         :to="getInternalUrl(child.url)"
-                        class="text-[10px] uppercase tracking-widest hover:text-primary transition-colors py-1"
+                        :class="[
+                          'text-[10px] uppercase tracking-widest hover:text-primary transition-colors py-1',
+                          isMenuItemActive(child) ? '!text-primary' : ''
+                        ]"
                       >
                         {{ child.title }}
                       </router-link>
@@ -97,8 +120,7 @@
               <router-link
                 v-else
                 :to="getInternalUrl(item.url)"
-                :class="[getNavItemClasses(false), 'group/link']"
-                exact-active-class="!text-primary is-active"
+                :class="[getNavItemClasses(isMenuItemActive(item)), 'group/link']"
                 :data-title="item.title"
               >
                 <span class="relative z-10">{{ item.title }}</span>
@@ -288,25 +310,80 @@
               v-for="item in navItems"
               :key="'mob-'+String(item.id || item.title)"
             >
-              <a 
-                v-if="isExternalLink(item.url)" 
-                :href="item.url || '#'" 
-                target="_blank"
-                class="flex items-center gap-3 text-white/80 hover:text-white transition-colors group/link"
-                @click="isOpen = false"
-              >
-                <ChevronRight class="w-3 h-3 text-primary group-hover/link:translate-x-1 transition-transform" />
-                <span class="text-sm font-medium">{{ item.title }}</span>
-              </a>
-              <router-link 
-                v-else
-                :to="getInternalUrl(item.url)" 
-                class="flex items-center gap-3 text-white/80 hover:text-white transition-colors group/link"
-                @click="isOpen = false"
-              >
-                <ChevronRight class="w-3 h-3 text-primary group-hover/link:translate-x-1 transition-transform" />
-                <span class="text-sm font-medium">{{ item.title }}</span>
-              </router-link>
+              <div class="space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <a 
+                    v-if="isExternalLink(resolveMobileItemUrl(item))" 
+                    :href="resolveMobileItemUrl(item) || '#'" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center gap-3 text-white/80 hover:text-white transition-colors group/link min-w-0"
+                    @click="isOpen = false"
+                  >
+                    <ChevronRight class="w-3 h-3 text-primary group-hover/link:translate-x-1 transition-transform shrink-0" />
+                    <span class="text-sm font-medium truncate">{{ item.title }}</span>
+                  </a>
+                  <router-link 
+                    v-else
+                    :to="getInternalUrl(resolveMobileItemUrl(item))" 
+                    :class="[
+                      'flex items-center gap-3 transition-colors group/link min-w-0',
+                      isMenuItemActive(item) ? 'text-white' : 'text-white/80 hover:text-white'
+                    ]"
+                    @click="isOpen = false"
+                  >
+                    <ChevronRight class="w-3 h-3 text-primary group-hover/link:translate-x-1 transition-transform shrink-0" />
+                    <span class="text-sm font-medium truncate">{{ item.title }}</span>
+                  </router-link>
+
+                  <button
+                    v-if="item.children && item.children.length > 0"
+                    type="button"
+                    class="p-1 text-white/55 hover:text-white transition-colors"
+                    :aria-label="`Toggle submenu ${item.title}`"
+                    @click="toggleMobileSubmenu(item)"
+                  >
+                    <ChevronDown
+                      class="w-4 h-4 transition-transform duration-200"
+                      :class="{ 'rotate-180': isMobileSubmenuOpen(item) }"
+                    />
+                  </button>
+                </div>
+
+                <div
+                  v-if="item.children && item.children.length > 0 && isMobileSubmenuOpen(item)"
+                  class="pl-6 space-y-1.5"
+                >
+                  <template
+                    v-for="child in item.children"
+                    :key="'mob-child-'+String(child.id || child.title)"
+                  >
+                    <a
+                      v-if="isExternalLink(child.url)"
+                      :href="child.url || '#'"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="flex items-center gap-2 text-xs text-white/55 hover:text-white/85 transition-colors"
+                      @click="isOpen = false"
+                    >
+                      <span class="w-1 h-1 rounded-full bg-primary/70" />
+                      {{ child.title }}
+                    </a>
+                    <router-link
+                      v-else
+                      :to="getInternalUrl(child.url)"
+                      :class="[
+                        'flex items-center gap-2 text-xs transition-colors',
+                        isMenuItemActive(child) ? 'text-white/90' : 'text-white/55 hover:text-white/85'
+                      ]"
+                      @click="isOpen = false"
+                    >
+                      <span class="w-1 h-1 rounded-full bg-primary/70" />
+                      {{ child.title }}
+                    </router-link>
+                  </template>
+                </div>
+              </div>
             </template>
           </div>
         </div>
@@ -419,6 +496,7 @@ const route = useRoute();
 const { isDark, toggleMode } = useDarkMode('frontend');
 
 const isOpen = ref(false);
+const mobileOpenSubmenus = ref<Set<string>>(new Set());
 const loginUrl = SECURITY_ROUTES.login;
 const headerRef = ref<HTMLElement>();
 const isDesktop = computed(() => device.value === 'desktop');
@@ -508,7 +586,31 @@ const getNavItemClasses = (isActive: boolean) => {
     return `${base} text-foreground hover:text-primary`;
 };
 
-const isParentActive = (_item: MenuItem) => false;
+const normalizePath = (raw?: string | null): string => {
+    if (!raw) return '/';
+    if (isExternalLink(raw)) return '';
+    const path = raw.startsWith('/') ? raw : `/${raw}`;
+    return path !== '/' && path.endsWith('/') ? path.slice(0, -1) : path;
+};
+
+const isRouteMatch = (targetPath: string, currentPath: string): boolean => {
+    if (!targetPath) return false;
+    if (targetPath === '/') return currentPath === '/';
+    return currentPath === targetPath || currentPath.startsWith(`${targetPath}/`);
+};
+
+const isMenuItemActive = (item: MenuItem): boolean => {
+    const currentPath = normalizePath(route.path);
+    const parentPath = normalizePath(item.url);
+    if (isRouteMatch(parentPath, currentPath)) return true;
+
+    const children = Array.isArray(item.children) ? item.children : [];
+    return children.some((child): boolean => {
+        return isMenuItemActive(child);
+    });
+};
+
+const isParentActive = (item: MenuItem) => isMenuItemActive(item);
 const normalizeMenuSetting = (value: unknown, fallback: string): string => {
     if (value === null || value === undefined || value === '' || value === 'none') {
         return fallback;
@@ -528,6 +630,9 @@ const navItems = computed<MenuItem[]>(() => {
 
 const toggleMenu = () => {
     isOpen.value = !isOpen.value;
+    if (!isOpen.value) {
+        mobileOpenSubmenus.value = new Set();
+    }
 };
 
 const toggleSocialLinks = () => {
@@ -617,6 +722,33 @@ const getInternalUrl = (url?: string | null) => {
     return url;
 };
 
+const resolveMobileItemUrl = (item: MenuItem): string => {
+    const direct = trimStr(item.url);
+    if (direct) return direct;
+    const children = Array.isArray(item.children) ? item.children : [];
+    const firstChildUrl = trimStr(children[0]?.url);
+    return firstChildUrl || '/';
+};
+
+const getMobileMenuKey = (item: MenuItem): string => {
+    return String(item.id || item.title || item.url || '');
+};
+
+const isMobileSubmenuOpen = (item: MenuItem): boolean => {
+    return mobileOpenSubmenus.value.has(getMobileMenuKey(item));
+};
+
+const toggleMobileSubmenu = (item: MenuItem) => {
+    const key = getMobileMenuKey(item);
+    const next = new Set(mobileOpenSubmenus.value);
+    if (next.has(key)) {
+        next.delete(key);
+    } else {
+        next.add(key);
+    }
+    mobileOpenSubmenus.value = next;
+};
+
 // Use a watch for more robust body scroll locking
 watch(isOpen, (newValue) => {
     if (!isDesktop.value) {
@@ -629,6 +761,7 @@ watch(isOpen, (newValue) => {
 // Close menu on route change
 watch(() => route.path, () => {
     isOpen.value = false;
+    mobileOpenSubmenus.value = new Set();
     document.body.style.overflow = '';
 });
 

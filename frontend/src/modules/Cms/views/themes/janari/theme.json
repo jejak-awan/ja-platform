@@ -3,7 +3,7 @@
     "slug": "janari-education",
     "version": "V.2.0",
     "type": "frontend",
-    "description": "Janari Theme - A modern, elegant theme for JA-Edu",
+    "description": "Janari Theme - A modern, elegant theme for JA-Platform",
     "author": "Jejakawan",
     "supports": {
         "janari_canvas": true
@@ -12,7 +12,7 @@
         "site_title": {
             "label": "Site Title",
             "type": "text",
-            "default": "JA-Edu",
+            "default": "JA-Platform",
             "category": "General"
         },
         "school_level": {

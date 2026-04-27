@@ -2,7 +2,7 @@ import { logger } from '@/utils/logger';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-// import { useSystemError } from '@/composables/useSystemError';
+import { useSystemError } from '@/composables/useSystemError';
 import { triggerVaporLock } from '@/services/api';
 import api from '@/services/api';
 import { SECURITY_ROUTES } from '@/config/security';
@@ -11,12 +11,7 @@ export function useSessionTimeout() {
     const router = useRouter();
     const authStore = useAuthStore();
     
-    // Delayed initialization to avoid dual-import warnings
-    const showError = async (params: any) => {
-        const { useSystemError } = await import('@/composables/useSystemError');
-        const { showError: triggerError } = useSystemError();
-        triggerError(params);
-    };
+    const { showError } = useSystemError();
 
     // Session configuration (in seconds)
     const SESSION_LIFETIME = parseInt(import.meta.env.VITE_SESSION_LIFETIME || '28800'); // 8 hours default
@@ -147,7 +142,7 @@ export function useSessionTimeout() {
                     const reason = 'concurrent';
 
                     // Use modal instead of hard redirect
-                    showError({
+                    void showError({
                         code: status || 419,
                         title: 'Session Expired',
                         message: 'Your session has expired due to concurrent login.',
@@ -255,7 +250,7 @@ export function useSessionTimeout() {
 
         // Use modal instead of hard redirect
         const currentPath = router.currentRoute.value.fullPath;
-        showError({
+        void showError({
             code: 419,
             title: 'Session Timeout',
             message: 'Your session has timed out due to inactivity.',

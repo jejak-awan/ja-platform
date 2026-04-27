@@ -54,7 +54,7 @@ export function useJanariIdentity() {
     const displaySiteName = computed(() => {
         const t = trimStr(getSetting('site_title', ''))
         if (t) return t
-        return trimStr(site.value.site_name) || 'JA-Edu'
+        return trimStr(site.value.site_name) || 'JA-Platform'
     })
 
     const displaySiteDescription = computed(() => {

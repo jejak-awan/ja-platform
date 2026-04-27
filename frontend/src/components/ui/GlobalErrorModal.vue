@@ -84,7 +84,8 @@ import Lock from 'lucide-vue-next/dist/esm/icons/lock.js';
 import LogIn from 'lucide-vue-next/dist/esm/icons/log-in.js';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 import AlertTriangle from 'lucide-vue-next/dist/esm/icons/triangle-alert.js';
-import { onMounted, reactive } from 'vue';
+import { reactive } from 'vue';
+import { useSystemError } from '@/composables/useSystemError';
 
 // Use a local reactive state that mirrors the system error store
 // This breaks the static import cycle while maintaining UI responsiveness
@@ -99,16 +100,8 @@ const state = reactive({
     traceId: '',
 });
 
-let hideErrorFn = () => {};
-
-onMounted(async () => {
-    const { useSystemError } = await import('@/composables/useSystemError');
-    const { state: systemState, hideError } = useSystemError();
-    
-    // Sync local state with global store
-    hideErrorFn = hideError;
-    Object.assign(state, systemState);
-});
+const { state: systemState, hideError: hideErrorFn } = useSystemError();
+Object.assign(state, systemState);
 
 const hideError = () => hideErrorFn();
 const router = useRouter();

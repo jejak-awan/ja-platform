@@ -177,6 +177,7 @@ class RedisController extends BaseApiController
             switch ($type) {
                 case 'cache':
                     Artisan::call('cache:clear');
+                    $this->flushRedisDatabase('cache');
                     break;
                 case 'config':
                     Artisan::call('config:clear');
@@ -193,11 +194,19 @@ class RedisController extends BaseApiController
                     Artisan::call('config:clear');
                     Artisan::call('route:clear');
                     Artisan::call('view:clear');
-                    Redis::connection()->flushdb();
+                    $this->flushRedisDatabase('default');
+                    $this->flushRedisDatabase('cache');
                     break;
             }
 
-            return $this->success(null, 'Cache cleared successfully');
+            $defaultKeys = $this->getConnectionKeys('default');
+            $cacheKeys = $this->getConnectionKeys('cache');
+
+            return $this->success([
+                'default_keys' => $defaultKeys,
+                'cache_keys' => $cacheKeys,
+                'total_keys' => $defaultKeys + $cacheKeys,
+            ], 'Cache cleared successfully');
         } catch (\Exception $e) {
             return $this->error('Failed to flush cache: '.$e->getMessage(), 500);
         }
@@ -306,6 +315,24 @@ class RedisController extends BaseApiController
         $size = $redis->dbsize();
 
         return is_numeric($size) ? (int) $size : 0;
+    }
+
+    private function flushRedisDatabase(string $connection): void
+    {
+        try {
+            Redis::connection($connection)->flushdb();
+        } catch (\Throwable $e) {
+            // Continue without failing request; some deployments may not define both connections.
+        }
+    }
+
+    private function getConnectionKeys(string $connection): int
+    {
+        try {
+            return $this->getDatabaseSize(Redis::connection($connection));
+        } catch (\Throwable $e) {
+            return 0;
+        }
     }
 
     /**

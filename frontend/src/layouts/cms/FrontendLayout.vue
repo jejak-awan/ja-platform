@@ -78,19 +78,24 @@
       <ArrowUp class="w-5 h-5" />
     </button>
     
-    <!-- FALLBACK: Loading State if Theme is missing/loading -->
+    <!-- FALLBACK: Degrade gracefully when theme API is unavailable -->
     <div 
       v-else
-      class="flex-1 flex flex-col items-center justify-center bg-background p-12 text-center"
+      class="flex-1 flex flex-col bg-background"
     >
-      <div class="w-20 h-20 relative mb-8">
-        <div class="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
-        <div class="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <div
+        v-if="showThemeServiceNotice"
+        class="px-4 py-2 text-xs text-center text-amber-700 dark:text-amber-300 bg-amber-500/10 border-b border-amber-500/30"
+      >
+        Theme service sedang tidak tersedia. Menampilkan mode fallback sementara.
       </div>
-      <h2 class="text-2xl font-black tracking-tighter uppercase mb-4">Initializing Portal</h2>
-      <p class="text-muted-foreground text-sm max-w-sm mx-auto">
-        Preparing your experience. If this takes longer than 10 seconds, please refresh the page.
-      </p>
+      <main class="main-content flex-1 w-full">
+        <router-view v-slot="{ Component }">
+          <div class="w-full h-full flex-1 flex flex-col page-enter">
+            <component :is="Component" />
+          </div>
+        </router-view>
+      </main>
     </div>
   </div>
 </template>
@@ -98,13 +103,25 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, onUnmounted, watch } from 'vue'
 import { useTheme } from '@/composables/useTheme'
-import { useGsapInteractiveUi } from '@/composables/useGsapInteractiveUi'
 import ThemePageResolver from '@/components/shared/ThemePageResolver.vue'
 import ArrowUp from 'lucide-vue-next/dist/esm/icons/arrow-up.js';
 import { JANARI_PRESETS } from '@/modules/Cms/config/janariPresets';
 import { themeUsesJanariCanvas } from '@/modules/Cms/utils/themeManifest';
+import { buildThemeViewResolveCandidates, findThemeViewKey } from '@/modules/Cms/utils/themeViewResolver'
+import { useRoute } from 'vue-router'
 
-const { activeTheme, getSetting } = useTheme()
+const { activeTheme, getSetting, loading, error, loadActiveTheme } = useTheme()
+const route = useRoute()
+const lastThemeRetryAt = ref(0)
+const RETRY_INTERVAL_MS = 15000
+const prefetchedThemePages = new Set<string>()
+const viewModules = import.meta.glob('../../modules/Cms/views/themes/**/*.vue') as Record<string, () => Promise<unknown>>
+const CORE_PUBLIC_PATH_TO_PAGE: Record<string, string> = {
+  '/': 'Home',
+  '/about': 'About',
+  '/blog': 'Blog',
+  '/contact': 'Contact',
+}
 
 const activeThemeSlug = computed(
   () => (activeTheme.value as { slug?: string } | null)?.slug ?? '',
@@ -288,7 +305,7 @@ const enableBackToTop = computed(() => getSetting('back_to_top', true) as boolea
 const headerSticky = computed(() => getSetting('header_sticky', true) as boolean)
 const showBackToTop = ref(false)
 const layoutRoot = ref<HTMLElement | null>(null)
-const { setup: setupInteractiveUi, cleanup: cleanupInteractiveUi } = useGsapInteractiveUi(layoutRoot)
+const showThemeServiceNotice = computed(() => !activeTheme.value && !loading.value && !!error.value)
 
 const handleScroll = () => {
   if (window.scrollY > 300 && enableBackToTop.value) {
@@ -300,6 +317,52 @@ const handleScroll = () => {
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const retryThemeLoadIfNeeded = async () => {
+  if (activeTheme.value || loading.value) return
+  const now = Date.now()
+  if (now - lastThemeRetryAt.value < RETRY_INTERVAL_MS) return
+  lastThemeRetryAt.value = now
+  try {
+    await loadActiveTheme('frontend')
+  } catch {
+    // silent: fallback UI handles service degradation
+  }
+}
+
+const resolveThemeViewKey = (pageName: string): string | undefined => {
+  const themeSlugs = buildThemeViewResolveCandidates(activeTheme.value)
+  return findThemeViewKey(viewModules, themeSlugs, pageName)
+}
+
+const prefetchThemePage = (pageName: string) => {
+  if (!activeTheme.value || loading.value) return
+  const key = resolveThemeViewKey(pageName)
+  if (!key || prefetchedThemePages.has(key)) return
+  const loader = viewModules[key]
+  if (!loader) return
+  prefetchedThemePages.add(key)
+  void loader().catch(() => {
+    prefetchedThemePages.delete(key)
+  })
+}
+
+const schedulePublicPrefetch = () => {
+  const path = route.path.toLowerCase()
+  const targets = Object.entries(CORE_PUBLIC_PATH_TO_PAGE)
+    .filter(([targetPath]) => targetPath !== path)
+    .map(([, page]) => page)
+
+  const run = () => {
+    targets.forEach(prefetchThemePage)
+  }
+
+  if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
+    window.requestIdleCallback(run, { timeout: 2000 })
+  } else {
+    setTimeout(run, 0)
+  }
 }
 
 // React immediately to back_to_top setting changes
@@ -319,7 +382,8 @@ watch(janariRootStyleVars, (vars) => {
 
 onMounted(async () => {
   window.addEventListener('scroll', handleScroll)
-  setupInteractiveUi()
+  await retryThemeLoadIfNeeded()
+  schedulePublicPrefetch()
 
   // Apply janari vars immediately on mount
   const el = layoutRoot.value
@@ -333,7 +397,16 @@ onMounted(async () => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
-  cleanupInteractiveUi()
+})
+
+watch(() => route.fullPath, () => {
+  void retryThemeLoadIfNeeded()
+  schedulePublicPrefetch()
+})
+
+watch(() => activeTheme.value?.slug, () => {
+  prefetchedThemePages.clear()
+  schedulePublicPrefetch()
 })
 </script>
 

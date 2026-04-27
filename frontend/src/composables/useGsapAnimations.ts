@@ -60,9 +60,9 @@ export function useGsapAnimations() {
   const isParallaxEnabled = (): boolean => getSetting('parallax_enabled', true) !== false
   const intensityScale = (): number => {
     const level = String(getSetting('animation_intensity', 'normal') || 'normal')
-    if (level === 'subtle') return 0.8
-    if (level === 'dramatic') return 1.2
-    return 1
+    if (level === 'subtle') return 0.6
+    if (level === 'dramatic') return 1.05
+    return 0.85
   }
 
   const normalizeOptions = (opts: AnimationOptions = {}, allowInReducedMotion = true): Required<Pick<AnimationOptions, 'delay' | 'duration' | 'ease' | 'start' | 'distance' | 'stagger'>> => {
@@ -70,11 +70,11 @@ export function useGsapAnimations() {
     const reduced = prefersReducedMotion.value && allowInReducedMotion
     return {
       delay: opts.delay ?? 0,
-      duration: reduced ? Math.min(opts.duration ?? 0.8, 0.24) : (opts.duration ?? 0.8) * scale,
-      ease: opts.ease ?? 'power3.out',
-      start: opts.start ?? 'top 85%',
-      distance: reduced ? 0 : (opts.distance ?? 60) * scale,
-      stagger: reduced ? 0 : (opts.stagger ?? 0.12) * scale,
+      duration: reduced ? Math.min(opts.duration ?? 0.55, 0.2) : (opts.duration ?? 0.55) * scale,
+      ease: opts.ease ?? 'power2.out',
+      start: opts.start ?? 'top 88%',
+      distance: reduced ? 0 : (opts.distance ?? 32) * scale,
+      stagger: reduced ? 0 : (opts.stagger ?? 0.08) * scale,
     }
   }
 

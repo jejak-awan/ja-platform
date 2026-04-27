@@ -18,7 +18,7 @@ const frontendRoutes: RouteRecordRaw[] = [
                 props: { page: 'Home' },
                 meta: {
                     title: 'Home',
-                    description: 'JA-Edu - Modern Content Management System',
+                    description: 'JA-Platform - Modern Content Management System',
                 }
             },
             {

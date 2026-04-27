@@ -95,10 +95,16 @@ const lazyLoadDirective: ObjectDirective<LazyHTMLElement, string> = {
 function loadImage(el: LazyHTMLElement, src: string) {
     // Create a temporary image to preload
     const img = new Image();
+    img.decoding = 'async';
+    img.loading = 'lazy';
+    img.fetchPriority = (el.dataset.fetchpriority === 'high' ? 'high' : 'low');
 
     img.onload = () => {
         // Set the actual image
         if (el instanceof HTMLImageElement) {
+            // Keep final element decoding non-blocking by default.
+            if (!el.decoding) el.decoding = 'async';
+            if (!el.loading) el.loading = 'lazy';
             el.src = src;
         } else {
             // Background image fallback or custom handling

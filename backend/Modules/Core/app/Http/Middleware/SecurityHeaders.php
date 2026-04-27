@@ -19,8 +19,15 @@ class SecurityHeaders
         // Content Security Policy
         $nonce = $this->generateNonce($request);
         Vite::useCspNonce($nonce);
+        $generatedCsp = $this->getContentSecurityPolicy($nonce);
         $configCsp = config('security.headers.csp');
-        $csp = is_string($configCsp) ? $configCsp : $this->getContentSecurityPolicy($nonce);
+        $csp = $generatedCsp;
+        if (is_string($configCsp)) {
+            $configuredPolicy = trim($configCsp);
+            if ($configuredPolicy !== '' && $this->isUsableConfiguredCsp($configuredPolicy)) {
+                $csp = $configuredPolicy;
+            }
+        }
         $reportOnlyRaw = config('security.headers.csp_report_only');
         if (is_bool($reportOnlyRaw)) {
             $reportOnly = $reportOnlyRaw;
@@ -248,5 +255,34 @@ class SecurityHeaders
         }
 
         return in_array($host, ['localhost', '127.0.0.1', '::1'], true);
+    }
+
+    /**
+     * Guard against legacy/invalid CSP overrides that break frontend runtime.
+     */
+    private function isUsableConfiguredCsp(string $policy): bool
+    {
+        $normalizedPolicy = strtolower($policy);
+
+        // Known broken policy pattern seen in old overrides.
+        if (str_contains($normalizedPolicy, "connect-src 'none'")) {
+            return false;
+        }
+
+        if (preg_match('/(?:^|;)\s*script-src\s+([^;]+)/i', $policy, $scriptMatch) === 1) {
+            $scriptSources = strtolower($scriptMatch[1]);
+            if (! str_contains($scriptSources, "'self'")) {
+                return false;
+            }
+        }
+
+        if (preg_match('/(?:^|;)\s*connect-src\s+([^;]+)/i', $policy, $connectMatch) === 1) {
+            $connectSources = strtolower($connectMatch[1]);
+            if (! str_contains($connectSources, "'self'")) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -714,7 +714,7 @@ class SecurityController extends BaseApiController
         $this->notificationService->send(
             'test_notification',
             'Sistem Keamanan Aktif 🛡️',
-            'Ini adalah notifikasi uji coba dari sistem keamanan JA-Edu. Koneksi Anda berhasil dikonfigurasi!',
+            'Ini adalah notifikasi uji coba dari sistem keamanan JA-Platform. Koneksi Anda berhasil dikonfigurasi!',
             \Modules\Core\Services\SecurityNotificationService::SEVERITY_INFO,
             [
                 'server' => gethostname(),

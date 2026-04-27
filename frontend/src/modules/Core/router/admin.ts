@@ -3,20 +3,16 @@ import type { RouteRecordRaw } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 import cmsRoutes from '@/modules/Cms/router';
 import schoolRoutes from '@/modules/School/router/index';
-import frontendRoutes from './frontend';
 import { SECURITY_ROUTES } from '@/config/security';
 import { handleBeforeEachGuard } from './guards';
-import { trackRouteVisit } from './analytics-tracker';
-// import { useSystemError } from '@/composables/useSystemError';
+import { attemptChunkRecoveryReload, isChunkLoadError } from '@/utils/chunkRecovery';
+import { useSystemError } from '@/composables/useSystemError';
 
 const adminPath = SECURITY_ROUTES.dashboardBase;
 const loginPath = SECURITY_ROUTES.login;
 const registerPath = SECURITY_ROUTES.register;
 
 const routes: Array<RouteRecordRaw> = [
-    // Frontend routes (public)
-    ...frontendRoutes,
-
     {
         path: '/maintenance',
         name: 'maintenance',
@@ -24,7 +20,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: { public: true, title: 'Under Maintenance' },
     },
 
-    // Auth routes
+    // Auth routes (admin/auth app)
     {
         path: loginPath,
         name: 'login',
@@ -77,13 +73,8 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'dashboard',
                 component: () => import('@/modules/Core/views/admin/Dashboard.vue'),
             },
-
-            // CMS Module Routes
             ...cmsRoutes,
-
-            // School Module Routes
             ...schoolRoutes,
-
             {
                 path: 'users',
                 name: 'users.index',
@@ -127,7 +118,6 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'profile',
                 component: () => import('@/modules/Core/views/admin/Profile.vue'),
             },
-
             {
                 path: 'cache',
                 name: 'cache',
@@ -194,7 +184,6 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/modules/Core/views/admin/settings/languages/Index.vue'),
                 meta: { permission: 'manage settings' },
             },
-
             {
                 path: 'system-journal',
                 name: 'system-journal',
@@ -211,11 +200,8 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/modules/Core/views/admin/dev/plugins/Index.vue'),
                 meta: { permission: 'manage plugins' },
             },
-
         ],
     },
-
-    // Error pages
     {
         path: '/403',
         name: 'forbidden',
@@ -246,8 +232,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/modules/Core/views/errors/RateLimit.vue'),
         meta: { public: true },
     },
-
-    // Catch-all route (must be last)
     {
         path: '/:pathMatch(.*)*',
         name: 'catch-all',
@@ -258,42 +242,35 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+    scrollBehavior(to, _from, savedPosition) {
+        if (savedPosition) return savedPosition;
+        if (to.hash) {
+            return { el: to.hash, top: 80, behavior: 'smooth' };
+        }
+        return { top: 0, left: 0, behavior: 'auto' };
+    },
 });
 
-// Navigation guard
 router.beforeEach(async (to, _from, next) => {
     await handleBeforeEachGuard(to, next, { loginPath, registerPath });
 });
 
-// Global error handler
 let isHandlingRouterError = false;
 router.onError((error) => {
-    // Re-entrancy guard: prevent infinite loop when GlobalErrorModal renders
-    // (it uses useRouter() which can re-trigger error during error state)
     if (isHandlingRouterError) return;
+    if (isChunkLoadError(error) && attemptChunkRecoveryReload()) return;
     isHandlingRouterError = true;
-
-    logger.error('Router error:', error);
-
-    // For runtime router errors, use the modal to avoid full page fallback if possible
-    import('@/composables/useSystemError').then(({ useSystemError }) => {
-        const { showError } = useSystemError();
-        showError({
-            code: 500,
-            title: 'Application Error',
-            message: error.message || 'A critical error occurred while navigating.',
-            description: 'The application encountered an unexpected error. Please try refreshing or contact support if the issue persists.',
-            reason: 'Router Navigation Error',
-            redirect: '/' // Fallback to home
-        });
+    logger.error('Admin router error:', error);
+    const { showError } = useSystemError();
+    showError({
+        code: 500,
+        title: 'Application Error',
+        message: error.message || 'A critical error occurred while navigating.',
+        description: 'The application encountered an unexpected error. Please refresh and try again.',
+        reason: 'Router Navigation Error',
+        redirect: SECURITY_ROUTES.dashboardBase,
     });
-
-    // Reset guard after a tick to allow future error handling
     setTimeout(() => { isHandlingRouterError = false; }, 1000);
-});
-
-router.afterEach((to, from) => {
-    trackRouteVisit(to, from);
 });
 
 export default router;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Global Helper Functions for JA-Edu Theme System
+ * Global Helper Functions for JA-Platform Theme System
  * These functions provide a convenient API for interacting with the theme system.
  * Vue SPA handles rendering, so only data/configuration helpers are needed.
  */

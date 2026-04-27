@@ -9,7 +9,7 @@ use Modules\Core\Models\SecurityLog;
 Route::get('/', function () {
     return response()->json([
         'status' => 'ok',
-        'message' => 'JA-Edu Backend API is running'
+        'message' => 'JA-Platform Backend API is running'
     ]);
 });
 

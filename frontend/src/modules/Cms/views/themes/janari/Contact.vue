@@ -135,7 +135,11 @@
                   <h3 class="font-bold text-xs uppercase tracking-widest text-muted-foreground mb-1">
                     Alamat
                   </h3>
-                  <Popover v-if="displayAddress && mapEnabled">
+                  <Popover
+                    v-if="displayAddress && mapEnabled"
+                    v-model:open="mapPopoverOpen"
+                    @update:open="onMapPopoverOpenChange"
+                  >
                     <PopoverTrigger as-child>
                       <button
                         type="button"
@@ -152,6 +156,7 @@
                     >
                       <div class="rounded-xl overflow-hidden border border-primary/30 bg-muted/20 shadow-[0_0_24px_hsl(var(--primary)/0.12)]">
                         <iframe
+                          v-if="mapIframeVisible"
                           :src="mapEmbedUrl"
                           class="w-full h-56"
                           loading="lazy"
@@ -552,7 +557,6 @@ import { useTheme } from '@/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
 import api, { getCsrfCookie } from '@/services/api'
 import { useCmsStore } from '@/modules/Cms/stores/cms'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
 import {
     Card,
     Button,
@@ -581,8 +585,6 @@ import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables
 import type { CaptchaPayload } from '@/modules/Core/components/captcha/CaptchaWrapper.vue'
 
 const CaptchaWrapper = defineAsyncComponent(() => import('@/modules/Core/components/captcha/CaptchaWrapper.vue'))
-
-type MotionApi = ReturnType<typeof useGsapAnimations>
 
 import type { Content } from '@/types/cms/cms'
 
@@ -626,12 +628,27 @@ const captchaPayload = ref<CaptchaPayload | null>(null)
 const captchaRef = ref<{ refresh?: () => Promise<void> } | null>(null)
 const startTracked = ref(false)
 const pageData = ref<PageData | null>(null)
+const mapPopoverOpen = ref(false)
+const mapIframeVisible = ref(false)
 const { getSetting } = useTheme()
-const motionApi: MotionApi = useGsapAnimations()
 const router = useRouter()
 const cmsStore = useCmsStore()
 const toast = useToast()
 const { displayEmail, displayPhone, displayAddress, phoneDialHref } = useJanariIdentity()
+let gsapPromise: Promise<any> | null = null
+
+function getGsap() {
+    if (!gsapPromise) {
+        gsapPromise = import('gsap').then(({ gsap }) => gsap)
+    }
+    return gsapPromise as Promise<any>
+}
+
+function animateTo(target: HTMLElement, vars: Record<string, unknown>): void {
+    void getGsap().then((gsap) => {
+        gsap.to(target, vars)
+    })
+}
 
 const isEnabled = computed(() => getSetting('enable_contact', true))
 const behavior = computed(() => getSetting('disabled_page_behavior', 'message'))
@@ -720,7 +737,7 @@ const formCol = ref<HTMLElement>()
 function onInfoItemEnter(event: Event): void {
     const el = event.currentTarget as HTMLElement | null
     if (!el) return
-    motionApi.gsap.to(el, {
+    animateTo(el, {
         x: 10,
         duration: 0.35,
         ease: 'power3.out',
@@ -730,7 +747,7 @@ function onInfoItemEnter(event: Event): void {
 function onInfoItemLeave(event: Event): void {
     const el = event.currentTarget as HTMLElement | null
     if (!el) return
-    motionApi.gsap.to(el, {
+    animateTo(el, {
         x: 0,
         scale: 1,
         duration: 0.4,
@@ -741,7 +758,7 @@ function onInfoItemLeave(event: Event): void {
 function onInfoItemPress(event: Event): void {
     const el = event.currentTarget as HTMLElement | null
     if (!el) return
-    motionApi.gsap.to(el, {
+    animateTo(el, {
         scale: 0.985,
         duration: 0.12,
         ease: 'power2.out',
@@ -751,7 +768,7 @@ function onInfoItemPress(event: Event): void {
 function onInfoItemRelease(event: Event): void {
     const el = event.currentTarget as HTMLElement | null
     if (!el) return
-    motionApi.gsap.to(el, {
+    animateTo(el, {
         scale: 1,
         duration: 0.2,
         ease: 'power2.out',
@@ -778,6 +795,22 @@ function openMapDirections(): void {
     const url = mapDirectionsUrl.value
     if (!url) return
     window.open(url, '_blank', 'noopener,noreferrer')
+}
+
+function onMapPopoverOpenChange(open: boolean): void {
+    mapPopoverOpen.value = open
+    if (!open) return
+
+    if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(() => {
+            mapIframeVisible.value = true
+        }, { timeout: 800 })
+        return
+    }
+
+    requestAnimationFrame(() => {
+        mapIframeVisible.value = true
+    })
 }
 
 async function copyLocationAddress(): Promise<void> {
@@ -1124,29 +1157,44 @@ async function submitForm(): Promise<void> {
 }
 
 function scheduleContactEnterMotion() {
-    const motion = motionApi
-    const { fadeInLeft, fadeInRight, staggerChildren } = motion
     const run = () => {
         void nextTick(() => {
-            if (infoCol.value) {
-                fadeInLeft(infoCol.value, { distance: 50, duration: 0.8 })
-            }
-            if (contactCard.value) {
-                const cardEl = (contactCard.value as unknown as { $el: HTMLElement }).$el || contactCard.value
-                staggerChildren(cardEl as HTMLElement, ':scope > div', {
-                    distance: 30,
-                    stagger: 0.12,
-                    delay: 0.3,
-                })
-            }
-            if (formCol.value) {
-                fadeInRight(formCol.value, { distance: 50, duration: 0.8, delay: 0.2 })
-            }
+            void getGsap().then((gsap) => {
+                if (infoCol.value) {
+                    gsap.fromTo(
+                        infoCol.value,
+                        { opacity: 0, x: -50 },
+                        { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' },
+                    )
+                }
+                if (contactCard.value) {
+                    const cardEl = (contactCard.value as unknown as { $el: HTMLElement }).$el || contactCard.value
+                    const children = (cardEl as HTMLElement).querySelectorAll(':scope > div')
+                    if (children.length > 0) {
+                        gsap.fromTo(
+                            children,
+                            { opacity: 0, y: 30 },
+                            { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, delay: 0.3, ease: 'power3.out' },
+                        )
+                    }
+                }
+                if (formCol.value) {
+                    gsap.fromTo(
+                        formCol.value,
+                        { opacity: 0, x: 50 },
+                        { opacity: 1, x: 0, duration: 0.8, delay: 0.2, ease: 'power3.out' },
+                    )
+                }
+            })
         })
     }
-    requestAnimationFrame(() => {
-        requestAnimationFrame(run)
-    })
+    if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(() => {
+            requestAnimationFrame(() => requestAnimationFrame(run))
+        }, { timeout: 1200 })
+        return
+    }
+    requestAnimationFrame(() => requestAnimationFrame(run))
 }
 
 onMounted(async () => {
@@ -1166,7 +1214,6 @@ onMounted(async () => {
         }).catch((e) => {
             logger.warning('[Contact] Content fetch skipped:', e)
         }),
-        loadContactForm(),
     ]
     if (!cmsStore.publicSettingsLoaded) {
         bootstrap.unshift(cmsStore.fetchPublicSettings())
@@ -1179,6 +1226,17 @@ onMounted(async () => {
     } finally {
         loading.value = false
         scheduleContactEnterMotion()
+
+        // Defer dynamic form schema load until page is visible/interactive.
+        if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(() => {
+                void loadContactForm()
+            }, { timeout: 1200 })
+        } else {
+            setTimeout(() => {
+                void loadContactForm()
+            }, 0)
+        }
     }
 })
 </script>

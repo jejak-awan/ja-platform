@@ -11,7 +11,8 @@
 
 <script setup lang="ts">
 import { logger } from '@/utils/logger';
-import { computed, shallowRef, watch, type HTMLAttributes, type Component } from 'vue'
+import { computed, type HTMLAttributes, type Component } from 'vue'
+import * as LucideIcons from 'lucide-vue-next';
 
 const props = withDefaults(defineProps<{
   name: string;
@@ -33,18 +34,6 @@ const numericSize = computed(() => {
     }
     return props.size;
 })
-
-// Icon cache to prevent re-importing
-const iconCache = new Map<string, Component>();
-const iconComponent = shallowRef<Component | null>(null);
-
-// Convert PascalCase/camelCase to kebab-case for file names
-const toKebabCase = (str: string): string => {
-  return str
-    .replace(/([a-z])([A-Z])/g, '$1-$2')
-    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
-    .toLowerCase();
-};
 
 // Convert to PascalCase for exports
 const toPascalCase = (str: string): string => {
@@ -73,65 +62,18 @@ const ICON_ALIASES: Record<string, string> = {
     'Layout': 'LayoutDashboard'
 };
 
-import { nextTick } from 'vue';
-
-let lucideModulePromise: Promise<Record<string, unknown>> | null = null;
-const getLucideModule = () => {
-  if (!lucideModulePromise) {
-    lucideModulePromise = import('lucide-vue-next') as Promise<Record<string, unknown>>;
-  }
-  return lucideModulePromise;
-};
-
-watch(() => props.name, async (name) => {
-  if (!name) {
-    iconComponent.value = null;
-    return;
-  }
-  
+const iconComponent = computed<Component | null>(() => {
+  const name = props.name;
+  if (!name) return null;
   let targetName = toPascalCase(name);
   if (ICON_ALIASES[targetName]) {
-      targetName = ICON_ALIASES[targetName] || targetName;
+    targetName = ICON_ALIASES[targetName] || targetName;
   }
-  
-  const pascalName = targetName;
-  
-  // Check cache first (synchronous - but we still defer for consistency during mount)
-  if (iconCache.has(pascalName)) {
-    const icon = iconCache.get(pascalName) || null;
-    await nextTick();
-    iconComponent.value = icon;
-    return;
+  const icon = (LucideIcons as unknown as Record<string, Component | undefined>)[targetName] ?? null;
+  if (!icon) {
+    logger.warning(`LucideIcon: Icon "${name}" not found in lucide-vue-next`);
   }
-  
-  try {
-    const module = await getLucideModule();
-    const icon = module[pascalName];
-    
-    if (icon) {
-      iconCache.set(pascalName, icon as Component);
-      // Wait for next tick to avoid triggering re-render during current patch
-      await nextTick();
-      iconComponent.value = icon as Component;
-    } else {
-      // Fallback: try kebab-case if PascalCase fails
-      const kebabName = toKebabCase(name);
-      const kebabPascalName = toPascalCase(kebabName);
-      const kebabIcon = module[kebabPascalName];
-      
-      if (kebabIcon) {
-          iconCache.set(pascalName, kebabIcon as Component);
-          await nextTick();
-          iconComponent.value = kebabIcon as Component;
-      } else {
-          logger.warning(`LucideIcon: Icon "${name}" not found in lucide-vue-next`);
-          iconComponent.value = null;
-      }
-    }
-  } catch (error) {
-    logger.warning(`LucideIcon: Failed to load icon "${name}"`, error);
-    iconComponent.value = null;
-  }
-}, { immediate: true });
+  return icon;
+});
 </script>
 

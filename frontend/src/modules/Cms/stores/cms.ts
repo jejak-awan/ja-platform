@@ -4,6 +4,40 @@ import api from '@/services/api';
 import { parseResponse, ensureArray } from '@/utils/responseParser';
 import type { CMSState, Content, SiteSettings } from '@/types/cms/cms';
 
+const PUBLIC_SETTINGS_CACHE_KEY = 'public_settings_snapshot_v1';
+
+const defaultSiteSettings = (): SiteSettings => ({
+    site_name: 'JA-Platform',
+    site_description: 'Jejakawan',
+    site_url: '',
+    admin_email: '',
+    site_version: 'v1.0',
+    site_logo: '',
+    site_favicon: '/favicon.svg'
+});
+
+const readCachedPublicSettings = (): SiteSettings | null => {
+    if (typeof window === 'undefined') return null;
+    try {
+        const raw = window.sessionStorage.getItem(PUBLIC_SETTINGS_CACHE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null;
+        return { ...defaultSiteSettings(), ...(parsed as Record<string, unknown>) };
+    } catch {
+        return null;
+    }
+};
+
+const writeCachedPublicSettings = (settings: SiteSettings): void => {
+    if (typeof window === 'undefined') return;
+    try {
+        window.sessionStorage.setItem(PUBLIC_SETTINGS_CACHE_KEY, JSON.stringify(settings));
+    } catch {
+        // ignore storage quota / privacy mode errors
+    }
+};
+
 export const useCmsStore = defineStore('cms', {
     state: (): CMSState => ({
         contents: [],
@@ -11,21 +45,13 @@ export const useCmsStore = defineStore('cms', {
         tags: [],
         media: [],
         settings: {}, // Store settings by group or flat key-value
-        siteSettings: {
-            site_name: 'JA-Edu',
-            site_description: 'Jejakawan',
-            site_url: '',
-            admin_email: '',
-            site_version: 'v1.0',
-            site_logo: '',
-            site_favicon: '/favicon.svg'
-        },
+        siteSettings: readCachedPublicSettings() ?? defaultSiteSettings(),
         currentContent: null,
         loading: false,
         loadingGroups: {}, // To track loading state for specific settings groups
         settingsPromises: {}, // To store promises for ongoing settings group fetches
         publicSettingsPromise: null, // Promise for public settings fetch
-        publicSettingsLoaded: false, // Flag to track if public settings were fetched
+        publicSettingsLoaded: readCachedPublicSettings() !== null, // Flag to track if public settings were fetched
         themeMode: 'system', // 'light', 'dark', 'system'
         isDarkMode: false,
     }),
@@ -113,6 +139,7 @@ export const useCmsStore = defineStore('cms', {
                     if (hasChanges) {
                         this.siteSettings = { ...this.siteSettings, ...settingsData };
                     }
+                    writeCachedPublicSettings(this.siteSettings);
                     
                     return this.siteSettings;
                 } catch (error: unknown) {

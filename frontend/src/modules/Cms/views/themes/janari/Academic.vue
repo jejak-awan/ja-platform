@@ -159,6 +159,10 @@ import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 
 const { getSetting } = useTheme();
 const router = useRouter();
+const ACADEMIC_CONTENT_CACHE_KEY = 'janari_academic_content_slug_v1';
+const ACADEMIC_CONTENT_MISS_KEY = 'janari_academic_content_miss_v1';
+const ACADEMIC_CONTENT_MISS_TTL_MS = 10 * 60 * 1000;
+let academicContentPromise: Promise<AcademicPageData | null> | null = null;
 
 const isEnabled = computed(() => getSetting('enable_academic', true));
 const behavior = computed(() => getSetting('disabled_page_behavior', 'message'));
@@ -198,6 +202,91 @@ const curriculumPoints = computed(() => {
   return defaultCurriculumPoints;
 });
 
+const readMissState = () => {
+  try {
+    const raw = sessionStorage.getItem(ACADEMIC_CONTENT_MISS_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { expiresAt?: number };
+    if (!parsed?.expiresAt || parsed.expiresAt <= Date.now()) {
+      sessionStorage.removeItem(ACADEMIC_CONTENT_MISS_KEY);
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+};
+
+const writeMissState = () => {
+  try {
+    sessionStorage.setItem(
+      ACADEMIC_CONTENT_MISS_KEY,
+      JSON.stringify({ expiresAt: Date.now() + ACADEMIC_CONTENT_MISS_TTL_MS })
+    );
+  } catch {
+    // ignore storage errors
+  }
+};
+
+const clearMissState = () => {
+  try {
+    sessionStorage.removeItem(ACADEMIC_CONTENT_MISS_KEY);
+  } catch {
+    // ignore storage errors
+  }
+};
+
+const readCachedSlug = (): string | null => {
+  try {
+    return sessionStorage.getItem(ACADEMIC_CONTENT_CACHE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+const writeCachedSlug = (slug: string) => {
+  try {
+    sessionStorage.setItem(ACADEMIC_CONTENT_CACHE_KEY, slug);
+  } catch {
+    // ignore storage errors
+  }
+};
+
+const loadAcademicContent = async (): Promise<AcademicPageData | null> => {
+  if (readMissState()) return null;
+  if (academicContentPromise) return academicContentPromise;
+
+  academicContentPromise = (async () => {
+    const cachedSlug = readCachedSlug();
+    const orderedCandidates = cachedSlug
+      ? [cachedSlug, 'akademik', 'academic', 'profil-akademik'].filter((value, index, arr) => arr.indexOf(value) === index)
+      : ['akademik', 'academic', 'profil-akademik'];
+
+    for (const slug of orderedCandidates) {
+      try {
+        const response = await api.get(`/ja/contents/${slug}`);
+        writeCachedSlug(slug);
+        clearMissState();
+        console.log(`[Academic] Data loaded with slug "${slug}"`);
+        return response.data as AcademicPageData;
+      } catch (error: any) {
+        if (error?.response?.status !== 404) {
+          console.warn(`[Academic] failed to fetch slug "${slug}"`, error);
+        }
+      }
+    }
+
+    writeMissState();
+    return null;
+  })();
+
+  try {
+    return await academicContentPromise;
+  } finally {
+    academicContentPromise = null;
+  }
+};
+
 onMounted(async () => {
   if (!isEnabled.value && behavior.value === 'redirect') {
     router.push('/');
@@ -207,13 +296,7 @@ onMounted(async () => {
   if (!isEnabled.value) return;
 
   console.log('[Academic] Component Mounted');
-  try {
-    const response = await api.get('/ja/contents/akademik');
-    pageData.value = response.data;
-    console.log('[Academic] Data loaded:', pageData.value ? 'Success' : 'Empty');
-  } catch (error) {
-    console.warn('[Academic] CMS fallback - failed to fetch content', error);
-  }
+  pageData.value = await loadAcademicContent();
 });
 
 onUnmounted(() => {

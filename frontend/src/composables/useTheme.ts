@@ -62,6 +62,66 @@ const error = ref<string | null>(null);
 const isLoading = ref(false); // Prevent multiple simultaneous loads
 let activeLoadPromise: Promise<void> | null = null; // Shared promise to await if load is in progress
 let themeUpdateListener: ((event: MessageEvent) => void) | null = null;
+let lastLoadedAt = 0;
+const THEME_CACHE_TTL_MS = 60_000;
+const THEME_SNAPSHOT_KEY = 'frontend_theme_snapshot_v1';
+
+const readThemeSnapshot = (): {
+    activeTheme: Theme | null;
+    themeSettings: Record<string, unknown>;
+    themeAssets: { css: string[]; js: string[] };
+    customCss: string;
+    lastLoadedAt: number;
+} | null => {
+    if (typeof window === 'undefined') return null;
+    try {
+        const raw = window.sessionStorage.getItem(THEME_SNAPSHOT_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw) as {
+            activeTheme?: Theme | null;
+            themeSettings?: Record<string, unknown>;
+            themeAssets?: { css?: string[]; js?: string[] };
+            customCss?: string;
+            lastLoadedAt?: number;
+        };
+        return {
+            activeTheme: parsed.activeTheme ?? null,
+            themeSettings: parsed.themeSettings ?? {},
+            themeAssets: {
+                css: Array.isArray(parsed.themeAssets?.css) ? parsed.themeAssets!.css : [],
+                js: Array.isArray(parsed.themeAssets?.js) ? parsed.themeAssets!.js : [],
+            },
+            customCss: typeof parsed.customCss === 'string' ? parsed.customCss : '',
+            lastLoadedAt: Number.isFinite(parsed.lastLoadedAt) ? Number(parsed.lastLoadedAt) : 0,
+        };
+    } catch {
+        return null;
+    }
+};
+
+const writeThemeSnapshot = (): void => {
+    if (typeof window === 'undefined') return;
+    try {
+        window.sessionStorage.setItem(THEME_SNAPSHOT_KEY, JSON.stringify({
+            activeTheme: activeTheme.value,
+            themeSettings: themeSettings.value,
+            themeAssets: themeAssets.value,
+            customCss: customCss.value,
+            lastLoadedAt,
+        }));
+    } catch {
+        // ignore storage quota / privacy mode errors
+    }
+};
+
+const initialThemeSnapshot = readThemeSnapshot();
+if (initialThemeSnapshot) {
+    activeTheme.value = initialThemeSnapshot.activeTheme;
+    themeSettings.value = initialThemeSnapshot.themeSettings;
+    themeAssets.value = initialThemeSnapshot.themeAssets;
+    customCss.value = initialThemeSnapshot.customCss;
+    lastLoadedAt = initialThemeSnapshot.lastLoadedAt;
+}
 
 /**
  * Composable for theme management in frontend
@@ -70,14 +130,16 @@ export function useTheme() {
     /**
      * Load active theme
      */
-    const loadActiveTheme = async (type = 'frontend') => {
+    const loadActiveTheme = async (type = 'frontend', options?: { force?: boolean }) => {
+        const force = options?.force === true;
         // Return existing promise if already loading
         if (activeLoadPromise && type === 'frontend') {
             return activeLoadPromise;
         }
 
-        // Return immediately if already loaded and no force reload is requested
-        if (activeTheme.value && type === 'frontend' && !loading.value) {
+        const cacheIsFresh = Date.now() - lastLoadedAt < THEME_CACHE_TTL_MS;
+        // Return immediately if cached theme is still fresh
+        if (activeTheme.value && type === 'frontend' && !loading.value && !force && cacheIsFresh) {
             return;
         }
 
@@ -121,13 +183,13 @@ export function useTheme() {
             }
 
             // Load theme assets
-            if (data.assets) {
+            if (nextAssetsSig !== prevAssetsSig && data.assets) {
                 themeAssets.value = data.assets;
                 injectCssFiles(data.assets.css || []);
                 injectJsFiles(data.assets.js || []);
             }
 
-            if (data.custom_css) {
+            if (nextCss !== prevCss && data.custom_css) {
                 customCss.value = data.custom_css;
                 applyCustomCss();
             }
@@ -178,12 +240,16 @@ export function useTheme() {
                 window.addEventListener('message', themeUpdateListener);
             }
 
+            lastLoadedAt = Date.now();
+            error.value = null;
+            writeThemeSnapshot();
+
         } catch (err: unknown) {
             const errorObj = err as Error;
             logger.warning('Failed to load active theme:', err);
             error.value = errorObj.message || 'Failed to load theme';
-            activeTheme.value = null;
-            themeSettings.value = {};
+            // Keep last known good theme to prevent full layout fallback flicker
+            // during transient network/backend failures.
             } finally {
                 loading.value = false;
                 isLoading.value = false;

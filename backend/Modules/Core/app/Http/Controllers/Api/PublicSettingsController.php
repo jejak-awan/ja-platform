@@ -3,6 +3,7 @@
 namespace Modules\Core\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Modules\Core\Models\Setting;
 
 /**
@@ -14,12 +15,12 @@ class PublicSettingsController extends BaseApiController
     /**
      * Get public settings for the frontend
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return $this->success([
+        $payload = [
             'enable_registration' => (bool) Setting::get('enable_registration', true),
             'require_email_verification' => (bool) Setting::get('require_email_verification', true),
-            'site_name' => Setting::get('site_name', 'JA-Edu'),
+            'site_name' => Setting::get('site_name', 'JA-Platform'),
             'site_description' => Setting::get('site_description', ''),
             'site_url' => Setting::get('site_url', config('app.url')),
             'admin_email' => Setting::get('admin_email', ''),
@@ -44,6 +45,25 @@ class PublicSettingsController extends BaseApiController
             'maintenance_message' => Setting::get('maintenance_message', ''),
             'maintenance_countdown_enabled' => (bool) Setting::get('maintenance_countdown_enabled', false),
             'maintenance_end_time' => Setting::get('maintenance_end_time', ''),
-        ], 'Public settings retrieved successfully');
+        ];
+
+        $etagSource = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $etag = '"'.sha1(is_string($etagSource) ? $etagSource : '').'"';
+        $ifNoneMatch = $request->headers->get('If-None-Match');
+
+        if (is_string($ifNoneMatch) && trim($ifNoneMatch) === $etag) {
+            return response()->json(null, 304, [
+                'ETag' => $etag,
+                'Cache-Control' => 'public, max-age=60, stale-while-revalidate=300',
+                'Vary' => 'Accept-Encoding',
+            ]);
+        }
+
+        $response = $this->success($payload, 'Public settings retrieved successfully');
+        $response->headers->set('ETag', $etag);
+        $response->headers->set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+        $response->headers->set('Vary', 'Accept-Encoding');
+
+        return $response;
     }
 }

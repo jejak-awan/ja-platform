@@ -600,7 +600,7 @@ const errors = ref<Record<string, string | string[]>>({});
 // Help guide state
 const showHelp = ref(false);
 const cronCopied = ref(false);
-const appPath = ref('/var/www/JA-Edu'); // Fallback default
+const appPath = ref('/var/www/JA-Platform'); // Fallback default
 
 // Ad-hoc Command State
 const adhocCommand = ref<AdhocCommand>({ command: '', parameters: '' });

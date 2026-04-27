@@ -4,9 +4,9 @@ namespace Modules\Core\Http\Controllers\Api;
 
 /**
  * @OA\Info(
- *     title="JA-Edu API Documentation",
+ *     title="JA-Platform API Documentation",
  *     version="1.0.0",
- *     description="Comprehensive API documentation for JA-Edu Content Management System",
+ *     description="Comprehensive API documentation for JA-Platform Content Management System",
  *
  *     @OA\Contact(
  *         email="support@jejakawan.com"

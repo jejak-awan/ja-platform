@@ -42,7 +42,7 @@ test.describe('Media Management Flow', () => {
         await fileInput.setInputFiles(testFilePath);
 
         // Wait for upload to complete and modal to close
-        // In JA-Edu, it usually shows a progress bar then closes or shows success
+        // In JA-Platform, it usually shows a progress bar then closes or shows success
         await expect(modal).not.toBeVisible({ timeout: 15000 });
 
         // Verify file appears in grid (we look for our filename or a generic media item)

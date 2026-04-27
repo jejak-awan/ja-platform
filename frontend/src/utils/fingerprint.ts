@@ -20,9 +20,9 @@ export const getCanvasFingerprint = (): string => {
         ctx.fillStyle = '#f60';
         ctx.fillRect(125, 1, 62, 20);
         ctx.fillStyle = '#069';
-        ctx.fillText('JA-Edu Security Shield, <canvas> 1.0', 2, 15);
+        ctx.fillText('JA-Platform Security Shield, <canvas> 1.0', 2, 15);
         ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-        ctx.fillText('JA-Edu Security Shield, <canvas> 1.0', 4, 17);
+        ctx.fillText('JA-Platform Security Shield, <canvas> 1.0', 4, 17);
 
         // Draw some shapes
         ctx.strokeStyle = '#000';

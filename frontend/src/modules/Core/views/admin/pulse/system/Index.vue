@@ -249,10 +249,13 @@ const clearLogs = async () : Promise<void> => {
 
     clearing.value = true;
     try {
-        await api.delete('admin/core/system-journal');
+        await api.post('admin/core/system-journal/clear', {
+            reason: `Manual clear from system journal at ${new Date().toISOString()}`,
+        });
         toast.success.action(t('features.system.logs.messages.cleared'));
         logContent.value = '';
-        fetchLogFiles();
+        await fetchLogFiles();
+        selectedLogFile.value = null;
     } catch (error: unknown) {
         logger.error('Failed to clear logs:', error);
         toast.error.fromResponse(error);

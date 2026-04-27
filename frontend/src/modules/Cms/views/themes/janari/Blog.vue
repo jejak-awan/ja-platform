@@ -73,7 +73,7 @@
                       </div>
                       <div>
                         <p class="font-semibold text-foreground">
-                          JA-Edu Team
+                          JA-Platform Team
                         </p>
                         <p class="text-xs text-muted-foreground">
                           {{ featuredPost.readTime }}

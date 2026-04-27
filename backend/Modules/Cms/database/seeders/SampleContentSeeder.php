@@ -156,7 +156,7 @@ class SampleContentSeeder extends Seeder
                 'id' => Str::uuid()->toString(),
                 'type' => 'hero',
                 'settings' => [
-                    'title' => 'Build Amazing Websites with JA-Edu',
+                    'title' => 'Build Amazing Websites with JA-Platform',
                     'subtitle' => 'The modern content management system that empowers you to create stunning, fast, and SEO-friendly websites without writing code.',
                     'bgImage' => '',
                     'bgColor' => '#4f46e5',
@@ -171,7 +171,7 @@ class SampleContentSeeder extends Seeder
                 'id' => Str::uuid()->toString(),
                 'type' => 'features',
                 'settings' => [
-                    'title' => 'Why Choose JA-Edu?',
+                    'title' => 'Why Choose JA-Platform?',
                     'items' => [
                         ['title' => 'Menu Builder', 'description' => 'Create complex navigation structures with ease.'],
                         ['title' => 'SEO Optimized', 'description' => 'Built-in SEO tools to help your content rank higher.'],
@@ -192,7 +192,7 @@ class SampleContentSeeder extends Seeder
                 'id' => Str::uuid()->toString(),
                 'type' => 'testimonial',
                 'settings' => [
-                    'quote' => 'JA-Edu transformed how we manage our content. The system is incredibly intuitive and our team loves it!',
+                    'quote' => 'JA-Platform transformed how we manage our content. The system is incredibly intuitive and our team loves it!',
                     'author' => 'Sarah Johnson',
                     'role' => 'Marketing Director at TechCorp',
                     'avatar' => '',
@@ -222,7 +222,7 @@ class SampleContentSeeder extends Seeder
                 'type' => 'cta',
                 'settings' => [
                     'title' => 'Ready to Get Started?',
-                    'subtitle' => 'Join thousands of creators and businesses using JA-Edu to build their online presence.',
+                    'subtitle' => 'Join thousands of creators and businesses using JA-Platform to build their online presence.',
                     'buttonText' => 'Start Free Trial',
                     'buttonUrl' => '/register',
                     'bgColor' => '#4f46e5',
@@ -236,15 +236,15 @@ class SampleContentSeeder extends Seeder
         Content::updateOrCreate(
             ['slug' => 'home', 'type' => 'page'],
             [
-                'title' => 'Welcome to JA-Edu',
+                'title' => 'Welcome to JA-Platform',
                 'slug' => 'home',
                 'type' => 'page',
                 'status' => 'published',
-                'body' => '<h1>Build Amazing Websites with JA-Edu</h1><p>The modern content management system that empowers you to create stunning, fast, and SEO-friendly websites.</p>',
+                'body' => '<h1>Build Amazing Websites with JA-Platform</h1><p>The modern content management system that empowers you to create stunning, fast, and SEO-friendly websites.</p>',
                 'author_id' => $user->id,
                 'published_at' => now(),
-                'meta_title' => 'JA-Edu - Modern Content Management System',
-                'meta_description' => 'Build amazing websites with JA-Edu, the modern content management system.',
+                'meta_title' => 'JA-Platform - Modern Content Management System',
+                'meta_description' => 'Build amazing websites with JA-Platform, the modern content management system.',
             ]
         );
 
@@ -259,7 +259,7 @@ class SampleContentSeeder extends Seeder
                 'id' => Str::uuid()->toString(),
                 'type' => 'hero',
                 'settings' => [
-                    'title' => 'About JA-Edu',
+                    'title' => 'About JA-Platform',
                     'subtitle' => 'We are building the future of content management - simple, powerful, and beautiful.',
                     'bgColor' => '#1e293b',
                     'padding' => 'py-24',
@@ -272,7 +272,7 @@ class SampleContentSeeder extends Seeder
                 'id' => Str::uuid()->toString(),
                 'type' => 'text',
                 'settings' => [
-                    'content' => '<h2>Our Story</h2><p>JA-Edu was born from a simple idea: content management should be easy, fast, and beautiful. We believe that everyone deserves powerful tools to share their ideas with the world.</p><p>Our team of passionate developers and designers work tirelessly to create the best possible experience for our users. We combine modern technology with intuitive design to deliver a CMS that just works.</p>',
+                    'content' => '<h2>Our Story</h2><p>JA-Platform was born from a simple idea: content management should be easy, fast, and beautiful. We believe that everyone deserves powerful tools to share their ideas with the world.</p><p>Our team of passionate developers and designers work tirelessly to create the best possible experience for our users. We combine modern technology with intuitive design to deliver a CMS that just works.</p>',
                     'padding' => 'py-16',
                     'visibility' => ['mobile' => true, 'tablet' => true, 'desktop' => true],
                 ],
@@ -282,7 +282,7 @@ class SampleContentSeeder extends Seeder
                 'id' => Str::uuid()->toString(),
                 'type' => 'person',
                 'settings' => [
-                    'name' => 'The JA-Edu Team',
+                    'name' => 'The JA-Platform Team',
                     'role' => 'Building the Future',
                     'bio' => 'A dedicated team of developers, designers, and content strategists committed to making content management accessible to everyone.',
                     'avatar' => '',
@@ -314,11 +314,11 @@ class SampleContentSeeder extends Seeder
                 'slug' => 'about',
                 'type' => 'page',
                 'status' => 'published',
-                'body' => '<h1>About JA-Edu</h1><p>We are building the future of content management - simple, powerful, and beautiful.</p><h2>Our Story</h2><p>JA-Edu was born from a simple idea: content management should be easy, fast, and beautiful.</p>',
+                'body' => '<h1>About JA-Platform</h1><p>We are building the future of content management - simple, powerful, and beautiful.</p><h2>Our Story</h2><p>JA-Platform was born from a simple idea: content management should be easy, fast, and beautiful.</p>',
                 'author_id' => $user->id,
                 'published_at' => now(),
-                'meta_title' => 'About JA-Edu - Our Story',
-                'meta_description' => 'Learn about JA-Edu, our mission, and the team behind the modern content management system.',
+                'meta_title' => 'About JA-Platform - Our Story',
+                'meta_description' => 'Learn about JA-Platform, our mission, and the team behind the modern content management system.',
             ]
         );
 
@@ -366,7 +366,7 @@ class SampleContentSeeder extends Seeder
                         'id' => Str::uuid()->toString(),
                         'type' => 'text',
                         'settings' => [
-                            'content' => '<h3>Contact Information</h3><p><strong>Email:</strong> hello@JA-Edu.com</p><p><strong>Phone:</strong> +1 (555) 123-4567</p><p><strong>Address:</strong><br>123 Innovation Street<br>Tech City, TC 12345</p><h4>Office Hours</h4><p>Monday - Friday: 9am - 6pm<br>Saturday - Sunday: Closed</p>',
+                            'content' => '<h3>Contact Information</h3><p><strong>Email:</strong> hello@JA-Platform.com</p><p><strong>Phone:</strong> +1 (555) 123-4567</p><p><strong>Address:</strong><br>123 Innovation Street<br>Tech City, TC 12345</p><h4>Office Hours</h4><p>Monday - Friday: 9am - 6pm<br>Saturday - Sunday: Closed</p>',
                             'visibility' => ['mobile' => true, 'tablet' => true, 'desktop' => true],
                         ],
                     ],
@@ -396,8 +396,8 @@ class SampleContentSeeder extends Seeder
                 'body' => '<h1>Get in Touch</h1><p>Have questions? We would love to hear from you. Send us a message and we will respond as soon as possible.</p>',
                 'author_id' => $user->id,
                 'published_at' => now(),
-                'meta_title' => 'Contact JA-Edu - Get in Touch',
-                'meta_description' => 'Have questions about JA-Edu? Contact our team for support, partnerships, or general inquiries.',
+                'meta_title' => 'Contact JA-Platform - Get in Touch',
+                'meta_description' => 'Have questions about JA-Platform? Contact our team for support, partnerships, or general inquiries.',
             ]
         );
 
@@ -408,42 +408,42 @@ class SampleContentSeeder extends Seeder
     {
         $posts = [
             [
-                'title' => 'Getting Started with JA-Edu',
+                'title' => 'Getting Started with JA-Platform',
                 'slug' => 'getting-started',
-                'excerpt' => 'Learn how to create stunning content in JA-Edu.',
-                'body' => '<p>JA-Edu is a powerful tool that allows you to create beautiful, responsive pages easily.</p>',
+                'excerpt' => 'Learn how to create stunning content in JA-Platform.',
+                'body' => '<p>JA-Platform is a powerful tool that allows you to create beautiful, responsive pages easily.</p>',
                 'category' => 'tutorial',
                 'is_featured' => true,
             ],
             [
-                'title' => 'Best Practices for SEO in JA-Edu',
+                'title' => 'Best Practices for SEO in JA-Platform',
                 'slug' => 'seo-best-practices',
-                'excerpt' => 'Discover how to optimize your content for search engines using JA-Edu built-in SEO tools.',
-                'body' => '<p>Search engine optimization is crucial for getting your content discovered. JA-Edu comes with powerful SEO tools built right in.</p><h2>Meta Tags</h2><p>Every page and post in JA-Edu can have custom meta titles, descriptions, and keywords. These are essential for search engine rankings.</p><h2>URL Structure</h2><p>Clean, descriptive URLs help both users and search engines understand your content. JA-Edu automatically generates SEO-friendly slugs from your titles.</p><h2>Performance</h2><p>Page speed is a ranking factor. JA-Edu is optimized for performance with lazy loading, code splitting, and efficient caching.</p>',
+                'excerpt' => 'Discover how to optimize your content for search engines using JA-Platform built-in SEO tools.',
+                'body' => '<p>Search engine optimization is crucial for getting your content discovered. JA-Platform comes with powerful SEO tools built right in.</p><h2>Meta Tags</h2><p>Every page and post in JA-Platform can have custom meta titles, descriptions, and keywords. These are essential for search engine rankings.</p><h2>URL Structure</h2><p>Clean, descriptive URLs help both users and search engines understand your content. JA-Platform automatically generates SEO-friendly slugs from your titles.</p><h2>Performance</h2><p>Page speed is a ranking factor. JA-Platform is optimized for performance with lazy loading, code splitting, and efficient caching.</p>',
                 'category' => 'technology',
                 'is_featured' => true,
             ],
             [
                 'title' => 'Designing Beautiful Themes',
                 'slug' => 'design-guide',
-                'excerpt' => 'A comprehensive guide to creating custom themes in JA-Edu.',
-                'body' => '<p>Customizing your site appearance is easy in JA-Edu.</p><h2>Global Styles</h2><p>Set your brand colors, typography, and spacing once and apply them everywhere. Changes propagate throughout your entire site.</p>',
+                'excerpt' => 'A comprehensive guide to creating custom themes in JA-Platform.',
+                'body' => '<p>Customizing your site appearance is easy in JA-Platform.</p><h2>Global Styles</h2><p>Set your brand colors, typography, and spacing once and apply them everywhere. Changes propagate throughout your entire site.</p>',
                 'category' => 'design',
                 'is_featured' => false,
             ],
             [
                 'title' => 'Building Multi-language Websites',
                 'slug' => 'multilanguage-websites',
-                'excerpt' => 'Learn how to create websites that support multiple languages with JA-Edu i18n features.',
-                'body' => '<p>JA-Edu has built-in support for internationalization (i18n), making it easy to create multi-language websites.</p><h2>Language Switcher</h2><p>Add a language switcher to your site header to allow visitors to choose their preferred language.</p><h2>Translation Management</h2><p>All interface text can be translated through JSON language files. Add new languages easily by creating new translation files.</p><h2>RTL Support</h2><p>JA-Edu themes support right-to-left languages like Arabic and Hebrew with automatic layout mirroring.</p>',
+                'excerpt' => 'Learn how to create websites that support multiple languages with JA-Platform i18n features.',
+                'body' => '<p>JA-Platform has built-in support for internationalization (i18n), making it easy to create multi-language websites.</p><h2>Language Switcher</h2><p>Add a language switcher to your site header to allow visitors to choose their preferred language.</p><h2>Translation Management</h2><p>All interface text can be translated through JSON language files. Add new languages easily by creating new translation files.</p><h2>RTL Support</h2><p>JA-Platform themes support right-to-left languages like Arabic and Hebrew with automatic layout mirroring.</p>',
                 'category' => 'tutorial',
                 'is_featured' => false,
             ],
             [
-                'title' => 'Scaling Your Business with JA-Edu',
+                'title' => 'Scaling Your Business with JA-Platform',
                 'slug' => 'scaling-business-cms',
-                'excerpt' => 'How JA-Edu can help you scale your online business with powerful content management.',
-                'body' => '<p>As your business grows, you need a CMS that can grow with you. JA-Edu is built for scale.</p><h2>Performance at Scale</h2><p>With Redis caching, queue workers, and optimized database queries, JA-Edu handles high traffic with ease.</p><h2>User Management</h2><p>Create teams with different roles and permissions. Control who can publish, edit, or manage content.</p><h2>API-First</h2><p>JA-Edu provides a comprehensive REST API, allowing you to integrate with external services and build headless applications.</p>',
+                'excerpt' => 'How JA-Platform can help you scale your online business with powerful content management.',
+                'body' => '<p>As your business grows, you need a CMS that can grow with you. JA-Platform is built for scale.</p><h2>Performance at Scale</h2><p>With Redis caching, queue workers, and optimized database queries, JA-Platform handles high traffic with ease.</p><h2>User Management</h2><p>Create teams with different roles and permissions. Control who can publish, edit, or manage content.</p><h2>API-First</h2><p>JA-Platform provides a comprehensive REST API, allowing you to integrate with external services and build headless applications.</p>',
                 'category' => 'business',
                 'is_featured' => false,
             ],

@@ -149,7 +149,19 @@ class ThemeController extends BaseApiController
                 return $this->success(null, 'No active theme found');
             }
 
+            $etagSource = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $etag = '"'.sha1(is_string($etagSource) ? $etagSource : '').'"';
+            $ifNoneMatch = $request->headers->get('If-None-Match');
+            if (is_string($ifNoneMatch) && trim($ifNoneMatch) === $etag) {
+                return response()->json(null, 304, [
+                    'ETag' => $etag,
+                    'Vary' => 'Accept-Encoding',
+                ]);
+            }
+
             $response = $this->success($payload, 'Active theme retrieved successfully');
+            $response->headers->set('ETag', $etag);
+            $response->headers->set('Vary', 'Accept-Encoding');
 
             $maxAgeRaw = config('cms.public_active_theme_http_cache_max_age', 0);
             $maxAge = is_int($maxAgeRaw) ? $maxAgeRaw : (is_numeric($maxAgeRaw) ? (int) $maxAgeRaw : 0);

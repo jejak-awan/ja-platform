@@ -29,7 +29,7 @@ class WebhookFactory extends Factory
             'method' => 'POST',
             'headers' => [
                 'Content-Type' => 'application/json',
-                'User-Agent' => 'JA-Edu-Webhook/1.0',
+                'User-Agent' => 'JA-Platform-Webhook/1.0',
             ],
             'payload_template' => [
                 'event' => '{{event}}',

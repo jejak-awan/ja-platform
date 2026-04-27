@@ -3,6 +3,7 @@ import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosE
 import { SystemMonitor } from './SystemMonitor';
 import { type ZodSchema } from 'zod';
 import { SECURITY_ROUTES, isProtectedDashboardPath } from '@/config/security';
+import { useSystemError } from '@/composables/useSystemError';
 // router import removed to break circular dependency
 
 
@@ -40,12 +41,38 @@ let abortController = new AbortController();
 export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     _skipManualRedirect?: boolean;
     _schema?: ZodSchema;
+    _perfStartedAt?: number;
 }
 
 export interface ApiRequestConfig extends AxiosRequestConfig {
     _skipManualRedirect?: boolean;
     _schema?: ZodSchema;
 }
+
+interface ApiPerfEntry {
+    url: string;
+    method: string;
+    status: number;
+    durationMs: number;
+    at: number;
+}
+
+const apiPerfBuffer: ApiPerfEntry[] = [];
+const MAX_API_PERF_BUFFER = 250;
+
+const pushApiPerfEntry = (entry: ApiPerfEntry): void => {
+    apiPerfBuffer.push(entry);
+    if (apiPerfBuffer.length > MAX_API_PERF_BUFFER) {
+        apiPerfBuffer.splice(0, apiPerfBuffer.length - MAX_API_PERF_BUFFER);
+    }
+};
+
+export const consumeApiPerfEntries = (): ApiPerfEntry[] => {
+    if (apiPerfBuffer.length === 0) return [];
+    const out = [...apiPerfBuffer];
+    apiPerfBuffer.length = 0;
+    return out;
+};
 
 const api: AxiosInstance = axios.create({
     baseURL: '/api/v1',
@@ -87,6 +114,7 @@ export const getCsrfCookie = async (): Promise<void> => {
 // Request Interceptor
 api.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
+        (config as CustomAxiosRequestConfig)._perfStartedAt = performance.now();
         // BREAK CIRCUIT: If system is down, block all non-critical requests
         if (SystemMonitor.isRequestBlocked && !config.url?.includes('system/health')) {
             logger.debug('Request blocked by Circuit Breaker:', { url: config.url });
@@ -136,6 +164,14 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response: AxiosResponse) => {
         const config = response.config as CustomAxiosRequestConfig;
+        const startedAt = typeof config._perfStartedAt === 'number' ? config._perfStartedAt : performance.now();
+        pushApiPerfEntry({
+            url: config.url || 'unknown',
+            method: String(config.method || 'get').toUpperCase(),
+            status: response.status,
+            durationMs: Math.max(0, performance.now() - startedAt),
+            at: Date.now(),
+        });
         const responseData = response.data;
 
         // 1. Zod Schema Runtime Validation (Combat "False Security")
@@ -178,6 +214,17 @@ api.interceptors.response.use(
         return response;
     },
     async (error: AxiosError<{ message?: string; retry_after?: number }> & { config: CustomAxiosRequestConfig }) => {
+        const errorConfig = error.config as CustomAxiosRequestConfig | undefined;
+        if (errorConfig) {
+            const startedAt = typeof errorConfig._perfStartedAt === 'number' ? errorConfig._perfStartedAt : performance.now();
+            pushApiPerfEntry({
+                url: errorConfig.url || 'unknown',
+                method: String(errorConfig.method || 'get').toUpperCase(),
+                status: error.response?.status ?? 0,
+                durationMs: Math.max(0, performance.now() - startedAt),
+                at: Date.now(),
+            });
+        }
         const originalRequest = error.config;
 
         // Skip global redirect if requested by the caller
@@ -340,8 +387,8 @@ api.interceptors.response.use(
             }
         }
 
-        // 1. Session Expiry / CORS / Forbidden
-        if (error.response?.status && [401, 419, 403].includes(error.response.status)) {
+        // 1. Session Expiry / CORS
+        if (error.response?.status && [401, 419].includes(error.response.status)) {
             if (isHandlingCriticalError) return Promise.reject(error);
             isHandlingCriticalError = true;
 
@@ -363,15 +410,13 @@ api.interceptors.response.use(
             if (isHandlingCriticalError) return Promise.reject(error);
             isHandlingCriticalError = true;
 
-            import('@/composables/useSystemError').then(({ useSystemError }) => {
-                const { showError } = useSystemError();
-                showError({
-                    code: 500,
-                    title: 'System Error',
-                    message: 'Internal server error occurred.',
-                    description: 'We have been notified and are looking into it.',
-                    reason: error.response?.data?.message || 'Unknown Server Error'
-                });
+            const { showError } = useSystemError();
+            showError({
+                code: 500,
+                title: 'System Error',
+                message: 'Internal server error occurred.',
+                description: 'We have been notified and are looking into it.',
+                reason: error.response?.data?.message || 'Unknown Server Error'
             });
         }
 

@@ -21,6 +21,18 @@
 
 - **[`/backend`](./backend)**: API Service berbasis Laravel 12.
 - **[`/frontend`](./frontend)**: Client application berbasis Vue 3 & Vite 7.
+- **[`/scripts`](./scripts)**: Script lintas-aplikasi (orchestration root monorepo).
+
+### Konvensi Folder Script
+
+- **`/scripts` (root)**: script yang menyentuh lebih dari satu app (contoh sinkronisasi `frontend/dist` ke `backend/public`).
+- **`/frontend/scripts`**: script khusus frontend (build tooling, perf budget, dll).
+- **`/backend/scripts`**: script khusus backend (testing helper, PHP tooling, dll).
+
+Contoh saat ini:
+- `scripts/sync-frontend-assets-to-backend.sh` -> lintas frontend + backend (tepat di root).
+- `frontend/scripts/check-perf-budget.mjs` -> khusus frontend.
+- `backend/scripts/test-with-pcov.sh` -> khusus backend.
 
 ## 🛠️ Developer Experience (DX)
 

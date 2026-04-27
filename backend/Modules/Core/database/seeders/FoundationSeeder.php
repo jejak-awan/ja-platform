@@ -163,7 +163,7 @@ class FoundationSeeder extends Seeder
     {
         $settings = [
             // General
-            ['key' => 'site_name', 'value' => 'JA-Edu Pro', 'group' => 'general', 'type' => 'string'],
+            ['key' => 'site_name', 'value' => 'JA-Platform Pro', 'group' => 'general', 'type' => 'string'],
             ['key' => 'site_description', 'value' => 'Modern SaaS Content Management System', 'group' => 'general', 'type' => 'text'],
             ['key' => 'site_url', 'value' => 'https://jejakawan.com', 'group' => 'general', 'type' => 'string'],
             ['key' => 'admin_email', 'value' => 'admin@jejakawan.com', 'group' => 'general', 'type' => 'string'],

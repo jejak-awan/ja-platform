@@ -1,13 +1,54 @@
 import { logger } from '@/utils/logger';
 import type { RouteLocationNormalized } from 'vue-router';
-import api from '@/services/api';
+import api, { consumeApiPerfEntries } from '@/services/api';
 import { SECURITY_ROUTES } from '@/config/security';
+import axios from 'axios';
 
 let initialNavigationDone = false;
 let lastTrackedPath = '';
 let lastTrackedAt = 0;
+let analyticsBlockedUntil = 0;
+let routePerfStartedAt = performance.now();
+
+const reportRoutePerf = (to: RouteLocationNormalized, from: RouteLocationNormalized): void => {
+    const routeDurationMs = Math.max(0, performance.now() - routePerfStartedAt);
+    routePerfStartedAt = performance.now();
+
+    const entries = consumeApiPerfEntries();
+    if (entries.length === 0) {
+        logger.debug('[Perf] Route transition', {
+            from: from.path,
+            to: to.path,
+            routeDurationMs: Math.round(routeDurationMs),
+            apiCalls: 0,
+        });
+        return;
+    }
+
+    const sorted = [...entries].sort((a, b) => b.durationMs - a.durationMs);
+    const topSlow = sorted.slice(0, 5).map((e) => ({
+        url: e.url,
+        method: e.method,
+        status: e.status,
+        durationMs: Math.round(e.durationMs),
+    }));
+
+    logger.debug('[Perf] Route transition', {
+        from: from.path,
+        to: to.path,
+        routeDurationMs: Math.round(routeDurationMs),
+        apiCalls: entries.length,
+        slowestApi: topSlow,
+    });
+};
 
 export const trackRouteVisit = (to: RouteLocationNormalized, from: RouteLocationNormalized): void => {
+    reportRoutePerf(to, from);
+
+    if (Date.now() < analyticsBlockedUntil) {
+        return;
+    }
+
     if (!initialNavigationDone) {
         initialNavigationDone = true;
         return;
@@ -37,6 +78,11 @@ export const trackRouteVisit = (to: RouteLocationNormalized, from: RouteLocation
 
     const send = () => {
         api.post('/analytics/track-visit', payload).catch((err) => {
+            if (axios.isAxiosError(err) && err.response?.status === 403) {
+                // Avoid noisy retry loops while edge protection is blocking this endpoint.
+                analyticsBlockedUntil = Date.now() + 5 * 60 * 1000;
+                return;
+            }
             logger.debug('Analytics tracking failed:', err);
         });
     };

@@ -69,10 +69,6 @@ class LogController extends BaseApiController
 
     public function clear(Request $request): \Illuminate\Http\JsonResponse
     {
-        if (app()->environment('production')) {
-            return $this->error('Log clearing is locked in production environment.', 403, [], 'LOG_CLEAR_LOCKED');
-        }
-
         $reasonRaw = $request->input('reason');
         $reason = is_string($reasonRaw) ? trim($reasonRaw) : '';
         if ($reason === '' || mb_strlen($reason) < 8) {
@@ -102,8 +98,11 @@ class LogController extends BaseApiController
                 try {
                     $audit($filename);
                     File::put($logFile, '');
+                    $deletedEmptyFiles = $this->deleteEmptyLogFiles($logPath);
 
-                    return $this->success(null, 'Log file cleared successfully');
+                    return $this->success([
+                        'deleted_empty_files' => $deletedEmptyFiles,
+                    ], 'Log file cleared successfully');
                 } catch (\Exception $e) {
                     return $this->error('Failed to clear log file: '.$e->getMessage(), 500);
                 }
@@ -128,7 +127,11 @@ class LogController extends BaseApiController
                 }
             }
 
-            return $this->success(null, 'All log files cleared successfully');
+            $deletedEmptyFiles = $this->deleteEmptyLogFiles($logPath);
+
+            return $this->success([
+                'deleted_empty_files' => $deletedEmptyFiles,
+            ], 'All log files cleared successfully');
         }
 
         return $this->error('Log directory not found', 404);
@@ -147,5 +150,38 @@ class LogController extends BaseApiController
         }
 
         return $content;
+    }
+
+    /**
+     * Remove empty .log files to keep journal directory clean.
+     *
+     * @return int Number of deleted empty files
+     */
+    protected function deleteEmptyLogFiles(string $logPath): int
+    {
+        if (! File::isDirectory($logPath)) {
+            return 0;
+        }
+
+        $deletedCount = 0;
+        foreach (File::files($logPath) as $file) {
+            if ($file->getExtension() !== 'log') {
+                continue;
+            }
+
+            if ($file->getSize() !== 0) {
+                continue;
+            }
+
+            try {
+                File::delete($file->getPathname());
+                $deletedCount++;
+            } catch (\Exception $e) {
+                // Ignore deletion errors to avoid failing the main clear action.
+                continue;
+            }
+        }
+
+        return $deletedCount;
     }
 }

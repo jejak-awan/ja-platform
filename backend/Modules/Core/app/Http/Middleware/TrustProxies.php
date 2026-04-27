@@ -99,6 +99,7 @@ class TrustProxies
     protected function isCloudflareEdgeIp(string $ip): bool
     {
         $cloudflareCidrs = [
+            // IPv4 ranges
             '173.245.48.0/20',
             '103.21.244.0/22',
             '103.22.200.0/22',
@@ -114,6 +115,14 @@ class TrustProxies
             '104.24.0.0/14',
             '172.64.0.0/13',
             '131.0.72.0/22',
+            // IPv6 ranges
+            '2400:cb00::/32',
+            '2606:4700::/32',
+            '2803:f800::/32',
+            '2405:b500::/32',
+            '2405:8100::/32',
+            '2a06:98c0::/29',
+            '2c0f:f248::/32',
         ];
 
         foreach ($cloudflareCidrs as $cidr) {
@@ -188,16 +197,43 @@ class TrustProxies
 
     protected function ipInCidr(string $ip, string $cidr): bool
     {
-        [$subnet, $bits] = explode('/', $cidr);
-        $ipLong = ip2long($ip);
-        $subnetLong = ip2long($subnet);
-        if ($ipLong === false || $subnetLong === false) {
+        if (! str_contains($cidr, '/')) {
             return false;
         }
 
-        $mask = -1 << (32 - (int) $bits);
-        $subnetLong &= $mask;
+        [$subnet, $bitsRaw] = explode('/', $cidr, 2);
+        if (! is_numeric($bitsRaw)) {
+            return false;
+        }
 
-        return ($ipLong & $mask) === $subnetLong;
+        $ipBinary = @inet_pton($ip);
+        $subnetBinary = @inet_pton($subnet);
+        if ($ipBinary === false || $subnetBinary === false) {
+            return false;
+        }
+        if (strlen($ipBinary) !== strlen($subnetBinary)) {
+            return false;
+        }
+
+        $maxBits = strlen($ipBinary) * 8;
+        $bits = (int) $bitsRaw;
+        if ($bits < 0 || $bits > $maxBits) {
+            return false;
+        }
+
+        $fullBytes = intdiv($bits, 8);
+        $remainingBits = $bits % 8;
+
+        if ($fullBytes > 0 && substr($ipBinary, 0, $fullBytes) !== substr($subnetBinary, 0, $fullBytes)) {
+            return false;
+        }
+
+        if ($remainingBits === 0) {
+            return true;
+        }
+
+        $mask = (~(0xff >> $remainingBits)) & 0xff;
+
+        return (ord($ipBinary[$fullBytes]) & $mask) === (ord($subnetBinary[$fullBytes]) & $mask);
     }
 }

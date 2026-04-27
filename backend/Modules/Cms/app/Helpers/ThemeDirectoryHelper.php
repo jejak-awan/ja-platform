@@ -99,7 +99,7 @@ JS;
             $readme = <<<README
 # {$themeName}
 
-A Vue-based theme for JA-Edu.
+A Vue-based theme for JA-Platform.
 
 ## Installation
 

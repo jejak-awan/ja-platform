@@ -84,6 +84,9 @@ const verified = ref(false)
 const error = ref('')
 const startX = ref(0)
 const trackWidth = ref(0)
+const generatedAt = ref(0)
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const generateCaptcha = async () => {
     try {
@@ -94,6 +97,7 @@ const generateCaptcha = async () => {
         progress.value = 0
         verified.value = false
         error.value = ''
+        generatedAt.value = Date.now()
     } catch (e) {
         logger.error('Failed to generate captcha:', e)
         error.value = 'Failed to load captcha'
@@ -104,9 +108,9 @@ const startDrag = (e: MouseEvent | TouchEvent) => {
     if (verified.value) return
     
     dragging.value = true
+    trackWidth.value = trackRef.value?.offsetWidth || 300
     const clientX = e instanceof MouseEvent ? e.clientX : (e.touches[0]?.clientX || 0)
     startX.value = clientX - (progress.value / 100) * trackWidth.value
-    trackWidth.value = trackRef.value?.offsetWidth || 300
     
     document.addEventListener('mousemove', onDrag)
     document.addEventListener('mouseup', endDrag)
@@ -144,6 +148,12 @@ const endDrag = async (_e?: MouseEvent | TouchEvent) => {
     
     // Server-side verification
     try {
+        // Backend enforces minimum solve timing (~800ms). Wait briefly if user solved too fast.
+        const elapsed = Date.now() - generatedAt.value
+        if (elapsed < 850) {
+            await sleep(850 - elapsed)
+        }
+
         await api.post('/captcha/verify', {
             token: token.value,
             answer: String(Math.round(progress.value))

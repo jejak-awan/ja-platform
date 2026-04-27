@@ -47,6 +47,17 @@
         value="statistics"
         class="px-6 space-y-6"
       >
+        <Card
+          v-if="stats.total_keys === 0 && (stats.hits > 0 || stats.misses > 0 || stats.total_commands > 0)"
+          class="border-blue-500/30 bg-blue-500/5"
+        >
+          <CardContent class="pt-4 pb-4">
+            <p class="text-sm text-blue-700 dark:text-blue-300">
+              Cache keys saat ini sudah kosong. Angka Hit/Miss dan Total Commands di tab statistik adalah metrik kumulatif Redis (sejak service start), sehingga tidak ikut reset saat clear cache.
+            </p>
+          </CardContent>
+        </Card>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card class="border-none bg-muted/20 shadow-none">
             <CardContent class="pt-6">
@@ -187,6 +198,9 @@
                   <p class="text-2xl font-bold">
                     {{ formatNumber(stats.total_commands) || 0 }}
                   </p>
+                  <p class="text-xs text-muted-foreground mt-1">
+                    cumulative
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -199,21 +213,57 @@
               <Activity class="w-5 h-5 text-primary" />
               {{ $t('features.redis.statistics.hitMiss.title') }}
             </CardTitle>
+            <p class="text-xs text-muted-foreground">
+              Server Lifetime Metrics
+            </p>
           </CardHeader>
           <CardContent class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div class="flex justify-between items-center p-4 bg-muted/30 rounded-lg border border-border/50 shadow-sm">
                 <span class="font-medium text-foreground">{{ $t('features.redis.statistics.hitMiss.hits') }}</span>
-                <span class="text-xl font-bold text-emerald-600">{{ formatNumber(stats.hits) || 0 }}</span>
+                <div class="text-right">
+                  <span class="text-xl font-bold text-emerald-600">{{ formatNumber(stats.hits) || 0 }}</span>
+                  <p class="text-[11px] text-muted-foreground">
+                    cumulative
+                  </p>
+                </div>
               </div>
               <div class="flex justify-between items-center p-4 bg-muted/30 rounded-lg border border-border/50 shadow-sm">
                 <span class="font-medium text-foreground">{{ $t('features.redis.statistics.hitMiss.misses') }}</span>
-                <span class="text-xl font-bold text-destructive">{{ formatNumber(stats.misses) || 0 }}</span>
+                <div class="text-right">
+                  <span class="text-xl font-bold text-destructive">{{ formatNumber(stats.misses) || 0 }}</span>
+                  <p class="text-[11px] text-muted-foreground">
+                    cumulative
+                  </p>
+                </div>
               </div>
               <div class="flex justify-between items-center p-4 bg-muted/30 rounded-lg border border-border/50 shadow-sm">
                 <span class="font-medium text-foreground">{{ $t('features.redis.statistics.hitMiss.hitRate') }}</span>
                 <span class="text-xl font-bold text-blue-600">{{ stats.hit_rate || '0%' }}</span>
               </div>
+            </div>
+
+            <div class="mt-6">
+              <h4 class="text-sm font-semibold text-foreground mb-3">
+                Since Last Clear (Local Snapshot)
+              </h4>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flex justify-between items-center p-4 bg-muted/30 rounded-lg border border-border/50 shadow-sm">
+                  <span class="font-medium text-foreground">Hits</span>
+                  <span class="text-xl font-bold text-emerald-600">{{ formatNumber(statsSinceLastClear.hits) }}</span>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-muted/30 rounded-lg border border-border/50 shadow-sm">
+                  <span class="font-medium text-foreground">Misses</span>
+                  <span class="text-xl font-bold text-destructive">{{ formatNumber(statsSinceLastClear.misses) }}</span>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-muted/30 rounded-lg border border-border/50 shadow-sm">
+                  <span class="font-medium text-foreground">Hit Rate</span>
+                  <span class="text-xl font-bold text-blue-600">{{ statsSinceLastClear.hitRate }}</span>
+                </div>
+              </div>
+              <p class="text-xs text-muted-foreground mt-2">
+                Snapshot diperbarui otomatis setelah aksi clear cache dari halaman ini.
+              </p>
             </div>
           </CardContent>
           <div class="px-6 py-4 border-t border-border/50 flex items-center justify-between">
@@ -734,6 +784,13 @@ interface RedisStat {
   misses: number;
 }
 
+interface RedisStatsSnapshot {
+  hits: number;
+  misses: number;
+  total_commands: number;
+  captured_at: string;
+}
+
 interface CacheKey {
   key: string;
   size: string;
@@ -853,6 +910,8 @@ const EMPTY_STATS: RedisStat = {
   misses: 0,
 }
 
+const REDIS_STATS_SNAPSHOT_KEY = 'redis:stats:snapshot:v1'
+
 const EMPTY_CACHE_STATS: CacheStats = {
   total_keys: 0,
   cache_size: '-',
@@ -861,6 +920,7 @@ const EMPTY_CACHE_STATS: CacheStats = {
 }
 
 const stats = ref<RedisStat>({ ...EMPTY_STATS })
+const statsSnapshot = ref<RedisStatsSnapshot | null>(null)
 const loadingStats = ref(false)
 const statsInterval = ref<ReturnType<typeof setInterval> | null>(null)
 
@@ -990,6 +1050,66 @@ const loadStats = async () : Promise<void> => {
   }
 }
 
+const readStatsSnapshot = (): RedisStatsSnapshot | null => {
+  const raw = localStorage.getItem(REDIS_STATS_SNAPSHOT_KEY)
+  if (!raw) return null
+
+  try {
+    const parsed = JSON.parse(raw) as Partial<RedisStatsSnapshot>
+    if (typeof parsed.hits !== 'number' || typeof parsed.misses !== 'number' || typeof parsed.total_commands !== 'number') {
+      return null
+    }
+
+    return {
+      hits: parsed.hits,
+      misses: parsed.misses,
+      total_commands: parsed.total_commands,
+      captured_at: typeof parsed.captured_at === 'string' ? parsed.captured_at : new Date().toISOString(),
+    }
+  } catch {
+    return null
+  }
+}
+
+const persistStatsSnapshot = (snapshot: RedisStatsSnapshot): void => {
+  statsSnapshot.value = snapshot
+  localStorage.setItem(REDIS_STATS_SNAPSHOT_KEY, JSON.stringify(snapshot))
+}
+
+const captureStatsSnapshot = (): void => {
+  persistStatsSnapshot({
+    hits: stats.value.hits || 0,
+    misses: stats.value.misses || 0,
+    total_commands: stats.value.total_commands || 0,
+    captured_at: new Date().toISOString(),
+  })
+}
+
+const statsSinceLastClear = computed(() => {
+  const snapshot = statsSnapshot.value
+  if (!snapshot) {
+    return {
+      hits: 0,
+      misses: 0,
+      totalCommands: 0,
+      hitRate: '0%',
+    }
+  }
+
+  const hits = Math.max((stats.value.hits || 0) - snapshot.hits, 0)
+  const misses = Math.max((stats.value.misses || 0) - snapshot.misses, 0)
+  const totalCommands = Math.max((stats.value.total_commands || 0) - snapshot.total_commands, 0)
+  const total = hits + misses
+  const hitRate = total > 0 ? `${Math.round((hits / total) * 10000) / 100}%` : '0%'
+
+  return {
+    hits,
+    misses,
+    totalCommands,
+    hitRate,
+  }
+})
+
 const loadCacheStats = async () : Promise<void> => {
   try {
     const response = await api.get('/admin/core/redis/cache-stats')
@@ -1074,7 +1194,8 @@ const flushCache = async (type: string) : Promise<void> => {
       return
     }
 
-    loadCacheStats()
+    await Promise.all([loadCacheStats(), loadStats()])
+    captureStatsSnapshot()
   } catch (error: unknown) {
     // If it's a 401, we know what happened
     if (axios.isAxiosError(error)) {
@@ -1167,6 +1288,7 @@ const formatNumber = (num?: number) => {
 
 // Lifecycle
 onMounted(() => {
+  statsSnapshot.value = readStatsSnapshot()
   loadSettings()
   loadStats()
   loadCacheStats()
