@@ -192,7 +192,7 @@ describe('CMS Store', () => {
 
     it('syncs theme with backend', async () => {
         const store = useCmsStore();
-        localStorage.setItem('auth_token', 'token');
+        localStorage.setItem('user', JSON.stringify({ id: 1, name: 'Test User' }));
         vi.mocked(api.put).mockResolvedValueOnce({});
 
         store.setThemeMode('light');
@@ -206,7 +206,7 @@ describe('CMS Store', () => {
 
     it('syncs theme with backend failure handled gracefully', async () => {
         const store = useCmsStore();
-        localStorage.setItem('auth_token', 'token');
+        localStorage.setItem('user', JSON.stringify({ id: 1, name: 'Test User' }));
         vi.mocked(api.put).mockRejectedValueOnce(new Error('network'));
 
         await store.syncThemeWithBackend('light');
@@ -214,7 +214,7 @@ describe('CMS Store', () => {
 
     it('loads theme preferences from backend', async () => {
         const store = useCmsStore();
-        localStorage.setItem('auth_token', 'token');
+        localStorage.setItem('user', JSON.stringify({ id: 1, name: 'Test User' }));
         vi.mocked(api.get).mockResolvedValueOnce({ data: { success: true, data: { dark_mode: 'dark' } } });
 
         store.themeMode = 'light';
@@ -224,7 +224,7 @@ describe('CMS Store', () => {
 
     it('loads theme preferences from backend failure handled', async () => {
         const store = useCmsStore();
-        localStorage.setItem('auth_token', 'token');
+        localStorage.setItem('user', JSON.stringify({ id: 1, name: 'Test User' }));
         vi.mocked(api.get).mockRejectedValueOnce(new Error('network'));
 
         store.themeMode = 'light';

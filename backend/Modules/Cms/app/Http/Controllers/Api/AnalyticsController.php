@@ -66,10 +66,26 @@ class AnalyticsController extends BaseApiController
         [$dateFrom, $dateTo] = $this->getDateRange($request);
         $groupByRaw = $request->input('group_by', 'day'); // day, week, month
         $groupBy = is_string($groupByRaw) ? $groupByRaw : 'day';
+        $driver = DB::getDriverName();
+
+        $periodSelect = match ($groupBy) {
+            'hour' => $driver === 'sqlite'
+                ? "strftime('%Y-%m-%d %H:00:00', visited_at) as period, count(*) as visits"
+                : "to_char(visited_at, 'YYYY-MM-DD HH24:00:00') as period, count(*) as visits",
+            'week' => $driver === 'sqlite'
+                ? "strftime('%Y-%W', visited_at) as period, count(*) as visits"
+                : "to_char(visited_at, 'IYYYIW') as period, count(*) as visits",
+            'month' => $driver === 'sqlite'
+                ? "strftime('%Y-%m', visited_at) as period, count(*) as visits"
+                : "to_char(visited_at, 'YYYY-MM') as period, count(*) as visits",
+            default => $driver === 'sqlite'
+                ? 'date(visited_at) as period, count(*) as visits'
+                : 'visited_at::date as period, count(*) as visits',
+        };
 
         $visits = AnalyticsVisit::whereBetween('visited_at', [$dateFrom, $dateTo])
-            ->selectRaw($this->getGroupByQuery($groupBy))
-            ->groupBy(DB::raw($this->getGroupByField($groupBy)))
+            ->selectRaw($periodSelect)
+            ->groupBy('period')
             ->orderBy('period')
             ->get();
 
@@ -530,88 +546,6 @@ class AnalyticsController extends BaseApiController
         }
 
         return (float) round(($bounceSessions / $totalSessions) * 100, 2);
-    }
-
-    /**
-     * Get group by query string.
-     */
-    protected function getGroupByQuery(string $groupBy): string
-    {
-        $driver = DB::getDriverName();
-
-        switch ($groupBy) {
-            case 'hour':
-                if ($driver === 'sqlite') {
-                    return "strftime('%Y-%m-%d %H:00:00', visited_at) as period, count(*) as visits";
-                }
-
-                return "to_char(visited_at, 'YYYY-MM-DD HH24:00:00') as period, count(*) as visits";
-            case 'day':
-                if ($driver === 'sqlite') {
-                    return 'date(visited_at) as period, count(*) as visits';
-                }
-
-                return 'visited_at::date as period, count(*) as visits';
-            case 'week':
-                if ($driver === 'sqlite') {
-                    return "strftime('%Y-%W', visited_at) as period, count(*) as visits";
-                }
-
-                return "to_char(visited_at, 'IYYYIW') as period, count(*) as visits";
-            case 'month':
-                if ($driver === 'sqlite') {
-                    return "strftime('%Y-%m', visited_at) as period, count(*) as visits";
-                }
-
-                return "to_char(visited_at, 'YYYY-MM') as period, count(*) as visits";
-            default:
-                if ($driver === 'sqlite') {
-                    return 'date(visited_at) as period, count(*) as visits';
-                }
-
-                return 'visited_at::date as period, count(*) as visits';
-        }
-    }
-
-    /**
-     * Get group by field for SQL group by.
-     */
-    protected function getGroupByField(string $groupBy): string
-    {
-        $driver = DB::getDriverName();
-
-        switch ($groupBy) {
-            case 'hour':
-                if ($driver === 'sqlite') {
-                    return "strftime('%Y-%m-%d %H:00:00', visited_at)";
-                }
-
-                return "to_char(visited_at, 'YYYY-MM-DD HH24:00:00')";
-            case 'day':
-                if ($driver === 'sqlite') {
-                    return 'date(visited_at)';
-                }
-
-                return 'visited_at::date';
-            case 'week':
-                if ($driver === 'sqlite') {
-                    return "strftime('%Y-%W', visited_at)";
-                }
-
-                return "to_char(visited_at, 'IYYYIW')";
-            case 'month':
-                if ($driver === 'sqlite') {
-                    return "strftime('%Y-%m', visited_at)";
-                }
-
-                return "to_char(visited_at, 'YYYY-MM')";
-            default:
-                if ($driver === 'sqlite') {
-                    return 'date(visited_at)';
-                }
-
-                return 'visited_at::date';
-        }
     }
 
     /**

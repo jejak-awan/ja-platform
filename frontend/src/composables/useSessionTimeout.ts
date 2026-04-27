@@ -250,7 +250,6 @@ export function useSessionTimeout() {
         hideWarning();
 
         // Logout user locally
-        localStorage.removeItem('auth_token');
         localStorage.removeItem('user');
         authStore.isAuthenticated = false;
 

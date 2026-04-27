@@ -123,6 +123,30 @@
               size="sm"
               variant="ghost"
               class="h-8 w-8 p-0 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg"
+              title="Zoom Out"
+              @click="zoom(-0.1)"
+            >
+              <ZoomOut
+                class="w-4 h-4"
+                stroke-width="1.5"
+              />
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              class="h-8 w-8 p-0 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg"
+              title="Zoom In"
+              @click="zoom(0.1)"
+            >
+              <ZoomIn
+                class="w-4 h-4"
+                stroke-width="1.5"
+              />
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              class="h-8 w-8 p-0 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg"
               title="Rotate"
               @click="rotate(90)"
             >
@@ -167,6 +191,14 @@
               @click="cancelCrop"
             >
               Cancel
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              class="text-muted-foreground hover:text-foreground"
+              @click="resetCropView"
+            >
+              Reset
             </Button>
             <Button
               size="sm"
@@ -374,6 +406,8 @@ import Scaling from 'lucide-vue-next/dist/esm/icons/scaling.js';
 import RotateCw from 'lucide-vue-next/dist/esm/icons/rotate-cw.js';
 import FlipHorizontal from 'lucide-vue-next/dist/esm/icons/flip-horizontal.js';
 import FlipVertical from 'lucide-vue-next/dist/esm/icons/flip-vertical.js';
+import ZoomIn from 'lucide-vue-next/dist/esm/icons/zoom-in.js';
+import ZoomOut from 'lucide-vue-next/dist/esm/icons/zoom-out.js';
 import Lock from 'lucide-vue-next/dist/esm/icons/lock.js';
 import Unlock from 'lucide-vue-next/dist/esm/icons/lock-open.js';
 import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
@@ -440,6 +474,8 @@ const modes = [
 const cropper = shallowRef<Cropper | null>(null);
 const cropperReady = ref(false);
 const currentAspectRatio = ref(NaN);
+const scaleX = ref(1);
+const scaleY = ref(1);
 const cropPresets = [
     { label: 'Free', value: NaN },
     { label: '1:1', value: 1 },
@@ -546,25 +582,17 @@ const initCropper = () => {
     cropperReady.value = false;
     
     const cropperInstance = new Cropper(imageElement.value, {
-        aspectRatio: currentAspectRatio.value,
-        viewMode: 1, 
-        dragMode: 'move', 
-        autoCropArea: 0.8,
-        responsive: true,
-        restore: false,
-        guides: true,
-        center: true,
-        highlight: false,
-        background: false,
-        cropBoxMovable: true,
-        cropBoxResizable: true,
-        toggleDragModeOnDblclick: false,
-        ready() {
-            cropperReady.value = true;
-        }
+        container: imageElement.value.parentElement ?? undefined,
     });
     
     cropper.value = markRaw(cropperInstance);
+    const selection = cropperInstance.getCropperSelection();
+    if (selection) {
+        selection.aspectRatio = currentAspectRatio.value;
+        selection.initialCoverage = 0.8;
+        selection.$center().$render();
+        cropperReady.value = true;
+    }
 };
 
 const destroyCropper = () => {
@@ -573,46 +601,74 @@ const destroyCropper = () => {
         cropper.value = null;
     }
     cropperReady.value = false;
+    scaleX.value = 1;
+    scaleY.value = 1;
 };
 
 const setAspectRatio = (ratio: number) => {
     currentAspectRatio.value = ratio;
     if (cropper.value && cropperReady.value) {
-        cropper.value.setAspectRatio(ratio);
-        if (!isNaN(ratio)) {
-             cropper.value.setData(cropper.value.getData()); 
-        }
+        const selection = cropper.value.getCropperSelection();
+        if (!selection) return;
+        selection.aspectRatio = ratio;
+        selection.$center().$render();
     }
 };
 
 const rotate = (deg: number) => {
-    if (cropper.value && cropperReady.value) cropper.value.rotate(deg);
+    if (!cropper.value || !cropperReady.value) return;
+    const cropperImage = cropper.value.getCropperImage();
+    if (!cropperImage) return;
+    cropperImage.$rotate(`${deg}deg`);
+};
+
+const zoom = (delta: number) => {
+    if (!cropper.value || !cropperReady.value) return;
+    const cropperImage = cropper.value.getCropperImage();
+    if (!cropperImage) return;
+    cropperImage.$zoom(delta);
 };
 
 const flip = (dir: 'horizontal' | 'vertical') => {
     if (!cropper.value || !cropperReady.value) return;
-    
-    const data = cropper.value.getData();
-    if (dir === 'horizontal') cropper.value.scaleX(data.scaleX === -1 ? 1 : -1);
-    if (dir === 'vertical') cropper.value.scaleY(data.scaleY === -1 ? 1 : -1);
+    const cropperImage = cropper.value.getCropperImage();
+    if (!cropperImage) return;
+
+    if (dir === 'horizontal') scaleX.value = scaleX.value === -1 ? 1 : -1;
+    if (dir === 'vertical') scaleY.value = scaleY.value === -1 ? 1 : -1;
+    cropperImage.$scale(scaleX.value, scaleY.value);
 };
 
-const applyCrop = () => {
+const resetCropView = () => {
     if (!cropper.value || !cropperReady.value) return;
-    
-    const canvas = cropper.value.getCroppedCanvas();
-    
-    if (canvas) {
-        currentImageSrc.value = canvas.toDataURL(props.media.mime_type || 'image/png');
-        
-        resizeConfig.value.width = canvas.width;
-        resizeConfig.value.height = canvas.height;
-        resizeConfig.value.originalRatio = canvas.width / canvas.height;
-        
-        setMode('view'); 
-    } else {
+    const cropperImage = cropper.value.getCropperImage();
+    const selection = cropper.value.getCropperSelection();
+    if (!cropperImage || !selection) return;
+
+    scaleX.value = 1;
+    scaleY.value = 1;
+    cropperImage.$resetTransform();
+    cropperImage.$scale(scaleX.value, scaleY.value);
+    selection.$reset().$center().$render();
+};
+
+const applyCrop = async (): Promise<void> => {
+    if (!cropper.value || !cropperReady.value) return;
+
+    const selection = cropper.value.getCropperSelection();
+    if (!selection) {
         logger.error("Failed to get cropped canvas");
+        return;
     }
+
+    const canvas = await selection.$toCanvas();
+    currentImageSrc.value = canvas.toDataURL(props.media.mime_type || 'image/png');
+
+    resizeConfig.value.width = canvas.width;
+    resizeConfig.value.height = canvas.height;
+    resizeConfig.value.originalRatio = canvas.width / canvas.height;
+
+    await setMode('view');
 };
 
 const cancelCrop = () => {
@@ -736,7 +792,7 @@ const saveImage = async () => {
     saving.value = true;
     try {
         if (activeMode.value === 'adjust' && isFilterDirty()) await applyFilters();
-        if (activeMode.value === 'crop') applyCrop();
+        if (activeMode.value === 'crop') await applyCrop();
 
         // Get blob securely (whether it's base64 or url)
         const blob = await getSecureBlob();
