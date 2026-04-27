@@ -2,11 +2,11 @@
 
 namespace Modules\Core\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\Core\Models\Notification;
-use Modules\Core\Support\SqlDateExpression;
 
 class NotificationController extends BaseApiController
 {
@@ -130,11 +130,9 @@ class NotificationController extends BaseApiController
         $limitRaw = $request->input('limit', 20);
         $limit = is_numeric($limitRaw) ? (int) $limitRaw : 20;
 
-        $minuteExpr = DB::raw(SqlDateExpression::minuteBucket('created_at'));
-
         // Group by title, message, type, and approximate created_at to find unique "broadcasts"
         $notifications = Notification::selectRaw('MIN(id) as id, title, message, type, MIN(created_at) as created_at, COUNT(*) as recipient_count')
-            ->groupBy('title', 'message', 'type', $minuteExpr)
+            ->groupBy('title', 'message', 'type')
             ->orderBy('created_at', 'desc')
             ->paginate($limit);
 
@@ -159,16 +157,15 @@ class NotificationController extends BaseApiController
             'created_at' => 'required|string',
         ]);
 
-        // Convert created_at to the same formatting used in groupBy for precise matching
-        // The input from frontend will be the full created_at string
         $createdAtRaw = $request->created_at;
         $createdAtStr = is_string($createdAtRaw) ? $createdAtRaw : '';
-        $createdAtTime = strtotime($createdAtStr);
-        $createdAt = date('Y-m-d H:i', $createdAtTime !== false ? $createdAtTime : time());
+        $createdAt = Carbon::parse($createdAtStr);
+        $startOfMinute = (clone $createdAt)->startOfMinute();
+        $endOfMinute = (clone $createdAt)->endOfMinute();
 
         $countRaw = Notification::where('title', $request->title)
             ->where('message', $request->message)
-            ->where(DB::raw(SqlDateExpression::minuteBucket('created_at')), $createdAt)
+            ->whereBetween('created_at', [$startOfMinute, $endOfMinute])
             ->delete();
 
         $count = is_numeric($countRaw) ? (int) $countRaw : 0;
@@ -206,8 +203,9 @@ class NotificationController extends BaseApiController
             }
             $createdAtRaw = $broadcast['created_at'] ?? '';
             $createdAtStr = is_string($createdAtRaw) ? $createdAtRaw : '';
-            $createdAtTime = strtotime($createdAtStr);
-            $createdAt = date('Y-m-d H:i', $createdAtTime !== false ? $createdAtTime : time());
+            $createdAt = Carbon::parse($createdAtStr);
+            $startOfMinute = (clone $createdAt)->startOfMinute();
+            $endOfMinute = (clone $createdAt)->endOfMinute();
 
             $titleRaw = $broadcast['title'] ?? '';
             $title = is_string($titleRaw) ? $titleRaw : '';
@@ -216,7 +214,7 @@ class NotificationController extends BaseApiController
 
             $countRaw = Notification::where('title', $title)
                 ->where('message', $message)
-                ->where(DB::raw(SqlDateExpression::minuteBucket('created_at')), $createdAt)
+                ->whereBetween('created_at', [$startOfMinute, $endOfMinute])
                 ->delete();
 
             $count = is_numeric($countRaw) ? (int) $countRaw : 0;

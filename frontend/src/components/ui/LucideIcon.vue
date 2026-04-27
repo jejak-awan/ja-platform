@@ -73,8 +73,8 @@ const ICON_ALIASES: Record<string, string> = {
     'Layout': 'LayoutDashboard'
 };
 
-// Load icon dynamically - using main entry point for reliability with manual chunks
-// Use a module-level promise to ensure we only import lucide-vue-next once
+import { nextTick } from 'vue';
+
 let lucideModulePromise: Promise<Record<string, unknown>> | null = null;
 const getLucideModule = () => {
   if (!lucideModulePromise) {
@@ -82,8 +82,6 @@ const getLucideModule = () => {
   }
   return lucideModulePromise;
 };
-
-import { nextTick } from 'vue';
 
 watch(() => props.name, async (name) => {
   if (!name) {
@@ -107,7 +105,6 @@ watch(() => props.name, async (name) => {
   }
   
   try {
-    // Import from shared promise - ensures only one import happens
     const module = await getLucideModule();
     const icon = module[pascalName];
     

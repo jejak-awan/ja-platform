@@ -31,6 +31,18 @@ export const useCmsStore = defineStore('cms', {
     }),
 
     actions: {
+        isAuthenticatedLocally(): boolean {
+            const userRaw = localStorage.getItem('user');
+            if (!userRaw) return false;
+
+            try {
+                const parsed = JSON.parse(userRaw);
+                return !!parsed && typeof parsed === 'object';
+            } catch {
+                return false;
+            }
+        },
+
         async fetchSettingsGroup(group: string) {
             // If already loading, return existing promise
             if (this.loadingGroups[group]) {
@@ -200,7 +212,7 @@ export const useCmsStore = defineStore('cms', {
         },
 
         async loadThemePreferences() {
-            if (!localStorage.getItem('auth_token')) return;
+            if (!this.isAuthenticatedLocally()) return;
             try {
                 const response = await api.get('/profile/preferences');
                 const backendMode = response.data?.dark_mode;
@@ -217,7 +229,7 @@ export const useCmsStore = defineStore('cms', {
         },
 
         async syncThemeWithBackend(mode: string) {
-            if (!localStorage.getItem('auth_token')) return;
+            if (!this.isAuthenticatedLocally()) return;
             try {
                 await api.put('/profile/preferences', { dark_mode: mode });
             } catch (error: unknown) {

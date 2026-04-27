@@ -19,6 +19,18 @@ const languages = ref<Language[]>([]);
 const loading = ref(false);
 const initialized = ref(false);
 
+const hasPersistedUser = (): boolean => {
+    const userRaw = localStorage.getItem('user');
+    if (!userRaw) return false;
+
+    try {
+        const parsed = JSON.parse(userRaw);
+        return !!parsed && typeof parsed === 'object';
+    } catch {
+        return false;
+    }
+};
+
 // RTL language codes
 const RTL_LANGUAGES = ['ar', 'he', 'fa', 'ur', 'yi'];
 
@@ -63,7 +75,7 @@ export function useLanguage() {
 
     // Check if user is authenticated
     const isAuthenticated = () => {
-        return !!localStorage.getItem('auth_token');
+        return hasPersistedUser();
     };
 
     /**

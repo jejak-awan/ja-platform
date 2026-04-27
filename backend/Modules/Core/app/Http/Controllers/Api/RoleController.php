@@ -35,9 +35,9 @@ class RoleController extends BaseApiController
 
         $userCounts = \DB::table($tableName)
             ->whereIn($columnName, $roleIds)
-            ->selectRaw($columnName.' as role_id, count(*) as total')
-            ->groupBy('role_id')
-            ->pluck('total', 'role_id');
+            ->select([$columnName, \DB::raw('count(*) as total')])
+            ->groupBy($columnName)
+            ->pluck('total', $columnName);
 
         $roles->getCollection()->transform(function (mixed $role) use ($userCounts) {
             /** @var Role $role */

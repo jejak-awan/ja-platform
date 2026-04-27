@@ -53,7 +53,8 @@
 
 <script setup lang="ts">
 import { useSecurityStore } from '@/modules/Core/stores/security';
-import { Shield, ShieldCheck } from 'lucide-vue-next';
+import Shield from 'lucide-vue-next/dist/esm/icons/shield.js';
+import ShieldCheck from 'lucide-vue-next/dist/esm/icons/shield-check.js';
 
 const securityStore = useSecurityStore();
 </script>

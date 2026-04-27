@@ -35,6 +35,14 @@ export default defineConfig({
     }
   },
   build: {
+    // Use esbuild CSS minifier to keep Tailwind v4 directives in scoped blocks
+    // from being reported as unknown by lightningcss during production builds.
+    cssMinify: 'esbuild',
+    rolldownOptions: {
+      checks: {
+        pluginTimings: false,
+      },
+    },
     rollupOptions: {
       output: {
         chunkFileNames: 'assets/[hash].js',
@@ -120,9 +128,9 @@ export default defineConfig({
         },
       },
     },
-    // Keep warnings meaningful: current largest vendor chunk (highlight stack)
-    // is ~1.02MB after minification.
-    chunkSizeWarningLimit: 1100,
+    // Current largest generated chunk is around ~1.65MB; keep warning threshold
+    // above that so build output only flags newly larger regressions.
+    chunkSizeWarningLimit: 1800,
     sourcemap: false,
   },
   server: {

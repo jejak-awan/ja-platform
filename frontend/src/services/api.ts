@@ -11,6 +11,18 @@ import { SECURITY_ROUTES, isProtectedDashboardPath } from '@/config/security';
 let isRedirectingToLogin = false;
 let isHandlingCriticalError = false;
 
+const hasPersistedUser = (): boolean => {
+    const userRaw = localStorage.getItem('user');
+    if (!userRaw) return false;
+
+    try {
+        const parsed = JSON.parse(userRaw);
+        return !!parsed && typeof parsed === 'object';
+    } catch {
+        return false;
+    }
+};
+
 declare global {
     interface Window {
         __isSessionTerminated?: boolean;
@@ -206,7 +218,6 @@ api.interceptors.response.use(
             if (!currentPath.includes('/419') && !currentPath.includes(SECURITY_ROUTES.login) && !currentPath.includes('/login')) {
                 // FORCE CLEAR: Wipe all auth-related storage to break the loop
                 localStorage.removeItem('user');
-                localStorage.removeItem('auth_token');
                 localStorage.removeItem('permissions');
                 localStorage.removeItem('roles');
                 
@@ -219,7 +230,7 @@ api.interceptors.response.use(
 
                 isRedirectingToLogin = true;
 
-                const hasSessionToken = !!localStorage.getItem('auth_token');
+                const hasSessionToken = hasPersistedUser();
                 const isProtectedProbePath = isProtectedDashboardPath(currentPath);
                 const target = (!hasSessionToken && isProtectedProbePath)
                     ? SECURITY_ROUTES.notFound
@@ -259,7 +270,6 @@ api.interceptors.response.use(
                 if (!currentPath.includes(SECURITY_ROUTES.login) && !currentPath.includes('/419')) {
                     // FORCE CLEAR: Wipe all auth-related storage to break the loop
                     localStorage.removeItem('user');
-                    localStorage.removeItem('auth_token');
                     localStorage.removeItem('permissions');
                     localStorage.removeItem('roles');
                     
@@ -272,7 +282,7 @@ api.interceptors.response.use(
 
                     isRedirectingToLogin = true;
 
-                    const hasSessionToken = !!localStorage.getItem('auth_token');
+                    const hasSessionToken = hasPersistedUser();
                     const isProtectedProbePath = isProtectedDashboardPath(currentPath);
                     const target = (!hasSessionToken && isProtectedProbePath)
                         ? SECURITY_ROUTES.notFound
@@ -336,7 +346,7 @@ api.interceptors.response.use(
             isHandlingCriticalError = true;
 
             const redirect = window.location.pathname + window.location.search;
-            const hasSessionToken = !!localStorage.getItem('auth_token');
+            const hasSessionToken = hasPersistedUser();
             const isProtectedProbePath = isProtectedDashboardPath(redirect);
             const target = (!hasSessionToken && isProtectedProbePath)
                 ? SECURITY_ROUTES.notFound

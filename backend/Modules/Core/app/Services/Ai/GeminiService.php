@@ -41,9 +41,7 @@ class GeminiService implements AiProviderInterface
         $modelStr = str_replace('models/', '', $model);
 
         try {
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-            ])->post("{$this->baseUrl}/models/{$modelStr}:generateContent?key={$this->apiKey}", [
+            $response = $this->withApiKeyHeaders()->post("{$this->baseUrl}/models/{$modelStr}:generateContent", [
                 'contents' => [
                     [
                         'parts' => [
@@ -103,7 +101,7 @@ class GeminiService implements AiProviderInterface
         }
 
         try {
-            $response = Http::get("{$this->baseUrl}/models?key={$this->apiKey}");
+            $response = $this->withApiKeyHeaders()->get("{$this->baseUrl}/models");
 
             if ($response->failed()) {
                 return [];
@@ -139,13 +137,21 @@ class GeminiService implements AiProviderInterface
         }
 
         // Lightweight check: List models. If it works, key is valid.
-        $response = Http::get("{$this->baseUrl}/models?key={$this->apiKey}");
+        $response = $this->withApiKeyHeaders()->get("{$this->baseUrl}/models");
 
         if ($response->failed()) {
             $this->handleError($response);
         }
 
         return true;
+    }
+
+    protected function withApiKeyHeaders(): \Illuminate\Http\Client\PendingRequest
+    {
+        return Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'x-goog-api-key' => (string) $this->apiKey,
+        ]);
     }
 
     /**

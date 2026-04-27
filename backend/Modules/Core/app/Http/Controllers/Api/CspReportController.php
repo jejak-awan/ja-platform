@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\Core\Helpers\IpHelper;
-use Modules\Core\Support\SqlDateExpression;
 use Modules\Core\Models\CspReport;
 
 class CspReportController extends BaseApiController
@@ -138,8 +137,6 @@ class CspReportController extends BaseApiController
      */
     public function statistics(): \Illuminate\Http\JsonResponse
     {
-        $dateExpr = SqlDateExpression::calendarDate('created_at');
-
         $stats = [
             'total' => CspReport::count(),
             'new' => CspReport::where('status', 'new')->count(),
@@ -148,9 +145,9 @@ class CspReportController extends BaseApiController
                 ->orderByDesc('count')
                 ->limit(10)
                 ->get(),
-            'recent_trend' => CspReport::select(DB::raw("{$dateExpr} as date"), DB::raw('count(*) as count'))
+            'recent_trend' => CspReport::selectRaw('DATE(created_at) as date, count(*) as count')
                 ->where('created_at', '>=', now()->subDays(30))
-                ->groupBy(DB::raw($dateExpr))
+                ->groupBy('date')
                 ->orderBy('date')
                 ->get(),
         ];
