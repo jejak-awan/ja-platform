@@ -7,11 +7,37 @@
   "scripts": {
     "deploy:assets": "bash scripts/sync-frontend-assets-to-backend.sh",
     "deploy:assets:sync": "SYNC_ONLY=1 bash scripts/sync-frontend-assets-to-backend.sh",
+    "agent:verify": "npm run quality:frontend && npm run quality:backend",
+    "agent:verify:quick": "npm run quality:frontend",
     "quality:frontend": "npm --prefix frontend run quality:frontend",
     "quality:backend": "cd backend && composer run quality",
     "quality:all": "npm run quality:frontend && npm run quality:backend",
     "test:e2e:list": "npm --prefix frontend run test:e2e:list",
     "test:e2e:smoke": "npm --prefix frontend run test:e2e:smoke",
     "test:e2e:auth": "npm --prefix frontend run test:e2e:auth"
+  },
+  "x-agent-guidelines": {
+    "purpose": "Standard instructions for AI/coding agents when creating or updating this project.",
+    "scope": "Monorepo root containing backend (Laravel) and frontend (Vue + Vite).",
+    "when_creating_or_updating_project": [
+      "Use branch-based workflow; avoid direct edits on main.",
+      "Prefer package managers for dependency changes (npm/composer), avoid manual lockfile edits.",
+      "Keep changes minimal and focused; avoid unrelated refactors.",
+      "Do not commit secrets or environment-specific credentials.",
+      "After edits, run quality gates before proposing merge."
+    ],
+    "required_validation_before_pr": [
+      "npm run quality:frontend",
+      "npm run quality:backend"
+    ],
+    "optional_validation": [
+      "npm run quality:all",
+      "npm run test:e2e:list"
+    ],
+    "handover_checklist": [
+      "Summarize risky files touched and behavior changes.",
+      "Include test evidence (commands + pass/fail).",
+      "Ensure working tree is clean before final handover."
+    ]
   }
 }
