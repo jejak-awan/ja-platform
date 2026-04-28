@@ -15,11 +15,12 @@
           size="sm"
           :disabled="loadingVisits"
           class="bg-muted/40 border border-border/40 hover:bg-muted/60"
+          :aria-label="$t('common.actions.refresh')"
           @click="refreshDashboard"
         >
           <RefreshCw
             class="w-4 h-4 mr-2"
-            :class="{ 'animate-spin': loadingVisits }"
+            :class="{ '': loadingVisits }"
           />
           {{ $t('common.actions.refresh') }}
         </Button>
@@ -134,16 +135,19 @@
       <Card class="col-span-1">
         <CardHeader class="flex flex-row items-center justify-between pb-2">
           <div class="space-y-1">
-            <CardTitle class="text-lg flex items-center gap-2">
+            <h2 class="text-lg font-semibold flex items-center gap-2">
               <BarChart3 class="w-5 h-5 text-primary" />
               {{ $t('features.dashboard.traffic.title') }}
-            </CardTitle>
+            </h2>
             <CardDescription>{{ $t('features.dashboard.traffic.overview') }}</CardDescription>
           </div>
           <!-- Time Range Filter -->
           <div class="w-[180px]">
             <Select v-model="timeRange">
-              <SelectTrigger class="w-full">
+              <SelectTrigger
+                class="w-full"
+                :aria-label="$t('features.dashboard.traffic.filters.last7Days')"
+              >
                 <SelectValue :placeholder="$t('features.dashboard.traffic.filters.last7Days')" />
               </SelectTrigger>
               <SelectContent>
@@ -161,20 +165,22 @@
           </div>
         </CardHeader>
         <CardContent>
-          <div class="h-[250px] mt-4">
+          <div class="h-[250px] mt-4 relative">
             <div
               v-if="loadingVisits"
-              class="h-full flex items-center justify-center"
+              class="absolute inset-0 flex items-center justify-center bg-card/50 z-20 backdrop-blur-[1px]"
             >
               <Loader2 class="h-8 w-8 text-primary animate-spin" />
             </div>
-            <LineChart
-              v-else-if="visitsDesktop.length > 0"
+            
+            <AsyncLineChart
+              v-if="visitsDesktop.length > 0"
               :data="visitsDesktop"
               :label="$t('features.dashboard.traffic.visits')"
             />
+            
             <div
-              v-else
+              v-if="!loadingVisits && visitsDesktop.length === 0"
               class="h-full flex flex-col items-center justify-center text-muted-foreground space-y-2"
             >
               <AreaChart class="w-10 h-10 opacity-20" />
@@ -192,7 +198,7 @@
         v-if="authStore.hasPermission('view users')"
         class="col-span-1"
       >
-        <RecentActivityWidget ref="recentActivityWidget" />
+        <AsyncRecentActivityWidget ref="recentActivityWidget" />
       </div>
 
       <!-- Email Status -->
@@ -200,7 +206,7 @@
         v-if="authStore.hasPermission('manage settings')"
         class="col-span-1"
       >
-        <EmailStatusWidget />
+        <AsyncEmailStatusWidget />
       </div>
 
       <!-- System Health -->
@@ -208,12 +214,12 @@
         v-if="authStore.hasPermission('manage system')"
         class="col-span-1"
       >
-        <SystemHealthWidget class="h-full" />
+        <AsyncSystemHealthWidget class="h-full" />
       </div>
 
       <!-- Quick Actions -->
       <div class="col-span-1">
-        <QuickActions :show-recent="false" />
+        <AsyncQuickActions :show-recent="false" />
       </div>
     </div>
   </div>
@@ -221,21 +227,15 @@
 
 <script setup lang="ts">
 import { logger } from '@/utils/logger';
-import { ref, onMounted, watch } from 'vue';
+import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import api from '@/services/api';
 import { parseSingleResponse, ensureArray } from '@/utils/responseParser';
 import type { SystemStats, TrafficItem, TrafficDataPoint, DashboardData } from '@/types/core/dashboard';
 
-import QuickActions from '@/modules/Core/components/admin/QuickActions.vue';
-import SystemHealthWidget from '@/modules/Core/components/admin/SystemHealthWidget.vue';
-import RecentActivityWidget from '@/modules/Core/components/admin/RecentActivityWidget.vue';
-import EmailStatusWidget from '@/modules/Core/components/admin/EmailStatusWidget.vue';
-import LineChart from '@/modules/Core/components/charts/LineChart.vue';
 import {
     Card,
     CardHeader,
-    CardTitle,
     CardDescription,
     CardContent,
     Button,
@@ -259,6 +259,11 @@ import BarChart3 from 'lucide-vue-next/dist/esm/icons/chart-bar-stacked.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
 const authStore = useAuthStore();
+const AsyncQuickActions = defineAsyncComponent(() => import('@/modules/Core/components/admin/QuickActions.vue'));
+const AsyncSystemHealthWidget = defineAsyncComponent(() => import('@/modules/Core/components/admin/SystemHealthWidget.vue'));
+const AsyncRecentActivityWidget = defineAsyncComponent(() => import('@/modules/Core/components/admin/RecentActivityWidget.vue'));
+const AsyncEmailStatusWidget = defineAsyncComponent(() => import('@/modules/Core/components/admin/EmailStatusWidget.vue'));
+const AsyncLineChart = defineAsyncComponent(() => import('@/modules/Core/components/charts/LineChart.vue'));
 
 const stats = ref<SystemStats>({
     contents: { total: 0, published: 0, pending: 0 },
@@ -269,7 +274,7 @@ const stats = ref<SystemStats>({
 const visitsDesktop = ref<TrafficDataPoint[]>([]);
 const loadingVisits = ref(false);
 const timeRange = ref('7'); 
-const recentActivityWidget = ref<InstanceType<typeof RecentActivityWidget> | null>(null);
+const recentActivityWidget = ref<{ fetchActivities?: () => Promise<void> } | null>(null);
 
 // Removed unused formatCurrency function
 
@@ -281,7 +286,7 @@ const refreshDashboard = async () => {
     try {
         await Promise.allSettled([
             fetchDashboardData(true),
-            recentActivityWidget.value?.fetchActivities() ?? Promise.resolve()
+            recentActivityWidget.value?.fetchActivities?.() ?? Promise.resolve()
         ]);
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'code' in error && 'response' in error) {

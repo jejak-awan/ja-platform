@@ -1,12 +1,15 @@
 <template>
-  <Doughnut
-    :data="chartData"
-    :options="chartOptions"
-  />
+  <div class="chart-container w-full h-full">
+    <Doughnut
+      v-if="isMounted"
+      :data="chartData"
+      :options="chartOptions"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { Doughnut } from 'vue-chartjs';
 import type {
     ChartOptions,
@@ -20,6 +23,17 @@ import {
 } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+const isMounted = ref(false);
+
+onMounted(async () => {
+    await nextTick();
+    isMounted.value = true;
+});
+
+onBeforeUnmount(() => {
+    isMounted.value = false;
+});
 
 interface ChartItem {
     [key: string]: unknown;
@@ -86,3 +100,11 @@ const chartOptions = computed<ChartOptions<'doughnut'>>(() => ({
     cutout: '60%',
 }));
 </script>
+
+<style scoped>
+.chart-container :deep(canvas) {
+    animation: revert !important;
+    transition: revert !important;
+}
+</style>
+

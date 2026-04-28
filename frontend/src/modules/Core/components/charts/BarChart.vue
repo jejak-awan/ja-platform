@@ -1,12 +1,15 @@
 <template>
-  <Bar
-    :data="chartData"
-    :options="chartOptions"
-  />
+  <div class="chart-container w-full h-full">
+    <Bar
+      v-if="isMounted"
+      :data="chartData"
+      :options="chartOptions"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { Bar } from 'vue-chartjs';
 import type {
     ChartOptions,
@@ -23,6 +26,17 @@ import {
 } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+const isMounted = ref(false);
+
+onMounted(async () => {
+    await nextTick();
+    isMounted.value = true;
+});
+
+onBeforeUnmount(() => {
+    isMounted.value = false;
+});
 
 interface ChartItem {
     [key: string]: unknown;
@@ -78,3 +92,11 @@ const chartOptions = computed<ChartOptions<'bar'>>(() => ({
     },
 }));
 </script>
+
+<style scoped>
+.chart-container :deep(canvas) {
+    animation: revert !important;
+    transition: revert !important;
+}
+</style>
+

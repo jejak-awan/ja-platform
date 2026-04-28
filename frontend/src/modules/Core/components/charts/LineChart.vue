@@ -1,41 +1,74 @@
 <template>
-  <Line
-    :data="chartData"
-    :options="chartOptions"
-  />
+  <div class="chart-container w-full h-full">
+    <Line
+      v-if="isMounted && hasData"
+      :key="chartKey"
+      :data="chartData"
+      :options="chartOptions"
+      :plugins="inlinePlugins"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { Line } from 'vue-chartjs';
 import type {
     ChartOptions,
     ChartData,
-    ScriptableContext
+    ScriptableContext,
+    Plugin
 } from 'chart.js';
 import {
     Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    Filler
+    registerables
 } from 'chart.js';
 import { useDarkMode } from '@/composables/useDarkMode';
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    Filler
-);
+ChartJS.register(...registerables);
+
+/*
+ * Guard plugin: Chart.js's built-in Filler plugin crashes when a resize event
+ * fires synchronously during _initialize → bindEvents → addEventListener,
+ * because it calls getDatasetMeta(i)._clip before update() has populated _clip.
+ *
+ * This plugin runs BEFORE the built-in filler (lower id = earlier) and aborts
+ * the entire draw cycle when any dataset metadata lacks _clip, which only
+ * happens during that single premature resize. Subsequent draws work normally.
+ */
+const safeFillerGuard: Plugin<'line'> = {
+    id: '_safeFillerGuard',
+    beforeDraw(chart) {
+        const datasets = chart.data?.datasets;
+        if (!datasets || datasets.length === 0) return;
+        for (let i = 0; i < datasets.length; i++) {
+            const meta = chart.getDatasetMeta(i);
+            if (!meta || typeof meta._clip === 'undefined') {
+                // Dataset metadata not yet initialised — skip this draw frame
+                return false;
+            }
+        }
+    },
+    beforeDatasetDraw(chart, args) {
+        const meta = chart.getDatasetMeta(args.index);
+        if (!meta || typeof meta._clip === 'undefined') {
+            return false;
+        }
+    },
+};
+
+const inlinePlugins = [safeFillerGuard] as Plugin<'line'>[];
+
+const isMounted = ref(false);
+
+onMounted(async () => {
+    await nextTick();
+    isMounted.value = true;
+});
+
+onBeforeUnmount(() => {
+    isMounted.value = false;
+});
 
 interface ChartItem {
     period: string;
@@ -55,6 +88,14 @@ const props = withDefaults(defineProps<{
 });
 
 const { isDark } = useDarkMode();
+
+const hasData = computed(() => {
+    return props.data && props.data.length > 0;
+});
+
+const chartKey = computed(() => {
+    return `chart-${props.data.length}-${props.compareData?.length || 0}-${isDark.value ? 'dark' : 'light'}`;
+});
 
 // Theme colors
 const colors = computed(() => {
@@ -94,6 +135,13 @@ const colors = computed(() => {
 });
 
 const chartData = computed<ChartData<'line'>>(() => {
+    if (!props.data || props.data.length === 0) {
+        return {
+            labels: [],
+            datasets: [],
+        };
+    }
+
     const datasets: ChartData<'line'>['datasets'] = [
         // Primary Dataset
         {
@@ -109,7 +157,8 @@ const chartData = computed<ChartData<'line'>>(() => {
             fill: true,
             tension: 0.4, 
             backgroundColor: (context: ScriptableContext<'line'>) => {
-                const ctx = context.chart.ctx;
+                const ctx = context.chart?.ctx;
+                if (!ctx) return colors.value.gradientStart;
                 const gradient = ctx.createLinearGradient(0, 0, 0, 300);
                 gradient.addColorStop(0, colors.value.gradientStart);
                 gradient.addColorStop(1, colors.value.gradientStop);
@@ -135,7 +184,8 @@ const chartData = computed<ChartData<'line'>>(() => {
             fill: true,
             tension: 0.4,
             backgroundColor: (context: ScriptableContext<'line'>) => {
-                const ctx = context.chart.ctx;
+                const ctx = context.chart?.ctx;
+                if (!ctx) return colors.value.compareGradientStart;
                 const gradient = ctx.createLinearGradient(0, 0, 0, 300);
                 gradient.addColorStop(0, colors.value.compareGradientStart);
                 gradient.addColorStop(1, colors.value.compareGradientStop);
@@ -167,6 +217,8 @@ const chartOptions = computed<ChartOptions<'line'>>(() => {
             intersect: false,
         },
         plugins: {
+            decimation: { enabled: false },
+            filler: { propagate: true },
             legend: {
                 display: !!(props.compareData && props.compareData.length > 0),
                 position: 'top',
@@ -176,7 +228,7 @@ const chartOptions = computed<ChartOptions<'line'>>(() => {
                 },
             },
             tooltip: {
-                enabled: true,
+                enabled: props.data.length > 0,
                 mode: 'index',
                 intersect: false,
                 backgroundColor: colors.value.tooltipBg,
@@ -229,3 +281,16 @@ const chartOptions = computed<ChartOptions<'line'>>(() => {
     };
 });
 </script>
+
+<style scoped>
+/*
+ * Exempt chart canvas from the global admin-no-motion CSS override.
+ * Chart.js relies on CSS transitions internally for resize detection;
+ * forcibly disabling them can trigger premature resize events.
+ */
+.chart-container :deep(canvas) {
+    animation: revert !important;
+    transition: revert !important;
+}
+</style>
+
