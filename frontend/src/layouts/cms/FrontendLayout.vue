@@ -27,7 +27,7 @@
           :style="hybridContentStyles"
         >
           <router-view v-slot="{ Component }">
-            <div class="w-full h-full flex-1 flex flex-col page-enter">
+            <div class="w-full h-full flex-1 flex flex-col page-enter route-shell">
               <component :is="Component" />
             </div>
           </router-view>
@@ -56,7 +56,7 @@
       >
         <!-- Added padding here too -->
         <router-view v-slot="{ Component }">
-          <div class="w-full h-full flex-1 flex flex-col page-enter">
+          <div class="w-full h-full flex-1 flex flex-col page-enter route-shell">
             <component :is="Component" />
           </div>
         </router-view>
@@ -78,6 +78,19 @@
       <ArrowUp class="w-5 h-5" />
     </button>
     
+    <!-- Initial loading guard: avoid double-mounting route component -->
+    <div
+      v-else-if="loading"
+      class="flex-1 flex items-center justify-center bg-background"
+      aria-live="polite"
+      aria-busy="true"
+    >
+      <div class="flex items-center gap-3 text-muted-foreground">
+        <span class="inline-block w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
+        <span class="text-sm font-medium">Memuat tema...</span>
+      </div>
+    </div>
+
     <!-- FALLBACK: Degrade gracefully when theme API is unavailable -->
     <div 
       v-else
@@ -91,7 +104,7 @@
       </div>
       <main class="main-content flex-1 w-full">
         <router-view v-slot="{ Component }">
-          <div class="w-full h-full flex-1 flex flex-col page-enter">
+          <div class="w-full h-full flex-1 flex flex-col page-enter route-shell">
             <component :is="Component" />
           </div>
         </router-view>
@@ -349,6 +362,12 @@ const prefetchThemePage = (pageName: string) => {
 }
 
 const schedulePublicPrefetch = () => {
+  if (route.path === '/') return
+  if (typeof navigator !== 'undefined') {
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
+    if (connection?.saveData) return
+    if (connection?.effectiveType && ['slow-2g', '2g', '3g'].includes(connection.effectiveType)) return
+  }
   const path = route.path.toLowerCase()
   const targets = Object.entries(CORE_PUBLIC_PATH_TO_PAGE)
     .filter(([targetPath]) => targetPath !== path)
@@ -424,6 +443,16 @@ watch(() => activeTheme.value?.slug, () => {
 }
 .page-enter {
   animation: pageEnter 0.25s ease-out;
+}
+
+.route-shell {
+  contain: layout paint style;
+}
+
+@media (prefers-reduced-motion: reduce), (max-width: 1024px) {
+  .page-enter {
+    animation: none;
+  }
 }
 
 /* Shadow utilities re-implementation because tailwind classes might be purged if dynamic */

@@ -71,6 +71,12 @@ const { t } = useI18n();
 const traceId = ref(`TRC-${Date.now().toString().slice(-6)}-${Math.random().toString(36).substring(7).toUpperCase()}`);
 
 const login = () => {
+    if (route.query.reason === 'timeout') {
+        authStore.logout();
+        router.push('/');
+        return;
+    }
+
     const redirect = route.query.redirect || SECURITY_ROUTES.dashboardBase;
     authStore.logout();
     router.push({

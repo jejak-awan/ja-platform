@@ -38,11 +38,11 @@
 
 <script setup lang="ts">
 import { logger } from '@/utils/logger';
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, defineAsyncComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import api from '@/services/api'
-import PostCard from './components/PostCard.vue'
+const PostCard = defineAsyncComponent(() => import('./components/PostCard.vue'))
 import { useAnalytics } from '@/composables/useAnalytics'
 
 import type { Content } from '@/types/cms/cms'

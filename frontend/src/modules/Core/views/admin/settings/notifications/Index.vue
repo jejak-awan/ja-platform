@@ -74,7 +74,7 @@
           v-if="loading"
           class="flex justify-center py-8"
         >
-          <Loader2 class="h-8 w-8 animate-spin text-muted-foreground" />
+          <Loader2 class="h-8 w-8 text-muted-foreground" />
         </div>
 
         <div
@@ -92,7 +92,7 @@
           <div
             v-for="notification in filteredNotifications"
             :key="notification.id"
-            class="group flex flex-col sm:flex-row gap-4 p-4 rounded-lg border transition-colors hover:bg-muted/50"
+            class="group flex flex-col sm:flex-row gap-4 p-4 rounded-lg border hover:bg-muted/50"
             :class="notification.read_at ? 'bg-card border-border' : 'bg-primary/5 border-primary/20'"
           >
             <div class="flex-shrink-0 mt-1">
@@ -123,7 +123,7 @@
               </div>
             </div>
 
-            <div class="flex sm:flex-col gap-2 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+            <div class="flex sm:flex-col gap-2 opacity-100 sm:opacity-0 group-hover:opacity-100">
               <Button
                 v-if="!notification.read_at"
                 variant="ghost"

@@ -53,7 +53,7 @@
         </div>
         <div
           v-if="stats.isScaling"
-          class="h-2 w-2 rounded-full bg-red-500 animate-pulse"
+          class="h-2 w-2 rounded-full bg-red-500"
           title="Dynamic scaling active"
         />
       </div>

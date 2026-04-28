@@ -38,18 +38,20 @@ export function useThemeCustomizer(slug: string, t: TranslateFn) {
     const canUndo = computed(() => historyIndex.value > 0);
     const canRedo = computed(() => historyIndex.value < history.value.length - 1);
 
-    function saveHistory() {
-        if (isInternalChange.value) return;
+    function pushCurrentStateToHistory() {
         const state = JSON.stringify({ f: formValues.value, c: customCss.value, b: bindings.value });
         if (history.value[historyIndex.value] === state) return;
-
         if (historyIndex.value < history.value.length - 1) {
             history.value = history.value.slice(0, historyIndex.value + 1);
         }
-
         history.value.push(state);
         if (history.value.length > 50) history.value.shift();
         else historyIndex.value++;
+    }
+
+    function saveHistory() {
+        if (isInternalChange.value) return;
+        pushCurrentStateToHistory();
     }
 
     function restoreState(stateStr: string) {
@@ -143,8 +145,10 @@ export function useThemeCustomizer(slug: string, t: TranslateFn) {
                 ...formValues.value,
                 [THEME_DATA_BINDINGS_KEY]: bindings.value,
             };
-            await api.put(`/admin/cms/themes/${slug}/settings`, { settings: payload });
-            await api.put(`/admin/cms/themes/${slug}/custom-css`, { custom_css: customCss.value });
+            await api.put(`/admin/cms/themes/${slug}/customization`, {
+                settings: payload,
+                custom_css: customCss.value,
+            });
 
             const state = JSON.stringify({ f: formValues.value, c: customCss.value, b: bindings.value });
             initialDataSnapshot.value = state;
@@ -158,7 +162,7 @@ export function useThemeCustomizer(slug: string, t: TranslateFn) {
 
     function resetToInitial() {
         restoreState(initialDataSnapshot.value);
-        saveHistory();
+        pushCurrentStateToHistory();
     }
 
     function resetToDefaults() {
@@ -173,7 +177,7 @@ export function useThemeCustomizer(slug: string, t: TranslateFn) {
         formValues.value = defaults;
         customCss.value = '';
         bindings.value = {};
-        saveHistory();
+        pushCurrentStateToHistory();
         setTimeout(() => {
             isInternalChange.value = false;
         }, 0);

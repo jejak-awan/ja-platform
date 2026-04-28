@@ -33,7 +33,7 @@
             <div
               v-for="i in 5"
               :key="i"
-              class="h-10 w-full bg-muted animate-pulse rounded-lg"
+              class="h-10 w-full bg-muted rounded-lg"
             />
           </div>
           <div
@@ -45,11 +45,8 @@
           <div
             v-for="role in filteredRoles"
             :key="role.id"
-            class="group flex items-center gap-3 p-2.5 rounded-lg transition-colors cursor-pointer relative"
-            :class="[
-              isSelected(role.id) ? 'bg-primary/5 border-primary/20' : 'hover:bg-muted/5' ,
-              activeRoleId === role.id ? 'ring-1 ring-primary/50 bg-primary/5' : ''
-            ]"
+            class="group flex items-center gap-3 p-2.5 rounded-lg cursor-pointer relative"
+            :class="[ isSelected(role.id) ? 'bg-primary/5 border-primary/20' : 'hover:bg-muted/5' , activeRoleId === role.id ? 'ring-1 ring-primary/50 bg-primary/5' : '' ]"
             @click="setActiveRole(role)"
           >
             <Checkbox 
@@ -68,7 +65,7 @@
 
             <div class="flex-1 overflow-hidden">
               <div class="flex items-center justify-between gap-2">
-                <span class="text-sm font-semibold truncate text-foreground group-hover:text-primary transition-colors">
+                <span class="text-sm font-semibold truncate text-foreground group-hover:text-primary">
                   {{ role?.name || 'Unknown Role' }}
                 </span>
                 <Badge
@@ -88,7 +85,7 @@
               </div>
             </div>
 
-            <div class="opacity-0 group-hover:opacity-100 transition-opacity flex gap-0.5">
+            <div class="opacity-0 group-hover:opacity-100 flex gap-0.5">
               <Button
                 v-if="!isProtectedRole(role.name) && authStore.hasPermission('delete roles')"
                 variant="ghost"
@@ -124,7 +121,7 @@
           <Button
             variant="outline"
             size="xs"
-            class="w-full h-8 text-[10px] font-bold border-primary/20 text-primary hover:bg-muted transition-colors"
+            class="w-full h-8 text-[10px] font-bold border-primary/20 text-primary hover:bg-muted"
             @click="selectedRoleIds = []"
           >
             {{ $t('features.roles.workspace.clearSelection') }}
@@ -187,7 +184,7 @@
                 class="h-8 border-primary/20 text-primary hover:bg-primary/5 font-bold"
                 @click="fetchRoles"
               >
-                <RefreshCw :class="cn('w-3.5 h-3.5 mr-2', loading && 'animate-spin')" />
+                <RefreshCw :class="cn('w-3.5 h-3.5 mr-2', loading && '')" />
                 {{ $t('common.actions.refresh') }}
               </Button>
               <Button
@@ -223,7 +220,7 @@
             >
               <Loader2
                 v-if="saving"
-                class="w-3 h-3 mr-2 animate-spin"
+                class="w-3 h-3 mr-2"
               />
               {{ $t('features.roles.workspace.save') }}
             </Button>
@@ -251,7 +248,7 @@
           <!-- Single Role Edit / Create Mode -->
           <div
             v-else-if="workspaceMode === 'edit' || workspaceMode === 'create'"
-            class="max-w-4xl space-y-10 animate-fade-in mx-auto"
+            class="max-w-4xl space-y-10 mx-auto"
           >
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-transparent rounded-xl">
               <div>
@@ -272,7 +269,7 @@
               <div class="flex flex-col justify-end">
                 <div class="flex items-center gap-4 text-xs text-muted-foreground opacity-70">
                   <div class="flex items-center gap-1.5">
-                    <div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                    <div class="w-1.5 h-1.5 rounded-full bg-primary" />
                     {{ $t('features.roles.workspace.liveEditing') }}
                   </div>
                   <div class="flex items-center gap-1.5">
@@ -326,10 +323,10 @@
                   :value="String(category)"
                   class="bg-transparent border-b border-border overflow-hidden"
                 >
-                  <AccordionTrigger class="px-2 py-5 bg-transparent hover:bg-muted/10 hover:no-underline transition-colors">
+                  <AccordionTrigger class="px-2 py-5 bg-transparent hover:bg-muted/10 hover:no-underline">
                     <div class="flex items-center justify-between w-full pr-4">
                       <div class="flex items-center gap-3">
-                        <div class="p-1.5 bg-primary/5 border border-primary/10 rounded-lg group-data-[state=open]:bg-primary/20 transition-colors">
+                        <div class="p-1.5 bg-primary/5 border border-primary/10 rounded-lg group-data-[state=open]:bg-primary/20">
                           <FolderOpen class="w-4 h-4 text-primary group-data-[state=open]:text-primary" />
                         </div>
                         <div class="text-left">
@@ -345,7 +342,7 @@
                         type="button"
                         variant="outline"
                         size="xs"
-                        class="h-7 text-[9px] font-bold border-primary/20 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                        class="h-7 text-[9px] font-bold border-primary/20 text-primary hover:bg-primary hover:text-primary-foreground"
                         @click.stop="toggleCategory(String(category))"
                       >
                         {{ isCategorySelected(String(category)) ? $t('features.roles.workspace.matrix.deselectCategory') : $t('features.roles.workspace.matrix.selectCategory') }}
@@ -357,14 +354,14 @@
                       <div
                         v-for="permission in perms"
                         :key="permission.id"
-                        class="flex items-center space-x-3 p-2.5 rounded-lg border border-transparent hover:border-border/60 hover:bg-card transition-colors cursor-pointer group/perm"
+                        class="flex items-center space-x-3 p-2.5 rounded-lg border border-transparent hover:border-border/60 hover:bg-card cursor-pointer group/perm"
                         @click="togglePermission(permission.name)"
                       >
                         <Checkbox
                           :checked="isSelectedPermission(permission?.name || '')"
                           @update:checked="() => togglePermission(permission?.name || '')"
                         />
-                        <span class="text-xs font-medium text-muted-foreground group-hover/perm:text-foreground transition-colors pt-0.5">
+                        <span class="text-xs font-medium text-muted-foreground group-hover/perm:text-foreground pt-0.5">
                           {{ formatPermissionName(permission?.name || '', String(category)) }}
                         </span>
                       </div>
@@ -378,7 +375,7 @@
           <!-- Comparison Matrix Mode -->
           <div
             v-else-if="workspaceMode === 'comparison'"
-            class="animate-fade-in h-full flex flex-col"
+            class="h-full flex flex-col"
           >
             <div class="mb-6 rounded-xl border border-primary/20 bg-primary/5 p-4 flex items-center justify-between">
               <div class="flex items-center gap-4">
@@ -428,7 +425,7 @@
                   :value="String(category)"
                   class="bg-transparent border-b border-border overflow-hidden"
                 >
-                  <AccordionTrigger class="px-2 py-5 bg-transparent hover:bg-muted/10 hover:no-underline transition-colors">
+                  <AccordionTrigger class="px-2 py-5 bg-transparent hover:bg-muted/10 hover:no-underline">
                     <div class="flex items-center gap-3">
                       <div class="p-1.5 bg-background border border-border/50 rounded-lg">
                         <FolderOpen class="w-4 h-4 text-muted-foreground" />
@@ -461,7 +458,7 @@
                                 <Button 
                                   variant="ghost" 
                                   size="icon" 
-                                  class="h-5 w-5 hover:bg-primary/20 hover:text-primary transition-colors rounded-md"
+                                  class="h-5 w-5 hover:bg-primary/20 hover:text-primary rounded-md"
                                   :title="$t('features.roles.form.selectAll') + ': ' + getRole(rId)?.name"
                                   :disabled="isProtectedRole(getRole(rId)?.name || '')"
                                   @click.stop="toggleCategoryForRole(String(category), rId)"
@@ -476,7 +473,7 @@
                           <TableRow 
                             v-for="permission in perms" 
                             :key="permission.id"
-                            class="border-b border-border/40 hover:bg-muted/5 transition-colors"
+                            class="border-b border-border/40 hover:bg-muted/5"
                           >
                             <TableCell class="sticky left-0 bg-background z-20 border-r font-medium text-xs px-4 py-3">
                               {{ formatPermissionName(permission.name, String(category)) }}
@@ -507,11 +504,11 @@
         <!-- Global Overlay Loading -->
         <div
           v-if="saving"
-          class="absolute inset-0 bg-background/60 backdrop-blur-[2px] z-50 flex items-center justify-center animate-fade-in"
+          class="absolute inset-0 bg-background/60 backdrop-blur-[2px] z-50 flex items-center justify-center"
         >
           <div class="bg-card border border-border shadow-xl rounded-2xl p-8 flex flex-col items-center gap-4">
             <div class="relative">
-              <div class="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+              <div class="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary" />
               <Shield class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 text-primary" />
             </div>
             <div class="text-center">
@@ -966,6 +963,4 @@ onMounted(async () => {
 .custom-scrollbar::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 10px; }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground) / 0.3); }
 
-.animate-fade-in { animation: fadeIn 0.3s ease-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 </style>

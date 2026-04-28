@@ -2,7 +2,7 @@
   <section class="py-24 bg-background relative border-y border-border overflow-hidden">
     <!-- Section Header Box -->
     <div class="container mx-auto px-6 mb-16 flex justify-center">
-      <div class="px-8 py-3 border border-border relative group overflow-hidden">
+      <div class="px-8 py-3 border border-border bg-background/95 relative group overflow-hidden">
         <div class="absolute inset-0 bg-foreground/5 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
         <div class="flex items-center gap-4 relative z-10">
           <span class="w-8 h-px bg-primary" />
@@ -23,7 +23,7 @@
         >
           <!-- Vertical Label (Absolute Gutter System) -->
           <div class="absolute top-16 left-8 hidden lg:block pointer-events-none">
-            <span class="inline-block [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-xs md:text-sm font-black tracking-[0.3em] uppercase text-foreground/20 group-hover/col:text-primary transition-colors duration-500">
+            <span class="inline-block [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-xs md:text-sm font-black tracking-[0.3em] uppercase text-foreground/65 group-hover/col:text-foreground transition-colors duration-500">
               PENGUMUMAN
             </span>
           </div>
@@ -39,9 +39,9 @@
                 <div class="flex items-center justify-between gap-4 mb-3">
                   <div class="flex items-center gap-3">
                     <span class="w-2 h-px bg-foreground/30 group-hover/item:w-4 group-hover/item:bg-primary transition-all duration-500" />
-                    <span class="text-[10px] font-bold tracking-[0.15em] text-foreground/40 group-hover/item:text-primary transition-colors uppercase">{{ item?.date || '' }} update</span>
+                    <span class="text-[10px] font-bold tracking-[0.15em] text-foreground/80 group-hover/item:text-foreground transition-colors uppercase">{{ item?.date || '' }} update</span>
                   </div>
-                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/50 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-primary group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300">
+                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/85 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-foreground group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300">
                     {{ item?.category || 'INFO' }}
                   </span>
                 </div>
@@ -72,7 +72,7 @@
             <div class="mt-8">
               <router-link
                 to="/blog"
-                class="inline-flex items-center gap-6 px-8 py-3 border border-border text-[9px] font-black tracking-[0.3em] uppercase text-foreground/60 hover:text-foreground hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-500 group/btn relative z-10"
+                class="inline-flex items-center gap-6 px-8 py-3 border border-border bg-background text-[9px] font-black tracking-[0.3em] uppercase text-foreground hover:text-foreground hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-500 group/btn relative z-10"
               >
                 View All
                 <span class="w-6 h-px bg-foreground/30 group-hover/btn:bg-primary transition-all duration-500" />
@@ -87,7 +87,7 @@
           class="relative py-16 lg:pl-32 lg:pr-10 group/col border-border/50"
         >
           <div class="absolute top-16 left-8 hidden lg:block pointer-events-none">
-            <span class="inline-block [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-xs md:text-sm font-black tracking-[0.3em] uppercase text-foreground/20 group-hover/col:text-primary transition-colors duration-500">
+            <span class="inline-block [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-xs md:text-sm font-black tracking-[0.3em] uppercase text-foreground/65 group-hover/col:text-foreground transition-colors duration-500">
               AGENDA
             </span>
           </div>
@@ -102,9 +102,9 @@
                 <div class="flex items-center justify-between gap-4 mb-3">
                   <div class="flex items-center gap-3">
                     <span class="w-2 h-px bg-foreground/30 group-hover/item:w-4 group-hover/item:bg-primary transition-all duration-500" />
-                    <span class="text-[10px] font-bold tracking-[0.15em] text-foreground/40 group-hover/item:text-primary transition-colors uppercase">{{ item?.date || '' }} event</span>
+                    <span class="text-[10px] font-bold tracking-[0.15em] text-foreground/80 group-hover/item:text-foreground transition-colors uppercase">{{ item?.date || '' }} event</span>
                   </div>
-                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/50 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-primary group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300">
+                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/85 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-foreground group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300">
                     {{ item?.category || 'INFO' }}
                   </span>
                 </div>
@@ -134,7 +134,7 @@
             <div class="mt-8">
               <router-link
                 to="/blog"
-                class="inline-flex items-center gap-6 px-8 py-3 border border-border text-[9px] font-black tracking-[0.3em] uppercase text-foreground/60 hover:text-foreground hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-500 group/btn relative z-10"
+                class="inline-flex items-center gap-6 px-8 py-3 border border-border bg-background text-[9px] font-black tracking-[0.3em] uppercase text-foreground hover:text-foreground hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-500 group/btn relative z-10"
               >
                 View All
                 <span class="w-6 h-px bg-foreground/30 group-hover/btn:bg-primary transition-all duration-500" />
@@ -149,7 +149,7 @@
           class="relative py-16 lg:pl-32 lg:pr-10 group/col border-border/50"
         >
           <div class="absolute top-16 left-8 hidden lg:block pointer-events-none">
-            <span class="inline-block [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-xs md:text-sm font-black tracking-[0.3em] uppercase text-foreground/20 group-hover/col:text-primary transition-colors duration-500">
+            <span class="inline-block [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-xs md:text-sm font-black tracking-[0.3em] uppercase text-foreground/65 group-hover/col:text-foreground transition-colors duration-500">
               LIBUR
             </span>
           </div>
@@ -164,9 +164,9 @@
                 <div class="flex items-center justify-between gap-4 mb-3">
                   <div class="flex items-center gap-3">
                     <span class="w-2 h-px bg-foreground/30 group-hover/item:w-4 group-hover/item:bg-primary transition-all duration-500" />
-                    <span class="text-[10px] font-bold tracking-[0.15em] text-foreground/40 group-hover/item:text-primary transition-colors uppercase">{{ item?.date || '' }} day off</span>
+                    <span class="text-[10px] font-bold tracking-[0.15em] text-foreground/80 group-hover/item:text-foreground transition-colors uppercase">{{ item?.date || '' }} day off</span>
                   </div>
-                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/50 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-primary group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300">
+                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/85 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-foreground group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300">
                     {{ item?.category || 'INFO' }}
                   </span>
                 </div>
@@ -196,7 +196,7 @@
             <div class="mt-8">
               <router-link
                 to="/blog"
-                class="inline-flex items-center gap-6 px-8 py-3 border border-border text-[9px] font-black tracking-[0.3em] uppercase text-foreground/60 hover:text-foreground hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-500 group/btn relative z-10"
+                class="inline-flex items-center gap-6 px-8 py-3 border border-border bg-background text-[9px] font-black tracking-[0.3em] uppercase text-foreground hover:text-foreground hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-500 group/btn relative z-10"
               >
                 View All
                 <span class="w-6 h-px bg-foreground/30 group-hover/btn:bg-primary transition-all duration-500" />
@@ -211,7 +211,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, computed } from 'vue'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 import { useThemeComponentBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 
 // Dynamic Data Integration
@@ -274,7 +274,7 @@ const holidays = computed(() => {
 })
 
 // GSAP
-const { staggerChildren } = useGsapAnimations()
+const { staggerChildren } = useThemeMotion()
 const col1 = ref<HTMLElement>()
 const col2 = ref<HTMLElement>()
 const col3 = ref<HTMLElement>()

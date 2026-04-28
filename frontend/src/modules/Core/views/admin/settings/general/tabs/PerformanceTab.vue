@@ -4,7 +4,7 @@
     <div class="bg-card border border-border rounded-lg overflow-hidden">
       <button 
         type="button"
-        class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-muted/50 transition-colors"
+        class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-muted/50"
         @click="sections.cache = !sections.cache"
       >
         <div class="flex items-center gap-3">
@@ -40,7 +40,7 @@
           stroke-width="2" 
           stroke-linecap="round" 
           stroke-linejoin="round"
-          class="text-muted-foreground transition-transform duration-200"
+          class="text-muted-foreground"
           :class="{ 'rotate-180': sections.cache }"
         ><path d="m6 9 6 6 6-6" /></svg>
       </button>
@@ -98,12 +98,12 @@
                 <button
                   type="button"
                   :disabled="clearingCache"
-                  class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border border-destructive/30 bg-destructive/10 text-destructive rounded-lg hover:bg-destructive/20 disabled:opacity-50 transition-colors"
+                  class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border border-destructive/30 bg-destructive/10 text-destructive rounded-lg hover:bg-destructive/20 disabled:opacity-50"
                   @click="$emit('clear-cache')"
                 >
                   <svg
                     v-if="clearingCache"
-                    class="animate-spin h-4 w-4"
+                    class="h-4 w-4"
                     viewBox="0 0 24 24"
                     fill="none"
                   ><circle
@@ -135,12 +135,12 @@
                 <button
                   type="button"
                   :disabled="warmingCache"
-                  class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border border-border bg-card text-foreground rounded-lg hover:bg-muted disabled:opacity-50 transition-colors"
+                  class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border border-border bg-card text-foreground rounded-lg hover:bg-muted disabled:opacity-50"
                   @click="$emit('warm-cache')"
                 >
                   <svg
                     v-if="warmingCache"
-                    class="animate-spin h-4 w-4"
+                    class="h-4 w-4"
                     viewBox="0 0 24 24"
                     fill="none"
                   ><circle
@@ -220,7 +220,7 @@
                         class="sr-only peer" 
                         @change="(e) => updateField(setting.key, (e.target as HTMLInputElement).checked)"
                       >
-                      <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-transform after:shadow-md peer-checked:bg-success" />
+                      <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after: after:shadow-md peer-checked:bg-success" />
                     </div>
                     <span class="ml-3 text-sm text-foreground">
                       {{ formData[setting.key] ? $t('features.settings.enabled') : $t('features.settings.disabled') }}
@@ -280,7 +280,7 @@
               </p>
               <router-link
                 to="/dash/redis"
-                class="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+                class="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80"
               >
                 {{ $t('features.settings.cache.redisInfo.linkText') }}
                 <svg
@@ -310,7 +310,7 @@
     <div class="bg-card border border-border rounded-lg overflow-hidden">
       <button 
         type="button"
-        class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-muted/50 transition-colors"
+        class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-muted/50"
         @click="sections.cdn = !sections.cdn"
       >
         <div class="flex items-center gap-3">
@@ -359,7 +359,7 @@
             stroke-width="2" 
             stroke-linecap="round" 
             stroke-linejoin="round"
-            class="text-muted-foreground transition-transform duration-200"
+            class="text-muted-foreground"
             :class="{ 'rotate-180': sections.cdn }"
           ><path d="m6 9 6 6 6-6" /></svg>
         </div>
@@ -389,7 +389,7 @@
                   class="sr-only peer" 
                   @change="(e) => updateField(cdnEnabledSetting?.key || '', (e.target as HTMLInputElement).checked)"
                 >
-                <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-transform after:shadow-md peer-checked:bg-success" />
+                <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after: after:shadow-md peer-checked:bg-success" />
               </div>
               <span class="ml-3 text-sm text-foreground">
                 {{ formData[cdnEnabledSetting?.key || ''] ? $t('features.settings.enabled') : $t('features.settings.disabled') }}
@@ -543,7 +543,7 @@
     >
       <button 
         type="button"
-        class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-muted/50 transition-colors"
+        class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-muted/50"
         @click="sections.other = !sections.other"
       >
         <div class="flex items-center gap-3">
@@ -583,7 +583,7 @@
           stroke-width="2" 
           stroke-linecap="round" 
           stroke-linejoin="round"
-          class="text-muted-foreground transition-transform duration-200"
+          class="text-muted-foreground"
           :class="{ 'rotate-180': sections.other }"
         ><path d="m6 9 6 6 6-6" /></svg>
       </button>
@@ -633,7 +633,7 @@
                       class="sr-only peer" 
                       @change="(e) => updateField(setting.key, (e.target as HTMLInputElement).checked)"
                     >
-                    <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-transform after:shadow-md peer-checked:bg-success" />
+                    <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after: after:shadow-md peer-checked:bg-success" />
                   </div>
                   <span class="ml-3 text-sm text-foreground">
                     {{ formData[setting.key] ? $t('features.settings.enabled') : $t('features.settings.disabled') }}

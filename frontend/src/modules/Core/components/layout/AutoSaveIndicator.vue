@@ -7,7 +7,7 @@
       <!-- Status Icon -->
       <svg
         v-if="status === 'saving'"
-        class="w-4 h-4 animate-spin"
+        class="w-4 h-4"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

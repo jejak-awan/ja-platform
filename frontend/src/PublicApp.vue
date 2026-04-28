@@ -6,8 +6,9 @@
     <div class="noise-overlay" />
     <template v-if="isReady">
       <router-view />
-      <Toast />
+      <Toast v-if="deferUiOverlays" />
       <ConfirmModal
+        v-if="deferUiOverlays && confirmState.isOpen"
         :is-open="confirmState.isOpen"
         :title="confirmState.title"
         :message="confirmState.message"
@@ -21,8 +22,9 @@
         @confirm="confirmState.onConfirm"
         @cancel="confirmState.onCancel"
       />
-      <GlobalErrorModal />
+      <GlobalErrorModal v-if="deferUiOverlays" />
       <SessionTimeoutModal
+        v-if="deferUiOverlays && isWarningVisible"
         :is-visible="isWarningVisible"
         :time-remaining="timeRemaining"
         @extend="extendSession"
@@ -44,6 +46,7 @@ import { useCmsStore } from '@/modules/Cms/stores/cms';
 import { useTheme } from '@/composables/useTheme';
 import { syncDocumentDarkClassForRoute } from '@/composables/useDarkMode';
 import { useHead } from '@unhead/vue';
+import { applyFavicon, resolveFavicon } from '@/utils/favicon';
 
 const Toast = defineAsyncComponent(() => import('@/components/ui/Toast.vue'));
 const ConfirmModal = defineAsyncComponent(() => import('@/components/ui/ConfirmModal.vue'));
@@ -57,6 +60,7 @@ const cmsStore = useCmsStore();
 const { themeSettings, loadActiveTheme } = useTheme();
 const route = useRoute();
 const isReady = ref(false);
+const deferUiOverlays = ref(false);
 
 watch(
     () => route.path,
@@ -66,32 +70,28 @@ watch(
     { immediate: true },
 );
 
-onMounted(async () => {
-    try {
-        await Promise.all([
-            cmsStore.fetchPublicSettings(),
-            loadActiveTheme(),
-        ]);
-    } finally {
-        isReady.value = true;
+onMounted(() => {
+    // Unblock first render; hydrate settings/theme in background.
+    isReady.value = true;
+    void Promise.all([
+        cmsStore.fetchPublicSettings({ force: true }),
+        loadActiveTheme(),
+    ]);
+
+    const mountDeferredUi = () => {
+        deferUiOverlays.value = true;
+    };
+    if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(mountDeferredUi, { timeout: 1500 });
+    } else {
+        setTimeout(mountDeferredUi, 600);
     }
 });
 
-const faviconHref = computed(() => {
-    try {
-        const themeIcon = themeSettings.value?.brand_favicon;
-        if (themeIcon && typeof themeIcon === 'string' && themeIcon.trim() !== '') {
-            return themeIcon;
-        }
-        const siteIcon = (cmsStore.siteSettings as any)?.site_favicon;
-        if (siteIcon && typeof siteIcon === 'string' && siteIcon.trim() !== '') {
-            return siteIcon;
-        }
-    } catch {
-        // silent
-    }
-    return '/favicon.svg';
-});
+const faviconHref = computed(() => resolveFavicon([
+    themeSettings.value?.brand_favicon,
+    (cmsStore.siteSettings as any)?.site_favicon,
+]));
 
 const siteTitle = computed(() => {
     try {
@@ -102,8 +102,33 @@ const siteTitle = computed(() => {
     }
 });
 
+const siteDescription = computed(() => {
+    try {
+        const description = (cmsStore.siteSettings as any)?.site_description;
+        if (description && typeof description === 'string' && description.trim().length > 0) {
+            return description.trim();
+        }
+    } catch {
+        // fallback below
+    }
+    return 'Portal resmi sekolah untuk informasi akademik, berita, dan layanan pendidikan.';
+});
+
 useHead({
     title: siteTitle,
-    link: [{ rel: 'icon', href: faviconHref }],
+    meta: [
+        {
+            name: 'description',
+            content: siteDescription,
+        },
+    ],
 });
+
+watch(
+    faviconHref,
+    (href) => {
+        applyFavicon(href);
+    },
+    { immediate: true },
+);
 </script>

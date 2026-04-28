@@ -2,16 +2,16 @@
   <Card class="flex flex-col h-full overflow-hidden border-border/40">
     <CardHeader class="flex flex-row items-center justify-between pb-4 space-y-0">
       <div class="space-y-1">
-        <CardTitle class="text-xl font-bold flex items-center gap-2">
+        <h2 class="text-xl font-bold flex items-center gap-2">
           <History class="w-5 h-5 text-primary" />
           {{ $t('features.dashboard.widgets.recentActivity.title') }}
-        </CardTitle>
+        </h2>
         <CardDescription v-if="activities.length > 0">
           {{ $t('features.dashboard.widgets.recentActivity.description') || 'Latest system events' }}
         </CardDescription>
       </div>
-      <div class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-success/10 text-success">
-        <div class="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+      <div class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-success/10 text-foreground">
+        <div class="w-1.5 h-1.5 rounded-full bg-success" />
         <span class="text-xs font-medium">{{ $t('features.dashboard.widgets.recentActivity.live') }}</span>
       </div>
     </CardHeader>
@@ -21,7 +21,7 @@
         v-if="loading && activities.length === 0"
         class="flex flex-col items-center justify-center p-12 text-muted-foreground space-y-3"
       >
-        <Loader2 class="w-8 h-8 animate-spin opacity-50" />
+        <Loader2 class="w-8 h-8 opacity-50" />
         <p>{{ $t('features.dashboard.widgets.recentActivity.loading') }}</p>
       </div>
             
@@ -42,11 +42,11 @@
         <div
           v-for="activity in activities.slice(0, 5)"
           :key="activity.id"
-          class="p-4 hover:bg-muted/30 transition-colors group"
+          class="p-4 hover:bg-muted/30 group"
         >
           <div class="flex items-start gap-4">
             <div class="flex-shrink-0">
-              <Avatar class="h-10 w-10 ring-2 ring-background group-hover:ring-muted transition-[ring-color]">
+              <Avatar class="h-10 w-10 ring-2 ring-background group-hover:ring-muted">
                 <AvatarFallback
                   :class="getUserAvatarClass(activity)"
                   class="font-bold text-xs"
@@ -82,20 +82,13 @@
     </CardContent>
         
     <div class="p-3 bg-muted/10 border-t border-border/40">
-      <Button
-        variant="ghost"
-        size="sm"
-        class="w-full text-primary hover:bg-primary/5 group"
-        as-child
+      <router-link
+        to="/dash/activity-journal"
+        class="inline-flex h-10 w-full items-center justify-center rounded-md px-4 text-sm font-medium text-primary hover:bg-primary/5"
       >
-        <router-link
-          to="/dash/activity-journal"
-          class="flex items-center justify-center"
-        >
-          {{ $t('features.dashboard.widgets.recentActivity.viewAll') }}
-          <ArrowRight class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-        </router-link>
-      </Button>
+        {{ $t('features.dashboard.widgets.recentActivity.viewAll') }}
+        <ArrowRight class="w-4 h-4 ml-2" />
+      </router-link>
     </div>
   </Card>
 </template>
@@ -109,10 +102,8 @@ import { parseResponse } from '@/utils/responseParser';
 import { 
     Card, 
     CardHeader, 
-    CardTitle, 
     CardDescription, 
     CardContent, 
-    Button, 
     Badge, 
     Avatar, 
     AvatarFallback 
@@ -143,12 +134,16 @@ const activities = ref<Activity[]>([]);
 const loading = ref(false);
 const refreshInterval = ref<ReturnType<typeof setInterval> | null>(null);
 
+const stopRefresh = () => {
+    if (refreshInterval.value) {
+        clearInterval(refreshInterval.value);
+        refreshInterval.value = null;
+    }
+};
+
 const fetchActivities = async () => {
     if ((window as unknown as { __isSessionTerminated?: boolean }).__isSessionTerminated) {
-        if (refreshInterval.value) {
-            clearInterval(refreshInterval.value);
-            refreshInterval.value = null;
-        }
+        stopRefresh();
         return;
     }
 
@@ -163,7 +158,11 @@ const fetchActivities = async () => {
     } catch (error: unknown) {
         if (error && typeof error === 'object' && 'code' in error && 'response' in error) {
             const err = error as { code: string; response?: { status: number } };
-            if (err.code !== 'ERR_CANCELED' && err.response?.status !== 401) {
+            if (err.response?.status === 401 || err.response?.status === 403) {
+                stopRefresh();
+                return;
+            }
+            if (err.code !== 'ERR_CANCELED') {
                 logger.error('Failed to fetch recent activities:', error);
             }
         }
@@ -209,10 +208,10 @@ const getUserAvatarClass = (activity: Activity) => {
 
 const getActionBadgeClass = (action?: string) => {
     const a = (action || '').toLowerCase();
-    if (a.includes('create')) return 'bg-success/10 text-success';
-    if (a.includes('update')) return 'bg-info/10 text-info';
-    if (a.includes('delete')) return 'bg-destructive/10 text-destructive';
-    if (a.includes('login') || a.includes('logout')) return 'bg-primary/10 text-primary';
+    if (a.includes('create')) return 'bg-success/10 text-foreground';
+    if (a.includes('update')) return 'bg-info/10 text-foreground';
+    if (a.includes('delete')) return 'bg-destructive/10 text-foreground';
+    if (a.includes('login') || a.includes('logout')) return 'bg-primary/10 text-foreground';
     return 'bg-muted text-muted-foreground';
 };
 
@@ -240,9 +239,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    if (refreshInterval.value) {
-        clearInterval(refreshInterval.value);
-    }
+    stopRefresh();
 });
 
 defineExpose({ fetchActivities });

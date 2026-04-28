@@ -5,7 +5,7 @@
       v-if="initializing"
       class="flex flex-col items-center justify-center py-12 space-y-4"
     >
-      <Loader2 class="h-8 w-8 animate-spin text-muted-foreground" />
+      <Loader2 class="h-8 w-8 text-muted-foreground" />
       <p class="text-sm text-muted-foreground">
         {{ $t('common.actions.verifying') || 'Checking status...' }}
       </p>
@@ -65,7 +65,7 @@
             >
               <Loader2
                 v-if="generating"
-                class="mr-2 h-4 w-4 animate-spin"
+                class="mr-2 h-4 w-4"
               />
               {{ generating ? $t('common.actions.generating') || 'Generating...' : $t('features.auth.twoFactor.generateQR') || 'Generate QR Code' }}
             </Button>
@@ -127,7 +127,7 @@
                 >
                   <Loader2
                     v-if="enabling"
-                    class="mr-2 h-4 w-4 animate-spin"
+                    class="mr-2 h-4 w-4"
                   />
                   {{ enabling ? $t('common.actions.verifying') || 'Verifying...' : $t('features.auth.twoFactor.enable') || 'Enable 2FA' }}
                 </Button>
@@ -299,7 +299,7 @@
                   >
                     <Loader2
                       v-if="disabling"
-                      class="mr-2 h-4 w-4 animate-spin"
+                      class="mr-2 h-4 w-4"
                     />
                     {{ disabling ? $t('common.actions.disabling') || 'Disabling...' : $t('features.auth.twoFactor.confirmDisable') || 'Confirm Disable' }}
                   </Button>
@@ -350,7 +350,7 @@
                   >
                     <Loader2
                       v-if="regenerating"
-                      class="mr-2 h-4 w-4 animate-spin"
+                      class="mr-2 h-4 w-4"
                     />
                     {{ regenerating ? $t('common.actions.regenerating') || 'Regenerating...' : $t('features.auth.twoFactor.confirmRegen') || 'Regenerate Codes' }}
                   </Button>

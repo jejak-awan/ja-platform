@@ -16,7 +16,13 @@ class SecurityHeaders
     {
         $response = $next($request);
 
+        $this->normalizeCacheControlForBfCache($request, $response);
+
         // Content Security Policy
+        // Remove any previously attached CSP headers first to avoid duplicate policies
+        // from other middleware layers that can generate noisy false-positive reports.
+        $response->headers->remove('Content-Security-Policy');
+        $response->headers->remove('Content-Security-Policy-Report-Only');
         $nonce = $this->generateNonce($request);
         Vite::useCspNonce($nonce);
         $generatedCsp = $this->getContentSecurityPolicy($nonce);
@@ -66,6 +72,57 @@ class SecurityHeaders
         $response->headers->remove('X-WebKit-CSP');
 
         return $response;
+    }
+
+    /**
+     * Keep regular HTML pages eligible for back/forward cache.
+     *
+     * Some upstream layers can inject `no-store` into successful document responses.
+     * That directive blocks bfcache restoration entirely, so we strip it for normal
+     * web page responses while preserving strict cache directives for errors/challenges.
+     */
+    private function normalizeCacheControlForBfCache(Request $request, Response $response): void
+    {
+        $status = $response->getStatusCode();
+        if ($status < 200 || $status >= 400) {
+            return;
+        }
+
+        if ($request->is('api/*') || $request->expectsJson()) {
+            return;
+        }
+
+        $contentType = strtolower((string) $response->headers->get('Content-Type', ''));
+        if (! str_contains($contentType, 'text/html')) {
+            return;
+        }
+
+        $cacheControl = (string) $response->headers->get('Cache-Control', '');
+        if ($cacheControl === '') {
+            return;
+        }
+
+        if (! str_contains(strtolower($cacheControl), 'no-store')) {
+            return;
+        }
+
+        $tokens = array_filter(array_map('trim', explode(',', $cacheControl)));
+        $filtered = [];
+        foreach ($tokens as $token) {
+            if (strtolower($token) === 'no-store') {
+                continue;
+            }
+            $filtered[] = $token;
+        }
+
+        if (! in_array('no-cache', array_map('strtolower', $filtered), true)) {
+            $filtered[] = 'no-cache';
+        }
+        if (! in_array('must-revalidate', array_map('strtolower', $filtered), true)) {
+            $filtered[] = 'must-revalidate';
+        }
+
+        $response->headers->set('Cache-Control', implode(', ', $filtered));
     }
 
     /**

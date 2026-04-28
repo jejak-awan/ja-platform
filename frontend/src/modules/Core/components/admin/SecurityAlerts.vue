@@ -32,11 +32,7 @@
       >
         <div class="flex items-center gap-3">
           <span
-            :class="[
-              'w-2 h-2 rounded-full flex-shrink-0',
-              alert.severity === 'critical' ? 'bg-destructive' :
-              alert.severity === 'warning' ? 'bg-warning' : 'bg-info'
-            ]"
+            :class="[ 'w-2 h-2 rounded-full flex-shrink-0', alert.severity === 'critical' ? 'bg-destructive' : alert.severity === 'warning' ? 'bg-warning' : 'bg-info' ]"
           />
           <div>
             <p class="text-sm font-medium text-foreground">
@@ -49,11 +45,7 @@
         </div>
         <div class="text-right flex-shrink-0">
           <span
-            :class="[
-              'text-xs px-2 py-1 rounded-full',
-              alert.severity === 'critical' ? 'bg-destructive/20 text-destructive' :
-              alert.severity === 'warning' ? 'bg-warning/20 text-warning' : 'bg-info/20 text-info'
-            ]"
+            :class="[ 'text-xs px-2 py-1 rounded-full', alert.severity === 'critical' ? 'bg-destructive/20 text-destructive' : alert.severity === 'warning' ? 'bg-warning/20 text-warning' : 'bg-info/20 text-info' ]"
           >
             {{ getSeverityLabel(alert.severity) }}
           </span>

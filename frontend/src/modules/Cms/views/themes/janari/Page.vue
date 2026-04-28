@@ -32,6 +32,12 @@
               :src="pageData?.featured_image || ''"
               :alt="featuredImageAlt"
               class="h-full w-full object-cover"
+              width="1440"
+              height="810"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              sizes="100vw"
             >
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div class="absolute bottom-0 left-0 right-0 p-5 md:p-7">
@@ -62,6 +68,12 @@
               :src="pageData?.featured_image || ''"
               :alt="featuredImageAlt"
               class="h-full w-full object-cover"
+              width="1920"
+              height="900"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              sizes="100vw"
             >
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
             <div class="absolute bottom-0 left-0 right-0 mx-auto w-full max-w-6xl px-4 pb-7 md:px-8 md:pb-10">
@@ -113,6 +125,11 @@
                   :src="pageData?.featured_image || ''"
                   :alt="featuredImageAlt"
                   class="h-[220px] w-full object-cover md:h-[340px]"
+                  width="1200"
+                  height="680"
+                  loading="lazy"
+                  decoding="async"
+                  sizes="(max-width: 1024px) 100vw, 75vw"
                 >
                 <figcaption
                   v-if="featuredImageCaptionText"

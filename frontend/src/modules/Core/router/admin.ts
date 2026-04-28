@@ -133,6 +133,7 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'security-journal',
                 name: 'security-journal',
                 component: () => import('@/modules/Core/views/admin/pulse/security/Index.vue'),
+                meta: { noCache: true },
             },
             {
                 path: 'system',
@@ -156,16 +157,19 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'activity-journal',
                 name: 'activity-journal',
                 component: () => import('@/modules/Core/views/admin/pulse/activity/Index.vue'),
+                meta: { noCache: true },
             },
             {
                 path: 'access-journal',
                 name: 'access-journal',
                 component: () => import('@/modules/Core/views/admin/pulse/access/Index.vue'),
+                meta: { noCache: true },
             },
             {
                 path: 'journal-dashboard',
                 name: 'journal-dashboard',
                 component: () => import('@/modules/Core/views/admin/pulse/Index.vue'),
+                meta: { noCache: true },
             },
             {
                 path: 'notifications',
@@ -188,6 +192,7 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'system-journal',
                 name: 'system-journal',
                 component: () => import('@/modules/Core/views/admin/pulse/system/Index.vue'),
+                meta: { noCache: true },
             },
             {
                 path: 'webhooks',

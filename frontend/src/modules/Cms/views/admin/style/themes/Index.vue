@@ -80,6 +80,13 @@
             :alt="theme.name"
             class="w-full h-full object-cover"
           >
+          <iframe
+            v-else-if="theme.is_active && (theme.type || 'frontend') === 'frontend'"
+            src="/"
+            class="w-full h-full border-0 pointer-events-none"
+            loading="lazy"
+            title="Active theme live preview"
+          />
           <div
             v-else
             class="w-full h-full flex items-center justify-center text-muted-foreground"
@@ -120,14 +127,6 @@
               @click="openThemeCustomizer(theme)"
             >
               {{ $t('features.themes.actions.openCustomizer') }}
-            </Button>
-            <Button
-              v-if="theme.is_active"
-              size="sm"
-              variant="default"
-              @click="openThemeCustomizer(theme)"
-            >
-              {{ $t('features.themes.actions.customizer') }}
             </Button>
           </div>
         </div>
@@ -190,15 +189,6 @@
                   {{ $t('features.themes.actions.activate') }}
                 </Button>
               </div>
-              <Button
-                v-if="theme.is_active"
-                class="w-full border-cyan-500 text-cyan-500 hover:bg-cyan-500/10"
-                variant="outline"
-                @click="openThemeCustomizer(theme)"
-              >
-                <LayoutTemplate class="w-4 h-4 mr-2" />
-                {{ $t('features.themes.actions.customizer') }}
-              </Button>
             </div>
 
             <!-- Secondary Action Buttons -->
@@ -269,7 +259,6 @@ import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
 import CheckCircle from 'lucide-vue-next/dist/esm/icons/circle-check.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import ThemePreview from '@/modules/Cms/components/themes/ThemePreview.vue';
-import LayoutTemplate from 'lucide-vue-next/dist/esm/icons/layout-template.js';
 
 import { useI18n } from 'vue-i18n';
 import { Badge, Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui';

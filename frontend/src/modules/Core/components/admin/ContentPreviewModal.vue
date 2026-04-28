@@ -19,12 +19,7 @@
                   v-for="device in devices"
                   :key="device.name"
                   :title="device.label"
-                  :class="[
-                    'px-3 py-1 text-sm rounded transition-colors flex items-center justify-center',
-                    selectedDevice === device.name
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'bg-secondary text-foreground hover:bg-accent'
-                  ]"
+                  :class="[ 'px-3 py-1 text-sm rounded flex items-center justify-center', selectedDevice === device.name ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-secondary text-foreground hover:bg-accent' ]"
                   @click="selectedDevice = device.name"
                 >
                   <component

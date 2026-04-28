@@ -58,57 +58,51 @@ export default defineConfig({
             return;
           }
 
+          // Individual heavy icons to avoid one massive icons chunk
           if (id.includes('lucide-vue-next')) {
             return 'vendor-icons';
           }
 
-          // Keep Vue runtime ecosystem together for stable long-term caching.
+          // Core Vue & Router
           if (
             id.includes('node_modules/vue/') ||
             id.includes('node_modules/vue-router/') ||
-            id.includes('node_modules/pinia/') ||
-            id.includes('node_modules/@vue/')
+            id.includes('node_modules/@vue/runtime')
           ) {
-            return 'vendor-vue';
+            return 'vendor-vue-core';
           }
 
-          // Split heavy rich-text stack from base UI/runtime bundles.
+          // State management
+          if (id.includes('pinia')) {
+            return 'vendor-pinia';
+          }
+
+          // Split heavy rich-text stack
           if (id.includes('@tiptap') || id.includes('prosemirror')) {
             return 'vendor-tiptap';
           }
 
-          if (id.includes('highlight.js')) {
-            return 'vendor-highlightjs';
+          if (id.includes('highlight.js') || id.includes('lowlight')) {
+            return 'vendor-syntax-highlighter';
           }
 
-          if (id.includes('lowlight')) {
-            return 'vendor-lowlight';
+          // UI Frameworks
+          if (id.includes('radix-vue') || id.includes('reka-ui')) {
+            return 'vendor-ui-core';
           }
 
-          if (id.includes('marked') || id.includes('turndown')) {
-            return 'vendor-markdown';
+          // Form & Validation
+          if (id.includes('zod') || id.includes('vee-validate')) {
+            return 'vendor-forms';
           }
 
-          // Keep component system dependencies in a dedicated UI chunk.
-          if (id.includes('radix-vue') || id.includes('reka-ui') || id.includes('class-variance-authority') || id.includes('tailwind-merge')) {
-            return 'vendor-ui';
+          // Utilities
+          if (id.includes('axios') || id.includes('dayjs') || id.includes('lodash')) {
+            return 'vendor-utils-base';
           }
 
-          if (id.includes('@vueuse/core') || id.includes('@unhead/vue')) {
-            return 'vendor-vue-utils';
-          }
-
-          if (
-            id.includes('axios') ||
-            id.includes('zod') ||
-            id.includes('dayjs') ||
-            id.includes('dompurify') ||
-            id.includes('lodash') ||
-            id.includes('qrcode') ||
-            id.includes('cropperjs') ||
-            id.includes('lottie-web')
-          ) {
-            return 'vendor-utils';
+          if (id.includes('gsap')) {
+            return 'vendor-animation';
           }
 
           if (id.includes('@fullcalendar')) {
@@ -119,11 +113,7 @@ export default defineConfig({
             return 'vendor-ui-charts';
           }
 
-          if (id.includes('gsap')) {
-            return 'vendor-gsap';
-          }
-
-          // Fallback vendor chunk for remaining third-party deps.
+          // Fallback vendor chunk
           return 'vendor-misc';
         },
       },

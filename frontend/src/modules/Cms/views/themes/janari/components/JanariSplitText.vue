@@ -6,10 +6,10 @@
     <span 
       v-for="(unit, idx) in units" 
       :key="idx"
-      class="gsap-split-unit inline-block overflow-hidden"
+      class="motion-split-unit inline-block overflow-hidden"
     >
       <span 
-        class="gsap-split-inner inline-block"
+        class="motion-split-inner inline-block"
         :data-unit="unit"
       >
         {{ unit }}<span v-if="isWordMode && idx < units.length - 1">&nbsp;</span>

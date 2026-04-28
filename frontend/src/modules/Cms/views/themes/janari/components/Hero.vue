@@ -19,9 +19,9 @@
         width="1920"
         height="1080"
         sizes="100vw"
-        decoding="async"
-        :fetchpriority="idx === activeSlide ? 'high' : 'low'"
-        :loading="idx === activeSlide ? 'eager' : 'lazy'"
+        :decoding="idx === 0 ? 'sync' : 'async'"
+        :fetchpriority="idx === 0 ? 'high' : 'low'"
+        :loading="idx === 0 ? 'eager' : 'lazy'"
         referrerpolicy="no-referrer"
       >
     </div>
@@ -88,10 +88,13 @@
         <button
           v-for="(_, idx) in heroSlides"
           :key="'dot-' + idx"
-          class="transition-all duration-500 rounded-full cursor-pointer"
+          class="transition-all duration-500 rounded-full cursor-pointer min-w-10 min-h-10 flex items-center justify-center"
           :class="idx === activeSlide ? 'w-8 h-2 bg-primary' : 'w-2 h-2 bg-white/30 hover:bg-white/60'"
+          :aria-label="`Pindah ke slide ${idx + 1}`"
           @click="goToSlide(idx)"
-        />
+        >
+          <span class="sr-only">Slide {{ idx + 1 }}</span>
+        </button>
       </div>
     </div>
 
@@ -116,8 +119,7 @@
         class="w-1/3 flex border-r border-white/5 group relative overflow-hidden bg-white/[0.01] hover:bg-white/[0.04] transition-colors cursor-pointer shrink-0"
       >
         <div class="w-12 lg:w-16 bg-black flex items-center justify-center shrink-0 border-r border-white/10 group-hover:bg-primary transition-colors duration-500 relative z-10 box-border">
-          <span class="rotate-[-90deg] origin-center whitespace-nowrap text-[9px] font-black tracking-[0.4em] uppercase text-white/50 group-hover:opacity-0 transition-opacity duration-300 absolute">LATEST NEWS</span>
-          <span class="rotate-[-90deg] origin-center whitespace-nowrap text-[10px] font-black tracking-[0.4em] uppercase text-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute">VIEW MORE</span>
+          <span class="rotate-[-90deg] origin-center whitespace-nowrap text-[9px] font-black tracking-[0.4em] uppercase text-white/85 group-hover:opacity-0 transition-opacity duration-300 absolute">LATEST NEWS</span>
         </div>
         <div class="flex-1 flex flex-col justify-center px-6 lg:px-10 relative overflow-hidden h-full">
           <div class="flex flex-col justify-center w-full gap-3">
@@ -126,9 +128,9 @@
               <span class="text-[10px] font-black tracking-widest text-white/50 group-hover:text-primary transition-colors">{{ visibleNews[primaryIndex]?.date || '' }}</span>
               <span class="text-[8px] px-2 py-1 border border-white/10 text-white/40 uppercase tracking-widest group-hover:border-primary group-hover:text-primary transition-colors">{{ visibleNews[primaryIndex]?.category || 'INFO' }}</span>
             </div>
-            <h3 class="text-sm md:text-base font-medium text-white/70 group-hover:text-white transition-colors line-clamp-2 pl-6 leading-relaxed">
+            <p class="text-sm md:text-base font-medium text-white/70 group-hover:text-white transition-colors line-clamp-2 pl-6 leading-relaxed">
               {{ visibleNews[primaryIndex]?.title || 'Loading...' }}
-            </h3>
+            </p>
           </div>
         </div>
       </router-link>
@@ -137,7 +139,8 @@
       <div class="w-1/3 flex group relative overflow-hidden bg-white/[0.02] hover:bg-white/[0.06] transition-colors shrink-0 items-center justify-center border-r border-white/5 z-0">
         <div class="absolute left-3 lg:left-5 top-1/2 -translate-y-1/2 z-20">
           <button
-            class="w-8 h-8 rounded-full bg-black/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/50 hover:text-primary hover:border-primary transition-all cursor-pointer"
+            class="w-10 h-10 rounded-full bg-black/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/50 hover:text-primary hover:border-primary transition-all cursor-pointer"
+            aria-label="Berita sebelumnya"
             @click.prevent="prevNews"
           >
             <svg
@@ -163,6 +166,7 @@
                 v-if="visibleNews[secondaryIndex]?.image"
                 :src="visibleNews[secondaryIndex].image" 
                 class="w-full h-full object-cover" 
+                :alt="visibleNews[secondaryIndex]?.title || 'News image'"
                 width="128"
                 height="80"
                 loading="lazy"
@@ -175,9 +179,9 @@
               <p class="text-[8px] text-primary font-black uppercase tracking-[0.25em] mb-2">
                 {{ visibleNews[secondaryIndex]?.category || 'INFO' }}
               </p>
-              <h4 class="text-xs font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
+              <p class="text-xs font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
                 {{ visibleNews[secondaryIndex]?.title || '' }}
-              </h4>
+              </p>
             </div>
           </div>
         </router-link>
@@ -195,6 +199,7 @@
                 v-if="visibleNews[tertiaryIndex]?.image"
                 :src="visibleNews[tertiaryIndex].image" 
                 class="w-full h-full object-cover" 
+                :alt="visibleNews[tertiaryIndex]?.title || 'News image'"
                 width="128"
                 height="80"
                 loading="lazy"
@@ -207,15 +212,16 @@
               <p class="text-[8px] text-primary font-black uppercase tracking-[0.25em] mb-2">
                 {{ visibleNews[tertiaryIndex]?.category || 'INFO' }}
               </p>
-              <h4 class="text-xs font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
+              <p class="text-xs font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
                 {{ visibleNews[tertiaryIndex]?.title || '' }}
-              </h4>
+              </p>
             </div>
           </div>
         </router-link>
         <div class="absolute right-3 lg:right-5 top-1/2 -translate-y-1/2 z-20">
           <button
-            class="w-8 h-8 rounded-full bg-black/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/50 hover:text-primary hover:border-primary transition-all cursor-pointer"
+            class="w-10 h-10 rounded-full bg-black/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/50 hover:text-primary hover:border-primary transition-all cursor-pointer"
+            aria-label="Berita berikutnya"
             @click.prevent="nextNews"
           >
             <svg
@@ -240,7 +246,8 @@
         <span class="text-[9px] font-black tracking-widest text-primary uppercase">LATEST NEWS</span>
         <div class="flex gap-3">
           <button
-            class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white/70"
+            class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/70"
+            aria-label="Berita sebelumnya"
             @click.prevent="prevNews"
           >
             <svg
@@ -254,7 +261,8 @@
             ><path d="m15 18-6-6 6-6" /></svg>
           </button>
           <button
-            class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white/70"
+            class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/70"
+            aria-label="Berita berikutnya"
             @click.prevent="nextNews"
           >
             <svg
@@ -272,9 +280,9 @@
       <router-link :to="visibleNews[primaryIndex]?.url || '#'">
         <div class="space-y-2">
           <span class="text-[8px] text-white/40 uppercase tracking-widest">{{ visibleNews[primaryIndex]?.date || '' }}</span>
-          <h3 class="text-sm font-bold text-white line-clamp-2">
+          <p class="text-sm font-bold text-white line-clamp-2">
             {{ visibleNews[primaryIndex]?.title || 'Loading...' }}
-          </h3>
+          </p>
         </div>
       </router-link>
     </div>
@@ -283,16 +291,17 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
+import { useHead } from '@unhead/vue'
 import JanariSplitText from './JanariSplitText.vue'
 import { useTheme } from '@/composables/useTheme'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 import api from '@/services/api'
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity'
 
 const { getSetting } = useTheme()
 const { displaySiteName } = useJanariIdentity()
-const { splitTextRevealSafe, createTimeline, gsap } = useGsapAnimations()
+const { splitTextRevealSafe, createTimeline, motion } = useThemeMotion()
 
 
 const heroBadge = ref<HTMLElement>()
@@ -322,6 +331,21 @@ const heroHeight = computed(() => (getSetting('hero_height') as string) || '85vh
 const heroAlignment = computed(() => (getSetting('hero_alignment') as string) || 'items-center text-center')
 const heroShowScroll = computed(() => getSetting('hero_show_scroll', true))
 const heroNewsCategory = computed(() => (getSetting('hero_news_category') as string)?.trim() || '');
+const initialHeroSlide = computed(() => {
+    const configured = (getSetting('hero_slide_1') as string) || '';
+    return configured || '/assets/themes/janari/hero-placeholder.png';
+});
+
+useHead({
+    link: [
+        {
+            rel: 'preload',
+            as: 'image',
+            href: initialHeroSlide,
+            fetchpriority: 'high',
+        },
+    ],
+});
 
 const heroSlides = ref<string[]>([])
 const activeSlide = ref(0)
@@ -395,8 +419,8 @@ const goToSlide = (idx: number) => {
     const prevEl = slideElements.value[activeSlide.value]
     const nextEl = slideElements.value[idx]
     if (!prevEl || !nextEl) return
-    gsap.to(prevEl, { opacity: 0, duration: 1.2 })
-    gsap.fromTo(nextEl, { opacity: 0 }, { opacity: 1, duration: 1.2 })
+    motion.to(prevEl, { opacity: 0, duration: 1.2 })
+    motion.fromTo(nextEl, { opacity: 0 }, { opacity: 1, duration: 1.2 })
     activeSlide.value = idx
     resetSlideTimer()
 }

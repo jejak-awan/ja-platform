@@ -18,7 +18,14 @@
             v-if="siteLogo && brandingDisplay !== 'text_only'" 
             :src="siteLogo" 
             class="h-8 w-auto object-contain brightness-100 group-hover:brightness-110 transition-all duration-300" 
-            :alt="siteName"
+            :alt="brandingDisplay === 'logo_only' ? siteName : ''"
+            :aria-hidden="brandingDisplay === 'logo_only' ? undefined : 'true'"
+            width="160"
+            height="32"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            sizes="160px"
           >
           <div 
             v-else-if="brandingDisplay !== 'text_only'"
@@ -135,8 +142,9 @@
           class="flex items-center gap-6 pl-6 border-l border-border"
         >
           <button
-            class="text-foreground hover:text-primary transition-colors"
+            class="text-foreground hover:text-primary transition-colors min-w-10 min-h-10 flex items-center justify-center"
             title="Toggle theme"
+            :aria-label="isDark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'"
             @click="toggleMode"
           >
             <Sun
@@ -168,7 +176,8 @@
         <!-- Mobile Burger -->
         <button
           v-if="!isDesktop"
-          class="p-2 text-foreground/70 hover:text-foreground relative z-[200]"
+          class="p-2 text-foreground/70 hover:text-foreground relative z-[200] min-w-10 min-h-10"
+          aria-label="Buka menu navigasi"
           @click="toggleMenu"
         >
           <MenuIcon class="w-7 h-7" />
@@ -213,6 +222,7 @@
               :href="resolveSocialHref(link)"
               :target="getSocialTarget(link)"
               :rel="getSocialRel(link)"
+              :aria-label="getSocialAriaLabel(link)"
               data-social-icon="true"
               class="social-dock-icon text-foreground/80 hover:text-primary transition-colors"
             >
@@ -229,7 +239,7 @@
           <button
             class="flex items-center gap-2 group/p focus:outline-none focus-visible:outline-none focus-visible:ring-0"
             type="button"
-            data-gsap-interactive="off"
+            data-motion-interactive="off"
             @click="toggleSocialLinks"
           >
             <span class="text-[9px] font-black uppercase tracking-[0.35em] text-foreground/75 group-hover/p:text-foreground transition-colors">SOCIAL</span>
@@ -264,14 +274,22 @@
               v-if="siteLogo"
               :src="siteLogo"
               class="h-8 w-auto object-contain"
-              :alt="siteName"
+              :alt="brandingDisplay === 'logo_only' ? siteName : ''"
+              :aria-hidden="brandingDisplay === 'logo_only' ? undefined : 'true'"
+              width="160"
+              height="32"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              sizes="160px"
             >
             <span class="text-lg font-heading font-black tracking-tight uppercase text-white leading-none">{{ siteName }}</span>
             <div class="h-4 w-px bg-white/20" />
             <span class="text-[7px] font-black tracking-[0.35em] uppercase text-white/40 leading-tight">OFFICIAL<br>WEBSITE</span>
           </router-link>
           <button
-            class="text-white/70 hover:text-white p-1"
+            class="text-white/70 hover:text-white p-1 min-w-10 min-h-10"
+            aria-label="Tutup menu navigasi"
             @click="isOpen = false"
           >
             <X class="w-8 h-8" />
@@ -444,6 +462,7 @@
             :href="resolveSocialHref(link)"
             :target="getSocialTarget(link)"
             :rel="getSocialRel(link)"
+            :aria-label="getSocialAriaLabel(link)"
             class="text-white/40 hover:text-white transition-colors"
           >
             <component
@@ -463,7 +482,7 @@ import { useTheme } from '@/composables/useTheme';
 import { useMenu } from '@/composables/useMenu';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
 import { useResponsiveDevice } from '@/composables/useResponsiveDevice';
-import { useGsapAnimations } from '@/composables/useGsapAnimations';
+import { useThemeMotion } from '@/composables/useThemeMotion';
 import { useRoute } from 'vue-router';
 import { useDarkMode } from '@/composables/useDarkMode';
 import { SECURITY_ROUTES } from '@/config/security';
@@ -491,7 +510,7 @@ import type { MenuItem } from '@/types/cms/menu';
 const { getSetting } = useTheme();
 const { menus, fetchMenuByIdentifier } = useMenu();
 const device = useResponsiveDevice();
-const { gsap } = useGsapAnimations();
+const { motion } = useThemeMotion();
 const route = useRoute();
 const { isDark, toggleMode } = useDarkMode('frontend');
 
@@ -568,9 +587,27 @@ const getSocialRel = (link: { icon?: string; url?: string }) => {
     return getSocialTarget(link) ? 'noopener noreferrer' : undefined;
 };
 
+const getSocialAriaLabel = (link: { icon?: string; url?: string }) => {
+    const icon = trimStr(link?.icon) || 'social';
+    const href = resolveSocialHref(link);
+    if (href.startsWith('mailto:')) return `Kirim email via ${icon}`;
+    if (href.startsWith('tel:')) return `Hubungi via ${icon}`;
+    if (href === '#') return `Tautan ${icon}`;
+    try {
+        const parsed = new URL(href, window.location.origin);
+        const path = parsed.pathname.replace(/^\/+/, '');
+        const suffix = path ? `${parsed.hostname}/${path}` : parsed.hostname;
+        return `Kunjungi ${icon} (${suffix})`;
+    } catch {
+        return `Kunjungi ${icon}`;
+    }
+};
+
 const latestNewsText = ref('Latest Updates: 35th L\'Anniversary Year - Arena Tour 2026 Underground Announced');
 const socialExpanded = ref(true);
 const socialLinksWrap = ref<HTMLElement>();
+const socialIconCenters = ref<number[]>([]);
+let socialDockRafId: number | null = null;
 
 const headerStyleClasses = computed(() => {
     switch (headerStyle.value) {
@@ -640,7 +677,7 @@ const toggleSocialLinks = () => {
     if (!wrap) return;
 
     if (socialExpanded.value) {
-        gsap.to(wrap, {
+        motion.to(wrap, {
             scaleX: 0,
             opacity: 0,
             x: 10,
@@ -656,8 +693,8 @@ const toggleSocialLinks = () => {
     }
 
     wrap.style.display = 'flex';
-    gsap.set(wrap, { scaleX: 0, opacity: 0, x: 10, transformOrigin: 'right center' });
-    gsap.to(wrap, {
+    motion.set(wrap, { scaleX: 0, opacity: 0, x: 10, transformOrigin: 'right center' });
+    motion.to(wrap, {
         scaleX: 1,
         opacity: 1,
         x: 0,
@@ -675,31 +712,48 @@ const handleSocialDockMove = (event: MouseEvent) => {
     const icons = Array.from(wrap.querySelectorAll<HTMLElement>('[data-social-icon="true"]'));
     if (!icons.length) return;
 
+    if (socialIconCenters.value.length !== icons.length) {
+        socialIconCenters.value = icons.map((icon) => {
+            const rect = icon.getBoundingClientRect();
+            return rect.left + (rect.width / 2);
+        });
+    }
+
     const pointerX = event.clientX;
     const maxDistance = 120;
 
-    icons.forEach((icon) => {
-        const rect = icon.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const distance = Math.abs(pointerX - centerX);
-        const intensity = Math.max(0, 1 - distance / maxDistance);
+    if (socialDockRafId !== null) {
+        cancelAnimationFrame(socialDockRafId);
+    }
+    socialDockRafId = requestAnimationFrame(() => {
+        icons.forEach((icon, idx) => {
+            const centerX = socialIconCenters.value[idx] ?? 0;
+            const distance = Math.abs(pointerX - centerX);
+            const intensity = Math.max(0, 1 - distance / maxDistance);
 
-        gsap.to(icon, {
-            scale: 1 + (intensity * 0.5),
-            y: -(intensity * 8),
-            duration: 0.18,
-            ease: 'power3.out',
-            overwrite: 'auto',
+            motion.to(icon, {
+                scale: 1 + (intensity * 0.5),
+                y: -(intensity * 8),
+                duration: 0.18,
+                ease: 'power3.out',
+                overwrite: 'auto',
+            });
         });
+        socialDockRafId = null;
     });
 };
 
 const resetSocialDock = () => {
     const wrap = socialLinksWrap.value;
     if (!wrap) return;
+    if (socialDockRafId !== null) {
+        cancelAnimationFrame(socialDockRafId);
+        socialDockRafId = null;
+    }
     const icons = Array.from(wrap.querySelectorAll<HTMLElement>('[data-social-icon="true"]'));
+    socialIconCenters.value = [];
     icons.forEach((icon) => {
-        gsap.to(icon, {
+        motion.to(icon, {
             scale: 1,
             y: 0,
             duration: 0.22,
@@ -778,12 +832,18 @@ onMounted(() => {
     fetchMenuByIdentifier(topMenuIdentifier, 'header_top');
     if (headerRef.value) {
         // Use set to ensure visibility before animation
-        gsap.set(headerRef.value, { y: -100, opacity: 0 });
-        gsap.to(headerRef.value, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', clearProps: 'all' });
+        motion.set(headerRef.value, { y: -100, opacity: 0 });
+        motion.to(headerRef.value, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', clearProps: 'all' });
     }
+    socialIconCenters.value = [];
+    window.addEventListener('resize', resetSocialDock);
 });
 
 onUnmounted(() => {
+    if (socialDockRafId !== null) {
+        cancelAnimationFrame(socialDockRafId);
+    }
+    window.removeEventListener('resize', resetSocialDock);
     document.body.style.overflow = '';
 });
 </script>

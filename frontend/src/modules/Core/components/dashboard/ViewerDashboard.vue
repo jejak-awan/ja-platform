@@ -28,7 +28,7 @@
             <div
               v-for="i in 3"
               :key="i"
-              class="h-12 bg-muted/50 rounded animate-pulse"
+              class="h-12 bg-muted/50 rounded"
             />
           </div>
           <div
@@ -44,7 +44,7 @@
             <div
               v-for="item in recentContent"
               :key="item.id"
-              class="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+              class="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50"
             >
               <div class="flex items-center gap-3">
                 <div class="p-2 bg-primary/10 text-primary rounded-full">
@@ -77,7 +77,7 @@
             <a
               href="/"
               target="_blank"
-              class="flex items-center p-3 rounded-lg border hover:bg-accent transition-colors group"
+              class="flex items-center p-3 rounded-lg border hover:bg-accent group"
             >
               <Home class="w-5 h-5 text-muted-foreground group-hover:text-primary mr-3" />
               <div>

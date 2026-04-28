@@ -294,12 +294,10 @@ class Theme extends Model
             }
         }
 
-        // Check required directories for Vue themes
-        $requiredDirs = ['assets']; // templates no longer required for Vue SPA
-        foreach ($requiredDirs as $dir) {
-            if (! is_dir("{$themePath}/{$dir}")) {
-                $errors[] = "Required directory missing: {$dir}";
-            }
+        // For code-first Vue themes, assets directory is optional.
+        // Many themes are fully component-driven and ship no static assets folder.
+        if (! is_dir("{$themePath}/assets")) {
+            \Log::info("Theme '{$this->name}' does not have an assets directory");
         }
 
         // Check for Vue components directory (optional but recommended)

@@ -169,6 +169,13 @@ const config = computed<ErrorConfig>(() => {
 });
 
 const handleLogin = () => {
+    if (state.code === 419 && state.reason === 'timeout') {
+        hideError();
+        authStore.logout();
+        window.location.href = '/';
+        return;
+    }
+
     const redirect = (state.redirect || router.currentRoute.value.fullPath) as string;
     const target = `${SECURITY_ROUTES.login}?redirect=${encodeURIComponent(redirect !== '/' ? redirect : SECURITY_ROUTES.dashboardBase)}`;
     

@@ -24,7 +24,7 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
       <Card
-        :class="cn('p-4 cursor-pointer hover:shadow-md hover:border-primary/50 rounded-xl border-border/50 transition-all duration-300', { 'border-primary ring-2 ring-primary/20': verificationFilter === 'all' && !activeStatFilter })"
+        :class="cn('p-4 cursor-pointer hover:shadow-md hover:border-primary/50 rounded-xl border-border/50 ', { 'border-primary ring-2 ring-primary/20': verificationFilter === 'all' && !activeStatFilter })"
         @click="clearFilters"
       >
         <div class="flex items-center justify-between">
@@ -40,7 +40,7 @@
         </div>
       </Card>
       <Card
-        :class="cn('p-4 cursor-pointer hover:shadow-md hover:border-primary/50 rounded-xl border-border/50 transition-all duration-300', { 'border-primary ring-2 ring-primary/20': verificationFilter === 'verified' })"
+        :class="cn('p-4 cursor-pointer hover:shadow-md hover:border-primary/50 rounded-xl border-border/50 ', { 'border-primary ring-2 ring-primary/20': verificationFilter === 'verified' })"
         @click="setVerificationFilter('verified')"
       >
         <div class="flex items-center justify-between">
@@ -56,7 +56,7 @@
         </div>
       </Card>
       <Card
-        :class="cn('p-4 cursor-pointer hover:shadow-md hover:border-warning/50 rounded-xl border-border/50 transition-all duration-300', { 'border-warning ring-2 ring-warning/20': verificationFilter === 'unverified' })"
+        :class="cn('p-4 cursor-pointer hover:shadow-md hover:border-warning/50 rounded-xl border-border/50 ', { 'border-warning ring-2 ring-warning/20': verificationFilter === 'unverified' })"
         @click="setVerificationFilter('unverified')"
       >
         <div class="flex items-center justify-between">
@@ -72,7 +72,7 @@
         </div>
       </Card>
       <Card
-        :class="cn('p-4 cursor-pointer hover:shadow-md hover:border-success/50 rounded-xl border-border/50 transition-all duration-300', { 'border-success ring-2 ring-success/20': activeStatFilter === 'recent' })"
+        :class="cn('p-4 cursor-pointer hover:shadow-md hover:border-success/50 rounded-xl border-border/50 ', { 'border-success ring-2 ring-success/20': activeStatFilter === 'recent' })"
         @click="setStatFilter('recent')"
       >
         <div class="flex items-center justify-between">
@@ -88,7 +88,7 @@
         </div>
       </Card>
       <Card
-        :class="cn('p-4 cursor-pointer hover:shadow-md hover:border-info/50 rounded-xl border-border/50 transition-all duration-300', { 'border-info ring-2 ring-info/20': activeStatFilter === 'active' })"
+        :class="cn('p-4 cursor-pointer hover:shadow-md hover:border-info/50 rounded-xl border-border/50 ', { 'border-info ring-2 ring-info/20': activeStatFilter === 'active' })"
         @click="setStatFilter('active')"
       >
         <div class="flex items-center justify-between">
@@ -176,7 +176,7 @@
           <div class="flex items-center gap-2">
             <div
               v-if="selectedIds.length > 0"
-              class="flex items-center gap-3 p-1.5 px-3 rounded-lg bg-primary/5 border border-primary/10 animate-in fade-in slide-in-from-top-1 mr-2"
+              class="flex items-center gap-3 p-1.5 px-3 rounded-lg bg-primary/5 border border-primary/10 mr-2"
             >
               <span class="text-xs font-semibold text-primary uppercase tracking-wider">
                 {{ selectedIds.length }} selected

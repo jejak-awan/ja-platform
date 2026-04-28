@@ -345,6 +345,14 @@ api.interceptors.response.use(
         // Handle 403 Forbidden - Redirect to maintenance if it looks like a global block
         if (error.response?.status === 403) {
             const url = error.config?.url || '';
+            const isAdminEndpoint = url.includes('/admin/');
+            const isSessionTerminated = !!window.__isSessionTerminated;
+
+            // Expected during standby/session lockdown on protected admin APIs.
+            // Keep behavior blocked, but silence noisy console/error handling chains.
+            if (isSessionTerminated && isAdminEndpoint) {
+                return Promise.reject(new axios.Cancel('Vapor Lock: Admin 403 Silenced'));
+            }
             
             // 403/503 Forbidden/Maintenance handling
             // We NO LONGER push to the router inside the interceptor for critical initialization APIs.

@@ -1,0 +1,1 @@
+function e(e){return e===!0||e===1||e===`1`||e===`true`}function t(t){if(!t||typeof t!=`object`||Array.isArray(t))return!1;let n=t.janari_canvas;return e(n)}function n(e){return!e||typeof e!=`object`||Array.isArray(e)?!1:t(e.supports)}function r(e){return e?n(e.manifest)||t(e.supports)?!0:String(e.slug??``).startsWith(`janari`):!1}export{r as t};

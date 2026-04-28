@@ -209,7 +209,7 @@
             v-if="loadingRoles"
             class="flex items-center text-sm text-muted-foreground"
           >
-            <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+            <Loader2 class="w-4 h-4 mr-2" />
             {{ $t('common.messages.loading.default') }}
           </div>
           <div
@@ -219,7 +219,7 @@
             <div
               v-for="role in availableRoles"
               :key="role.id"
-              class="flex items-center space-x-2 border border-input px-3 py-2 rounded-md hover:bg-accent/50 transition-colors"
+              class="flex items-center space-x-2 border border-input px-3 py-2 rounded-md hover:bg-accent/50"
             >
               <Checkbox
                 :id="`role-${role.id}`"
@@ -266,7 +266,7 @@
         >
           <Loader2
             v-if="saving"
-            class="w-4 h-4 mr-2 animate-spin"
+            class="w-4 h-4 mr-2"
           />
           {{ saving ? $t('common.messages.loading.creating') : $t('common.actions.create') }}
         </Button>

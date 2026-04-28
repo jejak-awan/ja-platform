@@ -1,34 +1,31 @@
 <template>
-  <section class="py-32 bg-black relative overflow-hidden border-y border-white/5">
-    <!-- Decorative Glow -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[160px] pointer-events-none" />
-
+  <section class="testimonial-section isolate py-32 bg-black relative overflow-hidden border-y border-white/5">
     <div class="container mx-auto px-6 relative z-10">
       <div
         ref="headerRef"
         class="mb-24"
       >
-        <span class="text-primary font-black tracking-[0.5em] uppercase text-[10px] block mb-6">VOICES OF EXCELLENCE</span>
+        <span class="text-white font-black tracking-[0.5em] uppercase text-[10px] block mb-6">VOICES OF EXCELLENCE</span>
         <h2
           ref="headingRef"
           class="text-5xl md:text-7xl font-heading font-black leading-[0.85] uppercase tracking-tighter text-white"
         >
-          <JanariSplitText text="TESTIMONIAL & ALUMNI STORIES" />
+          <JanariSplitText class="text-white" text="TESTIMONIAL & ALUMNI STORIES" />
         </h2>
       </div>
 
       <div
         ref="gridRef"
-        class="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/5 divide-y md:divide-y-0 md:divide-x divide-white/10 bg-background/40 dark:bg-card/50 backdrop-blur-sm"
+        class="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/10 divide-y md:divide-y-0 md:divide-x divide-white/10 bg-black"
       >
         <div 
           v-for="(item, index) in items" 
           :key="index"
-          class="gsap-testimonial p-12 group hover:bg-primary transition-all duration-700 cursor-default flex flex-col justify-between"
+          class="motion-testimonial p-12 group hover:bg-primary transition-all duration-700 cursor-default flex flex-col justify-between"
         >
           <div>
             <div class="relative mb-12">
-              <span class="gsap-quote text-7xl text-primary/20 group-hover:text-primary-foreground/15 font-heading leading-none absolute -top-8 -left-4 font-black">“</span>
+              <span class="motion-quote text-7xl text-primary/20 group-hover:text-primary-foreground/15 font-heading leading-none absolute -top-8 -left-4 font-black">“</span>
               <p class="text-white/60 group-hover:text-primary-foreground/85 leading-relaxed italic text-lg relative z-10 pt-4">
                 {{ item.content }}
               </p>
@@ -42,6 +39,11 @@
                 :src="item.avatar"
                 :alt="item.name"
                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                width="56"
+                height="56"
+                loading="lazy"
+                decoding="async"
+                sizes="56px"
               >
               <div
                 v-else
@@ -68,7 +70,7 @@
 <script setup lang="ts">
 import JanariSplitText from './JanariSplitText.vue'
 import { ref, onMounted, nextTick } from 'vue'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 
 interface Testimonial {
   name: string;
@@ -81,7 +83,7 @@ defineProps<{
   items: Testimonial[];
 }>();
 
-const { fadeInUp, staggerChildren, splitTextRevealSafe, gsap } = useGsapAnimations()
+const { fadeInUp, staggerChildren, splitTextRevealSafe, motion } = useThemeMotion()
 
 const headerRef = ref<HTMLElement>()
 const headingRef = ref<HTMLElement>()
@@ -106,17 +108,17 @@ onMounted(() => {
 
     // Cards stagger in
     if (gridRef.value) {
-      staggerChildren(gridRef.value, '.gsap-testimonial', {
+      staggerChildren(gridRef.value, '.motion-testimonial', {
         distance: 50,
         stagger: 0.15,
         duration: 0.8,
       })
 
       // Quote mark scale animation
-      const quotes = gridRef.value.querySelectorAll('.gsap-quote')
+      const quotes = gridRef.value.querySelectorAll('.motion-quote')
       quotes.forEach((q, i) => {
-        gsap.set(q, { scale: 0, opacity: 0 })
-        gsap.to(q, {
+        motion.set(q, { scale: 0, opacity: 0 })
+        motion.to(q, {
           scale: 1,
           opacity: 1,
           duration: 0.6,
@@ -135,5 +137,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Scoped adjustments */
+.testimonial-section {
+  background-color: #000 !important;
+}
 </style>

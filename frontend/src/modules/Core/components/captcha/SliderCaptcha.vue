@@ -8,7 +8,7 @@
       ref="trackRef"
       class="relative h-12 bg-muted rounded-lg border border-border overflow-hidden select-none"
       @mousedown="startDrag"
-      @touchstart="startDrag"
+      @touchstart.passive="startDrag"
     >
       <!-- Progress fill -->
       <div 
@@ -114,7 +114,7 @@ const startDrag = (e: MouseEvent | TouchEvent) => {
     
     document.addEventListener('mousemove', onDrag)
     document.addEventListener('mouseup', endDrag)
-    document.addEventListener('touchmove', onDrag)
+    document.addEventListener('touchmove', onDrag, { passive: true })
     document.addEventListener('touchend', endDrag)
 }
 

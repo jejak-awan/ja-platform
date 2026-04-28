@@ -7,7 +7,7 @@ import type { DirectiveBinding, ObjectDirective } from "vue";
 
 const observerOptions: IntersectionObserverInit = {
     root: null,
-    rootMargin: '50px',  // Start loading 50px before image is visible
+    rootMargin: '200px',  // Start loading 200px before image is visible
     threshold: 0.01,
 };
 

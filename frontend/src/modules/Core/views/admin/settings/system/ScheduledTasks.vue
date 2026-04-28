@@ -35,14 +35,7 @@
     </div>
 
     <!-- Inline Help Guide -->
-    <Transition
-      enter-active-class="transition ease-out duration-200"
-      enter-from-class="opacity-0 -translate-y-2"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition ease-in duration-150"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 -translate-y-2"
-    >
+    <div>
       <div
         v-if="showHelp"
         class="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
@@ -111,7 +104,7 @@
           </Button>
         </div>
       </div>
-    </Transition>
+    </div>
 
     <!-- Filter Bar -->
     <div class="bg-card border border-border rounded-lg p-4 sticky top-0 z-10 shadow-sm backdrop-blur-xl bg-card/80">
@@ -131,14 +124,7 @@
 
         <!-- Bulk Actions & View Toggle -->
         <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-          <Transition
-            enter-active-class="transition ease-out duration-200"
-            enter-from-class="opacity-0 scale-95"
-            enter-to-class="opacity-100 scale-100"
-            leave-active-class="transition ease-in duration-150"
-            leave-from-class="opacity-100 scale-100"
-            leave-to-class="opacity-0 scale-95"
-          >
+          <div>
             <div
               v-if="selectedTasks.length > 0"
               class="flex items-center gap-2"
@@ -150,7 +136,7 @@
                 v-model="bulkActionSelection"
                 @update:model-value="handleBulkAction"
               >
-                <SelectTrigger class="w-[140px] h-9 bg-primary/5 border-primary/20 text-primary hover:bg-primary/10 transition-colors">
+                <SelectTrigger class="w-[140px] h-9 bg-primary/5 border-primary/20 text-primary hover:bg-primary/10">
                   <SelectValue :placeholder="$t('common.actions.bulkAction')" />
                 </SelectTrigger>
                 <SelectContent>
@@ -166,7 +152,7 @@
                 </SelectContent>
               </Select>
             </div>
-          </Transition>
+          </div>
         </div>
       </div>
     </div>
@@ -179,7 +165,7 @@
       <div
         v-for="i in 3"
         :key="i"
-        class="h-16 rounded-lg bg-card border border-border animate-pulse"
+        class="h-16 rounded-lg bg-card border border-border"
       />
     </div>
 
@@ -426,7 +412,7 @@
                 v-if="adhocExecuting"
                 class="flex items-center gap-2"
               >
-                <Loader2 class="w-4 h-4 animate-spin" />
+                <Loader2 class="w-4 h-4" />
                 <span>{{ $t('features.command_runner.executing') }}</span>
               </div>
               <pre
@@ -450,7 +436,7 @@
           >
             <Loader2
               v-if="adhocExecuting"
-              class="w-4 h-4 mr-2 animate-spin"
+              class="w-4 h-4 mr-2"
             />
             <Play
               v-else
@@ -738,13 +724,13 @@ const columns = [
         header: () => h('div', { class: 'text-right' }, t('features.scheduled_tasks.table.actions')),
         cell: ({ row }) => {
             const task = row.original;
-            return h('div', { class: 'flex justify-end gap-1 opacity-100 group-hover:opacity-100 transition-opacity' }, [
+            return h('div', { class: 'flex justify-end gap-1 opacity-100 group-hover:opacity-100 ' }, [
                 h(Button, {
                     size: 'icon', variant: 'ghost', onClick: () => runTask(task),
                     disabled: running.value === task.id,
                     class: 'h-8 w-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20',
                     title: t('common.actions.run')
-                }, [running.value === task.id ? h(Loader2, { class: 'w-4 h-4 animate-spin' }) : h(Play, { class: 'w-4 h-4' })]),
+                }, [running.value === task.id ? h(Loader2, { class: 'w-4 h-4 ' }) : h(Play, { class: 'w-4 h-4' })]),
                 task.output && h(Button, {
                     size: 'icon', variant: 'ghost', onClick: () => viewOutput(task),
                     class: 'h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20',

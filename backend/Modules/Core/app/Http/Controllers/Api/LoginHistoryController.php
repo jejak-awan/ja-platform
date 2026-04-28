@@ -4,6 +4,7 @@ namespace Modules\Core\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Modules\Core\Models\IpList;
 use Modules\Core\Models\LoginHistory;
 
 class LoginHistoryController extends BaseApiController
@@ -99,18 +100,22 @@ class LoginHistoryController extends BaseApiController
     {
         try {
             $alerts = [];
+            $whitelistedIps = $this->getWhitelistedIps();
 
-            // 1. Users with multiple failed attempts in last 24h (brute force indicators)
-            /** @var \Illuminate\Support\Collection<int, object{user_id: int|null, ip_address: string|null, fail_count: int}> $failedAttempts */
-            $failedAttempts = LoginHistory::where('status', 'failed')
+            $failedAttemptsQuery = LoginHistory::where('status', 'failed')
                 ->where('login_at', '>=', now()->subDay())
                 ->selectRaw('user_id, ip_address, count(*) as fail_count')
                 ->groupBy('user_id', 'ip_address')
-                ->havingRaw('count(*) >= 3')
-                ->get();
+                ->havingRaw('count(*) >= 3');
+            if ($whitelistedIps !== []) {
+                $failedAttemptsQuery->whereNotIn('ip_address', $whitelistedIps);
+            }
+            /** @var \Illuminate\Support\Collection<int, object{user_id: int|null, ip_address: string|null, fail_count: int}> $failedAttempts */
+            $failedAttempts = $failedAttemptsQuery->get();
 
             foreach ($failedAttempts as $attempt) {
                 $user = $attempt->user_id ? \Modules\Core\Models\User::find($attempt->user_id) : null;
+                /** @var object{user_id: int|null, ip_address: string|null, fail_count: int} $attempt */
                 $alerts[] = [
                     'type' => 'brute_force',
                     'severity' => 'high',
@@ -122,10 +127,14 @@ class LoginHistoryController extends BaseApiController
             }
 
             // 2. New IPs for existing users (never seen before)
-            $recentLogins = LoginHistory::where('status', 'success')
+            $recentLoginsQuery = LoginHistory::where('status', 'success')
                 ->where('login_at', '>=', now()->subDay())
                 ->whereNotNull('user_id')
-                ->get(['user_id', 'ip_address', 'login_at']);
+                ->whereNotNull('ip_address');
+            if ($whitelistedIps !== []) {
+                $recentLoginsQuery->whereNotIn('ip_address', $whitelistedIps);
+            }
+            $recentLogins = $recentLoginsQuery->get(['user_id', 'ip_address', 'login_at']);
 
             foreach ($recentLogins as $login) {
                 $hasPreviousLogins = LoginHistory::where('user_id', $login->user_id)
@@ -157,14 +166,17 @@ class LoginHistoryController extends BaseApiController
             }
 
             // 3. Same IP used by multiple different users (account sharing/compromise)
-            /** @var \Illuminate\Support\Collection<int, object{ip_address: string|null, user_count: int}> $sharedIps */
-            $sharedIps = LoginHistory::where('status', 'success')
+            $sharedIpsQuery = LoginHistory::where('status', 'success')
                 ->where('login_at', '>=', now()->subWeek())
                 ->whereNotNull('user_id')
                 ->selectRaw('ip_address, count(distinct user_id) as user_count')
                 ->groupBy('ip_address')
-                ->havingRaw('count(distinct user_id) >= 3')
-                ->get();
+                ->havingRaw('count(distinct user_id) >= 3');
+            if ($whitelistedIps !== []) {
+                $sharedIpsQuery->whereNotIn('ip_address', $whitelistedIps);
+            }
+            /** @var \Illuminate\Support\Collection<int, object{ip_address: string|null, user_count: int}> $sharedIps */
+            $sharedIps = $sharedIpsQuery->get();
 
             foreach ($sharedIps as $shared) {
                 $alerts[] = [
@@ -199,20 +211,28 @@ class LoginHistoryController extends BaseApiController
     private function countSuspicious(): int
     {
         $count = 0;
+        $whitelistedIps = $this->getWhitelistedIps();
 
         // Brute force attempts
-        $count += (int) LoginHistory::where('status', 'failed')
+        $bruteForceQuery = LoginHistory::where('status', 'failed')
             ->where('login_at', '>=', now()->subDay())
             ->selectRaw("count(distinct CONCAT(COALESCE(user_id::text, ''), '-', COALESCE(ip_address, ''))) as cnt")
             ->havingRaw('count(*) >= 3')
-            ->groupBy('user_id', 'ip_address')
-            ->count();
+            ->groupBy('user_id', 'ip_address');
+        if ($whitelistedIps !== []) {
+            $bruteForceQuery->whereNotIn('ip_address', $whitelistedIps);
+        }
+        $count += (int) $bruteForceQuery->count();
 
         // New IPs (approximate — count distinct user-IP combos today not seen before)
-        $todayNewIps = LoginHistory::where('status', 'success')
+        $todayNewIpsQuery = LoginHistory::where('status', 'success')
             ->where('login_at', '>=', now()->subDay())
             ->whereNotNull('user_id')
-            ->get(['user_id', 'ip_address', 'login_at']);
+            ->whereNotNull('ip_address');
+        if ($whitelistedIps !== []) {
+            $todayNewIpsQuery->whereNotIn('ip_address', $whitelistedIps);
+        }
+        $todayNewIps = $todayNewIpsQuery->get(['user_id', 'ip_address', 'login_at']);
 
         foreach ($todayNewIps as $login) {
             $hasPreviousLogins = LoginHistory::where('user_id', $login->user_id)
@@ -232,6 +252,23 @@ class LoginHistoryController extends BaseApiController
         }
 
         return $count;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function getWhitelistedIps(): array
+    {
+        /** @var array<int, string> $ips */
+        $ips = IpList::query()
+            ->whitelist()
+            ->whereNotNull('ip_address')
+            ->pluck('ip_address')
+            ->filter(static fn ($ip): bool => is_string($ip) && $ip !== '')
+            ->values()
+            ->all();
+
+        return $ips;
     }
 
     /**

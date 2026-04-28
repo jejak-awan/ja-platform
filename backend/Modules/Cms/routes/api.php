@@ -175,6 +175,7 @@ Route::prefix('v1')->group(function () {
         Route::get('themes/{theme}/setting', [ThemeController::class, 'getSetting'])->middleware('permission:manage themes');
         Route::put('themes/{theme}/settings', [ThemeController::class, 'updateSettings'])->middleware('permission:manage themes');
         Route::put('themes/{theme}/custom-css', [ThemeController::class, 'updateCustomCss'])->middleware('permission:manage themes');
+        Route::put('themes/{theme}/customization', [ThemeController::class, 'updateCustomization'])->middleware('permission:manage themes');
         Route::get('themes/{theme}/components', [ThemeController::class, 'getComponents'])->middleware('permission:manage themes');
         Route::get('themes/{theme}/config', [ThemeController::class, 'getConfig'])->middleware('permission:manage themes');
         Route::get('themes/{theme}/composables', [ThemeController::class, 'getComposables'])->middleware('permission:manage themes');

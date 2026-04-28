@@ -38,11 +38,20 @@
       <!-- Page Content -->
       <main class="p-6 relative overflow-hidden">
         <router-view v-slot="{ Component, route: slotRoute }">
-          <transition name="fade" mode="out-in">
-            <div :key="String(slotRoute.name || slotRoute.path)">
-              <component :is="Component" />
-            </div>
-          </transition>
+          <KeepAlive
+            v-if="!slotRoute.meta?.noCache"
+            :max="12"
+          >
+            <component
+              :is="Component"
+              :key="`cached:${String(slotRoute.name || slotRoute.path)}`"
+            />
+          </KeepAlive>
+          <component
+            v-else
+            :is="Component"
+            :key="`live:${String(slotRoute.fullPath || slotRoute.path)}`"
+          />
         </router-view>
       </main>
     </div>
@@ -143,19 +152,3 @@ const handleLogout = async () => {
 
 </script>
 
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.fade-enter-from {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-</style>

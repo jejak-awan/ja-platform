@@ -10,6 +10,10 @@
         v-lazy="post.featured_image" 
         :alt="post.title" 
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        width="640"
+        height="384"
+        decoding="async"
+        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
       >
       <div
         v-if="post.category"

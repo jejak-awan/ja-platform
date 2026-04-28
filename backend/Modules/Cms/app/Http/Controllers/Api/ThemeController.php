@@ -207,6 +207,9 @@ class ThemeController extends BaseApiController
             if (isset($settingsInput['brand_logo'])) {
                 \Modules\Core\Models\Setting::set('site_logo', $settingsInput['brand_logo'], 'image', 'general');
             }
+            if (isset($settingsInput['brand_favicon'])) {
+                \Modules\Core\Models\Setting::set('site_favicon', $settingsInput['brand_favicon'], 'image', 'general');
+            }
 
             $this->themeService->clearThemeCache($theme);
 
@@ -232,6 +235,48 @@ class ThemeController extends BaseApiController
         $this->themeService->clearThemeCache($theme);
 
         return $this->success($theme, 'Theme custom CSS updated successfully');
+    }
+
+    public function updateCustomization(Request $request, Theme $theme): \Illuminate\Http\JsonResponse
+    {
+        $validated = $request->validate([
+            'settings' => 'required|array',
+            'custom_css' => 'nullable|string',
+        ]);
+
+        try {
+            $existingSettings = is_array($theme->settings) ? $theme->settings : [];
+            $settingsInput = is_array($validated['settings']) ? $validated['settings'] : [];
+            $customCss = isset($validated['custom_css']) && is_string($validated['custom_css']) ? $validated['custom_css'] : '';
+
+            $newSettings = array_merge($existingSettings, $settingsInput);
+            $newSettings = $this->themeService->normalizeThemeDataBindingsInSettings($newSettings);
+
+            \DB::transaction(function () use ($theme, $newSettings, $customCss, $settingsInput): void {
+                $theme->update([
+                    'settings' => $newSettings,
+                    'custom_css' => $customCss,
+                ]);
+
+                if (isset($settingsInput['brand_logo'])) {
+                    \Modules\Core\Models\Setting::set('site_logo', $settingsInput['brand_logo'], 'image', 'general');
+                }
+                if (isset($settingsInput['brand_favicon'])) {
+                    \Modules\Core\Models\Setting::set('site_favicon', $settingsInput['brand_favicon'], 'image', 'general');
+                }
+            });
+
+            $this->themeService->clearThemeCache($theme);
+
+            return $this->success($theme->fresh(), 'Theme customization updated successfully');
+        } catch (\Exception $e) {
+            Log::error('Failed to update theme customization: '.$e->getMessage(), [
+                'theme_id' => $theme->id,
+                'error' => $e->getTraceAsString(),
+            ]);
+
+            return $this->error('Failed to update theme customization: '.$e->getMessage(), 500);
+        }
     }
 
     public function validate(Theme $theme): \Illuminate\Http\JsonResponse

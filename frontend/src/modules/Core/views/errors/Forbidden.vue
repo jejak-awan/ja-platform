@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useI18n } from 'vue-i18n';
 import { SECURITY_ROUTES } from '@/config/security';
@@ -68,6 +68,7 @@ import LogIn from 'lucide-vue-next/dist/esm/icons/log-in.js';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 
 const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
 const { t } = useI18n();
 
@@ -75,6 +76,17 @@ const user = computed(() => authStore.user);
 const traceId = ref(`TRC-${Date.now().toString().slice(-6)}-${Math.random().toString(36).substring(7).toUpperCase()}`);
 
 const goBack = () => {
+  if (!authStore.isAuthenticated) {
+    router.push({
+      path: SECURITY_ROUTES.login,
+      query: { 
+        redirect: route.fullPath !== '/403' ? route.fullPath : undefined,
+        timeout: '1'
+      }
+    });
+    return;
+  }
+
   if (window.history.length > 1) {
     router.go(-1);
   } else {

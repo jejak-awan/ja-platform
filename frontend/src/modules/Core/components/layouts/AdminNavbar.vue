@@ -6,6 +6,7 @@
         <!-- Mobile Menu Toggle -->
         <button
           class="lg:hidden text-muted-foreground hover:text-foreground"
+          :aria-label="t('common.navigation.menu.toggleSidebar')"
           @click="$emit('toggle-sidebar')"
         >
           <Menu class="w-6 h-6" />
@@ -39,6 +40,7 @@
           <!-- Mobile Search Trigger -->
           <button
             class="md:hidden p-2 text-muted-foreground hover:text-foreground rounded-xl hover:bg-accent"
+            :aria-label="t('common.actions.search')"
             @click="showGlobalSearch = true"
           >
             <Search class="w-5 h-5" />
@@ -58,6 +60,7 @@
           <DropdownMenuTrigger as-child>
             <button
               class="relative p-2 text-muted-foreground hover:text-foreground dark:hover:text-foreground focus:outline-none"
+              :aria-label="t('common.labels.notifications')"
             >
               <Bell class="w-6 h-6" />
               <span
@@ -136,7 +139,8 @@
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <button
-              class="flex items-center space-x-3 px-3 py-2 rounded-xl hover:bg-accent focus:outline-none transition-colors"
+              class="flex items-center space-x-3 px-3 py-2 rounded-xl hover:bg-accent focus:outline-none"
+              :aria-label="t('common.labels.myProfile')"
             >
               <img
                 v-if="userAvatar"
@@ -315,6 +319,8 @@ const emit = defineEmits<{
 const notifications = ref<Notification[]>([]);
 const loadingNotifications = ref(false);
 const notificationInterval = ref<ReturnType<typeof setInterval> | null>(null);
+const isFetchingNotifications = ref(false);
+const hasLoadedNotificationsOnce = ref(false);
 const avatarError = ref(false);
 const showGlobalSearch = ref(false);
 
@@ -352,17 +358,36 @@ const userInitial = computed(() => {
     return props.user.name.charAt(0).toUpperCase();
 });
 
+const stopNotificationPolling = () => {
+    if (!notificationInterval.value) return;
+    clearInterval(notificationInterval.value);
+    notificationInterval.value = null;
+};
+
+const startNotificationPolling = () => {
+    stopNotificationPolling();
+    notificationInterval.value = setInterval(() => {
+        void fetchNotifications();
+    }, 120000);
+};
+
 const fetchNotifications = async () => {
     if (!props.isAuthenticated || (window as unknown as { __isSessionTerminated?: boolean }).__isSessionTerminated) return;
+    if (isFetchingNotifications.value) return;
     
-    loadingNotifications.value = true;
+    isFetchingNotifications.value = true;
+    if (!hasLoadedNotificationsOnce.value) {
+        loadingNotifications.value = true;
+    }
     try {
         const response = await api.get('/admin/core/notifications?limit=5');
         notifications.value = getResponseList<Notification>(response.data);
+        hasLoadedNotificationsOnce.value = true;
     } catch (error) {
         logger.error('Failed to fetch notifications:', error);
         notifications.value = [];
     } finally {
+        isFetchingNotifications.value = false;
         loadingNotifications.value = false;
     }
 };
@@ -400,21 +425,21 @@ const handleLogout = () => {
 
 watch(() => props.isAuthenticated, (isAuth) => {
     if (isAuth) {
-        fetchNotifications();
-        notificationInterval.value = setInterval(fetchNotifications, 120000);
+        void fetchNotifications();
+        startNotificationPolling();
     } else {
-        if (notificationInterval.value) {
-            clearInterval(notificationInterval.value);
-            notificationInterval.value = null;
-        }
+        stopNotificationPolling();
+        hasLoadedNotificationsOnce.value = false;
+        isFetchingNotifications.value = false;
+        loadingNotifications.value = false;
+        notifications.value = [];
     }
 });
 
 onMounted(() => {
     if (props.isAuthenticated) {
-        fetchNotifications();
-        // Poll faster (every 30s) instead of 2 minutes
-        notificationInterval.value = setInterval(fetchNotifications, 30000);
+        void fetchNotifications();
+        startNotificationPolling();
     }
     initializeLanguage();
     // Listen for manual triggers from other components
@@ -422,9 +447,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    if (notificationInterval.value) {
-        clearInterval(notificationInterval.value);
-    }
+    stopNotificationPolling();
     window.removeEventListener('notification:sent', fetchNotifications);
 });
 </script>

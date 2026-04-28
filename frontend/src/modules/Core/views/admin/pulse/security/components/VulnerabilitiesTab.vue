@@ -24,7 +24,7 @@
         >
           <Loader2
             v-if="auditRunning"
-            class="w-4 h-4 mr-2 animate-spin"
+            class="w-4 h-4 mr-2"
           />
           <ShieldAlert
             v-else

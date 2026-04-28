@@ -19,22 +19,69 @@
           <Hero v-show="isSectionActive('hero')" />
 
           <!-- Below-fold: async chunks reduce initial JS + long tasks -->
-          <PrincipalProfile v-show="isSectionActive('principal')" />
+          <div
+            ref="principalRef"
+            class="below-fold-section"
+          >
+            <PrincipalProfile
+              v-if="isSectionActive('principal') && mountedSections.principal"
+            />
+          </div>
 
-          <UpdateInformation v-show="isSectionActive('news')" />
+          <div
+            ref="newsRef"
+            class="below-fold-section"
+          >
+            <UpdateInformation
+              v-if="isSectionActive('news') && mountedSections.news"
+            />
+          </div>
 
-          <MajorsSection v-show="isSectionActive('programs')" />
+          <div
+            ref="programsRef"
+            class="below-fold-section"
+          >
+            <MajorsSection
+              v-if="isSectionActive('programs') && mountedSections.programs"
+            />
+          </div>
 
-          <StatsSection v-show="isSectionActive('stats')" />
+          <div
+            ref="statsRef"
+            class="below-fold-section"
+          >
+            <StatsSection
+              v-if="isSectionActive('stats') && mountedSections.stats"
+            />
+          </div>
 
-          <PartnersSection v-show="isSectionActive('partners')" />
+          <div
+            ref="partnersRef"
+            class="below-fold-section"
+          >
+            <PartnersSection
+              v-if="isSectionActive('partners') && mountedSections.partners"
+            />
+          </div>
 
-          <Testimonials
-            v-show="isSectionActive('testimonials')"
-            :items="testimonialData"
-          />
+          <div
+            ref="testimonialsRef"
+            class="below-fold-section"
+          >
+            <Testimonials
+              v-if="isSectionActive('testimonials') && mountedSections.testimonials"
+              :items="testimonialData"
+            />
+          </div>
 
-          <CtaSection v-show="isSectionActive('cta')" />
+          <div
+            ref="ctaRef"
+            class="below-fold-section"
+          >
+            <CtaSection
+              v-if="isSectionActive('cta') && mountedSections.cta"
+            />
+          </div>
         </section>
       </div>
     </div>
@@ -58,12 +105,12 @@ const PartnersSection = defineAsyncComponent(() => import('./components/Partners
 const CtaSection = defineAsyncComponent(() => import('./components/CtaSection.vue'))
 
 // Helpers
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 import { useTheme } from '@/composables/useTheme';
 
 const { getSetting } = useTheme();
-const { ScrollTrigger } = useGsapAnimations()
+const { ScrollTrigger } = useThemeMotion()
 
 interface Testimonial {
     name: string;
@@ -78,6 +125,7 @@ interface CmsPageData {
 }
 
 const isComponentActive = ref(true);
+let sectionObserver: IntersectionObserver | null = null;
 
 const { data: dynamicTestimonials } = useThemeDataBindings('testimonials', 'items')
 
@@ -92,6 +140,65 @@ const testimonialData = computed<Testimonial[]>(() => dynamicTestimonials.value.
     image: item._raw?.featured_image || item._raw?.thumbnail || '/assets/themes/janari/avatar-placeholder.png'
 })))
 
+const principalRef = ref<HTMLElement | null>(null);
+const newsRef = ref<HTMLElement | null>(null);
+const programsRef = ref<HTMLElement | null>(null);
+const statsRef = ref<HTMLElement | null>(null);
+const partnersRef = ref<HTMLElement | null>(null);
+const testimonialsRef = ref<HTMLElement | null>(null);
+const ctaRef = ref<HTMLElement | null>(null);
+
+const mountedSections = ref<Record<string, boolean>>({
+    principal: false,
+    news: false,
+    programs: false,
+    stats: false,
+    partners: false,
+    testimonials: false,
+    cta: false,
+});
+
+const observeSectionMount = () => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+        mountedSections.value = {
+            principal: true,
+            news: true,
+            programs: true,
+            stats: true,
+            partners: true,
+            testimonials: true,
+            cta: true,
+        };
+        return;
+    }
+
+    const map: Array<{ key: keyof typeof mountedSections.value; el: HTMLElement | null }> = [
+        { key: 'principal', el: principalRef.value },
+        { key: 'news', el: newsRef.value },
+        { key: 'programs', el: programsRef.value },
+        { key: 'stats', el: statsRef.value },
+        { key: 'partners', el: partnersRef.value },
+        { key: 'testimonials', el: testimonialsRef.value },
+        { key: 'cta', el: ctaRef.value },
+    ];
+
+    sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const key = (entry.target as HTMLElement).dataset.sectionKey as keyof typeof mountedSections.value | undefined;
+            if (!key) return;
+            mountedSections.value[key] = true;
+            sectionObserver?.unobserve(entry.target);
+        });
+    }, { rootMargin: '300px 0px' });
+
+    map.forEach(({ key, el }) => {
+        if (!el || mountedSections.value[key]) return;
+        el.dataset.sectionKey = key;
+        sectionObserver?.observe(el);
+    });
+};
+
 onMounted(() => {
     isComponentActive.value = true;
     void api.get('/ja/contents/home')
@@ -105,6 +212,7 @@ onMounted(() => {
         })
         .finally(() => {
             void nextTick().then(() => {
+                observeSectionMount();
                 setTimeout(() => {
                     if (typeof ScrollTrigger !== 'undefined') {
                         ScrollTrigger.refresh();
@@ -115,10 +223,18 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+    if (sectionObserver) {
+        sectionObserver.disconnect();
+        sectionObserver = null;
+    }
     isComponentActive.value = false
 })
 </script>
 
 <style scoped>
 .cms-content :deep(p) { margin-bottom: 1rem; }
+.below-fold-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+}
 </style>

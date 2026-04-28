@@ -5,10 +5,8 @@
   >
     <!-- Logo Container -->
     <div 
-      class="relative flex items-center justify-center overflow-hidden transition-[width,height,max-width] duration-300"
-      :class="[
-        minimized ? 'w-9 h-9' : 'w-auto h-9 max-w-[120px]'
-      ]"
+      class="relative flex items-center justify-center overflow-hidden"
+      :class="[ minimized ? 'w-9 h-9' : 'w-auto h-9 max-w-[120px]' ]"
     >
       <!-- Option A: User uploaded Logo Image -->
       <img 
@@ -62,6 +60,5 @@ const siteLogo = computed(() => cmsStore.siteSettings?.site_logo || '');
 <style scoped>
 .group:hover .bg-primary {
   filter: brightness(1.1);
-  transition: background-color 300ms ease-in-out, border-color 300ms ease-in-out;
 }
 </style>

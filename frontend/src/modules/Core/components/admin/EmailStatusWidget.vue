@@ -10,11 +10,12 @@
         size="icon"
         :disabled="loading"
         class="h-8 w-8 text-muted-foreground hover:text-foreground"
+        :aria-label="t('common.actions.refresh')"
         @click="refresh"
       >
         <RefreshCw
           class="w-4 h-4"
-          :class="{ 'animate-spin': loading }"
+          :class="{ '': loading }"
         />
       </Button>
     </CardHeader>
@@ -23,7 +24,7 @@
       <!-- Top Stats Row -->
       <div class="grid grid-cols-2 gap-3">
         <div class="p-3 rounded-xl bg-warning/5 border border-warning/10 space-y-1">
-          <p class="text-[10px] font-bold text-warning">
+          <p class="text-[10px] font-bold text-foreground">
             {{ t('features.dashboard.widgets.emailStatus.templates', 'Templates') }}
           </p>
           <p class="text-2xl font-bold text-foreground tabular-nums">
@@ -31,7 +32,7 @@
           </p>
         </div>
         <div class="p-3 rounded-xl bg-info/5 border border-info/10 space-y-1">
-          <p class="text-[10px] font-bold text-info">
+          <p class="text-[10px] font-bold text-foreground">
             {{ t('features.dashboard.widgets.emailStatus.subscribers', 'Subscribers') }}
           </p>
           <p class="text-2xl font-bold text-foreground tabular-nums">
@@ -155,9 +156,9 @@ const logs = ref<EmailLog[]>([]);
 
 const statusBadgeClass = computed(() => {
   const status = stats.value.smtp_status?.toLowerCase();
-  if (status === 'active' || status === 'healthy' || status === 'sent') return 'bg-success/10 text-success';
-  if (status === 'warning') return 'bg-warning/10 text-warning';
-  if (status === 'critical' || status === 'error' || status === 'failed') return 'bg-destructive/10 text-destructive';
+  if (status === 'active' || status === 'healthy' || status === 'sent') return 'bg-success/10 text-foreground';
+  if (status === 'warning') return 'bg-warning/10 text-foreground';
+  if (status === 'critical' || status === 'error' || status === 'failed') return 'bg-destructive/10 text-foreground';
   return 'bg-muted text-muted-foreground';
 });
 

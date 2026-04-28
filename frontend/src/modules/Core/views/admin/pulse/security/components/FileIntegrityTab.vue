@@ -4,7 +4,7 @@
       v-if="loading"
       class="flex items-center justify-center p-12"
     >
-      <Loader2 class="w-8 h-8 animate-spin text-primary" />
+      <Loader2 class="w-8 h-8 text-primary" />
     </div>
 
     <template v-else-if="integrity">

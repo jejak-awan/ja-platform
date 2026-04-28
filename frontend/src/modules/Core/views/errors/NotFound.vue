@@ -48,18 +48,35 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/modules/Core/stores/auth';
+import { SECURITY_ROUTES } from '@/config/security';
 import ErrorLayout from '@/layouts/core/ErrorLayout.vue';
 import FileQuestion from 'lucide-vue-next/dist/esm/icons/file-question-mark.js';
 import Home from 'lucide-vue-next/dist/esm/icons/house.js';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 
 const router = useRouter();
+const route = useRoute();
 const { t } = useI18n();
+const authStore = useAuthStore();
 const traceId = ref(`TRC-${Date.now().toString().slice(-6)}-${Math.random().toString(36).substring(7).toUpperCase()}`);
 
 const goBack = () => {
+  // If session is expired (was previously logged in or trying to access protected area)
+  // or simply not authenticated when they should be.
+  if (!authStore.isAuthenticated) {
+    router.push({
+      path: SECURITY_ROUTES.login,
+      query: { 
+        redirect: route.fullPath !== '/404' ? route.fullPath : undefined,
+        timeout: '1'
+      }
+    });
+    return;
+  }
+
   if (window.history.length > 1) {
     router.go(-1);
   } else {

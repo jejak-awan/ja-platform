@@ -33,7 +33,7 @@
               v-for="tab in tabs" 
               :key="tab.id" 
               :value="tab.id"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <component
                 :is="getTabIcon(tab.id)"

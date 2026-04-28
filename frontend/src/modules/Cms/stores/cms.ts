@@ -104,13 +104,14 @@ export const useCmsStore = defineStore('cms', {
             return promise;
         },
 
-        async fetchPublicSettings(): Promise<SiteSettings> {
+        async fetchPublicSettings(options?: { force?: boolean }): Promise<SiteSettings> {
+            const force = options?.force === true;
             // Already loaded or marked as failed-once to prevent loops
-            if (this.publicSettingsLoaded) {
+            if (this.publicSettingsLoaded && !force) {
                 return this.siteSettings;
             }
 
-            if (this.publicSettingsPromise) {
+            if (this.publicSettingsPromise && !force) {
                 return this.publicSettingsPromise;
             }
 

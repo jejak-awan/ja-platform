@@ -10,7 +10,7 @@
       <!-- Send Notification Form -->
       <div
         v-show="!sidebarCollapsed"
-        class="lg:col-span-4 transition-colors duration-300"
+        class="lg:col-span-4"
       >
         <Card>
           <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -30,10 +30,7 @@
           >
             <div class="flex items-center gap-2">
               <div
-                :class="[
-                  'h-2 w-2 rounded-full',
-                  queueHealth.is_active ? 'bg-green-500' : 'bg-yellow-500'
-                ]"
+                :class="[ 'h-2 w-2 rounded-full', queueHealth.is_active ? 'bg-green-500' : 'bg-yellow-500' ]"
               />
               <span class="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                 {{ queueHealth.message }} ({{ queueHealth.driver }})
@@ -190,7 +187,7 @@
               />
               <Loader2
                 v-else
-                class="mr-2 h-4 w-4 animate-spin"
+                class="mr-2 h-4 w-4"
               />
               {{ sending ? $t('features.system.notifications.form.sending') : $t('features.system.notifications.form.send') }}
             </Button>
@@ -199,7 +196,7 @@
       </div>
 
       <!-- History Table -->
-      <div :class="[sidebarCollapsed ? 'lg:col-span-12' : 'lg:col-span-8', 'transition-colors duration-300']">
+      <div :class="[sidebarCollapsed ? 'lg:col-span-12' : 'lg:col-span-8', ' ']">
         <Card>
           <CardHeader class="flex flex-row items-center justify-between space-y-0">
             <div class="flex items-center gap-4">
@@ -231,7 +228,7 @@
                 />
                 <Loader2
                   v-else
-                  class="h-4 w-4 animate-spin mr-2"
+                  class="h-4 w-4 mr-2"
                 />
                 {{ $t('features.system.notifications.form.revoke') }}
               </Button>
@@ -304,7 +301,7 @@
                           />
                           <Loader2
                             v-else
-                            class="h-4 w-4 animate-spin"
+                            class="h-4 w-4"
                           />
                         </Button>
                       </TableCell>

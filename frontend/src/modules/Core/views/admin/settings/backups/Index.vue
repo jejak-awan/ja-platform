@@ -16,7 +16,7 @@
       >
         <Loader2
           v-if="creating"
-          class="w-4 h-4 mr-2 animate-spin"
+          class="w-4 h-4 mr-2"
         />
         <Plus
           v-else
@@ -188,7 +188,7 @@
           v-if="loading"
           class="p-12 text-center"
         >
-          <Loader2 class="w-8 h-8 animate-spin mx-auto text-muted-foreground mb-4" />
+          <Loader2 class="w-8 h-8 mx-auto text-muted-foreground mb-4" />
           <p class="text-muted-foreground font-medium">
             {{ t('features.system.backups.loading') }}
           </p>
@@ -220,12 +220,12 @@
             <TableRow
               v-for="backup in filteredBackups"
               :key="backup.id"
-              class="hover:bg-muted/50 transition-colors group"
+              class="hover:bg-muted/50 group"
             >
               <TableCell>
                 <div class="flex items-center gap-3">
-                  <div class="p-2 bg-muted rounded-lg group-hover:bg-background transition-colors">
-                    <FileArchive class="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <div class="p-2 bg-muted rounded-lg group-hover:bg-background">
+                    <FileArchive class="w-4 h-4 text-muted-foreground group-hover:text-primary" />
                   </div>
                   <div>
                     <div class="text-sm font-semibold text-foreground">
@@ -291,7 +291,7 @@
                 {{ formatDate(backup.created_at) }}
               </TableCell>
               <TableCell class="text-right">
-                <div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100">
                   <Button 
                     variant="ghost" 
                     size="icon" 
@@ -407,7 +407,7 @@
           >
             <Loader2
               v-if="savingSchedule"
-              class="w-4 h-4 mr-2 animate-spin"
+              class="w-4 h-4 mr-2"
             />
             {{ savingSchedule ? t('features.system.backups.schedule.modal.saving') : t('features.system.backups.schedule.modal.save') }}
           </Button>

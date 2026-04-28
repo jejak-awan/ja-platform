@@ -12,11 +12,11 @@
         <!-- Create Post -->
         <button
           v-if="authStore.hasPermission('create content')"
-          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 transition-colors group relative overflow-hidden"
+          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 group relative overflow-hidden"
           :disabled="loading"
           @click="handleAction('create-post')"
         >
-          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/10 text-primary group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/10 text-primary group-hover:scale-110">
             <FileEdit class="w-5 h-5" />
           </div>
           <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -27,11 +27,11 @@
         <!-- Create Page -->
         <button
           v-if="authStore.hasPermission('create content')"
-          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 transition-colors group"
+          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 group"
           :disabled="loading"
           @click="handleAction('create-page')"
         >
-          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-info/10 text-info group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-info/10 text-info group-hover:scale-110">
             <PlusSquare class="w-5 h-5" />
           </div>
           <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -42,11 +42,11 @@
         <!-- Upload Media -->
         <button
           v-if="authStore.hasPermission('upload media') || authStore.hasPermission('create media')"
-          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 transition-colors group"
+          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 group"
           :disabled="loading"
           @click="handleAction('upload-media')"
         >
-          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-success/10 text-success group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-success/10 text-success group-hover:scale-110">
             <Upload class="w-5 h-5" />
           </div>
           <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -57,11 +57,11 @@
         <!-- Create Category -->
         <button
           v-if="authStore.hasPermission('create categories')"
-          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 transition-colors group"
+          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 group"
           :disabled="loading"
           @click="handleAction('create-category')"
         >
-          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-warning/10 text-warning group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-warning/10 text-warning group-hover:scale-110">
             <Hash class="w-5 h-5" />
           </div>
           <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -72,11 +72,11 @@
         <!-- Create Tag -->
         <button
           v-if="authStore.hasPermission('create tags')"
-          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 transition-colors group"
+          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 group"
           :disabled="loading"
           @click="handleAction('create-tag')"
         >
-          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/10 text-primary group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/10 text-primary group-hover:scale-110">
             <Tag class="w-5 h-5" />
           </div>
           <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -87,11 +87,11 @@
         <!-- Manage Users -->
         <button
           v-if="authStore.hasPermission('view users')"
-          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 transition-colors group"
+          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 group"
           :disabled="loading"
           @click="handleAction('manage-users')"
         >
-          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/10 text-primary group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/10 text-primary group-hover:scale-110">
             <UserCog class="w-5 h-5" />
           </div>
           <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -102,11 +102,11 @@
         <!-- View Comments -->
         <button
           v-if="authStore.hasPermission('view comments')"
-          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 transition-colors group"
+          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 group"
           :disabled="loading"
           @click="handleAction('view-comments')"
         >
-          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-warning/10 text-warning group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-warning/10 text-warning group-hover:scale-110">
             <MessageSquare class="w-5 h-5" />
           </div>
           <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -117,11 +117,11 @@
         <!-- Settings -->
         <button
           v-if="authStore.hasPermission('view settings')"
-          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-slate-500/5 transition-colors group"
+          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-slate-500/5 group"
           :disabled="loading"
           @click="handleAction('settings')"
         >
-          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-muted text-muted-foreground group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-muted text-muted-foreground group-hover:scale-110">
             <Settings class="w-5 h-5" />
           </div>
           <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -132,11 +132,11 @@
         <!-- Command Runner -->
         <button
           v-if="authStore.hasPermission('manage system')"
-          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 transition-colors group"
+          class="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-primary/5 group"
           :disabled="loading"
           @click="handleAction('command-runner')"
         >
-          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-warning/10 text-warning group-hover:scale-110 transition-transform">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-warning/10 text-warning group-hover:scale-110">
             <Terminal class="w-5 h-5" />
           </div>
           <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -157,10 +157,10 @@
           <div
             v-for="action in recentActions.slice(0, 3)"
             :key="action.id"
-            class="flex items-center p-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors cursor-pointer group"
+            class="flex items-center p-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 cursor-pointer group"
             @click="repeatAction(action)"
           >
-            <Clock class="w-4 h-4 mr-2 opacity-50 group-hover:opacity-100 transition-opacity" />
+            <Clock class="w-4 h-4 mr-2 opacity-50 group-hover:opacity-100" />
             <span class="flex-1 truncate font-medium">{{ getActionLabel(action.action) }}</span>
             <span class="text-[10px] tabular-nums opacity-50">{{ formatTime(action.timestamp) }}</span>
           </div>

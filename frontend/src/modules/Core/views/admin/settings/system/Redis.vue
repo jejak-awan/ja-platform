@@ -20,21 +20,21 @@
         <TabsList class="bg-transparent p-0 h-auto gap-0">
           <TabsTrigger
             value="statistics"
-            class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+            class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
           >
             <BarChart3 class="w-4 h-4 mr-2" />
             {{ $t('features.redis.tabs.statistics') }}
           </TabsTrigger>
           <TabsTrigger
             value="settings"
-            class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+            class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
           >
             <Settings class="w-4 h-4 mr-2" />
             {{ $t('features.redis.tabs.settings') }}
           </TabsTrigger>
           <TabsTrigger
             value="cache"
-            class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+            class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
           >
             <Database class="w-4 h-4 mr-2" />
             {{ $t('features.redis.tabs.cache') }}
@@ -275,7 +275,7 @@
             >
               <RefreshCw
                 v-if="loadingStats"
-                class="w-4 h-4 mr-2 animate-spin"
+                class="w-4 h-4 mr-2"
               />
               {{ loadingStats ? $t('features.redis.messages.loading') : $t('features.redis.statistics.refresh') }}
             </Button>
@@ -371,7 +371,7 @@
                     >
                       <Loader2
                         v-if="testing"
-                        class="w-4 h-4 mr-2 animate-spin"
+                        class="w-4 h-4 mr-2"
                       />
                       <Zap
                         v-else
@@ -474,7 +474,7 @@
             >
               <Loader2
                 v-if="saving"
-                class="w-4 h-4 mr-2 animate-spin"
+                class="w-4 h-4 mr-2"
               />
               <Save
                 v-else
@@ -578,7 +578,7 @@
                     <TableRow
                       v-for="(key, index) in cacheStats.top_keys"
                       :key="index"
-                      class="hover:bg-muted/50 transition-colors"
+                      class="hover:bg-muted/50"
                     >
                       <TableCell class="font-mono text-xs break-all py-3">
                         {{ key.key }}
@@ -616,13 +616,13 @@
                 <!-- Warm Cache -->
                 <button
                   :disabled="warming"
-                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-primary/50 hover:bg-primary/5 transition-shadow group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-primary/50 hover:bg-primary/5 group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
                   @click="warmCache"
                 >
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/10 text-primary group-hover:scale-110 transition-transform">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/10 text-primary group-hover:scale-110">
                     <Loader2
                       v-if="warming"
-                      class="w-5 h-5 animate-spin"
+                      class="w-5 h-5"
                     />
                     <Flame
                       v-else
@@ -637,10 +637,10 @@
                 <!-- Flush All -->
                 <button
                   :disabled="flushing"
-                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-destructive/50 hover:bg-destructive/5 transition-shadow group disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-destructive/50 hover:bg-destructive/5 group disabled:opacity-50 disabled:cursor-not-allowed"
                   @click="flushCache('all')"
                 >
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-destructive/10 text-destructive group-hover:scale-110 transition-transform">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-destructive/10 text-destructive group-hover:scale-110">
                     <Trash2 class="w-5 h-5" />
                   </div>
                   <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -651,10 +651,10 @@
                 <!-- Flush App Cache -->
                 <button
                   :disabled="flushing"
-                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-orange-500/50 hover:bg-orange-500/5 transition-shadow group disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-orange-500/50 hover:bg-orange-500/5 group disabled:opacity-50 disabled:cursor-not-allowed"
                   @click="flushCache('cache')"
                 >
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-orange-500/10 text-orange-500 group-hover:scale-110 transition-transform">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-orange-500/10 text-orange-500 group-hover:scale-110">
                     <HardDrive class="w-5 h-5" />
                   </div>
                   <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -665,10 +665,10 @@
                 <!-- Flush Config -->
                 <button
                   :disabled="flushing"
-                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-shadow group disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-indigo-500/50 hover:bg-indigo-500/5 group disabled:opacity-50 disabled:cursor-not-allowed"
                   @click="flushCache('config')"
                 >
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-indigo-500/10 text-indigo-500 group-hover:scale-110 transition-transform">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-indigo-500/10 text-indigo-500 group-hover:scale-110">
                     <Settings class="w-5 h-5" />
                   </div>
                   <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -679,10 +679,10 @@
                 <!-- Flush Route -->
                 <button
                   :disabled="flushing"
-                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-shadow group disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-emerald-500/50 hover:bg-emerald-500/5 group disabled:opacity-50 disabled:cursor-not-allowed"
                   @click="flushCache('route')"
                 >
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-500/10 text-emerald-500 group-hover:scale-110">
                     <Route class="w-5 h-5" />
                   </div>
                   <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">
@@ -693,10 +693,10 @@
                 <!-- Flush View -->
                 <button
                   :disabled="flushing"
-                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-blue-500/50 hover:bg-blue-500/5 transition-shadow group disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-border hover:border-blue-500/50 hover:bg-blue-500/5 group disabled:opacity-50 disabled:cursor-not-allowed"
                   @click="flushCache('view')"
                 >
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-blue-500/10 text-blue-500 group-hover:scale-110 transition-transform">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-blue-500/10 text-blue-500 group-hover:scale-110">
                     <Eye class="w-5 h-5" />
                   </div>
                   <span class="mt-2 text-xs font-semibold text-foreground text-center line-clamp-1 leading-tight w-full">

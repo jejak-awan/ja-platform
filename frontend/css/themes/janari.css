@@ -7,6 +7,19 @@
  */
 
 @layer base {
+    /* Performance baseline for all Janari pages:
+       keep first section eager, let below-fold sections render on demand. */
+    .theme-janari .main-content section + section {
+        content-visibility: auto;
+        contain-intrinsic-size: 900px;
+    }
+
+    /* Some pages start with wrappers before the first section. */
+    .theme-janari .main-content > div > section + section {
+        content-visibility: auto;
+        contain-intrinsic-size: 900px;
+    }
+
     /* ─── Neutral canvas (light): surfaces stay achromatic ─── */
     .theme-janari {
         --background: 0 0% 100%;
@@ -722,7 +735,25 @@
     .theme-janari section .tracking-\[0\.5em\],
     .theme-janari section .tracking-\[0\.8em\],
     .theme-janari section .tracking-\[0\.4em\] {
+        /* Keep labels readable on light backgrounds */
+        color: hsl(var(--foreground) / 0.88) !important;
+    }
+    .dark .theme-janari section .tracking-\[0\.5em\],
+    .dark .theme-janari section .tracking-\[0\.8em\],
+    .dark .theme-janari section .tracking-\[0\.4em\] {
         color: hsl(var(--primary)) !important;
+    }
+
+    /* Preserve readability on dark hero/testimonial sections */
+    .theme-janari section.bg-black .tracking-\[0\.5em\],
+    .theme-janari section.bg-black .tracking-\[0\.8em\],
+    .theme-janari section.bg-black .tracking-\[0\.4em\] {
+        color: hsl(0 0% 100%) !important;
+    }
+
+    /* Hero: keep LATEST NEWS label white on black strip */
+    .theme-janari .w-12.bg-black .rotate-\[-90deg\] {
+        color: hsl(0 0% 100% / 0.9) !important;
     }
 
     /* ─── Small accent lines (the w-8 h-px bg-primary) are already primary ─── */
@@ -734,8 +765,12 @@
     /* ─── Category Tags / Badges ─── */
     .theme-janari section .border .tracking-\[0\.2em\],
     .theme-janari section .border .tracking-widest {
-        border-color: hsl(var(--primary) / 0.25) !important;
-        color: hsl(var(--primary) / 0.7) !important;
+        border-color: hsl(var(--primary) / 0.3) !important;
+        color: hsl(var(--foreground) / 0.82) !important;
+    }
+    .dark .theme-janari section .border .tracking-\[0\.2em\],
+    .dark .theme-janari section .border .tracking-widest {
+        color: hsl(var(--primary) / 0.9) !important;
     }
 
     /* ─── Stats accent bar ─── */

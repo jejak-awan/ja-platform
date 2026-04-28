@@ -10,7 +10,6 @@ import i18n from './i18n';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { resolveIsAdminEntrypoint } from '@/modules/Core/router/entrypoint';
 import { attemptChunkRecoveryReload, isChunkLoadError } from '@/utils/chunkRecovery';
-import { enforceAdminNoGsap } from '@/utils/adminGsapGuard';
 
 // Keep admin/dashboard and public theme styles isolated.
 const isAdminRoute = resolveIsAdminEntrypoint(window.location.pathname);
@@ -143,12 +142,6 @@ async function bootstrap() {
     app.mount('#app');
     logger.info('App Mounted successfully!');
 
-    if (isAdminRoute) {
-        enforceAdminNoGsap(logger);
-        router.afterEach(() => {
-            enforceAdminNoGsap(logger);
-        });
-    }
 }
 
 void bootstrap();

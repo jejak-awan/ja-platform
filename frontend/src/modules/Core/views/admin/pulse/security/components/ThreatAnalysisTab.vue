@@ -4,7 +4,7 @@
       v-if="loading"
       class="flex items-center justify-center p-12"
     >
-      <Loader2 class="w-8 h-8 animate-spin text-primary" />
+      <Loader2 class="w-8 h-8 text-primary" />
     </div>
 
     <template v-else-if="analysis">
@@ -87,7 +87,7 @@
               <div
                 v-for="(campaign, index) in analysis.campaigns"
                 :key="index" 
-                class="p-4 rounded-lg border bg-muted/30 hover:bg-muted/50 transition-colors"
+                class="p-4 rounded-lg border bg-muted/30 hover:bg-muted/50"
               >
                 <div class="flex items-start justify-between">
                   <div>

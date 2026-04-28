@@ -39,14 +39,14 @@
           class="py-24 bg-gradient-to-b from-primary/10 to-background border-b border-border/50"
         >
           <div class="container mx-auto px-4 text-center">
-            <span class="gsap-fade text-primary font-bold tracking-wider uppercase text-sm mb-4 block">{{ pageTitle || 'Profil Sekolah' }}</span>
+            <span class="motion-fade text-primary font-bold tracking-wider uppercase text-sm mb-4 block">{{ pageTitle || 'Profil Sekolah' }}</span>
             <h1
               ref="aboutTitle"
               class="text-4xl md:text-6xl font-extrabold mb-6 text-foreground"
             >
               <JanariSplitText :text="pageTitle || 'SMK Negeri 1 Cijulang'" />
             </h1>
-            <p class="gsap-fade text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
+            <p class="motion-fade text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
               {{ pageSubtitle || 'Membangun masa depan generasi vokasi yang unggul, kompeten, dan berdaya saing global.' }}
             </p>
           </div>
@@ -60,7 +60,7 @@
                 ref="contentLeft"
                 class="space-y-8"
               >
-                <div class="gsap-fade space-y-4">
+                <div class="motion-fade space-y-4">
                   <h2 class="text-3xl font-bold text-foreground">
                     Visi & Misi Kami
                   </h2>
@@ -79,7 +79,7 @@
                   ref="aboutStats"
                   class="grid grid-cols-3 gap-8 pt-8 border-t border-border"
                 >
-                  <div class="gsap-stat-item">
+                  <div class="motion-stat-item">
                     <div class="text-4xl font-black text-primary">
                       20+
                     </div>
@@ -87,7 +87,7 @@
                       Tahun Berdiri
                     </div>
                   </div>
-                  <div class="gsap-stat-item">
+                  <div class="motion-stat-item">
                     <div class="text-4xl font-black text-primary">
                       1k+
                     </div>
@@ -95,7 +95,7 @@
                       Siswa Aktif
                     </div>
                   </div>
-                  <div class="gsap-stat-item">
+                  <div class="motion-stat-item">
                     <div class="text-4xl font-black text-primary">
                       50+
                     </div>
@@ -125,7 +125,7 @@
         <!-- Team Section (Kepala Sekolah & Staff) -->
         <section class="py-20 bg-muted/30">
           <div class="container mx-auto px-4 text-center">
-            <span class="gsap-fade text-primary font-bold tracking-wider uppercase text-sm mb-4 block">Manajemen Sekolah</span>
+            <span class="motion-fade text-primary font-bold tracking-wider uppercase text-sm mb-4 block">Manajemen Sekolah</span>
             <h2
               ref="teamTitle"
               class="text-3xl font-bold mb-12 text-foreground"
@@ -139,7 +139,7 @@
               <div
                 v-for="member in teamMembers"
                 :key="member.name"
-                class="gsap-team-card group"
+                class="motion-team-card group"
               >
                 <div class="w-full aspect-[3/4] bg-card rounded-2xl mb-4 overflow-hidden relative border border-border transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-1">
                   <div class="absolute inset-0 flex items-center justify-center text-muted-foreground text-xs p-4 text-center font-bold">
@@ -171,7 +171,7 @@ import { logger } from '@/utils/logger'
 import { useTheme } from '@/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
 import api from '@/services/api'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 
 interface TeamMember {
     name: string;
@@ -187,7 +187,7 @@ interface PageData extends Content {
 
 const { getSetting } = useTheme()
 const router = useRouter()
-const { fadeInRight, splitTextRevealSafe, staggerChildren } = useGsapAnimations()
+const { fadeInRight, splitTextRevealSafe, staggerChildren } = useThemeMotion()
 
 const isEnabled = computed(() => getSetting('enable_about', true))
 const behavior = computed(() => getSetting('disabled_page_behavior', 'message'))
@@ -221,7 +221,7 @@ const initAnimations = () => {
 
     // Header section
     if (headerSection.value) {
-        staggerChildren(headerSection.value, '.gsap-fade', { distance: 30, stagger: 0.15 })
+        staggerChildren(headerSection.value, '.motion-fade', { distance: 30, stagger: 0.15 })
     }
     if (aboutTitle.value) {
         splitTextRevealSafe(aboutTitle.value, { delay: 0.2, stagger: 0.05 })
@@ -229,12 +229,12 @@ const initAnimations = () => {
 
     // Content left stagger
     if (contentLeft.value) {
-        staggerChildren(contentLeft.value, '.gsap-fade', { distance: 40, stagger: 0.2 })
+        staggerChildren(contentLeft.value, '.motion-fade', { distance: 40, stagger: 0.2 })
     }
 
     // Stats stagger
     if (aboutStats.value) {
-        staggerChildren(aboutStats.value, '.gsap-stat-item', { distance: 30, stagger: 0.1 })
+        staggerChildren(aboutStats.value, '.motion-stat-item', { distance: 30, stagger: 0.1 })
     }
 
     // Image parallax from right
@@ -247,7 +247,7 @@ const initAnimations = () => {
         splitTextRevealSafe(teamTitle.value, { stagger: 0.04 })
     }
     if (teamGrid.value) {
-        staggerChildren(teamGrid.value, '.gsap-team-card', { distance: 50, stagger: 0.12, duration: 0.7 })
+        staggerChildren(teamGrid.value, '.motion-team-card', { distance: 50, stagger: 0.12, duration: 0.7 })
     }
 }
 

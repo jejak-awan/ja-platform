@@ -2,7 +2,7 @@
   "name": "ja-apps",
   "private": true,
   "engines": {
-    "node": ">=20.19.0 || >=22.12.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "deploy:assets": "bash scripts/sync-frontend-assets-to-backend.sh",

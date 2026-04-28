@@ -45,6 +45,39 @@
 
         <div class="h-6 w-px bg-border" />
 
+        <div class="hidden lg:flex items-center gap-1 rounded-md border bg-background p-1">
+          <button
+            class="px-2.5 py-1.5 text-xs font-semibold rounded transition-colors"
+            :class="workspaceMode === 'design' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'"
+            @click="workspaceMode = 'design'"
+          >
+            Design
+          </button>
+          <button
+            class="px-2.5 py-1.5 text-xs font-semibold rounded transition-colors"
+            :class="workspaceMode === 'bindings' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'"
+            @click="workspaceMode = 'bindings'"
+          >
+            Bindings
+          </button>
+          <button
+            class="px-2.5 py-1.5 text-xs font-semibold rounded transition-colors"
+            :class="workspaceMode === 'advanced' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'"
+            @click="workspaceMode = 'advanced'"
+          >
+            Advanced
+          </button>
+        </div>
+
+        <Button
+          variant="outline"
+          size="sm"
+          class="hidden xl:inline-flex"
+          @click="showPreview = true"
+        >
+          Show Preview
+        </Button>
+
         <div class="flex items-center gap-2">
           <span
             v-if="isDirty"
@@ -120,69 +153,18 @@
       class="flex-1 flex overflow-hidden"
     >
       <!-- Sidebar -->
-      <aside class="w-80 border-r border-border bg-card flex flex-col shrink-0 shadow-xl z-10 transition-all duration-300">
-        <!-- Sidebar Search -->
-        <div class="p-4 border-b bg-muted/20">
-          <div class="relative">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input 
-              v-model="searchQuery" 
-              :placeholder="t('features.theme_customizer.sidebar.search_placeholder')" 
-              class="w-full pl-9 pr-4 py-2 bg-background border rounded-lg text-xs focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-            >
-          </div>
-        </div>
-
-        <div class="flex-1 overflow-y-auto custom-scrollbar px-3 py-4 space-y-6">
-          <div
-            v-for="group in filteredGroups"
-            :key="group.id"
-            class="space-y-1"
-          >
-            <button 
-              class="w-full flex items-center justify-between px-3 py-1 mb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 hover:text-foreground transition-colors group"
-              @click="toggleGroup(group.id)"
-            >
-              <span>{{ group.label }}</span>
-              <ChevronDown 
-                class="w-3 h-3 transition-transform duration-200" 
-                :class="{ '-rotate-90': collapsedGroups.includes(group.id) }"
-              />
-            </button>
-                        
-            <div
-              v-show="!collapsedGroups.includes(group.id)"
-              class="space-y-0.5 animate-in slide-in-from-top-1 duration-200"
-            >
-              <button
-                v-for="item in group.items"
-                :key="item.id"
-                class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-3 group relative overflow-hidden"
-                :class="activeItemId === item.id 
-                  ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20' 
-                  : 'hover:bg-muted text-foreground/80 hover:text-foreground'"
-                @click="selectItem(item)"
-              >
-                <component
-                  :is="item.icon"
-                  class="w-4 h-4 shrink-0 transition-transform group-hover:scale-110"
-                />
-                <span class="truncate">{{ item.label }}</span>
-                <div
-                  v-if="activeItemId === item.id"
-                  class="ml-auto flex items-center gap-1"
-                >
-                  <div class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                </div>
-                <span
-                  v-else-if="item.hasBinding"
-                  class="ml-auto w-1.5 h-1.5 rounded-full bg-primary/40"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-      </aside>
+      <CustomizerSidebar
+        :groups="filteredGroups"
+        :flat-items="flatNavItems"
+        :active-item-id="activeItemId"
+        :collapsed-groups="collapsedGroups"
+        :search-query="searchQuery"
+        :sidebar-collapsed="sidebarCollapsed"
+        @select-item="selectItem"
+        @toggle-group="toggleGroup"
+        @update:search-query="searchQuery = $event"
+        @update:sidebar-collapsed="sidebarCollapsed = $event"
+      />
 
       <!-- Main Editor Area -->
       <main class="flex-1 overflow-y-auto relative bg-muted/5 custom-scrollbar">
@@ -220,9 +202,16 @@
 
           <!-- ════════ COMBINED EDITOR ════════ -->
           <div class="space-y-8 pb-20">
+            <div
+              v-if="!isItemCompatibleWithMode(selectedItem)"
+              class="rounded-xl border border-dashed border-border bg-card/60 p-5 text-sm text-muted-foreground"
+            >
+              {{ modeHintText }}
+            </div>
+
             <!-- Type 1: Static CSS Editor (Direct textarea) -->
             <div
-              v-if="selectedItem.id === 'styling-css'"
+              v-if="selectedItem.id === 'styling-css' && workspaceMode === 'advanced'"
               class="relative"
             >
               <div class="absolute top-4 right-4 z-10 flex items-center gap-2">
@@ -241,7 +230,7 @@
 
             <!-- Type 2: Manifest-Driven Settings (Cards) -->
             <section
-              v-if="selectedItem.manifestSections?.length"
+              v-if="selectedItem.manifestSections?.length && workspaceMode === 'design'"
               class="space-y-4"
             >
               <h4 class="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2 px-1">
@@ -268,7 +257,7 @@
 
             <!-- Type 3: Menu Locations -->
             <section
-              v-if="selectedItem.id === 'identity-menus'"
+              v-if="selectedItem.id === 'identity-menus' && workspaceMode === 'design'"
               class="space-y-4"
             >
               <h4 class="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2 px-1">
@@ -312,297 +301,26 @@
               </div>
             </section>
 
-            <!-- Type 4: component data bindings (theme settings) -->
-            <section
-              v-if="selectedItem.bindingComponent"
-              class="space-y-4"
-            >
-              <div class="flex items-center justify-between px-1">
-                <h4 class="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                  <Database class="w-3 h-3 text-primary" />
-                  {{ t('features.theme_customizer.editor.sections.bindings') }}
-                </h4>
-                <span class="text-[10px] text-primary/70 font-mono">{{ t('features.theme_customizer.editor.bindings.subtitle') }}</span>
-              </div>
-                            
-              <div class="space-y-4">
-                <div
-                  v-for="slot in selectedItem.bindingComponent.slots"
-                  :key="slot.id"
-                  class="bg-card border-border border-2 rounded-2xl overflow-hidden shadow-2xl shadow-primary/5 transition-all hover:shadow-primary/10"
-                >
-                  <button 
-                    class="w-full flex items-center justify-between p-6 hover:bg-muted/30 transition-colors group" 
-                    @click="toggleSlot(slot.id)"
-                  >
-                    <div class="flex items-center gap-4">
-                      <div
-                        class="w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black shadow-inner transition-colors"
-                        :class="getSlotConfig(selectedItem.bindingComponent.id, slot.id).sourceType !== 'static' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'"
-                      >
-                        {{ slot.id.charAt(0).toUpperCase() }}{{ slot.id.charAt(1) || '' }}
-                      </div>
-                      <div class="text-left">
-                        <span class="font-bold text-base tracking-tight">{{ slot.label }}</span>
-                        <div class="flex items-center gap-2 mt-0.5">
-                          <span class="text-[10px] uppercase font-bold text-muted-foreground/50">{{ t('features.theme_customizer.editor.bindings.source_label') }}</span>
-                          <span
-                            class="text-[10px] uppercase font-black"
-                            :class="getSlotConfig(selectedItem.bindingComponent.id, slot.id).sourceType !== 'static' ? 'text-primary' : 'text-muted-foreground'"
-                          >
-                            {{ getSourceLabel(getSlotConfig(selectedItem.bindingComponent.id, slot.id).sourceType) }}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <ChevronDown
-                      class="w-5 h-5 text-muted-foreground/50 transition-transform duration-300"
-                      :class="{ 'rotate-180': expandedSlots.includes(slot.id) }"
-                    />
-                  </button>
-
-                  <div
-                    v-show="expandedSlots.includes(slot.id)"
-                    class="border-t border-border/50 p-8 space-y-8 animate-in zoom-in-95 fade-in duration-300"
-                  >
-                    <!-- Source Type Selection -->
-                    <div class="p-6 bg-muted/20 rounded-2xl border border-border/50">
-                      <label class="text-[11px] font-black uppercase tracking-tighter text-muted-foreground/70 mb-3 block">{{ t('features.theme_customizer.editor.bindings.source_title') }}</label>
-                      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <button 
-                          v-for="src in ['static', 'api_posts', 'api_pages', 'api_categories']" 
-                          :key="src"
-                          class="px-4 py-3 rounded-xl border text-[11px] font-bold transition-all flex flex-col items-center gap-2 hover:translate-y-[-2px]"
-                          :class="getSlotConfig(selectedItem.bindingComponent!.id, slot.id).sourceType === src 
-                            ? 'bg-primary border-primary text-primary-foreground shadow-lg shadow-primary/30' 
-                            : 'bg-background border-border/50 hover:border-primary/50 text-muted-foreground hover:text-foreground'"
-                          @click="updateBinding(selectedItem.bindingComponent!.id, slot.id, 'sourceType', src)"
-                        >
-                          <component
-                            :is="getSourceIcon(src)"
-                            class="w-5 h-5"
-                          />
-                          {{ getSourceLabel(src) }}
-                        </button>
-                      </div>
-                    </div>
-
-                    <!-- Sub-Filters and Mapping if not static -->
-                    <div
-                      v-if="getSlotConfig(selectedItem.bindingComponent.id, slot.id).sourceType !== 'static'"
-                      class="space-y-8"
-                    >
-                      <!-- Filters Card -->
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 ring-1 ring-border/50 p-6 rounded-2xl bg-muted/10">
-                        <div class="space-y-4">
-                          <h5 class="text-[11px] font-black text-foreground uppercase tracking-wider flex items-center gap-2">
-                            <Filter class="w-3 h-3 text-primary" />
-                            {{ t('features.theme_customizer.editor.bindings.query_title') }}
-                          </h5>
-                                                    
-                          <!-- api_posts filters -->
-                          <div
-                            v-if="getSlotConfig(selectedItem.bindingComponent.id, slot.id).sourceType === 'api_posts'"
-                            class="grid grid-cols-1 gap-4"
-                          >
-                            <div class="space-y-1.5">
-                              <label class="text-[10px] font-bold text-muted-foreground uppercase">{{ t('common.labels.category') }}</label>
-                              <Select v-model="getSlotConfig(selectedItem.bindingComponent.id, slot.id).categoryFilter">
-                                <SelectTrigger class="w-full h-8 text-xs bg-background">
-                                  <SelectValue :placeholder="t('common.placeholders.select')" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="all">
-                                    {{ t('common.labels.all') }}
-                                  </SelectItem>
-                                  <SelectItem
-                                    v-for="cat in categories"
-                                    :key="cat.id"
-                                    :value="cat.slug"
-                                  >
-                                    {{ cat.name }}
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                              <div class="space-y-1.5">
-                                <div class="flex items-center justify-between mb-4">
-                                  <label class="text-[10px] font-bold text-muted-foreground uppercase">{{ t('common.labels.limit') }}</label>
-                                  <span class="text-[10px] text-muted-foreground font-mono">{{ t('features.theme_customizer.editor.bindings.items_found') }}</span>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                  <Input
-                                    v-model="getSlotConfig(selectedItem.bindingComponent.id, slot.id).limit"
-                                    type="number"
-                                    class="h-8 text-xs bg-background"
-                                    min="1"
-                                    max="50"
-                                  />
-                                </div>
-                              </div>
-                              <div class="space-y-1.5">
-                                <label class="text-[10px] font-bold text-muted-foreground uppercase">{{ t('common.labels.sort') }}</label>
-                                <Select v-model="getSlotConfig(selectedItem.bindingComponent.id, slot.id).orderBy">
-                                  <SelectTrigger class="w-full h-8 text-xs bg-background">
-                                    <SelectValue :placeholder="t('features.theme_customizer.editor.bindings.sort_options.latest')" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="published_at">
-                                      {{ t('features.theme_customizer.editor.bindings.sort_options.published_at') }}
-                                    </SelectItem>
-                                    <SelectItem value="title">
-                                      {{ t('features.theme_customizer.editor.bindings.sort_options.title') }}
-                                    </SelectItem>
-                                    <SelectItem value="views">
-                                      {{ t('features.theme_customizer.editor.bindings.sort_options.views') }}
-                                    </SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            </div>
-                          </div>
-
-                          <!-- api_pages filter -->
-                          <div
-                            v-if="getSlotConfig(selectedItem.bindingComponent.id, slot.id).sourceType === 'api_pages'"
-                            class="space-y-1.5"
-                          >
-                            <label class="text-[10px] font-bold text-muted-foreground uppercase">{{ t('common.labels.page') }}</label>
-                            <Select v-model="getSlotConfig(selectedItem.bindingComponent.id, slot.id).pageSlug">
-                              <SelectTrigger class="w-full h-8 text-xs bg-background">
-                                <SelectValue :placeholder="t('common.placeholders.select')" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem
-                                  v-for="page in pages"
-                                  :key="page.slug || page.id"
-                                  :value="String(page.slug || '')"
-                                >
-                                  {{ page.title }}
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-
-                        <!-- Property Mapping List -->
-                        <div
-                          v-if="slot.props.length > 0"
-                          class="space-y-4"
-                        >
-                          <h5 class="text-[11px] font-black text-foreground uppercase tracking-wider flex items-center gap-2">
-                            <Link2 class="w-3 h-3 text-primary" />
-                            {{ t('features.theme_customizer.editor.bindings.mapping_title') }}
-                          </h5>
-                          <div class="space-y-2 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
-                            <div
-                              v-for="prop in slot.props"
-                              :key="prop.key"
-                              class="flex items-center gap-3 p-2 bg-background border rounded-lg hover:border-primary/30 transition-colors"
-                            >
-                              <div class="w-1.5 h-1.5 rounded-full bg-primary/40 shrink-0" />
-                              <span
-                                class="text-[11px] font-bold text-muted-foreground/80 truncate w-32"
-                                :title="prop.label"
-                              >{{ prop.label }}</span>
-                              <ArrowRight class="w-3 h-3 text-muted-foreground/20" />
-                              <Select 
-                                :model-value="(selectedItem?.bindingComponent && getSlotConfig(selectedItem.bindingComponent.id, slot.id).propMapping?.[prop.key]) || ''" 
-                                @update:model-value="(val: string) => { 
-                                  if (!selectedItem?.bindingComponent) return;
-                                  const cfg = getSlotConfig(selectedItem.bindingComponent.id, slot.id);
-                                  if (!cfg.propMapping) cfg.propMapping = {};
-                                  cfg.propMapping[prop.key] = val;
-                                  saveHistory();
-                                }"
-                              >
-                                <SelectTrigger class="h-7 border-0 bg-muted/40 text-[10px]">
-                                  <SelectValue :placeholder="t('features.theme_customizer.editor.bindings.field_placeholder')" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem
-                                    v-for="field in getFieldsForSource(getSlotConfig(selectedItem.bindingComponent!.id, slot.id).sourceType)"
-                                    :key="field.value"
-                                    :value="field.value"
-                                  >
-                                    {{ field.label }}
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Data Inspector / Preview -->
-                      <div class="pt-2">
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          :disabled="previewLoading === slot.id" 
-                          class="h-8 text-[11px] font-black tracking-widest hover:text-primary transition-colors group"
-                          @click="previewSlotData(slot.id)"
-                        >
-                          <Eye class="w-3 h-3 mr-2 group-hover:scale-125 transition-transform" />
-                          {{ t('features.theme_customizer.editor.bindings.probe_button') }}
-                          <Loader2
-                            v-if="previewLoading === slot.id"
-                            class="ml-2 w-3 h-3 animate-spin"
-                          />
-                        </Button>
-
-                        <div
-                          v-if="previewResults[slot.id]"
-                          class="mt-4 bg-black/90 rounded-2xl p-6 relative overflow-hidden group/card shadow-inner"
-                        >
-                          <div class="absolute inset-0 bg-primary/5 pointer-events-none" />
-                          <div class="flex items-center justify-between mb-4 relative z-10 border-b border-white/10 pb-2">
-                            <div class="flex items-center gap-2">
-                              <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
-                              <span class="text-[10px] font-mono font-bold text-green-500 uppercase">{{ t('features.theme_customizer.editor.bindings.inspector_title') }}</span>
-                            </div>
-                            <span class="text-[10px] font-mono text-white/40 uppercase">{{ previewResults[slot.id]?.length ?? 0 }} {{ t('features.theme_customizer.editor.bindings.items_found') }}</span>
-                          </div>
-                                                    
-                          <div class="space-y-4 max-h-60 overflow-y-auto custom-scrollbar pr-2 relative z-10">
-                            <div
-                              v-for="(item, idx) in previewResults[slot.id]"
-                              :key="idx"
-                              class="group/item flex items-start gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5"
-                            >
-                              <div class="w-6 h-6 rounded bg-white/10 flex items-center justify-center text-[10px] font-mono text-white/50">
-                                {{ idx + 1 }}
-                              </div>
-                              <div class="flex-1 min-w-0">
-                                <p class="text-[11px] font-bold text-white mb-1 truncate">
-                                  {{ (item as any).title || (item as any).name || t('features.theme_customizer.editor.bindings.object_data') }}
-                                </p>
-                                <div class="flex flex-wrap gap-2">
-                                  <span
-                                    v-for="(val, field) in filterPreviewFields(item)"
-                                    :key="field"
-                                    class="text-[9px] font-mono bg-white/5 px-1.5 py-0.5 rounded text-white/30 border border-white/5"
-                                  >
-                                    <span class="text-white/60">{{ field }}:</span> {{ String(val).slice(0, 30) }}{{ String(val).length > 30 ? '...' : '' }}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <button
-                            class="absolute bottom-4 right-6 text-[10px] font-bold text-white/20 hover:text-white/90 transition-colors uppercase tracking-widest"
-                            @click="delete previewResults[slot.id]"
-                          >
-                            {{ t('features.theme_customizer.editor.bindings.clear_buffer') }}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
+            <BindingsSection
+              :selected-item="selectedItem"
+              :workspace-mode="workspaceMode"
+              :expanded-slots="expandedSlots"
+              :active-binding-component-id="activeBindingComponentId"
+              :categories="categories"
+              :pages="pages"
+              :preview-loading="previewLoading"
+              :preview-results="previewResults"
+              :toggle-slot="toggleSlot"
+              :get-slot-config="getSlotConfig"
+              :get-source-label="getSourceLabel"
+              :get-source-icon="getSourceIcon"
+              :update-binding="updateBinding"
+              :get-fields-for-source="getFieldsForSource"
+              :filter-preview-fields="filterPreviewFields"
+              :preview-slot-data="previewSlotData"
+              :save-history="saveHistory"
+              @clear-preview="id => delete previewResults[id]"
+            />
           </div>
         </div>
 
@@ -623,7 +341,26 @@
           </p>
         </div>
       </main>
-    </div>
+</div>
+
+    <Dialog
+      :open="showPreview"
+      @update:open="(open) => showPreview = open"
+    >
+      <DialogContent class="w-[96vw] max-w-[1400px] h-[90vh] p-0 overflow-hidden">
+        <div class="h-full flex flex-col bg-background">
+          <div class="h-12 px-4 border-b border-border flex items-center shrink-0">
+            <p class="text-sm font-semibold text-foreground">Theme Preview</p>
+          </div>
+          <div class="flex-1 min-h-0">
+            <PreviewArea
+              :preview-theme="previewTheme"
+              preview-url="/"
+            />
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
 
     <!-- Media Picker -->
     <MediaPicker
@@ -638,25 +375,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, onMounted, onUnmounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, computed, reactive, onMounted, onUnmounted, watch } from 'vue'
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { 
-    Button, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
+    Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+    Dialog, DialogContent
 } from '@/components/ui'
 import SettingControl from '@/modules/Cms/components/themes/customizer/sidebar/SettingControl.vue'
+import CustomizerSidebar from '@/modules/Cms/components/themes/customizer/sidebar/Sidebar.vue'
+import BindingsSection from '@/modules/Cms/components/themes/customizer/editor/BindingsSection.vue'
 import MediaPicker from '@/modules/Cms/components/media/MediaPicker.vue'
 
 // Icons
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
-import ArrowRight from 'lucide-vue-next/dist/esm/icons/arrow-right.js';
 import Save from 'lucide-vue-next/dist/esm/icons/save.js';
 import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
 import LayoutTemplate from 'lucide-vue-next/dist/esm/icons/layout-template.js';
-import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js';
-import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
-import Link2 from 'lucide-vue-next/dist/esm/icons/link-2.js';
 import Code2 from 'lucide-vue-next/dist/esm/icons/code-xml.js';
 import MenuIcon from 'lucide-vue-next/dist/esm/icons/menu.js';
 import Settings2 from 'lucide-vue-next/dist/esm/icons/settings-2.js';
@@ -673,8 +409,6 @@ import BarChart3 from 'lucide-vue-next/dist/esm/icons/chart-column.js';
 import MessageSquare from 'lucide-vue-next/dist/esm/icons/message-square.js';
 import Megaphone from 'lucide-vue-next/dist/esm/icons/megaphone.js';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
-import Database from 'lucide-vue-next/dist/esm/icons/database.js';
-import Filter from 'lucide-vue-next/dist/esm/icons/list-filter.js';
 import Layout from 'lucide-vue-next/dist/esm/icons/layout-dashboard.js';
 import Zap from 'lucide-vue-next/dist/esm/icons/zap.js';
 import History from 'lucide-vue-next/dist/esm/icons/history.js';
@@ -689,10 +423,13 @@ import Briefcase from 'lucide-vue-next/dist/esm/icons/briefcase.js';
 import api from '@/services/api'
 import toast from '@/services/toast'
 import type { ThemeSection } from '@/types/cms/theme'
+import type { Theme } from '@/types/cms/theme'
 import type { SlotBinding } from '@/modules/Cms/composables/useThemeDataBindings'
 import { THEME_BINDING_REGISTRY } from '@/modules/Cms/config/themeBindingsRegistry'
 import { useThemeCustomizer } from '@/modules/Cms/composables/useThemeCustomizer'
 import { themeUsesJanariCanvas } from '@/modules/Cms/utils/themeManifest'
+import PreviewArea from '@/modules/Cms/components/themes/customizer/preview/PreviewArea.vue'
+import { parseResponse, ensureArray } from '@/utils/responseParser'
 
 const { t, te } = useI18n()
 const route = useRoute()
@@ -719,6 +456,18 @@ const {
     recordSettingChange,
 } = useThemeCustomizer(slug, t)
 const availableMenus = ref<{ value: string | number; label: string }[]>([])
+const previewTheme = computed<Theme>(() => {
+    const base = (theme.value || {}) as Theme
+    const baseSettings = (base.settings || {}) as Record<string, unknown>
+    return {
+        ...base,
+        settings: {
+            ...baseSettings,
+            ...formValues.value,
+        },
+        custom_css: customCss.value,
+    }
+})
 
 // ─────────────────────────────────────────────
 // Schema & Organization
@@ -767,6 +516,9 @@ const searchQuery = ref('')
 const activeItemId = ref('')
 const collapsedGroups = ref<string[]>([])
 const expandedSlots = ref<string[]>([])
+const sidebarCollapsed = ref(false)
+const workspaceMode = ref<'design' | 'bindings' | 'advanced'>('design')
+const showPreview = ref(false)
 
 interface NavItem { 
     id: string; 
@@ -887,6 +639,9 @@ const selectedItem = computed(() => {
     return null
 })
 
+const activeBindingComponentId = computed(() => selectedItem.value?.bindingComponent?.id || '')
+const flatNavItems = computed(() => sidebarGroups.value.flatMap((group) => group.items as NavItem[]))
+
 const activeGroupLabel = computed(() => {
     for (const g of sidebarGroups.value) {
         if (g.items.some(i => i.id === activeItemId.value)) return g.label
@@ -896,11 +651,72 @@ const activeGroupLabel = computed(() => {
 
 function selectItem(item: NavItem) {
     activeItemId.value = item.id
+    if (item.id === 'styling-css') {
+        workspaceMode.value = 'advanced'
+    } else if (item.bindingComponent) {
+        workspaceMode.value = 'bindings'
+    } else {
+        workspaceMode.value = 'design'
+    }
     if (item.bindingComponent && item.bindingComponent.slots.length > 0) {
         ensureComponentBindings(item.bindingComponent.id)
         expandedSlots.value = [item.bindingComponent.slots[0]!.id]
     }
 }
+
+function getAllNavItems(): NavItem[] {
+    return sidebarGroups.value.flatMap((group) => group.items as NavItem[]);
+}
+
+function pickItemForMode(mode: 'design' | 'bindings' | 'advanced'): NavItem | null {
+    const items = getAllNavItems();
+    if (mode === 'advanced') {
+        return items.find((item) => item.id === 'styling-css') || null;
+    }
+    if (mode === 'bindings') {
+        return items.find((item) => !!item.bindingComponent) || null;
+    }
+    return items.find((item) => !item.bindingComponent && item.id !== 'styling-css') || null;
+}
+
+function ensureSelectionForMode(mode: 'design' | 'bindings' | 'advanced') {
+    const current = selectedItem.value;
+    if (current && isItemCompatibleWithMode(current)) return;
+    const fallback = pickItemForMode(mode);
+    if (fallback) selectItem(fallback);
+}
+
+function isItemCompatibleWithMode(item: NavItem | null): boolean {
+    if (!item) return true
+    if (item.id === 'styling-css') return workspaceMode.value === 'advanced'
+    if (item.bindingComponent) return workspaceMode.value === 'bindings'
+    return workspaceMode.value === 'design'
+}
+
+const modeHintText = computed(() => {
+    if (!selectedItem.value) return ''
+    if (selectedItem.value.id === 'styling-css') return 'Custom CSS tersedia di mode Advanced.'
+    if (selectedItem.value.bindingComponent) return 'Data binding tersedia di mode Bindings.'
+    return 'Pengaturan visual tersedia di mode Design.'
+})
+
+watch(
+    workspaceMode,
+    (mode) => {
+        ensureSelectionForMode(mode);
+    },
+    { immediate: false }
+);
+
+watch(
+    sidebarGroups,
+    () => {
+        if (!selectedItem.value) {
+            ensureSelectionForMode(workspaceMode.value);
+        }
+    },
+    { immediate: true }
+);
 
 function toggleGroup(groupId: string) {
     if (collapsedGroups.value.includes(groupId)) {
@@ -1074,13 +890,19 @@ async function previewSlotData(slotId: string) {
             const params: any = { status: 'published', type: 'post', per_page: config.limit || 5, sort_by: config.orderBy || 'published_at' }
             if (config.categoryFilter && config.categoryFilter !== 'all') params.category = config.categoryFilter
             const res = await api.get('/admin/cms/contents', { params })
-            results = (res.data || res.data)?.data || res.data || []
+            const parsed = parseResponse<any>(res)
+            results = ensureArray<any>(parsed.data)
         } else if (config.sourceType === 'api_pages') {
             const res = await api.get('/admin/cms/contents', { params: { type: 'page', status: 'published' } })
-            results = (res.data || res.data)?.data || []
+            const parsed = parseResponse<any>(res)
+            results = ensureArray<any>(parsed.data)
+            if (config.pageSlug) {
+                results = results.filter((item) => String(item?.slug || '') === String(config.pageSlug))
+            }
         } else if (config.sourceType === 'api_categories') {
             const res = await api.get('/admin/cms/categories')
-            results = res.data || []
+            const parsed = parseResponse<any>(res)
+            results = ensureArray<any>(parsed.data)
         }
         previewResults[slotId] = results
     } catch { toast.error(t('features.theme_customizer.messages.error'), t('features.theme_customizer.messages.probe_failed')) }
@@ -1101,15 +923,17 @@ function filterPreviewFields(item: any) {
 async function fetchCategories() {
     try {
         const r = await api.get('/admin/cms/categories')
-        categories.value = r.data.data || r.data
+        const parsed = parseResponse<any>(r)
+        categories.value = ensureArray<any>(parsed.data)
     } catch { /* silent */ }
 }
 
 async function fetchMenus() {
     try {
         const r = await api.get('/admin/cms/menus')
-        const data = r.data.data || r.data
-        availableMenus.value = (Array.isArray(data) ? data : []).map((m: any) => ({ value: m.id, label: m.name }))
+        const parsed = parseResponse<any>(r)
+        const data = ensureArray<any>(parsed.data)
+        availableMenus.value = data.map((m: any) => ({ value: m.id, label: m.name }))
         availableMenus.value.unshift({ value: 'none', label: t('features.theme_customizer.editor.menus.placeholder') })
     } catch { /* silent */ }
 }
@@ -1117,7 +941,8 @@ async function fetchMenus() {
 async function fetchPages() {
     try {
         const r = await api.get('/admin/cms/contents', { params: { type: 'page' } })
-        pages.value = r.data.data || r.data
+        const parsed = parseResponse<any>(r)
+        pages.value = ensureArray<any>(parsed.data)
     } catch { /* silent */ }
 }
 
@@ -1145,6 +970,12 @@ function handleBack() {
     } else router.push({ name: 'themes' })
 }
 
+const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+    if (!isDirty.value) return;
+    event.preventDefault();
+    event.returnValue = '';
+};
+
 // Media
 const showMediaPicker = ref(false)
 const activeMediaField = ref<string | null>(null)
@@ -1163,7 +994,20 @@ onMounted(() => {
     fetchCategories();
     fetchPages();
     window.addEventListener('keydown', handleKey);
+    window.addEventListener('beforeunload', handleBeforeUnload);
 });
 
-onUnmounted(() => { window.removeEventListener('keydown', handleKey); });
+onBeforeRouteLeave((_to, _from, next) => {
+    if (!isDirty.value) {
+        next();
+        return;
+    }
+    if (confirm(t('features.theme_customizer.messages.confirm_exit'))) next();
+    else next(false);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('keydown', handleKey);
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+});
 </script>

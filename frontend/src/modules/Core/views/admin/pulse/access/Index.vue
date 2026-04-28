@@ -4,7 +4,7 @@
       <div class="flex items-center gap-4">
         <router-link
           to="/dash/journal-dashboard"
-          class="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+          class="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg"
         >
           <ArrowLeft class="w-5 h-5" />
         </router-link>
@@ -103,11 +103,7 @@
               v-for="(alert, index) in suspiciousAlerts" 
               :key="index"
               class="p-3 rounded-md border flex flex-col gap-2"
-              :class="[
-                alert.severity === 'high' ? 'bg-red-500/10 border-red-500/30' : 
-                alert.severity === 'medium' ? 'bg-orange-500/10 border-orange-500/30' : 
-                'bg-yellow-500/10 border-yellow-500/30'
-              ]"
+              :class="[ alert.severity === 'high' ? 'bg-red-500/10 border-red-500/30' : alert.severity === 'medium' ? 'bg-orange-500/10 border-orange-500/30' : 'bg-yellow-500/10 border-yellow-500/30' ]"
             >
               <div class="flex items-center justify-between">
                 <Badge
@@ -237,18 +233,13 @@
         <div
           v-for="entry in history"
           :key="entry.id"
-          class="px-6 py-4 hover:bg-muted/50 transition-colors"
+          class="px-6 py-4 hover:bg-muted/50"
         >
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
               <!-- Status Icon -->
               <div
-                :class="[
-                  'w-10 h-10 rounded-full flex items-center justify-center',
-                  entry.status === 'success'
-                    ? 'bg-green-500/20 text-green-500'
-                    : 'bg-red-500/20 text-red-500'
-                ]"
+                :class="[ 'w-10 h-10 rounded-full flex items-center justify-center', entry.status === 'success' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500' ]"
               >
                 <Check
                   v-if="entry.status === 'success'"

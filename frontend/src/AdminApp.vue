@@ -31,12 +31,14 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, watch } from 'vue';
+import { computed, defineAsyncComponent, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useConfirm } from '@/composables/useConfirm';
 import { useSessionTimeout } from '@/composables/useSessionTimeout';
 import { syncDocumentDarkClassForRoute } from '@/composables/useDarkMode';
 import { useHead } from '@unhead/vue';
+import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { applyFavicon, resolveFavicon } from '@/utils/favicon';
 
 const Toast = defineAsyncComponent(() => import('@/components/ui/Toast.vue'));
 const ConfirmModal = defineAsyncComponent(() => import('@/components/ui/ConfirmModal.vue'));
@@ -46,6 +48,7 @@ const SessionTimeoutModal = defineAsyncComponent(() => import('@/components/ui/S
 const { confirmState } = useConfirm();
 const { isWarningVisible, timeRemaining, extendSession, manualLogout } = useSessionTimeout();
 const route = useRoute();
+const cmsStore = useCmsStore();
 
 watch(
     () => route.path,
@@ -57,8 +60,28 @@ watch(
 
 useHead({
     title: 'JA-Platform Admin',
-    link: [{ rel: 'icon', href: '/favicon.svg' }],
 });
+
+onMounted(async () => {
+    document.body.classList.add('admin-no-motion-global');
+    await cmsStore.fetchPublicSettings({ force: true });
+});
+
+onUnmounted(() => {
+    document.body.classList.remove('admin-no-motion-global');
+});
+
+const faviconHref = computed(() => resolveFavicon([
+    (cmsStore.siteSettings as any)?.site_favicon,
+]));
+
+watch(
+    faviconHref,
+    (href) => {
+        applyFavicon(href);
+    },
+    { immediate: true },
+);
 </script>
 
 <style>
@@ -69,6 +92,19 @@ useHead({
 #app-container.admin-no-motion *,
 #app-container.admin-no-motion *::before,
 #app-container.admin-no-motion *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+</style>
+<style>
+/*
+  Also disable motion for teleported overlays (Dialog/Popover/Dropdown)
+  that are mounted outside #app-container, usually under <body>.
+*/
+body.admin-no-motion-global *,
+body.admin-no-motion-global *::before,
+body.admin-no-motion-global *::after {
   animation: none !important;
   transition: none !important;
   scroll-behavior: auto !important;

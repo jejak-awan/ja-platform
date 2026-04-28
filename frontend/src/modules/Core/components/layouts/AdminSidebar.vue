@@ -1,15 +1,12 @@
 <template>
   <aside
-    :class="[
-      'fixed inset-y-0 left-0 z-50 bg-sidebar text-sidebar-foreground border-r border-border',
-      sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
-      sidebarMinimized ? 'w-[68px]' : 'w-64'
-    ]"
+    :class="[ 'fixed inset-y-0 left-0 z-50 bg-sidebar text-sidebar-foreground border-r border-border', sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0', sidebarMinimized ? 'w-[68px]' : 'w-64' ]"
   >
     <!-- Floating Toggle Button (Desktop) -->
     <button
       class="hidden lg:flex absolute -right-3 top-5 items-center justify-center h-6 w-6 rounded-full border border-border bg-sidebar text-muted-foreground hover:text-foreground shadow-sm z-[51]"
       :title="sidebarMinimized ? t('common.navigation.sidebar.expand') : t('common.navigation.sidebar.minimize')"
+      :aria-label="sidebarMinimized ? t('common.navigation.sidebar.expand') : t('common.navigation.sidebar.minimize')"
       @click="$emit('toggle-minimize')"
     >
       <component
@@ -49,6 +46,7 @@
           <!-- Mobile Close Button -->
           <button
             class="lg:hidden text-muted-foreground hover:text-accent-foreground"
+            :aria-label="t('common.actions.close')"
             @click="$emit('close')"
           >
             <component :is="getIcon('x')" />
@@ -65,7 +63,7 @@
           {{ t('common.navigation.sidebar.activeRole') }}
         </p>
         <div class="flex items-center gap-2">
-          <div class="w-2 h-2 rounded-full bg-primary/60 animate-pulse" />
+          <div class="w-2 h-2 rounded-full bg-primary/60" />
           <span class="text-[11px] font-black truncate text-foreground/80 tracking-wide uppercase">{{ currentRoleName }}</span>
         </div>
       </div>
@@ -76,11 +74,7 @@
         <router-link
           :to="{ name: 'dashboard' }"
           class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl group"
-          :class="[
-            $route.name === 'dashboard'
-              ? 'bg-accent text-foreground'
-              : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-          ]"
+          :class="[ $route.name === 'dashboard' ? 'bg-accent text-foreground' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' ]"
           :title="sidebarMinimized ? t('common.navigation.menu.dashboard') : ''"
           @click="$emit('close')"
         >
@@ -148,11 +142,7 @@
                   >
                     <button 
                       class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-xl group pl-9"
-                      :class="[
-                        isSubSectionActive(item)
-                          ? 'text-foreground hover:bg-accent'
-                          : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                      ]"
+                      :class="[ isSubSectionActive(item) ? 'text-foreground hover:bg-accent' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' ]"
                       @click="toggleSubSection(item.label || '')"
                     >
                       <div class="flex items-center gap-2.5">
@@ -165,7 +155,7 @@
                       <component 
                         :is="getIcon('chevron-down')" 
                         :class="{ 'rotate-180': expandedSubSections[item.label || ''] }"
-                        class="w-3.5 h-3.5 transition-transform duration-200"
+                        class="w-3.5 h-3.5"
                       />
                     </button>
                                         
@@ -178,11 +168,7 @@
                         :key="subItem.name || subItem.label"
                         :to="subItem.name ? { name: subItem.name } : (subItem.to || '')"
                         class="flex items-center px-3 py-1.5 text-xs font-medium rounded-xl group pl-16"
-                        :class="[
-                          $route.name === subItem.name
-                            ? 'bg-accent text-foreground font-semibold'
-                            : 'text-muted-foreground/80 hover:bg-accent hover:text-accent-foreground'
-                        ]"
+                        :class="[ $route.name === subItem.name ? 'bg-accent text-foreground font-semibold' : 'text-muted-foreground/80 hover:bg-accent hover:text-accent-foreground' ]"
                         @click="$emit('close')"
                       >
                         <component
@@ -199,11 +185,7 @@
                     v-else
                     :to="item.name ? { name: item.name } : (item.to || '')"
                     class="flex items-center px-3 py-2 text-sm font-medium rounded-xl group pl-9"
-                    :class="[
-                      $route.name === item.name
-                        ? 'bg-accent text-foreground'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                    ]"
+                    :class="[ $route.name === item.name ? 'bg-accent text-foreground' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' ]"
                     @click="$emit('close')"
                   >
                     <component
@@ -224,12 +206,8 @@
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                   <button
-                    class="w-full flex items-center justify-center p-2.5 rounded-xl cursor-pointer transition-colors focus:outline-none"
-                    :class="[
-                      isSectionActive(section.key)
-                        ? 'bg-accent text-foreground'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                    ]"
+                    class="w-full flex items-center justify-center p-2.5 rounded-xl cursor-pointer focus:outline-none"
+                    :class="[ isSectionActive(section.key) ? 'bg-accent text-foreground' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' ]"
                   >
                     <component
                       :is="section.icon"
@@ -280,11 +258,7 @@
                           <router-link
                             :to="subItem.name ? { name: subItem.name } : (subItem.to || '')"
                             class="flex items-center px-3 py-1.5 text-xs font-medium cursor-pointer"
-                            :class="[
-                              $route.name === subItem.name
-                                ? 'text-foreground bg-accent'
-                                : 'text-muted-foreground'
-                            ]"
+                            :class="[ $route.name === subItem.name ? 'text-foreground bg-accent' : 'text-muted-foreground' ]"
                             @click="$emit('close')"
                           >
                             <component
@@ -303,11 +277,7 @@
                         <router-link
                           :to="item.name ? { name: item.name } : (item.to || '')"
                           class="flex items-center px-3 py-2 text-sm font-medium cursor-pointer"
-                          :class="[
-                            $route.name === item.name
-                              ? 'text-foreground bg-accent'
-                              : 'text-muted-foreground'
-                          ]"
+                          :class="[ $route.name === item.name ? 'text-foreground bg-accent' : 'text-muted-foreground' ]"
                           @click="$emit('close')"
                         >
                           <component

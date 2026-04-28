@@ -24,19 +24,12 @@
         <div
           v-for="entry in history"
           :key="entry.id"
-          class="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors"
+          class="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-muted/50"
         >
           <div class="flex items-center space-x-4 flex-1">
             <!-- Status Icon -->
             <div
-              :class="[
-                'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center',
-                entry.status === 'success'
-                  ? 'bg-green-100 dark:bg-green-900/30'
-                  : entry.status === 'failed'
-                    ? 'bg-red-100 dark:bg-red-900/30'
-                    : 'bg-yellow-100 dark:bg-yellow-900/30',
-              ]"
+              :class="[ 'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center', entry.status === 'success' ? 'bg-green-100 dark:bg-green-900/30' : entry.status === 'failed' ? 'bg-red-100 dark:bg-red-900/30' : 'bg-yellow-100 dark:bg-yellow-900/30', ]"
             >
               <svg
                 v-if="entry.status === 'success'"
@@ -72,12 +65,7 @@
             <div class="flex-1 min-w-0">
               <div class="flex items-center space-x-2">
                 <p
-                  :class="[
-                    'text-sm font-medium',
-                    entry.status === 'success'
-                      ? 'text-success'
-                      : 'text-destructive',
-                  ]"
+                  :class="[ 'text-sm font-medium', entry.status === 'success' ? 'text-success' : 'text-destructive', ]"
                 >
                   {{ entry.status === 'success' ? 'Successful Login' : 'Failed Login' }}
                 </p>

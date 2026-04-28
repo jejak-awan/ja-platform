@@ -71,7 +71,7 @@
         v-if="loading"
         class="flex flex-col items-center justify-center py-12"
       >
-        <Loader2 class="w-8 h-8 animate-spin text-muted-foreground mb-2" />
+        <Loader2 class="w-8 h-8 text-muted-foreground mb-2" />
         <p class="text-muted-foreground">
           {{ $t('common.messages.loading.default') }}
         </p>
@@ -146,7 +146,7 @@
                 >
                   <Loader2
                     v-if="exporting === lang.id"
-                    class="w-4 h-4 mr-2 animate-spin"
+                    class="w-4 h-4 mr-2"
                   />
                   <Download
                     v-else
@@ -217,7 +217,7 @@
           >
             <Loader2
               v-if="importing"
-              class="w-4 h-4 mr-2 animate-spin"
+              class="w-4 h-4 mr-2"
             />
             {{ importing ? $t('common.messages.loading.default') : $t('features.languages.import.button') }}
           </Button>
@@ -289,7 +289,7 @@
           >
             <Loader2
               v-if="creating"
-              class="w-4 h-4 mr-2 animate-spin"
+              class="w-4 h-4 mr-2"
             />
             {{ creating ? $t('common.messages.loading.default') : $t('common.actions.create') }}
           </Button>

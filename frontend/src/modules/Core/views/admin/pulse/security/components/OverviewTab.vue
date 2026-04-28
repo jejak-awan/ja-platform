@@ -3,21 +3,13 @@
     <!-- Maintenance Mode Banner (Full Width) -->
     <Card
       v-if="maintenanceStatus"
-      :class="[
-        'border-2 transition-all duration-300',
-        maintenanceStatus.active 
-          ? 'border-yellow-500/50 bg-yellow-500/5 dark:bg-yellow-500/10' 
-          : 'border-border'
-      ]"
+      :class="[ 'border-2 ', maintenanceStatus.active ? 'border-yellow-500/50 bg-yellow-500/5 dark:bg-yellow-500/10' : 'border-border' ]"
     >
       <CardContent class="p-6">
         <div class="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
           <div class="flex items-start gap-4">
             <div
-              :class="[
-                'p-3 rounded-xl',
-                maintenanceStatus.active ? 'bg-yellow-500 text-white shadow-lg shadow-yellow-500/20' : 'bg-muted text-muted-foreground'
-              ]"
+              :class="[ 'p-3 rounded-xl', maintenanceStatus.active ? 'bg-yellow-500 text-white shadow-lg shadow-yellow-500/20' : 'bg-muted text-muted-foreground' ]"
             >
               <Wrench class="h-6 w-6" />
             </div>
@@ -27,7 +19,7 @@
                 <Badge
                   v-if="maintenanceStatus.active"
                   variant="warning"
-                  class="animate-pulse"
+                  class=""
                 >
                   {{ $t('features.security.maintenance.status.active') }}
                 </Badge>
@@ -118,7 +110,7 @@
             >
               <Loader2
                 v-if="maintenanceActivating"
-                class="mr-2 h-4 w-4 animate-spin"
+                class="mr-2 h-4 w-4"
               />
               <Play
                 v-else
@@ -136,7 +128,7 @@
             >
               <Loader2
                 v-if="maintenanceActivating"
-                class="mr-2 h-4 w-4 animate-spin"
+                class="mr-2 h-4 w-4"
               />
               <Square
                 v-else
@@ -148,14 +140,7 @@
         </div>
 
         <!-- Module Selector Dropdown (Hidden by default) -->
-        <Transition
-          enter-active-class="transition duration-200 ease-out"
-          enter-from-class="transform scale-95 opacity-0"
-          enter-to-class="transform scale-100 opacity-100"
-          leave-active-class="transition duration-150 ease-in"
-          leave-from-class="transform scale-100 opacity-100"
-          leave-to-class="transform scale-95 opacity-0"
-        >
+        <div>
           <div
             v-if="showModuleSelector && !maintenanceStatus.active"
             class="mt-6 p-4 bg-muted/30 rounded-lg border border-border grid grid-cols-2 md:grid-cols-4 gap-4"
@@ -179,7 +164,7 @@
               </Label>
             </div>
           </div>
-        </Transition>
+        </div>
 
         <!-- Active Modules List (When active) -->
         <div
@@ -227,11 +212,7 @@
               />
               <!-- Foreground Circle (Gauge) -->
               <circle
-                :class="{
-                  'text-green-500': securityHealth.assessment.score >= 80,
-                  'text-yellow-500': securityHealth.assessment.score >= 50 && securityHealth.assessment.score < 80,
-                  'text-red-500': securityHealth.assessment.score < 50
-                }"
+                :class="{ 'text-green-500': securityHealth.assessment.score >= 80, 'text-yellow-500': securityHealth.assessment.score >= 50 && securityHealth.assessment.score < 80, 'text-red-500': securityHealth.assessment.score < 50 }"
                 stroke-width="8"
                 :stroke-dasharray="251.2"
                 :stroke-dashoffset="251.2 - (251.2 * securityHealth.assessment.score) / 100"
@@ -241,7 +222,6 @@
                 r="40"
                 cx="50"
                 cy="50"
-                style="transition: stroke-dashoffset 1s ease-in-out;"
               />
             </svg>
             <div class="absolute inset-0 flex flex-col items-center justify-center">

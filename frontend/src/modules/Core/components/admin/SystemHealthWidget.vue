@@ -14,11 +14,12 @@
         :disabled="loading"
         class="h-8 w-8 text-muted-foreground hover:text-foreground"
         title="Refresh"
+        :aria-label="$t('common.actions.refresh')"
         @click="refresh"
       >
         <RefreshCw
           class="w-4 h-4"
-          :class="{ 'animate-spin': loading }"
+          :class="{ '': loading }"
         />
       </Button>
     </CardHeader>
@@ -41,7 +42,7 @@
         <!-- CPU -->
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-muted-foreground flex items-center gap-1.5 ">
+            <span class="text-xs font-bold text-muted-foreground flex items-center gap-1.5">
               <Cpu class="w-3.5 h-3.5" />
               {{ $t('features.dashboard.widgets.systemHealth.cpu') }}
             </span>
@@ -56,7 +57,7 @@
             <div
               :class="getProgressBarClass(health.cpu?.status)"
               :style="{ width: `${health.cpu?.percent || 0}%` }"
-              class="h-full transition-[width] duration-500 rounded-full shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+              class="h-full rounded-full shadow-[0_0_10px_rgba(0,0,0,0.1)]"
             />
           </div>
           <p
@@ -85,7 +86,7 @@
             <div
               :class="getProgressBarClass(health.memory?.status)"
               :style="{ width: `${health.memory?.percent || 0}%` }"
-              class="h-full transition-[width] duration-500 rounded-full shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+              class="h-full rounded-full shadow-[0_0_10px_rgba(0,0,0,0.1)]"
             />
           </div>
           <p class="text-[10px] text-muted-foreground line-clamp-1 italic">
@@ -113,7 +114,7 @@
               <div
                 :class="getProgressBarClass(health.disk?.status)"
                 :style="{ width: `${health.disk?.percent || 0}%` }"
-                class="h-full transition-[width] duration-500"
+                class="h-full"
               />
             </div>
           </div>
@@ -245,6 +246,13 @@ const loading = ref(false);
 const lastUpdated = ref<Date | null>(null);
 const refreshInterval = ref<ReturnType<typeof setInterval> | null>(null);
 
+const stopRefresh = () => {
+    if (refreshInterval.value) {
+        clearInterval(refreshInterval.value);
+        refreshInterval.value = null;
+    }
+};
+
 const overallStatus = computed(() => health.value.overall || 'unknown');
 
 const overallStatusText = computed(() => {
@@ -262,16 +270,16 @@ const overallStatusClass = computed(() => {
 
 const overallStatusBadgeClass = computed(() => {
   const status = overallStatus.value;
-  if (status === 'healthy') return 'bg-success/10 text-success';
-  if (status === 'warning') return 'bg-warning/10 text-warning';
-  if (status === 'critical') return 'bg-destructive/10 text-destructive';
+  if (status === 'healthy') return 'bg-success/10 text-foreground';
+  if (status === 'warning') return 'bg-warning/10 text-foreground';
+  if (status === 'critical') return 'bg-destructive/10 text-foreground';
   return 'bg-muted text-muted-foreground';
 });
 
 const getStatusClass = (status?: string) => {
-  if (status === 'ok') return 'text-success';
-  if (status === 'warning') return 'text-warning';
-  if (status === 'critical' || status === 'error') return 'text-destructive';
+  if (status === 'ok') return 'text-foreground';
+  if (status === 'warning') return 'text-foreground';
+  if (status === 'critical' || status === 'error') return 'text-foreground';
   return 'text-muted-foreground';
 };
 
@@ -284,10 +292,7 @@ const getProgressBarClass = (status?: string) => {
 
 const fetchHealth = async () => {
     if ((window as unknown as { __isSessionTerminated?: boolean }).__isSessionTerminated) {
-        if (refreshInterval.value) {
-            clearInterval(refreshInterval.value);
-            refreshInterval.value = null;
-        }
+        stopRefresh();
         return;
     }
 
@@ -304,7 +309,11 @@ const fetchHealth = async () => {
     } catch (error: unknown) {
         if (error && typeof error === 'object' && 'code' in error && 'response' in error) {
             const err = error as { code: string; response?: { status: number } };
-            if (err.code !== 'ERR_CANCELED' && err.response?.status !== 401) {
+            if (err.response?.status === 401 || err.response?.status === 403) {
+                stopRefresh();
+                return;
+            }
+            if (err.code !== 'ERR_CANCELED') {
                 logger.error('Failed to fetch system health:', error);
             }
         }
@@ -337,9 +346,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    if (refreshInterval.value) {
-        clearInterval(refreshInterval.value);
-    }
+    stopRefresh();
 });
 </script>
 

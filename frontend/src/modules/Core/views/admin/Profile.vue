@@ -18,28 +18,28 @@
           <TabsList class="bg-transparent p-0 h-auto gap-0">
             <TabsTrigger
               value="profile"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <User class="w-4 h-4 mr-2" />
               {{ $t('features.profile.tabs.profile') }}
             </TabsTrigger>
             <TabsTrigger
               value="password"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <KeyRound class="w-4 h-4 mr-2" />
               {{ $t('features.profile.tabs.password') }}
             </TabsTrigger>
             <TabsTrigger
               value="two-factor"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <ShieldCheck class="w-4 h-4 mr-2" />
               {{ $t('features.profile.tabs.two-factor') }}
             </TabsTrigger>
             <TabsTrigger
               value="history"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <History class="w-4 h-4 mr-2" />
               {{ $t('features.profile.tabs.history') }}
@@ -148,7 +148,7 @@
                 >
                   <Loader2
                     v-if="saving"
-                    class="mr-2 h-4 w-4 animate-spin"
+                    class="mr-2 h-4 w-4"
                   />
                   {{ saving ? $t('features.profile.form.saving') : $t('features.profile.form.save') }}
                 </Button>
@@ -210,7 +210,7 @@
                 >
                   <Loader2
                     v-if="changingPassword"
-                    class="mr-2 h-4 w-4 animate-spin"
+                    class="mr-2 h-4 w-4"
                   />
                   {{ $t('common.actions.update') }} {{ $t('common.labels.password') }}
                 </Button>

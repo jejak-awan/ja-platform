@@ -5,14 +5,13 @@
         ref="cardRef"
         class="max-w-7xl mx-auto p-12 md:p-32 border border-border bg-card/50 backdrop-blur-3xl relative overflow-hidden"
       >
-        <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/10 blur-[180px] -mr-96 -mt-96 animate-pulse" />
         <div class="relative z-10 flex flex-col items-center text-center">
-          <span class="text-[10px] font-black tracking-[0.8em] uppercase text-primary mb-12">
+          <span class="inline-flex items-center px-3 py-1 bg-background/95 border border-border text-[10px] font-black tracking-[0.4em] uppercase text-foreground mb-12">
             {{ badgeText }}
           </span>
           <h2
             ref="titleRef"
-            class="text-5xl md:text-9xl font-heading font-black mb-16 leading-[0.85] uppercase tracking-tighter"
+            class="text-5xl md:text-9xl font-heading font-black mb-16 leading-[0.85] uppercase tracking-tighter text-foreground"
           >
             <JanariSplitText :text="titleText" />
           </h2>
@@ -40,10 +39,10 @@
 import { ref, computed, onMounted } from 'vue'
 import JanariSplitText from './JanariSplitText.vue'
 import { useTheme } from '@/composables/useTheme'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 
 const { getSetting } = useTheme()
-const { scaleReveal, splitTextRevealSafe } = useGsapAnimations()
+const { scaleReveal, splitTextRevealSafe } = useThemeMotion()
 
 const cardRef = ref<HTMLElement>()
 const titleRef = ref<HTMLElement>()

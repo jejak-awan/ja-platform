@@ -22,6 +22,11 @@
             :src="partner.image"
             :alt="partner.name"
             class="h-12 object-contain"
+            width="192"
+            height="48"
+            loading="lazy"
+            decoding="async"
+            sizes="192px"
           >
           <span
             v-else
@@ -36,11 +41,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useTheme } from '@/composables/useTheme'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 
 const { getSetting } = useTheme()
-const { marquee } = useGsapAnimations()
+const { marquee } = useThemeMotion()
 
 const marqueeRef = ref<HTMLElement>()
 const { data: dynamicItems } = useThemeDataBindings('partners', 'partners')

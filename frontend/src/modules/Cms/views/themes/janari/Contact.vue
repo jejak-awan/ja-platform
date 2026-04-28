@@ -34,10 +34,15 @@
         v-else
         class="space-y-0"
       >
-        <section class="relative overflow-hidden border-y border-border/50">
-          <div
-            class="absolute inset-0 bg-center bg-cover"
-            :style="contactHeroImage ? { backgroundImage: `url('${contactHeroImage}')` } : undefined"
+        <section class="relative overflow-hidden border-y border-border/50 aspect-[16/9] md:aspect-[21/9] lg:aspect-[3/1] min-h-[300px]">
+          <img
+            v-if="contactHeroImage"
+            :src="contactHeroImage"
+            class="absolute inset-0 w-full h-full object-cover"
+            fetchpriority="high"
+            loading="eager"
+            decoding="sync"
+            alt="Contact Hero"
           />
           <div class="absolute inset-0 bg-background/70 dark:bg-background/75 backdrop-blur-[1px]" />
           <div class="container mx-auto px-6 py-16 md:py-20 relative z-10">
@@ -549,7 +554,8 @@
 
 <script setup lang="ts">
 import { logger } from '@/utils/logger';
-import { ref, onMounted, computed, nextTick, defineAsyncComponent } from 'vue'
+import { ref, onMounted, computed, nextTick, defineAsyncComponent, watchEffect } from 'vue'
+import { useHead } from '@unhead/vue'
 import axios from 'axios'
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue'
 import { useRouter } from 'vue-router'
@@ -581,6 +587,7 @@ import Phone from 'lucide-vue-next/dist/esm/icons/phone.js';
 import MapPin from 'lucide-vue-next/dist/esm/icons/map-pin.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import { useToast } from '@/composables/useToast'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity'
 import type { CaptchaPayload } from '@/modules/Core/components/captcha/CaptchaWrapper.vue'
 
@@ -635,19 +642,10 @@ const router = useRouter()
 const cmsStore = useCmsStore()
 const toast = useToast()
 const { displayEmail, displayPhone, displayAddress, phoneDialHref } = useJanariIdentity()
-let gsapPromise: Promise<any> | null = null
-
-function getGsap() {
-    if (!gsapPromise) {
-        gsapPromise = import('gsap').then(({ gsap }) => gsap)
-    }
-    return gsapPromise as Promise<any>
-}
+const { motion } = useThemeMotion()
 
 function animateTo(target: HTMLElement, vars: Record<string, unknown>): void {
-    void getGsap().then((gsap) => {
-        gsap.to(target, vars)
-    })
+    motion.to(target, vars)
 }
 
 const isEnabled = computed(() => getSetting('enable_contact', true))
@@ -660,6 +658,21 @@ const pageSubtitle = computed(() =>
 const contactHeroImage = computed(() => {
     const raw = getSetting('page_contact_hero')
     return typeof raw === 'string' ? raw.trim() : ''
+})
+
+watchEffect(() => {
+    if (contactHeroImage.value) {
+        useHead({
+            link: [
+                {
+                    rel: 'preload',
+                    as: 'image',
+                    href: contactHeroImage.value,
+                    fetchpriority: 'high'
+                }
+            ]
+        })
+    }
 })
 
 const mapEnabled = computed(() => getSetting('contact_map_enabled', true) !== false)
@@ -1159,33 +1172,31 @@ async function submitForm(): Promise<void> {
 function scheduleContactEnterMotion() {
     const run = () => {
         void nextTick(() => {
-            void getGsap().then((gsap) => {
-                if (infoCol.value) {
-                    gsap.fromTo(
-                        infoCol.value,
-                        { opacity: 0, x: -50 },
-                        { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' },
+            if (infoCol.value) {
+                motion.fromTo(
+                    infoCol.value,
+                    { opacity: 0, x: -50 },
+                    { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' },
+                )
+            }
+            if (contactCard.value) {
+                const cardEl = (contactCard.value as unknown as { $el: HTMLElement }).$el || contactCard.value
+                const children = (cardEl as HTMLElement).querySelectorAll(':scope > div')
+                if (children.length > 0) {
+                    motion.fromTo(
+                        children,
+                        { opacity: 0, y: 30 },
+                        { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, delay: 0.3, ease: 'power3.out' },
                     )
                 }
-                if (contactCard.value) {
-                    const cardEl = (contactCard.value as unknown as { $el: HTMLElement }).$el || contactCard.value
-                    const children = (cardEl as HTMLElement).querySelectorAll(':scope > div')
-                    if (children.length > 0) {
-                        gsap.fromTo(
-                            children,
-                            { opacity: 0, y: 30 },
-                            { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, delay: 0.3, ease: 'power3.out' },
-                        )
-                    }
-                }
-                if (formCol.value) {
-                    gsap.fromTo(
-                        formCol.value,
-                        { opacity: 0, x: 50 },
-                        { opacity: 1, x: 0, duration: 0.8, delay: 0.2, ease: 'power3.out' },
-                    )
-                }
-            })
+            }
+            if (formCol.value) {
+                motion.fromTo(
+                    formCol.value,
+                    { opacity: 0, x: 50 },
+                    { opacity: 1, x: 0, duration: 0.8, delay: 0.2, ease: 'power3.out' },
+                )
+            }
         })
     }
     if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {

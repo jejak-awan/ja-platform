@@ -9,26 +9,20 @@ This is the frontend component of **JA-Platform**.
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4
 - **State Management**: Pinia
-- **Animation**: GSAP (GreenSock Animation Platform)
+- **Animation**: Native CSS/Vue transitions
 
-## ✨ Animations with GSAP
+## ✨ Animations
 
-Untuk menjaga estetika premium **JA-Platform**, gunakan GSAP untuk animasi UI:
+Untuk menjaga estetika premium **JA-Platform**, gunakan transisi native CSS/Vue:
 
 ```typescript
-import gsap from 'gsap'
+const visible = ref(false)
 
-// Contoh penggunaan di Vue component
 onMounted(() => {
-  gsap.from('.hero-title', { 
-    opacity: 0, 
-    y: 100, 
-    duration: 1, 
-    ease: 'power4.out' 
-  })
+  visible.value = true
 })
 ```
-Pastikan setiap komponen utama memiliki transisi halus menggunakan GSAP untuk memberikan "WOW effect" kepada pengguna.
+Pastikan setiap komponen utama memiliki transisi halus dengan pendekatan ringan agar performa tetap optimal.
 
 ## 🛠️ Development
 

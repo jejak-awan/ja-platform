@@ -24,8 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // Enable Sanctum stateful API for SPA
         $middleware->statefulApi();
 
-        // Ensure guests are redirected to the named 'login' route (SPA)
-        $middleware->redirectGuestsTo(fn (Request $request) => $request->expectsJson() ? null : route('login'));
+        // Never resolve a named login route here (the SPA handles auth screens).
+        // This prevents RouteNotFoundException when guest/API requests do not send JSON headers.
+        $middleware->redirectGuestsTo(fn (Request $request) => ($request->is('api/*') || $request->expectsJson()) ? null : '/');
 
         $middleware->web(prepend: [
             \Modules\Core\Http\Middleware\VerifyConnection::class,

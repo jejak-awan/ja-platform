@@ -14,10 +14,10 @@
         <div
           v-for="stat in items"
           :key="stat.label"
-          class="gsap-stat group flex flex-col items-center"
+          class="motion-stat group flex flex-col items-center"
         >
           <div
-            class="gsap-stat-value text-5xl md:text-9xl font-heading font-black mb-6 tracking-tighter"
+            class="motion-stat-value text-5xl md:text-9xl font-heading font-black mb-6 tracking-tighter"
             :data-value="stat.rawValue"
           >
             {{ stat.value }}
@@ -35,11 +35,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useTheme } from '@/composables/useTheme'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 
 const { getSetting } = useTheme()
-const { staggerChildren, counterUp } = useGsapAnimations()
+const { staggerChildren, counterUp } = useThemeMotion()
 
 const gridRef = ref<HTMLElement>()
 const { data: dynamicItems } = useThemeDataBindings('stats', 'counters')
@@ -53,8 +53,8 @@ const items = computed(() => dynamicItems.value.map((item: any) => ({
 
 onMounted(() => {
     if (gridRef.value) {
-        staggerChildren(gridRef.value, '.gsap-stat', { distance: 40, stagger: 0.12 })
-        gridRef.value.querySelectorAll('.gsap-stat-value').forEach((el: any) => {
+        staggerChildren(gridRef.value, '.motion-stat', { distance: 40, stagger: 0.12 })
+        gridRef.value.querySelectorAll('.motion-stat-value').forEach((el: any) => {
             const raw = parseInt(el.getAttribute('data-value') || '0', 10)
             if (raw > 0) counterUp(el, raw, { duration: 2.5 })
         })

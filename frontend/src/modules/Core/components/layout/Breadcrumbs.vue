@@ -1,17 +1,13 @@
 <template>
   <nav 
     v-if="breadcrumbs.length > 0" 
-    :class="[
-      navClasses,
-      isScrolled ? 'py-2 shadow-lg' : 'py-4 shadow-md',
-      isSticky ? 'sticky z-40 transition-all duration-500 ease-in-out' : 'relative'
-    ]"
+    :class="[ navClasses, isScrolled ? 'py-2 shadow-lg' : 'py-4 shadow-md', isSticky ? 'sticky z-40 ' : 'relative' ]"
     aria-label="Breadcrumb"
   >
     <div class="container mx-auto px-8 flex items-center justify-between">
       <!-- Page Title (L'Arc Style) -->
       <div 
-        class="flex flex-col transition-all duration-500"
+        class="flex flex-col"
         :class="isScrolled ? 'opacity-80 scale-95 origin-left' : 'opacity-100 scale-100'"
       >
         <h1 class="dashboard-breadcrumb-title">

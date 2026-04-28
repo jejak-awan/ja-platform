@@ -51,6 +51,12 @@
                       :src="featuredPost.image" 
                       :alt="featuredPost.title"
                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      width="960"
+                      height="720"
+                      loading="eager"
+                      fetchpriority="high"
+                      decoding="async"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                     >
                     <div v-else class="w-full h-full bg-primary/5 flex items-center justify-center">
                       <span class="text-primary/20 font-bold text-4xl">JA</span>
@@ -125,7 +131,7 @@
                     v-for="article in displayArticles" 
                     :key="article.id" 
                     :to="article.link || '#'"
-                    class="gsap-article group block"
+                    class="motion-article group block"
                   >
                     <article class="h-full bg-card/40 hover:bg-card border border-border/50 hover:border-primary/30 rounded-2xl overflow-hidden transition-all duration-500 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col">
                       <!-- Image Section (Sleek) -->
@@ -134,6 +140,12 @@
                           :src="article.image" 
                           :alt="article.title"
                           class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          width="480"
+                          height="360"
+                          loading="lazy"
+                          fetchpriority="low"
+                          decoding="async"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                         >
                         <div class="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
                         <div class="absolute bottom-4 left-6">
@@ -248,7 +260,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useTheme } from '@/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
 import api from '@/services/api'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 import ArrowRight from 'lucide-vue-next/dist/esm/icons/arrow-right.js';
 import Clock from 'lucide-vue-next/dist/esm/icons/clock.js';
 
@@ -285,7 +297,7 @@ const hasMore = computed(() => !isSearchMode.value && currentPage.value < lastPa
 const searchSuggestions = ref<Array<{ text: string; type: string }>>([])
 
 // GSAP
-const { splitTextRevealSafe, scaleReveal, staggerChildren, gsap, ScrollTrigger } = useGsapAnimations()
+const { splitTextRevealSafe, scaleReveal, staggerChildren, motion, ScrollTrigger } = useThemeMotion()
 const blogTitle = ref<HTMLElement>()
 const featuredRef = ref<HTMLElement>()
 const articlesGrid = ref<HTMLElement>()
@@ -297,19 +309,19 @@ const animateArticleCards = async (onlyNew = false): Promise<void> => {
     if (!grid) return
 
     if (!onlyNew) {
-        staggerChildren(grid, '.gsap-article', { distance: 40, stagger: 0.1, duration: 0.6 })
-        grid.querySelectorAll('.gsap-article').forEach((el) => {
-            (el as HTMLElement).dataset.gsapAnimated = '1'
+        staggerChildren(grid, '.motion-article', { distance: 40, stagger: 0.1, duration: 0.6 })
+        grid.querySelectorAll('.motion-article').forEach((el) => {
+            (el as HTMLElement).dataset.motionAnimated = '1'
         })
         return
     }
 
-    const newCards = Array.from(grid.querySelectorAll('.gsap-article')).filter((el) => !(el as HTMLElement).dataset.gsapAnimated)
+    const newCards = Array.from(grid.querySelectorAll('.motion-article')).filter((el) => !(el as HTMLElement).dataset.motionAnimated)
     if (!newCards.length) return
     newCards.forEach((el) => {
-        (el as HTMLElement).dataset.gsapAnimated = '1'
+        (el as HTMLElement).dataset.motionAnimated = '1'
     })
-    gsap.fromTo(newCards, { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.08 })
+    motion.fromTo(newCards, { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.08 })
     ScrollTrigger.refresh()
 }
 

@@ -11,7 +11,8 @@ export { default as Badge } from './Badge.vue';
 export { default as Spinner } from './Spinner.vue';
 export { default as LazyImage } from './LazyImage.vue';
 export { default as SkeletonLoader } from './SkeletonLoader.vue';
-export { default as LucideIcon } from './LucideIcon.vue';
+// Keep this async to avoid eagerly loading the whole lucide map.
+export const LucideIcon = defineAsyncComponent(() => import('./LucideIcon.vue'));
 
 // Cards (Keep synchronous - used on many pages)
 export { default as Card } from './Card.vue';

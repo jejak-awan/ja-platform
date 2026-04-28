@@ -61,9 +61,9 @@
 
         <!-- Bottom Name Label (Mobile primarily) -->
         <div class="absolute bottom-12 left-12 z-20 lg:hidden">
-          <h3 class="text-3xl font-heading font-black text-white uppercase tracking-tighter">
+          <p class="text-3xl font-heading font-black text-white uppercase tracking-tighter">
             {{ name }}
-          </h3>
+          </p>
           <p class="text-[10px] font-black tracking-[0.3em] text-primary mt-2 uppercase">
             Official School Principal
           </p>
@@ -77,7 +77,7 @@
       >
         <!-- Message Badge -->
         <div class="mb-8 md:mb-12">
-          <span class="text-primary text-[10px] font-black tracking-[0.5em] uppercase block mb-4">LATEST MESSAGE</span>
+          <span class="text-black dark:text-white text-[10px] font-black tracking-[0.5em] uppercase block mb-4">LATEST MESSAGE</span>
           <h2
             ref="headingRef"
             class="text-3xl md:text-6xl font-heading font-black uppercase tracking-tighter leading-[0.9] text-foreground"
@@ -99,20 +99,20 @@
           <!-- Principal Identity & Signature -->
           <div class="flex flex-col gap-1 border-l-2 border-primary pl-4 md:pl-6 mb-12 md:mb-16">
             <span class="text-foreground text-lg md:text-xl font-heading font-black uppercase tracking-tight">{{ name }}</span>
-            <span class="text-[9px] md:text-[10px] font-black tracking-[0.3em] text-foreground/40 uppercase italic">Signature of Excellence</span>
+            <span class="text-[9px] md:text-[10px] font-black tracking-[0.3em] text-black/70 dark:text-white/80 uppercase italic">Signature of Excellence</span>
           </div>
 
           <!-- Action Buttons -->
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6">
             <router-link
               :to="principalMessageLink"
-              class="px-10 py-5 bg-foreground text-background font-black text-[10px] tracking-[0.4em] text-center uppercase hover:bg-primary transition-all duration-300 shadow-xl"
+              class="px-10 py-5 bg-foreground text-background font-black text-[10px] tracking-[0.35em] text-center uppercase hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-xl"
             >
               BACA SAMBUTAN
             </router-link>
             <router-link
               :to="principalBiographyLink"
-              class="px-10 py-5 border border-border text-foreground/50 font-black text-[10px] tracking-[0.4em] text-center uppercase hover:text-foreground hover:border-foreground transition-all duration-300"
+              class="px-10 py-5 border border-border text-black dark:text-white font-black text-[10px] tracking-[0.4em] text-center uppercase hover:text-foreground hover:border-foreground transition-all duration-300"
             >
               BIOGRAFI
             </router-link>
@@ -127,7 +127,7 @@
 import JanariSplitText from './JanariSplitText.vue'
 import { computed, ref, onMounted, nextTick } from 'vue'
 import { useTheme } from '@/composables/useTheme'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 
 const { getSetting } = useTheme()
 
@@ -204,7 +204,7 @@ const sanitizeImageUrl = (url: string | null | undefined, fallback: string) => {
 const defaultMessage = "Sesuai dengan visi kami, kami berkomitmen untuk menciptakan ekosistem pendidikan yang tidak hanya unggul secara akademis, tetapi juga secara karakter dan kecakapan di era digital industri modern.";
 
 // GSAP
-const { splitTextRevealSafe, staggerChildren, createTimeline } = useGsapAnimations()
+const { splitTextRevealSafe, staggerChildren, createTimeline } = useThemeMotion()
 const leftCard = ref<HTMLElement>()
 const rightCard = ref<HTMLElement>()
 const headingRef = ref<HTMLElement>()

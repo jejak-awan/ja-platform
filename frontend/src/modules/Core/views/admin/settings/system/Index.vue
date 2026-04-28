@@ -9,7 +9,7 @@
     <!-- Loading Skeleton -->
     <div
       v-if="loading"
-      class="space-y-6 animate-pulse"
+      class="space-y-6"
     >
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-card border border-border rounded-lg p-6 h-24" />
@@ -196,7 +196,7 @@
           <div class="grid grid-cols-2 gap-3">
             <router-link
               to="/dash/settings"
-              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50 transition-colors duration-200"
+              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Settings class="h-8 w-8 text-primary mb-2" />
               <span class="text-xs font-medium text-foreground text-center">{{ t('features.system.info.quickActions.settings') }}</span>
@@ -204,7 +204,7 @@
                     
             <router-link
               to="/dash/backups"
-              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50 transition-colors duration-200"
+              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Download class="h-8 w-8 text-green-600 dark:text-green-400 mb-2" />
               <span class="text-xs font-medium text-foreground text-center">{{ t('features.system.info.quickActions.backups') }}</span>
@@ -212,7 +212,7 @@
                     
             <router-link
               to="/dash/redis"
-              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50 transition-colors duration-200"
+              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Database class="h-8 w-8 text-red-500 dark:text-red-400 mb-2" />
               <span class="text-xs font-medium text-foreground text-center">{{ t('features.system.info.quickActions.redis') }}</span>
@@ -220,7 +220,7 @@
                     
             <router-link
               to="/dash/scheduled-tasks"
-              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50 transition-colors duration-200"
+              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Clock class="h-8 w-8 text-blue-500 dark:text-blue-400 mb-2" />
               <span class="text-xs font-medium text-foreground text-center">{{ t('features.system.info.quickActions.scheduledTasks') }}</span>
@@ -228,7 +228,7 @@
                     
             <router-link
               to="/dash/scheduled-tasks?action=run_command"
-              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50 transition-colors duration-200"
+              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Terminal class="h-8 w-8 text-yellow-500 dark:text-yellow-400 mb-2" />
               <span class="text-xs font-medium text-foreground text-center">{{ t('features.system.info.quickActions.commandRunner') }}</span>
@@ -236,7 +236,7 @@
 
             <router-link
               to="/dash/system/notifications"
-              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50 transition-colors duration-200"
+              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Bell class="h-8 w-8 text-purple-500 dark:text-purple-400 mb-2" />
               <span class="text-xs font-medium text-foreground text-center">{{ t('features.system.info.quickActions.notifications') }}</span>
@@ -244,7 +244,7 @@
 
             <router-link
               to="/dash/settings?tab=email"
-              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50 transition-colors duration-200"
+              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Mail class="h-8 w-8 text-orange-500 dark:text-orange-400 mb-2" />
               <span class="text-xs font-medium text-foreground text-center">{{ t('features.system.info.quickActions.emailSettings') }}</span>
@@ -252,7 +252,7 @@
 
             <router-link
               to="/dash/email-templates"
-              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50 transition-colors duration-200"
+              class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <FileText class="h-8 w-8 text-sky-500 dark:text-sky-400 mb-2" />
               <span class="text-xs font-medium text-foreground text-center">{{ t('features.system.info.quickActions.emailTemplates') }}</span>

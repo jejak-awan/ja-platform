@@ -42,10 +42,8 @@
               v-for="logFile in logFiles"
               :key="logFile.name"
               variant="ghost"
-              class="w-full justify-start h-auto px-6 py-4 rounded-none border-b border-border last:border-0 hover:bg-muted transition-colors"
-              :class="[
-                selectedLogFile?.name === logFile.name ? 'bg-muted border-l-4 border-l-primary' : ''
-              ]"
+              class="w-full justify-start h-auto px-6 py-4 rounded-none border-b border-border last:border-0 hover:bg-muted"
+              :class="[ selectedLogFile?.name === logFile.name ? 'bg-muted border-l-4 border-l-primary' : '' ]"
               @click="selectLogFile(logFile)"
             >
               <div class="flex items-center justify-between w-full">

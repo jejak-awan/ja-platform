@@ -5,7 +5,6 @@ import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useSystemError } from '@/composables/useSystemError';
 import { triggerVaporLock } from '@/services/api';
 import api from '@/services/api';
-import { SECURITY_ROUTES } from '@/config/security';
 
 export function useSessionTimeout() {
     const router = useRouter();
@@ -248,15 +247,13 @@ export function useSessionTimeout() {
         localStorage.removeItem('user');
         authStore.isAuthenticated = false;
 
-        // Use modal instead of hard redirect
-        const currentPath = router.currentRoute.value.fullPath;
         void showError({
             code: 419,
             title: 'Session Timeout',
             message: 'Your session has timed out due to inactivity.',
-            description: 'Please login again to continue.',
+            description: 'You were returned to the homepage after inactivity timeout.',
             reason: 'timeout',
-            redirect: currentPath !== '/' ? currentPath : SECURITY_ROUTES.dashboardBase
+            redirect: '/'
         });
     };
 
@@ -266,7 +263,7 @@ export function useSessionTimeout() {
         removeActivityListeners();
 
         await authStore.logout();
-        router.push(SECURITY_ROUTES.login);
+        router.push('/');
     };
 
     // Initialization

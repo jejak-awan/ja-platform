@@ -142,7 +142,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, markRaw, onUnmounted } from 'vue';
+import { ref, onMounted, computed, markRaw } from 'vue';
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
 import { useRouter } from 'vue-router';
 import { useTheme } from '@/composables/useTheme';
@@ -267,7 +267,6 @@ const loadAcademicContent = async (): Promise<AcademicPageData | null> => {
         const response = await api.get(`/ja/contents/${slug}`);
         writeCachedSlug(slug);
         clearMissState();
-        console.log(`[Academic] Data loaded with slug "${slug}"`);
         return response.data as AcademicPageData;
       } catch (error: any) {
         if (error?.response?.status !== 404) {
@@ -295,11 +294,7 @@ onMounted(async () => {
   
   if (!isEnabled.value) return;
 
-  console.log('[Academic] Component Mounted');
   pageData.value = await loadAcademicContent();
 });
 
-onUnmounted(() => {
-  console.log('[Academic] Component Unmounted');
-});
 </script>

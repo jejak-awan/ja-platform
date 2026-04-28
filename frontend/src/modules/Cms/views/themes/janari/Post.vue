@@ -68,6 +68,12 @@
             :src="post.featured_image"
             :alt="post.title"
             class="absolute inset-0 w-full h-full object-cover"
+            width="1280"
+            height="720"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            sizes="(max-width: 1024px) 100vw, 1280px"
           >
         </div>
       </div>

@@ -30,7 +30,7 @@
         >
           <Loader2
             v-if="loading"
-            class="w-4 h-4 mr-2 animate-spin"
+            class="w-4 h-4 mr-2"
           />
           <RefreshCw
             v-else
@@ -50,70 +50,70 @@
           <TabsList class="bg-transparent p-0 h-auto gap-0">
             <TabsTrigger
               value="overview"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <BarChart3 class="w-4 h-4 mr-2" />
               {{ $t('features.security.tabs.overview') }}
             </TabsTrigger>
             <TabsTrigger
               value="blocklist"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <ShieldX class="w-4 h-4 mr-2" />
               {{ $t('features.security.tabs.blocklist') }}
             </TabsTrigger>
             <TabsTrigger
               value="whitelist"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <ShieldCheck class="w-4 h-4 mr-2" />
               {{ $t('features.security.tabs.whitelist') }}
             </TabsTrigger>
             <TabsTrigger
               value="csp-reports"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <FileWarning class="w-4 h-4 mr-2" />
               {{ $t('features.security.tabs.cspReports') }}
             </TabsTrigger>
             <TabsTrigger
               value="slow-queries"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <Timer class="w-4 h-4 mr-2" />
               {{ $t('features.security.tabs.slowQueries') }}
             </TabsTrigger>
             <TabsTrigger
               value="vulnerabilities"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <ShieldAlert class="w-4 h-4 mr-2" />
               {{ $t('features.security.tabs.vulnerabilities') }}
             </TabsTrigger>
             <TabsTrigger
               value="shield-journal"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <ShieldCheck class="w-4 h-4 mr-2" />
               {{ $t('features.security.tabs.shieldJournal') }}
             </TabsTrigger>
             <TabsTrigger
               value="threat-analysis"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <Activity class="w-4 h-4 mr-2" />
               {{ $t('features.security.tabs.threatAnalysis') }}
             </TabsTrigger>
             <TabsTrigger
               value="file-integrity"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <FileCheck class="w-4 h-4 mr-2" />
               {{ $t('features.security.tabs.fileIntegrity') }}
             </TabsTrigger>
             <TabsTrigger
               value="settings"
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
+              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <SettingsIcon class="w-4 h-4 mr-2" />
               {{ $t('features.security.tabs.settings') }}
@@ -321,7 +321,7 @@
           >
             <Loader2
               v-if="resyncSubmitting"
-              class="w-4 h-4 mr-2 animate-spin"
+              class="w-4 h-4 mr-2"
             />
             Authorize & Re-sync
           </Button>

@@ -4,7 +4,7 @@
       <div class="flex items-center gap-4">
         <router-link
           to="/dash/journal-dashboard"
-          class="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+          class="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg"
         >
           <ArrowLeft class="w-5 h-5" />
         </router-link>
@@ -247,10 +247,7 @@
               <div class="flex items-center space-x-2">
                 <Badge
                   :variant="(log.action || log.type) === 'deleted' ? 'destructive' : 'default'"
-                  :class="[
-                    (log.action || log.type) === 'created' ? 'bg-green-500 hover:bg-green-600' : '',
-                    (log.action || log.type) === 'updated' ? 'bg-blue-500 hover:bg-blue-600' : ''
-                  ].filter(Boolean).join(' ')"
+                  :class="[ (log.action || log.type) === 'created' ? 'bg-green-500 hover:bg-green-600' : '', (log.action || log.type) === 'updated' ? 'bg-blue-500 hover:bg-blue-600' : '' ].filter(Boolean).join(' ')"
                 >
                   {{ t(`features.activityJournal.filters.types.${log.action || log.type}`) || (log.action || log.type || t('features.activityJournal.messages.unknown')) }}
                 </Badge>
@@ -266,7 +263,7 @@
                 class="mt-2 text-xs text-muted-foreground"
               >
                 <details class="group">
-                  <summary class="cursor-pointer hover:text-foreground flex items-center gap-1 transition-colors">
+                  <summary class="cursor-pointer hover:text-foreground flex items-center gap-1">
                     <Eye class="w-3 h-3 group-open:hidden" />
                     <EyeOff class="w-3 h-3 hidden group-open:block" />
                     {{ t('features.activityJournal.messages.viewDetails') }}

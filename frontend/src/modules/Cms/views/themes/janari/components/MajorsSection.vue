@@ -3,7 +3,7 @@
     <div class="container mx-auto px-6">
       <div class="mb-24 flex flex-col md:flex-row items-end justify-between gap-12">
         <div class="max-w-3xl">
-          <span class="text-primary font-black tracking-[0.5em] uppercase text-[10px] block mb-6">
+          <span class="text-foreground font-black tracking-[0.5em] uppercase text-[10px] block mb-6">
             {{ badgeText }}
           </span>
           <h2 class="text-3xl md:text-8xl font-heading font-black leading-[0.85] uppercase tracking-tighter text-foreground">
@@ -12,7 +12,7 @@
         </div>
         <router-link
           to="/jurusan"
-          class="px-8 py-3 border border-border text-[9px] font-black tracking-[0.4em] uppercase text-foreground/40 hover:text-primary transition-all"
+          class="px-8 py-3 border border-border text-[9px] font-black tracking-[0.4em] uppercase text-foreground/90 hover:text-foreground transition-all"
         >
           {{ buttonText }}
         </router-link>
@@ -25,7 +25,7 @@
         <div
           v-for="(major, idx) in items"
           :key="idx"
-          class="gsap-card group relative p-12 bg-card hover:bg-primary transition-all duration-700 cursor-pointer min-h-[400px] flex flex-col justify-between overflow-hidden"
+          class="motion-card group relative p-12 bg-card hover:bg-primary transition-all duration-700 cursor-pointer min-h-[400px] flex flex-col justify-between overflow-hidden"
         >
           <div class="relative z-10 flex justify-between">
             <div class="w-16 h-16 border border-border flex items-center justify-center group-hover:border-primary-foreground/25">
@@ -54,7 +54,7 @@
 import { ref, computed, onMounted, markRaw } from 'vue'
 import JanariSplitText from './JanariSplitText.vue'
 import { useTheme } from '@/composables/useTheme'
-import { useGsapAnimations } from '@/composables/useGsapAnimations'
+import { useThemeMotion } from '@/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 import Monitor from 'lucide-vue-next/dist/esm/icons/monitor.js'
 import Cpu from 'lucide-vue-next/dist/esm/icons/cpu.js'
@@ -64,7 +64,7 @@ import Heart from 'lucide-vue-next/dist/esm/icons/heart.js'
 import BookOpen from 'lucide-vue-next/dist/esm/icons/book-open.js'
 
 const { getSetting } = useTheme()
-const { staggerChildren } = useGsapAnimations()
+const { staggerChildren } = useThemeMotion()
 
 const gridRef = ref<HTMLElement>()
 const { data: dynamicItems } = useThemeDataBindings('majors', 'programs')
@@ -85,6 +85,6 @@ const items = computed(() => dynamicItems.value.map((item: any) => ({
 })))
 
 onMounted(() => {
-    if (gridRef.value) staggerChildren(gridRef.value, '.gsap-card', { distance: 60, stagger: 0.15 })
+    if (gridRef.value) staggerChildren(gridRef.value, '.motion-card', { distance: 60, stagger: 0.15 })
 })
 </script>

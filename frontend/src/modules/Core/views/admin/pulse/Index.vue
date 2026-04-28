@@ -14,7 +14,7 @@
       <!-- Activity Logs Card -->
       <router-link 
         to="/dash/activity-journal" 
-        class="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-md transition-shadow group"
+        class="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-md group"
       >
         <div class="flex items-center justify-between mb-4">
           <div class="w-12 h-12 rounded-full bg-indigo-500/20 dark:bg-indigo-500/10 flex items-center justify-center">
@@ -37,7 +37,7 @@
       <!-- Security Logs Card -->
       <router-link 
         to="/dash/security-journal" 
-        class="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-md transition-shadow group"
+        class="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-md group"
       >
         <div class="flex items-center justify-between mb-4">
           <div class="w-12 h-12 rounded-full bg-red-500/20 dark:bg-red-500/10 flex items-center justify-center">
@@ -60,7 +60,7 @@
       <!-- Login History Card -->
       <router-link 
         to="/dash/access-journal" 
-        class="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-md transition-shadow group"
+        class="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-md group"
       >
         <div class="flex items-center justify-between mb-4">
           <div class="w-12 h-12 rounded-full bg-green-500/20 dark:bg-green-500/10 flex items-center justify-center">
@@ -83,7 +83,7 @@
       <!-- System Logs Card -->
       <router-link 
         to="/dash/system-journal" 
-        class="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-md transition-shadow group"
+        class="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-md group"
       >
         <div class="flex items-center justify-between mb-4">
           <div class="w-12 h-12 rounded-full bg-yellow-500/20 dark:bg-yellow-500/10 flex items-center justify-center">
