@@ -37,6 +37,7 @@ frontend/lint_report_final.json
 frontend/unused_vars.txt
 frontend/public/stats.html
 backend/phpunit.coverage.xml
+backend/build/
 
 # Runtime/cache artifacts
 backend/storage/logs/*.log
