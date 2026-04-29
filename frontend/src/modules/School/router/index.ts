@@ -111,6 +111,18 @@ const schoolRoutes: RouteRecordRaw[] = [
         meta: { permission: 'view student affairs' },
     },
     {
+        path: 'graduation',
+        name: 'students.graduation',
+        component: () => import('@/modules/School/views/admin/students/operations/Graduation.vue'),
+        meta: { permission: 'edit students' },
+    },
+    {
+        path: 'document-templates',
+        name: 'settings.document-templates',
+        component: () => import('@/modules/School/views/admin/settings/DocumentTemplates.vue'),
+        meta: { permission: 'manage settings' },
+    },
+    {
         path: 'lms',
         name: 'lms.index',
         component: () => import('@/modules/School/views/admin/lms/management/CourseManager.vue'),
@@ -248,6 +260,12 @@ const schoolRoutes: RouteRecordRaw[] = [
         name: 'student.lms.player',
         component: () => import('@/modules/School/views/student/Lms/LessonPlayer.vue'),
         meta: { title: 'Lesson Player', requiresAuth: true, layout: 'empty' }
+      },
+      {
+        path: 'student/graduation',
+        name: 'student.graduation',
+        component: () => import('@/modules/School/views/student/Graduation.vue'),
+        meta: { title: 'Informasi Kelulusan', requiresAuth: true }
       },
 
       // Teacher Portal

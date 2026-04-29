@@ -1,21 +1,34 @@
 <template>
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-8">
+  <div class="space-y-8 p-6 animate-in fade-in duration-700">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-2">
       <div>
-        <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.lms.title') }}
-        </h1>
-        <p class="text-sm text-muted-foreground">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <LucideIcon
+              name="Book"
+              class="w-5 h-5 text-primary"
+            />
+          </div>
+          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+            {{ $t('features.school.lms.title') }}
+          </h1>
+        </div>
+        <p class="text-muted-foreground text-sm font-medium italic">
           {{ $t('features.school.lms.subtitle') }}
         </p>
       </div>
-      <Button @click="handleAdd">
-        <LucideIcon
-          name="Plus"
-          class="w-4 h-4 mr-2"
-        />
-        {{ activeTab === 'bank' ? $t('features.school.lms.actions.addBank') : $t('features.school.lms.actions.addExam') }}
-      </Button>
+      <div class="flex gap-2">
+        <Button 
+          class="rounded-xl shadow-sm px-6"
+          @click="handleAdd"
+        >
+          <LucideIcon
+            name="Plus"
+            class="w-4 h-4 mr-2"
+          />
+          {{ activeTab === 'bank' ? $t('features.school.lms.actions.addBank') : $t('features.school.lms.actions.addExam') }}
+        </Button>
+      </div>
       <ExamQuestionDialog 
         v-model:open="examQuestionsOpen" 
         :exam="selectedExam" 
@@ -26,10 +39,10 @@
       v-model="activeTab"
       class="w-full"
     >
-      <TabsList class="mb-6 border-b bg-transparent p-0 h-auto gap-6 flex-wrap">
+      <TabsList class="p-2 bg-muted/50 rounded-2xl inline-flex h-auto gap-2 mb-6">
         <TabsTrigger 
           value="bank" 
-          class="px-2 py-3 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-all"
+          class="rounded-xl px-8 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
         >
           <LucideIcon
             name="Layers"
@@ -39,7 +52,7 @@
         </TabsTrigger>
         <TabsTrigger 
           value="exam" 
-          class="px-2 py-3 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-all"
+          class="rounded-xl px-8 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
         >
           <LucideIcon
             name="Monitor"
@@ -50,7 +63,7 @@
       </TabsList>
 
       <div class="mt-4">
-        <Card>
+        <Card class="border border-border/40 bg-card shadow-none rounded-xl overflow-hidden">
           <CardContent class="p-0">
             <DataTable 
               :table="table"
@@ -133,7 +146,7 @@ const actionColumn = columnHelper.display({
       variant: 'ghost',
       size: 'icon',
       title: t('features.school.lms.actions.manageQuestions'),
-      class: 'h-8 w-8 text-success',
+      class: 'h-8 w-8 text-muted-foreground hover:bg-success/10 hover:text-success rounded-lg',
       onClick: (e: MouseEvent) => {
           e.stopPropagation();
           handleManageQuestions(row.original);
@@ -153,7 +166,7 @@ const actionColumn = columnHelper.display({
       variant: 'ghost',
       size: 'icon',
       title: t('common.actions.edit'),
-      class: 'h-8 w-8 text-primary',
+      class: 'h-8 w-8 text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-lg',
       onClick: (e: MouseEvent) => {
           e.stopPropagation();
           handleEdit(row.original);
@@ -163,7 +176,7 @@ const actionColumn = columnHelper.display({
       variant: 'ghost',
       size: 'icon',
       title: t('common.actions.delete'),
-      class: 'h-8 w-8 text-destructive',
+      class: 'h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-lg',
       onClick: (e: MouseEvent) => {
           e.stopPropagation();
           handleDelete(row.original);
@@ -187,7 +200,7 @@ const examColumns = [
   }),
   columnHelper.accessor('is_active', { 
     header: t('common.labels.status'),
-    cell: info => info.getValue() ? h('span', { class: 'px-2 py-1 rounded-full bg-success/10 text-success text-xs font-medium' }, t('features.school.lms.labels.active')) : t('features.school.lms.labels.draft')
+    cell: info => info.getValue() ? h('span', { class: 'px-2 py-0.5 rounded-lg bg-success/10 text-success border border-success/20 text-[10px] font-black uppercase tracking-widest' }, t('features.school.lms.labels.active')) : h('span', { class: 'px-2 py-0.5 rounded-lg bg-muted text-muted-foreground text-[10px] font-black uppercase tracking-widest' }, t('features.school.lms.labels.draft'))
   }),
   actionColumn
 ];

@@ -1,13 +1,22 @@
 <template>
   <div class="p-6">
-    <!-- Page Header -->
-    <div class="mb-8 text-left">
-      <h2 class="text-3xl font-bold tracking-tight text-foreground">
-        {{ $t('features.school.title') }}
-      </h2>
-      <p class="text-muted-foreground mt-1">
-        {{ $t('features.school.subtitle') }}
-      </p>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 animate-in fade-in duration-700">
+      <div>
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <LucideIcon
+              name="Building"
+              class="w-5 h-5 text-primary"
+            />
+          </div>
+          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+            {{ $t('features.school.title') }}
+          </h1>
+        </div>
+        <p class="text-muted-foreground text-sm font-medium italic">
+          {{ $t('features.school.subtitle') }}
+        </p>
+      </div>
     </div>
 
     <!-- Loading State -->
@@ -135,11 +144,11 @@
         v-model="activeTab"
         class="w-full"
       >
-        <div class="flex items-center justify-between border-b">
-          <TabsList class="bg-transparent p-0 h-auto gap-0">
+        <div class="flex items-center justify-between mb-6">
+          <TabsList class="p-2 bg-muted/50 rounded-2xl inline-flex h-auto gap-2">
             <TabsTrigger 
               value="identity" 
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors font-bold"
+              class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold"
             >
               <LucideIcon
                 name="Building"
@@ -149,7 +158,7 @@
             </TabsTrigger>
             <TabsTrigger 
               value="levels" 
-              class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors font-bold"
+              class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold"
             >
               <LucideIcon
                 name="Layers"
@@ -159,7 +168,7 @@
               <Badge
                 v-if="levels.length > 0"
                 variant="secondary"
-                class="ml-2 h-5 px-1.5 text-[10px] font-bold"
+                class="ml-2 h-5 px-1.5 text-[10px] font-black tracking-widest bg-primary/10 text-primary border border-primary/20"
               >
                 {{ levels.length }}
               </Badge>

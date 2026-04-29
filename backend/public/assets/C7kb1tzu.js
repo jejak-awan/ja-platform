@@ -1,1 +1,0 @@
-import{k as t}from"./index-DesAzQqT.js";import{d as o,D as r,G as n,L as c,P as l,C as p}from"./B55wTpUl.js";const u=o({__name:"CardContent",props:{class:{type:[Boolean,null,String,Object,Array]}},setup(a){const s=a;return(e,d)=>(p(),r("div",{"data-slot":"card-content",class:n(c(t)("px-4 group-data-[size=sm]/card:px-3",s.class))},[l(e.$slots,"default")],2))}});export{u as _};

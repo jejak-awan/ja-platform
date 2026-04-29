@@ -66,6 +66,8 @@ class VerifyConnection
         if ($request->isMethod('OPTIONS') || 
             $this->isStaticAssetRequest($request) || 
             $request->is('api/v1/admin/*') ||
+            $request->is('api/v1/student/*') ||
+            $request->is('api/v1/teacher/*') ||
             $request->is('api/v1/dashboard/*') ||
             $request->is('api/v1/public/*') ||
             $request->is('api/v1/analytics/*') ||

@@ -1,34 +1,43 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex justify-between items-center">
+  <div class="space-y-8 p-6 animate-in fade-in duration-700">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-2">
       <div>
-        <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.audit.title') }}
-        </h1>
-        <p class="text-sm text-muted-foreground">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <LucideIcon
+              name="Activity"
+              class="w-5 h-5 text-primary"
+            />
+          </div>
+          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+            {{ $t('features.school.audit.title') }}
+          </h1>
+        </div>
+        <p class="text-muted-foreground text-sm font-medium italic">
           {{ $t('features.school.audit.subtitle') }}
         </p>
       </div>
     </div>
 
-    <Card>
+    <Card class="border border-border/40 bg-card shadow-none rounded-xl overflow-hidden">
       <CardContent class="p-0">
-        <div class="p-6 border-b flex justify-between items-center">
+        <div class="p-6 border-b border-border/40 flex justify-between items-center bg-muted/10">
           <div class="flex gap-4">
             <div class="relative w-64">
               <LucideIcon
                 name="Search"
-                class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
               />
               <Input
                 v-model="filters.search"
                 :placeholder="$t('features.school.audit.placeholders.search')"
-                class="pl-9"
+                class="pl-10 rounded-xl bg-background border-border/40"
               />
             </div>
           </div>
           <Button
             variant="outline"
+            class="rounded-xl border-border/40 h-10 px-4"
             @click="fetchLogs"
           >
             <LucideIcon
@@ -44,7 +53,10 @@
           :loading="loading"
         />
         
-        <div class="p-4 border-t">
+        <div class="p-6 border-t border-border/40 flex justify-between items-center bg-muted/5">
+          <p class="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">
+             TOTAL: {{ pagination?.total || 0 }}
+          </p>
           <Pagination 
             v-if="pagination && (pagination.total || 0) > (pagination.per_page || 0)" 
             :total-items="pagination.total || 0" 
@@ -152,11 +164,12 @@ const columns = [
     cell: ({ row }) => h(Button, {
       variant: 'ghost',
       size: 'sm',
+      class: 'rounded-xl h-8 text-muted-foreground hover:bg-primary/10 hover:text-primary font-bold',
       onClick: () => {
         selectedLog.value = row.original;
         dialogs.value.detail = true;
       }
-    }, t('common.actions.view'))
+    }, () => t('common.actions.view'))
   })
 ];
 

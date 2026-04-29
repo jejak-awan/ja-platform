@@ -80,6 +80,52 @@ export const OperationsService = {
 
     async deleteStudentAffair(type: string, id: number | string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/operations/${type}/${id}`);
+    },
+
+    async getEligibleGraduates(params: Record<string, any> = {}): Promise<AxiosResponse<any>> {
+        return api.get('admin/operations/graduation/eligible', { params });
+    },
+
+    async getGraduationResults(params: Record<string, any> = {}): Promise<AxiosResponse<any>> {
+        return api.get('admin/operations/graduation/results', { params });
+    },
+
+    async updateGraduationResult(data: any): Promise<AxiosResponse<any>> {
+        return api.post('admin/operations/graduation/results', data);
+    },
+
+    async processGraduation(data: { student_ids: number[]; graduation_year: number; status: string }): Promise<AxiosResponse<any>> {
+        return api.post('admin/operations/graduation/batch', data);
+    },
+
+    async importGrades(file: File, graduationYear: number): Promise<AxiosResponse<any>> {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('graduation_year', String(graduationYear));
+        return api.post('admin/operations/graduation/import-grades', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+    },
+
+    async checkPublicGraduation(params: { identifier: string; dob: string }): Promise<AxiosResponse<any>> {
+        return api.get('public/graduation/check', { params });
+    },
+
+    // Document Templates
+    async getDocumentTemplates(params: Record<string, any> = {}): Promise<AxiosResponse<any[]>> {
+        return api.get('admin/operations/document-templates', { params });
+    },
+
+    async storeDocumentTemplate(data: any): Promise<AxiosResponse<any>> {
+        return api.post('admin/operations/document-templates', data);
+    },
+
+    async updateDocumentTemplate(id: number | string, data: any): Promise<AxiosResponse<any>> {
+        return api.put(`admin/operations/document-templates/${id}`, data);
+    },
+
+    async deleteDocumentTemplate(id: number | string): Promise<AxiosResponse<void>> {
+        return api.delete(`admin/operations/document-templates/${id}`);
     }
 };
 

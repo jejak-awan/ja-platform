@@ -1,29 +1,26 @@
 <template>
   <div class="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-1000 p-2">
-    <!-- Admin Hero Section (The Command Center) -->
-    <div class="relative overflow-hidden group">
-      <div class="absolute inset-0 bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-800 opacity-95 rounded-[3rem] shadow-2xl shadow-indigo-500/20" />
-      <div class="absolute -right-20 -top-20 w-96 h-96 bg-white/10 rounded-full blur-[80px] group-hover:bg-white/15 transition-all duration-700" />
-      
-      <div class="relative z-10 p-10 flex flex-col lg:flex-row justify-between items-center gap-10 text-white">
-        <div class="space-y-6 text-center lg:text-left">
-          <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
-            <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-90">{{ $t('features.school.dashboard.v2.hero.badge') }}</span>
+    <!-- Admin Hero Section: Clean & Modern -->
+    <div class="p-10 rounded-xl bg-card border border-border/50 shadow-sm overflow-hidden relative">
+      <div class="relative z-10 flex flex-col lg:flex-row justify-between items-center gap-10">
+        <div class="space-y-4 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
+            <div class="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-90">{{ $t('features.school.dashboard.v2.hero.badge') }}</span>
           </div>
-          <h1 class="text-5xl font-black tracking-tighter leading-none">
+          <h1 class="text-4xl font-black tracking-tight leading-tight text-foreground">
             {{ $t('features.school.dashboard.v2.hero.title') }}
           </h1>
-          <p class="text-white/60 max-w-xl text-lg font-medium leading-relaxed italic">
+          <p class="text-muted-foreground max-w-xl text-lg font-medium leading-relaxed italic">
             {{ $t('features.school.dashboard.v2.hero.subtitle') }}
           </p>
-          <div class="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
-            <Button class="bg-white text-indigo-700 hover:bg-white/90 font-black rounded-2xl h-14 px-10 shadow-xl shadow-white/10 transition-transform active:scale-95">
+          <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
+            <Button class="rounded-xl h-12 px-8 shadow-sm">
               {{ $t('features.school.dashboard.v2.hero.actions.reports') }}
             </Button>
             <Button
-              variant="ghost"
-              class="text-white hover:bg-white/10 border border-white/10 font-bold rounded-2xl h-14 px-8"
+              variant="outline"
+              class="rounded-xl h-12 px-6"
             >
               {{ $t('features.school.dashboard.v2.hero.actions.config') }}
             </Button>
@@ -34,27 +31,27 @@
           <div
             v-for="(stat, idx) in adminQuickStats"
             :key="idx" 
-            class="p-6 rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 flex flex-col items-center justify-center w-40 h-40 hover:bg-white/10 hover:translate-y-[-5px] transition-all duration-500 cursor-pointer group/stat"
+            class="p-6 rounded-xl bg-muted/30 border border-border/40 flex flex-col items-center justify-center w-36 h-36 hover:bg-muted/50 transition-all duration-300 cursor-pointer group/stat"
           >
-            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-3 group-hover/stat:rotate-12 transition-transform">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-3 group-hover/stat:scale-110 transition-transform text-primary">
               <LucideIcon
                 :name="stat.icon"
-                class="w-6 h-6"
+                class="w-5 h-5"
               />
             </div>
-            <span class="text-3xl font-black tracking-tighter leading-none">{{ stat.value }}</span>
-            <span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-50 mt-2 text-center">{{ stat.label }}</span>
+            <span class="text-2xl font-black tracking-tight leading-none text-foreground">{{ stat.value }}</span>
+            <span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-50 mt-2 text-center text-muted-foreground">{{ stat.label }}</span>
           </div>
         </div>
       </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-      <!-- Personnel Presence (Personnel Hub) -->
-      <Card class="lg:col-span-2 border-none bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl rounded-[3rem] shadow-sm hover:shadow-2xl transition-all duration-700 group">
-        <CardHeader class="flex flex-row items-center justify-between p-10 pb-4">
+      <!-- Personnel Presence -->
+      <Card class="lg:col-span-2 border-border/40 bg-card shadow-none rounded-xl group">
+        <CardHeader class="flex flex-row items-center justify-between p-8 pb-4">
           <div>
-            <CardTitle class="text-2xl font-black tracking-tight text-foreground/90 uppercase">
+            <CardTitle class="text-xl font-black tracking-tight text-foreground/90 uppercase">
               {{ $t('features.school.dashboard.v2.hr_presence.title') }}
             </CardTitle>
             <CardDescription class="font-medium italic">
@@ -64,7 +61,7 @@
           <Button
             variant="ghost"
             size="icon"
-            class="rounded-2xl hover:bg-white/50"
+            class="rounded-xl hover:bg-muted"
           >
             <LucideIcon
               name="Filter"
@@ -72,32 +69,32 @@
             />
           </Button>
         </CardHeader>
-        <CardContent class="px-10 pb-10">
+        <CardContent class="px-8 pb-8">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div
               v-for="(staff, idx) in personnelList"
               :key="idx" 
-              class="flex items-center gap-5 p-5 rounded-[2rem] bg-white/50 dark:bg-slate-800/50 border border-transparent hover:border-indigo-500/20 hover:bg-white transition-all duration-500 group/staff cursor-pointer"
+              class="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/20 hover:border-primary/20 hover:bg-muted/40 transition-all duration-300 group/staff cursor-pointer"
             >
-              <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-600 font-black text-lg transition-transform group-hover/staff:rotate-6">
+              <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black text-base transition-transform group-hover/staff:scale-105">
                 {{ staff.initials }}
               </div>
               <div class="flex-1 min-w-0">
-                <h5 class="font-black text-foreground truncate">
+                <h5 class="font-bold text-foreground truncate text-sm">
                   {{ staff.name }}
                 </h5>
-                <p class="text-[10px] text-muted-foreground uppercase font-black tracking-widest">
+                <p class="text-[9px] text-muted-foreground uppercase font-black tracking-widest">
                   {{ staff.role }}
                 </p>
               </div>
               <div class="flex flex-col items-end gap-1">
                 <Badge
                   variant="secondary"
-                  class="bg-emerald-500/10 text-emerald-600 border-none rounded-lg font-black text-[9px]"
+                  class="bg-success/10 text-success border-none rounded-lg font-black text-[8px]"
                 >
                   {{ staff.time }}
                 </Badge>
-                <span class="text-[9px] font-bold opacity-30">{{ $t(`features.school.dashboard.v2.hr_presence.status.${staff.statusKey}`) }}</span>
+                <span class="text-[8px] font-bold opacity-40">{{ $t(`features.school.dashboard.v2.hr_presence.status.${staff.statusKey}`) }}</span>
               </div>
             </div>
           </div>
@@ -106,43 +103,37 @@
 
       <!-- Financial Pulse (The Vault) -->
       <div class="space-y-10">
-        <Card class="border-none bg-indigo-600 text-white rounded-[3rem] shadow-2xl shadow-indigo-600/20 overflow-hidden relative group">
-          <div class="absolute right-[-10%] bottom-[-10%] opacity-10 group-hover:rotate-12 transition-transform duration-700">
-            <LucideIcon
-              name="Vault"
-              class="w-48 h-48"
-            />
-          </div>
+        <Card class="border-border/40 bg-card text-foreground rounded-xl shadow-none overflow-hidden relative group">
           <CardHeader class="p-8 pb-4 relative z-10">
-            <CardTitle class="text-xs font-black uppercase tracking-[0.3em] opacity-60">
+            <CardTitle class="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
               {{ $t('features.school.finance.summary') }}
             </CardTitle>
           </CardHeader>
-          <CardContent class="p-8 relative z-10">
-            <div class="space-y-8">
+          <CardContent class="p-8 pt-4 relative z-10">
+            <div class="space-y-6">
               <div>
-                <p class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-2">
+                <p class="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-1">
                   {{ $t('features.school.finance.labels.netBalance') }}
                 </p>
-                <h3 class="text-5xl font-black tracking-tighter flex items-baseline gap-2">
+                <h3 class="text-4xl font-black tracking-tighter flex items-baseline gap-2 text-foreground">
                   <span class="text-sm opacity-50 font-medium">Rp</span>
                   {{ summary?.net_balance ? formatCurrency(summary.net_balance) : '0' }}
                 </h3>
               </div>
 
-              <div class="space-y-6 pt-4 border-t border-white/10">
+              <div class="space-y-5 pt-4 border-t border-border/50">
                 <div
                   v-for="metric in financeMetrics"
                   :key="metric.label"
-                  class="space-y-3"
+                  class="space-y-2"
                 >
                   <div class="flex justify-between items-end">
-                    <span class="text-[10px] font-black uppercase tracking-widest opacity-60">{{ metric.label }}</span>
-                    <span class="text-sm font-black">{{ metric.percent }}%</span>
+                    <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{{ metric.label }}</span>
+                    <span class="text-xs font-black">{{ metric.percent }}%</span>
                   </div>
-                  <div class="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div class="h-1.5 bg-muted rounded-full overflow-hidden">
                     <div
-                      class="h-full bg-white rounded-full transition-all duration-1000"
+                      class="h-full bg-primary rounded-full transition-all duration-1000"
                       :style="{ width: metric.percent + '%' }"
                     />
                   </div>
@@ -152,8 +143,8 @@
           </CardContent>
           <CardFooter class="p-8 pt-0 relative z-10">
             <Button
-              variant="ghost"
-              class="w-full text-xs font-black uppercase tracking-widest h-14 rounded-2xl bg-white/10 hover:bg-white/20 hover:text-white border-0"
+              variant="outline"
+              class="w-full text-[10px] font-black uppercase tracking-widest h-12 rounded-xl bg-muted/30 hover:bg-muted/50 border-border/40"
               @click="$router.push({ name: 'finance.index' })"
             >
               {{ $t('features.school.finance.tabs.reports') }}
@@ -166,9 +157,9 @@
         </Card>
 
         <!-- Strategic Alerts -->
-        <Card class="border-none bg-rose-500/5 dark:bg-rose-500/10 border-l-4 border-rose-500 rounded-[2.5rem] p-8 shadow-inner group">
-          <h4 class="text-xs font-black uppercase tracking-[0.2em] text-rose-600 flex items-center gap-3 mb-6">
-            <div class="w-2 h-2 rounded-full bg-rose-500 group-hover:animate-ping" />
+        <Card class="border-border/40 bg-destructive/5 dark:bg-destructive/10 border-l-4 border-destructive rounded-xl p-8 shadow-none group">
+          <h4 class="text-xs font-black uppercase tracking-[0.2em] text-destructive flex items-center gap-3 mb-6">
+            <div class="w-2 h-2 rounded-full bg-destructive group-hover:animate-ping" />
             {{ $t('features.school.dashboard.v2.alerts.title') }}
           </h4>
           <div class="space-y-6">
@@ -177,17 +168,17 @@
               :key="alert.id"
               class="flex gap-4 group/alert cursor-pointer"
             >
-              <div class="w-10 h-10 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-600 transition-transform group-hover/alert:scale-110">
+              <div class="w-9 h-9 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive transition-transform group-hover/alert:scale-110">
                 <LucideIcon
                   :name="alert.icon"
-                  class="w-5 h-5"
+                  class="w-4 h-4"
                 />
               </div>
               <div>
-                <p class="text-sm font-black text-foreground/80 leading-tight group-hover/alert:text-rose-600 transition-colors">
+                <p class="text-sm font-bold text-foreground/80 leading-tight group-hover/alert:text-destructive transition-colors">
                   {{ alert.title }}
                 </p>
-                <p class="text-[10px] font-bold text-muted-foreground/60 mt-1 uppercase leading-none">
+                <p class="text-[9px] font-black text-muted-foreground/60 mt-1 uppercase leading-none">
                   {{ alert.status }}
                 </p>
               </div>

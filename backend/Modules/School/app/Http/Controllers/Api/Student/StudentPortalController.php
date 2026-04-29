@@ -10,9 +10,18 @@ use Modules\School\Models\Academic\Attendance;
 use Modules\School\Models\Lms\ExamResult;
 use Modules\School\Models\Academic\Schedule;
 use Modules\School\Models\Academic\Grade;
+use Modules\School\Models\Operations\GraduationResult;
+use Modules\School\Models\Operations\DocumentTemplate;
 
 class StudentPortalController extends BaseController
 {
+    protected \Modules\School\Services\Operations\DocumentService $documentService;
+
+    public function __construct(\Modules\School\Services\Operations\DocumentService $documentService)
+    {
+        $this->documentService = $documentService;
+    }
+
     private function getStudent(): Student
     {
         /** @var \Modules\Core\Models\User|null $user */
@@ -110,5 +119,49 @@ class StudentPortalController extends BaseController
         // Calculate GPA based on E-Rapor final grades
         $avg = Grade::where('student_id', $studentId)->avg('final_grade');
         return (float) round((float)$avg, 2);
+    }
+
+    public function graduation(): \Illuminate\Http\JsonResponse
+    {
+        $student = $this->getStudent();
+        $result = GraduationResult::where('student_id', $student->id)
+            ->latest('graduation_year')
+            ->first();
+
+        return $this->sendResponse([
+            'student' => $student->only(['full_name', 'nisn', 'nis']),
+            'result' => $result
+        ], 'Graduation data retrieved.');
+    }
+
+    public function downloadCertificate(): mixed
+    {
+        $student = $this->getStudent();
+        $result = GraduationResult::where('student_id', $student->id)
+            ->where('status', 'graduated')
+            ->latest('graduation_year')
+            ->firstOrFail();
+
+        $template = DocumentTemplate::where('school_id', $student->school_id)
+            ->where('type', 'skl')
+            ->where('is_active', true)
+            ->first();
+
+        if (!$template) {
+            return $this->sendError('Template sertifikat belum diatur oleh sekolah.', [], 404);
+        }
+
+        $data = array_merge($student->toArray(), [
+            'graduation_year' => $result->graduation_year,
+            'certificate_number' => $result->certificate_number,
+            'grades' => $result->grades,
+            'published_date' => $result->published_at ? $result->published_at->format('d F Y') : now()->format('d F Y'),
+        ]);
+
+        $pdfBinary = $this->documentService->generatePdf($template, $data);
+
+        return response($pdfBinary)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="SKL_' . $student->nisn . '.pdf"');
     }
 }

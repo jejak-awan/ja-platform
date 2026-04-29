@@ -1,16 +1,27 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex justify-between items-center">
+  <div class="space-y-8 p-6 animate-in fade-in duration-700">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-2">
       <div>
-        <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.admission.title') }}
-        </h1>
-        <p class="text-sm text-muted-foreground">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <LucideIcon
+              name="UserCheck"
+              class="w-5 h-5 text-primary"
+            />
+          </div>
+          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+            {{ $t('features.school.admission.title') }}
+          </h1>
+        </div>
+        <p class="text-muted-foreground text-sm font-medium italic">
           {{ $t('features.school.admission.subtitle') }}
         </p>
       </div>
       <div class="flex gap-2">
-        <Button @click="dialogs.register = true">
+        <Button 
+          class="rounded-xl shadow-sm px-6"
+          @click="dialogs.register = true"
+        >
           <LucideIcon
             name="UserPlus"
             class="w-4 h-4 mr-2"
@@ -20,49 +31,48 @@
       </div>
     </div>
 
-    <!-- Stats Summary -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <Card
-        v-for="(stat, key) in stats"
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div 
+        v-for="(stat, key) in stats" 
         :key="key"
-        class="bg-card"
+        class="group bg-card border border-border/40 rounded-xl p-6 shadow-none hover:bg-muted/30 transition-all duration-300"
       >
-        <CardContent class="p-4 flex items-center gap-4">
-          <div :class="`p-2 rounded-lg ${stat.color}`">
+        <div class="flex justify-between items-start mb-4">
+          <div :class="`w-10 h-10 rounded-xl flex items-center justify-center border border-border/40 bg-muted/50 ${stat.color.split(' ')[1]}`">
             <LucideIcon
               :name="stat.icon"
               class="w-5 h-5"
             />
           </div>
-          <div>
-            <p class="text-xs text-muted-foreground uppercase font-bold">
-              {{ stat.label }}
-            </p>
-            <p class="text-2xl font-bold">
-              {{ stat.value }}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+          <span class="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">{{ stat.label }}</span>
+        </div>
+        <div class="flex items-baseline gap-2">
+          <h3 class="text-2xl font-black tracking-tight text-foreground">
+            {{ stat.value }}
+          </h3>
+          <span class="text-[10px] font-bold text-muted-foreground uppercase">{{ $t('common.labels.student') }}</span>
+        </div>
+      </div>
     </div>
 
-    <Card>
+    <Card class="border border-border/40 bg-card shadow-none rounded-xl overflow-hidden">
       <CardContent class="p-0">
-        <div class="p-6 border-b flex flex-wrap gap-4 justify-between items-center">
+        <div class="p-6 border-b border-border/40 flex flex-wrap gap-4 justify-between items-center bg-muted/10">
           <div class="flex gap-4">
             <div class="relative w-64">
               <LucideIcon
                 name="Search"
-                class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
               />
               <Input
                 v-model="filters.search"
                 :placeholder="$t('features.school.admission.placeholders.search')"
-                class="pl-9"
+                class="pl-10 rounded-xl bg-background border-border/40"
               />
             </div>
             <Select v-model="filters.status">
-              <SelectTrigger class="w-40">
+              <SelectTrigger class="w-40 rounded-xl bg-background border-border/40">
                 <SelectValue :placeholder="$t('common.labels.status')" />
               </SelectTrigger>
               <SelectContent>
@@ -94,11 +104,15 @@
           :loading="loading"
         />
         
-        <div class="p-4 border-t">
+        <div class="p-6 border-t border-border/40 flex justify-between items-center bg-muted/5">
+          <p class="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">
+             TOTAL: {{ pagination?.total || 0 }}
+          </p>
           <Pagination
             v-if="pagination && (pagination.total || 0) > (pagination.per_page || 0)"
             v-model:current-page="pagination.current_page"
             :total-items="pagination.total || 0"
+            :per-page="pagination.per_page || 20"
           />
         </div>
       </CardContent>
@@ -153,9 +167,9 @@ const stats = ref({
 const columnHelper = createColumnHelper<any>();
 
 const columns = [
-  columnHelper.accessor('registration_number', { header: t('features.school.admission.labels.regNumber'), cell: info => h('span', { class: 'font-mono font-bold text-primary' }, info.getValue()) }),
-  columnHelper.accessor('full_name', { header: t('common.labels.name') }),
-  columnHelper.accessor('nisn', { header: 'NISN' }),
+  columnHelper.accessor('registration_number', { header: t('features.school.admission.labels.regNumber'), cell: info => h('span', { class: 'text-xs font-black tracking-widest text-primary uppercase' }, info.getValue()) }),
+  columnHelper.accessor('full_name', { header: t('common.labels.name'), cell: info => h('span', { class: 'text-sm font-bold text-foreground' }, info.getValue()) }),
+  columnHelper.accessor('nisn', { header: 'NISN', cell: info => h('span', { class: 'text-xs font-bold text-muted-foreground' }, info.getValue() || '-') }),
   columnHelper.accessor('status', {
     header: t('common.labels.status'),
     cell: info => {
@@ -169,12 +183,12 @@ const columns = [
         draft: { text: 'Draft', class: 'bg-muted text-muted-foreground' }
       };
       const config = labels[status as string] || labels.draft;
-      return h('span', { class: `px-2 py-1 rounded-full text-xs font-medium ${config?.class || ''}` }, config?.text || '');
+      return h('span', { class: `px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-[0.15em] border border-current ${config?.class || ''}` }, config?.text || '');
     }
   }),
   columnHelper.accessor('created_at', { 
     header: t('features.school.admission.labels.regNumber'), 
-    cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US') 
+    cell: info => h('span', { class: 'text-xs font-medium text-muted-foreground' }, new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US'))
   }),
   columnHelper.display({
     id: 'actions',
@@ -182,8 +196,9 @@ const columns = [
     cell: ({ row }) => h(Button, {
       variant: 'ghost',
       size: 'sm',
+      class: 'rounded-xl h-8 text-muted-foreground hover:bg-primary/10 hover:text-primary font-bold',
       onClick: () => router.push({ name: 'admission.show', params: { id: row.original.id } })
-    }, t('common.actions.view'))
+    }, () => t('common.actions.view'))
   })
 ];
 

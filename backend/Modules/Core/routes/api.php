@@ -108,8 +108,8 @@ Route::prefix('v1')->group(function () {
 
     // Admin Core - Unthrottled High-Frequency Polling
     Route::prefix('admin/core')->middleware(['auth:sanctum'])->group(function () {
-        Route::get('system/cache-status', [SystemController::class, 'cacheStatus'])->middleware('permission:manage system');
-        Route::post('system/cache/warm', [SystemController::class, 'warmCache'])->middleware('permission:manage system');
+        Route::get('system/cache-status', [SystemController::class, 'cacheStatus'])->middleware('permission:view settings');
+        Route::post('system/cache/warm', [SystemController::class, 'warmCache'])->middleware('permission:manage settings');
         Route::get('redis/cache-stats', [RedisController::class, 'cacheStats'])->middleware('permission:manage settings');
     });
 
@@ -206,7 +206,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('shield/stats', [SecurityController::class, 'shieldStats']);
                 Route::get('threat-analysis', [SecurityController::class, 'threatAnalysis']);
                 Route::get('file-integrity', [SecurityController::class, 'fileIntegrityStatus']);
-                Route::post('run-integrity-check', [SecurityController::class, 'runIntegrityCheck'])->middleware('throttle:5,1');
+                Route::post('run-integrity-check', [SecurityController::class, 'runIntegrityCheck'])->middleware('throttle:30,1');
                 Route::post('file-integrity/resync', [SecurityController::class, 'resyncFileIntegrity'])->middleware('throttle:60,1');
                 Route::get('dependency-vulnerabilities', [DependencyVulnerabilityController::class, 'index']);
                 Route::get('dependency-vulnerabilities/statistics', [DependencyVulnerabilityController::class, 'statistics']);
@@ -255,7 +255,7 @@ Route::prefix('v1')->group(function () {
         Route::get('system/health', [SystemController::class, 'health'])->middleware('permission:manage system');
         Route::get('system/health/detailed', [SystemController::class, 'systemHealth'])->middleware('permission:manage system');
         Route::get('system/statistics', [SystemController::class, 'statistics'])->middleware('permission:manage system');
-        Route::post('system/cache/clear', [SystemController::class, 'clearCache'])->middleware('permission:manage system');
+        Route::post('system/cache/clear', [SystemController::class, 'clearCache'])->middleware('permission:manage settings');
 
         // Redis
         Route::get('redis/settings', [RedisController::class, 'index'])->middleware('permission:manage settings');

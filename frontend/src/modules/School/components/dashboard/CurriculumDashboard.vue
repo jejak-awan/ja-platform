@@ -1,32 +1,29 @@
 <template>
   <div class="space-y-10 animate-in fade-in slide-in-from-right-5 duration-1000 p-2">
-    <!-- Curriculum Hero -->
-    <div class="relative overflow-hidden group">
-      <div class="absolute inset-0 bg-gradient-to-br from-emerald-600 via-teal-700 to-cyan-800 opacity-95 rounded-[3rem] shadow-2xl shadow-emerald-500/20" />
-      <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-white/10 rounded-full blur-[80px] group-hover:bg-white/15 transition-all duration-700" />
-      
-      <div class="relative z-10 p-10 flex flex-col lg:flex-row justify-between items-center gap-10 text-white">
-        <div class="space-y-6 text-center lg:text-left">
-          <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+    <!-- Curriculum Header: Clean & Modern -->
+    <div class="p-10 rounded-xl bg-card border border-border/50 shadow-sm overflow-hidden relative">
+      <div class="relative z-10 flex flex-col lg:flex-row justify-between items-center gap-10">
+        <div class="space-y-4 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
             <LucideIcon
               name="BookOpen"
-              class="w-4 h-4 text-emerald-300"
+              class="w-4 h-4 text-primary"
             />
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-90">{{ $t('features.school.dashboard.v2.academic.hero_badge') }}</span>
+            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-90">{{ $t('features.school.dashboard.v2.academic.hero_badge') }}</span>
           </div>
-          <h1 class="text-5xl font-black tracking-tighter leading-none">
+          <h1 class="text-4xl font-black tracking-tight leading-tight text-foreground">
             {{ $t('features.school.dashboard.v2.academic.hero_title') }}
           </h1>
-          <p class="text-white/60 max-w-xl text-lg font-medium leading-relaxed italic">
+          <p class="text-muted-foreground max-w-xl text-lg font-medium leading-relaxed italic">
             {{ $t('features.school.dashboard.v2.academic.hero_subtitle') }}
           </p>
-          <div class="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
-            <Button class="bg-white text-emerald-700 hover:bg-white/90 font-black rounded-2xl h-14 px-10 shadow-xl shadow-white/10 transition-transform active:scale-95">
+          <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
+            <Button class="rounded-xl h-12 px-8 shadow-sm">
               {{ $t('features.school.dashboard.v2.academic.actions.schedule') }}
             </Button>
             <Button
-              variant="ghost"
-              class="text-white hover:bg-white/10 border border-white/10 font-bold rounded-2xl h-14 px-8"
+              variant="outline"
+              class="rounded-xl h-12 px-6"
             >
               {{ $t('features.school.dashboard.v2.academic.actions.bank') }}
             </Button>
@@ -37,16 +34,16 @@
           <div
             v-for="(stat, idx) in curriculumStats"
             :key="idx" 
-            class="p-6 rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 flex flex-col items-center justify-center w-40 h-40 hover:bg-white/10 hover:translate-y-[-5px] transition-all duration-500 cursor-pointer group/stat"
+            class="p-6 rounded-xl bg-muted/30 border border-border/40 flex flex-col items-center justify-center w-36 h-36 hover:bg-muted/50 transition-all duration-300 cursor-pointer group/stat"
           >
-            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-3 group-hover/stat:rotate-12 transition-transform">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-3 group-hover/stat:scale-110 transition-transform text-primary">
               <LucideIcon
                 :name="stat.icon"
-                class="w-6 h-6"
+                class="w-5 h-5"
               />
             </div>
-            <span class="text-3xl font-black tracking-tighter leading-none">{{ stat.value }}</span>
-            <span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-50 mt-2 text-center">{{ stat.label }}</span>
+            <span class="text-2xl font-black tracking-tight leading-none text-foreground">{{ stat.value }}</span>
+            <span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-50 mt-2 text-center text-muted-foreground">{{ stat.label }}</span>
           </div>
         </div>
       </div>
@@ -54,10 +51,11 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
       <!-- Subject Distribution -->
-      <Card class="lg:col-span-2 border-none bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl rounded-[3rem] shadow-sm hover:shadow-2xl transition-all duration-700 group">
-        <CardHeader class="flex flex-row items-center justify-between p-10 pb-4">
+      <!-- Subject Distribution -->
+      <Card class="lg:col-span-2 border-border/40 bg-card shadow-none rounded-xl group">
+        <CardHeader class="flex flex-row items-center justify-between p-8 pb-4">
           <div>
-            <CardTitle class="text-2xl font-black tracking-tight text-foreground/90 uppercase">
+            <CardTitle class="text-xl font-black tracking-tight text-foreground/90 uppercase">
               {{ $t('features.school.dashboard.v2.academic.popular_subjects') }}
             </CardTitle>
             <CardDescription class="font-medium italic">
@@ -65,30 +63,30 @@
             </CardDescription>
           </div>
         </CardHeader>
-        <CardContent class="px-10 pb-10">
+        <CardContent class="px-8 pb-8">
           <div class="space-y-6">
             <div
               v-for="(subject, idx) in subjects"
               :key="idx"
               class="space-y-2"
             >
-              <div class="flex justify-between items-end">
+              <div class="flex justify-between items-end text-xs font-bold">
                 <div class="flex items-center gap-3">
-                  <div class="w-2 h-8 bg-emerald-500 rounded-full" />
+                  <div class="w-1.5 h-6 bg-primary rounded-full" />
                   <div>
-                    <h5 class="font-black text-sm">
+                    <h5 class="font-black text-foreground">
                       {{ subject.name }}
                     </h5>
-                    <p class="text-[9px] font-bold text-muted-foreground uppercase">
+                    <p class="text-[8px] font-bold text-muted-foreground uppercase">
                       {{ subject.teacher }}
                     </p>
                   </div>
                 </div>
-                <span class="text-sm font-black">{{ subject.avg }}%</span>
+                <span class="text-foreground">{{ subject.avg }}%</span>
               </div>
-              <div class="h-2 bg-muted rounded-full overflow-hidden">
+              <div class="h-1.5 bg-muted rounded-full overflow-hidden">
                 <div
-                  class="h-full bg-emerald-500 rounded-full transition-all duration-1000"
+                  class="h-full bg-primary rounded-full transition-all duration-1000"
                   :style="{ width: subject.avg + '%' }"
                 />
               </div>
@@ -98,34 +96,28 @@
       </Card>
 
       <!-- Academic Events -->
-      <Card class="border-none bg-emerald-600 text-white rounded-[3rem] shadow-2xl shadow-emerald-600/20 overflow-hidden relative group">
-        <div class="absolute right-[-10%] top-[-10%] opacity-10 group-hover:-rotate-12 transition-transform duration-700">
-          <LucideIcon
-            name="Calendar"
-            class="w-48 h-48"
-          />
-        </div>
+      <Card class="border-border/40 bg-card text-foreground rounded-xl shadow-none overflow-hidden relative group">
         <CardHeader class="p-8 pb-4 relative z-10">
-          <CardTitle class="text-xs font-black uppercase tracking-[0.3em] opacity-60">
+          <CardTitle class="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
             {{ $t('features.school.dashboard.v2.academic.agenda') }}
           </CardTitle>
         </CardHeader>
-        <CardContent class="p-8 relative z-10">
-          <div class="space-y-8">
+        <CardContent class="p-8 pt-4 relative z-10">
+          <div class="space-y-6">
             <div
               v-for="event in events"
               :key="event.title"
               class="flex gap-4"
             >
-              <div class="w-12 h-14 rounded-2xl bg-white/10 flex flex-col items-center justify-center shrink-0">
+              <div class="w-12 h-14 rounded-xl bg-primary/10 text-primary flex flex-col items-center justify-center shrink-0 border border-primary/20">
                 <span class="text-lg font-black leading-none">{{ event.day }}</span>
                 <span class="text-[8px] font-bold uppercase tracking-widest opacity-60">{{ event.month }}</span>
               </div>
               <div>
-                <h5 class="font-black text-sm leading-snug">
+                <h5 class="font-bold text-sm leading-snug">
                   {{ event.title }}
                 </h5>
-                <p class="text-[10px] opacity-60 font-medium italic mt-1">
+                <p class="text-[9px] text-muted-foreground font-medium italic mt-1">
                   {{ event.location }}
                 </p>
               </div>
@@ -134,8 +126,8 @@
         </CardContent>
         <CardFooter class="p-8 pt-0 relative z-10">
           <Button
-            variant="ghost"
-            class="w-full text-xs font-black uppercase tracking-widest h-14 rounded-2xl bg-white/10 hover:bg-white/20 hover:text-white border-0"
+            variant="outline"
+            class="w-full text-[10px] font-black uppercase tracking-widest h-12 rounded-xl bg-muted/30 hover:bg-muted/50 border-border/40"
           >
             {{ $t('features.school.dashboard.v2.academic.actions.calendar') }}
             <LucideIcon

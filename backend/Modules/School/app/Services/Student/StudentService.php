@@ -176,4 +176,28 @@ class StudentService
         $record->update($data);
         return $record;
     }
+
+    /**
+     * Batch update students status to graduated.
+     * 
+     * @param array<int> $studentIds
+     */
+    public function batchGraduate(array $studentIds): int
+    {
+        return Student::whereIn('id', $studentIds)
+            ->update(['status' => 'graduated']);
+    }
+
+    /**
+     * Find student for public graduation check.
+     */
+    public function findForGraduationCheck(string $identifier, string $dob): ?Student
+    {
+        return Student::where(function($q) use ($identifier) {
+                $q->where('nisn', $identifier)
+                  ->orWhere('nis', $identifier);
+            })
+            ->where('date_of_birth', $dob)
+            ->first();
+    }
 }

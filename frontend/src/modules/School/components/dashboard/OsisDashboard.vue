@@ -1,10 +1,10 @@
 <template>
   <div class="space-y-8 animate-in zoom-in-95 duration-700">
-    <!-- OSIS Header -->
-    <div class="p-8 rounded-3xl bg-pink-500/5 border border-pink-500/20 relative overflow-hidden group">
+    <!-- OSIS Header: Clean -->
+    <div class="p-8 rounded-xl bg-card border border-border/50 shadow-sm relative overflow-hidden group">
       <div class="relative z-10">
         <div class="flex items-center gap-3">
-          <div class="p-2 bg-pink-500 rounded-xl text-white shadow-lg shadow-pink-500/20">
+          <div class="p-2.5 bg-primary/10 rounded-xl text-primary border border-primary/20">
             <LucideIcon
               name="Shield"
               class="w-6 h-6"
@@ -14,21 +14,17 @@
             {{ t('features.school.osis.dashboard.title') }}
           </h1>
         </div>
-        <p class="text-muted-foreground mt-2 max-w-xl">
+        <p class="text-muted-foreground mt-2 max-w-xl text-lg font-medium">
           {{ t('features.school.osis.dashboard.subtitle') }}
         </p>
       </div>
-      <LucideIcon
-        name="Users"
-        class="absolute right-[-20px] top-[-20px] w-64 h-64 text-pink-500/5 -rotate-12 group-hover:rotate-0 transition-all duration-700"
-      />
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card
         v-for="stat in osisStats"
         :key="stat.key"
-        class="bg-card/50 border-border/50"
+        class="bg-card border-border/40 shadow-none rounded-xl"
       >
         <CardContent class="p-6">
           <div class="flex justify-between items-start">
@@ -52,13 +48,13 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <Card class="lg:col-span-2 bg-card/50 border-border/50">
+      <Card class="lg:col-span-2 bg-card border-border/40 shadow-none rounded-xl">
         <CardHeader class="flex flex-row items-center justify-between">
           <CardTitle>{{ t('features.school.osis.tabs.programs') }}</CardTitle>
           <Button
             variant="outline"
             size="sm"
-            class="rounded-full"
+            class="rounded-xl"
           >
             {{ t('common.actions.new') }}
           </Button>
@@ -68,7 +64,7 @@
             <div
               v-for="program in upcomingPrograms"
               :key="program.id"
-              class="p-4 rounded-2xl bg-muted/30 border border-border/40 hover:bg-muted/50 transition-colors cursor-pointer flex gap-4 items-center"
+              class="p-4 rounded-xl bg-muted/20 border border-border/20 hover:bg-muted/40 transition-colors cursor-pointer flex gap-4 items-center"
             >
               <div class="w-14 h-14 bg-background rounded-xl border border-border/50 flex flex-col items-center justify-center shrink-0">
                 <span class="text-[10px] font-bold text-pink-500 uppercase">{{ getMonthName(program.planned_date) }}</span>
@@ -100,28 +96,28 @@
       </Card>
 
       <div class="space-y-8">
-        <Card class="bg-gradient-to-br from-pink-600 to-rose-600 text-white border-0 overflow-hidden shadow-xl shadow-pink-500/20">
+        <Card class="border-border/40 bg-card text-foreground rounded-xl shadow-none overflow-hidden relative group">
           <CardHeader>
-            <CardTitle class="text-white">
+            <CardTitle class="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
               {{ t('features.school.osis.finances.title') }}
             </CardTitle>
-            <CardDescription class="text-pink-100 italic opacity-80 mt-1">
+            <CardDescription class="text-muted-foreground italic mt-1 text-[10px]">
               Sisa saldo kas organisasi periode ini.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <h2 class="text-4xl font-black tracking-tighter">
+            <h2 class="text-3xl font-black tracking-tighter">
               {{ formatCurrency(stats.budget) }}
             </h2>
             <div class="mt-6 flex gap-2">
-              <div class="flex-1 h-1 rounded-full bg-white/20 overflow-hidden">
+              <div class="flex-1 h-1 rounded-full bg-muted overflow-hidden">
                 <div
-                  class="h-full bg-white"
+                  class="h-full bg-primary"
                   :style="{ width: stats.programs > 0 ? (stats.completedPrograms / stats.programs * 100) + '%' : '0%' }"
                 />
               </div>
             </div>
-            <p class="text-[10px] uppercase font-bold mt-2 opacity-80 italic">
+            <p class="text-[9px] uppercase font-bold mt-2 opacity-60 italic text-muted-foreground">
               {{ stats.programs > 0 ? Math.round(stats.completedPrograms / stats.programs * 100) : 0 }}% {{ t('common.labels.completed') }}
             </p>
           </CardContent>

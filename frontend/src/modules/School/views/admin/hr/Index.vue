@@ -1,27 +1,41 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex justify-between items-center text-left">
+  <div class="space-y-8 p-6 animate-in fade-in duration-700">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-2">
       <div>
-        <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.hr.labels.advancedHR') }}
-        </h1>
-        <p class="text-sm text-muted-foreground">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <LucideIcon
+              name="Briefcase"
+              class="w-5 h-5 text-primary"
+            />
+          </div>
+          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+            {{ $t('features.school.hr.labels.advancedHR') }}
+          </h1>
+        </div>
+        <p class="text-muted-foreground text-sm font-medium italic">
           {{ $t('features.school.hr.subtitle') }}
         </p>
       </div>
     </div>
 
-    <Card>
+    <Card class="border border-border/40 bg-card shadow-none rounded-xl overflow-hidden">
       <CardContent class="p-0">
         <Tabs
           v-model="activeTab"
           class="w-full"
         >
-          <TabsList class="p-6 border-b bg-muted/20 flex justify-start h-auto gap-4">
-            <TabsTrigger value="leaves">
+          <TabsList class="p-2 m-4 bg-muted/50 rounded-2xl inline-flex h-auto gap-2">
+            <TabsTrigger 
+              value="leaves"
+              class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
+            >
               {{ $t('features.school.hr.labels.leaveApplications') }}
             </TabsTrigger>
-            <TabsTrigger value="shifts">
+            <TabsTrigger 
+              value="shifts"
+              class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
+            >
               {{ $t('features.school.hr.labels.shiftSettings') }}
             </TabsTrigger>
           </TabsList>
@@ -30,12 +44,12 @@
             value="leaves"
             class="p-0"
           >
-            <div class="p-6 border-b flex justify-between items-center">
+            <div class="p-6 border-b border-border/40 flex justify-between items-center bg-muted/10">
               <Select
                 v-model="filters.status"
                 class="w-40"
               >
-                <SelectTrigger><SelectValue :placeholder="$t('common.labels.status')" /></SelectTrigger>
+                <SelectTrigger class="rounded-xl bg-background border-border/40"><SelectValue :placeholder="$t('common.labels.status')" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">
                     {{ $t('common.labels.all') }}
@@ -51,7 +65,10 @@
                   </SelectItem>
                 </SelectContent>
               </Select>
-              <Button @click="dialogs.leave = true">
+              <Button 
+                class="rounded-xl shadow-sm px-6"
+                @click="dialogs.leave = true"
+              >
                 <LucideIcon
                   name="Plus"
                   class="w-4 h-4 mr-2"
@@ -69,8 +86,11 @@
             value="shifts"
             class="p-0"
           >
-            <div class="p-6 border-b flex justify-end">
-              <Button @click="handleAddShift">
+            <div class="p-6 border-b border-border/40 flex justify-end bg-muted/10">
+              <Button 
+                class="rounded-xl shadow-sm px-6"
+                @click="handleAddShift"
+              >
                 <LucideIcon
                   name="Plus"
                   class="w-4 h-4 mr-2"
@@ -166,7 +186,7 @@ const leaveColumns = [
           rejected: t('common.labels.rejected'),
           pending: t('common.labels.pending')
       };
-      return h('span', { class: `px-2 py-1 rounded-full text-xs font-medium ${colors[status]}` }, 
+      return h('span', { class: `px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-[0.15em] border border-current ${colors[status]}` }, 
         labels[status] || status.toUpperCase()
       );
     }
@@ -178,15 +198,15 @@ const leaveColumns = [
       h(Button, {
         size: 'sm',
         variant: 'outline',
-        class: 'text-success',
+        class: 'rounded-xl h-8 text-success hover:bg-success/10 hover:text-success border-success/20 font-bold',
         onClick: () => handleUpdateLeave(row.original.id, 'approved')
-      }, t('common.actions.approve')),
+      }, () => t('common.actions.approve')),
       h(Button, {
         size: 'sm',
         variant: 'outline',
-        class: 'text-destructive',
+        class: 'rounded-xl h-8 text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/20 font-bold',
         onClick: () => handleUpdateLeave(row.original.id, 'rejected')
-      }, t('common.actions.reject'))
+      }, () => t('common.actions.reject'))
     ]) : null
   })
 ];
@@ -202,6 +222,7 @@ const shiftColumns = [
       h(Button, {
         size: 'icon',
         variant: 'ghost',
+        class: 'h-8 w-8 text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-lg',
         onClick: () => {
           selectedShift.value = row.original;
           dialogs.value.shift = true;
@@ -210,7 +231,7 @@ const shiftColumns = [
       h(Button, {
         size: 'icon',
         variant: 'ghost',
-        class: 'text-destructive',
+        class: 'h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-lg',
         onClick: () => handleDeleteShift(row.original.id)
       }, () => h(LucideIcon, { name: 'Trash2', class: 'w-4 h-4' }))
     ])

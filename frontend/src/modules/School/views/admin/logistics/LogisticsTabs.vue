@@ -1,11 +1,19 @@
 <template>
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-8 text-left">
+  <div class="space-y-8 p-6 animate-in fade-in duration-700">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-2">
       <div>
-        <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.logistics.labels.logisticsEcosystem') }}
-        </h1>
-        <p class="text-sm text-muted-foreground">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <LucideIcon
+              name="Truck"
+              class="w-5 h-5 text-primary"
+            />
+          </div>
+          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+            {{ $t('features.school.logistics.labels.logisticsEcosystem') }}
+          </h1>
+        </div>
+        <p class="text-muted-foreground text-sm font-medium italic">
           {{ $t('features.school.logistics.subtitle') }}
         </p>
       </div>
@@ -15,10 +23,10 @@
       v-model="activeTab"
       class="w-full"
     >
-      <TabsList class="mb-6 border-b bg-transparent p-0 h-auto gap-6 flex justify-start">
+      <TabsList class="p-2 bg-muted/50 rounded-2xl inline-flex h-auto gap-2 mb-6">
         <TabsTrigger 
           value="hostel" 
-          class="px-2 py-3 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-all font-bold"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold"
         >
           <LucideIcon
             name="Home"
@@ -28,7 +36,7 @@
         </TabsTrigger>
         <TabsTrigger 
           value="transport" 
-          class="px-2 py-3 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-all font-bold"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold"
         >
           <LucideIcon
             name="Bus"
@@ -38,7 +46,7 @@
         </TabsTrigger>
         <TabsTrigger 
           value="inventory" 
-          class="px-2 py-3 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-all font-bold"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold"
         >
           <LucideIcon
             name="Box"
@@ -48,7 +56,7 @@
         </TabsTrigger>
         <TabsTrigger 
           value="career" 
-          class="px-2 py-3 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-all font-bold"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold"
         >
           <LucideIcon
             name="Briefcase"

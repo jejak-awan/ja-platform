@@ -26,6 +26,8 @@ use Modules\School\Http\Controllers\Api\Lms\LmsController;
 use Modules\School\Http\Controllers\Api\Lms\CbtController;
 use Modules\School\Http\Controllers\Api\Osis\OsisController;
 use Modules\School\Http\Controllers\Api\Teacher\TeacherPortalController;
+use Modules\School\Http\Controllers\Api\Operations\GraduationController;
+use Modules\School\Http\Controllers\Api\Operations\GraduationSettingsController;
 
 Route::prefix('v1')->group(function () {
     Route::prefix('admin')->middleware([
@@ -183,6 +185,20 @@ Route::prefix('v1')->group(function () {
                 Route::post('counseling', [OperationController::class, 'storeCounselingRecord']);
                 Route::put('counseling/{id}', [OperationController::class, 'updateCounselingRecord']);
                 Route::delete('counseling/{id}', [OperationController::class, 'destroyCounselingRecord']);
+
+                Route::get('graduation/eligible', [GraduationController::class, 'eligibleStudents']);
+                Route::get('graduation/results', [GraduationController::class, 'indexResults']);
+                Route::post('graduation/results', [GraduationController::class, 'updateResult']);
+                Route::post('graduation/batch', [GraduationController::class, 'batchGraduate']);
+                Route::post('graduation/import-grades', [GraduationController::class, 'importGrades']);
+                
+                Route::get('graduation/settings', [GraduationSettingsController::class, 'index']);
+                Route::get('graduation/settings/{year}', [GraduationSettingsController::class, 'show']);
+                Route::post('graduation/settings', [GraduationSettingsController::class, 'store']);
+                Route::put('graduation/settings/{year}', [GraduationSettingsController::class, 'update']);
+                Route::delete('graduation/settings/{year}', [GraduationSettingsController::class, 'destroy']);
+                
+                Route::apiResource('document-templates', \Modules\School\Http\Controllers\Api\Operations\DocumentTemplateController::class);
             });
 
             Route::middleware('permission:view visitors|manage visitors')->group(function () {
@@ -403,6 +419,8 @@ Route::prefix('v1')->group(function () {
 
     // Public Verification (No Auth)
     Route::get('public/verify/{hash}', [\Modules\School\Http\Controllers\Api\Admission\PublicVerificationController::class, 'verify']);
+    Route::get('public/graduation/check', [GraduationController::class, 'publicCheck']);
+    Route::get('public/graduation/certificate/{id}', [GraduationController::class, 'downloadCertificatePublic']);
 
     // Student Portal
     Route::prefix('student')->middleware(['auth:sanctum'])->group(function () {
@@ -410,6 +428,8 @@ Route::prefix('v1')->group(function () {
         Route::get('bills', [StudentPortalController::class, 'bills']);
         Route::get('attendance', [StudentPortalController::class, 'attendance']);
         Route::get('grades', [StudentPortalController::class, 'grades']);
+        Route::get('graduation', [StudentPortalController::class, 'graduation']);
+        Route::get('graduation/certificate', [StudentPortalController::class, 'downloadCertificate']);
         Route::get('schedule', [StudentPortalController::class, 'schedule']);
 
         // LMS Student Routes

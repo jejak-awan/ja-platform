@@ -1,18 +1,18 @@
 <template>
   <div class="space-y-8 p-6 animate-in fade-in duration-700">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-2">
       <div>
-        <h1 class="text-4xl font-black tracking-tighter text-foreground/90 uppercase">
+        <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
           {{ $t('features.school.finance.title') }}
         </h1>
-        <p class="text-muted-foreground font-medium italic">
+        <p class="text-muted-foreground text-sm font-medium italic">
           {{ $t('features.school.finance.subtitle') }}
         </p>
       </div>
       <div class="flex gap-2">
         <Button
           v-if="activeTab === 'bills'"
-          class="rounded-2xl shadow-lg shadow-primary/20 bg-indigo-600 hover:bg-indigo-700 h-11 px-6"
+          class="rounded-xl shadow-sm h-11 px-6"
           @click="dialogs.generate = true"
         >
           <LucideIcon
@@ -23,7 +23,7 @@
         </Button>
         <Button
           v-if="activeTab === 'fee-types'"
-          class="rounded-2xl bg-indigo-600 hover:bg-indigo-700 h-11 px-6"
+          class="rounded-xl h-11 px-6"
           @click="feeTypesTabRef?.openAddDialog()"
         >
           <LucideIcon
@@ -34,7 +34,7 @@
         </Button>
         <Button
           v-if="activeTab === 'expenses'"
-          class="rounded-2xl bg-indigo-600 hover:bg-indigo-700 h-11 px-6"
+          class="rounded-xl h-11 px-6"
           @click="expensesTabRef?.openAddDialog()"
         >
           <LucideIcon
@@ -45,7 +45,7 @@
         </Button>
         <Button
           v-if="activeTab === 'budgeting'"
-          class="rounded-2xl bg-indigo-600 hover:bg-indigo-700 h-11 px-6"
+          class="rounded-xl h-11 px-6"
           @click="budgetsTabRef?.openAddDialog()"
         >
           <LucideIcon
@@ -56,7 +56,7 @@
         </Button>
         <Button
           variant="outline"
-          class="rounded-2xl h-11 px-4"
+          class="rounded-xl h-11 px-4 border-border/40"
           @click="refreshAll"
         >
           <LucideIcon
@@ -69,29 +69,24 @@
     </div>
 
     <!-- Financial Summary Dashboard -->
+    <!-- Financial Summary Dashboard -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <Card
         v-for="(stat, idx) in financialStats"
         :key="idx" 
-        class="relative overflow-hidden border-none bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl rounded-[2rem] shadow-sm hover:shadow-xl hover:translate-y-[-4px] transition-all duration-500 group"
+        class="bg-card border border-border/40 rounded-xl shadow-none hover:bg-muted/30 transition-all duration-300 group"
       >
-        <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-          <LucideIcon
-            :name="stat.icon"
-            class="w-24 h-24 rotate-12"
-          />
-        </div>
         <CardContent class="p-6 relative z-10">
-          <div :class="['w-12 h-12 rounded-2xl flex items-center justify-center mb-4 shadow-inner', stat.bgClass]">
+          <div :class="['w-10 h-10 rounded-xl flex items-center justify-center mb-4 border border-border/40 bg-muted/50', stat.bgClass.split(' ')[1]]">
             <LucideIcon
               :name="stat.icon"
-              class="w-6 h-6"
+              class="w-5 h-5"
             />
           </div>
-          <p class="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-1">
+          <p class="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-1">
             {{ stat.label }}
           </p>
-          <h2 class="text-2xl font-black tracking-tight flex items-baseline gap-1">
+          <h2 class="text-2xl font-black tracking-tight text-foreground flex items-baseline gap-1">
             <span class="text-xs opacity-50 font-medium">Rp</span>
             {{ formatNumber(stat.value) }}
           </h2>
@@ -109,7 +104,7 @@
       </Card>
     </div>
 
-    <Card class="border-none bg-white/60 dark:bg-slate-900/60 backdrop-blur-md rounded-[2.5rem] overflow-hidden shadow-2xl shadow-indigo-500/5">
+    <Card class="border border-border/40 bg-card shadow-none rounded-xl overflow-hidden">
       <CardContent class="p-0">
         <Tabs
           v-model="activeTab"
@@ -118,25 +113,25 @@
           <TabsList class="p-2 m-4 bg-muted/50 rounded-2xl inline-flex h-auto gap-2 overflow-x-auto w-[calc(100%-2rem)] md:w-auto">
             <TabsTrigger
               value="bills"
-              class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+              class="rounded-lg px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
             >
               {{ $t('features.school.finance.tabs.bills') }}
             </TabsTrigger>
             <TabsTrigger
               value="fee-types"
-              class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+              class="rounded-lg px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
             >
               {{ $t('features.school.finance.tabs.feeTypes') }}
             </TabsTrigger>
             <TabsTrigger
               value="expenses"
-              class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+              class="rounded-lg px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
             >
               {{ $t('features.school.finance.tabs.expenses') }}
             </TabsTrigger>
             <TabsTrigger
               value="budgeting"
-              class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+              class="rounded-lg px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
             >
               {{ $t('features.school.finance.tabs.budgeting') }}
             </TabsTrigger>

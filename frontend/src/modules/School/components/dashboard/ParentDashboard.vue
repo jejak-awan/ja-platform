@@ -1,16 +1,13 @@
 <template>
   <div class="space-y-8 animate-in slide-in-from-right-4 duration-700">
     <!-- Parent Header -->
-    <div class="p-8 rounded-[2.5rem] bg-emerald-500/5 border border-emerald-500/20 shadow-2xl shadow-emerald-500/5 flex flex-col md:flex-row justify-between items-center gap-6">
+    <!-- Parent Header: Clean -->
+    <div class="p-8 rounded-xl bg-card border border-border/50 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
       <div class="flex items-center gap-6">
-        <div class="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 shadow-inner p-1 border border-emerald-500/20">
-          <LucideIcon
-            name="Heart"
-            class="w-10 h-10 fill-current opacity-20"
-          />
+        <div class="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shrink-0">
           <LucideIcon
             name="ShieldCheck"
-            class="w-10 h-10 absolute"
+            class="w-8 h-8"
           />
         </div>
         <div>
@@ -24,10 +21,10 @@
       </div>
       <div class="flex gap-4">
         <div class="text-right">
-          <p class="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+          <p class="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em]">
             Siswa Terhubung
           </p>
-          <p class="font-bold text-emerald-600">
+          <p class="font-bold text-primary text-sm">
             Muhammad Al-Fatih (XI-RPL-1)
           </p>
         </div>
@@ -39,7 +36,7 @@
       <Card
         v-for="tile in monitorTiles"
         :key="tile.label"
-        class="bg-card/40 border-border/50 hover:scale-[1.02] transition-transform duration-300 cursor-pointer"
+        class="bg-card border-border/40 shadow-none hover:bg-accent/50 transition-colors cursor-pointer rounded-xl"
       >
         <CardContent class="p-6">
           <LucideIcon
@@ -60,8 +57,8 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Attendance Calendar View Mini -->
-      <Card class="lg:col-span-2 bg-card/40 border-border/50">
+      <!-- Attendance Calendar -->
+      <Card class="lg:col-span-2 bg-card border-border/40 shadow-none rounded-xl">
         <CardHeader class="flex flex-row items-center justify-between">
           <div>
             <CardTitle>Kehadiran Bulan Ini</CardTitle>
@@ -107,7 +104,7 @@
       </Card>
 
       <!-- Grade Performance -->
-      <Card class="bg-card/40 border-border/50">
+      <Card class="bg-card border-border/40 shadow-none rounded-xl">
         <CardHeader>
           <CardTitle>Performa Akademik</CardTitle>
           <CardDescription>Nilai rata-rata per mata pelajaran.</CardDescription>

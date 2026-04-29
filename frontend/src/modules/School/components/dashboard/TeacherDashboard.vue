@@ -1,17 +1,13 @@
 <template>
   <div class="space-y-8 animate-in fade-in duration-700">
-    <!-- Header with Background Gradient -->
-    <div class="relative p-8 rounded-3xl overflow-hidden bg-gradient-to-br from-primary/10 via-background to-background border border-border/50">
-      <div class="relative z-10">
-        <h1 class="text-3xl font-bold tracking-tight">
-          {{ t('features.school.teacher_dashboard.welcome', { name: authStore.user?.name }) }}
-        </h1>
-        <p class="text-muted-foreground mt-2 text-lg">
-          {{ t('features.school.teacher_dashboard.subtitle') }}
-        </p>
-      </div>
-      <!-- Decorative element -->
-      <div class="absolute -right-20 -top-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+    <!-- Header: Clean & Professional -->
+    <div class="p-8 rounded-xl bg-card border border-border/50 shadow-sm">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground">
+        {{ t('features.school.teacher_dashboard.welcome', { name: authStore.user?.name }) }}
+      </h1>
+      <p class="text-muted-foreground mt-2 text-lg">
+        {{ t('features.school.teacher_dashboard.subtitle') }}
+      </p>
     </div>
 
     <!-- Stats Grid -->
@@ -19,13 +15,13 @@
       <Card
         v-for="stat in stats"
         :key="stat.key"
-        class="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-all duration-300"
+        class="bg-card border-border/40 shadow-none hover:bg-accent/5 transition-colors"
       >
         <CardContent class="p-6 flex items-center space-x-4">
-          <div :class="['p-3 rounded-2xl bg-opacity-10', stat.colorClass]">
+          <div :class="['p-3 rounded-xl bg-opacity-10', stat.colorClass]">
             <LucideIcon
               :name="stat.icon"
-              :class="['w-6 h-6', stat.iconClass]"
+              :class="['w-5 h-5', stat.iconClass]"
             />
           </div>
           <div>
@@ -44,7 +40,7 @@
       <!-- Main Content Area -->
       <div class="lg:col-span-2 space-y-8">
         <!-- Schedule / Active Lessons -->
-        <Card class="bg-card/30 backdrop-blur-xl border-border/50">
+        <Card class="bg-card border-border/40 shadow-none">
           <CardHeader class="flex flex-row items-center justify-between">
             <div>
               <CardTitle>{{ t('features.school.teacher_dashboard.sections.schedule.title') }}</CardTitle>
@@ -61,7 +57,7 @@
             <div
               v-for="schedule in todaySchedules"
               :key="schedule.id"
-              class="flex items-center p-4 rounded-2xl bg-muted/20 border border-border/40 hover:bg-muted/40 transition-colors cursor-pointer group"
+              class="flex items-center p-4 rounded-xl bg-muted/30 border border-border/20 hover:bg-muted/50 transition-colors cursor-pointer group"
             >
               <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center font-bold text-primary mr-4 group-hover:scale-110 transition-transform text-xs">
                 {{ schedule.start_time?.substring(0, 5) }}
@@ -91,7 +87,7 @@
         </Card>
 
         <!-- Recent Journals -->
-        <Card class="bg-card/30 backdrop-blur-xl border-border/50">
+        <Card class="bg-card border-border/40 shadow-none">
           <CardHeader>
             <CardTitle>{{ t('features.school.teacher_dashboard.sections.recentJournals.title') }}</CardTitle>
             <CardDescription>{{ t('features.school.teacher_dashboard.sections.recentJournals.desc') }}</CardDescription>
@@ -133,7 +129,7 @@
       <!-- Sidebar Area -->
       <div class="space-y-8">
         <!-- Attendance Alerts -->
-        <Card class="bg-card/30 backdrop-blur-xl border-border/50 border-warning/20 shadow-lg shadow-warning/5">
+        <Card class="bg-card border-border/40 border-warning/30 shadow-none">
           <CardHeader class="flex flex-row items-center space-x-2">
             <LucideIcon
               name="AlertCircle"
@@ -173,8 +169,8 @@
           <Button
             v-for="link in quickLinks"
             :key="link.key"
-            variant="secondary"
-            class="w-full justify-start h-12 rounded-2xl bg-muted/30 hover:bg-muted/50 border-0 group"
+            variant="ghost"
+            class="w-full justify-start h-11 rounded-xl bg-muted/20 hover:bg-muted/40 border border-border/20 group"
           >
             <LucideIcon
               :name="link.icon"

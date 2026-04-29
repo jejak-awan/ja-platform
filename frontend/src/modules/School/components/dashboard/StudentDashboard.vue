@@ -1,49 +1,48 @@
 <template>
   <div class="space-y-8 animate-in slide-in-from-bottom-4 duration-700">
-    <!-- Student Profile Header -->
-    <div class="p-8 rounded-[2rem] bg-gradient-to-br from-indigo-500/10 via-background to-background border border-indigo-500/20 shadow-xl shadow-indigo-500/5 relative overflow-hidden">
+    <!-- Student Profile Header: Clean -->
+    <div class="p-8 rounded-xl bg-card border border-border/50 shadow-sm relative overflow-hidden">
       <div class="flex flex-col md:flex-row items-center gap-6 relative z-10">
-        <div class="w-24 h-24 rounded-3xl bg-indigo-500/20 flex items-center justify-center border-2 border-indigo-500/30 overflow-hidden shadow-inner">
+        <div class="w-20 h-20 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 overflow-hidden shadow-sm shrink-0">
           <LucideIcon
             name="User"
-            class="w-12 h-12 text-indigo-500"
+            class="w-10 h-10 text-primary"
           />
         </div>
         <div class="text-center md:text-left">
-          <h1 class="text-3xl font-black tracking-tight text-foreground">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">
             Halo, {{ authStore.user?.name }}! 👋
           </h1>
-          <p class="text-muted-foreground mt-1 font-medium">
+          <p class="text-muted-foreground mt-1 font-medium text-sm">
             Kelas XI RPL 1 • NISN: 0012345678
           </p>
           <div class="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
             <Badge
-              variant="secondary"
-              class="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-emerald-500/20 rounded-full px-4"
+              variant="outline"
+              class="bg-success/5 text-success border-success/20 rounded-lg px-3 py-0.5 text-[10px] font-black uppercase"
             >
               Status: Aktif
             </Badge>
             <Badge
-              variant="secondary"
-              class="bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 border-indigo-500/20 rounded-full px-4 text-xs"
+              variant="outline"
+              class="bg-primary/5 text-primary border-primary/20 rounded-lg px-3 py-0.5 text-[10px] font-black uppercase"
             >
               Peringkat Kelas: #3
             </Badge>
           </div>
         </div>
       </div>
-      <div class="absolute right-[-5%] bottom-[-20%] w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl" />
     </div>
 
     <!-- Learning Progress & Quick Stats -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <Card class="lg:col-span-2 bg-card/40 backdrop-blur-md border-border/50 overflow-hidden">
+      <Card class="lg:col-span-2 bg-card border-border/40 shadow-none overflow-hidden rounded-xl">
         <CardHeader class="pb-2">
           <CardTitle>Lanjutkan Belajar</CardTitle>
           <CardDescription>Materi terakhir yang Anda pelajari.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div class="p-6 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/20 relative group cursor-pointer overflow-hidden">
+          <div class="p-6 rounded-xl bg-primary text-primary-foreground shadow-sm relative group cursor-pointer overflow-hidden">
             <div class="relative z-10">
               <span class="text-[10px] font-bold uppercase tracking-widest opacity-80">RPL • Pengembangan Perangkat Lunak</span>
               <h3 class="text-2xl font-bold mt-1">
@@ -70,23 +69,19 @@
                 </Button>
               </div>
             </div>
-            <LucideIcon
-              name="Code"
-              class="absolute right-[-10px] bottom-[-20px] w-32 h-32 opacity-10 rotate-12 group-hover:rotate-0 transition-transform duration-500"
-            />
           </div>
         </CardContent>
       </Card>
 
       <!-- Grade Overview Mini -->
-      <Card class="bg-card/40 backdrop-blur-md border-border/50">
+      <Card class="bg-card border-border/40 shadow-none rounded-xl">
         <CardHeader class="pb-2 text-center">
           <CardTitle class="text-sm text-muted-foreground font-medium">
             Rata-rata Nilai (IPK)
           </CardTitle>
         </CardHeader>
         <CardContent class="flex flex-col items-center justify-center py-6">
-          <div class="w-32 h-32 rounded-full border-[10px] border-indigo-500/10 flex items-center justify-center relative">
+          <div class="w-32 h-32 rounded-full border-[10px] border-primary/10 flex items-center justify-center relative">
             <svg class="absolute inset-0 w-full h-full -rotate-90">
               <circle
                 cx="64"
@@ -95,13 +90,13 @@
                 fill="transparent"
                 stroke="currentColor"
                 stroke-width="10"
-                class="text-indigo-500"
+                class="text-primary"
                 stroke-dasharray="339.292"
                 stroke-dashoffset="50.89"
               />
             </svg>
             <div class="text-center">
-              <span class="text-4xl font-black text-indigo-600">3.85</span>
+              <span class="text-4xl font-black text-primary">3.85</span>
               <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
                 Sangat Baik
               </p>
@@ -118,7 +113,7 @@
         <h3 class="text-xl font-bold flex items-center gap-2 px-2">
           <LucideIcon
             name="Clock"
-            class="w-5 h-5 text-indigo-500"
+            class="w-5 h-5 text-primary"
           />
           Tugas Mendatang
         </h3>
@@ -126,17 +121,17 @@
           <div
             v-for="i in 3"
             :key="i"
-            class="p-4 rounded-2xl bg-card border border-border/50 hover:border-indigo-500/30 transition-all hover:shadow-lg hover:shadow-indigo-500/5 group cursor-pointer"
+            class="p-4 rounded-xl bg-card border border-border/40 hover:bg-accent/50 transition-all shadow-sm cursor-pointer"
           >
             <div class="flex items-center gap-4">
-              <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
+              <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <LucideIcon
                   name="FileText"
                   class="w-5 h-5"
                 />
               </div>
               <div class="flex-1">
-                <h4 class="font-bold group-hover:text-indigo-600 transition-colors">
+                <h4 class="font-bold">
                   Analisis Algoritma Sorting
                 </h4>
                 <p class="text-xs text-muted-foreground">
@@ -157,7 +152,7 @@
         <h3 class="text-xl font-bold flex items-center gap-2 px-2">
           <LucideIcon
             name="Bell"
-            class="w-5 h-5 text-indigo-500"
+            class="w-5 h-5 text-primary"
           />
           Pengumuman Baru
         </h3>
@@ -165,7 +160,7 @@
           <div
             v-for="i in 2"
             :key="i"
-            class="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 relative overflow-hidden"
+            class="p-4 rounded-xl bg-primary/5 border border-primary/10 relative overflow-hidden"
           >
             <div class="flex gap-4 relative z-10">
               <div class="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-500 shrink-0">

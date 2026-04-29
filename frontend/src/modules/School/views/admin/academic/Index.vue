@@ -1,17 +1,26 @@
 <template>
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-8">
+  <div class="space-y-8 p-6 animate-in fade-in duration-700">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-2">
       <div>
-        <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.academic.title') }}
-        </h1>
-        <p class="text-sm text-muted-foreground">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <LucideIcon
+              name="GraduationCap"
+              class="w-5 h-5 text-primary"
+            />
+          </div>
+          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+            {{ $t('features.school.academic.title') }}
+          </h1>
+        </div>
+        <p class="text-muted-foreground text-sm font-medium italic">
           {{ $t('features.school.academic.subtitle') }}
         </p>
       </div>
       <div class="flex gap-2">
         <Button
           v-if="activeTab !== 'timetable'"
+          class="rounded-xl shadow-sm px-6"
           @click="handleAdd"
         >
           <LucideIcon
@@ -27,10 +36,10 @@
       v-model="activeTab"
       class="w-full"
     >
-      <TabsList class="mb-6 border-b bg-transparent p-0 h-auto gap-6">
+      <TabsList class="p-2 bg-muted/50 rounded-2xl inline-flex h-auto gap-2 mb-6">
         <TabsTrigger 
           value="subjects" 
-          class="px-2 py-3 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-all"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
         >
           <LucideIcon
             name="BookOpen"
@@ -40,7 +49,7 @@
         </TabsTrigger>
         <TabsTrigger 
           value="study-groups" 
-          class="px-2 py-3 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-all"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
         >
           <LucideIcon
             name="Users2"
@@ -50,7 +59,7 @@
         </TabsTrigger>
         <TabsTrigger 
           value="timetable" 
-          class="px-2 py-3 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-all"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
         >
           <LucideIcon
             name="Calendar"
@@ -60,7 +69,7 @@
         </TabsTrigger>
         <TabsTrigger 
           value="years" 
-          class="px-2 py-3 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-all"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
         >
           <LucideIcon
             name="CalendarDays"
@@ -74,7 +83,7 @@
         <template v-if="activeTab === 'timetable'">
           <Timetable />
         </template>
-        <Card v-else>
+        <Card class="border border-border/40 bg-card shadow-none rounded-xl overflow-hidden">
           <CardContent class="p-0">
             <DataTable 
               :table="table" 
@@ -169,11 +178,11 @@ const actionColumn = columnHelper.display({
   id: 'actions',
   header: t('common.labels.status'), // Or actions if you prefer, but labels.json has status
   cell: ({ row }) => h('div', { class: 'flex gap-2' }, [
-    activeTab.value === 'study-groups' ? h(Button, {
+      activeTab.value === 'study-groups' ? h(Button, {
       variant: 'ghost',
       size: 'icon',
       title: t('features.school.academic.actions.manageMembers'),
-      class: 'h-8 w-8 text-success',
+      class: 'h-8 w-8 text-muted-foreground hover:bg-success/10 hover:text-success rounded-lg',
       onClick: (e: MouseEvent) => {
           e.stopPropagation();
           selectedItem.value = row.original;
@@ -183,7 +192,7 @@ const actionColumn = columnHelper.display({
     h(Button, {
       variant: 'ghost',
       size: 'icon',
-      class: 'h-8 w-8 text-primary',
+      class: 'h-8 w-8 text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-lg',
       onClick: (e: MouseEvent) => {
           e.stopPropagation();
           handleEdit(row.original);
@@ -192,7 +201,7 @@ const actionColumn = columnHelper.display({
     h(Button, {
       variant: 'ghost',
       size: 'icon',
-      class: 'h-8 w-8 text-destructive',
+      class: 'h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-lg',
       onClick: (e: MouseEvent) => {
           e.stopPropagation();
           handleDelete(row.original);
@@ -220,7 +229,7 @@ const yearColumns = [
   columnHelper.accessor('year', { header: t('features.school.academic.tabs.years') }),
   columnHelper.accessor('is_active', { 
     header: t('common.labels.status'),
-    cell: info => info.getValue() ? h('span', { class: 'px-2 py-1 rounded-full bg-success/10 text-success text-xs font-medium' }, t('common.labels.active')) : t('common.labels.inactive')
+    cell: info => info.getValue() ? h('span', { class: 'px-2 py-0.5 rounded-lg bg-success/10 text-success border border-success/20 text-[10px] font-black uppercase tracking-widest' }, t('common.labels.active')) : h('span', { class: 'px-2 py-0.5 rounded-lg bg-muted text-muted-foreground text-[10px] font-black uppercase tracking-widest' }, t('common.labels.inactive'))
   }),
   actionColumn
 ];
