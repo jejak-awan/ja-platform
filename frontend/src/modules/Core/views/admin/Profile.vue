@@ -174,34 +174,85 @@
             >
               <div class="space-y-2">
                 <Label for="current_password">{{ $t('features.profile.form.currentPassword') }}</Label>
-                <Input 
-                  id="current_password" 
-                  v-model="passwordForm.current_password" 
-                  type="password" 
-                  name="current_password"
-                  autocomplete="current-password"
-                />
+                <div class="relative">
+                  <Input 
+                    id="current_password" 
+                    v-model="passwordForm.current_password" 
+                    :type="showCurrentPassword ? 'text' : 'password'" 
+                    name="current_password"
+                    autocomplete="current-password"
+                    class="pr-10"
+                  />
+                  <button
+                    type="button"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    @click="showCurrentPassword = !showCurrentPassword"
+                  >
+                    <Eye
+                      v-if="!showCurrentPassword"
+                      class="h-4 w-4"
+                    />
+                    <EyeOff
+                      v-else
+                      class="h-4 w-4"
+                    />
+                  </button>
+                </div>
               </div>
               <div />
               <div class="space-y-2">
                 <Label for="new_password">{{ $t('features.profile.form.newPassword') }}</Label>
-                <Input 
-                  id="new_password" 
-                  v-model="passwordForm.password" 
-                  type="password" 
-                  name="password"
-                  autocomplete="new-password"
-                />
+                <div class="relative">
+                  <Input 
+                    id="new_password" 
+                    v-model="passwordForm.password" 
+                    :type="showNewPassword ? 'text' : 'password'" 
+                    name="password"
+                    autocomplete="new-password"
+                    class="pr-10"
+                  />
+                  <button
+                    type="button"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    @click="showNewPassword = !showNewPassword"
+                  >
+                    <Eye
+                      v-if="!showNewPassword"
+                      class="h-4 w-4"
+                    />
+                    <EyeOff
+                      v-else
+                      class="h-4 w-4"
+                    />
+                  </button>
+                </div>
               </div>
               <div class="space-y-2">
                 <Label for="confirm_password">{{ $t('features.profile.form.confirmPassword') }}</Label>
-                <Input 
-                  id="confirm_password" 
-                  v-model="passwordForm.password_confirmation" 
-                  type="password" 
-                  name="password_confirmation"
-                  autocomplete="new-password"
-                />
+                <div class="relative">
+                  <Input 
+                    id="confirm_password" 
+                    v-model="passwordForm.password_confirmation" 
+                    :type="showConfirmPassword ? 'text' : 'password'" 
+                    name="password_confirmation"
+                    autocomplete="new-password"
+                    class="pr-10"
+                  />
+                  <button
+                    type="button"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    @click="showConfirmPassword = !showConfirmPassword"
+                  >
+                    <Eye
+                      v-if="!showConfirmPassword"
+                      class="h-4 w-4"
+                    />
+                    <EyeOff
+                      v-else
+                      class="h-4 w-4"
+                    />
+                  </button>
+                </div>
               </div>
               <div class="flex justify-start">
                 <Button
@@ -296,6 +347,8 @@ import User from 'lucide-vue-next/dist/esm/icons/user.js';
 import KeyRound from 'lucide-vue-next/dist/esm/icons/key-round.js';
 import ShieldCheck from 'lucide-vue-next/dist/esm/icons/shield-check.js';
 import History from 'lucide-vue-next/dist/esm/icons/history.js';
+import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
+import EyeOff from 'lucide-vue-next/dist/esm/icons/eye-off.js';
 
 
 interface ProfileForm {
@@ -314,6 +367,9 @@ const authStore = useAuthStore();
 const activeTab = ref('profile');
 const saving = ref(false);
 const changingPassword = ref(false);
+const showCurrentPassword = ref(false);
+const showNewPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 const profileForm: Ref<ProfileForm> = ref({
     name: '',

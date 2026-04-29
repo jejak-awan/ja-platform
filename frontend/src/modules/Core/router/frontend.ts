@@ -119,6 +119,13 @@ const frontendRoutes: RouteRecordRaw[] = [
                 meta: { title: 'Pendaftaran Siswa Baru' }
             },
 
+            {
+                path: 'graduation',
+                name: 'graduation',
+                component: () => import('@/modules/Cms/views/themes/janari/Graduation.vue'),
+                meta: { title: 'Pengumuman Kelulusan' }
+            },
+
             // Dynamic content route (must be last in children)
             {
                 path: ':slug',

@@ -53,6 +53,7 @@
         "staffIndex": "Staff Data",
         "studentsIndex": "Student Data",
         "studentAffairsIndex": "Student Services",
+        "graduation": "Graduation Management",
         "studio": "Content",
         "system": "System Info",
         "systemInfo": "System Info",
@@ -94,7 +95,8 @@
         "seo_optimization": "SEO & Optimization",
         "design_config": "Design & Config",
         "advanced": "Advanced",
-        "infrastructure": "Infrastructure"
+        "infrastructure": "Infrastructure",
+        "student_portal": "Student Portal"
     },
     "sidebar": {
         "expand": "Expand sidebar",

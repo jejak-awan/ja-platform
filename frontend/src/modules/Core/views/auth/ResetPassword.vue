@@ -72,33 +72,65 @@
                 for="password"
                 class="text-[10px] uppercase tracking-wider font-bold ml-1 text-muted-foreground/80"
               >{{ t('common.labels.password') }}</Label>
-              <Input
-                id="password"
-                v-model="form.password"
-                name="password"
-                type="password"
-                autocomplete="new-password"
-                required
-                class="auth-input h-9 text-sm"
-                :class="errors.password ? 'border-destructive/50 ring-destructive/20 focus:border-destructive' : ''"
-                :placeholder="t('features.auth.login.passwordPlaceholder')"
-              />
+              <div class="relative">
+                <Input
+                  id="password"
+                  v-model="form.password"
+                  name="password"
+                  :type="showPassword ? 'text' : 'password'"
+                  autocomplete="new-password"
+                  required
+                  class="auth-input h-9 text-sm pr-10"
+                  :class="errors.password ? 'border-destructive/50 ring-destructive/20 focus:border-destructive' : ''"
+                  :placeholder="t('features.auth.login.passwordPlaceholder')"
+                />
+                <button
+                  type="button"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  @click="showPassword = !showPassword"
+                >
+                  <Eye
+                    v-if="!showPassword"
+                    class="h-4 w-4"
+                  />
+                  <EyeOff
+                    v-else
+                    class="h-4 w-4"
+                  />
+                </button>
+              </div>
             </div>
             <div class="space-y-1">
               <Label
                 for="password_confirmation"
                 class="text-[10px] uppercase tracking-wider font-bold ml-1 text-muted-foreground/80"
               >{{ t('common.labels.confirmPassword') }}</Label>
-              <Input
-                id="password_confirmation"
-                v-model="form.password_confirmation"
-                name="password_confirmation"
-                type="password"
-                autocomplete="new-password"
-                required
-                class="auth-input h-9 text-sm"
-                :placeholder="t('common.labels.confirmPassword')"
-              />
+              <div class="relative">
+                <Input
+                  id="password_confirmation"
+                  v-model="form.password_confirmation"
+                  name="password_confirmation"
+                  :type="showConfirmPassword ? 'text' : 'password'"
+                  autocomplete="new-password"
+                  required
+                  class="auth-input h-9 text-sm pr-10"
+                  :placeholder="t('common.labels.confirmPassword')"
+                />
+                <button
+                  type="button"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  @click="showConfirmPassword = !showConfirmPassword"
+                >
+                  <Eye
+                    v-if="!showConfirmPassword"
+                    class="h-4 w-4"
+                  />
+                  <EyeOff
+                    v-else
+                    class="h-4 w-4"
+                  />
+                </button>
+              </div>
             </div>
             <p
               v-if="errors.password"
@@ -161,6 +193,8 @@ import { resetPasswordSchema } from '@/schemas/auth';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import LayoutTemplate from 'lucide-vue-next/dist/esm/icons/layout-template.js';
+import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
+import EyeOff from 'lucide-vue-next/dist/esm/icons/eye-off.js';
 
 
 // Shadcn Components
@@ -177,6 +211,8 @@ const cmsStore = useCmsStore();
 const authStore = useAuthStore();
 const { errors, validateWithZod, setErrors, clearErrors } = useFormValidation(resetPasswordSchema);
 
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 const form = reactive({
     email: '',
     token: '',

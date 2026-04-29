@@ -1,0 +1,1 @@
+.animate-progress-loading[data-v-f615e42c]{animation:progress-loading-f615e42c 1s infinite linear;transform-origin:0% 50%}@keyframes progress-loading-f615e42c{0%{transform:translate(-100%) scaleX(.2)}50%{transform:translate(0) scaleX(.5)}to{transform:translate(100%) scaleX(.2)}}[dir=rtl] .fixed.bottom-6.right-6[data-v-f615e42c]{right:auto;left:24px}

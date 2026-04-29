@@ -80,5 +80,62 @@
             "registerSuccess": "Tamu berhasil didaftarkan",
             "checkOutSuccess": "Check-out berhasil"
         }
+    },
+    "graduation": {
+        "title": "Kelulusan Siswa",
+        "subtitle": "Kelola pengumuman kelulusan, input nilai, dan cetak sertifikat/SKL.",
+        "labels": {
+            "tabEligible": "Calon Lulusan",
+            "tabHistory": "Riwayat & Nilai",
+            "eligibleHint": "Pilih siswa yang akan diproses status kelulusannya secara massal.",
+            "manageTemplates": "Manajemen Template",
+            "btnProcess": "Proses Data",
+            "confirmTitle": "Konfirmasi Kelulusan",
+            "confirmMessage": "Apakah Anda yakin ingin memproses {count} siswa terpilih?"
+        },
+        "check": {
+            "title": "Pengumuman Kelulusan",
+            "subtitle": "Masukkan NISN/NIS dan Tanggal Lahir untuk melihat status kelulusan Anda.",
+            "identifier": "NISN / NIS",
+            "dob": "Tanggal Lahir",
+            "btnCheck": "Cek Status",
+            "resultTitle": "Hasil Kelulusan",
+            "graduated": "SELAMAT! ANDA DINYATAKAN LULUS",
+            "notGraduated": "Status Anda belum dinyatakan lulus.",
+            "downloadHint": "Silakan unduh Surat Keterangan Lulus (SKL) melalui tombol di bawah ini."
+        }
+    },
+    "templates": {
+        "title": "Template Dokumen",
+        "subtitle": "Kelola layout dan desain sertifikat, SKL, atau surat resmi sekolah.",
+        "btnAdd": "Tambah Template",
+        "emptyTitle": "Belum Ada Template",
+        "emptySubtitle": "Buat template dokumen pertama Anda untuk mulai mencetak sertifikat atau surat.",
+        "lastUpdated": "Terakhir diperbarui",
+        "modal": {
+            "titleAdd": "Tambah Template",
+            "titleEdit": "Edit Template",
+            "labelName": "Nama Template",
+            "labelType": "Jenis Dokumen",
+            "labelHtml": "HTML Content",
+            "labelCss": "CSS Styles",
+            "labelActive": "Aktifkan Template",
+            "labelDefault": "Set sebagai Default",
+            "placeholderName": "Contoh: SKL Lulusan 2024",
+            "placeholdersTitle": "Placeholder Tersedia:",
+            "types": {
+                "skl": "SKL (Surat Keterangan Lulus)",
+                "certificate": "Sertifikat/Piagam",
+                "letter": "Surat Keputusan/Resmi"
+            }
+        },
+        "previewHtml": "Preview HTML",
+        "labels": {
+            "name": "Nama Template",
+            "type": "Jenis Dokumen",
+            "active": "Aktif",
+            "inactive": "Nonaktif",
+            "default": "Default"
+        }
     }
 }

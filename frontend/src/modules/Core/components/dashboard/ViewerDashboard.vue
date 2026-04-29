@@ -1,11 +1,11 @@
 <template>
   <div class="space-y-6">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
       <div>
         <h1 class="text-3xl font-bold tracking-tight text-foreground">
           Welcome back, {{ authStore.user?.name }}!
         </h1>
-        <p class="text-muted-foreground">
+        <p class="text-muted-foreground text-sm font-medium">
           Explore the latest content updates.
         </p>
       </div>
@@ -13,7 +13,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Recent Updates -->
-      <Card>
+      <Card class="border-border/40 bg-card shadow-none rounded-xl">
         <CardHeader>
           <CardTitle class="flex items-center gap-2">
             <Newspaper class="w-5 h-5 text-primary" />
@@ -44,7 +44,7 @@
             <div
               v-for="item in recentContent"
               :key="item.id"
-              class="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50"
+              class="flex items-center justify-between p-3 rounded-xl border bg-card hover:bg-accent/50"
             >
               <div class="flex items-center gap-3">
                 <div class="p-2 bg-primary/10 text-primary rounded-full">
@@ -65,7 +65,7 @@
       </Card>
 
       <!-- Help & Resources -->
-      <Card>
+      <Card class="border-border/40 bg-card shadow-none rounded-xl">
         <CardHeader>
           <CardTitle class="flex items-center gap-2">
             <HelpCircle class="w-5 h-5 text-indigo-500" />
@@ -77,7 +77,7 @@
             <a
               href="/"
               target="_blank"
-              class="flex items-center p-3 rounded-lg border hover:bg-accent group"
+              class="flex items-center p-3 rounded-xl border hover:bg-accent group"
             >
               <Home class="w-5 h-5 text-muted-foreground group-hover:text-primary mr-3" />
               <div>

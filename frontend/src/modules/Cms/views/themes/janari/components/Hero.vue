@@ -12,18 +12,28 @@
       class="absolute inset-0 w-full h-full transition-opacity duration-1000"
       :style="{ opacity: idx === activeSlide ? 1 : 0, zIndex: idx === activeSlide ? 2 : 1 }"
     >
-      <img 
-        :src="slide" 
-        class="w-full h-full object-cover scale-105"
-        :alt="'Hero Slide ' + (idx + 1)"
-        width="1920"
-        height="1080"
-        sizes="100vw"
-        :decoding="idx === 0 ? 'sync' : 'async'"
-        :fetchpriority="idx === 0 ? 'high' : 'low'"
-        :loading="idx === 0 ? 'eager' : 'lazy'"
-        referrerpolicy="no-referrer"
+      <div 
+        v-if="slide"
+        class="absolute inset-0 w-full h-full"
       >
+        <img 
+          :src="slide" 
+          class="w-full h-full object-cover scale-105"
+          :alt="'Hero Slide ' + (idx + 1)"
+          width="1920"
+          height="1080"
+          sizes="100vw"
+          :decoding="idx === 0 ? 'sync' : 'async'"
+          :fetchpriority="idx === 0 ? 'high' : 'low'"
+          :loading="idx === 0 ? 'eager' : 'lazy'"
+          referrerpolicy="no-referrer"
+        >
+      </div>
+      <!-- Non-image fallback: sophisticated dark gradient -->
+      <div 
+        v-else
+        class="absolute inset-0 w-full h-full bg-gradient-to-br from-black via-zinc-900 to-black"
+      />
     </div>
     
     <!-- Dark overlay for text readability -->
@@ -174,6 +184,13 @@
                 sizes="(max-width: 1024px) 96px, 128px"
                 referrerpolicy="no-referrer"
               >
+              <!-- Non-image fallback for news thumb -->
+              <div 
+                v-else
+                class="w-full h-full flex items-center justify-center bg-primary/10 text-primary"
+              >
+                <Newspaper class="w-6 h-6 opacity-30" />
+              </div>
             </div>
             <div class="flex-1 pr-6 flex flex-col justify-center">
               <p class="text-[8px] text-primary font-black uppercase tracking-[0.25em] mb-2">
@@ -207,6 +224,13 @@
                 sizes="(max-width: 1024px) 96px, 128px"
                 referrerpolicy="no-referrer"
               >
+              <!-- Non-image fallback for news thumb -->
+              <div 
+                v-else
+                class="w-full h-full flex items-center justify-center bg-primary/10 text-primary"
+              >
+                <Newspaper class="w-6 h-6 opacity-30" />
+              </div>
             </div>
             <div class="flex-1 pr-14 lg:pr-16 flex flex-col justify-center">
               <p class="text-[8px] text-primary font-black uppercase tracking-[0.25em] mb-2">
@@ -302,6 +326,7 @@ import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables
 const { getSetting } = useTheme()
 const { displaySiteName } = useJanariIdentity()
 const { splitTextRevealSafe, createTimeline, motion } = useThemeMotion()
+import Newspaper from 'lucide-vue-next/dist/esm/icons/newspaper.js'
 
 
 const heroBadge = ref<HTMLElement>()
@@ -333,7 +358,7 @@ const heroShowScroll = computed(() => getSetting('hero_show_scroll', true))
 const heroNewsCategory = computed(() => (getSetting('hero_news_category') as string)?.trim() || '');
 const initialHeroSlide = computed(() => {
     const configured = (getSetting('hero_slide_1') as string) || '';
-    return configured || '/assets/themes/janari/hero-placeholder.png';
+    return configured || undefined;
 });
 
 useHead({
@@ -365,9 +390,9 @@ const primaryIndex = computed(() => {
 const secondaryIndex = computed(() => visibleNews.value.length > 0 ? ((currentNewsIndex.value + 1) % visibleNews.value.length) : 0)
 const tertiaryIndex = computed(() => visibleNews.value.length > 0 ? ((currentNewsIndex.value + 2) % visibleNews.value.length) : 0)
 
-const sanitizeImageUrl = (url: string | null | undefined, fallback: string = '/assets/themes/janari/news-placeholder.png') => {
-    if (!url) return fallback
-    if (url.includes('unsplash.com') || url.includes('placehold.co')) return fallback
+const sanitizeImageUrl = (url: string | null | undefined) => {
+    if (!url) return undefined
+    if (url.includes('unsplash.com') || url.includes('placehold.co')) return undefined
     return url
 }
 
@@ -409,7 +434,7 @@ const updateStableData = async () => {
     const count = heroSlideCount.value > 0 ? heroSlideCount.value : 1
     for (let i = 1; i <= count; i++) {
         const img = getSetting(`hero_slide_${i}`) as string
-        slides.push(img || '/assets/themes/janari/hero-placeholder.png')
+        slides.push(img || '')
     }
     heroSlides.value = slides
 }

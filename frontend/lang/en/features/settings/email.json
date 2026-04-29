@@ -39,6 +39,7 @@
         "warm": "Warm Cache",
         "clearing": "Clearing...",
         "warming": "Warming...",
+        "loading": "Loading cache status...",
         "cleared": "Cache cleared successfully",
         "warmed": "Cache warmed successfully",
         "status": "Status",

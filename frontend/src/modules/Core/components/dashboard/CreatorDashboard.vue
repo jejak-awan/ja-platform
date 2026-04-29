@@ -1,11 +1,11 @@
 <template>
   <div class="space-y-6">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
       <div>
         <h1 class="text-3xl font-bold tracking-tight text-foreground">
           {{ $t('features.dashboard.title') }}
         </h1>
-        <p class="text-muted-foreground">
+        <p class="text-muted-foreground text-sm font-medium">
           {{ $t('features.dashboard.welcome', { name: authStore.user?.name }) }}
         </p>
       </div>
@@ -28,7 +28,7 @@
     <!-- Row 1: Personal Stats -->
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <!-- My Contents -->
-      <Card class="border-border/40 bg-card shadow-none">
+      <Card class="border-border/40 bg-card shadow-none rounded-xl">
         <CardContent class="p-6">
           <div class="flex items-start justify-between">
             <div class="space-y-1">
@@ -51,7 +51,7 @@
       </Card>
 
       <!-- Pending Review -->
-      <Card class="border-border/40 bg-card shadow-none">
+      <Card class="border-border/40 bg-card shadow-none rounded-xl">
         <CardContent class="p-6">
           <div class="flex items-start justify-between">
             <div class="space-y-1">
@@ -74,7 +74,7 @@
       </Card>
 
       <!-- My Media -->
-      <Card class="border-border/40 bg-card shadow-none">
+      <Card class="border-border/40 bg-card shadow-none rounded-xl">
         <CardContent class="p-6">
           <div class="flex items-start justify-between">
             <div class="space-y-1">
@@ -97,7 +97,7 @@
       </Card>
             
       <!-- Drafts -->
-      <Card class="border-border/40 bg-card shadow-none">
+      <Card class="border-border/40 bg-card shadow-none rounded-xl">
         <CardContent class="p-6">
           <div class="flex items-start justify-between">
             <div class="space-y-1">
@@ -120,8 +120,8 @@
       </Card>
     </div>
 
-    <!-- Row 2: Recent Activity (Full Width) -->
-    <Card>
+    <!-- Traffic Activity -->
+    <Card class="border-border/40 bg-card shadow-none rounded-xl">
       <CardHeader class="flex flex-row items-center justify-between pb-2">
         <CardTitle>{{ $t('features.dashboard.traffic.visits') }}</CardTitle>
         <!-- Time Range Filter -->
@@ -167,8 +167,8 @@
 
     <!-- Row 3: Status Distribution & Top Content & Quick Actions -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-      <!-- Status Distribution (Col 1) -->
-      <Card class="col-span-1 lg:col-span-1">
+      <!-- Status Distribution -->
+      <Card class="col-span-1 lg:col-span-1 border-border/40 bg-card shadow-none rounded-xl">
         <CardHeader>
           <CardTitle>{{ $t('features.dashboard.stats.creator.contentStatus') }}</CardTitle>
         </CardHeader>
@@ -191,8 +191,8 @@
         </CardContent>
       </Card>
 
-      <!-- Top Content (Col 2-3) -->
-      <Card class="col-span-1 lg:col-span-2">
+      <!-- Top Content -->
+      <Card class="col-span-1 lg:col-span-2 border-border/40 bg-card shadow-none rounded-xl">
         <CardHeader>
           <CardTitle class="flex items-center gap-2">
             <Trophy class="w-5 h-5 text-warning" />

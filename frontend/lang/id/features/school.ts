@@ -24,6 +24,7 @@ export default {
     lms,
     cbt,
     hr,
+    ops,
     operations: ops,
     finance,
     logistics,

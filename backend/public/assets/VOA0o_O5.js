@@ -1,0 +1,1 @@
+import{d as r,S as n,z as p,A as d,C as m,P as c,M as i,N as l,L as e,bK as u}from"./CZYuNOV2.js";const B=r({__name:"ContextMenu",props:{dir:{},modal:{type:Boolean}},emits:["update:open"],setup(s,{emit:t}){const o=n(s,t);return(a,C)=>(p(),d(e(u),i(l(e(o))),{default:m(()=>[c(a.$slots,"default")]),_:3},16))}});export{B as default};

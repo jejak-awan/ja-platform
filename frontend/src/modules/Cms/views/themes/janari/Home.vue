@@ -116,7 +116,7 @@ interface Testimonial {
     name: string;
     role: string;
     content: string;
-    image: string;
+    avatar?: string;
 }
 
 interface CmsPageData {
@@ -137,7 +137,7 @@ const testimonialData = computed<Testimonial[]>(() => dynamicTestimonials.value.
     name: item.title, 
     role: item.excerpt || 'Visi Utama', 
     content: item.body || item.content,
-    image: item._raw?.featured_image || item._raw?.thumbnail || '/assets/themes/janari/avatar-placeholder.png'
+    avatar: item._raw?.featured_image || item._raw?.thumbnail || undefined
 })))
 
 const principalRef = ref<HTMLElement | null>(null);

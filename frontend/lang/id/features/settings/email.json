@@ -39,6 +39,7 @@
         "warm": "Warm Cache",
         "clearing": "Membersihkan...",
         "warming": "Memproses...",
+        "loading": "Memuat status cache...",
         "cleared": "Cache berhasil dibersihkan",
         "warmed": "Cache berhasil di-warm",
         "status": "Status",

@@ -551,6 +551,7 @@ const dedicatedManifestCategories = new Set([
     'Career Center Page',
     'Blog Page',
     'Contact Page',
+    'Graduation Page',
 ])
 
 const sidebarGroups = computed(() => {
@@ -613,6 +614,7 @@ const sidebarGroups = computed(() => {
                 { id: 'page-career', label: t('features.theme_customizer.sidebar.items.page_career', 'Career Center'), description: 'Customize the BKK / Career Center page', icon: Briefcase, manifestSections: findSections(['Career Center Page']), hasBinding: false },
                 { id: 'page-blog', label: t('features.theme_customizer.sidebar.items.page_blog', 'Blog Page'), description: 'Customize the News & Information page', icon: Newspaper, manifestSections: findSections(['Blog Page']), hasBinding: false },
                 { id: 'page-contact', label: t('features.theme_customizer.sidebar.items.page_contact', 'Contact Page'), description: 'Customize the Contact Us page', icon: Globe, manifestSections: findSections(['Contact Page']), hasBinding: false },
+                { id: 'page-graduation', label: t('features.theme_customizer.sidebar.items.page_graduation', 'Graduation Page'), description: t('features.theme_customizer.sidebar.items.page_graduation_desc'), icon: GraduationCap, manifestSections: findSections(['Graduation Page']), hasBinding: false },
             ] 
         }
     ]

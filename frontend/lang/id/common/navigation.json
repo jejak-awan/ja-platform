@@ -52,6 +52,7 @@
         "staffIndex": "Data Pegawai",
         "studentsIndex": "Data Siswa",
         "studentAffairsIndex": "Layanan Kesiswaan",
+        "graduation": "Manajemen Kelulusan",
         "studio": "Konten",
         "system": "Info Sistem",
         "systemInfo": "Info Sistem",
@@ -94,7 +95,8 @@
         "seo_optimization": "SEO & Optimasi",
         "design_config": "Tampilan & Desain",
         "advanced": "Lanjutan",
-        "infrastructure": "Infrastruktur"
+        "infrastructure": "Infrastruktur",
+        "student_portal": "Portal Siswa"
     },
     "sidebar": {
         "expand": "Perluas sidebar",

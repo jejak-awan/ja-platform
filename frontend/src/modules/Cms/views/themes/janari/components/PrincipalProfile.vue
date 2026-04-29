@@ -6,10 +6,23 @@
         ref="leftCard"
         class="relative min-h-[500px] md:min-h-[650px] overflow-hidden group border-b lg:border-b-0 lg:border-r border-border"
       >
-        <!-- Section background (Theme Customizer: principal_section_background → school_image → placeholder) -->
-        <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 z-0 overflow-hidden">
+          <!-- Premium High-Performance Animated Background (Replaces Heavy Image) -->
+          <div 
+            class="absolute inset-0 transition-opacity duration-1000"
+            :class="[bgStyle === 'mesh' ? 'opacity-100' : 'opacity-0']"
+          >
+            <div class="mesh-gradient-container">
+              <div class="mesh-ball ball-1" />
+              <div class="mesh-ball ball-2" />
+              <div class="mesh-ball ball-3" />
+            </div>
+          </div>
+
+          <!-- Legacy Image Support (if specifically selected) -->
           <img 
-            :src="sanitizeImageUrl(sectionBackgroundUrl, '/assets/themes/janari/hero-placeholder.png')" 
+            v-if="bgStyle === 'image' && sectionBackgroundUrl"
+            :src="sanitizeImageUrl(sectionBackgroundUrl)" 
             class="w-full h-full object-cover grayscale opacity-40 group-hover:scale-105 transition-transform duration-1000"
             alt="Latar belakang section kepala sekolah"
             width="1200"
@@ -18,6 +31,8 @@
             decoding="async"
             sizes="100vw"
           >
+
+          <!-- Fallback / Gradient Overlay -->
           <div
             class="absolute inset-0 bg-gradient-to-br from-primary/35 via-primary/15 to-black/75 dark:from-primary/45 dark:via-primary/20 dark:to-black/88"
           />
@@ -38,7 +53,8 @@
                 shadow-inner bg-background/5 dark:bg-black/20"
             >
               <img 
-                :src="sanitizeImageUrl(photo, '/images/placeholders/principal.jpg')" 
+                v-if="photo"
+                :src="sanitizeImageUrl(photo)" 
                 class="h-full w-full object-cover grayscale-[0.3] brightness-[0.92] group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 dark:brightness-[0.88] dark:group-hover:brightness-100"
                 alt="Kepala Sekolah"
                 width="400"
@@ -47,6 +63,14 @@
                 decoding="async"
                 sizes="(max-width: 768px) 75vw, 400px"
               >
+              <!-- Non-image fallback for principal portrait -->
+              <div 
+                v-else
+                class="h-full w-full flex flex-col items-center justify-center bg-muted/30 text-muted-foreground/40"
+              >
+                <User class="w-20 h-20 mb-4 opacity-20" />
+                <span class="text-[10px] font-black tracking-[0.3em] uppercase opacity-40">Identity Undefined</span>
+              </div>
             </div>
           </div>
         </div>
@@ -128,6 +152,7 @@ import JanariSplitText from './JanariSplitText.vue'
 import { computed, ref, onMounted, nextTick } from 'vue'
 import { useTheme } from '@/composables/useTheme'
 import { useThemeMotion } from '@/composables/useThemeMotion'
+import User from 'lucide-vue-next/dist/esm/icons/user.js'
 
 const { getSetting } = useTheme()
 
@@ -188,16 +213,17 @@ const principalBiographyLink = computed(() =>
 );
 
 /** Principal section background media, then school_image if unset; template uses placeholders when empty. */
+const bgStyle = computed(() => (getSetting('principal_background_style') as string) || 'mesh');
+
 const sectionBackgroundUrl = computed(() => {
     const dedicated = getSetting('principal_section_background') as string | undefined;
-    if (dedicated) return dedicated;
-    return (getSetting('school_image') as string) || '';
+    return dedicated || (getSetting('school_image') as string) || '';
 });
 
-// Replace known external stock URLs with theme placeholders
-const sanitizeImageUrl = (url: string | null | undefined, fallback: string) => {
-    if (!url) return fallback
-    if (url.includes('unsplash.com') || url.includes('placehold.co')) return fallback
+// Remove unused fallback logic and replace with null-safety
+const sanitizeImageUrl = (url: string | null | undefined): string | undefined => {
+    if (!url) return undefined
+    if (url.includes('unsplash.com') || url.includes('placehold.co')) return undefined
     return url
 }
 
@@ -250,5 +276,58 @@ onMounted(() => {
     init()
 })
 </script>
+
+<style scoped>
+.mesh-gradient-container {
+  position: absolute;
+  inset: 0;
+  background: var(--theme-background-color, #000);
+  filter: blur(80px);
+  opacity: 0.4;
+  overflow: hidden;
+}
+
+.mesh-ball {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: mesh-float 20s infinite alternate ease-in-out;
+}
+
+.ball-1 {
+  width: 60%;
+  height: 60%;
+  background: hsl(var(--primary));
+  top: -10%;
+  left: -10%;
+}
+
+.ball-2 {
+  width: 50%;
+  height: 50%;
+  background: hsl(var(--primary) / 0.5);
+  bottom: -10%;
+  right: -10%;
+  animation-delay: -5s;
+}
+
+.ball-3 {
+  width: 40%;
+  height: 40%;
+  background: hsl(var(--primary) / 0.3);
+  top: 30%;
+  left: 30%;
+  animation-delay: -10s;
+}
+
+@keyframes mesh-float {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(10%, 15%) rotate(90deg); }
+  100% { transform: translate(-5%, 5%) rotate(180deg); }
+}
+
+.principal-editorial { border-collapse: separate; }
+.text-sharp { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+</style>
 
 

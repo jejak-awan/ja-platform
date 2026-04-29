@@ -32,6 +32,8 @@
       "edu_desc": "Contact and school profile data.",
       "page_ppdb": "PPDB Registration Page",
       "page_ppdb_desc": "Configure dynamic content for the Registration (PPDB) page.",
+      "page_graduation": "Graduation Announcement Page",
+      "page_graduation_desc": "Configure schedule and visibility for graduation results.",
       "menus": {
         "title": "Navigation Map",
         "description": "Map menus to specific locations."
@@ -189,6 +191,16 @@
     "ppdb_faqs": "Frequently Asked Questions",
     "ppdb_wa_number": "Admission WhatsApp Contact",
     "ppdb_wa_text": "WhatsApp Link Call-to-action",
+    "graduation_hero_badge": "Graduation Hero Badge",
+    "graduation_hero_title": "Graduation Hero Title",
+    "graduation_hero_desc": "Graduation Hero Description",
+    "graduation_cta_title": "Graduation CTA Title",
+    "graduation_cta_desc": "Graduation CTA Description",
+    "graduation_is_open": "Access Open (Manual)",
+    "graduation_open_at": "Scheduled Open Time",
+    "graduation_close_at": "Scheduled Close Time",
+    "graduation_closed_message": "Access Closed Message",
+    "graduation_wa_number": "Graduation Support WhatsApp",
     "hero_section": "Master Hero Section",
     "hero_section_desc": "Main landing area with carousel and marquee.",
     "principal_welcome_comp": "Principal's Welcome",
@@ -257,6 +269,7 @@
       "hero_section": "Master Hero Section",
       "menus": "Navigation & Menus",
       "ppdb_page": "PPDB Page",
+      "graduation_page": "Graduation Page",
       "cta_section": "CTA Section"
     },
     "menus": {

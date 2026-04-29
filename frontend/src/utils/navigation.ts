@@ -10,6 +10,7 @@ export interface NavItem {
     labelKey?: string;
     icon?: string;
     permission?: string;
+    role?: string | string[];
     type?: 'item' | 'divider';
     children?: NavItem[];
 }
@@ -73,6 +74,7 @@ export const navigationGroups: Record<string, NavItem[]> = {
                 { name: 'students.index', to: '/dash/students', label: 'Data Siswa', labelKey: 'common.navigation.menu.studentsIndex', icon: 'users', permission: 'view students' },
                 { name: 'attendance.index', to: '/dash/attendance', label: 'Presensi Siswa', labelKey: 'common.navigation.menu.attendanceIndex', icon: 'clipboard-check', permission: 'view attendance' },
                 { name: 'student-affairs.index', to: '/dash/student-affairs', label: 'Layanan Kesiswaan', labelKey: 'common.navigation.menu.studentAffairsIndex', icon: 'user-check', permission: 'view student affairs' },
+                { name: 'students.graduation', to: '/dash/graduation', label: 'Manajemen Kelulusan', labelKey: 'common.navigation.menu.graduation', icon: 'graduation-cap', permission: 'edit students' },
                 { name: 'visitors.index', to: '/dash/visitors', label: 'Buku Tamu', labelKey: 'common.navigation.menu.visitorsIndex', icon: 'contact', permission: 'view staff' },
             ]
         },
@@ -99,6 +101,12 @@ export const navigationGroups: Record<string, NavItem[]> = {
             label: 'Keuangan & Monitoring', labelKey: 'common.navigation.sections.keuangan_monitoring', icon: 'banknote', children: [
                 { name: 'finance.index', to: '/dash/finance', label: 'Keuangan Sekolah', labelKey: 'common.navigation.menu.financeIndex', icon: 'banknote', permission: 'view school finance' },
                 { name: 'settings.logs', to: '/dash/settings/logs', label: 'Audit Log & Keamanan', labelKey: 'common.navigation.menu.settingsLogs', icon: 'shield-alert', permission: 'view logs' },
+            ]
+        },
+        {
+            label: 'Portal Siswa', labelKey: 'common.navigation.sections.student_portal', icon: 'user', role: 'siswa', children: [
+                { name: 'student.dashboard', to: '/dash/student/dashboard', label: 'Dashboard', labelKey: 'common.navigation.menu.dashboard', icon: 'layout-dashboard' },
+                { name: 'student.graduation', to: '/dash/student/graduation', label: 'Kelulusan', labelKey: 'common.navigation.menu.graduation', icon: 'graduation-cap' },
             ]
         },
     ],

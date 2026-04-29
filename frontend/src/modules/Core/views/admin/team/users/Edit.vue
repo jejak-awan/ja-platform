@@ -125,14 +125,30 @@
             <label class="block text-sm font-medium text-foreground">
               {{ $t('features.users.form.password') }}
             </label>
-            <Input
-              v-model="form.password"
-              name="password"
-              type="password"
-              autocomplete="new-password"
-              :class="{ 'border-destructive focus-visible:ring-destructive': errors.password }"
-              :placeholder="$t('features.users.form.placeholders.passwordCurrent') + ' (min 8, A-Z, a-z, 0-9)'"
-            />
+            <div class="relative">
+              <Input
+                v-model="form.password"
+                name="password"
+                :type="showPassword ? 'text' : 'password'"
+                autocomplete="new-password"
+                :class="[errors.password ? 'border-destructive focus-visible:ring-destructive' : '', 'pr-10']"
+                :placeholder="$t('features.users.form.placeholders.passwordCurrent') + ' (min 8, A-Z, a-z, 0-9)'"
+              />
+              <button
+                type="button"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                @click="showPassword = !showPassword"
+              >
+                <Eye
+                  v-if="!showPassword"
+                  class="h-4 w-4"
+                />
+                <EyeOff
+                  v-else
+                  class="h-4 w-4"
+                />
+              </button>
+            </div>
             <p class="text-xs text-muted-foreground">
               {{ $t('features.users.form.hints.passwordUpdate') }}
             </p>
@@ -148,14 +164,30 @@
             <label class="block text-sm font-medium text-foreground">
               {{ $t('features.users.form.passwordConfirmation') || 'Confirm Password' }}
             </label>
-            <Input
-              v-model="form.password_confirmation"
-              name="password_confirmation"
-              type="password"
-              autocomplete="new-password"
-              :class="{ 'border-destructive focus-visible:ring-destructive': errors.password_confirmation }"
-              :placeholder="$t('features.users.form.placeholders.passwordConfirmation') || 'Repeat password'"
-            />
+            <div class="relative">
+              <Input
+                v-model="form.password_confirmation"
+                name="password_confirmation"
+                :type="showConfirmPassword ? 'text' : 'password'"
+                autocomplete="new-password"
+                :class="[errors.password_confirmation ? 'border-destructive focus-visible:ring-destructive' : '', 'pr-10']"
+                :placeholder="$t('features.users.form.placeholders.passwordConfirmation') || 'Repeat password'"
+              />
+              <button
+                type="button"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                @click="showConfirmPassword = !showConfirmPassword"
+              >
+                <Eye
+                  v-if="!showConfirmPassword"
+                  class="h-4 w-4"
+                />
+                <EyeOff
+                  v-else
+                  class="h-4 w-4"
+                />
+              </button>
+            </div>
             <p
               v-if="errors.password_confirmation"
               class="text-sm text-destructive"
@@ -320,6 +352,8 @@ import {
 import MediaPicker from '@/modules/Cms/components/media/MediaPicker.vue';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
+import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
+import EyeOff from 'lucide-vue-next/dist/esm/icons/eye-off.js';
 import { useAuthStore, ROLE_RANKS } from '@/modules/Core/stores/auth';
 import type { Role, User } from '@/types/core/auth';
 
@@ -347,6 +381,8 @@ interface UserForm {
 const loading = ref(true);
 const saving = ref(false);
 const loadingRoles = ref(false);
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 const availableRoles = ref<Role[]>([]);
 
 const form = ref<UserForm>({

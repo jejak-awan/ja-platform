@@ -657,7 +657,20 @@
             "label": "Principal section — background image",
             "type": "media",
             "category": "Education Info",
-            "description": "Large photo behind the headmaster portrait (school building, campus). Configured in Theme Customizer. If empty, uses School image (below), then default."
+            "description": "Large photo behind the headmaster portrait (school building, campus). Visible only when 'Custom Image' style is selected below."
+        },
+        "principal_background_style": {
+            "label": "Principal Background Style",
+            "type": "select",
+            "default": "mesh",
+            "category": "Education Info",
+            "description": "Choose the background look. 'Mesh Gradient' is recommended for high performance and premium feel.",
+            "options": [
+                { "label": "✨ Animated Mesh (Fast)", "value": "mesh" },
+                { "label": "🖼️ Custom Image", "value": "image" },
+                { "label": "🌑 Solid Gradient", "value": "solid" },
+                { "label": "⚪ None (Clean)", "value": "none" }
+            ]
         },
         "school_image": {
             "label": "School / campus image",
@@ -1173,6 +1186,71 @@
             "type": "text",
             "category": "PPDB Page",
             "default": "Chat Admin PPDB"
+        },
+        "graduation_hero_badge": {
+            "label": "Hero Badge Text",
+            "type": "text",
+            "category": "Graduation Page",
+            "default": "KELULUSAN 2025/2026"
+        },
+        "graduation_hero_title": {
+            "label": "Hero Title",
+            "type": "text",
+            "category": "Graduation Page",
+            "default": "Cek Hasil<br/>Kelulusanmu Sekarang."
+        },
+        "graduation_hero_desc": {
+            "label": "Hero Description",
+            "type": "textarea",
+            "category": "Graduation Page",
+            "default": "Gunakan NISN dan Nomor Peserta untuk melihat pengumuman kelulusan serta mengunduh SKL."
+        },
+        "graduation_cta_title": {
+            "label": "CTA Title",
+            "type": "text",
+            "category": "Graduation Page",
+            "default": "Butuh Bantuan?"
+        },
+        "graduation_cta_desc": {
+            "label": "CTA Description",
+            "type": "textarea",
+            "category": "Graduation Page",
+            "default": "Hubungi pihak sekolah untuk pertanyaan terkait kelulusan dan SKL."
+        },
+        "graduation_is_open": {
+            "label": "Akses Pengumuman Dibuka",
+            "type": "checkbox",
+            "category": "Graduation Page",
+            "default": false,
+            "description": "Jika dicentang, form pengecekan kelulusan akan langsung ditampilkan (Force Open)."
+        },
+        "graduation_open_at": {
+            "label": "Waktu Buka (Jadwal)",
+            "type": "text",
+            "category": "Graduation Page",
+            "default": "2026-05-05 10:00:00",
+            "description": "Format: YYYY-MM-DD HH:mm:ss. Pengumuman akan otomatis terbuka pada waktu ini."
+        },
+        "graduation_close_at": {
+            "label": "Waktu Tutup (Jadwal)",
+            "type": "text",
+            "category": "Graduation Page",
+            "default": "2026-05-15 23:59:59",
+            "description": "Format: YYYY-MM-DD HH:mm:ss. Akses akan ditutup kembali setelah waktu ini."
+        },
+        "graduation_closed_message": {
+            "label": "Pesan Saat Ditutup",
+            "type": "textarea",
+            "category": "Graduation Page",
+            "default": "Mohon maaf, pengumuman kelulusan belum dibuka atau sudah berakhir. Silakan hubungi admin sekolah jika ada pertanyaan.",
+            "description": "Pesan yang ditampilkan saat countdown belum selesai atau akses sudah berakhir."
+        },
+        "graduation_wa_number": {
+            "label": "WhatsApp Admin Support",
+            "type": "text",
+            "category": "Graduation Page",
+            "default": "",
+            "description": "Nomor WA untuk bantuan teknis kelulusan."
         },
         "animation_enabled": {
             "label": "Enable GSAP Animations",

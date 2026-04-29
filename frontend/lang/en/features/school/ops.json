@@ -80,5 +80,62 @@
             "registerSuccess": "Visitor registered successfully",
             "checkOutSuccess": "Check-out successful"
         }
+    },
+    "graduation": {
+        "title": "Student Graduation",
+        "subtitle": "Manage graduation announcements, input grades, and print certificates/SKL.",
+        "labels": {
+            "tabEligible": "Prospective Graduates",
+            "tabHistory": "History & Grades",
+            "eligibleHint": "Select students whose graduation status will be processed in batch.",
+            "manageTemplates": "Manage Templates",
+            "btnProcess": "Process Data",
+            "confirmTitle": "Confirm Graduation",
+            "confirmMessage": "Are you sure you want to process {count} selected students?"
+        },
+        "check": {
+            "title": "Graduation Announcement",
+            "subtitle": "Enter NISN/NIS and Date of Birth to view your graduation status.",
+            "identifier": "NISN / NIS",
+            "dob": "Date of Birth",
+            "btnCheck": "Check Status",
+            "resultTitle": "Graduation Result",
+            "graduated": "CONGRATULATIONS! YOU ARE DECLARED GRADUATED",
+            "notGraduated": "Your status has not been declared graduated yet.",
+            "downloadHint": "Please download your Graduation Certificate (SKL) via the button below."
+        }
+    },
+    "templates": {
+        "title": "Document Templates",
+        "subtitle": "Manage layout and design of certificates, SKL, or official school letters.",
+        "btnAdd": "Add Template",
+        "emptyTitle": "No Templates Yet",
+        "emptySubtitle": "Create your first document template to start printing certificates or letters.",
+        "lastUpdated": "Last updated",
+        "modal": {
+            "titleAdd": "Add Template",
+            "titleEdit": "Edit Template",
+            "labelName": "Template Name",
+            "labelType": "Document Type",
+            "labelHtml": "HTML Content",
+            "labelCss": "CSS Styles",
+            "labelActive": "Activate Template",
+            "labelDefault": "Set as Default",
+            "placeholderName": "Example: Graduation SKL 2024",
+            "placeholdersTitle": "Available Placeholders:",
+            "types": {
+                "skl": "SKL (Graduation Certificate)",
+                "certificate": "Certificate/Award",
+                "letter": "Official Letter"
+            }
+        },
+        "previewHtml": "Preview HTML",
+        "labels": {
+            "name": "Template Name",
+            "type": "Document Type",
+            "active": "Active",
+            "inactive": "Inactive",
+            "default": "Default"
+        }
     }
 }

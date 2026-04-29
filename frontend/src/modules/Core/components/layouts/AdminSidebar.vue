@@ -435,6 +435,13 @@ const filteredNavigation = computed(() => {
                 const newItem = { ...item };
                 if (newItem.children) {
                     newItem.children = newItem.children.filter(child => {
+                        // Role check (priority)
+                        if (child.role) {
+                            const roles = Array.isArray(child.role) ? child.role : [child.role];
+                            const hasRole = authStore.user?.roles?.some(r => roles.includes(r.name));
+                            if (!hasRole) return false;
+                        }
+
                         if (!child.permission) return true;
                         return authStore.hasPermission(child.permission);
                     });
@@ -442,6 +449,13 @@ const filteredNavigation = computed(() => {
                 return newItem;
             })
             .filter(item => {
+                // Role check (priority)
+                if (item.role) {
+                    const roles = Array.isArray(item.role) ? item.role : [item.role];
+                    const hasRole = authStore.user?.roles?.some(r => roles.includes(r.name));
+                    if (!hasRole) return false;
+                }
+
                 // If it's a parent item with children, only show if it has visible children
                 if (item.children && item.children.length === 0 && !item.to) {
                     return false;

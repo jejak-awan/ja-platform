@@ -1,11 +1,11 @@
 <template>
   <div class="space-y-6">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
       <div>
         <h1 class="text-3xl font-bold tracking-tight text-foreground">
           {{ $t('features.dashboard.title') }}
         </h1>
-        <p class="text-muted-foreground">
+        <p class="text-muted-foreground text-sm font-medium">
           {{ $t('features.dashboard.welcome', { name: authStore.user?.name }) }}
         </p>
       </div>
@@ -29,7 +29,7 @@
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <!-- Contents Card -->
-      <Card class="border-border/40 bg-card">
+      <Card class="border-border/40 bg-card shadow-none rounded-xl">
         <CardContent class="p-6">
           <div class="flex items-start justify-between">
             <div class="space-y-1">
@@ -52,7 +52,7 @@
       </Card>
 
       <!-- Media Card -->
-      <Card class="border-border/40 bg-card">
+      <Card class="border-border/40 bg-card shadow-none rounded-xl">
         <CardContent class="p-6">
           <div class="flex items-start justify-between">
             <div class="space-y-1">
@@ -77,7 +77,7 @@
       <!-- Users Card -->
       <Card
         v-if="authStore.hasPermission('manage users')"
-        class="border-border/40 bg-card"
+        class="border-border/40 bg-card shadow-none rounded-xl"
       >
         <CardContent class="p-6">
           <div class="flex items-start justify-between">
@@ -103,7 +103,7 @@
       <!-- Pending Card -->
       <Card
         v-if="authStore.hasPermission('approve content')"
-        class="border-border/40 bg-card"
+        class="border-border/40 bg-card shadow-none rounded-xl"
       >
         <CardContent class="p-6">
           <div class="flex items-start justify-between">
@@ -132,7 +132,7 @@
       v-if="authStore.hasPermission('view analytics')"
       class="w-full"
     >
-      <Card class="col-span-1">
+      <Card class="col-span-1 border-border/40 bg-card shadow-none rounded-xl">
         <CardHeader class="flex flex-row items-center justify-between pb-2">
           <div class="space-y-1">
             <h2 class="text-lg font-semibold flex items-center gap-2">
