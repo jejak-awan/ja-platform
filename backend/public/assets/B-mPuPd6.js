@@ -1,1 +1,0 @@
-import{d as t,bL as r,z as n,A as p,C as d,P as l,M as c,N as i,L as e,bM as u}from"./CZYuNOV2.js";const C=t({__name:"ContextMenuTrigger",props:{disabled:{type:Boolean},asChild:{type:Boolean},as:{}},setup(a){const s=r(a);return(o,m)=>(n(),p(e(u),c(i(e(s))),{default:d(()=>[l(o.$slots,"default")]),_:3},16))}});export{C as default};

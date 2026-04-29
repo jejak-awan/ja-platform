@@ -1,1 +1,0 @@
-import{d as r,S as n,C as p,z as d,B as m,P as c,N as i,O as l,L as e,bK as u}from"./B55wTpUl.js";const x=r({__name:"ContextMenu",props:{dir:{},modal:{type:Boolean}},emits:["update:open"],setup(s,{emit:t}){const o=n(s,t);return(a,B)=>(p(),d(e(u),i(l(e(o))),{default:m(()=>[c(a.$slots,"default")]),_:3},16))}});export{x as default};

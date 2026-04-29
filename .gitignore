@@ -47,3 +47,4 @@ backend/storage/framework/views/*
 !backend/storage/framework/sessions/.gitignore
 !backend/storage/framework/views/.gitignore
 backend/phpstan-output.txt
+backend/public/assets/
