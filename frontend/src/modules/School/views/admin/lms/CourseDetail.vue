@@ -168,7 +168,7 @@ const fetchData = async () => {
   loading.value = true;
   try {
     const res = await LmsService.getCourseDetails(courseId);
-    course.value = res.data.data;
+    course.value = res.data;
   } catch (err) {
     console.error(err);
   } finally {

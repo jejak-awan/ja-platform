@@ -125,8 +125,8 @@ const fetchData = async () => {
   loading.value = true;
   try {
     const res = await LmsService.getLearningData(courseId);
-    program.value = res.data.data.program;
-    progress.value = res.data.data.progress;
+    program.value = res.data.program;
+    progress.value = res.data.progress;
     // Set first topic as active by default if not set
     if (!activeTopic.value && program.value.length > 0 && program.value[0].topics.length > 0) {
       activeTopic.value = program.value[0].topics[0];
