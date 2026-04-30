@@ -153,6 +153,12 @@ api.interceptors.request.use(
             config.headers['X-Level-ID'] = activeLevelId;
         }
 
+        // SCHOOL CONTEXT: Inject active school ID
+        const activeSchoolId = localStorage.getItem('active_school_id');
+        if (activeSchoolId) {
+            config.headers['X-School-Id'] = activeSchoolId;
+        }
+
         return config;
     },
     (error: unknown) => {

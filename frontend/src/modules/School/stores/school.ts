@@ -37,6 +37,11 @@ export const useSchoolStore = defineStore('school', {
                     const schoolData = Array.isArray(result) ? result[0] : result;
                     this.currentSchool = schoolData as School;
                     this.schools = [this.currentSchool];
+                    
+                    // Persist for API interceptor
+                    if (this.currentSchool.id) {
+                        localStorage.setItem('active_school_id', String(this.currentSchool.id));
+                    }
                 }
             } catch (e: unknown) {
                 logger.error('Failed to fetch institution:', e);

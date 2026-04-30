@@ -29,6 +29,7 @@ class AdminLmsController extends BaseController
     public function storeCourse(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('create', Course::class);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'summary' => 'nullable|string',
@@ -36,7 +37,13 @@ class AdminLmsController extends BaseController
             'status' => 'required|in:draft,published,archived',
         ]);
 
-        $validated['school_id'] = (int) ($request->header('X-School-Id') ?? 1);
+        $schoolId = $request->header('X-School-Id');
+        if (!$schoolId) {
+            $school = \Modules\School\Models\Institution\School::first();
+            $schoolId = $school ? $school->id : 1;
+        }
+
+        $validated['school_id'] = (int) $schoolId;
         $validated['author_id'] = (int) auth()->id();
 
         $course = $this->service->createCourse($validated);
