@@ -28,6 +28,12 @@ class AdminLmsController extends BaseController
             $schoolId = $school ? $school->id : 1;
         }
 
+        \Illuminate\Support\Facades\Log::info('LMS Index Request', [
+            'header_school_id' => $request->header('X-School-Id'),
+            'resolved_school_id' => $schoolId,
+            'user_id' => auth()->id()
+        ]);
+
         $courses = $this->service->getCourses((int)$schoolId, $request->all());
         return $this->sendResponse($courses, 'Courses retrieved successfully.');
     }

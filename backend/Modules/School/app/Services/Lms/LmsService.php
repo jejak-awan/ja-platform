@@ -26,8 +26,9 @@ class LmsService
     {
         return Course::where('school_id', $schoolId)
             ->withCount('lessons')
-            ->when(isset($filters['status']), fn($q) => $q->where('status', $filters['status']))
-            ->when(isset($filters['level']), fn($q) => $q->where('level', $filters['level']))
+            ->when(!empty($filters['status']), fn($q) => $q->where('status', $filters['status']))
+            ->when(!empty($filters['level']), fn($q) => $q->where('level', $filters['level']))
+            ->when(!empty($filters['search']), fn($q) => $q->where('title', 'like', '%' . $filters['search'] . '%'))
             ->latest()
             ->get();
     }

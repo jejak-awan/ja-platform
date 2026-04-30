@@ -17,7 +17,7 @@ export const useLmsStore = defineStore('lms', {
       this.loading = true;
       try {
         const response = await LmsService.getAdminCourses();
-        this.courses = response.data.data;
+        this.courses = response.data;
       } catch (err: any) {
         this.error = err.message;
       } finally {
@@ -29,7 +29,7 @@ export const useLmsStore = defineStore('lms', {
       this.loading = true;
       try {
         const response = await LmsService.getCatalog();
-        this.catalog = response.data.data;
+        this.catalog = response.data;
       } catch (err: any) {
         this.error = err.message;
       } finally {
@@ -41,7 +41,7 @@ export const useLmsStore = defineStore('lms', {
       this.loading = true;
       try {
         const response = await LmsService.getMyCourses();
-        this.myCourses = response.data.data;
+        this.myCourses = response.data;
       } catch (err: any) {
         this.error = err.message;
       } finally {
@@ -53,8 +53,8 @@ export const useLmsStore = defineStore('lms', {
       this.loading = true;
       try {
         const response = await LmsService.getCourseDetails(id);
-        this.currentCourse = response.data.data;
-        return response.data.data;
+        this.currentCourse = response.data;
+        return response.data;
       } catch (err: any) {
         this.error = err.message;
         throw err;
