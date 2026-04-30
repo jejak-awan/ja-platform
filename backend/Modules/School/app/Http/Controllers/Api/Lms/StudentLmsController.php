@@ -33,8 +33,13 @@ class StudentLmsController extends BaseController
 
     public function catalog(Request $request): \Illuminate\Http\JsonResponse
     {
-        $schoolId = (int) ($request->header('X-School-Id') ?? 1);
-        $courses = $this->service->getCourses($schoolId, ['status' => 'published']);
+        $schoolId = $request->header('X-School-Id');
+        if (!$schoolId) {
+            $school = \Modules\School\Models\Institution\School::first();
+            $schoolId = $school ? $school->id : 1;
+        }
+
+        $courses = $this->service->getCourses((int)$schoolId, ['status' => 'published']);
         return $this->sendResponse($courses, 'Published courses catalog.');
     }
 

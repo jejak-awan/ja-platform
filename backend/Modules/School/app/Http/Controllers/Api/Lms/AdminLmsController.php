@@ -21,8 +21,14 @@ class AdminLmsController extends BaseController
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('viewAny', Course::class);
-        $schoolId = (int) ($request->header('X-School-Id') ?? 1);
-        $courses = $this->service->getCourses($schoolId, $request->all());
+
+        $schoolId = $request->header('X-School-Id');
+        if (!$schoolId) {
+            $school = \Modules\School\Models\Institution\School::first();
+            $schoolId = $school ? $school->id : 1;
+        }
+
+        $courses = $this->service->getCourses((int)$schoolId, $request->all());
         return $this->sendResponse($courses, 'Courses retrieved successfully.');
     }
 

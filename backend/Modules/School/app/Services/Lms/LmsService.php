@@ -25,6 +25,7 @@ class LmsService
     public function getCourses(int $schoolId, array $filters = []): Collection
     {
         return Course::where('school_id', $schoolId)
+            ->withCount('lessons')
             ->when(isset($filters['status']), fn($q) => $q->where('status', $filters['status']))
             ->when(isset($filters['level']), fn($q) => $q->where('level', $filters['level']))
             ->latest()
@@ -34,7 +35,14 @@ class LmsService
     public function createCourse(array $data): Course
     {
         if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['title']);
+            $baseSlug = Str::slug($data['title']);
+            $slug = $baseSlug;
+            $counter = 1;
+
+            while (Course::where('slug', $slug)->exists()) {
+                $slug = $baseSlug . '-' . $counter++;
+            }
+            $data['slug'] = $slug;
         }
         
         /** @var Course $course */
