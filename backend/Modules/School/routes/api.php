@@ -239,29 +239,6 @@ Route::prefix('v1')->group(function () {
             });
         });
 
-        // Finance
-        Route::middleware('permission:view school finance|manage school finance')->group(function () {
-            Route::prefix('finance')->group(function () {
-                Route::get('summary', [FinanceController::class, 'summary']);
-                Route::get('fee-types', [FinanceController::class, 'feeTypes']);
-                Route::post('fee-types', [FinanceController::class, 'storeFeeType']);
-                Route::put('fee-types/{id}', [FinanceController::class, 'updateFeeType']);
-                Route::delete('fee-types/{id}', [FinanceController::class, 'destroyFeeType']);
-
-                Route::get('bills', [FinanceController::class, 'bills']);
-                Route::post('bills/generate', [FinanceController::class, 'generateBills']);
-                Route::post('bills/{id}/pay', [FinanceController::class, 'payBill']);
-
-                Route::get('expenses', [FinanceController::class, 'expenses']);
-                Route::post('expenses', [FinanceController::class, 'storeExpense']);
-                Route::put('expenses/{id}', [FinanceController::class, 'updateExpense']);
-                Route::delete('expenses/{id}', [FinanceController::class, 'destroyExpense']);
-
-                Route::get('budgets', [FinanceController::class, 'budgets']);
-                Route::post('budgets', [FinanceController::class, 'storeBudget']);
-            });
-        });
-
         // OSIS Management
         Route::middleware('permission:view osis|manage osis')->group(function () {
             Route::prefix('osis')->group(function () {
@@ -425,7 +402,6 @@ Route::prefix('v1')->group(function () {
     // Student Portal
     Route::prefix('student')->middleware(['auth:sanctum'])->group(function () {
         Route::get('dashboard', [StudentPortalController::class, 'dashboard']);
-        Route::get('bills', [StudentPortalController::class, 'bills']);
         Route::get('attendance', [StudentPortalController::class, 'attendance']);
         Route::get('grades', [StudentPortalController::class, 'grades']);
         Route::get('graduation', [StudentPortalController::class, 'graduation']);

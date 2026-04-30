@@ -41,7 +41,7 @@ class SchoolServiceProvider extends ServiceProvider
         Gate::policy(\Modules\School\Models\Institution\School::class, \Modules\School\Policies\SchoolPolicy::class);
         Gate::policy(\Modules\School\Models\Student\Student::class, \Modules\School\Policies\StudentPolicy::class);
         Gate::policy(\Modules\School\Models\HR\Staff::class, \Modules\School\Policies\StaffPolicy::class);
-        Gate::policy(\Modules\School\Models\Finance\StudentBill::class, \Modules\School\Policies\FinancePolicy::class);
+
         Gate::policy(\Modules\School\Models\Lms\Course::class, \Modules\School\Policies\LmsPolicy::class);
         Gate::policy(\Modules\School\Models\Lms\Enrollment::class, \Modules\School\Policies\LmsEnrollmentPolicy::class);
 

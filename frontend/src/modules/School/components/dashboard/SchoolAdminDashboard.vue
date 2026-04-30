@@ -101,61 +101,7 @@
         </CardContent>
       </Card>
 
-      <!-- Financial Pulse (The Vault) -->
       <div class="space-y-10">
-        <Card class="border-border/40 bg-card text-foreground rounded-xl shadow-none overflow-hidden relative group">
-          <CardHeader class="p-8 pb-4 relative z-10">
-            <CardTitle class="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
-              {{ $t('features.school.finance.summary') }}
-            </CardTitle>
-          </CardHeader>
-          <CardContent class="p-8 pt-4 relative z-10">
-            <div class="space-y-6">
-              <div>
-                <p class="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-1">
-                  {{ $t('features.school.finance.labels.netBalance') }}
-                </p>
-                <h3 class="text-4xl font-black tracking-tighter flex items-baseline gap-2 text-foreground">
-                  <span class="text-sm opacity-50 font-medium">Rp</span>
-                  {{ summary?.net_balance ? formatCurrency(summary.net_balance) : '0' }}
-                </h3>
-              </div>
-
-              <div class="space-y-5 pt-4 border-t border-border/50">
-                <div
-                  v-for="metric in financeMetrics"
-                  :key="metric.label"
-                  class="space-y-2"
-                >
-                  <div class="flex justify-between items-end">
-                    <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{{ metric.label }}</span>
-                    <span class="text-xs font-black">{{ metric.percent }}%</span>
-                  </div>
-                  <div class="h-1.5 bg-muted rounded-full overflow-hidden">
-                    <div
-                      class="h-full bg-primary rounded-full transition-all duration-1000"
-                      :style="{ width: metric.percent + '%' }"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter class="p-8 pt-0 relative z-10">
-            <Button
-              variant="outline"
-              class="w-full text-[10px] font-black uppercase tracking-widest h-12 rounded-xl bg-muted/30 hover:bg-muted/50 border-border/40"
-              @click="$router.push({ name: 'finance.index' })"
-            >
-              {{ $t('features.school.finance.tabs.reports') }}
-              <LucideIcon
-                name="ArrowRight"
-                class="w-4 h-4 ml-2"
-              />
-            </Button>
-          </CardFooter>
-        </Card>
-
         <!-- Strategic Alerts -->
         <Card class="border-border/40 bg-destructive/5 dark:bg-destructive/10 border-l-4 border-destructive rounded-xl p-8 shadow-none group">
           <h4 class="text-xs font-black uppercase tracking-[0.2em] text-destructive flex items-center gap-3 mb-6">
@@ -193,18 +139,15 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { storeToRefs } from 'pinia';
 import {
-  Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter,
+  Card, CardContent, CardHeader, CardTitle, CardDescription,
   Button, LucideIcon, Badge
 } from '@/components/ui';
 import { InstitutionService } from '@/modules/School/services/InstitutionService';
-import { useFinanceStore } from '../../stores/finance';
 import { parseResponse } from '@/utils/responseParser';
 
 const { t } = useI18n();
-const financeStore = useFinanceStore();
-const { summary } = storeToRefs(financeStore);
+
 
 const statsData = ref<any[]>([]);
 const personnelList = ref<Personnel[]>([]);
@@ -226,16 +169,9 @@ interface Personnel {
     statusKey: string;
 }
 
-const financeMetrics = computed(() => [
-    { label: t('features.school.finance.income'), percent: summary.value?.collection_rate || 0 },
-    { label: t('features.school.finance.expenses'), percent: (summary.value?.total_collections && summary.value?.total_collections > 0) ? Math.round((summary.value?.total_expenses || 0) / summary.value.total_collections * 100) : 0 },
-]);
 
-const formatCurrency = (val: number) => {
-    if (val >= 1000000000) return (val / 1000000000).toFixed(1) + 'B';
-    if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M';
-    return new Intl.NumberFormat('id-ID').format(val);
-};
+
+
 
 const fetchData = async () => {
     loading.value = true;
@@ -252,7 +188,7 @@ const fetchData = async () => {
             statsData.value = data;
         }
         
-        await financeStore.fetchSummary();
+
     } catch (e) {
         console.error(e);
     } finally {

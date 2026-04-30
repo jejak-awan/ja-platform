@@ -98,8 +98,7 @@ export const navigationGroups: Record<string, NavItem[]> = {
             ]
         },
         {
-            label: 'Keuangan & Monitoring', labelKey: 'common.navigation.sections.keuangan_monitoring', icon: 'banknote', children: [
-                { name: 'finance.index', to: '/dash/finance', label: 'Keuangan Sekolah', labelKey: 'common.navigation.menu.financeIndex', icon: 'banknote', permission: 'view school finance' },
+            label: 'Keamanan & Monitoring', labelKey: 'common.navigation.sections.monitoring', icon: 'shield-alert', children: [
                 { name: 'settings.logs', to: '/dash/settings/logs', label: 'Audit Log & Keamanan', labelKey: 'common.navigation.menu.settingsLogs', icon: 'shield-alert', permission: 'view logs' },
             ]
         },

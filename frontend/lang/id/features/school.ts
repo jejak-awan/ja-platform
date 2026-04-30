@@ -4,7 +4,7 @@ import lms from './school/lms.json';
 import cbt from './school/cbt.json';
 import hr from './school/hr.json';
 import ops from './school/ops.json';
-import finance from './school/finance.json';
+
 import logistics from './school/logistics.json';
 import institution from './school/institution.json';
 import levels from './school/levels.json';
@@ -26,7 +26,7 @@ export default {
     hr,
     ops,
     operations: ops,
-    finance,
+
     logistics,
     institution,
     levels,

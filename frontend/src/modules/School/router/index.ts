@@ -163,12 +163,7 @@ const schoolRoutes: RouteRecordRaw[] = [
         component: () => import('@/modules/School/views/admin/extensions/Index.vue'),
         meta: { permission: 'view school extensions' },
     },
-    {
-        path: 'finance',
-        name: 'finance.index',
-        component: () => import('@/modules/School/views/admin/finance/Index.vue'),
-        meta: { title: 'Keuangan Sekolah', permission: 'view school finance' }
-      },
+
       {
         path: 'admission',
         name: 'admission.index',
@@ -225,12 +220,7 @@ const schoolRoutes: RouteRecordRaw[] = [
         component: () => import('@/modules/School/views/student/Dashboard.vue'),
         meta: { title: 'Dashboard Siswa', requiresAuth: true }
       },
-      {
-        path: 'student/bills',
-        name: 'student.bills',
-        component: () => import('@/modules/School/views/student/Bills.vue'),
-        meta: { title: 'Tagihan & Pembayaran', requiresAuth: true }
-      },
+
       {
         path: 'student/grades',
         name: 'student.grades',

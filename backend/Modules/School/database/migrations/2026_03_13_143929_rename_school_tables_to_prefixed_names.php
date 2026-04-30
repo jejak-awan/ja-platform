@@ -37,12 +37,7 @@ return new class extends Migration
         if (Schema::hasTable('exams')) Schema::rename('exams', 'sch_lms_exams');
         if (Schema::hasTable('exam_results')) Schema::rename('exam_results', 'sch_lms_results');
 
-        // Finance
-        if (Schema::hasTable('fee_types')) Schema::rename('fee_types', 'sch_fin_fee_types');
-        if (Schema::hasTable('student_bills')) Schema::rename('student_bills', 'sch_fin_bills');
-        if (Schema::hasTable('payment_transactions')) Schema::rename('payment_transactions', 'sch_fin_transactions');
-        if (Schema::hasTable('expenses')) Schema::rename('expenses', 'sch_fin_expenses');
-        if (Schema::hasTable('budgets')) Schema::rename('budgets', 'sch_fin_budgets');
+
 
         // HR
         if (Schema::hasTable('staff')) Schema::rename('staff', 'sch_hr_staff');
@@ -133,11 +128,7 @@ return new class extends Migration
         Schema::rename('sch_hr_attendances', 'staff_attendances');
         Schema::rename('sch_hr_staff', 'staff');
 
-        Schema::rename('sch_fin_budgets', 'budgets');
-        Schema::rename('sch_fin_expenses', 'expenses');
-        Schema::rename('sch_fin_transactions', 'payment_transactions');
-        Schema::rename('sch_fin_bills', 'student_bills');
-        Schema::rename('sch_fin_fee_types', 'fee_types');
+
 
         Schema::rename('sch_lms_results', 'exam_results');
         Schema::rename('sch_lms_exams', 'exams');

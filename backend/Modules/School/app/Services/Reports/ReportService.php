@@ -3,8 +3,7 @@
 namespace Modules\School\Services\Reports;
 
 use Modules\School\Models\Student\Student;
-use Modules\School\Models\Finance\PaymentTransaction;
-use Modules\School\Models\Finance\StudentBill;
+
 use Modules\School\Models\Academic\Attendance;
 use Illuminate\Support\Facades\DB;
 
@@ -41,25 +40,7 @@ class ReportService
         ];
     }
 
-    /**
-     * Get payment receipt data for PDF.
-     * @return array{transaction: PaymentTransaction, school: \Modules\School\Models\Institution\School|null}
-     */
-    public function getPaymentReceiptData(int $transactionId): array
-    {
-        /** @var PaymentTransaction $transaction */
-        $transaction = PaymentTransaction::with([
-            'bill.student',
-            'bill.feeType',
-            'bill.academicYear',
-            'verifier',
-        ])->findOrFail($transactionId);
 
-        return [
-            'transaction' => $transaction,
-            'school' => $transaction->bill->student->school ?? null,
-        ];
-    }
 
     /**
      * Get student ID card data.
@@ -121,27 +102,5 @@ class ReportService
         ];
     }
 
-    /**
-     * Get financial report data.
-     * @return array{total_billed: float, total_paid: float, total_unpaid: float, bills_by_status: array<int, array<string, mixed>>}
-     */
-    public function getFinancialReport(int $schoolId, ?int $academicYearId = null): array
-    {
-        $billQuery = StudentBill::where('school_id', $schoolId)
-            ->when($academicYearId, fn($q) => $q->where('academic_year_id', $academicYearId));
 
-        /** @var array<int, array<string, mixed>> $billsByStatus */
-        $billsByStatus = (clone $billQuery)
-            ->select('status', DB::raw('count(*) as count'), DB::raw('sum(amount) as total'))
-            ->groupBy('status')
-            ->get()
-            ->toArray();
-
-        return [
-            'total_billed' => (float) (clone $billQuery)->sum('amount'),
-            'total_paid' => (float) (clone $billQuery)->sum('paid_amount'),
-            'total_unpaid' => (float) (clone $billQuery)->where('status', 'unpaid')->sum('amount'),
-            'bills_by_status' => $billsByStatus,
-        ];
-    }
 }

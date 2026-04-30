@@ -17,9 +17,7 @@ return new class extends Migration
             'sch_hr_staff',
             'sch_acad_years',
             'sch_acad_semesters',
-            'sch_fin_bills',
-            'sch_fin_transactions',
-            'sch_fin_fee_types',
+
             'sch_acad_schedules',
             'sch_acad_study_groups',
             'sch_acad_subjects',
@@ -47,9 +45,7 @@ return new class extends Migration
             'sch_hr_staff',
             'sch_acad_years',
             'sch_acad_semesters',
-            'sch_fin_bills',
-            'sch_fin_transactions',
-            'sch_fin_fee_types',
+
             'sch_acad_schedules',
             'sch_acad_study_groups',
             'sch_acad_subjects',

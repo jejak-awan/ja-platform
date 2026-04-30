@@ -50,21 +50,7 @@ return new class extends Migration
             });
         }
 
-        // Student Bills indexes
-        Schema::table('sch_fin_bills', function (Blueprint $table) {
-            $table->index('school_id', 'idx_bills_school_id');
-            $table->index('student_id', 'idx_bills_student_id');
-            $table->index('status', 'idx_bills_status');
-            $table->index(['student_id', 'fee_type_id', 'academic_year_id'], 'idx_bills_unique_check');
-            $table->index(['school_id', 'status'], 'idx_bills_school_status');
-        });
 
-        // Payment Transactions indexes
-        Schema::table('sch_fin_transactions', function (Blueprint $table) {
-            $table->index('student_bill_id', 'idx_transactions_bill_id');
-            $table->index('payment_date', 'idx_transactions_payment_date');
-            $table->index(['student_bill_id', 'payment_date'], 'idx_transactions_bill_date');
-        });
 
         // Schedules indexes
         Schema::table('sch_acad_schedules', function (Blueprint $table) {
@@ -89,12 +75,7 @@ return new class extends Migration
             $table->index(['student_id', 'date'], 'idx_attendances_student_date');
         });
 
-        // Expenses indexes
-        Schema::table('sch_fin_expenses', function (Blueprint $table) {
-            $table->index('school_id', 'idx_expenses_school_id');
-            $table->index('category', 'idx_expenses_category');
-            $table->index('date', 'idx_expenses_date');
-        });
+
 
         // Teaching Journals indexes
         Schema::table('sch_acad_teaching_journals', function (Blueprint $table) {
@@ -133,11 +114,10 @@ return new class extends Migration
         $indexDrops = [
             'sch_std_students' => ['idx_students_school_id', 'idx_students_school_level_id', 'idx_students_department_id', 'idx_students_school_level', 'idx_students_status', 'idx_students_school_status', 'idx_students_user_id'],
             'sch_hr_staff' => ['idx_staff_school_id', 'idx_staff_ptk_type', 'idx_staff_employment_status'],
-            'sch_fin_bills' => ['idx_bills_school_id', 'idx_bills_student_id', 'idx_bills_status', 'idx_bills_unique_check', 'idx_bills_school_status'],
-            'sch_fin_transactions' => ['idx_transactions_bill_id', 'idx_transactions_payment_date', 'idx_transactions_bill_date'],
+
             'sch_acad_schedules' => ['idx_schedules_staff_id', 'idx_schedules_study_group_id', 'idx_schedules_day', 'idx_schedules_staff_day', 'idx_schedules_group_day', 'idx_schedules_room_day'],
             'sch_acad_attendances' => ['idx_attendances_student_id', 'idx_attendances_date', 'idx_attendances_status', 'idx_attendances_student_date'],
-            'sch_fin_expenses' => ['idx_expenses_school_id', 'idx_expenses_category', 'idx_expenses_date'],
+
             'sch_acad_teaching_journals' => ['idx_journals_schedule_id'],
             'sch_lms_enrollments' => ['idx_enrollments_course_id', 'idx_enrollments_student_id', 'idx_enrollments_course_student'],
             'sch_acad_years' => ['idx_years_school_id', 'idx_years_is_active'],

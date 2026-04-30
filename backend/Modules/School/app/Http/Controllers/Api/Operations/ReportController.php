@@ -5,7 +5,7 @@ namespace Modules\School\Http\Controllers\Api\Operations;
 use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
 use Modules\School\Models\Student\Student;
-use Modules\School\Models\Finance\PaymentTransaction;
+
 use Modules\School\Models\Institution\School;
 use Mpdf\Mpdf;
 
@@ -36,30 +36,7 @@ class ReportController extends BaseController
             ->header('Content-Disposition', 'inline; filename="student_profile.pdf"');
     }
 
-    public function paymentReceipt(int $id): \Illuminate\Http\Response
-    {
-        $this->authorize('view', PaymentTransaction::class);
-        /** @var PaymentTransaction $transaction */
-        $transaction = PaymentTransaction::with(['bill.student', 'bill.feeType', 'school'])->findOrFail($id);
-        $school = $transaction->school;
 
-        $verificationUrl = $transaction->getVerificationUrl('receipt');
-        $html = view('school::reports.receipt', compact('transaction', 'school', 'verificationUrl'))->render();
-
-        $mpdf = new Mpdf([
-            'format' => [148, 210], // A5 Landscape
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 10,
-            'margin_bottom' => 10,
-        ]);
-
-        $mpdf->WriteHTML($html);
-
-        return response((string)$mpdf->Output('kwitansi.pdf', 'S'), 200)
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'inline; filename="kwitansi.pdf"');
-    }
 
     public function studentIdCard(int $id): \Illuminate\Http\Response
     {
