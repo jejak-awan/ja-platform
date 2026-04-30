@@ -31,17 +31,5 @@ class AnalyticsController extends BaseController
         return $this->sendResponse($summary, 'Executive summary retrieved successfully.');
     }
 
-    public function financialCharts(Request $request): \Illuminate\Http\JsonResponse
-    {
-        $this->authorize('viewAny', \Modules\School\Models\Finance\Expense::class);
-        $schoolIdValue = $request->header('X-School-Id') ?? $request->input('school_id');
-        $defaultId = \Modules\School\Models\Institution\School::value('id') ?? 1;
-        $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : (is_numeric($defaultId) ? (int)$defaultId : 1);
-        $yearValue = $request->input('year');
-        $year = is_numeric($yearValue) ? (int)$yearValue : (int)date('Y');
 
-        $data = $this->service->getFinancialChartData($schoolId, $year);
-
-        return $this->sendResponse($data, 'Financial chart data retrieved successfully.');
-    }
 }

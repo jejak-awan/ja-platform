@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Use PostgreSQL compatible jsonb_set for updating the JSON column
-        \DB::table('themes')
-            ->where('slug', 'janari')
-            ->whereNotNull('settings')
-            ->update([
-                'settings' => \DB::raw("jsonb_set(settings::jsonb, '{principal_background_style}', '\"mesh\"'::jsonb)::json")
-            ]);
+        if (\DB::table('themes')->where('slug', 'janari')->exists()) {
+            \DB::table('themes')
+                ->where('slug', 'janari')
+                ->whereNotNull('settings')
+                ->update([
+                    'settings' => \DB::raw("jsonb_set(settings::jsonb, '{principal_background_style}', '\"mesh\"'::jsonb)::json")
+                ]);
+        }
     }
 
     /**

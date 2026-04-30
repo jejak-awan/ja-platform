@@ -48,23 +48,7 @@ class SchoolApiStandardizationTest extends TestCase
             ]);
     }
 
-    /**
-     * Test LMS overview structure.
-     */
-    public function test_lms_overview_structure(): void
-    {
-        $response = $this->actingAsAdmin()->getJson('/api/v1/admin/lms/overview');
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'success',
-                'data' => [
-                    'banks_count',
-                    'exams_count',
-                ],
-                'message',
-            ]);
-    }
+    // Removed test_lms_overview_structure
 
     /**
      * Test Operations attendance overview structure.

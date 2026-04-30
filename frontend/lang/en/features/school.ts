@@ -1,7 +1,6 @@
 import academic from './school/academic.json';
 import admission from './school/admission.json';
-import lms from './school/lms.json';
-import cbt from './school/cbt.json';
+
 import hr from './school/hr.json';
 import ops from './school/ops.json';
 
@@ -21,8 +20,7 @@ export default {
     ...misc,
     academic,
     admission,
-    lms,
-    cbt,
+
     hr,
     ops,
     operations: ops,

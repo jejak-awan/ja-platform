@@ -57,7 +57,7 @@ class SchoolOperationsRbacTest extends TestCase
     {
         $user = User::factory()->create();
         $role = Role::findOrCreate('test-curriculum-only', 'web');
-        $role->syncPermissions(['view academic', 'manage academic', 'view lms', 'manage question bank']);
+        $role->syncPermissions(['view academic', 'manage academic']);
         $user->assignRole('test-curriculum-only');
 
         $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/operations/attendance/overview')->assertForbidden();

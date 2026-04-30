@@ -5,9 +5,7 @@ namespace Modules\School\Http\Controllers\Api\Student;
 use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
 use Modules\School\Models\Student\Student;
-use Modules\School\Models\Finance\StudentBill;
 use Modules\School\Models\Academic\Attendance;
-use Modules\School\Models\Lms\ExamResult;
 use Modules\School\Models\Academic\Schedule;
 use Modules\School\Models\Academic\Grade;
 use Modules\School\Models\Operations\GraduationResult;
@@ -48,23 +46,13 @@ class StudentPortalController extends BaseController
         return $this->sendResponse([
             'student' => $student->only(['full_name', 'nisn', 'nis']),
             'summary' => [
-                'unpaid_bills' => StudentBill::where('student_id', $student->id)->where('status', '!=', 'paid')->count(),
                 'attendance_rate' => $this->calculateAttendanceRate((int)$student->id),
                 'gpa' => $this->calculateGPA((int)$student->id),
             ]
         ], 'Dashboard data retrieved.');
     }
 
-    public function bills(): \Illuminate\Http\JsonResponse
-    {
-        $student = $this->getStudent();
-        $bills = StudentBill::with(['feeType', 'transactions'])
-            ->where('student_id', $student->id)
-            ->latest()
-            ->get();
-            
-        return $this->sendResponse($bills, 'Student bills retrieved.');
-    }
+
 
     public function attendance(): \Illuminate\Http\JsonResponse
     {

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
 use Modules\School\Models\Admission\DocumentVerification;
 use Modules\School\Models\Student\Student;
-use Modules\School\Models\Finance\PaymentTransaction;
+
 
 class PublicVerificationController extends BaseController
 {
@@ -34,17 +34,6 @@ class PublicVerificationController extends BaseController
                     'Department' => $student->department?->name,
                     'Level' => $student->level->name,
                     'Status' => 'Authentic Document'
-                ];
-            }
-        } elseif ($verification->document_type === 'receipt') {
-            $transaction = PaymentTransaction::with(['school', 'bill.student'])->find($verification->document_id);
-            if ($transaction) {
-                $data['details'] = [
-                    'Transaction ID' => $transaction->reference_number,
-                    'Student' => $transaction->bill->student->full_name,
-                    'Amount' => 'Rp ' . number_format((float) ($transaction->amount ?? 0.0), 0, ',', '.'),
-                    'Date' => $transaction->payment_date->toDateString(),
-                    'Status' => 'Paid & Verified'
                 ];
             }
         }

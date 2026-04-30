@@ -82,14 +82,7 @@ return new class extends Migration
             $table->index('schedule_id', 'idx_journals_schedule_id');
         });
 
-        // LMS Enrollments indexes
-        if (Schema::hasTable('sch_lms_enrollments')) {
-            Schema::table('sch_lms_enrollments', function (Blueprint $table) {
-                $table->index('course_id', 'idx_enrollments_course_id');
-                $table->index('student_id', 'idx_enrollments_student_id');
-                $table->index(['course_id', 'student_id'], 'idx_enrollments_course_student');
-            });
-        }
+
 
         // Academic Years indexes
         Schema::table('sch_acad_years', function (Blueprint $table) {
@@ -97,13 +90,7 @@ return new class extends Migration
             $table->index('is_active', 'idx_years_is_active');
         });
 
-        // Exam Results indexes
-        if (Schema::hasTable('sch_lms_results')) {
-            Schema::table('sch_lms_results', function (Blueprint $table) {
-                $table->index('exam_id', 'idx_results_exam_id');
-                $table->index('student_id', 'idx_results_student_id');
-            });
-        }
+
     }
 
     /**
@@ -119,9 +106,9 @@ return new class extends Migration
             'sch_acad_attendances' => ['idx_attendances_student_id', 'idx_attendances_date', 'idx_attendances_status', 'idx_attendances_student_date'],
 
             'sch_acad_teaching_journals' => ['idx_journals_schedule_id'],
-            'sch_lms_enrollments' => ['idx_enrollments_course_id', 'idx_enrollments_student_id', 'idx_enrollments_course_student'],
+
             'sch_acad_years' => ['idx_years_school_id', 'idx_years_is_active'],
-            'sch_lms_results' => ['idx_results_exam_id', 'idx_results_student_id'],
+
         ];
 
         foreach ($indexDrops as $table => $indexes) {

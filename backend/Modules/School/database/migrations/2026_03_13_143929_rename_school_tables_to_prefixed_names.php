@@ -31,11 +31,7 @@ return new class extends Migration
         if (Schema::hasTable('enrollment_documents')) Schema::rename('enrollment_documents', 'sch_adm_documents');
         if (Schema::hasTable('document_verifications')) Schema::rename('document_verifications', 'sch_adm_verifications');
 
-        // LMS
-        if (Schema::hasTable('question_banks')) Schema::rename('question_banks', 'sch_lms_question_banks');
-        if (Schema::hasTable('questions')) Schema::rename('questions', 'sch_lms_questions');
-        if (Schema::hasTable('exams')) Schema::rename('exams', 'sch_lms_exams');
-        if (Schema::hasTable('exam_results')) Schema::rename('exam_results', 'sch_lms_results');
+
 
 
 
@@ -130,10 +126,7 @@ return new class extends Migration
 
 
 
-        Schema::rename('sch_lms_results', 'exam_results');
-        Schema::rename('sch_lms_exams', 'exams');
-        Schema::rename('sch_lms_questions', 'questions');
-        Schema::rename('sch_lms_question_banks', 'question_banks');
+
 
         Schema::rename('sch_adm_verifications', 'document_verifications');
         Schema::rename('sch_adm_documents', 'enrollment_documents');

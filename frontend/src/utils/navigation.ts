@@ -64,9 +64,6 @@ export const navigationGroups: Record<string, NavItem[]> = {
         {
             label: 'Akademik & Kurikulum', labelKey: 'common.navigation.sections.academic_kurikulum', icon: 'book-open', children: [
                 { name: 'academic.index', to: '/dash/academic', label: 'Manajemen Akademik', labelKey: 'common.navigation.menu.academicIndex', icon: 'graduation-cap', permission: 'manage academic' },
-                { name: 'lms.index', to: '/dash/lms', label: 'LMS (Materi & Tugas)', labelKey: 'common.navigation.menu.lmsIndex', icon: 'book-open', permission: 'view lms' },
-                { name: 'admin.lms.question-bank', to: '/dash/lms/question-bank', label: 'Bank Soal', labelKey: 'common.navigation.menu.adminQuestionBank', icon: 'database', permission: 'view lms' },
-                { name: 'admin.cbt.manage', to: '/dash/cbt/manage', label: 'CBT (Ujian Formal)', labelKey: 'common.navigation.menu.adminCbtManage', icon: 'monitor', permission: 'view lms' },
             ]
         },
         {

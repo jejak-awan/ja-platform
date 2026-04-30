@@ -18,9 +18,7 @@ class EventServiceProvider extends ServiceProvider
         \Modules\School\Events\StudentDeleted::class => [
             \Modules\School\Listeners\LogStudentActivity::class . '@handleStudentDeleted',
         ],
-        \Modules\School\Events\BillPaid::class => [
-            \Modules\School\Listeners\LogFinancialActivity::class,
-        ],
+
         \Modules\School\Events\AttendanceMarked::class => [
             \Modules\School\Listeners\LogAcademicActivity::class,
         ],

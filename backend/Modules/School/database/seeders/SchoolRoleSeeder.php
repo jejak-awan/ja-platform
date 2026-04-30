@@ -33,12 +33,7 @@ class SchoolRoleSeeder extends Seeder
             'manage schedule',
             'grade assignments',
             'input journal',
-            'manage question bank',
-            'view lms',
-            'create lms',
-            'edit lms',
-            'delete lms',
-            'manage lms',
+
             
             // Student & Attendance
             'view students',
@@ -66,8 +61,7 @@ class SchoolRoleSeeder extends Seeder
             'manage logistics',
             
             // Finance
-            'view school finance',
-            'manage school finance',
+
             
             // Community & OSIS
             'view osis',
@@ -99,7 +93,7 @@ class SchoolRoleSeeder extends Seeder
 
         // Specialized Admins
         $adminKurikulum = Role::findOrCreate('admin-kurikulum', 'web');
-        $adminKurikulum->syncPermissions(['view lms', 'view academic', 'manage academic', 'manage curriculum', 'manage schedule', 'manage question bank', 'view students', 'view staff']);
+        $adminKurikulum->syncPermissions(['view academic', 'manage academic', 'manage curriculum', 'manage schedule', 'view students', 'view staff']);
 
         $adminKesiswaan = Role::findOrCreate('admin-kesiswaan', 'web');
         $adminKesiswaan->syncPermissions(['view students', 'manage students', 'view attendance', 'manage attendance', 'view student affairs', 'manage student affairs', 'view osis', 'manage osis', 'view admission', 'manage admission']);
@@ -112,7 +106,7 @@ class SchoolRoleSeeder extends Seeder
 
         // Staff
         $guru = Role::findOrCreate('guru', 'web');
-        $guru->syncPermissions(['view lms', 'grade assignments', 'input journal', 'view students', 'view attendance', 'manage attendance', 'manage question bank']);
+        $guru->syncPermissions(['grade assignments', 'input journal', 'view students', 'view attendance', 'manage attendance']);
 
         $waliKelas = Role::findOrCreate('wali-kelas', 'web');
         $waliKelas->syncPermissions($guru->permissions); // Inherit guru
@@ -120,7 +114,7 @@ class SchoolRoleSeeder extends Seeder
 
         // Student & Community
         $siswa = Role::findOrCreate('siswa', 'web');
-        $siswa->syncPermissions(['view lms', 'view attendance']);
+        $siswa->syncPermissions(['view attendance']);
 
         $orangTua = Role::findOrCreate('orang-tua', 'web');
         $orangTua->syncPermissions(['view students', 'view attendance']);

@@ -5,7 +5,7 @@ use Modules\School\Http\Controllers\Api\Academic\AcademicController;
 use Modules\School\Http\Controllers\Api\Academic\GradeController;
 use Modules\School\Http\Controllers\Api\Admission\AdmissionController;
 use Modules\School\Http\Controllers\Api\Logistics\FacilityController;
-use Modules\School\Http\Controllers\Api\Finance\FinanceController;
+
 use Modules\School\Http\Controllers\Api\Institution\SchoolController;
 use Modules\School\Http\Controllers\Api\Institution\SchoolLevelController;
 use Modules\School\Http\Controllers\Api\HR\StaffController;
@@ -22,8 +22,7 @@ use Modules\School\Http\Controllers\Api\Operations\AuditLogController;
 use Modules\School\Http\Controllers\Api\Operations\AnalyticsController;
 use Modules\School\Http\Controllers\Api\Operations\ReportController;
 use Modules\School\Http\Controllers\Api\Operations\AdminExtensionController;
-use Modules\School\Http\Controllers\Api\Lms\LmsController;
-use Modules\School\Http\Controllers\Api\Lms\CbtController;
+
 use Modules\School\Http\Controllers\Api\Osis\OsisController;
 use Modules\School\Http\Controllers\Api\Teacher\TeacherPortalController;
 use Modules\School\Http\Controllers\Api\Operations\GraduationController;
@@ -107,57 +106,7 @@ Route::prefix('v1')->group(function () {
             });
         });
 
-        // LMS & Admin Extensions
-        Route::middleware('permission:view lms|manage lms|create lms|edit lms|delete lms|manage question bank')->group(function () {
-            Route::prefix('lms')->group(function () {
-                Route::get('overview', [LmsController::class, 'overview']);
 
-                Route::get('banks', [LmsController::class, 'questionBanks']);
-                Route::post('banks', [LmsController::class, 'storeQuestionBank']);
-                Route::put('banks/{id}', [LmsController::class, 'updateQuestionBank']);
-                Route::delete('banks/{id}', [LmsController::class, 'destroyQuestionBank']);
-
-                Route::get('exams', [LmsController::class, 'exams']);
-                Route::post('exams', [LmsController::class, 'storeExam']);
-                Route::put('exams/{id}', [LmsController::class, 'updateExam']);
-                Route::delete('exams/{id}', [LmsController::class, 'destroyExam']);
-                Route::get('exams/{id}/questions', [LmsController::class, 'examQuestions']);
-                Route::post('exams/{id}/questions/sync', [LmsController::class, 'syncExamQuestions']);
-
-                Route::get('results', [LmsController::class, 'examResults']);
-                Route::post('results', [LmsController::class, 'storeExamResult']);
-                Route::put('results/{id}', [LmsController::class, 'updateExamResult']);
-                Route::delete('results/{id}', [LmsController::class, 'destroyExamResult']);
-
-                Route::get('banks/{bankId}/questions', [LmsController::class, 'questions']);
-                Route::post('banks/{bankId}/questions', [LmsController::class, 'storeQuestion']);
-                Route::post('questions/{id}', [LmsController::class, 'updateQuestion']);
-                Route::delete('questions/{id}', [LmsController::class, 'destroyQuestion']);
-
-                Route::get('courses', [LmsController::class, 'courses']);
-                Route::post('courses', [LmsController::class, 'storeCourse']);
-                Route::get('courses/{id}', [LmsController::class, 'showCourse']);
-                Route::put('courses/{id}', [LmsController::class, 'updateCourse']);
-                Route::delete('courses/{id}', [LmsController::class, 'destroyCourse']);
-
-                // Teacher Course Management
-                Route::get('manage/stats', [LmsController::class, 'teacherStats']);
-                Route::get('manage/courses', [LmsController::class, 'teacherCourses']);
-                Route::get('manage/courses/{id}/monitoring', [LmsController::class, 'courseMonitoring']);
-            });
-        });
-
-        // CBT (Computer Based Testing)
-        Route::middleware('permission:view lms|manage lms')->group(function () {
-            Route::prefix('cbt')->group(function () {
-                Route::get('exams', [CbtController::class, 'exams']);
-                Route::get('sessions', [CbtController::class, 'indexSessions']);
-                Route::post('sessions', [CbtController::class, 'storeSession']);
-                Route::put('sessions/{id}', [CbtController::class, 'updateSession']);
-                Route::delete('sessions/{id}', [CbtController::class, 'destroySession']);
-                Route::post('sessions/{id}/token', [CbtController::class, 'generateToken']);
-            });
-        });
 
         // Operations (split middleware: attendance vs student affairs vs visitors)
         Route::prefix('operations')->group(function () {
@@ -300,7 +249,7 @@ Route::prefix('v1')->group(function () {
         });
 
         // Reports & Export
-        Route::middleware('permission:view students|manage students|view school finance|manage school finance')->group(function () {
+        Route::middleware('permission:view students|manage students')->group(function () {
             Route::prefix('reports')->group(function () {
                 Route::get('students/{id}/pdf', [ReportController::class, 'studentProfile']);
                 Route::get('payments/{id}/pdf', [ReportController::class, 'paymentReceipt']);
@@ -385,7 +334,7 @@ Route::prefix('v1')->group(function () {
         });
 
         // Analytics
-        Route::middleware('permission:view analytics|view schools|manage schools|view school finance|manage school finance')->group(function () {
+        Route::middleware('permission:view analytics|view schools|manage schools')->group(function () {
             Route::prefix('analytics')->group(function () {
                 Route::get('summary', [AnalyticsController::class, 'status']);
                 Route::get('summary-full', [AnalyticsController::class, 'executiveSummary']);
@@ -408,13 +357,6 @@ Route::prefix('v1')->group(function () {
         Route::get('graduation/certificate', [StudentPortalController::class, 'downloadCertificate']);
         Route::get('schedule', [StudentPortalController::class, 'schedule']);
 
-        // LMS Student Routes
-        Route::prefix('lms')->group(function () {
-            Route::get('courses', [LmsController::class, 'courses']);
-            Route::get('courses/{id}', [LmsController::class, 'showCourse']);
-            Route::post('courses/{courseId}/enroll', [LmsController::class, 'enroll']);
-            Route::get('my-enrollment/{courseId}', [LmsController::class, 'myEnrollment']);
-            Route::post('enrollments/{enrollmentId}/lessons/{lessonId}/complete', [LmsController::class, 'completeLesson']);
-        });
+
     });
 });

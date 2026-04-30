@@ -12,8 +12,6 @@ use Modules\School\Models\Student\TracerStudy;
 use Modules\School\Models\Student\Student;
 use Modules\School\Models\HR\Staff;
 use Modules\School\Models\Admission\Enrollment;
-use Modules\School\Models\Finance\PaymentTransaction;
-use Modules\School\Models\Finance\Expense;
 use Modules\School\Models\HR\Payroll;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -100,7 +98,7 @@ class OperationsService
     // --- Analytics ---
 
     /**
-     * @return array{students: array{total: int, active: int, graduated: int}, finance: array{total_income: float, total_expenses: float, total_payroll: float}, admission: array{total_applicants: int, admitted: int, conversion_rate: float}, staff: array{total: int, attendance_today: int}}
+     * @return array{students: array{total: int, active: int, graduated: int}, admission: array{total_applicants: int, admitted: int, conversion_rate: float}, staff: array{total: int, attendance_today: int}}
      */
     public function getExecutiveSummary(int $schoolId): array
     {
@@ -109,11 +107,6 @@ class OperationsService
                 'total' => (int) Student::where('school_id', $schoolId)->count(),
                 'active' => (int) Student::where('school_id', $schoolId)->where('status', 'active')->count(),
                 'graduated' => (int) Student::where('school_id', $schoolId)->where('status', 'graduated')->count(),
-            ],
-            'finance' => [
-                'total_income' => (float) PaymentTransaction::whereHas('bill', fn($q) => $q->where('school_id', $schoolId))->sum('amount'),
-                'total_expenses' => (float) Expense::where('school_id', $schoolId)->sum('amount'),
-                'total_payroll' => (float) Payroll::where('school_id', $schoolId)->sum('net_salary'),
             ],
             'admission' => [
                 'total_applicants' => (int) Enrollment::where('school_id', $schoolId)->count(),
@@ -129,32 +122,7 @@ class OperationsService
         ];
     }
 
-    /**
-     * @return array{income: Collection<int, \stdClass>, expenses: Collection<int, \stdClass>}
-     */
-    public function getFinancialChartData(int $schoolId, int $year): array
-    {
-        /** @var Collection<int, \stdClass> $income */
-        $income = DB::table('sch_fin_transactions as pt')
-            ->join('sch_fin_bills as sb', 'pt.student_bill_id', '=', 'sb.id')
-            ->where('sb.school_id', $schoolId)
-            ->whereYear('pt.payment_date', $year)
-            ->select(DB::raw('EXTRACT(MONTH FROM pt.payment_date) as month'), DB::raw('SUM(pt.amount) as total'))
-            ->groupBy(DB::raw('EXTRACT(MONTH FROM pt.payment_date)'))
-            ->get();
 
-        /** @var Collection<int, \stdClass> $expenses */
-        $expenses = Expense::where('school_id', $schoolId)
-            ->whereYear('date', $year)
-            ->select(DB::raw('EXTRACT(MONTH FROM date) as month'), DB::raw('SUM(amount) as total'))
-            ->groupBy(DB::raw('EXTRACT(MONTH FROM date)'))
-            ->get();
-
-        return [
-            'income' => $income,
-            'expenses' => $expenses
-        ];
-    }
 
     // --- Library ---
 

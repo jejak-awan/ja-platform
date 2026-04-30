@@ -181,21 +181,7 @@ class School extends Model
         return $this->hasMany(\Modules\School\Models\Academic\StudyGroup::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Lms\QuestionBank, $this>
-     */
-    public function questionBanks(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(\Modules\School\Models\Lms\QuestionBank::class);
-    }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Lms\Exam, $this>
-     */
-    public function exams(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(\Modules\School\Models\Lms\Exam::class);
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Operations\LibraryBook, $this>

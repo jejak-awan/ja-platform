@@ -13,9 +13,8 @@ use Modules\School\Models\Institution\SchoolLevel;
 use Modules\School\Models\Academic\Department;
 use Modules\School\Models\Academic\StudyGroup;
 use Modules\School\Models\Academic\Attendance;
-use Modules\School\Models\Lms\ExamResult;
 use Modules\School\Models\Operations\UksVisit;
-use Modules\School\Models\Finance\StudentBill;
+
 
 /**
  * @property int $id
@@ -68,9 +67,7 @@ use Modules\School\Models\Finance\StudentBill;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Attendance> $attendances
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Violation> $violations
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Achievement> $achievements
- * @property-read \Illuminate\Database\Eloquent\Collection<int, ExamResult> $examResults
  * @property-read \Illuminate\Database\Eloquent\Collection<int, UksVisit> $uksVisits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, StudentBill> $bills
  * @property-read \Modules\Core\Models\User|null $user
  */
 class Student extends Model
@@ -183,13 +180,7 @@ class Student extends Model
         return $this->hasMany(Achievement::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<ExamResult, $this>
-     */
-    public function examResults(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(ExamResult::class);
-    }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany<UksVisit, $this>
@@ -199,13 +190,7 @@ class Student extends Model
         return $this->morphMany(UksVisit::class, 'patient');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<StudentBill, $this>
-     */
-    public function bills(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(StudentBill::class);
-    }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\Core\Models\User, $this>

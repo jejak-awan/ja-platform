@@ -37,13 +37,12 @@ class SchoolServiceProvider extends ServiceProvider
     protected function registerPolicies(): void
     {
         $academicPolicy = \Modules\School\Policies\AcademicPolicy::class;
-        $lmsCatalogPolicy = \Modules\School\Policies\LmsCatalogPolicy::class;
+
         Gate::policy(\Modules\School\Models\Institution\School::class, \Modules\School\Policies\SchoolPolicy::class);
         Gate::policy(\Modules\School\Models\Student\Student::class, \Modules\School\Policies\StudentPolicy::class);
         Gate::policy(\Modules\School\Models\HR\Staff::class, \Modules\School\Policies\StaffPolicy::class);
 
-        Gate::policy(\Modules\School\Models\Lms\Course::class, \Modules\School\Policies\LmsPolicy::class);
-        Gate::policy(\Modules\School\Models\Lms\Enrollment::class, \Modules\School\Policies\LmsEnrollmentPolicy::class);
+
 
         Gate::policy(\Modules\School\Models\Academic\AcademicYear::class, $academicPolicy);
         Gate::policy(\Modules\School\Models\Academic\Semester::class, $academicPolicy);
@@ -53,10 +52,7 @@ class SchoolServiceProvider extends ServiceProvider
         Gate::policy(\Modules\School\Models\Academic\TeachingJournal::class, $academicPolicy);
         Gate::policy(\Modules\School\Models\Academic\Department::class, $academicPolicy);
 
-        Gate::policy(\Modules\School\Models\Lms\QuestionBank::class, $lmsCatalogPolicy);
-        Gate::policy(\Modules\School\Models\Lms\Exam::class, $lmsCatalogPolicy);
-        Gate::policy(\Modules\School\Models\Lms\ExamResult::class, $lmsCatalogPolicy);
-        Gate::policy(\Modules\School\Models\Lms\Question::class, $lmsCatalogPolicy);
+
 
         Gate::policy(\Modules\School\Models\Academic\Attendance::class, \Modules\School\Policies\OperationsAttendancePolicy::class);
         Gate::policy(\Modules\School\Models\Student\Violation::class, \Modules\School\Policies\OperationsStudentAffairsPolicy::class);

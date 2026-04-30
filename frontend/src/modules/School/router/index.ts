@@ -122,41 +122,7 @@ const schoolRoutes: RouteRecordRaw[] = [
         component: () => import('@/modules/School/views/admin/settings/DocumentTemplates.vue'),
         meta: { permission: 'manage settings' },
     },
-    {
-        path: 'lms',
-        name: 'lms.index',
-        component: () => import('@/modules/School/views/admin/lms/management/CourseManager.vue'),
-        meta: { permission: 'view lms' },
-    },
-    {
-        path: 'lms/question-bank',
-        name: 'admin.lms.question-bank',
-        component: () => import('@/modules/School/views/admin/lms/QuestionBankManager.vue'),
-        meta: { permission: 'view lms' },
-    },
-    {
-        path: 'lms/manage',
-        name: 'admin.lms.manage',
-        redirect: { name: 'lms.index' }
-    },
-    {
-        path: 'lms/manage/editor/:id?',
-        name: 'admin.lms.manage.editor',
-        component: () => import('@/modules/School/views/admin/lms/management/CourseEditor.vue'),
-        meta: { permission: 'view lms' },
-    },
-    {
-        path: 'lms/manage/:id/monitoring',
-        name: 'admin.lms.manage.monitoring',
-        component: () => import('@/modules/School/views/admin/lms/management/EnrollmentMonitor.vue'),
-        meta: { permission: 'view lms' },
-    },
-    {
-        path: 'cbt/manage',
-        name: 'admin.cbt.manage',
-        component: () => import('@/modules/School/views/admin/cbt/SessionManager.vue'),
-        meta: { permission: 'view lms' },
-    },
+    // (Removed Legacy LMS and CBT Routes)
     {
         path: 'extensions',
         name: 'extensions.index',
@@ -233,24 +199,7 @@ const schoolRoutes: RouteRecordRaw[] = [
         component: () => import('@/modules/School/views/student/Schedule.vue'),
         meta: { title: 'Jadwal Mingguan', requiresAuth: true }
       },
-      {
-        path: 'student/lms',
-        name: 'student.lms.index',
-        component: () => import('@/modules/School/views/student/Lms/CourseIndex.vue'),
-        meta: { title: 'Learning Center', requiresAuth: true }
-      },
-      {
-        path: 'student/lms/:id',
-        name: 'student.lms.course',
-        component: () => import('@/modules/School/views/student/Lms/CourseDetail.vue'),
-        meta: { title: 'Course Details', requiresAuth: true }
-      },
-      {
-        path: 'student/lms/:courseId/lessons/:lessonId',
-        name: 'student.lms.player',
-        component: () => import('@/modules/School/views/student/Lms/LessonPlayer.vue'),
-        meta: { title: 'Lesson Player', requiresAuth: true, layout: 'empty' }
-      },
+      // (Removed Legacy Student LMS Routes)
       {
         path: 'student/graduation',
         name: 'student.graduation',
