@@ -27,6 +27,8 @@ use Modules\School\Http\Controllers\Api\Osis\OsisController;
 use Modules\School\Http\Controllers\Api\Teacher\TeacherPortalController;
 use Modules\School\Http\Controllers\Api\Operations\GraduationController;
 use Modules\School\Http\Controllers\Api\Operations\GraduationSettingsController;
+use Modules\School\Http\Controllers\Api\Lms\AdminLmsController;
+use Modules\School\Http\Controllers\Api\Lms\StudentLmsController;
 
 Route::prefix('v1')->group(function () {
     Route::prefix('admin')->middleware([
@@ -227,6 +229,16 @@ Route::prefix('v1')->group(function () {
                 Route::get('recent-journals', [TeacherPortalController::class, 'recentJournals']);
             });
         });
+        // LMS Management
+        Route::middleware('permission:manage lms|view lms')->group(function () {
+            Route::prefix('lms')->group(function () {
+                Route::get('courses', [AdminLmsController::class, 'index']);
+                Route::post('courses', [AdminLmsController::class, 'storeCourse']);
+                Route::get('courses/{id}', [AdminLmsController::class, 'showCourse']);
+                Route::post('courses/{courseId}/lessons', [AdminLmsController::class, 'storeLesson']);
+                Route::post('lessons/{lessonId}/topics', [AdminLmsController::class, 'storeTopic']);
+            });
+        });
 
         // Advanced HR (Shifts & Leave)
         Route::middleware('permission:view staff|manage staff|manage payroll')->group(function () {
@@ -252,7 +264,7 @@ Route::prefix('v1')->group(function () {
         Route::middleware('permission:view students|manage students')->group(function () {
             Route::prefix('reports')->group(function () {
                 Route::get('students/{id}/pdf', [ReportController::class, 'studentProfile']);
-                Route::get('payments/{id}/pdf', [ReportController::class, 'paymentReceipt']);
+
                 Route::get('students/{id}/id-card', [ReportController::class, 'studentIdCard']);
                 Route::get('students/{id}/skl', [ReportController::class, 'graduationCertificate']);
             });
@@ -338,7 +350,7 @@ Route::prefix('v1')->group(function () {
             Route::prefix('analytics')->group(function () {
                 Route::get('summary', [AnalyticsController::class, 'status']);
                 Route::get('summary-full', [AnalyticsController::class, 'executiveSummary']);
-                Route::get('financial-charts', [AnalyticsController::class, 'financialCharts']);
+
             });
         });
     });
@@ -357,6 +369,13 @@ Route::prefix('v1')->group(function () {
         Route::get('graduation/certificate', [StudentPortalController::class, 'downloadCertificate']);
         Route::get('schedule', [StudentPortalController::class, 'schedule']);
 
+        // LMS Learning
+        Route::prefix('lms')->group(function () {
+            Route::get('catalog', [StudentLmsController::class, 'catalog']);
+            Route::get('my-courses', [StudentLmsController::class, 'myCourses']);
+            Route::get('courses/{courseId}/learn', [StudentLmsController::class, 'learn']);
+            Route::post('topics/{topicId}/complete', [StudentLmsController::class, 'completeTopic']);
+        });
 
     });
 });

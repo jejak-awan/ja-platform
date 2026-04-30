@@ -122,7 +122,20 @@ const schoolRoutes: RouteRecordRaw[] = [
         component: () => import('@/modules/School/views/admin/settings/DocumentTemplates.vue'),
         meta: { permission: 'manage settings' },
     },
-    // (Removed Legacy LMS and CBT Routes)
+    // LMS Management
+    {
+        path: 'lms/courses',
+        name: 'admin-lms-courses',
+        component: () => import('@/modules/School/views/admin/lms/CourseManagement.vue'),
+        meta: { title: 'Manajemen Kursus', permission: 'manage lms' },
+    },
+    {
+        path: 'lms/courses/:id',
+        name: 'admin-lms-course-detail',
+        component: () => import('@/modules/School/views/admin/lms/CourseDetail.vue'),
+        meta: { title: 'Detail Kursus', permission: 'manage lms' },
+    },
+
     {
         path: 'extensions',
         name: 'extensions.index',
@@ -199,7 +212,26 @@ const schoolRoutes: RouteRecordRaw[] = [
         component: () => import('@/modules/School/views/student/Schedule.vue'),
         meta: { title: 'Jadwal Mingguan', requiresAuth: true }
       },
-      // (Removed Legacy Student LMS Routes)
+      // Student LMS Learning
+      {
+        path: 'student/lms/catalog',
+        name: 'student-lms-catalog',
+        component: () => import('@/modules/School/views/student/Lms/CourseCatalog.vue'),
+        meta: { title: 'Katalog Kursus', requiresAuth: true }
+      },
+      {
+        path: 'student/lms/my-courses',
+        name: 'student-lms-my-courses',
+        component: () => import('@/modules/School/views/student/Lms/MyCourses.vue'),
+        meta: { title: 'Kursus Saya', requiresAuth: true }
+      },
+      {
+        path: 'student/lms/courses/:id/learn',
+        name: 'student-lms-learn',
+        component: () => import('@/modules/School/views/student/Lms/LearningPortal.vue'),
+        meta: { title: 'Belajar', requiresAuth: true }
+      },
+
       {
         path: 'student/graduation',
         name: 'student.graduation',
