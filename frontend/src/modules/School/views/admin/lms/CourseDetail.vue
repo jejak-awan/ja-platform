@@ -101,9 +101,9 @@
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Tipe Materi</label>
-            <div class="grid grid-cols-3 gap-3">
+            <div class="grid grid-cols-4 gap-3">
               <button 
-                v-for="type in ['richtext', 'video', 'pdf']" 
+                v-for="type in ['richtext', 'video', 'pdf', 'quiz']" 
                 :key="type"
                 type="button"
                 @click="topicForm.type = type"
@@ -125,6 +125,22 @@
           <div v-if="topicForm.type === 'video'">
             <label class="block text-xs font-bold text-slate-400 uppercase mb-2">URL Video (YouTube/Direct)</label>
             <input v-model="topicForm.content.value" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" placeholder="https://youtube.com/...">
+          </div>
+
+          <div v-if="topicForm.type === 'pdf'">
+            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">URL File PDF</label>
+            <input v-model="topicForm.content.value" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" placeholder="https://link-ke-file.pdf">
+          </div>
+
+          <div v-if="topicForm.type === 'quiz'" class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Skor Kelulusan (0-100)</label>
+              <input v-model.number="topicForm.content.pass_score" type="number" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" placeholder="70">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Batas Waktu (Menit, 0 = No Limit)</label>
+              <input v-model.number="topicForm.content.time_limit" type="number" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" placeholder="0">
+            </div>
           </div>
 
           <div class="flex gap-4 mt-8 pt-4 border-t border-slate-100 dark:border-slate-800">
@@ -160,7 +176,11 @@ const lessonForm = ref({ title: '', order: 0 });
 const topicForm = ref({
   title: '',
   type: 'richtext',
-  content: { value: '' },
+  content: { 
+    value: '',
+    pass_score: 70,
+    time_limit: 0
+  },
   order: 0
 });
 
@@ -202,7 +222,12 @@ const createTopic = async () => {
     await LmsService.createTopic(activeLessonId.value, topicForm.value);
     await fetchData();
     showAddTopicModal.value = false;
-    topicForm.value = { title: '', type: 'richtext', content: { value: '' }, order: 0 };
+    topicForm.value = { 
+      title: '', 
+      type: 'richtext', 
+      content: { value: '', pass_score: 70, time_limit: 0 }, 
+      order: 0 
+    };
   } catch (err) {
     console.error(err);
   } finally {

@@ -97,8 +97,11 @@ class AdminLmsController extends BaseController
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'type' => 'required|in:richtext,video,pdf',
+            'type' => 'required|in:richtext,video,pdf,quiz',
             'content' => 'required|array',
+            'content.value' => 'required_unless:type,quiz|string',
+            'content.pass_score' => 'required_if:type,quiz|integer|min:0|max:100',
+            'content.time_limit' => 'required_if:type,quiz|integer|min:0',
             'order' => 'integer|min:0',
         ]);
 
