@@ -13,6 +13,11 @@ use Modules\School\Models\Lms\TopicContent\RichText;
 use Modules\School\Models\Lms\TopicContent\Video;
 use Modules\School\Models\Lms\TopicContent\Pdf;
 
+use Modules\School\Models\Lms\TopicContent\Quiz;
+use Modules\School\Models\Lms\QuizQuestion;
+use Modules\School\Models\Lms\QuizOption;
+use Modules\School\Models\Lms\QuizAttempt;
+
 class LmsService
 {
     // --- Course Management ---
@@ -64,7 +69,7 @@ class LmsService
      * Create a topic with specific content.
      * 
      * @param array $topicData Basic topic info (lesson_id, title, order, etc.)
-     * @param string $contentType 'richtext', 'video', 'pdf'
+     * @param string $contentType 'richtext', 'video', 'pdf', 'quiz'
      * @param array $contentData Specific data for the content type
      */
     public function createTopic(array $topicData, string $contentType, array $contentData): Topic
@@ -73,6 +78,7 @@ class LmsService
             'richtext' => RichText::create($contentData),
             'video' => Video::create($contentData),
             'pdf' => Pdf::create($contentData),
+            'quiz' => Quiz::create($contentData),
             default => throw new \InvalidArgumentException("Unsupported content type: $contentType"),
         };
 
@@ -82,6 +88,82 @@ class LmsService
         /** @var Topic $topic */
         $topic = Topic::create($topicData);
         return $topic;
+    }
+
+    // --- Quiz Management ---
+
+    public function addQuestionToQuiz(int $quizId, array $questionData, array $options = []): QuizQuestion
+    {
+        $questionData['quiz_id'] = $quizId;
+        /** @var QuizQuestion $question */
+        $question = QuizQuestion::create($questionData);
+
+        foreach ($options as $option) {
+            QuizOption::create([
+                'question_id' => $question->id,
+                'value' => $option['value'],
+                'is_correct' => $option['is_correct'] ?? false,
+            ]);
+        }
+
+        return $question;
+    }
+
+    public function startQuizAttempt(int $quizId, int $studentId): QuizAttempt
+    {
+        /** @var QuizAttempt $attempt */
+        $attempt = QuizAttempt::create([
+            'quiz_id' => $quizId,
+            'student_id' => $studentId,
+            'started_at' => now(),
+        ]);
+        return $attempt;
+    }
+
+    public function submitQuizAttempt(QuizAttempt $attempt, array $answers): QuizAttempt
+    {
+        // Simple scoring logic for Multiple Choice
+        $score = 0;
+        $totalPossible = 0;
+        $quiz = $attempt->quiz;
+
+        foreach ($quiz->questions as $question) {
+            $totalPossible += $question->score;
+            $studentAnswer = $answers[$question->id] ?? null;
+
+            if ($question->type === 'multiple_choice' || $question->type === 'true_false') {
+                $correctOption = $question->options()->where('is_correct', true)->first();
+                if ($correctOption && (string)$correctOption->id === (string)$studentAnswer) {
+                    $score += $question->score;
+                }
+            }
+            // Add short_answer logic if needed
+        }
+
+        // Calculate percentage
+        $percentage = $totalPossible > 0 ? ($score / $totalPossible) * 100 : 0;
+
+        $attempt->update([
+            'score' => round($percentage),
+            'finished_at' => now(),
+            'answers' => $answers,
+        ]);
+
+        // Auto-mark topic as completed if passed
+        if ($percentage >= $quiz->pass_score) {
+            $topic = Topic::where('topicable_type', Quiz::class)
+                ->where('topicable_id', $quiz->id)
+                ->first();
+            
+            if ($topic) {
+                $this->markTopicAsCompleted($topic->id, $attempt->student_id, [
+                    'attempt_id' => $attempt->id,
+                    'score' => $attempt->score
+                ]);
+            }
+        }
+
+        return $attempt;
     }
 
     // --- Enrollment & Progress ---
@@ -118,7 +200,11 @@ class LmsService
      */
     public function getCourseProgram(int $courseId): Collection
     {
-        return Lesson::with(['topics.topicable'])
+        return Lesson::with(['topics.topicable' => function ($morph) {
+            $morph->morphWith([
+                \Modules\School\Models\Lms\TopicContent\Quiz::class => ['questions.options'],
+            ]);
+        }])
             ->where('course_id', $courseId)
             ->whereNull('parent_id')
             ->orderBy('order')

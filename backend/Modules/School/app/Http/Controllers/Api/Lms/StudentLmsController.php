@@ -55,6 +55,17 @@ class StudentLmsController extends BaseController
 
         $program = $this->service->getCourseProgram($courseId);
         
+        // Hide correct answers from student
+        $program->each(function($lesson) {
+            $lesson->topics->each(function($topic) {
+                if ($topic->topicable instanceof \Modules\School\Models\Lms\TopicContent\Quiz) {
+                    $topic->topicable->questions->each(function($question) {
+                        $question->options->makeHidden(['is_correct']);
+                    });
+                }
+            });
+        });
+
         // Also get student progress for these topics
         $progress = \Modules\School\Models\Lms\TopicProgress::where('student_id', $student->id)
             ->whereIn('topic_id', Topic::whereHas('lesson', fn($q) => $q->where('course_id', $courseId))->pluck('id'))
@@ -74,5 +85,29 @@ class StudentLmsController extends BaseController
 
         $progress = $this->service->markTopicAsCompleted($topicId, (int)$student->id, $request->input('metadata', []));
         return $this->sendResponse($progress, 'Topic marked as completed.');
+    }
+
+    public function startQuiz(int $quizId): \Illuminate\Http\JsonResponse
+    {
+        /** @var Student|null $student */
+        $student = Student::where('user_id', auth()->id())->first();
+        if (!$student) return $this->sendError('Student not found.', [], 404);
+
+        $attempt = $this->service->startQuizAttempt($quizId, (int)$student->id);
+        return $this->sendResponse($attempt, 'Quiz attempt started.');
+    }
+
+    public function submitQuiz(Request $request, int $attemptId): \Illuminate\Http\JsonResponse
+    {
+        $attempt = \Modules\School\Models\Lms\QuizAttempt::findOrFail($attemptId);
+        
+        // Ensure student owns the attempt
+        $student = Student::where('user_id', auth()->id())->first();
+        if (!$student || $attempt->student_id !== $student->id) {
+            return $this->sendError('Unauthorized.', [], 403);
+        }
+
+        $attempt = $this->service->submitQuizAttempt($attempt, $request->input('answers', []));
+        return $this->sendResponse($attempt, 'Quiz submitted.');
     }
 }

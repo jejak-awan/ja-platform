@@ -45,7 +45,12 @@ class AdminLmsController extends BaseController
 
     public function showCourse(int $id): \Illuminate\Http\JsonResponse
     {
-        $course = Course::with(['lessons.topics.topicable'])->findOrFail($id);
+        $course = Course::with(['lessons.topics.topicable' => function ($morph) {
+            $morph->morphWith([
+                \Modules\School\Models\Lms\TopicContent\Quiz::class => ['questions.options'],
+            ]);
+        }])->findOrFail($id);
+        
         $this->authorize('view', $course);
         return $this->sendResponse($course, 'Course details retrieved.');
     }
@@ -89,5 +94,21 @@ class AdminLmsController extends BaseController
         );
 
         return $this->sendResponse($topic, 'Topic created successfully.', 201);
+    }
+
+    public function storeQuestion(Request $request, int $quizId): \Illuminate\Http\JsonResponse
+    {
+        $validated = $request->validate([
+            'type' => 'required|in:multiple_choice,true_false,short_answer',
+            'value' => 'required|string',
+            'score' => 'integer|min:1',
+            'order' => 'integer|min:0',
+            'options' => 'required_if:type,multiple_choice,true_false|array',
+            'options.*.value' => 'required|string',
+            'options.*.is_correct' => 'boolean',
+        ]);
+
+        $question = $this->service->addQuestionToQuiz($quizId, $validated, $validated['options'] ?? []);
+        return $this->sendResponse($question, 'Question added to quiz.', 201);
     }
 }

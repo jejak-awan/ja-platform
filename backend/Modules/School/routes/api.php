@@ -237,6 +237,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('courses/{id}', [AdminLmsController::class, 'showCourse']);
                 Route::post('courses/{courseId}/lessons', [AdminLmsController::class, 'storeLesson']);
                 Route::post('lessons/{lessonId}/topics', [AdminLmsController::class, 'storeTopic']);
+                Route::post('quizzes/{quizId}/questions', [AdminLmsController::class, 'storeQuestion']);
             });
         });
 
@@ -375,6 +376,8 @@ Route::prefix('v1')->group(function () {
             Route::get('my-courses', [StudentLmsController::class, 'myCourses']);
             Route::get('courses/{courseId}/learn', [StudentLmsController::class, 'learn']);
             Route::post('topics/{topicId}/complete', [StudentLmsController::class, 'completeTopic']);
+            Route::post('quizzes/{quizId}/start', [StudentLmsController::class, 'startQuiz']);
+            Route::post('attempts/{attemptId}/submit', [StudentLmsController::class, 'submitQuiz']);
         });
 
     });

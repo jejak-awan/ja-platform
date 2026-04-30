@@ -49,6 +49,10 @@ const LmsService = {
     return api.post(`/admin/lms/lessons/${lessonId}/topics`, data);
   },
 
+  addQuestion(quizId: number, data: any) {
+    return api.post(`/admin/lms/quizzes/${quizId}/questions`, data);
+  },
+
   // Student Endpoints
   getCatalog() {
     return api.get('/student/lms/catalog');
@@ -64,6 +68,14 @@ const LmsService = {
 
   completeTopic(topicId: number, metadata: any = {}) {
     return api.post(`/student/lms/topics/${topicId}/complete`, { metadata });
+  },
+
+  startQuiz(quizId: number) {
+    return api.post(`/student/lms/quizzes/${quizId}/start`);
+  },
+
+  submitQuiz(attemptId: number, answers: any) {
+    return api.post(`/student/lms/attempts/${attemptId}/submit`, { answers });
   }
 };
 

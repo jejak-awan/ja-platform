@@ -90,6 +90,13 @@
             </video>
           </div>
 
+          <div v-else-if="activeTopic.topicable_type.includes('Quiz')">
+            <QuizRenderer 
+              :quiz="activeTopic.topicable" 
+              @completed="fetchData"
+            />
+          </div>
+
           <div v-else class="p-10 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 text-center">
             <p>Konten tipe ini belum didukung penampilannya.</p>
           </div>
@@ -103,6 +110,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import LmsService from '../../../services/LmsService';
+import QuizRenderer from '../../../components/lms/QuizRenderer.vue';
 
 const route = useRoute();
 const courseId = Number(route.params.id);
