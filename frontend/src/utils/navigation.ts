@@ -64,6 +64,8 @@ export const navigationGroups: Record<string, NavItem[]> = {
         {
             label: 'Akademik & Kurikulum', labelKey: 'common.navigation.sections.academic_kurikulum', icon: 'book-open', children: [
                 { name: 'academic.index', to: '/dash/academic', label: 'Manajemen Akademik', labelKey: 'common.navigation.menu.academicIndex', icon: 'graduation-cap', permission: 'manage academic' },
+                { name: 'admin-lms-courses', to: '/dash/lms/courses', label: 'E-Learning (LMS)', icon: 'laptop-minimal', permission: 'manage lms' },
+
             ]
         },
         {
@@ -102,7 +104,10 @@ export const navigationGroups: Record<string, NavItem[]> = {
         {
             label: 'Portal Siswa', labelKey: 'common.navigation.sections.student_portal', icon: 'user', role: 'siswa', children: [
                 { name: 'student.dashboard', to: '/dash/student/dashboard', label: 'Dashboard', labelKey: 'common.navigation.menu.dashboard', icon: 'layout-dashboard' },
+                { name: 'student-lms-my-courses', to: '/dash/student/lms/my-courses', label: 'E-Learning (LMS)', icon: 'graduation-cap' },
+                { name: 'student-lms-catalog', to: '/dash/student/lms/catalog', label: 'Katalog Kursus', icon: 'book-marked' },
                 { name: 'student.graduation', to: '/dash/student/graduation', label: 'Kelulusan', labelKey: 'common.navigation.menu.graduation', icon: 'graduation-cap' },
+
             ]
         },
     ],
