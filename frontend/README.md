@@ -11,6 +11,20 @@ This is the frontend component of **JA-Platform**.
 - **State Management**: Pinia
 - **Animation**: Native CSS/Vue transitions
 
+## 🎓 LMS Features
+
+The frontend implements a premium learning experience with the following components:
+
+### 📱 Student Experience
+- **Course Catalog**: Beautifully designed course listing and enrollment.
+- **Learning Portal**: A dedicated classroom view with a navigation sidebar, progress tracking, and dynamic content rendering.
+- **Quiz Renderer**: Interactive assessment interface with real-time feedback and score calculation.
+
+### ⚙️ Admin Management
+- **Course Management**: Full CRUD for courses.
+- **Curriculum Builder**: Intuitively manage lessons and topics for each course.
+- **Quiz Editor**: Build complex assessments with multiple question types.
+
 ## ✨ Animations
 
 Untuk menjaga estetika premium **JA-Platform**, gunakan transisi native CSS/Vue:
@@ -22,7 +36,7 @@ onMounted(() => {
   visible.value = true
 })
 ```
-Pastikan setiap komponen utama memiliki transisi halus dengan pendekatan ringan agar performa tetap optimal.
+Setiap komponen LMS dirancang dengan transisi mikro untuk memberikan kesan *premium* dan *alive*.
 
 ## 🛠️ Development
 
