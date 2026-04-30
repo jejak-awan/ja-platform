@@ -197,6 +197,10 @@ const fetchData = async () => {
 };
 
 const createLesson = async () => {
+  if (!lessonForm.value.title.trim()) {
+    alert('Judul modul wajib diisi');
+    return;
+  }
   submitting.value = true;
   try {
     await LmsService.createLesson(courseId, lessonForm.value);
@@ -217,6 +221,15 @@ const openAddTopicModal = (lessonId: number) => {
 
 const createTopic = async () => {
   if (!activeLessonId.value) return;
+  if (!topicForm.value.title.trim()) {
+    alert('Judul materi wajib diisi');
+    return;
+  }
+  if (topicForm.value.type !== 'quiz' && !topicForm.value.content.value.trim()) {
+    alert('Konten/URL materi wajib diisi');
+    return;
+  }
+  
   submitting.value = true;
   try {
     await LmsService.createTopic(activeLessonId.value, topicForm.value);

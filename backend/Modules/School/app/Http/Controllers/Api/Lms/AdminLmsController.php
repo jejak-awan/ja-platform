@@ -95,15 +95,24 @@ class AdminLmsController extends BaseController
         $lesson = Lesson::findOrFail($lessonId);
         $this->authorize('update', $lesson->course);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'type' => 'required|in:richtext,video,pdf,quiz',
-            'content' => 'required|array',
-            'content.value' => 'required_unless:type,quiz|string',
-            'content.pass_score' => 'required_if:type,quiz|integer|min:0|max:100',
-            'content.time_limit' => 'required_if:type,quiz|integer|min:0',
-            'order' => 'integer|min:0',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'type' => 'required|in:richtext,video,pdf,quiz',
+                'content' => 'required|array',
+                'content.value' => 'required_unless:type,quiz|string',
+                'content.pass_score' => 'required_if:type,quiz|integer|min:0|max:100',
+                'content.time_limit' => 'required_if:type,quiz|integer|min:0',
+                'order' => 'integer|min:0',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Illuminate\Support\Facades\Log::warning('Topic Validation Failed', [
+                'errors' => $e->errors(),
+                'input' => $request->all(),
+                'lesson_id' => $lessonId
+            ]);
+            throw $e;
+        }
 
         $topic = $this->service->createTopic(
             [
