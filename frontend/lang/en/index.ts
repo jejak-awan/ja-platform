@@ -161,4 +161,7 @@ export default {
 
     // 4. Feature Alias Level (Backward Compatibility)
     features,
+
+    // 5. Case-insensitive aliases (Safety Net)
+    COMMON: common,
 };

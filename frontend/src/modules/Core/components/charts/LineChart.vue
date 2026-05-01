@@ -1,12 +1,15 @@
 <template>
-  <div class="chart-container w-full h-full">
+  <div class="chart-container w-full h-full relative">
     <Line
-      v-if="isMounted && hasData"
+      v-if="hasData"
       :key="chartKey"
       :data="chartData"
       :options="chartOptions"
       :plugins="inlinePlugins"
     />
+    <div v-else class="flex items-center justify-center h-full text-muted-foreground text-sm">
+        No data available
+    </div>
   </div>
 </template>
 
@@ -211,7 +214,7 @@ const chartOptions = computed<ChartOptions<'line'>>(() => {
         },
         // Explicitly define events to avoid "includes of undefined" in minified chart.js
         events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
-        resizeDelay: 100,
+        resizeDelay: 50,
         interaction: {
             mode: 'index',
             intersect: false,

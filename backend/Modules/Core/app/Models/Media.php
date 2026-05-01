@@ -38,15 +38,15 @@ use Modules\Core\Models\User;
  */
 class Media extends Model
 {
-    /** @use HasFactory<\Modules\Cms\Database\Factories\MediaFactory> */
+    /** @use HasFactory<\Modules\Core\Database\Factories\MediaFactory> */
     use HasFactory, SoftDeletes;
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Cms\Database\Factories\MediaFactory
+    protected static function newFactory(): \Modules\Core\Database\Factories\MediaFactory
     {
-        return \Modules\Cms\Database\Factories\MediaFactory::new();
+        return \Modules\Core\Database\Factories\MediaFactory::new();
     }
 
     protected $fillable = [

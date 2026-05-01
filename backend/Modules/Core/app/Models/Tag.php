@@ -23,15 +23,15 @@ use Modules\Core\Models\User;
  */
 class Tag extends Model
 {
-    /** @use HasFactory<\Modules\Cms\Database\Factories\TagFactory> */
+    /** @use HasFactory<\Modules\Core\Database\Factories\TagFactory> */
     use HasFactory, SoftDeletes;
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Cms\Database\Factories\TagFactory
+    protected static function newFactory(): \Modules\Core\Database\Factories\TagFactory
     {
-        return \Modules\Cms\Database\Factories\TagFactory::new();
+        return \Modules\Core\Database\Factories\TagFactory::new();
     }
 
     protected $fillable = [

@@ -42,7 +42,7 @@ class MediaController extends BaseApiController
             $query->withTrashed();
         }
 
-        $perPage = $request->input('per_page', 30);
+        $perPage = (int) $request->input('per_page', 30);
         $media = $query->latest()->paginate($perPage);
 
         return $this->success($media, 'Global media retrieved successfully');
@@ -63,7 +63,7 @@ class MediaController extends BaseApiController
     /**
      * Delete media permanently (Global)
      */
-    public function destroy($id): \Illuminate\Http\JsonResponse
+    public function destroy(int|string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Media $media */
         $media = Media::withTrashed()->findOrFail($id);
