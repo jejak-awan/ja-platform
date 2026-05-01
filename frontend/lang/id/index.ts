@@ -22,7 +22,7 @@ import editor from './modules/cms/editor.json';
 import newsletter from './modules/cms/newsletter.json';
 
 // Modules - School
-import school from './modules/school';
+import school from './modules/school/index';
 
 // Shared / Common
 import actions from './shared/actions.json';
@@ -36,7 +36,7 @@ import status from './shared/status.json';
 import time from './shared/time.json';
 import errors from './shared/errors.json';
 
-// Misc Features (Remaining to be sorted)
+// Misc Features (Remaining)
 import languages from './features/languages.json';
 import dashboard from './features/dashboard.json';
 import security from './features/security.json';
@@ -59,99 +59,106 @@ import scheduled_tasks from './features/scheduled_tasks.json';
 import command_runner from './features/command_runner.json';
 import email_templates from './features/email_templates.json';
 
-export default {
-    shared: {
-        actions,
-        labels,
-        validation,
-        messages,
-        navigation,
-        placeholders,
-        pagination,
-        status,
-        time,
-        errors,
-    },
-    modules: {
-        core: {
-            auth,
-            users,
-            roles,
-            media,
-            file_manager,
-            analytics,
-            notifications,
-            system,
-            settings,
-        },
-        cms: {
-            content,
-            categories,
-            tags,
-            comments,
-            forms,
-            menus,
-            themes,
-            seo,
-            editor,
-            newsletter,
-        },
-        school,
-    },
-    // Backward Compatibility Alias
-    common: {
-        actions,
-        labels,
-        validation,
-        messages,
-        navigation,
-        placeholders,
-        pagination,
-        status,
-        time,
-    },
-    features: {
+const modules = {
+    core: {
         auth,
-        content,
-        comments,
-        languages,
-        dashboard,
-        file_manager,
-        newsletter,
-        notifications,
         users,
-        widgets,
+        roles,
+        media,
+        file_manager,
         analytics,
-        seo,
-        redirects,
-        security,
-        redis,
+        notifications,
+        system,
         settings,
+    },
+    cms: {
+        content,
         categories,
         tags,
-        roles,
-        themes,
+        comments,
         forms,
         menus,
-        activityJournal,
-        accessJournal,
-        journalDashboard,
-        search,
-        frontend,
-        errors,
-        developer,
-        content_templates,
-        system,
-        profile,
-        content_studio,
-        autosave,
-        security_alerts: securityAlerts,
-        theme_customizer,
-        scheduled_tasks,
-        command_runner,
-        email_templates,
+        themes,
+        seo,
         editor,
-        school,
-        media,
+        newsletter,
     },
+    school,
+};
+
+const common = {
+    actions,
+    labels,
+    validation,
+    messages,
+    navigation,
+    placeholders,
+    pagination,
+    status,
+    time,
+    errors,
+};
+
+const features = {
+    ...modules.core,
+    ...modules.cms,
+    school: modules.school,
+    // Add legacy direct feature names
+    auth,
+    content,
+    comments,
+    languages,
+    dashboard,
+    file_manager,
+    newsletter,
+    notifications,
+    users,
+    widgets,
+    analytics,
+    seo,
+    redirects,
+    security,
+    redis,
+    settings,
+    categories,
+    tags,
+    roles,
+    themes,
+    forms,
+    menus,
+    activityJournal,
+    accessJournal,
+    journalDashboard,
+    search,
+    frontend,
+    errors,
+    developer,
+    content_templates,
+    system,
+    profile,
+    content_studio,
+    autosave,
+    security_alerts: securityAlerts,
+    theme_customizer,
+    scheduled_tasks,
+    command_runner,
+    email_templates,
+    editor,
+    media,
+};
+
+export default {
+    // 1. Shared / Common Level
+    ...common,
+    shared: common,
+    common: common,
+
+    // 2. Modular Level
+    modules,
+    
+    // 3. School Module Flattened (for $t('academic...'))
+    ...school,
+
+    // 4. Feature Alias Level (Backward Compatibility)
+    features,
 };
