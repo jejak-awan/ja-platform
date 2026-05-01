@@ -1,61 +1,104 @@
-import actions from './common/actions.json';
-import labels from './common/labels.json';
-import validation from './common/validation.json';
-import messages from './common/messages.json';
-import navigation from './common/navigation.json';
-import placeholders from './common/placeholders.json';
-import pagination from './common/pagination.json';
-import status from './common/status.json';
-import time from './common/time.json';
+// Modules - Core
+import auth from './modules/core/auth.json';
+import users from './modules/core/users.json';
+import roles from './modules/core/roles.json';
+import media from './modules/core/media.json';
+import file_manager from './modules/core/file_manager.json';
+import analytics from './modules/core/analytics.json';
+import notifications from './modules/core/notifications.json';
+import system from './modules/core/system.json';
+import settings from './modules/core/settings';
 
-import auth from './features/auth.json';
-import content from './features/content.json';
-import comments from './features/comments.json';
+// Modules - CMS
+import content from './modules/cms/content.json';
+import categories from './modules/cms/categories.json';
+import tags from './modules/cms/tags.json';
+import comments from './modules/cms/comments.json';
+import forms from './modules/cms/forms.json';
+import menus from './modules/cms/menus.json';
+import themes from './modules/cms/themes.json';
+import seo from './modules/cms/seo.json';
+import editor from './modules/cms/editor.json';
+import newsletter from './modules/cms/newsletter.json';
+
+// Modules - School
+import school from './modules/school';
+
+// Shared / Common
+import actions from './shared/actions.json';
+import labels from './shared/labels.json';
+import validation from './shared/validation.json';
+import messages from './shared/messages.json';
+import navigation from './shared/navigation.json';
+import placeholders from './shared/placeholders.json';
+import pagination from './shared/pagination.json';
+import status from './shared/status.json';
+import time from './shared/time.json';
+import errors from './shared/errors.json';
+
+// Misc Features (Remaining to be sorted)
 import languages from './features/languages.json';
 import dashboard from './features/dashboard.json';
-import users from './features/users.json';
 import security from './features/security.json';
 import redis from './features/redis.json';
-import settings from './features/settings';
 import developer from './features/developer.json';
-import file_manager from './features/file_manager.json';
-import newsletter from './features/newsletter.json';
-import notifications from './features/notifications.json';
 import widgets from './features/widgets.json';
-import analytics from './features/analytics.json';
-import seo from './features/seo.json';
 import redirects from './features/redirects.json';
-
-import media from './features/media.json';
-import categories from './features/categories.json';
-import tags from './features/tags.json';
-import roles from './features/roles.json';
-import themes from './features/themes.json';
-import forms from './features/forms.json';
-import menus from './features/menus.json';
 import activityJournal from './features/activity_journal.json';
 import accessJournal from './features/access_journal.json';
 import journalDashboard from './features/journal_dashboard.json';
-
 import search from './features/search.json';
 import frontend from './features/frontend.json';
-import errors from './features/errors.json';
 import content_templates from './features/content_templates.json';
-import system from './features/system.json';
 import profile from './features/profile.json';
 import content_studio from './features/content_studio.json';
 import autosave from './features/autosave.json';
 import securityAlerts from './features/security_alerts.json';
 import theme_customizer from './features/theme_customizer.json';
-
-
 import scheduled_tasks from './features/scheduled_tasks.json';
 import command_runner from './features/command_runner.json';
 import email_templates from './features/email_templates.json';
-import editor from './features/editor.json';
-import school from './features/school';
 
 export default {
+    shared: {
+        actions,
+        labels,
+        validation,
+        messages,
+        navigation,
+        placeholders,
+        pagination,
+        status,
+        time,
+        errors,
+    },
+    modules: {
+        core: {
+            auth,
+            users,
+            roles,
+            media,
+            file_manager,
+            analytics,
+            notifications,
+            system,
+            settings,
+        },
+        cms: {
+            content,
+            categories,
+            tags,
+            comments,
+            forms,
+            menus,
+            themes,
+            seo,
+            editor,
+            newsletter,
+        },
+        school,
+    },
+    // Backward Compatibility Alias
     common: {
         actions,
         labels,
