@@ -77,7 +77,7 @@
                 name="Printer"
                 class="w-4 h-4 mr-2"
               />
-              Cetak Profil
+              {{ $t('features.school.students.actions.printProfile') }}
             </Button>
             <Button
               class="flex-1 md:flex-none rounded-xl shadow-sm"
@@ -87,7 +87,7 @@
                 name="Pencil"
                 class="w-4 h-4 mr-2"
               />
-              Edit Profil
+              {{ $t('features.school.students.actions.editProfile') }}
             </Button>
           </div>
         </div>
@@ -99,7 +99,7 @@
         <div class="lg:col-span-1 space-y-4">
           <div class="bg-card border border-border/50 rounded-xl p-4 sticky top-8 shadow-sm">
             <h3 class="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em] mb-4 px-4 pt-2">
-              Menu Siswa
+              {{ $t('features.school.students.labels.studentMenu') }}
             </h3>
             <div class="space-y-1">
               <button 
@@ -132,7 +132,7 @@
               <div class="p-4 rounded-xl bg-muted/30 border border-border/40 relative overflow-hidden group">
                 <div class="z-10 relative">
                   <p class="text-[9px] font-black text-primary uppercase tracking-widest mb-1">
-                    Status Keuangan
+                    {{ $t('features.school.students.labels.financialStatus') }}
                   </p>
                   <p class="text-xs font-bold text-foreground">
                     Lunas / SPP Okt
@@ -169,7 +169,7 @@
                       />
                     </div>
                     <h3 class="text-xl font-black tracking-tight text-foreground">
-                      Data Pribadi
+                      {{ $t('features.school.students.labels.personalInfo') }}
                     </h3>
                   </div>
                   
@@ -199,7 +199,7 @@
                       />
                     </div>
                     <h3 class="text-xl font-black tracking-tight text-foreground">
-                      Keluarga & Wali
+                      {{ $t('features.school.students.labels.parentInfo') }}
                     </h3>
                   </div>
                   
@@ -230,13 +230,13 @@
                     />
                   </div>
                   <h3 class="text-xl font-black tracking-tight text-foreground">
-                    Alamat Lengkap
+                    {{ $t('common.labels.fullAddress') }}
                   </h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div class="md:col-span-1">
                     <p class="text-[9px] font-black text-muted-foreground/60 uppercase tracking-widest mb-1">
-                      Alamat Domisili
+                      {{ $t('features.school.students.labels.domicileAddress') }}
                     </p>
                     <p class="text-sm font-bold leading-relaxed text-foreground">
                       {{ student.address || '-' }}
@@ -245,7 +245,7 @@
                   <div class="grid grid-cols-2 md:grid-cols-3 gap-6 md:col-span-2">
                     <div>
                       <p class="text-[9px] font-black text-muted-foreground/60 uppercase tracking-widest mb-1">
-                        Dusun
+                        {{ $t('common.labels.dusun') }}
                       </p>
                       <p class="text-sm font-bold text-foreground">
                         {{ student.dusun || '-' }}
@@ -253,7 +253,7 @@
                     </div>
                     <div>
                       <p class="text-[9px] font-black text-muted-foreground/60 uppercase tracking-widest mb-1">
-                        Desa/Kel
+                        {{ $t('common.labels.village') }}
                       </p>
                       <p class="text-sm font-bold text-foreground">
                         {{ student.desa_kelurahan || '-' }}
@@ -261,7 +261,7 @@
                     </div>
                     <div>
                       <p class="text-[9px] font-black text-muted-foreground/60 uppercase tracking-widest mb-1">
-                        Kecamatan
+                        {{ $t('common.labels.subdistrict') }}
                       </p>
                       <p class="text-sm font-bold text-foreground">
                         {{ student.kecamatan || '-' }}
@@ -279,24 +279,24 @@
             >
               <div class="w-16 h-16 rounded-xl bg-muted flex items-center justify-center border border-border/40">
                 <LucideIcon
-                  :name="(tabs.find(t => t.id === activeTab)?.icon as any)"
+                  :name="(tabs.find(tabItem => tabItem.id === activeTab)?.icon as any)"
                   class="w-8 h-8 text-muted-foreground/40"
                 />
               </div>
               <div>
                 <h4 class="text-lg font-black text-foreground uppercase tracking-tight">
-                  Data Belum Tersedia
+                  {{ $t('features.school.students.messages.dataNotAvailable') }}
                 </h4>
                 <p class="text-muted-foreground text-xs font-medium max-w-xs mx-auto">
-                  Informasi detail untuk modul ini masih dalam tahap sinkronisasi data.
+                  {{ $t('features.school.students.messages.syncingData') }}
                 </p>
               </div>
-              <Button
+                <Button
                 variant="outline"
                 class="mt-4 rounded-xl"
                 @click="activeTab = 'profile'"
               >
-                Kembali ke Profil
+                {{ $t('features.school.students.actions.backToProfile') }}
               </Button>
             </div>
           </transition>
@@ -307,7 +307,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, toRefs } from 'vue';
+import { ref, onMounted, toRefs, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { useStudentStore } from '@/modules/School/stores/student';
 import {
@@ -316,36 +317,37 @@ import {
 } from '@/components/ui';
 import api from '@/services/api';
 
+const { t } = useI18n();
 const route = useRoute();
 const studentStore = useStudentStore();
 const { currentStudent: student, loading } = toRefs(studentStore);
 const activeTab = ref('profile');
 
-const tabs = [
-  { id: 'profile', name: 'Biodata Lengkap', icon: 'UserCircle' },
-  { id: 'academic', name: 'Riwayat Akademik', icon: 'GraduationCap' },
-  { id: 'attendance', name: 'Kehadiran', icon: 'CalendarCheck' },
-  { id: 'disciplinary', name: 'Catatan Kedisiplinan', icon: 'ShieldAlert' },
-  { id: 'payment', name: 'Keuangan', icon: 'CreditCard' },
-];
+const tabs = computed(() => [
+  { id: 'profile', name: t('features.school.students.tabs.profile'), icon: 'UserCircle' },
+  { id: 'academic', name: t('features.school.students.tabs.academic'), icon: 'GraduationCap' },
+  { id: 'attendance', name: t('features.school.students.tabs.attendance'), icon: 'CalendarCheck' },
+  { id: 'disciplinary', name: t('features.school.students.tabs.disciplinary'), icon: 'ShieldAlert' },
+  { id: 'payment', name: t('features.school.students.tabs.payment'), icon: 'CreditCard' },
+]);
 
-const personalFields = [
-  { label: 'Nama Lengkap', key: 'full_name' },
-  { label: 'Tempat Lahir', key: 'place_of_birth' },
-  { label: 'Tanggal Lahir', key: 'date_of_birth' },
-  { label: 'Jenis Kelamin', key: 'gender' },
-  { label: 'Agama', key: 'religion' },
-  { label: 'Email', key: 'email' },
-  { label: 'No. HP', key: 'phone' },
-];
+const personalFields = computed(() => [
+  { label: t('features.school.students.labels.fullName'), key: 'full_name' },
+  { label: t('common.labels.placeOfBirth'), key: 'place_of_birth' },
+  { label: t('common.labels.dateOfBirth'), key: 'date_of_birth' },
+  { label: t('features.school.students.labels.gender'), key: 'gender' },
+  { label: t('common.labels.religion'), key: 'religion' },
+  { label: t('common.labels.email'), key: 'email' },
+  { label: t('common.labels.phone'), key: 'phone' },
+]);
 
-const parentFields = [
-  { label: 'Nama Ayah', key: 'father_name' },
-  { label: 'Pekerjaan Ayah', key: 'father_occupation' },
-  { label: 'Nama Ibu', key: 'mother_name' },
-  { label: 'Pekerjaan Ibu', key: 'mother_occupation' },
-  { label: 'Wali Siswa', key: 'guardian_name' },
-];
+const parentFields = computed(() => [
+  { label: t('features.school.students.labels.fatherName'), key: 'father_name' },
+  { label: t('features.school.students.labels.fatherOccupation'), key: 'father_occupation' },
+  { label: t('features.school.students.labels.motherName'), key: 'mother_name' },
+  { label: t('features.school.students.labels.motherOccupation'), key: 'mother_occupation' },
+  { label: t('features.school.students.labels.guardianName'), key: 'guardian_name' },
+]);
 
 const fetchData = async () => {
   try {

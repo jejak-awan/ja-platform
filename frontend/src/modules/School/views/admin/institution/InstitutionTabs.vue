@@ -1,23 +1,24 @@
 <template>
-  <div class="p-6">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 animate-in fade-in duration-700">
-      <div>
-        <div class="flex items-center gap-3 mb-1">
-          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-            <LucideIcon
-              name="Building"
-              class="w-5 h-5 text-primary"
-            />
+  <div class="pb-8">
+    <div class="px-6 space-y-8">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 animate-in fade-in duration-700">
+        <div>
+          <div class="flex items-center gap-3 mb-1">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border border-primary/20 shadow-sm shadow-primary/10 transition-transform hover:scale-105 duration-300">
+              <LucideIcon
+                name="Building2"
+                class="w-6 h-6 text-primary"
+              />
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight text-foreground">
+              {{ $t('features.school.title') }}
+            </h1>
           </div>
-          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
-            {{ $t('features.school.title') }}
-          </h1>
+          <p class="text-muted-foreground text-sm">
+            {{ $t('features.school.subtitle') }}
+          </p>
         </div>
-        <p class="text-muted-foreground text-sm font-medium italic">
-          {{ $t('features.school.subtitle') }}
-        </p>
       </div>
-    </div>
 
     <!-- Loading State -->
     <div
@@ -77,11 +78,22 @@
       <Card class="overflow-hidden border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 rounded-2xl">
         <div class="bg-muted/30 p-6 border-b border-border/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-left">
           <div class="flex items-center gap-4">
-            <div class="p-3 bg-background rounded-xl shadow-sm border border-border/50 flex items-center justify-center">
-              <LucideIcon
-                :name="getSchoolIcon(school.type || '')"
-                class="w-8 h-8 text-primary"
+            <div class="p-0 bg-background rounded-xl shadow-sm border border-border/50 flex items-center justify-center w-14 h-14 overflow-hidden bg-gradient-to-br from-muted/50 to-muted/20">
+              <img
+                v-if="school.logo"
+                :src="school.logo"
+                class="w-full h-full object-cover"
+                :alt="school.name"
               />
+              <div
+                v-else
+                class="flex items-center justify-center w-full h-full"
+              >
+                <LucideIcon
+                  :name="getSchoolIcon(school.type || '')"
+                  class="w-7 h-7 text-primary/70"
+                />
+              </div>
             </div>
             <div>
               <h2 class="text-xl font-bold text-foreground leading-tight">
@@ -348,6 +360,7 @@
         </TabsContent>
       </Tabs>
     </div>
+    </div>
 
     <!-- Level Create/Edit Dialog -->
     <LevelDialog
@@ -440,9 +453,6 @@ import type { SchoolLevel } from '@/types';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useToast } from '@/composables/useToast';
 import {
-  Card, CardContent, Button, LucideIcon, Badge,
-  Tabs, TabsList, TabsTrigger, TabsContent,
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Input, Label
 } from '@/components/ui';
 
@@ -697,5 +707,3 @@ const executeDelete = async () => {
   }
 };
 </script>
-"
-,Complexity:5,Description:

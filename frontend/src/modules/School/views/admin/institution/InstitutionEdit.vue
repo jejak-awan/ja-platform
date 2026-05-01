@@ -39,7 +39,7 @@
       class="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700"
     >
       <!-- Section 1: Basic Identity -->
-      <Card class="shadow-xl border-border/40 rounded-2xl overflow-hidden">
+      <Card class="shadow-sm border-border/40 rounded-2xl overflow-hidden">
         <CardContent class="p-8">
           <div class="space-y-6 text-left">
             <div class="space-y-1">
@@ -73,7 +73,7 @@
       </Card>
 
       <!-- Section 2: Institution Status -->
-      <Card class="shadow-xl border-border/40 rounded-2xl overflow-hidden">
+      <Card class="shadow-sm border-border/40 rounded-2xl overflow-hidden">
         <CardContent class="p-8">
           <div class="space-y-6 text-left">
             <div class="space-y-1">
@@ -125,7 +125,7 @@
       </Card>
 
       <!-- Section 3: Operational Configuration -->
-      <Card class="shadow-xl border-border/40 rounded-2xl overflow-hidden">
+      <Card class="shadow-sm border-border/40 rounded-2xl overflow-hidden">
         <CardContent class="p-8">
           <div class="space-y-6 text-left">
             <div class="space-y-1">

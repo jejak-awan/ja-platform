@@ -1,16 +1,18 @@
 <template>
   <div class="p-6 space-y-8 animate-in fade-in duration-700">
+    <Breadcrumbs />
+    
     <!-- Premium Header Section -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-gradient-to-r from-background via-accent/5 to-background p-6 rounded-2xl border border-border/50 shadow-sm">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
       <div class="space-y-1">
-        <h1 class="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-foreground to-foreground/70">
+        <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
           {{ $t('features.school.hr.staff.title') }}
         </h1>
         <div class="flex items-center gap-2">
-          <Badge variant="secondary" class="bg-primary/10 text-primary border-primary/20 shrink-0">
+          <Badge variant="secondary" class="bg-primary/10 text-primary border-primary/20 shrink-0 font-bold">
             {{ pagination?.total || 0 }} {{ $t('features.school.hr.staff.tabs.staff') }}
           </Badge>
-          <p class="text-sm text-muted-foreground line-clamp-1 italic">
+          <p class="text-sm text-muted-foreground italic font-medium">
             {{ $t('features.school.hr.staff.subtitle') }}
           </p>
         </div>
@@ -20,7 +22,7 @@
         <Button
           v-if="activeTab === 'payroll'"
           size="lg"
-          class="shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all hover:-translate-y-0.5"
+          class="rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95 font-bold h-11 px-6"
           @click="handleGeneratePayroll"
         >
           <LucideIcon name="Coins" class="w-5 h-5 mr-2" />
@@ -30,7 +32,7 @@
         <Button
           variant="outline"
           size="lg"
-          class="border-border/50 hover:bg-accent/50 transition-colors"
+          class="rounded-xl border-border/50 hover:bg-accent/50 transition-colors h-11 px-6 font-bold"
           :disabled="loading || staff.length === 0"
           @click="handleExport"
         >
@@ -39,7 +41,7 @@
         </Button>
 
         <router-link :to="{ name: 'staff.create' }">
-          <Button size="lg" class="shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all hover:-translate-y-0.5">
+          <Button size="lg" class="rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95 font-bold h-11 px-8">
             <LucideIcon name="UserPlus" class="w-5 h-5 mr-2" />
             {{ $t('features.school.hr.staff.btnAdd') }}
           </Button>
@@ -49,25 +51,25 @@
 
     <!-- Main Content Area with Animated Tabs -->
     <Tabs v-model="activeTab" class="w-full space-y-6">
-      <div class="flex items-center justify-between overflow-x-auto pb-2 scrollbar-hide">
-        <TabsList class="bg-muted/30 p-1 rounded-xl border border-border/50">
+      <div class="flex items-center justify-between gap-4">
+        <TabsList class="bg-muted/50 p-1.5 rounded-2xl border border-border/40 inline-flex h-auto gap-1">
           <TabsTrigger 
             value="staff" 
-            class="rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-6 py-2 transition-all"
+            class="rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm px-6 py-2.5 transition-all font-bold"
           >
             <LucideIcon name="Users" class="w-4 h-4 mr-2" />
             {{ $t('features.school.hr.staff.tabs.staff') }}
           </TabsTrigger>
           <TabsTrigger 
             value="salary" 
-            class="rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-6 py-2 transition-all"
+            class="rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm px-6 py-2.5 transition-all font-bold"
           >
             <LucideIcon name="Wallet" class="w-4 h-4 mr-2" />
             {{ $t('features.school.hr.staff.tabs.salary') }}
           </TabsTrigger>
           <TabsTrigger 
             value="payroll" 
-            class="rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-6 py-2 transition-all"
+            class="rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm px-6 py-2.5 transition-all font-bold"
           >
             <LucideIcon name="FileDigit" class="w-4 h-4 mr-2" />
             {{ $t('features.school.hr.staff.tabs.payroll') }}
@@ -78,7 +80,7 @@
            <Input 
              v-model="searchQuery" 
              :placeholder="$t('common.labels.search')" 
-             class="bg-background/50 border-border/50 focus:ring-primary/20"
+             class="bg-background/50 border-border/50 focus:ring-primary/20 rounded-xl h-11"
              @input="handleSearch"
            >
              <template #prefix>
@@ -88,7 +90,7 @@
         </div>
       </div>
 
-      <Card class="overflow-hidden border-border/50 bg-background/50 backdrop-blur-sm shadow-xl rounded-2xl">
+      <Card class="overflow-hidden border-border/50 bg-background/50 backdrop-blur-sm shadow-sm rounded-2xl">
         <CardContent class="p-0">
           <DataTable
             :table="table"
@@ -99,11 +101,11 @@
           <div class="p-6 bg-muted/20 border-t border-border/50 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
               <div class="h-8 w-1 bg-primary rounded-full"></div>
-              <p class="text-sm font-medium text-foreground">
+              <p class="text-xs font-black text-muted-foreground uppercase tracking-widest">
                 {{ $t('features.school.hr.staff.labels.total', { total: pagination?.total || 0 }) }}
               </p>
-              <span class="text-xs text-muted-foreground">|</span>
-              <span class="text-xs text-muted-foreground">{{ $t('common.labels.showing_page', { current: pagination?.current_page || 1 }) }}</span>
+              <span class="text-xs text-muted-foreground opacity-30">|</span>
+              <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">{{ $t('common.labels.showing_page', { current: pagination?.current_page || 1 }) }}</span>
             </div>
             
             <Pagination
@@ -137,6 +139,7 @@ import { HRService } from '@/modules/School/services/HRService';
 import {
   Card, CardContent, Button, LucideIcon, DataTable, Pagination, Tabs, TabsList, TabsTrigger, Badge, Input
 } from '@/components/ui';
+import Breadcrumbs from '@/modules/Core/components/layout/Breadcrumbs.vue';
 import { useToast } from '@/composables/useToast';
 import { useConfirm } from '@/composables/useConfirm';
 import { 
@@ -177,7 +180,7 @@ const staffColumns = [
   columnHelper.accessor('full_name', { 
     header: t('features.school.hr.staff.labels.fullName'),
     cell: ({ row }) => h('div', { class: 'flex items-center gap-3' }, [
-      h('div', { class: 'w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20' }, 
+      h('div', { class: 'w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20' }, 
         row.original.full_name.charAt(0)
       ),
       h('div', { class: 'flex flex-col' }, [
@@ -207,15 +210,15 @@ const staffColumns = [
     header: '',
     cell: ({ row }) => h('div', { class: 'flex justify-end gap-1 px-2' }, [
       h(Button, {
-        variant: 'ghost', size: 'icon', class: 'hover:bg-primary/10 hover:text-primary transition-colors',
+        variant: 'ghost', size: 'icon', class: 'h-8 w-8 hover:bg-primary/10 hover:text-primary transition-colors rounded-lg',
         onClick: () => router.push({ name: 'staff.show', params: { id: row.original.id } })
       }, () => h(LucideIcon, { name: 'Eye', class: 'w-4 h-4' })),
       h(Button, {
-        variant: 'ghost', size: 'icon', class: 'hover:bg-primary/10 hover:text-primary transition-colors',
+        variant: 'ghost', size: 'icon', class: 'h-8 w-8 hover:bg-primary/10 hover:text-primary transition-colors rounded-lg',
         onClick: () => router.push({ name: 'staff.edit', params: { id: row.original.id } })
       }, () => h(LucideIcon, { name: 'Edit2', class: 'w-4 h-4' })),
       h(Button, {
-        variant: 'ghost', size: 'icon', class: 'hover:bg-destructive/10 hover:text-destructive transition-colors',
+        variant: 'ghost', size: 'icon', class: 'h-8 w-8 hover:bg-destructive/10 hover:text-destructive transition-colors rounded-lg',
         onClick: () => handleDelete(row.original.id)
       }, () => h(LucideIcon, { name: 'Trash2', class: 'w-4 h-4' }))
     ]),
@@ -234,7 +237,7 @@ const salaryColumns = [
         cell: ({ row }) => h(Button, {
             size: 'sm',
             variant: 'secondary',
-            class: 'bg-primary/5 text-primary hover:bg-primary/10 transition-colors',
+            class: 'bg-primary/5 text-primary hover:bg-primary/10 transition-colors rounded-lg font-bold',
             onClick: () => handleSetupSalary(row.original)
         }, () => [
             h(LucideIcon, { name: 'Settings2', class: 'w-3 h-3 mr-2' }),
@@ -251,7 +254,7 @@ const payrollColumns = [
     columnHelper.accessor('period', { header: t('features.school.hr.staff.labels.period') }),
     columnHelper.accessor('net_salary', { 
         header: t('features.school.hr.staff.labels.netSalary'),
-        cell: info => h('span', { class: 'font-mono text-success' }, 
+        cell: info => h('span', { class: 'font-mono text-success font-bold' }, 
             new Intl.NumberFormat(t('common.language') === 'id' ? 'id-ID' : 'en-US', { 
                 style: 'currency', currency: 'IDR' 
             }).format(info.getValue())
@@ -261,7 +264,7 @@ const payrollColumns = [
         header: t('common.labels.status'),
         cell: info => h(Badge, { 
             variant: info.getValue() === 'Paid' ? 'success' : 'warning',
-            class: 'capitalize' 
+            class: 'capitalize font-bold rounded-lg' 
         }, () => info.getValue())
     }),
 ];
@@ -408,11 +411,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
-}
-.scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
+/* Removed redundant scrollbar styles */
 </style>

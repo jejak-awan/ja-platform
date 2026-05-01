@@ -30,7 +30,9 @@
             "salarySetting": "Pengaturan Gaji",
             "period": "Periode",
             "netSalary": "Gaji Bersih",
-            "total": "Total: {total} orang"
+            "total": "Total: {total} orang",
+            "employmentStatus": "Status Kepegawaian",
+            "certificationStatus": "Sertifikasi"
         },
         "actions": {
             "setupSalary": "Atur Komponen"

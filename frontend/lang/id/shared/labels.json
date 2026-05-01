@@ -135,6 +135,7 @@
     "visionMission": "Visi & Misi",
     "visionMissionDesc": "Visi, misi, dan sejarah singkat sekolah.",
     "warning": "Peringatan",
+    "showing_page": "Menampilkan Halaman {current} dari {total}",
     "requiredFieldHint": "Field bertanda ({symbol}) wajib diisi.",
     "placeDateOfBirth": "Tempat, Tgl Lahir",
     "placeOfBirth": "Tempat Lahir",
@@ -161,6 +162,11 @@
     "search": "Cari",
     "refresh": "Segarkan",
     "view": "Lihat",
+    "filter_data": "Filter Data",
+    "reset_filter": "Reset Filter",
+    "search_name_nisn": "Cari Nama / NISN...",
+    "class_group": "Kelas / Rombel",
+    "level": "Jenjang",
     "graduated": "Lulus",
     "days": {
         "monday": "Senin",
@@ -184,10 +190,6 @@
         "october": "Oktober",
         "november": "November",
         "december": "Desember"
-    },
-    "genders": {
-        "male": "Laki-laki",
-        "female": "Perempuan"
     },
     "borrowed": "Dipinjam",
     "returned": "Dikembalikan",

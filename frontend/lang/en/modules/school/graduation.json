@@ -1,0 +1,46 @@
+{
+    "title": "Student Graduation",
+    "subtitle": "Manage graduation announcements, input grades, and print certificates/SKL.",
+    "tabs": {
+        "eligible": "Prospective Graduates",
+        "history": "History & Grades",
+        "settings": "Settings"
+    },
+    "labels": {
+        "manageTemplates": "Manage Templates",
+        "eligibleHint": "This list contains final-year students ready for graduation processing.",
+        "batchYear": "Graduation Year",
+        "targetStatus": "Target Status",
+        "processSelected": "Process ({count})",
+        "importGrades": "Import Grades",
+        "editGrades": "Input Grades & Certificate",
+        "certificateNumber": "Certificate/SKL No.",
+        "certificateNumberPlaceholder": "Example: SKL/2024/001",
+        "gradeDetails": "Grade Details",
+        "addSubject": "Add Subject",
+        "noGrades": "No grade data yet.",
+        "importTitle": "Import Grades from File",
+        "importDescription": "Upload CSV or Excel (.xlsx) file with format: first column NISN, subsequent columns subject names with their values.",
+        "chooseFile": "Choose CSV/Excel File",
+        "formatHint": "File Format",
+        "graduationYear": "Graduation Year",
+        "statusPub": "Publication Status",
+        "openAnnouncement": "Open Graduation Announcement",
+        "openAnnouncementDesc": "If enabled, students can view graduation results on the public page.",
+        "announcementSchedule": "Announcement Schedule",
+        "announcementScheduleDesc": "Leave blank if announcement can be accessed anytime after opening.",
+        "mappingSubject": "Subject Mapping",
+        "mappingSubjectDesc": "This list of subjects will be used as a format during Excel Import.",
+        "selectYear": "Select Academic Year",
+        "createSetting": "Create Settings for Year {year}",
+        "saveSetting": "Save Settings"
+    },
+    "messages": {
+        "processConfirmTitle": "Confirm Graduation Process",
+        "processConfirmMessage": "Are you sure you want to process {count} students with status \"{status}\" for year {year}?",
+        "importSuccess": "Successfully imported grades for {count} students",
+        "createSuccess": "New settings created successfully",
+        "saveSuccess": "Settings saved successfully",
+        "gradeSaveSuccess": "Grade data saved successfully"
+    }
+}

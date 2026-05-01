@@ -10,7 +10,7 @@
               class="w-6 h-6"
             />
           </div>
-          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">
             {{ t('features.school.osis.dashboard.title') }}
           </h1>
         </div>
@@ -29,10 +29,10 @@
         <CardContent class="p-6">
           <div class="flex justify-between items-start">
             <div class="space-y-1">
-              <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+              <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
                 {{ t('features.school.osis.stats.' + stat.key) }}
               </p>
-              <h3 class="text-3xl font-black text-foreground">
+              <h3 class="text-3xl font-bold text-foreground">
                 {{ stat.value }}
               </h3>
             </div>
@@ -68,7 +68,7 @@
             >
               <div class="w-14 h-14 bg-background rounded-xl border border-border/50 flex flex-col items-center justify-center shrink-0">
                 <span class="text-[10px] font-bold text-pink-500 uppercase">{{ getMonthName(program.planned_date) }}</span>
-                <span class="text-xl font-black">{{ getDay(program.planned_date) }}</span>
+                <span class="text-xl font-bold">{{ getDay(program.planned_date) }}</span>
               </div>
               <div class="flex-1">
                 <h4 class="font-bold">
@@ -98,7 +98,7 @@
       <div class="space-y-8">
         <Card class="border-border/40 bg-card text-foreground rounded-xl shadow-none overflow-hidden relative group">
           <CardHeader>
-            <CardTitle class="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
+            <CardTitle class="text-[11px] font-bold text-primary">
               {{ t('features.school.osis.finances.title') }}
             </CardTitle>
             <CardDescription class="text-muted-foreground italic mt-1 text-[10px]">
@@ -106,7 +106,7 @@
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <h2 class="text-3xl font-black tracking-tighter">
+            <h2 class="text-3xl font-bold tracking-tight">
               {{ formatCurrency(stats.budget) }}
             </h2>
             <div class="mt-6 flex gap-2">

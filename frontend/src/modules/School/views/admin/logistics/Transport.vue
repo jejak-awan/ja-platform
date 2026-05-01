@@ -50,7 +50,7 @@
         <CardHeader class="pb-2">
           <div class="flex justify-between items-start">
             <div>
-              <CardTitle class="text-sm font-bold">
+              <CardTitle class="text-sm font-semibold">
                 {{ vehicle.plate_number }}
               </CardTitle>
               <CardDescription class="text-[10px]">
@@ -160,7 +160,7 @@ const columns = [
    columnHelper.accessor('vehicle.plate_number', { header: t('features.school.logistics.transport.labels.vehicle') }),
    columnHelper.accessor('status', {
       header: t('common.labels.status'),
-      cell: info => h(Badge, { variant: info.getValue() === 'active' ? 'outline' : 'secondary', class: 'text-[10px] font-bold' }, info.getValue())
+      cell: info => h(Badge, { variant: info.getValue() === 'active' ? 'outline' : 'secondary', class: 'text-[10px] font-semibold' }, info.getValue())
    })
 ];
 

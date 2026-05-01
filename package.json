@@ -5,7 +5,9 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "deploy:assets": "bash scripts/sync-frontend-assets-to-backend.sh",
+    "build": "npm --prefix frontend run build",
+    "deploy:assets": "SYNC_ONLY=1 bash scripts/sync-frontend-assets-to-backend.sh",
+    "deploy:assets:full": "bash scripts/sync-frontend-assets-to-backend.sh",
     "deploy:assets:sync": "SYNC_ONLY=1 bash scripts/sync-frontend-assets-to-backend.sh",
     "agent:verify": "npm run quality:frontend && npm run quality:backend",
     "agent:verify:quick": "npm run quality:frontend",

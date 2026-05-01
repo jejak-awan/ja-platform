@@ -1,13 +1,20 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div>
-        <h2 class="text-xl font-bold text-foreground">{{ $t('features.school.ops.templates.title') }}</h2>
-        <p class="text-sm text-muted-foreground italic">{{ $t('features.school.ops.templates.subtitle') }}</p>
+  <div class="p-6 space-y-8 animate-in fade-in duration-700">
+    <Breadcrumbs />
+
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div class="space-y-1">
+        <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+          {{ $t('features.school.ops.templates.title') }}
+        </h1>
+        <p class="text-sm text-muted-foreground italic font-medium">
+          {{ $t('features.school.ops.templates.subtitle') }}
+        </p>
       </div>
       <Button
         variant="default"
-        class="rounded-xl shadow-sm px-6"
+        size="lg"
+        class="rounded-xl shadow-sm px-8 h-11 font-bold transition-all active:scale-95"
         @click="openCreateModal"
       >
         <LucideIcon
@@ -502,7 +509,7 @@ const saveTemplate = async () => {
         } else {
             await OperationsService.storeDocumentTemplate(editingTemplate.value);
         }
-        toast.success.action('Template berhasil disimpan');
+        toast.success.default('Template berhasil disimpan');
         modalOpen.value = false;
         fetchTemplates();
     } catch (e) {
@@ -522,7 +529,7 @@ const handleDelete = async (template: any) => {
     if (confirmed) {
         try {
             await OperationsService.deleteDocumentTemplate(template.id);
-            toast.success.action('Template berhasil dihapus');
+            toast.success.default('Template berhasil dihapus');
             fetchTemplates();
         } catch (e) {
             toast.error.fromResponse(e);

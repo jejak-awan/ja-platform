@@ -35,6 +35,7 @@ import pagination from './shared/pagination.json';
 import status from './shared/status.json';
 import time from './shared/time.json';
 import errors from './shared/errors.json';
+import genders from './shared/genders.json';
 
 // Misc Features (Remaining)
 import languages from './features/languages.json';
@@ -97,6 +98,7 @@ const common = {
     status,
     time,
     errors,
+    genders,
 };
 
 const features = {

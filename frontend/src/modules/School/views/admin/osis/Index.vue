@@ -112,21 +112,22 @@ const formatCurrency = (val: number) => {
 </script>
 
 <template>
-  <div class="space-y-8 p-6 animate-in fade-in duration-700">
+  <div class="space-y-6 p-8 animate-in fade-in duration-700">
+
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-2">
       <div>
         <div class="flex items-center gap-3 mb-1">
-          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+          <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-sm">
             <LucideIcon
               name="Globe"
-              class="w-5 h-5 text-primary"
+              class="w-6 h-6 text-primary"
             />
           </div>
-          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground">
             {{ t('features.school.osis.title') }}
           </h1>
         </div>
-        <p class="text-muted-foreground text-sm font-medium italic">
+        <p class="text-sm text-muted-foreground">
           {{ t('features.school.osis.subtitle') }}
         </p>
       </div>
@@ -157,12 +158,12 @@ const formatCurrency = (val: number) => {
       <div 
         v-for="(stat, idx) in [
           { key: 'workPrograms', value: stats.totalPrograms, color: 'text-primary', icon: 'Package' },
-          { key: 'completed', value: stats.completedPrograms, color: 'text-success', icon: 'CheckCircle' },
+          { key: 'completed', value: stats.completedPrograms, color: 'text-success', icon: 'CircleCheck' },
           { key: 'members', value: stats.totalMembers, color: 'text-info', icon: 'Users' },
           { key: 'pendingSuggestions', value: stats.pendingSuggestions, color: 'text-warning', icon: 'Inbox' }
         ]"
         :key="idx"
-        class="group bg-card border border-border/40 rounded-xl p-6 shadow-none hover:bg-muted/30 transition-all duration-300"
+        class="group bg-card border border-border/40 rounded-xl p-6 shadow-sm hover:bg-muted/30 transition-all duration-300"
       >
         <div class="flex justify-between items-start mb-4">
           <div :class="`w-10 h-10 rounded-xl flex items-center justify-center border border-border/40 bg-muted/50 ${stat.color}`">
@@ -171,13 +172,13 @@ const formatCurrency = (val: number) => {
               class="w-5 h-5"
             />
           </div>
-          <span class="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">{{ t('features.school.osis.stats.' + stat.key) }}</span>
+          <span class="text-[10px] font-semibold text-muted-foreground/60">{{ t('features.school.osis.stats.' + stat.key) }}</span>
         </div>
         <div class="flex items-baseline gap-2">
-          <h3 class="text-2xl font-black tracking-tight text-foreground">
+          <h3 class="text-2xl font-bold tracking-tight text-foreground">
             {{ stat.value }}
           </h3>
-          <span class="text-[10px] font-bold text-muted-foreground uppercase">Data</span>
+          <span class="text-[10px] font-medium text-muted-foreground">Data</span>
         </div>
       </div>
     </div>
@@ -226,7 +227,7 @@ const formatCurrency = (val: number) => {
           <Card
             v-for="program in programs"
             :key="program.id"
-            class="group transition-all bg-card border border-border/40 rounded-xl overflow-hidden shadow-none hover:bg-muted/30"
+            class="group transition-all bg-card border border-border/40 rounded-xl overflow-hidden shadow-sm hover:bg-muted/30"
           >
             <CardHeader class="pb-2">
               <div class="flex items-center justify-between mb-2">
@@ -238,7 +239,7 @@ const formatCurrency = (val: number) => {
                 </Badge>
                 <span class="text-[9px] font-black text-muted-foreground/60 uppercase tracking-widest">{{ dayjs(program.planned_date).format('DD MMM YYYY') }}</span>
               </div>
-              <CardTitle class="text-lg font-black tracking-tight text-foreground group-hover:text-primary transition-colors">
+              <CardTitle class="text-lg font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
                 {{ program.name }}
               </CardTitle>
             </CardHeader>
@@ -273,7 +274,7 @@ const formatCurrency = (val: number) => {
               name="Package"
               class="w-12 h-12 text-muted-foreground/20 mb-4"
             />
-            <h3 class="text-xl font-black text-foreground">
+            <h3 class="text-xl font-bold text-foreground">
               {{ t('features.school.osis.programs.emptyTitle') }}
             </h3>
             <p class="text-muted-foreground text-sm font-medium">
@@ -284,12 +285,12 @@ const formatCurrency = (val: number) => {
       </TabsContent>
 
       <TabsContent value="members">
-        <Card class="border border-border/40 bg-card shadow-none rounded-xl overflow-hidden">
+        <Card class="border border-border/40 bg-card shadow-sm rounded-xl overflow-hidden">
           <CardContent class="p-0">
             <div class="overflow-x-auto">
               <table class="w-full text-left">
                 <thead>
-                  <tr class="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 border-b border-border/40 bg-muted/10">
+                  <tr class="text-[11px] font-semibold text-muted-foreground/70 border-b border-border/40 bg-muted/20">
                     <th class="p-6">
                       {{ t('features.school.osis.members.name') }}
                     </th>
@@ -319,7 +320,7 @@ const formatCurrency = (val: number) => {
                           <p class="font-bold text-foreground">
                             {{ member.student?.name }}
                           </p>
-                          <p class="text-[9px] text-muted-foreground font-black uppercase tracking-[0.2em]">
+                          <p class="text-[10px] text-muted-foreground font-medium">
                             {{ member.student?.nis }}
                           </p>
                         </div>
@@ -355,11 +356,11 @@ const formatCurrency = (val: number) => {
 
       <!-- Finance Tab -->
       <TabsContent value="finances">
-        <Card class="border border-border/40 bg-card shadow-none rounded-xl overflow-hidden">
+        <Card class="border border-border/40 bg-card shadow-sm rounded-xl overflow-hidden">
           <CardContent class="p-6">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 text-left">
               <div>
-                <h2 class="text-xl font-black text-foreground uppercase tracking-tight">
+                <h2 class="text-xl font-bold text-foreground tracking-tight">
                   {{ t('features.school.osis.finances.title') }}
                 </h2>
                 <p class="text-xs font-medium text-muted-foreground">Laporan keuangan organisasi periode berjalan</p>
@@ -394,7 +395,7 @@ const formatCurrency = (val: number) => {
           <Card
             v-for="suggestion in suggestions"
             :key="suggestion.id"
-            class="bg-card border border-border/40 rounded-xl overflow-hidden shadow-none hover:bg-muted/30 transition-all text-left"
+            class="bg-card border border-border/40 rounded-xl overflow-hidden shadow-sm hover:bg-muted/30 transition-all text-left"
           >
             <CardContent class="p-6">
               <div class="flex flex-col md:flex-row items-start justify-between gap-6">
@@ -408,7 +409,7 @@ const formatCurrency = (val: number) => {
                     </Badge>
                     <span class="text-[9px] font-black text-muted-foreground/60 uppercase tracking-widest">{{ dayjs(suggestion.created_at).format('DD MMM YYYY HH:mm') }}</span>
                   </div>
-                  <h3 class="text-lg font-black tracking-tight text-foreground mb-1">
+                  <h3 class="text-lg font-bold tracking-tight text-foreground mb-1">
                     {{ suggestion.subject }}
                   </h3>
                   <p class="text-sm font-medium text-muted-foreground leading-relaxed">
@@ -465,8 +466,4 @@ const formatCurrency = (val: number) => {
 </template>
 
 <style scoped>
-.glass-effect {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-}
 </style>

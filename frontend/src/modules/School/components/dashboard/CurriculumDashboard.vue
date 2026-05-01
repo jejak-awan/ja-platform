@@ -9,12 +9,12 @@
               name="BookOpen"
               class="w-4 h-4 text-primary"
             />
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-90">{{ $t('features.school.dashboard.v2.academic.hero_badge') }}</span>
+            <span class="text-[10px] font-bold text-primary/80 tracking-wide">{{ $t('features.school.dashboard.v2.academic.hero_badge') }}</span>
           </div>
-          <h1 class="text-4xl font-black tracking-tight leading-tight text-foreground">
+          <h1 class="text-4xl font-bold tracking-tight leading-tight text-foreground">
             {{ $t('features.school.dashboard.v2.academic.hero_title') }}
           </h1>
-          <p class="text-muted-foreground max-w-xl text-lg font-medium leading-relaxed italic">
+          <p class="text-muted-foreground max-w-xl text-lg leading-relaxed">
             {{ $t('features.school.dashboard.v2.academic.hero_subtitle') }}
           </p>
           <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
@@ -42,8 +42,8 @@
                 class="w-5 h-5"
               />
             </div>
-            <span class="text-2xl font-black tracking-tight leading-none text-foreground">{{ stat.value }}</span>
-            <span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-50 mt-2 text-center text-muted-foreground">{{ stat.label }}</span>
+            <span class="text-2xl font-bold tracking-tight leading-none text-foreground">{{ stat.value }}</span>
+            <span class="text-[10px] font-medium mt-1 text-center text-muted-foreground">{{ stat.label }}</span>
           </div>
         </div>
       </div>
@@ -55,10 +55,10 @@
       <Card class="lg:col-span-2 border-border/40 bg-card shadow-none rounded-xl group">
         <CardHeader class="flex flex-row items-center justify-between p-8 pb-4">
           <div>
-            <CardTitle class="text-xl font-black tracking-tight text-foreground/90 uppercase">
+            <CardTitle class="text-xl font-bold tracking-tight text-foreground/90">
               {{ $t('features.school.dashboard.v2.academic.popular_subjects') }}
             </CardTitle>
-            <CardDescription class="font-medium italic">
+            <CardDescription>
               {{ $t('features.school.dashboard.v2.academic.popular_desc') }}
             </CardDescription>
           </div>
@@ -98,7 +98,7 @@
       <!-- Academic Events -->
       <Card class="border-border/40 bg-card text-foreground rounded-xl shadow-none overflow-hidden relative group">
         <CardHeader class="p-8 pb-4 relative z-10">
-          <CardTitle class="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
+          <CardTitle class="text-[11px] font-bold text-primary">
             {{ $t('features.school.dashboard.v2.academic.agenda') }}
           </CardTitle>
         </CardHeader>
@@ -110,14 +110,14 @@
               class="flex gap-4"
             >
               <div class="w-12 h-14 rounded-xl bg-primary/10 text-primary flex flex-col items-center justify-center shrink-0 border border-primary/20">
-                <span class="text-lg font-black leading-none">{{ event.day }}</span>
-                <span class="text-[8px] font-bold uppercase tracking-widest opacity-60">{{ event.month }}</span>
+                <span class="text-lg font-bold leading-none">{{ event.day }}</span>
+                <span class="text-[8px] font-bold uppercase tracking-wide opacity-60">{{ event.month }}</span>
               </div>
               <div>
                 <h5 class="font-bold text-sm leading-snug">
                   {{ event.title }}
                 </h5>
-                <p class="text-[9px] text-muted-foreground font-medium italic mt-1">
+                <p class="text-[10px] text-muted-foreground font-medium mt-1">
                   {{ event.location }}
                 </p>
               </div>
@@ -127,7 +127,7 @@
         <CardFooter class="p-8 pt-0 relative z-10">
           <Button
             variant="outline"
-            class="w-full text-[10px] font-black uppercase tracking-widest h-12 rounded-xl bg-muted/30 hover:bg-muted/50 border-border/40"
+            class="w-full text-[10px] font-bold uppercase tracking-wide h-12 rounded-xl bg-muted/30 hover:bg-muted/50 border-border/40"
           >
             {{ $t('features.school.dashboard.v2.academic.actions.calendar') }}
             <LucideIcon

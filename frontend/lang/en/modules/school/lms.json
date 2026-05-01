@@ -1,0 +1,31 @@
+{
+    "title": "Course Management",
+    "subtitle": "Centrally manage school curriculum and learning materials.",
+    "actions": {
+        "addNew": "Add New Course",
+        "manage": "Manage",
+        "saveCourse": "Save Course",
+        "createTitle": "Create New Course"
+    },
+    "labels": {
+        "courseTitle": "Course Title",
+        "academicContext": "Academic Context",
+        "level": "Level",
+        "status": "Status",
+        "modules": "Modules",
+        "academicYear": "Academic Year",
+        "semester": "Semester",
+        "department": "Department",
+        "grade": "Grade",
+        "difficulty": "Difficulty Level"
+    },
+    "placeholders": {
+        "titleHint": "e.g., Web Dev Mastery",
+        "selectYear": "Select Year",
+        "selectSemester": "Select Semester",
+        "selectDept": "Select Dept",
+        "selectGrade": "Select Grade",
+        "selectLevel": "Select Level",
+        "selectStatus": "Select Status"
+    }
+}

@@ -46,7 +46,7 @@ defineProps<DataTableProps>()
               v-for="header in headerGroup.headers"
               :key="header.id"
               class="h-11 px-4 py-3 text-xs font-bold tracking-wider text-muted-foreground whitespace-nowrap"
-              :style="{ width: header.getSize() !== 150 ? `${header.getSize()}px` : undefined }"
+              :style="{ width: header.getSize() !== 150 ? header.getSize() + 'px' : undefined }"
             >
               <div
                 v-if="!header.isPlaceholder"
@@ -101,6 +101,7 @@ defineProps<DataTableProps>()
                     class="px-4 py-3"
                   >
                     <FlexRender
+                      v-if="cell.column.columnDef.cell"
                       :render="cell.column.columnDef.cell"
                       :props="cell.getContext()"
                     />

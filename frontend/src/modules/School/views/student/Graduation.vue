@@ -3,7 +3,7 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
         <h2 class="text-xl font-bold text-foreground">Informasi Kelulusan</h2>
-        <p class="text-sm text-muted-foreground italic">Cek status kelulusan dan download sertifikat resmi Anda di sini.</p>
+        <p class="text-sm text-muted-foreground">Cek status kelulusan dan download sertifikat resmi Anda di sini.</p>
       </div>
     </div>
 
@@ -27,8 +27,8 @@
                 </div>
                 
                 <div>
-                    <h3 class="text-xs font-black uppercase tracking-widest text-muted-foreground mb-1">Status Kelulusan</h3>
-                    <p :class="['text-2xl font-black uppercase tracking-tighter', statusTextColor]">
+                    <h3 class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">Status Kelulusan</h3>
+                    <p :class="['text-2xl font-bold tracking-tight', statusTextColor]">
                         {{ statusLabel }}
                     </p>
                 </div>
@@ -65,7 +65,7 @@
                         class="flex justify-between items-center p-3 rounded-xl bg-accent/30 border border-border/20"
                     >
                         <span class="text-sm font-medium">{{ key }}</span>
-                        <span class="text-lg font-black text-primary">{{ val }}</span>
+                        <span class="text-lg font-bold text-primary">{{ val }}</span>
                     </div>
                 </div>
                 <div v-else class="text-center py-12 text-muted-foreground text-sm italic">
@@ -76,7 +76,7 @@
                     <div class="flex items-start gap-3">
                         <LucideIcon name="ShieldCheck" class="w-5 h-5 text-primary mt-0.5" />
                         <div>
-                            <p class="text-xs font-bold uppercase tracking-wide text-primary">Nomor Sertifikat</p>
+                            <p class="text-[10px] font-bold text-primary uppercase tracking-wide">Nomor Sertifikat</p>
                             <p class="text-sm font-mono">{{ graduationData.result.certificate_number }}</p>
                         </div>
                     </div>
@@ -144,7 +144,7 @@ const statusTextColor = computed(() => {
 
 const statusIcon = computed(() => {
     const status = graduationData.value?.result?.status;
-    if (status === 'graduated') return 'CheckCircle';
+    if (status === 'graduated') return 'CircleCheck';
     if (status === 'not_graduated') return 'XCircle';
     if (status === 'deferred') return 'Clock';
     return 'Loader2';

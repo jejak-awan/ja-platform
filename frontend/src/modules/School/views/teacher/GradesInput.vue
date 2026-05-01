@@ -10,7 +10,7 @@
     </div>
 
     <!-- Filters & Selection -->
-    <Card class="border-none bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-2xl shadow-indigo-500/5">
+    <Card class="border border-border/40 bg-card shadow-sm">
       <CardContent class="p-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="space-y-2">
@@ -18,7 +18,7 @@
             <Select v-model="selectedClassId">
               <SelectTrigger
                 :disabled="loadingSchedules"
-                class="h-12 bg-white/50 backdrop-blur-sm"
+                class="h-12 bg-background"
               >
                 <SelectValue placeholder="-- Pilih Kelas & Mapel --" />
               </SelectTrigger>
@@ -39,7 +39,7 @@
             <Select v-model="selectedAcademicYear">
               <SelectTrigger
                 :disabled="loadingMeta"
-                class="h-12 bg-white/50 backdrop-blur-sm"
+                class="h-12 bg-background"
               >
                 <SelectValue placeholder="-- Tahun Akademik --" />
               </SelectTrigger>
@@ -60,7 +60,7 @@
             <Select v-model="selectedSemester">
               <SelectTrigger
                 :disabled="loadingMeta"
-                class="h-12 bg-white/50 backdrop-blur-sm"
+                class="h-12 bg-background"
               >
                 <SelectValue placeholder="-- Pilih Semester --" />
               </SelectTrigger>
@@ -87,7 +87,7 @@
       <CardContent class="p-0 border rounded-2xl overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
           <table class="w-full text-sm text-left whitespace-nowrap">
-            <thead class="text-xs text-muted-foreground bg-muted/50 uppercase">
+            <thead class="text-[11px] font-semibold text-muted-foreground/70 bg-muted/20">
               <tr>
                 <th
                   class="px-4 py-3 border-b"
@@ -114,7 +114,7 @@
                   Nilai Keterampilan
                 </th>
                 <th
-                  class="px-4 py-3 border-b text-center font-bold"
+                  class="px-4 py-3 border-b text-center font-semibold"
                   rowspan="2"
                 >
                   Pre-Kalkulasi<br>K & S
@@ -214,7 +214,7 @@
                 </td>
                       
                 <!-- Preview -->
-                <td class="px-4 py-3 text-center bg-muted/5 font-bold tabular-nums">
+                <td class="px-4 py-3 text-center bg-muted/5 font-semibold tabular-nums">
                   <span class="text-primary">{{ calcK(gradesDraft[student.id]) }}</span>
                   <span class="mx-1 text-muted-foreground/30">|</span>
                   <span class="text-success">{{ calcS(gradesDraft[student.id]) }}</span>

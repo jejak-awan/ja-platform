@@ -25,7 +25,7 @@
     >
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
-          <thead class="bg-muted/50 border-b">
+          <thead class="text-[11px] font-semibold text-muted-foreground/70 bg-muted/20 border-b">
             <tr>
               <th class="p-4 text-left font-semibold">
                 Mata Pelajaran
@@ -59,7 +59,7 @@
               <td class="p-4 text-center">
                 {{ grade.skill_score || '-' }}
               </td>
-              <td class="p-4 text-center font-bold text-lg">
+              <td class="p-4 text-center font-semibold text-base">
                 <span :class="{'text-destructive': grade.final_grade < 75, 'text-success': grade.final_grade >= 80}">
                   {{ grade.final_grade || '-' }}
                 </span>

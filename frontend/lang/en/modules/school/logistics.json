@@ -45,7 +45,20 @@
             "studentList": "Transport Student List",
             "studentListDesc": "Students registered for school transportation service.",
             "pickupPoint": "Pickup Point",
-            "vehicle": "Vehicle"
+            "vehicle": "Vehicle",
+            "route": "Route",
+            "startService": "Start Service"
+        },
+        "placeholders": {
+            "searchStudent": "Search Student",
+            "searchHint": "Name or NIS...",
+            "selectFleet": "Select Fleet",
+            "selectRoute": "Select Route",
+            "pickupHint": "Address or Stop"
+        },
+        "messages": {
+            "saveSuccess": "Student successfully registered for transport",
+            "fillAll": "Please complete all registration data"
         }
     },
     "inventory": {

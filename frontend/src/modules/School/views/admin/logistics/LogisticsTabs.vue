@@ -9,11 +9,11 @@
               class="w-5 h-5 text-primary"
             />
           </div>
-          <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
             {{ $t('features.school.logistics.labels.logisticsEcosystem') }}
           </h1>
         </div>
-        <p class="text-muted-foreground text-sm font-medium italic">
+        <p class="text-muted-foreground text-sm">
           {{ $t('features.school.logistics.subtitle') }}
         </p>
       </div>
@@ -26,7 +26,7 @@
       <TabsList class="p-2 bg-muted/50 rounded-2xl inline-flex h-auto gap-2 mb-6">
         <TabsTrigger 
           value="hostel" 
-          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-semibold"
         >
           <LucideIcon
             name="Home"
@@ -36,7 +36,7 @@
         </TabsTrigger>
         <TabsTrigger 
           value="transport" 
-          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-semibold"
         >
           <LucideIcon
             name="Bus"
@@ -46,7 +46,7 @@
         </TabsTrigger>
         <TabsTrigger 
           value="inventory" 
-          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-semibold"
         >
           <LucideIcon
             name="Box"
@@ -56,7 +56,7 @@
         </TabsTrigger>
         <TabsTrigger 
           value="career" 
-          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold"
+          class="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-semibold"
         >
           <LucideIcon
             name="Briefcase"

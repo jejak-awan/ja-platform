@@ -1,5 +1,5 @@
 <template>
-  <Card class="border-border/50 bg-background/50 backdrop-blur-sm shadow-xl rounded-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-500">
+  <Card class="border-border/50 bg-background/50 backdrop-blur-sm shadow-sm rounded-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-500">
     <form @submit.prevent="handleSubmit">
       <CardContent class="p-0">
         <Tabs

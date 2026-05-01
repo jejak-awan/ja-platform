@@ -1,0 +1,46 @@
+{
+    "title": "Kelulusan Siswa",
+    "subtitle": "Kelola pengumuman kelulusan, input nilai, dan cetak sertifikat/SKL.",
+    "tabs": {
+        "eligible": "Calon Lulusan",
+        "history": "Riwayat & Nilai",
+        "settings": "Pengaturan"
+    },
+    "labels": {
+        "manageTemplates": "Kelola Template",
+        "eligibleHint": "Daftar ini berisi siswa tingkat akhir yang siap diproses kelulusannya.",
+        "batchYear": "Tahun Lulus",
+        "targetStatus": "Status Target",
+        "processSelected": "Proses ({count})",
+        "importGrades": "Import Nilai",
+        "editGrades": "Input Nilai & Sertifikat",
+        "certificateNumber": "No. Sertifikat/SKL",
+        "certificateNumberPlaceholder": "Contoh: SKL/2024/001",
+        "gradeDetails": "Rincian Nilai",
+        "addSubject": "Tambah Mapel",
+        "noGrades": "Belum ada data nilai.",
+        "importTitle": "Import Nilai dari File",
+        "importDescription": "Upload file CSV atau Excel (.xlsx) dengan format: kolom pertama NISN, kolom selanjutnya nama mata pelajaran dengan nilainya.",
+        "chooseFile": "Pilih File CSV/Excel",
+        "formatHint": "Format File",
+        "graduationYear": "Tahun Kelulusan",
+        "statusPub": "Status Publikasi",
+        "openAnnouncement": "Buka Pengumuman Kelulusan",
+        "openAnnouncementDesc": "Jika diaktifkan, siswa dapat melihat hasil kelulusan di halaman publik.",
+        "announcementSchedule": "Jadwal Pengumuman",
+        "announcementScheduleDesc": "Kosongkan jika pengumuman dapat diakses kapan saja setelah dibuka.",
+        "mappingSubject": "Mata Pelajaran (Mapping)",
+        "mappingSubjectDesc": "Daftar mata pelajaran ini akan digunakan sebagai format saat Import Excel.",
+        "selectYear": "Pilih Tahun Ajaran",
+        "createSetting": "Buat Pengaturan Tahun {year}",
+        "saveSetting": "Simpan Pengaturan"
+    },
+    "messages": {
+        "processConfirmTitle": "Konfirmasi Proses Kelulusan",
+        "processConfirmMessage": "Apakah Anda yakin ingin memproses {count} siswa dengan status \"{status}\" untuk tahun {year}?",
+        "importSuccess": "Berhasil import nilai untuk {count} siswa",
+        "createSuccess": "Pengaturan baru berhasil dibuat",
+        "saveSuccess": "Pengaturan berhasil disimpan",
+        "gradeSaveSuccess": "Data nilai berhasil disimpan"
+    }
+}

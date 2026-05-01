@@ -3,9 +3,11 @@
         "add": "Add Student",
         "editProfile": "Edit Profile",
         "export": "Export CSV",
+        "import": "Import Data",
         "printID": "Print Student Card",
         "printProfile": "Print Profile",
-        "printSKL": "Print SKL"
+        "printSKL": "Print SKL",
+        "backToProfile": "Back to Profile"
     },
     "labels": {
         "academicHistory": "Academic History",
@@ -15,20 +17,40 @@
         "disciplineRecord": "Discipline Record",
         "fatherName": "Father's Name",
         "fatherOccupation": "Father's Occupation",
-        "genderShort": "Gender",
+        "genderShort": "Sex",
+        "fullName": "Full Name",
+        "class": "Class / Group",
+        "gender": "Gender",
         "level": "Level",
         "motherName": "Mother's Name",
+        "motherOccupation": "Mother's Occupation",
         "parentInfo": "Parent Information",
         "personalInfo": "Personal Information",
         "religion": "Religion",
         "rombel": "Study Group",
         "studentData": "Student Data",
-        "totalStudents": "Total: {total} students"
+        "totalStudents": "Total: {total} students",
+        "studentMenu": "Student Menu",
+        "financialStatus": "Financial Status",
+        "guardianName": "Guardian Name",
+        "domicileAddress": "Domicile Address"
+    },
+    "tabs": {
+        "profile": "Complete Biodata",
+        "academic": "Academic History",
+        "attendance": "Attendance",
+        "disciplinary": "Disciplinary Records",
+        "payment": "Finance"
     },
     "messages": {
         "academicHistoryEmpty": "Academic history will be displayed here.",
         "attendanceEmpty": "Attendance summary will be displayed here.",
-        "disciplineEmpty": "Violation and achievement records will be displayed here."
+        "disciplineEmpty": "Violation and achievement records will be displayed here.",
+        "dataNotAvailable": "Data Not Available Yet",
+        "syncingData": "Detailed information for this module is currently being synchronized.",
+        "saveSuccess": "Student data saved successfully",
+        "deleteSuccess": "Student data deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete student \"{name}\"?"
     },
     "subtitle": "Manage all student data and their detailed profile information.",
     "title": "Student Data"

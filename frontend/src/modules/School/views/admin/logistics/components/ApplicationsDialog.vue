@@ -50,7 +50,7 @@ const columns = [
    columnHelper.accessor('vacancy.company_name', { header: 'Perusahaan' }),
    columnHelper.accessor('status', {
       header: 'Status',
-      cell: info => h(Badge, { variant: 'outline', class: 'text-[10px] uppercase font-bold' }, info.getValue())
+      cell: info => h(Badge, { variant: 'outline', class: 'text-[10px] font-semibold' }, info.getValue())
    }),
    columnHelper.accessor('created_at', { 
       header: 'Tanggal',

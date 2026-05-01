@@ -6,12 +6,12 @@
         <div class="space-y-4 text-center lg:text-left">
           <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
             <div class="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-90">{{ $t('features.school.dashboard.v2.hero.badge') }}</span>
+            <span class="text-[10px] font-bold text-primary/80">{{ $t('features.school.dashboard.v2.hero.badge') }}</span>
           </div>
-          <h1 class="text-4xl font-black tracking-tight leading-tight text-foreground">
+          <h1 class="text-4xl font-bold tracking-tight leading-tight text-foreground">
             {{ $t('features.school.dashboard.v2.hero.title') }}
           </h1>
-          <p class="text-muted-foreground max-w-xl text-lg font-medium leading-relaxed italic">
+          <p class="text-muted-foreground max-w-xl text-lg leading-relaxed">
             {{ $t('features.school.dashboard.v2.hero.subtitle') }}
           </p>
           <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
@@ -39,8 +39,8 @@
                 class="w-5 h-5"
               />
             </div>
-            <span class="text-2xl font-black tracking-tight leading-none text-foreground">{{ stat.value }}</span>
-            <span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-50 mt-2 text-center text-muted-foreground">{{ stat.label }}</span>
+            <span class="text-2xl font-bold tracking-tight leading-none text-foreground">{{ stat.value }}</span>
+            <span class="text-[10px] font-medium mt-1 text-center text-muted-foreground">{{ stat.label }}</span>
           </div>
         </div>
       </div>
@@ -51,10 +51,10 @@
       <Card class="lg:col-span-2 border-border/40 bg-card shadow-none rounded-xl group">
         <CardHeader class="flex flex-row items-center justify-between p-8 pb-4">
           <div>
-            <CardTitle class="text-xl font-black tracking-tight text-foreground/90 uppercase">
+            <CardTitle class="text-xl font-bold tracking-tight text-foreground/90">
               {{ $t('features.school.dashboard.v2.hr_presence.title') }}
             </CardTitle>
-            <CardDescription class="font-medium italic">
+            <CardDescription>
               {{ $t('features.school.dashboard.v2.hr_presence.subtitle') }}
             </CardDescription>
           </div>
@@ -83,7 +83,7 @@
                 <h5 class="font-bold text-foreground truncate text-sm">
                   {{ staff.name }}
                 </h5>
-                <p class="text-[9px] text-muted-foreground uppercase font-black tracking-widest">
+                <p class="text-[10px] text-muted-foreground font-medium">
                   {{ staff.role }}
                 </p>
               </div>
@@ -104,7 +104,7 @@
       <div class="space-y-10">
         <!-- Strategic Alerts -->
         <Card class="border-border/40 bg-destructive/5 dark:bg-destructive/10 border-l-4 border-destructive rounded-xl p-8 shadow-none group">
-          <h4 class="text-xs font-black uppercase tracking-[0.2em] text-destructive flex items-center gap-3 mb-6">
+          <h4 class="text-xs font-bold text-destructive flex items-center gap-3 mb-6">
             <div class="w-2 h-2 rounded-full bg-destructive group-hover:animate-ping" />
             {{ $t('features.school.dashboard.v2.alerts.title') }}
           </h4>
@@ -124,7 +124,7 @@
                 <p class="text-sm font-bold text-foreground/80 leading-tight group-hover/alert:text-destructive transition-colors">
                   {{ alert.title }}
                 </p>
-                <p class="text-[9px] font-black text-muted-foreground/60 mt-1 uppercase leading-none">
+                <p class="text-[10px] font-medium text-muted-foreground/60 mt-1">
                   {{ alert.status }}
                 </p>
               </div>

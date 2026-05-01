@@ -81,7 +81,7 @@
           </Badge>
         </div>
         <CardHeader class="pb-2">
-          <CardTitle class="text-sm font-bold truncate">
+          <CardTitle class="text-sm font-semibold truncate">
             {{ item.name }}
           </CardTitle>
           <CardDescription class="text-[10px]">
@@ -90,7 +90,7 @@
         </CardHeader>
         <CardContent>
           <div class="flex justify-between items-end">
-            <div class="text-2xl font-bold">
+            <div class="text-2xl font-semibold">
               {{ item.quantity_on_hand }} <span class="text-xs text-muted-foreground font-normal">{{ item.unit }}</span>
             </div>
             <div class="text-[10px] text-muted-foreground">
@@ -170,7 +170,7 @@ const columns = [
       header: t('common.labels.type'),
       cell: info => h(Badge, { 
          variant: info.getValue() === 'in' ? 'outline' : (info.getValue() === 'out' ? 'destructive' : 'secondary'),
-         class: 'text-[10px] uppercase font-bold'
+         class: 'text-[10px] font-semibold'
       }, info.getValue())
    }),
    columnHelper.accessor('quantity', { header: t('features.school.logistics.inventory.labels.quantity') }),

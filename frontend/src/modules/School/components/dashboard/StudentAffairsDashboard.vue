@@ -9,12 +9,12 @@
               name="Heart"
               class="w-4 h-4 text-primary"
             />
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-90">{{ $t('features.school.dashboard.v2.student_affairs.hero_badge') }}</span>
+            <span class="text-[10px] font-bold text-primary/80 tracking-wide">{{ $t('features.school.dashboard.v2.student_affairs.hero_badge') }}</span>
           </div>
-          <h1 class="text-4xl font-black tracking-tight leading-tight text-foreground">
+          <h1 class="text-4xl font-bold tracking-tight leading-tight text-foreground">
             {{ $t('features.school.dashboard.v2.student_affairs.hero_title') }}
           </h1>
-          <p class="text-muted-foreground max-w-xl text-lg font-medium leading-relaxed italic">
+          <p class="text-muted-foreground max-w-xl text-lg leading-relaxed">
             {{ $t('features.school.dashboard.v2.student_affairs.hero_subtitle') }}
           </p>
           <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
@@ -42,8 +42,8 @@
                 class="w-5 h-5"
               />
             </div>
-            <span class="text-2xl font-black tracking-tight leading-none text-foreground">{{ stat.value }}</span>
-            <span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-50 mt-2 text-center text-muted-foreground">{{ stat.label }}</span>
+            <span class="text-2xl font-bold tracking-tight leading-none text-foreground">{{ stat.value }}</span>
+            <span class="text-[10px] font-medium mt-1 text-center text-muted-foreground">{{ stat.label }}</span>
           </div>
         </div>
       </div>
@@ -54,10 +54,10 @@
       <Card class="lg:col-span-2 border-border/40 bg-card shadow-none rounded-xl group">
         <CardHeader class="flex flex-row items-center justify-between p-8 pb-4">
           <div>
-            <CardTitle class="text-xl font-black tracking-tight text-foreground/90 uppercase">
+            <CardTitle class="text-xl font-bold tracking-tight text-foreground/90 uppercase">
               {{ $t('features.school.dashboard.v2.student_affairs.activity_log') }}
             </CardTitle>
-            <CardDescription class="font-medium italic">
+            <CardDescription>
               {{ $t('features.school.dashboard.v2.student_affairs.activity_desc') }}
             </CardDescription>
           </div>
@@ -105,7 +105,7 @@
       <!-- OSIS Highlight -->
       <Card class="border-border/40 bg-card text-foreground rounded-xl shadow-none overflow-hidden relative group">
         <CardHeader class="p-8 pb-4 relative z-10">
-          <CardTitle class="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
+          <CardTitle class="text-[11px] font-bold text-primary">
             {{ $t('features.school.dashboard.v2.student_affairs.osis_highlight') }}
           </CardTitle>
         </CardHeader>
@@ -115,7 +115,7 @@
               {{ $t('features.school.dashboard.v2.student_affairs.on_going_program') }}
             </p>
             <div class="flex justify-between items-end mb-2">
-              <h3 class="text-2xl font-black">
+              <h3 class="text-2xl font-bold">
                 Bakti Sosial
               </h3>
               <span class="text-xs font-bold">65%</span>

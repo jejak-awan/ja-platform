@@ -3,7 +3,7 @@
     "subtitle": "Monitor administrative activities and system changes.",
     "labels": {
         "details": "Log Details",
-        "causer": "Causer",
+        "causer": "Executor",
         "time": "Time",
         "description": "Description",
         "properties": "Data Properties",
@@ -12,6 +12,6 @@
         "module": "Module"
     },
     "placeholders": {
-        "search": "Search activities..."
+        "search": "Search activity..."
     }
 }

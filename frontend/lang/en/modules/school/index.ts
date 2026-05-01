@@ -11,8 +11,10 @@ import students from './students.json';
 import misc from './misc.json';
 import wizard from './wizard.json';
 import extensions from './extensions.json';
+import graduation from './graduation.json';
 import osis from './osis.json';
 import teacher_dashboard from './teacher_dashboard.json';
+import lms from './lms.json';
 
 export default {
     ...misc,
@@ -31,4 +33,6 @@ export default {
     extensions,
     osis,
     teacher_dashboard,
+    graduation,
+    lms,
 };

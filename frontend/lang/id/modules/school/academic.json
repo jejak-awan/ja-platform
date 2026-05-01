@@ -24,7 +24,8 @@
         "setActiveYear": "Set sebagai Tahun Aktif",
         "noMembers": "Belum ada anggota di rombel ini.",
         "manageGroupMembers": "Kelola Anggota: {name}",
-        "manageGroupMembersDesc": "Tambahkan atau hapus siswa dari rombongan belajar ini."
+        "manageGroupMembersDesc": "Tambahkan atau hapus siswa dari rombongan belajar ini.",
+        "department": "Jurusan / Kompetensi Keahlian"
     },
     "messages": {
         "addSuccess": "Data berhasil ditambahkan",
@@ -50,7 +51,8 @@
         "selectYear": "Pilih Tahun",
         "selectStudentToAdd": "Pilih siswa untuk ditambahkan",
         "selectSubjectGroup": "Pilih Kelompok",
-        "notesHint": "Keterangan tambahan..."
+        "notesHint": "Keterangan tambahan...",
+        "department": "Pilih Jurusan"
     },
     "subtitle": "Kelola kurikulum, rombongan belajar, dan kalender akademik.",
     "tabs": {

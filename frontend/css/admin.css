@@ -78,36 +78,36 @@
 }
 
 @layer components {
-    /* Dashboard Breadcrumb */
+    /* Dashboard Breadcrumb - Clean & Flat Shadcn Style */
     .dashboard-breadcrumb {
-        @apply bg-card border-b border-border overflow-hidden transition-all duration-300;
+        @apply bg-transparent border-b border-border/40 py-4 px-6;
     }
 
     .dashboard-breadcrumb-title {
-        @apply text-[12px] md:text-[14px] font-black uppercase tracking-[0.4em] text-foreground leading-none;
+        @apply text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 leading-none;
     }
 
     .dashboard-breadcrumb-title-rule {
-        @apply h-px bg-border mt-1.5 transition-all duration-500;
+        @apply hidden; /* Remove the underline rule for a cleaner flat look */
     }
 
     .dashboard-breadcrumb-path {
-        @apply flex items-center space-x-3 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground;
+        @apply flex items-center mt-1.5 text-[13px] font-medium text-foreground/70;
     }
 
     .dashboard-breadcrumb-separator {
-        @apply mx-2 text-border;
+        @apply mx-2 text-muted-foreground/30 font-light;
     }
 
     .dashboard-breadcrumb-link {
-        @apply text-muted-foreground hover:text-foreground transition-colors;
+        @apply text-muted-foreground hover:text-foreground transition-colors duration-200;
     }
 
     .dashboard-breadcrumb-current {
-        @apply text-foreground;
+        @apply text-foreground font-semibold;
     }
 
     .dashboard-breadcrumb-accent {
-        @apply absolute bottom-0 left-0 w-full h-px bg-border;
+        @apply hidden;
     }
 }

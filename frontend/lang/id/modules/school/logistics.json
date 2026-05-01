@@ -45,7 +45,20 @@
             "studentList": "Daftar Siswa Antar Jemput",
             "studentListDesc": "Siswa yang terdaftar dalam layanan transportasi sekolah.",
             "pickupPoint": "Titik Jemput",
-            "vehicle": "Kendaraan"
+            "vehicle": "Kendaraan",
+            "route": "Rute",
+            "startService": "Mulai Layanan"
+        },
+        "placeholders": {
+            "searchStudent": "Cari Siswa",
+            "searchHint": "Nama atau NIS...",
+            "selectFleet": "Pilih Armada",
+            "selectRoute": "Pilih Rute",
+            "pickupHint": "Alamat atau Halte jemput"
+        },
+        "messages": {
+            "saveSuccess": "Siswa berhasil terdaftar transport",
+            "fillAll": "Lengkapi semua data pendaftaran"
         }
     },
     "inventory": {

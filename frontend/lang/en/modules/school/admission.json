@@ -11,7 +11,7 @@
         "new": "New",
         "personalData": "Personal Data",
         "previousSchool": "Previous School",
-        "regNumber": "Reg Number",
+        "regNumber": "Reg. Number",
         "rejected": "Rejected",
         "conversion": "Conversion",
         "registrationStatus": "Registration Status",
@@ -20,18 +20,25 @@
         "targetAcademicYear": "Target Academic Year",
         "totalApplicants": "Total Applicants",
         "verified": "Verified",
-        "nisn": "NISN"
+        "nisn": "NISN",
+        "father_name": "Father's Name",
+        "mother_name": "Mother's Name"
     },
     "placeholders": {
-        "fullNameHint": "According to Diploma / Certificate",
+        "full_name": "According to ID / Certificate",
+        "gender": "Select Gender",
+        "religion": "Select Religion",
+        "level": "Select Level",
+        "fullNameHint": "According to ID / Certificate",
         "noDocuments": "No documents uploaded yet.",
         "search": "Search applicants...",
         "selectGender": "Select Gender",
         "selectYear": "Select Year",
         "nisnHint": "10 Digit NISN",
+        "nisHint": "Student Identification Number",
         "emailHint": "example@email.com",
         "previousSchoolHint": "Previous school name"
     },
-    "subtitle": "Manage registration, document verification, and selection process.",
+    "subtitle": "Manage registration, document verification, and admission selection.",
     "title": "New Student Admission (PPDB)"
 }

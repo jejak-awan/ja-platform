@@ -20,15 +20,22 @@
         "targetAcademicYear": "Tahun Ajaran Tujuan",
         "totalApplicants": "Total Pelamar",
         "verified": "Terverifikasi",
-        "nisn": "NISN"
+        "nisn": "NISN",
+        "father_name": "Nama Ayah",
+        "mother_name": "Nama Ibu"
     },
     "placeholders": {
+        "full_name": "Sesuai Ijazah / Akta",
+        "gender": "Pilih Jenis Kelamin",
+        "religion": "Pilih Agama",
+        "level": "Pilih Jenjang",
         "fullNameHint": "Sesuai Ijazah / Akta",
         "noDocuments": "Belum ada dokumen yang diunggah.",
         "search": "Cari pelamar...",
         "selectGender": "Pilih Jenis Kelamin",
         "selectYear": "Pilih Tahun",
         "nisnHint": "10 Digit NISN",
+        "nisHint": "Nomor Induk Sekolah",
         "emailHint": "contoh@email.com",
         "previousSchoolHint": "Nama sekolah sebelumnya"
     },

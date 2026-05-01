@@ -1,11 +1,11 @@
 {
-    "title": "Personnel Management",
+    "title": "Human Resources",
     "actions": {
         "addShift": "Add Shift",
         "inputLeave": "Input Leave (Manual)"
     },
     "labels": {
-        "advancedHR": "Advanced Personnel Management",
+        "advancedHR": "Advanced HR Management",
         "from": "From",
         "leaveApplications": "Leave Applications",
         "shiftSettings": "Shift Settings",
@@ -27,10 +27,12 @@
             "nuptk": "NUPTK",
             "fullName": "Full Name",
             "ptkType": "Staff Type",
-            "salarySetting": "Salary Setting",
+            "salarySetting": "Salary Settings",
             "period": "Period",
             "netSalary": "Net Salary",
-            "total": "Total: {total} people"
+            "total": "Total: {total} persons",
+            "employmentStatus": "Employment Status",
+            "certificationStatus": "Certification"
         },
         "actions": {
             "setupSalary": "Setup Components"
@@ -38,12 +40,12 @@
         "messages": {
             "exportSuccess": "Data exported to CSV successfully",
             "deleteConfirmTitle": "Delete Staff Data",
-            "deleteConfirmMessage": "Are you sure you want to delete this staff record?",
+            "deleteConfirmMessage": "Are you sure you want to delete this staff data?",
             "deleteSuccess": "Staff deleted successfully",
             "generatePayrollConfirm": "Generate payroll for period {period}?",
             "generatePayrollSuccess": "Payroll generated successfully",
             "saveSalarySuccess": "Salary structure saved successfully"
         }
     },
-    "subtitle": "Manage working hours (shifts) and staff leave/permit requests."
+    "subtitle": "Manage working hours (shifts) and staff leave/permit applications."
 }

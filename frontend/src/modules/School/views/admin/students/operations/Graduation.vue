@@ -2,24 +2,32 @@
   <div class="space-y-6">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <h2 class="text-xl font-bold text-foreground">
-          {{ $t('features.school.ops.graduation.title') }}
-        </h2>
-        <p class="text-sm text-muted-foreground italic">
-          {{ $t('features.school.ops.graduation.subtitle') }}
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-sm">
+            <LucideIcon
+              name="GraduationCap"
+              class="w-6 h-6 text-primary"
+            />
+          </div>
+          <h2 class="text-3xl font-black tracking-tight text-foreground uppercase">
+            {{ $t('graduation.title') }}
+          </h2>
+        </div>
+        <p class="text-sm text-muted-foreground italic font-medium">
+          {{ $t('graduation.subtitle') }}
         </p>
       </div>
       <div class="flex gap-2">
         <router-link :to="{ name: 'settings.document-templates', query: { type: 'skl' } }">
           <Button
             variant="outline"
-            class="rounded-xl shadow-sm"
+            class="rounded-xl shadow-sm h-11 px-6 font-bold"
           >
             <LucideIcon
               name="FileText"
               class="w-4 h-4 mr-2"
             />
-            {{ $t('features.school.ops.graduation.labels.manageTemplates') }}
+            {{ $t('graduation.labels.manageTemplates') }}
           </Button>
         </router-link>
       </div>
@@ -29,15 +37,15 @@
       v-model="activeTab"
       class="w-full"
     >
-      <TabsList class="grid w-full grid-cols-3 lg:w-[600px]">
-        <TabsTrigger value="eligible">
-          {{ $t('features.school.ops.graduation.labels.tabEligible') }}
+      <TabsList class="grid w-full grid-cols-3 lg:w-[600px] h-12 bg-muted/50 p-1 rounded-xl">
+        <TabsTrigger value="eligible" class="rounded-lg font-bold">
+          {{ $t('graduation.tabs.eligible') }}
         </TabsTrigger>
-        <TabsTrigger value="history">
-          {{ $t('features.school.ops.graduation.labels.tabHistory') }}
+        <TabsTrigger value="history" class="rounded-lg font-bold">
+          {{ $t('graduation.tabs.history') }}
         </TabsTrigger>
-        <TabsTrigger value="settings">
-          Pengaturan
+        <TabsTrigger value="settings" class="rounded-lg font-bold">
+          {{ $t('graduation.tabs.settings') }}
         </TabsTrigger>
       </TabsList>
 
@@ -45,13 +53,13 @@
         value="eligible"
         class="mt-6 space-y-4"
       >
-        <Card class="border border-border/40 shadow-none rounded-xl">
-          <CardContent class="p-4 space-y-4">
-            <div class="flex flex-wrap gap-4 items-end">
+        <Card class="border border-border/40 shadow-sm rounded-2xl overflow-hidden">
+          <CardContent class="p-6 space-y-6">
+            <div class="flex flex-wrap gap-4 items-end bg-muted/10 p-4 rounded-xl border border-border/30">
               <div class="space-y-2">
-                <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Tahun Lulus</label>
+                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.batchYear') }}</label>
                 <Select v-model="batchYear">
-                  <SelectTrigger class="w-[120px] rounded-xl">
+                  <SelectTrigger class="w-[140px] rounded-xl h-11 bg-background">
                     <SelectValue :placeholder="String(new Date().getFullYear())" />
                   </SelectTrigger>
                   <SelectContent>
@@ -66,39 +74,39 @@
                 </Select>
               </div>
               <div class="space-y-2">
-                <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Status Target</label>
+                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.targetStatus') }}</label>
                 <Select v-model="batchStatus">
-                  <SelectTrigger class="w-[180px] rounded-xl">
+                  <SelectTrigger class="w-[200px] rounded-xl h-11 bg-background">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="graduated">Lulus</SelectItem>
-                    <SelectItem value="not_graduated">Tidak Lulus</SelectItem>
-                    <SelectItem value="deferred">Ditangguhkan</SelectItem>
+                    <SelectItem value="graduated">{{ $t('common.status.completed') }}</SelectItem>
+                    <SelectItem value="not_graduated">{{ $t('common.status.rejected') }}</SelectItem>
+                    <SelectItem value="deferred">{{ $t('common.status.pending') }}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <Button
                 v-if="selectedRows.length > 0"
                 variant="default"
-                class="rounded-xl shadow-sm px-6 bg-success hover:bg-success/90"
+                class="rounded-xl shadow-sm px-8 h-11 font-bold bg-success hover:bg-success/90 ml-auto"
                 :loading="processing"
                 @click="handleProcess"
               >
                 <LucideIcon
-                  name="CheckCircle"
-                  class="w-4 h-4 mr-2"
+                  name="CircleCheck"
+                  class="w-5 h-5 mr-2"
                 />
-                Proses ({{ selectedRows.length }})
+                {{ $t('graduation.labels.processSelected', { count: selectedRows.length }) }}
               </Button>
             </div>
 
-            <div class="p-3 bg-muted/30 rounded-lg text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+            <div class="p-3 bg-primary/5 border border-primary/10 rounded-xl text-[11px] font-bold uppercase tracking-wider text-primary flex items-center gap-2">
               <LucideIcon
                 name="Info"
-                class="w-3 h-3"
+                class="w-4 h-4"
               />
-              {{ $t('features.school.ops.graduation.labels.eligibleHint') }}
+              {{ $t('graduation.labels.eligibleHint') }}
             </div>
 
             <DataTable
@@ -113,12 +121,13 @@
         value="history"
         class="mt-6"
       >
-        <Card class="border border-border/40 shadow-none rounded-xl overflow-hidden">
+        <Card class="border border-border/40 shadow-sm rounded-2xl overflow-hidden">
           <CardContent class="p-0">
-            <div class="p-4 flex justify-between items-center bg-muted/20 border-b border-border/40">
-              <div class="flex items-center gap-2">
+            <div class="p-6 flex flex-wrap justify-between items-center bg-muted/10 border-b border-border/40 gap-4">
+              <div class="flex items-center gap-3">
+                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.graduationYear') }}</label>
                 <Select v-model="filterYear">
-                  <SelectTrigger class="w-[120px] rounded-xl h-8">
+                  <SelectTrigger class="w-[140px] rounded-xl h-10 bg-background">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -132,30 +141,32 @@
                   </SelectContent>
                 </Select>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                class="rounded-lg"
-                @click="importModalOpen = true"
-              >
-                <LucideIcon
-                  name="Upload"
-                  class="w-3.5 h-3.5 mr-2"
-                />
-                Import Nilai
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                class="rounded-lg"
-                @click="fetchHistory"
-              >
-                <LucideIcon
-                  name="RefreshCcw"
-                  class="w-3.5 h-3.5 mr-2"
-                />
-                Refresh
-              </Button>
+              <div class="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="default"
+                  class="rounded-xl h-10 px-6 font-bold"
+                  @click="importModalOpen = true"
+                >
+                  <LucideIcon
+                    name="Upload"
+                    class="w-4 h-4 mr-2 text-primary"
+                  />
+                  {{ $t('graduation.labels.importGrades') }}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="default"
+                  class="rounded-xl h-10 px-6 font-bold"
+                  @click="fetchHistory"
+                >
+                  <LucideIcon
+                    name="RefreshCcw"
+                    class="w-4 h-4 mr-2"
+                  />
+                  {{ $t('common.actions.refresh') }}
+                </Button>
+              </div>
             </div>
             <DataTable
               :table="historyTable"
@@ -177,103 +188,105 @@
     
     <!-- Edit Grade Modal -->
     <Dialog v-model:open="gradeModalOpen">
-      <DialogContent class="sm:max-w-[600px] rounded-2xl max-h-[90vh] overflow-hidden flex flex-col">
-        <DialogHeader>
-          <DialogTitle>Input Nilai & Sertifikat</DialogTitle>
-          <DialogDescription v-if="editingResult">
-            Siswa: {{ editingResult.student?.full_name }} ({{ editingResult.student?.nisn }})
+      <DialogContent class="sm:max-w-[600px] rounded-2xl max-h-[90vh] overflow-hidden flex flex-col p-0">
+        <DialogHeader class="p-6 border-b border-border/40">
+          <DialogTitle>{{ $t('graduation.labels.editGrades') }}</DialogTitle>
+          <DialogDescription v-if="editingResult" class="font-bold text-primary">
+            {{ editingResult.student?.full_name }} ({{ editingResult.student?.nisn }})
           </DialogDescription>
         </DialogHeader>
         
         <div 
           v-if="editingResult" 
-          class="space-y-4 py-4 flex-1 overflow-y-auto"
+          class="p-6 space-y-6 flex-1 overflow-y-auto"
         >
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-6">
             <div class="space-y-2">
-              <label class="text-xs font-bold uppercase">Status</label>
+              <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('common.labels.status') }}</label>
               <Select v-model="editingResult.status">
-                <SelectTrigger class="rounded-xl">
+                <SelectTrigger class="rounded-xl h-11">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="graduated">Lulus</SelectItem>
-                  <SelectItem value="not_graduated">Tidak Lulus</SelectItem>
-                  <SelectItem value="deferred">Ditangguhkan</SelectItem>
+                  <SelectItem value="graduated">{{ $t('common.status.completed') }}</SelectItem>
+                  <SelectItem value="not_graduated">{{ $t('common.status.rejected') }}</SelectItem>
+                  <SelectItem value="deferred">{{ $t('common.status.pending') }}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div class="space-y-2">
-              <label class="text-xs font-bold uppercase">No. Sertifikat/SKL</label>
+              <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.certificateNumber') }}</label>
               <Input
                 v-model="editingResult.certificate_number"
-                placeholder="Contoh: SKL/2024/001"
-                class="rounded-xl"
+                :placeholder="$t('graduation.labels.certificateNumberPlaceholder')"
+                class="rounded-xl h-11"
               />
             </div>
           </div>
 
-          <div class="space-y-2">
+          <div class="space-y-3">
             <div class="flex justify-between items-center">
-              <label class="text-xs font-bold uppercase">Rincian Nilai</label>
+              <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.gradeDetails') }}</label>
               <Button 
-                variant="link" 
+                variant="ghost" 
                 size="sm" 
-                class="h-auto p-0 text-xs"
+                class="h-8 px-3 rounded-lg text-primary font-bold hover:bg-primary/5"
                 @click="addGradeField"
               >
-                + Tambah Mapel
+                <LucideIcon name="Plus" class="w-3.5 h-3.5 mr-1" />
+                {{ $t('graduation.labels.addSubject') }}
               </Button>
             </div>
-            <div class="max-h-[250px] overflow-y-auto space-y-2 pr-1">
+            <div class="max-h-[300px] overflow-y-auto space-y-3 pr-2 custom-scrollbar">
               <div 
                 v-for="(_, key) in editingResult.grades" 
                 :key="key" 
-                class="flex gap-2"
+                class="flex gap-3 animate-in fade-in slide-in-from-left-2 duration-300"
               >
                 <Input 
                   v-model="tempGradeKeys[key]" 
-                  placeholder="Mapel" 
-                  class="flex-1 rounded-lg h-8 text-sm"
+                  :placeholder="$t('common.placeholders.subject_name')" 
+                  class="flex-1 rounded-xl h-10 text-sm font-medium"
                   @blur="updateGradeKey(key as string)"
                 />
                 <Input 
                   v-model="editingResult.grades[key]" 
-                  placeholder="Nilai" 
+                  placeholder="0" 
                   type="number" 
-                  class="w-20 rounded-lg h-8 text-sm text-center"
+                  class="w-24 rounded-xl h-10 text-sm font-black text-center"
                 />
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  class="h-8 w-8 text-destructive"
+                  class="h-10 w-10 text-destructive hover:bg-destructive/10 rounded-xl shrink-0"
                   @click="removeGradeField(key as string)"
                 >
-                  <LucideIcon name="Trash2" class="w-3.5 h-3.5" />
+                  <LucideIcon name="Trash2" class="w-4 h-4" />
                 </Button>
               </div>
-              <div v-if="Object.keys(editingResult.grades || {}).length === 0" class="text-center py-4 text-muted-foreground text-xs italic">
-                Belum ada data nilai.
+              <div v-if="Object.keys(editingResult.grades || {}).length === 0" class="text-center py-10 bg-muted/20 rounded-2xl border-2 border-dashed border-border/50 text-muted-foreground text-xs italic font-medium">
+                {{ $t('graduation.labels.noGrades') }}
               </div>
             </div>
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter class="p-6 border-t border-border/40 bg-muted/10">
           <Button 
             variant="outline" 
-            class="rounded-xl" 
+            class="rounded-xl h-11 px-8 font-bold" 
             @click="gradeModalOpen = false"
           >
-            Batal
+            {{ $t('common.actions.cancel') }}
           </Button>
           <Button 
             variant="default" 
-            class="rounded-xl px-8" 
+            class="rounded-xl h-11 px-10 font-bold shadow-sm" 
             :loading="savingResult"
             @click="saveResult"
           >
-            Simpan Perubahan
+            <LucideIcon name="Save" class="w-4 h-4 mr-2" />
+            {{ $t('common.actions.save') }}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -281,17 +294,19 @@
 
     <!-- Import Grades Modal -->
     <Dialog v-model:open="importModalOpen">
-      <DialogContent class="sm:max-w-[500px] rounded-2xl">
-        <DialogHeader>
-          <DialogTitle>Import Nilai dari File</DialogTitle>
+      <DialogContent class="sm:max-w-[500px] rounded-2xl p-0 overflow-hidden">
+        <DialogHeader class="p-6 border-b border-border/40">
+          <DialogTitle>{{ $t('graduation.labels.importTitle') }}</DialogTitle>
           <DialogDescription>
-            Upload file CSV atau Excel (.xlsx) dengan format: kolom pertama NISN, kolom selanjutnya nama mata pelajaran dengan nilainya.
+            {{ $t('graduation.labels.importDescription') }}
           </DialogDescription>
         </DialogHeader>
 
-        <div class="space-y-4 py-4">
-          <div class="p-4 border-2 border-dashed border-border rounded-xl text-center space-y-2 bg-muted/20">
-            <LucideIcon name="Upload" class="w-8 h-8 mx-auto text-muted-foreground" />
+        <div class="p-6 space-y-6">
+          <div class="p-8 border-2 border-dashed border-border rounded-2xl text-center space-y-4 bg-muted/10 hover:bg-muted/20 transition-colors cursor-pointer group" @click="($refs.importFileInput as HTMLInputElement)?.click()">
+            <div class="w-16 h-16 rounded-2xl bg-background mx-auto flex items-center justify-center shadow-sm border border-border group-hover:scale-110 transition-transform">
+              <LucideIcon name="CloudUpload" class="w-8 h-8 text-primary" />
+            </div>
             <input
               ref="importFileInput"
               type="file"
@@ -299,17 +314,16 @@
               class="hidden"
               @change="onImportFileSelected"
             />
-            <Button variant="outline" class="rounded-xl" @click="($refs.importFileInput as HTMLInputElement)?.click()">
-              Pilih File CSV/Excel
-            </Button>
-            <p v-if="importFile" class="text-sm font-medium text-primary">{{ importFile.name }}</p>
-            <p class="text-[10px] text-muted-foreground">Format: CSV (.csv) atau Excel (.xlsx)</p>
+            <div class="space-y-1">
+              <p class="text-sm font-bold">{{ importFile ? importFile.name : $t('graduation.labels.chooseFile') }}</p>
+              <p class="text-[10px] text-muted-foreground uppercase font-black tracking-widest">CSV (.csv) / Excel (.xlsx)</p>
+            </div>
           </div>
 
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase">Tahun Kelulusan</label>
+            <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.graduationYear') }}</label>
             <Select v-model="importYear">
-              <SelectTrigger class="rounded-xl">
+              <SelectTrigger class="rounded-xl h-11">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -318,32 +332,37 @@
             </Select>
           </div>
 
-          <div class="p-3 bg-primary/5 rounded-xl border border-primary/10">
-            <p class="text-[10px] font-bold uppercase tracking-wider text-primary mb-1">Format File</p>
-            <div class="font-mono text-[10px] text-muted-foreground space-y-0.5">
+          <div class="p-4 bg-primary/5 rounded-2xl border border-primary/10">
+            <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-2">{{ $t('graduation.labels.formatHint') }}</p>
+            <div class="font-mono text-[10px] text-muted-foreground space-y-1 bg-background/50 p-3 rounded-lg border border-border/30">
               <p>NISN, Matematika, B. Indonesia, B. Inggris, ...</p>
-              <p>0012345678, 85, 90, 88, ...</p>
-              <p>0012345679, 92, 78, 95, ...</p>
+              <p class="text-primary/70">0012345678, 85, 90, 88, ...</p>
+              <p class="text-primary/70">0012345679, 92, 78, 95, ...</p>
             </div>
           </div>
 
-          <div v-if="importErrors.length > 0" class="p-3 bg-destructive/5 rounded-xl border border-destructive/10 max-h-[120px] overflow-y-auto">
-            <p class="text-[10px] font-bold uppercase text-destructive mb-1">Errors:</p>
-            <p v-for="(err, i) in importErrors" :key="i" class="text-[10px] text-destructive">{{ err }}</p>
+          <div v-if="importErrors.length > 0" class="p-4 bg-destructive/5 rounded-xl border border-destructive/10 max-h-[150px] overflow-y-auto">
+            <p class="text-[10px] font-black uppercase text-destructive mb-2">Errors:</p>
+            <ul class="space-y-1">
+              <li v-for="(err, i) in importErrors" :key="i" class="text-[10px] text-destructive font-medium flex items-start gap-2">
+                <span class="block w-1 h-1 rounded-full bg-destructive mt-1 shrink-0"></span>
+                {{ err }}
+              </li>
+            </ul>
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" class="rounded-xl" @click="importModalOpen = false">Batal</Button>
+        <DialogFooter class="p-6 bg-muted/10 border-t border-border/40">
+          <Button variant="outline" class="rounded-xl h-11 px-8 font-bold" @click="importModalOpen = false">{{ $t('common.actions.cancel') }}</Button>
           <Button 
             variant="default" 
-            class="rounded-xl px-8" 
+            class="rounded-xl h-11 px-10 font-bold shadow-sm" 
             :loading="importing"
             :disabled="!importFile"
             @click="handleImport"
           >
             <LucideIcon name="Upload" class="w-4 h-4 mr-2" />
-            Import Nilai
+            {{ $t('graduation.labels.importGrades') }}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -431,59 +450,68 @@ const columns = [
   }),
   columnHelper.accessor('nisn', { 
     header: 'NISN',
-    cell: info => h('span', { class: 'font-mono text-xs' }, info.getValue() || '-')
+    cell: info => h('span', { class: 'font-mono text-xs font-black tracking-widest text-primary' }, info.getValue() || '-')
   }),
   columnHelper.accessor('full_name', { 
-    header: t('features.school.operations.affairs.labels.studentName'),
+    header: t('common.labels.name'),
     cell: info => h('span', { class: 'font-bold' }, info.getValue())
+  }),
+  columnHelper.accessor('gender', {
+    header: t('common.labels.gender'),
+    cell: info => {
+      const val = info.getValue()?.toLowerCase();
+      const label = val === 'p' ? t('common.genders.female') : t('common.genders.male');
+      return h('span', { class: 'text-xs font-medium' }, label);
+    }
   }),
   columnHelper.accessor('level.name', { 
     header: t('common.labels.single_level'),
-    cell: info => h('span', { class: 'text-xs opacity-70' }, info.getValue())
+    cell: info => h('span', { class: 'text-xs font-bold text-muted-foreground' }, info.getValue())
   }),
   columnHelper.accessor('status', { 
     header: t('common.labels.status'),
-    cell: info => h('span', { class: 'px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest' }, info.getValue())
+    cell: info => h('span', { class: 'px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20' }, info.getValue())
   }),
 ];
 
 const historyColumns = [
   columnHelper.accessor('student.full_name', { 
-    header: 'Nama Siswa',
+    header: t('common.labels.name'),
     cell: info => h('div', [
-        h('div', { class: 'font-bold' }, info.getValue()),
-        h('div', { class: 'text-[10px] opacity-60 font-mono' }, info.row.original.student?.nisn)
+        h('div', { class: 'font-bold text-sm' }, info.getValue()),
+        h('div', { class: 'text-[10px] text-muted-foreground font-black tracking-widest uppercase' }, info.row.original.student?.nisn)
     ])
   }),
   columnHelper.accessor('status', { 
-    header: 'Status',
+    header: t('common.labels.status'),
     cell: info => {
         const val = info.getValue() as string;
-        const colors: any = { graduated: 'bg-success/10 text-success', not_graduated: 'bg-destructive/10 text-destructive', deferred: 'bg-warning/10 text-warning' };
-        return h('span', { class: `px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-widest ${colors[val] || 'bg-muted'}` }, val);
+        const colors: any = { graduated: 'bg-success/10 text-success border-success/20', not_graduated: 'bg-destructive/10 text-destructive border-destructive/20', deferred: 'bg-warning/10 text-warning border-warning/20' };
+        const labelMap: any = { graduated: t('common.status.completed'), not_graduated: t('common.status.rejected'), deferred: t('common.status.pending') };
+        return h('span', { class: `px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-[0.15em] border ${colors[val] || 'bg-muted border-border'}` }, labelMap[val] || val);
     }
   }),
   columnHelper.accessor('certificate_number', { 
-    header: 'No. Sertifikat',
-    cell: info => h('span', { class: 'text-xs italic opacity-60' }, info.getValue() || '-')
+    header: t('graduation.labels.certificateNumber'),
+    cell: info => h('span', { class: 'text-xs font-mono font-bold text-muted-foreground' }, info.getValue() || '-')
   }),
   columnHelper.display({
     id: 'actions',
-    header: 'Aksi',
+    header: t('common.labels.actions'),
     cell: ({ row }) => h('div', { class: 'flex gap-2' }, [
         h(Button, {
             variant: 'ghost',
             size: 'sm',
-            class: 'h-8 px-2 text-primary',
+            class: 'h-8 px-3 rounded-lg text-primary font-bold hover:bg-primary/10',
             onClick: () => openGradeModal(row.original)
-        }, () => [h(LucideIcon, { name: 'Edit', class: 'w-3.5 h-3.5 mr-1' }), 'Nilai']),
+        }, () => [h(LucideIcon, { name: 'Edit3', class: 'w-3.5 h-3.5 mr-1' }), t('common.actions.edit')]),
         h(Button, {
             variant: 'ghost',
-            size: 'sm',
-            class: 'h-8 px-2',
+            size: 'icon',
+            class: 'h-8 w-8 rounded-lg hover:bg-primary/10 hover:text-primary',
             disabled: row.original.status !== 'graduated',
             onClick: () => downloadCertificate(row.original.student_id as number)
-        }, () => h(LucideIcon, { name: 'Download', class: 'w-3.5 h-3.5' }))
+        }, () => h(LucideIcon, { name: 'Download', class: 'w-4 h-4' }))
     ])
   })
 ];
@@ -527,8 +555,8 @@ const fetchEligible = async () => {
 const handleProcess = async () => {
   const count = selectedRows.value.length;
   const confirmed = await confirmModal.value.confirm({
-    title: 'Konfirmasi Proses Kelulusan',
-    message: `Apakah Anda yakin ingin memproses ${count} siswa dengan status "${batchStatus.value}" untuk tahun ${batchYear.value}?`,
+    title: t('graduation.messages.processConfirmTitle'),
+    message: t('graduation.messages.processConfirmMessage', { count, status: batchStatus.value, year: batchYear.value }),
     variant: 'default'
   });
 
@@ -572,7 +600,7 @@ const openGradeModal = (result: any) => {
 };
 
 const addGradeField = () => {
-    const newKey = `Mapel ${Object.keys(editingResult.value.grades).length + 1}`;
+    const newKey = `${t('common.labels.subject')} ${Object.keys(editingResult.value.grades).length + 1}`;
     editingResult.value.grades[newKey] = 0;
     tempGradeKeys.value[newKey] = newKey;
 };
@@ -599,7 +627,7 @@ const saveResult = async () => {
     savingResult.value = true;
     try {
         await OperationsService.updateGraduationResult(editingResult.value);
-        toast.success.action('Data nilai berhasil disimpan');
+        toast.success.action(t('graduation.messages.gradeSaveSuccess'));
         gradeModalOpen.value = false;
         fetchHistory();
     } catch (e) {
@@ -633,7 +661,7 @@ const handleImport = async () => {
         const response = await OperationsService.importGrades(importFile.value, parseInt(importYear.value));
         const parsed = parseResponse(response) as any;
         const data = parsed.data;
-        toast.success.action(`Berhasil import nilai untuk ${data.imported} siswa`);
+        toast.success.action(t('graduation.messages.importSuccess', { count: data.imported }));
         if (data.errors && data.errors.length > 0) {
             importErrors.value = data.errors;
         } else {

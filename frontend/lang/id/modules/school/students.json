@@ -3,9 +3,11 @@
         "add": "Tambah Siswa",
         "editProfile": "Edit Profil",
         "export": "Ekspor CSV",
+        "import": "Impor Data",
         "printID": "Cetak Kartu Pelajar",
         "printProfile": "Cetak Profil",
-        "printSKL": "Cetak SKL"
+        "printSKL": "Cetak SKL",
+        "backToProfile": "Kembali ke Profil"
     },
     "labels": {
         "academicHistory": "Riwayat Akademik",
@@ -16,19 +18,39 @@
         "fatherName": "Nama Ayah",
         "fatherOccupation": "Pekerjaan Ayah",
         "genderShort": "JK",
+        "fullName": "Nama Lengkap",
+        "class": "Kelas / Rombel",
+        "gender": "Jenis Kelamin",
         "level": "Jenjang",
         "motherName": "Nama Ibu",
+        "motherOccupation": "Pekerjaan Ibu",
         "parentInfo": "Informasi Orang Tua",
         "personalInfo": "Informasi Pribadi",
         "religion": "Agama",
         "rombel": "Rombel",
         "studentData": "Data Siswa",
-        "totalStudents": "Total: {total} siswa"
+        "totalStudents": "Total: {total} siswa",
+        "studentMenu": "Menu Siswa",
+        "financialStatus": "Status Keuangan",
+        "guardianName": "Wali Siswa",
+        "domicileAddress": "Alamat Domisili"
+    },
+    "tabs": {
+        "profile": "Biodata Lengkap",
+        "academic": "Riwayat Akademik",
+        "attendance": "Kehadiran",
+        "disciplinary": "Catatan Kedisiplinan",
+        "payment": "Keuangan"
     },
     "messages": {
         "academicHistoryEmpty": "Riwayat akademik akan ditampilkan di sini.",
         "attendanceEmpty": "Ringkasan kehadiran akan ditampilkan di sini.",
-        "disciplineEmpty": "Catatan pelanggaran dan prestasi akan ditampilkan di sini."
+        "disciplineEmpty": "Catatan pelanggaran dan prestasi akan ditampilkan di sini.",
+        "dataNotAvailable": "Data Belum Tersedia",
+        "syncingData": "Informasi detail untuk modul ini masih dalam tahap sinkronisasi data.",
+        "saveSuccess": "Data siswa berhasil disimpan",
+        "deleteSuccess": "Data siswa berhasil dihapus",
+        "deleteConfirm": "Apakah Anda yakin ingin menghapus data siswa \"{name}\"?"
     },
     "subtitle": "Kelola data seluruh siswa dan informasi profil detail mereka.",
     "title": "Data Siswa"

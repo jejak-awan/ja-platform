@@ -1,0 +1,31 @@
+{
+    "title": "Manajemen Kursus",
+    "subtitle": "Kelola kurikulum dan materi pembelajaran sekolah secara terpusat.",
+    "actions": {
+        "addNew": "Tambah Kursus Baru",
+        "manage": "Kelola",
+        "saveCourse": "Simpan Kursus",
+        "createTitle": "Buat Kursus Baru"
+    },
+    "labels": {
+        "courseTitle": "Judul Kursus",
+        "academicContext": "Konteks Akademik",
+        "level": "Level",
+        "status": "Status",
+        "modules": "Modul",
+        "academicYear": "Tahun Ajaran",
+        "semester": "Semester",
+        "department": "Jurusan / Departemen",
+        "grade": "Tingkatan / Grade",
+        "difficulty": "Level Kesulitan"
+    },
+    "placeholders": {
+        "titleHint": "Contoh: Web Dev Mastery",
+        "selectYear": "Pilih Tahun",
+        "selectSemester": "Pilih Semester",
+        "selectDept": "Pilih Jurusan",
+        "selectGrade": "Pilih Tingkat",
+        "selectLevel": "Pilih Level",
+        "selectStatus": "Pilih Status"
+    }
+}

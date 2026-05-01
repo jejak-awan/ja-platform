@@ -33,7 +33,7 @@
             :class="step.done ? 'bg-success/10 text-success' : 'bg-primary/10 text-primary'"
           >
             <LucideIcon
-              :name="step.done ? 'CheckCircle2' : 'Circle'"
+              :name="step.done ? 'CircleCheck2' : 'Circle'"
               class="w-5 h-5"
             />
           </div>

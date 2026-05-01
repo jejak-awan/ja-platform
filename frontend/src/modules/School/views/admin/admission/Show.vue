@@ -62,7 +62,7 @@
         </CardHeader>
         <CardContent class="grid grid-cols-2 gap-y-4 gap-x-8">
           <div class="space-y-1">
-            <p class="text-xs text-muted-foreground uppercase">
+            <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
               {{ $t('features.school.admission.labels.full_name') }}
             </p>
             <p class="font-medium">
@@ -70,7 +70,7 @@
             </p>
           </div>
           <div class="space-y-1">
-            <p class="text-xs text-muted-foreground uppercase">
+            <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
               {{ $t('features.school.admission.labels.nisn') }}
             </p>
             <p class="font-medium">
@@ -78,7 +78,7 @@
             </p>
           </div>
           <div class="space-y-1">
-            <p class="text-xs text-muted-foreground uppercase">
+            <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
               {{ $t('common.labels.placeDateOfBirth') }}
             </p>
             <p class="font-medium">
@@ -86,7 +86,7 @@
             </p>
           </div>
           <div class="space-y-1">
-            <p class="text-xs text-muted-foreground uppercase">
+            <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
               {{ $t('common.labels.gender') }}
             </p>
             <p class="font-medium">
@@ -94,7 +94,7 @@
             </p>
           </div>
           <div class="space-y-1">
-            <p class="text-xs text-muted-foreground uppercase">
+            <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
               {{ $t('common.labels.contact') }}
             </p>
             <p class="font-medium">
@@ -102,7 +102,7 @@
             </p>
           </div>
           <div class="space-y-1">
-            <p class="text-xs text-muted-foreground uppercase">
+            <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
               {{ $t('features.school.admission.labels.previousSchool') }}
             </p>
             <p class="font-medium">

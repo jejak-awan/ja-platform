@@ -135,6 +135,7 @@
     "visionMission": "Vision & Mission",
     "visionMissionDesc": "School vision, mission, and brief history.",
     "warning": "Warning",
+    "showing_page": "Showing Page {current} of {total}",
     "requiredFieldHint": "Fields marked with ({symbol}) are required.",
     "placeDateOfBirth": "Place, Date of Birth",
     "placeOfBirth": "Place of Birth",
@@ -161,6 +162,11 @@
     "search": "Search",
     "refresh": "Refresh",
     "view": "View",
+    "filter_data": "Filter Data",
+    "reset_filter": "Reset Filter",
+    "search_name_nisn": "Search Name / NISN...",
+    "class_group": "Class / Group",
+    "level": "Level",
     "graduated": "Graduated",
     "days": {
         "monday": "Monday",
@@ -184,10 +190,6 @@
         "october": "October",
         "november": "November",
         "december": "December"
-    },
-    "genders": {
-        "male": "Male",
-        "female": "Female"
     },
     "borrowed": "Borrowed",
     "returned": "Returned",

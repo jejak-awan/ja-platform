@@ -3,12 +3,12 @@
     <CardHeader class="border-b border-border/40 bg-muted/20 pb-4">
       <div class="flex justify-between items-center">
         <div>
-          <CardTitle class="text-lg">Pengaturan Kelulusan</CardTitle>
-          <CardDescription>Atur status pengumuman, jadwal, dan mapping mata pelajaran</CardDescription>
+          <CardTitle class="text-lg">{{ $t('graduation.labels.statusPub') }}</CardTitle>
+          <CardDescription>{{ $t('graduation.labels.mappingSubjectDesc') }}</CardDescription>
         </div>
         <Button variant="default" size="sm" class="rounded-lg" @click="fetchSettings" :loading="loading">
           <LucideIcon name="RefreshCcw" class="w-3.5 h-3.5 mr-2" />
-          Refresh
+          {{ $t('common.actions.refresh') }}
         </Button>
       </div>
     </CardHeader>
@@ -16,10 +16,10 @@
       <div class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase text-muted-foreground">Pilih Tahun Ajaran</label>
+            <label class="text-xs font-bold uppercase text-muted-foreground">{{ $t('graduation.labels.selectYear') }}</label>
             <Select v-model="selectedYear" @update:model-value="onYearChange">
               <SelectTrigger class="w-full rounded-xl">
-                <SelectValue placeholder="Pilih Tahun" />
+                <SelectValue :placeholder="$t('common.placeholders.select_year')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem v-for="year in years" :key="year" :value="String(year)">
@@ -32,7 +32,7 @@
           <div class="flex items-end">
             <Button v-if="!currentSetting" variant="outline" class="w-full rounded-xl border-dashed" @click="createSetting">
               <LucideIcon name="Plus" class="w-4 h-4 mr-2" />
-              Buat Pengaturan Tahun {{ selectedYear }}
+              {{ $t('graduation.labels.createSetting', { year: selectedYear }) }}
             </Button>
           </div>
         </div>
@@ -43,23 +43,23 @@
             <div class="space-y-4">
               <h3 class="text-sm font-bold flex items-center">
                 <LucideIcon name="Settings2" class="w-4 h-4 mr-2 text-primary" />
-                Status Publikasi
+                {{ $t('graduation.labels.statusPub') }}
               </h3>
               
               <div class="flex items-center space-x-2">
                 <Switch id="is-open" v-model:checked="form.is_open" />
                 <label for="is-open" class="text-sm font-medium leading-none cursor-pointer">
-                  Buka Pengumuman Kelulusan
+                  {{ $t('graduation.labels.openAnnouncement') }}
                 </label>
               </div>
               <p class="text-xs text-muted-foreground ml-11">
-                Jika diaktifkan, siswa dapat melihat hasil kelulusan di halaman publik.
+                {{ $t('graduation.labels.openAnnouncementDesc') }}
               </p>
 
               <div class="space-y-2 pt-2">
-                <label class="text-xs font-bold uppercase text-muted-foreground">Jadwal Pengumuman</label>
+                <label class="text-xs font-bold uppercase text-muted-foreground">{{ $t('graduation.labels.announcementSchedule') }}</label>
                 <Input v-model="form.announcement_date" type="datetime-local" class="rounded-xl w-full" />
-                <p class="text-xs text-muted-foreground">Kosongkan jika pengumuman dapat diakses kapan saja setelah dibuka.</p>
+                <p class="text-xs text-muted-foreground">{{ $t('graduation.labels.announcementScheduleDesc') }}</p>
               </div>
             </div>
 
@@ -68,36 +68,36 @@
               <h3 class="text-sm font-bold flex items-center justify-between">
                 <div class="flex items-center">
                   <LucideIcon name="BookOpen" class="w-4 h-4 mr-2 text-primary" />
-                  Mata Pelajaran (Mapping)
+                  {{ $t('graduation.labels.mappingSubject') }}
                 </div>
                 <Button variant="ghost" size="sm" class="h-8 px-2 text-xs" @click="addSubject">
-                  <LucideIcon name="Plus" class="w-3 h-3 mr-1" /> Tambah
+                  <LucideIcon name="Plus" class="w-3 h-3 mr-1" /> {{ $t('common.actions.add') }}
                 </Button>
               </h3>
               
               <p class="text-xs text-muted-foreground mb-2">
-                Daftar mata pelajaran ini akan digunakan sebagai format saat Import Excel.
+                {{ $t('graduation.labels.mappingSubjectDesc') }}
               </p>
 
               <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2">
                 <div v-for="(_, idx) in form.subjects" :key="idx" class="flex items-center gap-2">
-                  <Input v-model="form.subjects[idx]" placeholder="Nama Mata Pelajaran" class="flex-1 rounded-lg text-sm" />
+                  <Input v-model="form.subjects[idx]" :placeholder="$t('common.placeholders.subject_name')" class="flex-1 rounded-lg text-sm" />
                   <Button variant="ghost" size="icon" class="h-9 w-9 text-destructive shrink-0" @click="removeSubject(idx)">
                     <LucideIcon name="Trash2" class="w-4 h-4" />
                   </Button>
                 </div>
                 <div v-if="!form.subjects || form.subjects.length === 0" class="text-center py-4 text-xs italic text-muted-foreground border-2 border-dashed border-border rounded-xl">
-                  Belum ada mata pelajaran. Klik tambah.
+                  {{ $t('graduation.labels.noGrades') }}
                 </div>
               </div>
             </div>
           </div>
 
           <div class="flex justify-end gap-3 pt-4 border-t border-border/40">
-            <Button variant="outline" class="rounded-xl px-6" @click="fetchSettings" :disabled="saving">Batal</Button>
+            <Button variant="outline" class="rounded-xl px-6" @click="fetchSettings" :disabled="saving">{{ $t('common.actions.cancel') }}</Button>
             <Button variant="default" class="rounded-xl px-8" :loading="saving" @click="saveSettings">
               <LucideIcon name="Save" class="w-4 h-4 mr-2" />
-              Simpan Pengaturan
+              {{ $t('graduation.labels.saveSetting') }}
             </Button>
           </div>
         </div>
@@ -108,6 +108,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { 
   Card, CardContent, CardHeader, CardTitle, CardDescription,
   Button, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
@@ -117,6 +118,7 @@ import { useToast } from '@/composables/useToast';
 import api from '@/services/api';
 import { parseResponse } from '@/utils/responseParser';
 
+const { t } = useI18n();
 const toast = useToast();
 const loading = ref(false);
 const saving = ref(false);
@@ -175,7 +177,7 @@ const createSetting = async () => {
             is_open: false,
             subjects: ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris']
         });
-        toast.success.action('Pengaturan baru berhasil dibuat');
+        toast.success.action(t('graduation.messages.createSuccess'));
         await fetchSettings();
     } catch (e) {
         toast.error.fromResponse(e);
@@ -194,7 +196,7 @@ const saveSettings = async () => {
             subjects: form.value.subjects,
             config: form.value.config
         });
-        toast.success.action('Pengaturan berhasil disimpan');
+        toast.success.action(t('graduation.messages.saveSuccess'));
         await fetchSettings();
     } catch (e) {
         toast.error.fromResponse(e);

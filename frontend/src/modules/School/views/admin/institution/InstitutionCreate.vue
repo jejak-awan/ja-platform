@@ -48,7 +48,7 @@
         </template>
       </div>
 
-      <Card class="shadow-xl border-border/40 rounded-2xl overflow-hidden">
+      <Card class="shadow-sm border-border/40 rounded-2xl overflow-hidden">
         <CardContent class="p-8">
           <!-- Step 1: Basic Information -->
           <div
@@ -348,7 +348,7 @@
               />
               <LucideIcon
                 v-else
-                name="CheckCircle"
+                name="CircleCheck"
                 class="w-4 h-4 mr-2"
               />
               {{ loading ? $t('features.school.wizard.actions.processing') : $t('features.school.wizard.actions.finish') }}

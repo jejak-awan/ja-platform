@@ -39,7 +39,7 @@
                   id="nisn"
                   v-model="form.nisn"
                   maxlength="10"
-                  placeholder="10 Digit"
+                  :placeholder="$t('features.school.admission.placeholders.nisnHint')"
                 />
               </div>
               <div class="space-y-2">
@@ -47,7 +47,7 @@
                 <Input
                   id="nis"
                   v-model="form.nis"
-                  placeholder="Nomor Induk Sekolah"
+                  :placeholder="$t('features.school.admission.placeholders.nisHint')"
                 />
               </div>
               <div class="space-y-2">
