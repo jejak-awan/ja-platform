@@ -1,25 +1,11 @@
 <template>
   <nav 
     v-if="breadcrumbs.length > 0" 
-    :class="[ navClasses, isScrolled ? 'py-2 shadow-lg' : 'py-4 shadow-md', isSticky ? 'sticky z-40 ' : 'relative' ]"
+    :class="[ navClasses, isSticky ? 'sticky z-40' : 'relative' ]"
     aria-label="Breadcrumb"
   >
-    <div class="container mx-auto px-8 flex items-center justify-between">
-      <!-- Page Title (L'Arc Style) -->
-      <div 
-        class="flex flex-col"
-        :class="isScrolled ? 'opacity-80 scale-95 origin-left' : 'opacity-100 scale-100'"
-      >
-        <h1 class="dashboard-breadcrumb-title">
-          {{ currentPageLabel }}
-        </h1>
-        <div
-          class="dashboard-breadcrumb-title-rule"
-          :class="isScrolled ? 'w-8' : 'w-12'"
-        />
-      </div>
-
-      <!-- Breadcrumb Path -->
+    <div class="container mx-auto px-6 flex items-center">
+      <!-- Breadcrumb Path Only (Clean & Flat) -->
       <ol class="dashboard-breadcrumb-path">
         <li
           v-for="(crumb, index) in breadcrumbs"
@@ -30,7 +16,9 @@
           <span
             v-if="index > 0"
             class="dashboard-breadcrumb-separator"
-          >/</span>
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+          </span>
             
           <router-link
             v-if="index < breadcrumbs.length - 1"
@@ -49,14 +37,11 @@
         </li>
       </ol>
     </div>
-
-    <!-- Signature Accent Lines (Consistency with Header) -->
-    <div class="dashboard-breadcrumb-accent" />
   </nav>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useBreadcrumbs } from '@/composables/useBreadcrumbs';
 import { useTheme } from '@/composables/useTheme';
@@ -66,16 +51,6 @@ const { getBreadcrumbs } = useBreadcrumbs();
 const { getSetting } = useTheme();
 
 const breadcrumbs = computed(() => getBreadcrumbs(route));
-const currentPageLabel = computed(() => {
-    if (breadcrumbs.value.length === 0) return '';
-    return breadcrumbs.value[breadcrumbs.value.length - 1]?.label || '';
-});
-
-// Scroll Tracking for Shrink Animation
-const isScrolled = ref(false);
-const handleScroll = () => {
-    isScrolled.value = window.scrollY > 20;
-};
 
 // Theme settings
 const isSticky = computed(() => getSetting('breadcrumb_sticky', true));
@@ -98,14 +73,6 @@ const navClasses = computed(() => {
   return classes.join(' ');
 });
 
-onMounted(() => {
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-});
-
-onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll);
-});
 </script>
 
 <style scoped>
