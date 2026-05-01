@@ -1,69 +1,7 @@
 @reference "./base.css";
 
 @layer base {
-    :root {
-        --primary: 222 47% 11%;
-        --primary-foreground: 0 0% 100%;
-        --background: 0 0% 100%;
-        --foreground: 222 47% 11%;
-        --card: 0 0% 100%;
-        --card-foreground: 222 47% 11%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 222 47% 11%;
-        --sidebar: 0 0% 100%;
-        --sidebar-foreground: 222 47% 11%;
-        --sidebar-accent: 210 40% 96%;
-        --secondary: 210 40% 96%;
-        --secondary-foreground: 222 47% 11%;
-        --muted: 210 40% 96%;
-        --muted-foreground: 215 16% 47%;
-        --accent: 210 40% 96%;
-        --accent-foreground: 222 47% 11%;
-        --destructive: 0 84% 60%;
-        --destructive-foreground: 0 0% 100%;
-        --border: 214 32% 91%;
-        --input: 214 32% 91%;
-        --ring: 222 47% 11%;
-        --radius: 0.5rem;
-        --success: 142 76% 36%;
-        --success-foreground: 0 0% 100%;
-        --warning: 38 92% 50%;
-        --warning-foreground: 48 96% 2%;
-        --info: 199 88% 48%;
-        --info-foreground: 0 0% 100%;
-    }
-
-    .dark {
-        --background: 0 0% 0%;
-        --sidebar: 0 0% 0%;
-        --card: 0 0% 3%;
-        --popover: 0 0% 2%;
-        --foreground: 0 0% 100%;
-        --card-foreground: 0 0% 98%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 100%;
-        --primary-foreground: 0 0% 0%;
-        --secondary: 0 0% 6%;
-        --secondary-foreground: 0 0% 100%;
-        --muted: 0 0% 6%;
-        --muted-foreground: 0 0% 65%;
-        --accent: 0 0% 10%;
-        --accent-foreground: 0 0% 100%;
-        --destructive: 0 84% 60%;
-        --destructive-foreground: 0 0% 100%;
-        --border: 0 0% 12%;
-        --input: 0 0% 12%;
-        --ring: 0 0% 100%;
-        --sidebar-foreground: 0 0% 98%;
-        --sidebar-accent: 0 0% 6%;
-        --success: 142 70% 45%;
-        --success-foreground: 144 61% 9%;
-        --warning: 38 92% 50%;
-        --warning-foreground: 48 96% 2%;
-        --info: 199 88% 48%;
-        --info-foreground: 0 0% 100%;
-    }
-
+    /* Admin-only monochrome: surfaces + semantics + charts (no chroma; single source in app.css) */
     .admin-layout {
         --background: 0 0% 100%;
         --foreground: 0 0% 6%;
@@ -85,6 +23,20 @@
         --border: 0 0% 90%;
         --input: 0 0% 90%;
         --ring: 0 0% 0%;
+        /* “Semantic” hues → grayscale only */
+        --destructive: 0 0% 12%;
+        --destructive-foreground: 0 0% 100%;
+        --success: 0 0% 18%;
+        --success-foreground: 0 0% 100%;
+        --warning: 0 0% 28%;
+        --warning-foreground: 0 0% 100%;
+        --info: 0 0% 22%;
+        --info-foreground: 0 0% 100%;
+        --chart-1: 0 0% 12%;
+        --chart-2: 0 0% 28%;
+        --chart-3: 0 0% 44%;
+        --chart-4: 0 0% 60%;
+        --chart-5: 0 0% 76%;
     }
 
     .dark .admin-layout {
@@ -108,32 +60,24 @@
         --border: 0 0% 16%;
         --input: 0 0% 16%;
         --ring: 0 0% 100%;
+        --destructive: 0 0% 88%;
+        --destructive-foreground: 0 0% 0%;
+        --success: 0 0% 78%;
+        --success-foreground: 0 0% 0%;
+        --warning: 0 0% 68%;
+        --warning-foreground: 0 0% 0%;
+        --info: 0 0% 72%;
+        --info-foreground: 0 0% 0%;
+        --chart-1: 0 0% 96%;
+        --chart-2: 0 0% 72%;
+        --chart-3: 0 0% 52%;
+        --chart-4: 0 0% 36%;
+        --chart-5: 0 0% 22%;
+        color-scheme: dark;
     }
 }
 
 @layer components {
-    /* Form Resets */
-    [data-slot="input"], [data-slot="select-trigger"], [data-slot="checkbox"], [data-slot="search-trigger"] {
-        border-color: hsl(var(--border) / 0.5) !important;
-    }
-    
-    [data-slot="checkbox"][data-state="checked"] {
-        background-color: hsl(var(--primary)) !important;
-        border-color: hsl(var(--primary)) !important;
-    }
-
-    /* Overlays */
-    [data-slot="popover"], [data-slot="dropdown-menu"], [data-slot="dialog"], [data-slot="hover-card"], [role="dialog"] {
-        box-shadow: 0 25px 50px -12px hsl(var(--foreground) / 0.15), 0 0 0 1px hsl(var(--border) / 0.5) !important;
-        border: none !important;
-    }
-
-    .dark [data-slot="popover"], .dark [data-slot="dropdown-menu"], .dark [data-slot="dialog"], .dark [data-slot="hover-card"], .dark [role="dialog"] {
-        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px hsl(var(--border) / 0.3) !important;
-        background-color: hsl(var(--popover) / 0.92) !important;
-        backdrop-filter: blur(20px);
-    }
-
     /* Dashboard Breadcrumb */
     .dashboard-breadcrumb {
         @apply bg-card border-b border-border overflow-hidden transition-all duration-300;
