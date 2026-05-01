@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\ContentRevision;
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Tag;
 use Modules\Core\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;

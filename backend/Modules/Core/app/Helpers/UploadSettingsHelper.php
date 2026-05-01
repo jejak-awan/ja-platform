@@ -1,14 +1,14 @@
 <?php
 
-namespace Modules\Cms\Helpers;
+namespace Modules\Core\Helpers;
 
 use Modules\Core\Models\Setting;
 
 /**
- * Helper class for media-related settings
- * Shared between Media and FileManager components
+ * Helper class for platform-wide upload settings and security.
+ * Centralizes whitelist, max size, and validation rules.
  */
-class MediaSettingsHelper
+class UploadSettingsHelper
 {
     /**
      * Get maximum upload size in kilobytes
@@ -51,7 +51,35 @@ class MediaSettingsHelper
     }
 
     /**
-     * Get all allowed extensions (images + files)
+     * Get allowed video types (comma-separated)
+     *
+     * @return array<int, string>
+     */
+    public static function getAllowedVideoTypes(): array
+    {
+        $types = Setting::get('allowed_video_types', 'mp4,webm,ogg');
+        /** @var string $typesStr */
+        $typesStr = is_string($types) ? $types : 'mp4,webm,ogg';
+
+        return array_map('trim', explode(',', $typesStr));
+    }
+
+    /**
+     * Get allowed audio types (comma-separated)
+     *
+     * @return array<int, string>
+     */
+    public static function getAllowedAudioTypes(): array
+    {
+        $types = Setting::get('allowed_audio_types', 'mp3,wav,aac');
+        /** @var string $typesStr */
+        $typesStr = is_string($types) ? $types : 'mp3,wav,aac';
+
+        return array_map('trim', explode(',', $typesStr));
+    }
+
+    /**
+     * Get all allowed extensions (images + files + video + audio)
      *
      * @return array<int, string>
      */
@@ -59,7 +87,9 @@ class MediaSettingsHelper
     {
         return array_merge(
             self::getAllowedImageTypes(),
-            self::getAllowedFileTypes()
+            self::getAllowedFileTypes(),
+            self::getAllowedVideoTypes(),
+            self::getAllowedAudioTypes()
         );
     }
 

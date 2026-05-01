@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\School\Models\Student\Student;
 
+/**
+ * @property int $id
+ * @property int $course_id
+ * @property int $student_id
+ * @property \Illuminate\Support\Carbon|null $enrolled_at
+ * @property \Illuminate\Support\Carbon|null $expired_at
+ * @property bool $is_active
+ * @property-read Course $course
+ * @property-read Student $student
+ */
 class Enrollment extends Model
 {
     protected $table = 'sch_lms_enrollments';
@@ -23,11 +33,17 @@ class Enrollment extends Model
         'expired_at' => 'datetime',
     ];
 
+    /**
+     * @return BelongsTo<Course, $this>
+     */
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
     }
 
+    /**
+     * @return BelongsTo<Student, $this>
+     */
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);

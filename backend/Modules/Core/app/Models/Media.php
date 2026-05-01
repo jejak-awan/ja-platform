@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Cms\Models;
+namespace Modules\Core\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -50,6 +50,7 @@ class Media extends Model
     }
 
     protected $fillable = [
+        'module',
         'name',
         'file_name',
         'mime_type',

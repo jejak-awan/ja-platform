@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\School\Models\Lms\TopicContent\Quiz;
 
+/**
+ * @property int $id
+ * @property int $quiz_id
+ * @property string $type
+ * @property string $value
+ * @property int $score
+ * @property int $order
+ * @property-read Quiz $quiz
+ * @property-read \Illuminate\Support\Collection<int, QuizOption> $options
+ */
 class QuizQuestion extends Model
 {
     protected $table = 'sch_lms_quiz_questions';
@@ -19,11 +29,17 @@ class QuizQuestion extends Model
         'order',
     ];
 
+    /**
+     * @return BelongsTo<Quiz, $this>
+     */
     public function quiz(): BelongsTo
     {
         return $this->belongsTo(Quiz::class, 'quiz_id');
     }
 
+    /**
+     * @return HasMany<QuizOption, $this>
+     */
     public function options(): HasMany
     {
         return $this->hasMany(QuizOption::class, 'question_id');

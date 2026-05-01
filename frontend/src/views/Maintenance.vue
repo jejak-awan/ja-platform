@@ -98,18 +98,20 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useHead } from '@unhead/vue';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useCoreStore } from '@/modules/Core/stores/core';
 import { SECURITY_ROUTES } from '@/config/security';
 
 
 const cmsStore = useCmsStore();
+const coreStore = useCoreStore();
 
 const publicSettings = computed(() => cmsStore.siteSettings);
 const loginUrl = SECURITY_ROUTES.login;
 
-const title = computed(() => publicSettings.value?.maintenance_title || 'Coming Soon');
-const message = computed(() => publicSettings.value?.maintenance_message || 'We are currently working on something awesome. Please check back later.');
-const countdownEnabled = computed(() => publicSettings.value?.maintenance_countdown_enabled === true || publicSettings.value?.maintenance_countdown_enabled === 'true' || publicSettings.value?.maintenance_countdown_enabled === '1');
-const targetDateStr = computed(() => publicSettings.value?.maintenance_end_time);
+const title = computed(() => coreStore.maintenance.title || 'Coming Soon');
+const message = computed(() => coreStore.maintenance.message || 'We are currently working on something awesome. Please check back later.');
+const countdownEnabled = computed(() => coreStore.maintenance.countdown_enabled);
+const targetDateStr = computed(() => coreStore.maintenance.end_time);
 
 const targetDate = computed(() => {
     if (!targetDateStr.value) return null;
@@ -146,13 +148,9 @@ const updateCountdown = () => {
 let healthTimer: number | null = null;
 const pollHealth = async () => {
     try {
-        const response = await fetch('/api/v1/public/settings');
-        if (response.ok) {
-            const result = await response.json();
-            // System is back up if maintenance mode is explicitly disabled
-            if (result.data && !result.data.maintenance_mode) {
-                window.location.href = '/';
-            }
+        await coreStore.fetchPublicSettings();
+        if (!coreStore.maintenance.mode) {
+            window.location.href = '/';
         }
     } catch {
         // Still down or network error
@@ -166,7 +164,10 @@ useHead({
 onMounted(async () => {
     // Always refresh settings when on maintenance page
     try {
-        await cmsStore.fetchPublicSettings();
+        await Promise.all([
+            cmsStore.fetchPublicSettings(),
+            coreStore.fetchPublicSettings(),
+        ]);
     } catch (error) {
         console.error('Failed to fetch settings for maintenance mode:', error);
     }

@@ -94,7 +94,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import api from '@/services/api';
-import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useCoreStore } from '@/modules/Core/stores/core';
 import { useToast } from '@/composables/useToast';
 import type { MediaConstraints, Media } from '@/types/cms/cms';
 
@@ -107,10 +107,10 @@ const emit = defineEmits<{
     (e: 'uploaded', media: Media): void;
 }>();
 
-const cmsStore = useCmsStore();
 const toast = useToast();
 const { t } = useI18n();
-const { settings } = storeToRefs(cmsStore);
+const coreStore = useCoreStore();
+const { settings } = storeToRefs(coreStore);
 
 // Define reactive settings reference using storeToRefs
 const globalMaxSize = computed(() => {
@@ -120,7 +120,23 @@ const globalMaxSize = computed(() => {
 });
 
 const effectiveConstraints = computed(() => {
-    const defaultExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+    // Get all possible allowed extensions from settings
+    const settingImages = settings.value.allowed_image_types ? String(settings.value.allowed_image_types).split(',').map(s => s.trim()) : [];
+    const settingFiles = settings.value.allowed_file_types ? String(settings.value.allowed_file_types).split(',').map(s => s.trim()) : [];
+    const settingVideos = settings.value.allowed_video_types ? String(settings.value.allowed_video_types).split(',').map(s => s.trim()) : [];
+    const settingAudio = settings.value.allowed_audio_types ? String(settings.value.allowed_audio_types).split(',').map(s => s.trim()) : [];
+    
+    const allSystemAllowed = [
+        ...settingImages,
+        ...settingFiles,
+        ...settingVideos,
+        ...settingAudio
+    ];
+
+    const defaultExtensions = allSystemAllowed.length > 0 
+        ? allSystemAllowed 
+        : ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+        
     const allowedExtensions = props.constraints?.allowedExtensions || defaultExtensions;
     
     // System limit is the hard cap
@@ -147,8 +163,8 @@ const uploadedMedia = ref<Media | null>(null);
 const error = ref<string | null>(null);
 
 onMounted(async () => {
-    // Always fetch media settings to ensure they're loaded
-    await cmsStore.fetchSettingsGroup('media');
+    // Ensure media settings are loaded for the limits
+    await coreStore.fetchSettingsGroup('media');
 });
 
 const isPreviewVideo = computed(() => {

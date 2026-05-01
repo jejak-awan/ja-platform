@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Cms\Models;
+namespace Modules\Core\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +18,7 @@ use Modules\Core\Models\User;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Modules\Core\Models\User|null $author
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Content> $contents
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\Content> $contents
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Media> $media
  */
 class Tag extends Model
@@ -50,11 +50,11 @@ class Tag extends Model
     }
 
     /**
-     * @return BelongsToMany<Content, $this>
+     * @return BelongsToMany<\Modules\Cms\Models\Content, $this>
      */
     public function contents(): BelongsToMany
     {
-        return $this->belongsToMany(Content::class, 'content_tag');
+        return $this->belongsToMany(\Modules\Cms\Models\Content::class, 'content_tag');
     }
 
     /**

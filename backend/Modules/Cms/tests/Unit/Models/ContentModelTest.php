@@ -5,7 +5,7 @@ namespace Modules\Cms\Tests\Unit\Models;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Tag;
 use Modules\Core\Models\User;
 use Tests\TestCase;
 

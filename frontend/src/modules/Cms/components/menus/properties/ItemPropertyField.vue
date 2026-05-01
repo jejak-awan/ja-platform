@@ -180,7 +180,7 @@ import {
     IconPicker
 } from '@/components/ui';
 
-import MediaPicker from '@/modules/Cms/components/media/MediaPicker.vue';
+import MediaPicker from '@/components/shared/media/MediaPicker.vue';
 
 const { t } = useI18n();
 

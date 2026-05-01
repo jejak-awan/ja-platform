@@ -3,14 +3,18 @@ import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from '@/composables/useToast';
 import { useConfirm } from '@/composables/useConfirm';
+import { useCoreStore } from '@/modules/Core/stores/core';
+import { storeToRefs } from 'pinia';
 import api from '@/services/api';
 import { parseSingleResponse, getResponseObject } from '@/utils/responseParser';
 import type { FileItem, FolderItem, TrashItem } from '@/types/cms/file-manager';
 
-export function useFileManager() {
+export function useFileManager(options: { rootPath?: string } = {}) {
     const { t } = useI18n();
     const toast = useToast();
     const { confirm: confirmDialog } = useConfirm();
+
+    const rootPath = options.rootPath || '/';
 
     // State
     const files = ref<FileItem[]>([]);
@@ -18,11 +22,11 @@ export function useFileManager() {
     const allFolders = ref<FolderItem[]>([]);
     const filesCache = ref(new Map<string, FileItem[]>());
     const loading = ref(false);
-    const currentPath = ref('/');
+    const currentPath = ref(rootPath);
     const viewMode = ref<'grid' | 'list'>(localStorage.getItem('fileManagerViewMode') as 'grid' | 'list' || 'grid');
     const sidebarCollapsed = ref(localStorage.getItem('fileManagerSidebarCollapsed') === 'true');
     const propertiesSidebarVisible = ref(localStorage.getItem('fileManagerPropertiesVisible') === 'true');
-    const expandedFolders = ref(new Set(['/']));
+    const expandedFolders = ref(new Set([rootPath]));
     const scannedPaths = ref(new Set<string>()); // Track which paths have been scanned for subfolders
 
     // Trash state
@@ -76,30 +80,60 @@ export function useFileManager() {
         return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
     };
 
+    const coreStore = useCoreStore();
+    const { settings } = storeToRefs(coreStore);
+
     const isImage = (file: FileItem) => {
-        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'];
+        const imageExtensions = settings.value.allowed_image_types 
+            ? String(settings.value.allowed_image_types).split(',').map(s => s.trim().toLowerCase())
+            : ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'];
         return imageExtensions.includes(file.extension?.toLowerCase() || '');
     };
 
     const isVideo = (file: FileItem) => {
-        const videoExtensions = ['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm'];
+        const videoExtensions = settings.value.allowed_video_types
+            ? String(settings.value.allowed_video_types).split(',').map(s => s.trim().toLowerCase())
+            : ['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm'];
         return videoExtensions.includes(file.extension?.toLowerCase() || '');
+    };
+
+    const isAudio = (file: FileItem) => {
+        const audioExtensions = settings.value.allowed_audio_types
+            ? String(settings.value.allowed_audio_types).split(',').map(s => s.trim().toLowerCase())
+            : ['mp3', 'wav', 'aac'];
+        return audioExtensions.includes(file.extension?.toLowerCase() || '');
     };
 
     const isArchive = (file: FileItem) => {
         if (!file || !file.extension) return false;
         const ext = file.extension.toLowerCase();
-        return ['zip', 'tar', 'gz', 'tgz', 'rar', '7z'].includes(ext);
+        const archiveExtensions = ['zip', 'tar', 'gz', 'tgz', 'rar', '7z'];
+        return archiveExtensions.includes(ext);
     };
 
     // Computed
     const pathParts = computed(() => {
-        if (currentPath.value === '/') return [];
-        const parts = currentPath.value.split('/').filter(p => p);
-        return parts.map((part, index) => ({
-            name: part,
-            path: '/' + parts.slice(0, index + 1).join('/'),
-        }));
+        const rPath = rootPath.replace(/\/$/, '');
+        const cPath = currentPath.value.replace(/\/$/, '');
+        
+        if (cPath === rPath) return [];
+        
+        const relativePath = cPath.startsWith(rPath) 
+            ? cPath.substring(rPath.length).replace(/^\//, '')
+            : cPath.replace(/^\//, '');
+
+        if (!relativePath) return [];
+        
+        const parts = relativePath.split('/').filter(p => p);
+        let accumulated = rPath;
+        
+        return parts.map((part) => {
+            accumulated += '/' + part;
+            return {
+                name: part,
+                path: accumulated,
+            };
+        });
     });
 
     const folderTree = computed(() => {
@@ -171,10 +205,18 @@ export function useFileManager() {
 
         if (filterType.value !== 'all') {
             const typeMap: Record<string, string[]> = {
-                images: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico'],
-                documents: ['pdf', 'doc', 'docx', 'txt', 'rtf', 'odt', 'xls', 'xlsx', 'ppt', 'pptx'],
-                videos: ['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm'],
-                audio: ['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a'],
+                images: settings.value.allowed_image_types 
+                    ? String(settings.value.allowed_image_types).split(',').map(s => s.trim().toLowerCase())
+                    : ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico'],
+                documents: settings.value.allowed_file_types
+                    ? String(settings.value.allowed_file_types).split(',').map(s => s.trim().toLowerCase())
+                    : ['pdf', 'doc', 'docx', 'txt', 'rtf', 'odt', 'xls', 'xlsx', 'ppt', 'pptx'],
+                videos: settings.value.allowed_video_types
+                    ? String(settings.value.allowed_video_types).split(',').map(s => s.trim().toLowerCase())
+                    : ['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm'],
+                audio: settings.value.allowed_audio_types
+                    ? String(settings.value.allowed_audio_types).split(',').map(s => s.trim().toLowerCase())
+                    : ['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a'],
                 archives: ['zip', 'rar', '7z', 'tar', 'gz', 'bz2'],
             };
             const allowedExts = typeMap[filterType.value] || [];
@@ -295,7 +337,7 @@ export function useFileManager() {
                     allFolders.value.push(folder);
                 }
             });
-            folders.value = allFolders.value;
+            folders.value = newFolders; // Just keep the folders from the current response
             filesCache.value.set(currentPath.value, files.value);
         } catch (error: unknown) {
             logger.error('Failed to fetch files:', error);
@@ -304,7 +346,7 @@ export function useFileManager() {
         }
     };
 
-    const fetchAllFolders = async (path: string = '/', recursive: boolean = false) => {
+    const fetchAllFolders = async (path: string = rootPath, recursive: boolean = false) => {
         if (scannedPaths.value.has(path) && !recursive) return;
 
         try {
@@ -417,7 +459,10 @@ export function useFileManager() {
             await api.post(url, { path: item.path.replace(/^\//, '') });
 
             if (isFolder) {
-                allFolders.value = allFolders.value.filter(f => f.path !== item.path);
+                // Recursively remove folder and all its contents from cache
+                const folderPath = item.path.endsWith('/') ? item.path : item.path + '/';
+                allFolders.value = allFolders.value.filter(f => f.path !== item.path && !f.path.startsWith(folderPath));
+                scannedPaths.value.delete(item.path);
             }
             await fetchCurrentPath();
             fetchTrash();
@@ -442,7 +487,11 @@ export function useFileManager() {
                 const isFolder = 'children' in item || !('extension' in item);
                 const url = isFolder ? '/admin/core/file-manager/folder/delete' : '/admin/core/file-manager/delete';
                 await api.post(url, { path: item.path.replace(/^\//, '') });
-                if (isFolder) allFolders.value = allFolders.value.filter(f => f.path !== item.path);
+                if (isFolder) {
+                    const folderPath = item.path.endsWith('/') ? item.path : item.path + '/';
+                    allFolders.value = allFolders.value.filter(f => f.path !== item.path && !f.path.startsWith(folderPath));
+                    scannedPaths.value.delete(item.path);
+                }
             }
             clearSelection();
             await fetchCurrentPath();
@@ -636,7 +685,7 @@ export function useFileManager() {
         pathParts, folderTree, filteredFolders, filteredFiles, sortedFolders, sortedFiles,
         totalItems, paginatedFolders, paginatedFiles, isAllSelected, activeItem,
         // Helpers
-        formatFileSize, isImage, isVideo, isArchive,
+        formatFileSize, isImage, isVideo, isAudio, isArchive,
         // Actions
         fetchCurrentPath, fetchAllFolders, fetchFilters, navigateToPath, toggleSidebar, togglePropertiesSidebar,
         toggleFolderExpanded, isFolderExpanded, toggleSelection, toggleSelectAll, clearSelection,

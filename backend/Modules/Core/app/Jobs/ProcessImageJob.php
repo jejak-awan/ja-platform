@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Modules\Cms\Models\Media;
+use Modules\Core\Models\Media;
 use Modules\Core\Models\Setting;
 
 class ProcessImageJob implements ShouldQueue

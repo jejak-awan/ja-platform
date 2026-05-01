@@ -229,7 +229,7 @@ import {
     Button,
     LucideIcon
 } from '@/components/ui'
-import MediaPicker from '@/modules/Cms/components/media/MediaPicker.vue'
+import MediaPicker from '@/components/shared/media/MediaPicker.vue'
 
 interface SettingOption {
     value: string | number;

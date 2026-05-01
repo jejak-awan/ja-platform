@@ -279,8 +279,8 @@ import CreateFolderModal from '@/modules/Core/components/file-manager/CreateFold
 import type { FileItem } from '@/types/cms/file-manager';
 import { FileManagerKey } from '@/keys';
 
-// Initialize File Manager Composable
-const fm = useFileManager();
+// Initialize File Manager Composable with CMS scope
+const fm = useFileManager({ rootPath: '/cms/media' });
 
 // Provide state to children
 provide(FileManagerKey, fm);

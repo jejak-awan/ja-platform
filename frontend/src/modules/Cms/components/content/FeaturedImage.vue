@@ -35,7 +35,7 @@
           <MediaPicker
             :label="$t('features.content.form.selectImage')"
             :constraints="{
-              allowedExtensions: ['jpg', 'jpeg', 'png', 'webp'],
+              allowedExtensions: settings.allowed_image_types ? String(settings.allowed_image_types).split(',').map(s => s.trim()) : ['jpg', 'jpeg', 'png', 'webp'],
               minWidth: 600,
               minHeight: 400
             }"
@@ -55,7 +55,7 @@
           </MediaPicker>
           <div class="mt-4 text-[10px] text-muted-foreground/60 text-center italic leading-relaxed">
             <p>{{ $t('features.content.form.recommendedHint', { dimensions: '1200x630px' }) }} {{ $t('features.content.form.minHint', { dimensions: '600x400px' }) }}</p>
-            <p>{{ $t('features.content.form.maxSizeHint', { size: Math.round(maxUploadSizeMB), extensions: 'JPG, PNG, WEBP' }) }}</p>
+            <p>{{ $t('features.content.form.maxSizeHint', { size: Math.round(maxUploadSizeMB), extensions: String(settings.allowed_image_types || 'JPG, PNG, WEBP').toUpperCase() }) }}</p>
           </div>
         </div>
       </div>
@@ -66,7 +66,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
-import MediaPicker from '@/modules/Cms/components/media/MediaPicker.vue';
+import MediaPicker from '@/components/shared/media/MediaPicker.vue';
 import {
     Card,
     CardHeader,
@@ -77,10 +77,10 @@ import {
 import Image from 'lucide-vue-next/dist/esm/icons/image.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
-import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useCoreStore } from '@/modules/Core/stores/core';
 
-const cmsStore = useCmsStore();
-const { settings } = storeToRefs(cmsStore);
+const coreStore = useCoreStore();
+const { settings } = storeToRefs(coreStore);
 
 const maxUploadSizeMB = computed(() => {
     // Setting is in KB, convert to MB
@@ -90,7 +90,7 @@ const maxUploadSizeMB = computed(() => {
 
 onMounted(async () => {
     // Ensure media settings are loaded for the limits
-    await cmsStore.fetchSettingsGroup('media');
+    await coreStore.fetchSettingsGroup('media');
 });
 
 defineProps<{

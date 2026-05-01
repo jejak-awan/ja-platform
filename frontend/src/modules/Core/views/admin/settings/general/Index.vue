@@ -59,7 +59,7 @@
           </div>
 
           <template v-else>
-            <TabsContent value="general">
+            <TabsContent value="system">
               <GeneralTab
                 v-model:form-data="formData"
                 :settings="settings"
@@ -119,6 +119,30 @@
                 />
               </div>
             </TabsContent>
+
+            <TabsContent value="media">
+              <MediaTab
+                v-model:form-data="formData"
+                :settings="settings"
+                :errors="errors"
+              />
+            </TabsContent>
+
+            <TabsContent value="monitoring">
+              <MonitoringTab
+                v-model:form-data="formData"
+                :settings="settings"
+                :errors="errors"
+              />
+            </TabsContent>
+
+            <TabsContent value="ai">
+              <AiTab
+                v-model:form-data="formData"
+                :settings="settings"
+                :errors="errors"
+              />
+            </TabsContent>
           </template>
 
           <!-- Actions -->
@@ -159,18 +183,23 @@ import {
 } from '@/components/ui';
 import { useToast } from '@/composables/useToast';
 import { useConfirm } from '@/composables/useConfirm';
-import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useCoreStore } from '@/modules/Core/stores/core';
 import type { CacheStatus, QueueStatus, EmailLog, SettingValue } from '@/types/core/settings';
 import SettingsIcon from 'lucide-vue-next/dist/esm/icons/settings.js';
 import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
 import Shield from 'lucide-vue-next/dist/esm/icons/shield.js';
 import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
+import ImageIcon from 'lucide-vue-next/dist/esm/icons/image.js';
+import Sparkles from 'lucide-vue-next/dist/esm/icons/sparkles.js';
 
 // Async Tab Components
 const GeneralTab = defineAsyncComponent(() => import('./tabs/GeneralTab.vue'));
 const EmailTab = defineAsyncComponent(() => import('./tabs/EmailTab.vue'));
 const SecurityTab = defineAsyncComponent(() => import('./tabs/SecurityTab.vue'));
 const PerformanceTab = defineAsyncComponent(() => import('./tabs/PerformanceTab.vue'));
+const MediaTab = defineAsyncComponent(() => import('./tabs/MediaTab.vue'));
+const AiTab = defineAsyncComponent(() => import('./tabs/AiTab.vue'));
+const MonitoringTab = defineAsyncComponent(() => import('./tabs/MonitoringTab.vue'));
 const EmailTestSection = defineAsyncComponent(() => import('./EmailTestSection.vue'));
 
 interface Setting {
@@ -189,16 +218,16 @@ interface Tab {
 }
 
 const { t } = useI18n();
+const coreStore = useCoreStore();
+const route = useRoute();
 const { confirm } = useConfirm();
 const toast = useToast();
-const route = useRoute();
-const cmsStore = useCmsStore();
 
 const loading = ref(false);
 const saving = ref(false);
 // Initialize tab from query param if present (e.g., ?tab=performance)
-const validTabs = ['general', 'email', 'security', 'performance'];
-const initialTab = validTabs.includes(route.query.tab as string) ? (route.query.tab as string) : 'general';
+const validTabs = ['system', 'security', 'performance', 'monitoring', 'email', 'media', 'ai'];
+const initialTab = validTabs.includes(route.query.tab as string) ? (route.query.tab as string) : 'system';
 const activeTab = ref(initialTab);
 const settings = ref<Setting[]>([]);
 const formData = ref<Record<string, SettingValue>>({});
@@ -239,18 +268,24 @@ const clearingCache = ref(false);
 const warmingCache = ref(false);
 
 const tabs: Tab[] = [
-    { id: 'general', label: 'System' },
+    { id: 'system', label: 'System' },
     { id: 'security', label: 'Security' },
     { id: 'performance', label: 'Performance' },
+    { id: 'monitoring', label: 'Monitoring' },
+    { id: 'media', label: 'Media' },
+    { id: 'ai', label: 'AI Assistance' },
     { id: 'email', label: 'Email' },
 ];
 
 const getTabIcon = (tabId: string) => {
     switch (tabId) {
-        case 'general': return SettingsIcon;
+        case 'system': return SettingsIcon;
         case 'security': return Shield;
         case 'performance': return Activity;
+        case 'monitoring': return Activity;
         case 'email': return Mail;
+        case 'media': return ImageIcon;
+        case 'ai': return Sparkles;
         default: return SettingsIcon;
     }
 };
@@ -258,6 +293,10 @@ const getTabIcon = (tabId: string) => {
 const currentSettings = computed(() => {
     if (!settings.value || !Array.isArray(settings.value)) {
         return [];
+    }
+    // System tab also shows brand settings
+    if (activeTab.value === 'system') {
+        return settings.value.filter(s => s && (s.group === 'system' || s.group === 'brand'));
     }
     return settings.value.filter(s => s && s.group === activeTab.value);
 });
@@ -270,9 +309,10 @@ const fetchSettings = async () => {
         const { data } = parseResponse(response);
         settings.value = ensureArray(data) as Setting[];
 
-        // Inject missing CDN settings with defaults
+        // Inject missing settings with defaults
         const ensureSetting = (key: string, value: unknown, type: string, group: string, description = '') => {
-            if (!settings.value.find(s => s.key === key)) {
+            const existing = settings.value.find(s => s.key === key);
+            if (!existing) {
                 settings.value.push({
                     id: 'temp_' + key,
                     key,
@@ -282,6 +322,15 @@ const fetchSettings = async () => {
                     description,
                     is_public: 0
                 });
+            } else {
+                // Ensure media keys are always in 'media' group regardless of DB state
+                const mediaKeys = [
+                    'storage_driver', 'max_upload_size', 'allowed_image_types', 'allowed_file_types',
+                    'thumbnail_width', 'thumbnail_height', 'enable_watermark', 'watermark_text'
+                ];
+                if (mediaKeys.includes(key)) {
+                    existing.group = 'media';
+                }
             }
         };
 
@@ -318,6 +367,16 @@ const fetchSettings = async () => {
         // Inject Dropbox Settings
         ensureSetting('dropbox_authorization_token', '', 'password', 'media');
 
+        // Ensure Core Media Settings exist and are in 'media' group
+        ensureSetting('storage_driver', 'local', 'string', 'media');
+        ensureSetting('max_upload_size', 2048, 'integer', 'media');
+        ensureSetting('allowed_image_types', 'jpg,jpeg,png,webp,gif', 'string', 'media');
+        ensureSetting('allowed_file_types', 'pdf,doc,docx,xls,xlsx,zip,rar', 'string', 'media');
+        ensureSetting('thumbnail_width', 300, 'integer', 'media');
+        ensureSetting('thumbnail_height', 300, 'integer', 'media');
+        ensureSetting('enable_watermark', false, 'boolean', 'media');
+        ensureSetting('watermark_text', 'JA-Platform', 'string', 'media');
+
         // Inject WhatsApp Settings
         ensureSetting('whatsapp_driver', 'log', 'string', 'whatsapp');
         ensureSetting('whatsapp_api_url', '', 'string', 'whatsapp');
@@ -328,19 +387,17 @@ const fetchSettings = async () => {
         ensureSetting('gemini_api_key', '', 'password', 'ai');
 
         // Inject Maintenance Settings
-        ensureSetting('maintenance_mode', false, 'boolean', 'general');
-        ensureSetting('maintenance_title', 'Coming Soon', 'string', 'general');
-        ensureSetting('maintenance_message', 'We are currently working on something awesome. Please check back later.', 'text', 'general');
-        ensureSetting('maintenance_countdown_enabled', false, 'boolean', 'general');
-        ensureSetting('maintenance_end_time', '', 'datetime', 'general');
-        ensureSetting('site_logo', '', 'image', 'general', 'Site Logo');
-        ensureSetting('site_favicon', '', 'image', 'general', 'Site Favicon');
+        ensureSetting('maintenance_mode', false, 'boolean', 'system');
+        ensureSetting('maintenance_title', 'Coming Soon', 'string', 'system');
+        ensureSetting('maintenance_message', 'We are currently working on something awesome. Please check back later.', 'text', 'system');
+        ensureSetting('maintenance_countdown_enabled', false, 'boolean', 'system');
+        ensureSetting('maintenance_end_time', '', 'datetime', 'system');
 
         // Inject Localization Settings
-        ensureSetting('timezone', 'Asia/Jakarta', 'string', 'general');
-        ensureSetting('date_format', 'Y-m-d', 'string', 'general');
-        ensureSetting('time_format', 'H:i:s', 'string', 'general');
-        ensureSetting('items_per_page', 20, 'integer', 'general');
+        ensureSetting('timezone', 'Asia/Jakarta', 'string', 'system');
+        ensureSetting('date_format', 'Y-m-d', 'string', 'system');
+        ensureSetting('time_format', 'H:i:s', 'string', 'system');
+        ensureSetting('items_per_page', 20, 'integer', 'system');
         
         // Inject Security Pulse Settings (AbuseIPDB & Notifications)
         ensureSetting('abuseipdb_api_key', '', 'password', 'security');
@@ -349,6 +406,16 @@ const fetchSettings = async () => {
         ensureSetting('telegram_chat_id', '', 'string', 'security');
         ensureSetting('email_to', '', 'string', 'security');
         ensureSetting('webhook_url', '', 'string', 'security');
+
+        // Inject Brand / App Identity Settings (Core domain)
+        ensureSetting('admin_email', '', 'string', 'brand');
+        ensureSetting('app_name', 'JA-Platform', 'string', 'brand');
+        ensureSetting('school_name', 'SMK Negeri 1 Cijulang', 'string', 'general');
+        ensureSetting('license_key', 'senja@jejakawan', 'string', 'system');
+        ensureSetting('license_type', 'Pro+', 'string', 'system');
+        ensureSetting('brand_logo', '', 'image', 'brand');
+        ensureSetting('brand_favicon', '', 'image', 'brand');
+        ensureSetting('branding_display', 'logo', 'string', 'brand');
 
         initializeFormData();
     } catch (error: unknown) {
@@ -422,7 +489,7 @@ const handleSubmit = async () => {
         
         toast.success.save();
         await fetchSettings();
-        await cmsStore.fetchSettingsGroup(activeTab.value); // Force refresh store for reactivity
+        await coreStore.fetchSettingsGroup(activeTab.value); // Force refresh store for reactivity
 
         // Refresh cache status if on performance tab
         if (activeTab.value === 'performance') {

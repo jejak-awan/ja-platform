@@ -127,11 +127,6 @@ const cmsRoutes: RouteRecordRaw[] = [
         component: () => import('@/modules/Cms/views/admin/studio/custom-fields/Index.vue'),
     },
     {
-        path: 'file-manager',
-        name: 'file-manager',
-        component: () => import('@/modules/Cms/views/admin/studio/file-manager/Index.vue'),
-    },
-    {
         path: 'search',
         name: 'search',
         component: () => import('@/modules/Cms/views/admin/studio/search/Index.vue'),

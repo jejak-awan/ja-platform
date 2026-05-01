@@ -104,34 +104,18 @@ export const useCmsStore = defineStore('cms', {
             return promise;
         },
 
-        async fetchPublicSettings(options?: { force?: boolean }): Promise<SiteSettings> {
-            const force = options?.force === true;
-            // Already loaded or marked as failed-once to prevent loops
-            if (this.publicSettingsLoaded && !force) {
-                return this.siteSettings;
-            }
-
-            if (this.publicSettingsPromise && !force) {
+        async fetchPublicSettings(options: { force?: boolean } = {}) {
+            // If already loading, return existing promise
+            if (this.publicSettingsPromise && !options.force) {
                 return this.publicSettingsPromise;
             }
 
+            // Create and store the promise for this fetch operation
             this.publicSettingsPromise = (async () => {
                 try {
                     const response = await api.get('/public/settings');
-                    
-                    // Stability: Check response status and data early
-                    if (!response || !response.data) {
-                        throw new Error('Empty response from public settings API');
-                    }
-
                     const settingsData = response.data || {};
                     
-                    // Critical Guard: Ensure settingsData is a valid object and not a string (HTML error page)
-                    if (typeof settingsData !== 'object' || settingsData === null || Array.isArray(settingsData)) {
-                        logger.error('[CMS Store] Invalid public settings response (likely HTML error page):', settingsData);
-                        return this.siteSettings;
-                    }
-
                     // Stability: Check for actual differences before triggering reactivity
                     const currentSettings = this.siteSettings as Record<string, unknown>;
                     const incomingSettings = settingsData as Record<string, unknown>;

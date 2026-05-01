@@ -29,6 +29,7 @@ use Modules\School\Http\Controllers\Api\Operations\GraduationController;
 use Modules\School\Http\Controllers\Api\Operations\GraduationSettingsController;
 use Modules\School\Http\Controllers\Api\Lms\AdminLmsController;
 use Modules\School\Http\Controllers\Api\Lms\StudentLmsController;
+use Modules\School\Http\Controllers\Api\Lms\LmsFileController;
 
 Route::prefix('v1')->group(function () {
     Route::prefix('admin')->middleware([
@@ -379,6 +380,10 @@ Route::prefix('v1')->group(function () {
             Route::post('quizzes/{quizId}/start', [StudentLmsController::class, 'startQuiz']);
             Route::post('attempts/{attemptId}/submit', [StudentLmsController::class, 'submitQuiz']);
         });
+    });
 
+    // LMS Secure Files
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('lms/files/private/{path}', [LmsFileController::class, 'stream'])->where('path', '.*');
     });
 });

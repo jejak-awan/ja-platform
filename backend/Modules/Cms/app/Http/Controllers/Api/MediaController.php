@@ -5,9 +5,10 @@ namespace Modules\Cms\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Modules\Cms\Models\Media;
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Media;
+use Modules\Core\Models\Tag;
 use Modules\Cms\Services\MediaService;
+use Modules\Core\Helpers\UploadSettingsHelper;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 use Modules\Core\Models\ActivityLog;
 use Modules\Core\Models\User;
@@ -44,7 +45,7 @@ class MediaController extends BaseApiController
      */
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
-        $query = Media::with(['folder', 'usages', 'tags']);
+        $query = Media::where('module', 'cms')->with(['folder', 'usages', 'tags']);
 
         $user = $request->user();
         if (! $user) {
@@ -262,11 +263,8 @@ class MediaController extends BaseApiController
         }
 
         try {
-            $maxSizeRaw = \Modules\Core\Models\Setting::get('max_upload_size', 10240);
-            $maxSize = is_numeric($maxSizeRaw) ? (int) $maxSizeRaw : 10240;
-
-            $request->validate([
-                'file' => ['required', 'file', 'max:'.$maxSize],
+            $rules = UploadSettingsHelper::getUploadValidationRules();
+            $request->validate(array_merge($rules, [
                 'folder_id' => 'nullable|exists:media_folders,id',
                 'optimize' => 'boolean',
                 'min_width' => 'nullable|integer|min:1',
@@ -278,7 +276,7 @@ class MediaController extends BaseApiController
                 'caption' => 'nullable|string',
                 'alt' => 'nullable|string',
                 'tags' => 'nullable|array',
-            ]);
+            ]));
 
             $file = $request->file('file');
             if ($file instanceof \Illuminate\Http\UploadedFile) {
@@ -401,8 +399,7 @@ class MediaController extends BaseApiController
         }
 
         try {
-            $maxSizeRaw = \Modules\Core\Models\Setting::get('max_upload_size', 10240);
-            $maxSize = is_numeric($maxSizeRaw) ? (int) $maxSizeRaw : 10240;
+            $maxSize = UploadSettingsHelper::getMaxUploadSize();
 
             $request->validate([
                 'files' => 'required|array',
@@ -908,7 +905,7 @@ class MediaController extends BaseApiController
         }
 
         // Also delete trashed folders
-        $folderQuery = \Modules\Cms\Models\MediaFolder::onlyTrashed();
+        $folderQuery = \Modules\Core\Models\MediaFolder::onlyTrashed();
         if (! $user->can('manage media')) {
             $folderQuery->where('author_id', $user->id);
         }
@@ -974,7 +971,7 @@ class MediaController extends BaseApiController
         /** @var array<int, int> $existingFolderIds */
         $existingFolderIds = [];
         if (! empty($folderIds)) {
-            $folderQuery = \Modules\Cms\Models\MediaFolder::withTrashed()->whereIn('id', $folderIds);
+            $folderQuery = \Modules\Core\Models\MediaFolder::withTrashed()->whereIn('id', $folderIds);
             if (! $user->can('manage media')) {
                 $folderQuery->where('author_id', $user->id);
             }

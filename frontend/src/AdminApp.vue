@@ -38,6 +38,7 @@ import { useSessionTimeout } from '@/composables/useSessionTimeout';
 import { syncDocumentDarkClassForRoute } from '@/composables/useDarkMode';
 import { useHead } from '@unhead/vue';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useCoreStore } from '@/modules/Core/stores/core';
 import { applyFavicon, resolveFavicon } from '@/utils/favicon';
 
 const Toast = defineAsyncComponent(() => import('@/components/ui/Toast.vue'));
@@ -49,6 +50,7 @@ const { confirmState } = useConfirm();
 const { isWarningVisible, timeRemaining, extendSession, manualLogout } = useSessionTimeout();
 const route = useRoute();
 const cmsStore = useCmsStore();
+const coreStore = useCoreStore();
 
 watch(
     () => route.path,
@@ -64,7 +66,10 @@ useHead({
 
 onMounted(async () => {
     document.body.classList.add('admin-no-motion-global');
-    await cmsStore.fetchPublicSettings({ force: true });
+    await Promise.all([
+        cmsStore.fetchPublicSettings(),
+        coreStore.fetchPublicSettings(),
+    ]);
 });
 
 onUnmounted(() => {

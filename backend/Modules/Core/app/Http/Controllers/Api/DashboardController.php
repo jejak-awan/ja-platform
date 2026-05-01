@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Media;
+use Modules\Core\Models\Media;
 use Modules\Core\Models\AnalyticsVisit;
 use Modules\Core\Models\User;
 
@@ -163,7 +163,7 @@ class DashboardController extends BaseApiController
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\Media>
+     * @return \Illuminate\Database\Eloquent\Collection<int, \Modules\Core\Models\Media>
      */
     private function getMediaByType(): \Illuminate\Support\Collection
     {

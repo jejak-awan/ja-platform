@@ -386,7 +386,7 @@ import {
 import SettingControl from '@/modules/Cms/components/themes/customizer/sidebar/SettingControl.vue'
 import CustomizerSidebar from '@/modules/Cms/components/themes/customizer/sidebar/Sidebar.vue'
 import BindingsSection from '@/modules/Cms/components/themes/customizer/editor/BindingsSection.vue'
-import MediaPicker from '@/modules/Cms/components/media/MediaPicker.vue'
+import MediaPicker from '@/components/shared/media/MediaPicker.vue'
 
 // Icons
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';

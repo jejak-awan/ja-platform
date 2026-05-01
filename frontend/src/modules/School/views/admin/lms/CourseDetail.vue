@@ -1,158 +1,172 @@
 <template>
-  <div class="p-6 max-w-5xl mx-auto">
-    <div class="mb-8 flex items-center justify-between">
+  <div class="p-6 max-w-5xl mx-auto space-y-8">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
       <div class="flex items-center gap-4">
-        <router-link :to="{ name: 'admin-lms-courses' }" class="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 transition-all">
-          <svg class="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-        </router-link>
+        <Button variant="ghost" size="icon" as-child>
+          <router-link :to="{ name: 'admin-lms-courses' }">
+            <ChevronLeft class="w-5 h-5" />
+          </router-link>
+        </Button>
         <div v-if="course">
-          <h1 class="text-2xl font-bold text-slate-900 dark:text-white">{{ course.title }}</h1>
-          <p class="text-slate-500 text-sm">Editor Kurikulum & Materi</p>
+          <h1 class="text-2xl font-bold tracking-tight text-foreground">{{ course.title }}</h1>
+          <p class="text-muted-foreground text-sm">Editor Kurikulum & Materi</p>
         </div>
       </div>
       <div class="flex gap-3">
-        <button @click="showAddLessonModal = true" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-lg shadow-indigo-500/20 flex items-center">
-          <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" /></svg>
+        <Button @click="showAddLessonModal = true" class="font-bold">
+          <Plus class="w-4 h-4 mr-2" />
           Tambah Modul
-        </button>
+        </Button>
       </div>
     </div>
 
-    <div v-if="loading" class="space-y-4">
-      <div v-for="i in 3" :key="i" class="h-20 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-2xl"></div>
+    <!-- Loading State -->
+    <div v-if="loading" class="space-y-6">
+      <SkeletonLoader v-for="i in 3" :key="i" class="h-32 rounded-3xl" />
     </div>
 
+    <!-- Course Content -->
     <div v-else-if="course" class="space-y-6">
-      <div v-for="(lesson, lIdx) in course.lessons" :key="lesson.id" class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div class="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 flex justify-between items-center">
+      <Card v-for="(lesson, lIdx) in course.lessons" :key="lesson.id" class="overflow-hidden border-border/50 shadow-sm transition-all hover:shadow-md">
+        <CardHeader class="flex flex-row items-center justify-between space-y-0 bg-muted/30 py-4 px-6">
           <div class="flex items-center gap-4">
-            <div class="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-sm">
+            <div class="w-8 h-8 bg-primary text-primary-foreground rounded-lg flex items-center justify-center font-bold text-sm">
               {{ Number(lIdx) + 1 }}
             </div>
-            <h3 class="font-bold text-slate-900 dark:text-white">{{ lesson.title }}</h3>
+            <CardTitle class="text-base font-bold">{{ lesson.title }}</CardTitle>
           </div>
-          <button @click="openAddTopicModal(lesson.id)" class="text-indigo-600 hover:text-indigo-700 text-xs font-bold uppercase tracking-widest flex items-center">
-            <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" /></svg>
+          <Button variant="ghost" size="sm" @click="openAddTopicModal(lesson.id)" class="text-primary font-bold uppercase tracking-widest text-[10px]">
+            <Plus class="w-3 h-3 mr-1" />
             Tambah Materi
-          </button>
-        </div>
+          </Button>
+        </CardHeader>
         
-        <div class="p-4 space-y-2">
-          <div v-if="lesson.topics.length === 0" class="py-10 text-center text-slate-400 text-sm italic">
+        <CardContent class="p-4 space-y-2">
+          <div v-if="lesson.topics.length === 0" class="py-10 text-center text-muted-foreground text-sm italic">
             Belum ada materi di modul ini.
           </div>
           <div 
             v-for="topic in lesson.topics" 
             :key="topic.id"
-            class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-transparent hover:border-indigo-500/30 transition-all group"
+            class="flex items-center justify-between p-4 bg-muted/20 rounded-2xl border border-transparent hover:border-primary/30 transition-all group"
           >
             <div class="flex items-center gap-4">
-              <div class="w-8 h-8 bg-white dark:bg-slate-800 rounded-lg flex items-center justify-center border border-slate-200 dark:border-slate-700">
-                <svg v-if="topic.topicable_type.includes('RichText')" class="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-                <svg v-else-if="topic.topicable_type.includes('Video')" class="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <svg v-else class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+              <div class="w-8 h-8 bg-background rounded-lg flex items-center justify-center border border-border shadow-sm">
+                <FileText v-if="topic.topicable_type.includes('RichText')" class="w-4 h-4 text-orange-500" />
+                <PlayCircle v-else-if="topic.topicable_type.includes('Video')" class="w-4 h-4 text-red-500" />
+                <FileCheck v-else-if="topic.topicable_type.includes('Quiz')" class="w-4 h-4 text-emerald-500" />
+                <FileDown v-else class="w-4 h-4 text-blue-500" />
               </div>
               <div>
-                <div class="text-sm font-bold text-slate-900 dark:text-white">{{ topic.title }}</div>
-                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                <div class="text-sm font-bold text-foreground">{{ topic.title }}</div>
+                <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">
                   {{ topic.topicable_type.split('\\').pop() }}
                 </div>
               </div>
             </div>
             <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button class="p-2 text-slate-400 hover:text-indigo-600 transition-all">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-              </button>
+              <Button variant="ghost" size="icon" class="h-8 w-8 text-muted-foreground hover:text-primary">
+                <Pencil class="w-4 h-4" />
+              </Button>
+              <Button variant="ghost" size="icon" class="h-8 w-8 text-muted-foreground hover:text-destructive">
+                <Trash2 class="w-4 h-4" />
+              </Button>
             </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
 
     <!-- Modals -->
     <!-- Add Lesson Modal -->
-    <div v-if="showAddLessonModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-8 shadow-2xl border border-slate-200 dark:border-slate-800">
-        <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Tambah Modul Baru</h2>
-        <form @submit.prevent="createLesson" class="space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Judul Modul</label>
-            <input v-model="lessonForm.title" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" required placeholder="Contoh: Pengenalan Dasar">
+    <Dialog v-model:open="showAddLessonModal">
+      <DialogContent class="sm:max-w-md rounded-3xl">
+        <DialogHeader>
+          <DialogTitle class="text-2xl font-bold">Tambah Modul Baru</DialogTitle>
+        </DialogHeader>
+        <div class="space-y-4 py-4">
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-muted-foreground uppercase">Judul Modul</label>
+            <Input v-model="lessonForm.title" placeholder="Contoh: Pengenalan Dasar" />
           </div>
-          <div class="flex gap-4 mt-8">
-            <button type="button" @click="showAddLessonModal = false" class="flex-1 px-4 py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl font-bold hover:opacity-80 transition-all">Batal</button>
-            <button type="submit" :disabled="submitting" class="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center">
-              <span v-if="submitting" class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-              Simpan Modul
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        </div>
+        <DialogFooter class="gap-2 sm:gap-0">
+          <Button variant="outline" @click="showAddLessonModal = false" class="flex-1 rounded-xl font-bold">Batal</Button>
+          <Button @click="createLesson" :disabled="submitting" class="flex-1 rounded-xl font-bold">
+            <Spinner v-if="submitting" class="mr-2 h-4 w-4" />
+            Simpan Modul
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
 
     <!-- Add Topic Modal -->
-    <div v-if="showAddTopicModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl p-8 shadow-2xl border border-slate-200 dark:border-slate-800 overflow-y-auto max-h-[90vh]">
-        <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Tambah Materi</h2>
-        <form @submit.prevent="createTopic" class="space-y-6">
-          <div>
-            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Judul Materi</label>
-            <input v-model="topicForm.title" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" required placeholder="Contoh: Apa itu HTML?">
+    <Dialog v-model:open="showAddTopicModal">
+      <DialogContent class="sm:max-w-2xl rounded-3xl overflow-hidden max-h-[90vh] flex flex-col p-0">
+        <DialogHeader class="p-8 pb-4">
+          <DialogTitle class="text-2xl font-bold">Tambah Materi</DialogTitle>
+        </DialogHeader>
+        
+        <div class="flex-1 overflow-y-auto p-8 pt-0 space-y-6">
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-muted-foreground uppercase">Judul Materi</label>
+            <Input v-model="topicForm.title" placeholder="Contoh: Apa itu HTML?" />
           </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Tipe Materi</label>
-            <div class="grid grid-cols-4 gap-3">
-              <button 
+
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-muted-foreground uppercase">Tipe Materi</label>
+            <div class="grid grid-cols-4 gap-2">
+              <Button 
                 v-for="type in ['richtext', 'video', 'pdf', 'quiz']" 
                 :key="type"
                 type="button"
+                variant="outline"
                 @click="topicForm.type = type"
-                class="px-4 py-3 rounded-xl border-2 text-xs font-bold uppercase tracking-wider transition-all"
-                :class="topicForm.type === type 
-                  ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-500/20' 
-                  : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-400'"
+                class="uppercase text-[10px] tracking-widest font-bold h-12"
+                :class="{ 'bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground': topicForm.type === type }"
               >
                 {{ type }}
-              </button>
+              </Button>
             </div>
           </div>
           
-          <div v-if="topicForm.type === 'richtext'">
-            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Konten HTML</label>
-            <textarea v-model="topicForm.content.value" rows="6" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" placeholder="Masukkan konten HTML di sini..."></textarea>
+          <div v-if="topicForm.type === 'richtext'" class="space-y-2">
+            <label class="text-xs font-bold text-muted-foreground uppercase">Konten Materi</label>
+            <TiptapEditor v-model="topicForm.content.value" placeholder="Tulis materi di sini..." />
           </div>
 
-          <div v-if="topicForm.type === 'video'">
-            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">URL Video (YouTube/Direct)</label>
-            <input v-model="topicForm.content.value" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" placeholder="https://youtube.com/...">
+          <div v-if="topicForm.type === 'video'" class="space-y-2">
+            <label class="text-xs font-bold text-muted-foreground uppercase">URL Video (YouTube/Direct)</label>
+            <Input v-model="topicForm.content.value" placeholder="https://youtube.com/..." />
           </div>
 
-          <div v-if="topicForm.type === 'pdf'">
-            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">URL File PDF</label>
-            <input v-model="topicForm.content.value" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" placeholder="https://link-ke-file.pdf">
+          <div v-if="topicForm.type === 'pdf'" class="space-y-2">
+            <label class="text-xs font-bold text-muted-foreground uppercase">URL File PDF</label>
+            <Input v-model="topicForm.content.value" placeholder="https://link-ke-file.pdf" />
           </div>
 
           <div v-if="topicForm.type === 'quiz'" class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Skor Kelulusan (0-100)</label>
-              <input v-model.number="topicForm.content.pass_score" type="number" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" placeholder="70">
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-muted-foreground uppercase">Skor Kelulusan (0-100)</label>
+              <Input v-model.number="topicForm.content.pass_score" type="number" />
             </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Batas Waktu (Menit, 0 = No Limit)</label>
-              <input v-model.number="topicForm.content.time_limit" type="number" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" placeholder="0">
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-muted-foreground uppercase">Batas Waktu (Menit)</label>
+              <Input v-model.number="topicForm.content.time_limit" type="number" />
             </div>
           </div>
+        </div>
 
-          <div class="flex gap-4 mt-8 pt-4 border-t border-slate-100 dark:border-slate-800">
-            <button type="button" @click="showAddTopicModal = false" class="flex-1 px-4 py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl font-bold hover:opacity-80 transition-all">Batal</button>
-            <button type="submit" :disabled="submitting" class="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center">
-              <span v-if="submitting" class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-              Simpan Materi
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <DialogFooter class="p-8 pt-4 border-t bg-muted/20 gap-2 sm:gap-0">
+          <Button variant="outline" @click="showAddTopicModal = false" class="flex-1 rounded-xl font-bold">Batal</Button>
+          <Button @click="createTopic" :disabled="submitting" class="flex-1 rounded-xl font-bold">
+            <Spinner v-if="submitting" class="mr-2 h-4 w-4" />
+            Simpan Materi
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
 
@@ -160,6 +174,13 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import LmsService from '../../../services/LmsService';
+import { Button } from '@/components/ui';
+import { Input } from '@/components/ui';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui';
+import { Spinner, SkeletonLoader } from '@/components/ui';
+import { ChevronLeft, Plus, Pencil, Trash2, FileText, PlayCircle, FileDown, FileCheck } from 'lucide-vue-next';
+import TiptapEditor from '@/components/shared/editor/TiptapEditor.vue';
 
 const route = useRoute();
 const courseId = Number(route.params.id);

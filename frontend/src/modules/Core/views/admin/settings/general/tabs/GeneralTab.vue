@@ -9,20 +9,71 @@
       :color="group.color"
       :default-expanded="group.defaultExpanded"
     >
-      <SettingField
+      <template
         v-for="setting in group.settings"
-        v-show="isMaintenanceSettingVisible(setting.key)"
         :key="setting.id"
-        :model-value="(formData[setting.key] as any)"
-        :field-key="setting.key"
-        :label="$t('features.settings.labels.' + setting.key)"
-        :description="$t('features.settings.descriptions.' + setting.key)"
-        :type="setting.type"
-        :enabled-text="$t('features.settings.enabled')"
-        :disabled-text="$t('features.settings.disabled')"
-        :error="errors?.[setting.key]"
-        @update:model-value="(value) => updateField(setting.key, value)"
-      />
+      >
+        <SettingField
+          v-if="setting.key !== 'content.autosave_interval_seconds'"
+          v-show="isMaintenanceSettingVisible(setting.key)"
+          :model-value="(formData[setting.key] as any)"
+          :field-key="setting.key"
+          :label="$t('features.settings.labels.' + setting.key)"
+          :description="$t('features.settings.descriptions.' + setting.key)"
+          :type="setting.type"
+          :enabled-text="$t('features.settings.enabled')"
+          :disabled-text="$t('features.settings.disabled')"
+          :error="errors?.[setting.key]"
+          :readonly="isFieldProtected(setting.key)"
+          @update:model-value="(value) => updateField(setting.key, value)"
+        />
+
+        <div
+          v-else
+          class="space-y-2"
+        >
+          <label class="block text-sm font-medium text-foreground">
+            {{ $t('features.settings.labels.content.autosave_interval_seconds') }}
+          </label>
+          <p class="text-xs text-muted-foreground">
+            {{ $t('features.settings.descriptions.content.autosave_interval_seconds') }}
+          </p>
+
+          <Select
+            :model-value="autosavePresetValue"
+            @update:model-value="handleAutosavePresetChange"
+          >
+            <SelectTrigger>
+              <SelectValue :placeholder="$t('common.actions.select')" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="15">
+                15 detik (aktif)
+              </SelectItem>
+              <SelectItem value="30">
+                30 detik (seimbang)
+              </SelectItem>
+              <SelectItem value="60">
+                60 detik (ringan server)
+              </SelectItem>
+              <SelectItem value="custom">
+                Custom
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Input
+            v-if="autosavePresetValue === 'custom'"
+            :model-value="String(autosaveIntervalSeconds)"
+            type="number"
+            min="5"
+            max="300"
+            step="1"
+            placeholder="5-300"
+            @input="handleAutosaveCustomInput"
+          />
+        </div>
+      </template>
     </SettingGroup>
   </div>
 </template>
@@ -32,6 +83,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingGroup from '@/modules/Core/components/settings/SettingGroup.vue'
 import SettingField from '@/modules/Core/components/settings/SettingField.vue'
+import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui'
 
 interface Setting {
     id: number | string;
@@ -72,9 +124,32 @@ const updateField = (key: string, value: unknown) => {
     emit('update:formData', newData);
 }
 
+const normalizeAutosaveInterval = (value: unknown): number => {
+    const parsed = Number(value)
+    if (!Number.isFinite(parsed)) return 30
+    return Math.min(300, Math.max(5, Math.round(parsed)))
+}
+
+const autosaveIntervalSeconds = computed(() => normalizeAutosaveInterval(props.formData['content.autosave_interval_seconds']))
+
+const autosavePresetValue = computed(() => {
+    const v = autosaveIntervalSeconds.value
+    return [15, 30, 60].includes(v) ? String(v) : 'custom'
+})
+
+const handleAutosavePresetChange = (value: string) => {
+    if (value === 'custom') {
+        return
+    }
+    updateField('content.autosave_interval_seconds', Number(value))
+}
+
+const handleAutosaveCustomInput = (event: Event) => {
+    const value = Number((event.target as HTMLInputElement).value)
+    updateField('content.autosave_interval_seconds', normalizeAutosaveInterval(value))
+}
+
 // SVG Icon Components
-
-
 const ClockIcon = {
     template: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
 }
@@ -82,6 +157,7 @@ const ClockIcon = {
 const ToolIcon = {
     template: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75a4.5 4.5 0 01-4.884 4.484c-1.076-.091-2.264.071-2.999.922l-7.126 7.126a.908.908 0 01-1.287 0l-1.287-1.287a.908.908 0 010-1.287l7.126-7.126c.851-.735 1.013-1.923.922-2.999a4.5 4.5 0 014.484-4.884 4.5 4.5 0 014.884 4.884zM11.64 12.36L9.64 10.36" /><path stroke-linecap="round" stroke-linejoin="round" d="M7 17l-5 5" /><path stroke-linecap="round" stroke-linejoin="round" d="M12.5 12.5l5.5-5.5" /></svg>`
 }
+
 
 interface SettingGroupData {
     id: string;
@@ -110,11 +186,61 @@ const isMaintenanceSettingVisible = (key: string) => {
     return true;
 }
 
+const BrandIcon = {
+    template: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" /></svg>`
+}
+
+const isFieldProtected = (key: string) => {
+    // Branding fields are protected if not Pro+ license
+    const brandingKeys = ['app_name', 'brand_logo', 'brand_favicon', 'branding_display'];
+    if (brandingKeys.includes(key)) {
+        return props.formData.license_type !== 'Pro+';
+    }
+    
+    // License Type is readonly (managed by system/validation)
+    // License Key is now editable manually as requested
+    if (key === 'license_type') {
+        return true;
+    }
+    
+    return false;
+}
+
 // General settings grouped by category
 const generalSettingsGrouped = computed(() => {
-    const generalSettings = props.settings.filter(s => s && s.group === 'general')
+    const systemSettings = props.settings.filter(s => s && (s.group === 'system' || s.group === 'brand' || s.group === 'general'))
     
     const groups: SettingGroupData[] = [
+        {
+            id: 'license',
+            title: 'Lisensi & Layanan',
+            description: 'Status lisensi dan integrasi platform.',
+            icon: ToolIcon,
+            color: 'purple',
+            keys: ['license_key', 'license_type'],
+            settings: [],
+            defaultExpanded: true,
+        },
+        {
+            id: 'brand',
+            title: 'Identitas Aplikasi (Whitelabel)',
+            description: 'Sesuaikan branding platform admin dan sistem.',
+            icon: BrandIcon,
+            color: 'indigo',
+            keys: ['app_name', 'brand_logo', 'brand_favicon', 'branding_display'],
+            settings: [],
+            defaultExpanded: true,
+        },
+        {
+            id: 'school',
+            title: 'Identitas Lembaga (Public)',
+            description: 'Identitas sekolah untuk portal publik dan landing page.',
+            icon: BrandIcon,
+            color: 'emerald',
+            keys: ['school_name', 'admin_email', 'school_address', 'school_phone'],
+            settings: [],
+            defaultExpanded: true,
+        },
         {
             id: 'localization',
             title: t('features.settings.groups.localization.title'),
@@ -123,7 +249,7 @@ const generalSettingsGrouped = computed(() => {
             color: 'amber',
             keys: ['timezone', 'date_format', 'time_format', 'items_per_page'],
             settings: [],
-            defaultExpanded: true,
+            defaultExpanded: false,
         },
         {
             id: 'maintenance',
@@ -138,15 +264,24 @@ const generalSettingsGrouped = computed(() => {
     ]
 
     groups.forEach(group => {
-        group.settings = generalSettings.filter(s => group.keys.includes(s.key))
+        group.settings = systemSettings.filter(s => group.keys.includes(s.key))
         
         // Ensure settings are in logical order
-        if (group.id === 'maintenance') {
-            const order = ['maintenance_mode', 'maintenance_title', 'maintenance_message', 'maintenance_countdown_enabled', 'maintenance_end_time'];
-            group.settings.sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key));
+        const orders: Record<string, string[]> = {
+            'license': ['license_type', 'license_key'],
+            'brand': ['app_name', 'brand_logo', 'brand_favicon', 'branding_display'],
+            'school': ['school_name', 'admin_email', 'school_address', 'school_phone'],
+            'maintenance': ['maintenance_mode', 'maintenance_title', 'maintenance_message', 'maintenance_countdown_enabled', 'maintenance_end_time'],
+            'localization': ['timezone', 'date_format', 'time_format', 'items_per_page']
+        };
+
+        const groupOrder = orders[group.id];
+        if (groupOrder) {
+            group.settings.sort((a, b) => groupOrder.indexOf(a.key) - groupOrder.indexOf(b.key));
         }
     })
 
     return groups.filter(group => group.settings.length > 0)
 })
 </script>
+

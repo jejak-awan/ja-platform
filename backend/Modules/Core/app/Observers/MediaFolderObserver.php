@@ -2,7 +2,7 @@
 
 namespace Modules\Core\Observers;
 
-use Modules\Cms\Models\MediaFolder;
+use Modules\Core\Models\MediaFolder;
 
 class MediaFolderObserver
 {
@@ -34,13 +34,13 @@ class MediaFolderObserver
     public function restoring(MediaFolder $mediaFolder): void
     {
         // Restore all children recursively
-        foreach (\Modules\Cms\Models\MediaFolder::onlyTrashed()->where('parent_id', $mediaFolder->id)->get() as $child) {
+        foreach (\Modules\Core\Models\MediaFolder::onlyTrashed()->where('parent_id', $mediaFolder->id)->get() as $child) {
             $child->restore();
         }
 
         // Restore all media files that belong to this folder
         // We only restore media that were trashed (deleted_at is NOT null)
-        foreach (\Modules\Cms\Models\Media::onlyTrashed()->where('folder_id', $mediaFolder->id)->get() as $media) {
+        foreach (\Modules\Core\Models\Media::onlyTrashed()->where('folder_id', $mediaFolder->id)->get() as $media) {
             $media->restore();
         }
     }

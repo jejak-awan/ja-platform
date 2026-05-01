@@ -11,9 +11,11 @@
         "security": "Security",
         "comments": "Discussion",
         "performance": "Performance",
+        "monitoring": "Monitoring",
         "media": "Media",
         "ai": "AI Assistance",
-        "analytics": "Analytics"
+        "analytics": "Analytics",
+        "system": "System"
     },
     "groups": {
         "ai": {
@@ -35,6 +37,10 @@
             "using_model": "Using: {model}",
             "connection_success": "Connection successful",
             "fetch_success": "Models fetched successfully"
+        },
+        "brand": {
+            "title": "Application Identity",
+            "description": "Logo, favicon, and admin email for the application dashboard"
         },
         "siteInfo": {
             "title": "Site Information",
@@ -169,6 +175,14 @@
             "purgeButton": "Delete all analytics",
             "purgingNow": "Deleting...",
             "purgeSuccess": "Removed {count} analytics records. Dashboards will reflect empty data immediately."
+        },
+        "logs": {
+            "title": "System Log Retention",
+            "description": "Configure how long activity and system logs are kept before being auto-deleted."
+        },
+        "backupMonitoring": {
+            "title": "Backup Monitoring",
+            "description": "System backup monitoring and file retention settings."
         }
     },
     "enabled": "Enabled",

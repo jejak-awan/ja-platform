@@ -194,7 +194,7 @@ import { useFormValidation } from '@/composables/useFormValidation';
 import { contentTemplateSchema } from '@/schemas';
 import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Textarea } from '@/components/ui';
 
-import TiptapEditor from '@/modules/Cms/components/editor/TiptapEditor.vue';
+import TiptapEditor from '@/components/shared/editor/TiptapEditor.vue';
 import ChevronLeft from 'lucide-vue-next/dist/esm/icons/chevron-left.js';
 import Save from 'lucide-vue-next/dist/esm/icons/save.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';

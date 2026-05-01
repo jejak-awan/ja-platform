@@ -4,7 +4,7 @@ namespace Modules\Cms\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Tag;
 
 class TagFactory extends Factory
 {

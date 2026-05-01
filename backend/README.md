@@ -10,19 +10,20 @@ This is the backend service for **JA-Platform**.
 - **Worker/Queue**: Laravel Horizon
 - **Realtime**: Laravel Reverb
 
-## 🎓 LMS Module (Headless Architecture)
+## Headless LMS Module (Native)
 
-The School module now features a robust, headless Learning Management System (LMS) inspired by the **EscolaLMS** architecture.
+Modul LMS ini dibangun secara *native* di dalam modul School untuk mendukung pembelajaran daring yang terintegrasi penuh dengan data institusi dan siswa.
 
-### Key Features:
-- **Hierarchical Structure**: `Course -> Lesson -> Topic`.
-- **Polymorphic Content**: Topics support multiple content types via a `topicable` relationship.
+## Fitur Utama
+- **Polymorphic Topics**: Materi pembelajaran mendukung berbagai tipe (RichText, Video, PDF, Quiz).
+- **Quiz Engine**: Sistem penilaian otomatis dengan dukungan berbagai tipe pertanyaan.
+- **Multi-tenancy**: Terintegrasi penuh dengan sistem sekolah (X-School-Id).
+- **Student Progress**: Pelacakan progres belajar siswa secara real-time.
 - **Supported Content Types**:
     - **RichText**: Standard HTML/Text materials.
     - **Video**: Support for direct MP4 links or YouTube embeds.
     - **PDF**: Document-based learning.
     - **Quiz**: Full assessment system with Multiple Choice, True/False, and Short Answer questions.
-- **Progress Tracking**: Automatic progress saving and pass-score validation for Quizzes.
 
 ## 🛠️ Installation
 

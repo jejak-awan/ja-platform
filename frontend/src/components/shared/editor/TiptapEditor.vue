@@ -109,24 +109,24 @@ import { TableCell } from '@tiptap/extension-table-cell';
 import { TableHeader } from '@tiptap/extension-table-header';
 
 // Modular Components
-import Toolbar from '@/modules/Cms/components/editor/Toolbar.vue';
-import BubbleMenu from '@/modules/Cms/components/editor/BubbleMenu.vue';
-import MediaBubbleMenu from '@/modules/Cms/components/editor/MediaBubbleMenu.vue';
-import ContextMenu from '@/modules/Cms/components/editor/ContextMenu.vue';
-import PropertiesPopover from '@/modules/Cms/components/editor/PropertiesPopover.vue';
-import TableInsertDialog from '@/modules/Cms/components/editor/TableInsertDialog.vue';
-import MediaPicker from '@/modules/Cms/components/media/MediaPicker.vue';
+import Toolbar from '@/components/shared/editor/Toolbar.vue';
+import BubbleMenu from '@/components/shared/editor/BubbleMenu.vue';
+import MediaBubbleMenu from '@/components/shared/editor/MediaBubbleMenu.vue';
+import ContextMenu from '@/components/shared/editor/ContextMenu.vue';
+import PropertiesPopover from '@/components/shared/editor/PropertiesPopover.vue';
+import TableInsertDialog from '@/components/shared/editor/TableInsertDialog.vue';
+import MediaPicker from '@/components/shared/media/MediaPicker.vue';
 
 // Custom Extensions
-import { CustomImage } from '@/modules/Cms/components/editor/extensions/CustomImage';
-import { VideoExtension } from '@/modules/Cms/components/editor/extensions/Video';
-import { Dropcap } from '@/modules/Cms/components/editor/extensions/Dropcap';
-import { Columns } from '@/modules/Cms/components/editor/extensions/Columns';
-import { Column } from '@/modules/Cms/components/editor/extensions/Column';
-import { TextColumns } from '@/modules/Cms/components/editor/extensions/TextColumns';
-import { CodeBlockWithCopyExtension } from '@/modules/Cms/components/editor/extensions/CodeBlockExtension';
-import { HtmlEmbed } from '@/modules/Cms/components/editor/extensions/HtmlEmbedExtension';
-import { Icon } from '@/modules/Cms/components/editor/extensions/IconExtension';
+import { CustomImage } from '@/components/shared/editor/extensions/CustomImage';
+import { VideoExtension } from '@/components/shared/editor/extensions/Video';
+import { Dropcap } from '@/components/shared/editor/extensions/Dropcap';
+import { Columns } from '@/components/shared/editor/extensions/Columns';
+import { Column } from '@/components/shared/editor/extensions/Column';
+import { TextColumns } from '@/components/shared/editor/extensions/TextColumns';
+import { CodeBlockWithCopyExtension } from '@/components/shared/editor/extensions/CodeBlockExtension';
+import { HtmlEmbed } from '@/components/shared/editor/extensions/HtmlEmbedExtension';
+import { Icon } from '@/components/shared/editor/extensions/IconExtension';
 
 import type { Media } from '@/types/cms/media';
 

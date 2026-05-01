@@ -8,7 +8,7 @@ use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\Menu;
 use Modules\Cms\Models\MenuItem;
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Tag;
 use Modules\Core\Models\User;
 
 class SampleContentSeeder extends Seeder
@@ -489,7 +489,7 @@ class SampleContentSeeder extends Seeder
         ];
 
         foreach ($folders as $folder) {
-            \Modules\Cms\Models\MediaFolder::updateOrCreate(
+            \Modules\Core\Models\MediaFolder::updateOrCreate(
                 ['slug' => $folder['slug']],
                 array_merge($folder, ['author_id' => $user->id])
             );

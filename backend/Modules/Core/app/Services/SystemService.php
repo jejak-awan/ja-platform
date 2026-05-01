@@ -116,7 +116,7 @@ class SystemService
                 // Flat keys for frontend compatibility
                 'total_contents' => \Modules\Cms\Models\Content::count(),
                 'total_users' => \Modules\Core\Models\User::count(),
-                'total_media' => \Modules\Cms\Models\Media::count(),
+                'total_media' => \Modules\Core\Models\Media::count(),
                 'total_visits' => $totalVisits,
                 // Detailed nested data (for extended use)
                 'contents' => [
@@ -130,11 +130,11 @@ class SystemService
                     'verified' => \Modules\Core\Models\User::whereNotNull('email_verified_at')->count(),
                 ],
                 'media' => [
-                    'total' => \Modules\Cms\Models\Media::count(),
-                    'total_size' => \Modules\Cms\Models\Media::sum('size'),
+                    'total' => \Modules\Core\Models\Media::count(),
+                    'total_size' => \Modules\Core\Models\Media::sum('size'),
                 ],
                 'categories' => \Modules\Cms\Models\Category::count(),
-                'tags' => \Modules\Cms\Models\Tag::count(),
+                'tags' => \Modules\Core\Models\Tag::count(),
                 'comments' => \Modules\Cms\Models\Comment::count(),
                 'forms' => \Modules\Cms\Models\Form::count(),
                 'form_submissions' => \Modules\Cms\Models\FormSubmission::count(),

@@ -2,7 +2,7 @@
 
 namespace Modules\Cms\Tests\Feature;
 
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Tag;
 use Modules\Core\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;

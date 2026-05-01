@@ -9,7 +9,7 @@ use Modules\Cms\Models\Form;
 use Modules\Cms\Models\FormField;
 use Modules\Cms\Models\Menu;
 use Modules\Cms\Models\MenuItem;
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Tag;
 use Modules\Core\Models\User;
 
 class StudioSeeder extends Seeder

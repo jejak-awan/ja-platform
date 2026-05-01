@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\School\Models\Student\Student;
 
+/**
+ * @property int $id
+ * @property int $topic_id
+ * @property int $student_id
+ * @property bool $is_completed
+ * @property \Illuminate\Support\Carbon|null $completed_at
+ * @property array<string, mixed>|null $metadata
+ * @property-read Topic $topic
+ * @property-read Student $student
+ */
 class TopicProgress extends Model
 {
     protected $table = 'sch_lms_topic_progress';
@@ -24,11 +34,17 @@ class TopicProgress extends Model
         'metadata' => 'json',
     ];
 
+    /**
+     * @return BelongsTo<Topic, $this>
+     */
     public function topic(): BelongsTo
     {
         return $this->belongsTo(Topic::class);
     }
 
+    /**
+     * @return BelongsTo<Student, $this>
+     */
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);

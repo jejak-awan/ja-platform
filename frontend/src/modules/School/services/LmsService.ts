@@ -10,6 +10,14 @@ export interface Course {
   level: 'beginner' | 'intermediate' | 'advanced';
   status: 'draft' | 'published' | 'archived';
   lessons_count?: number;
+  academic_year_id?: number;
+  semester_id?: number;
+  department_id?: number;
+  grade_id?: number;
+  academic_year?: { id: number, year: string };
+  semester?: { id: number, semester: string };
+  department?: { id: number, name: string };
+  grade?: { id: number, name: string };
 }
 
 export interface Topic {

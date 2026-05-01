@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Media;
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Media;
+use Modules\Core\Models\Tag;
 use Modules\Core\Models\Language;
 
 /**

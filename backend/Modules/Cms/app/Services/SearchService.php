@@ -338,7 +338,7 @@ class SearchService
         }
 
         // Reindex tags
-        $tags = \Modules\Cms\Models\Tag::all();
+        $tags = \Modules\Core\Models\Tag::all();
         foreach ($tags as $tag) {
             SearchIndex::index($tag, [
                 'title' => $tag->name,

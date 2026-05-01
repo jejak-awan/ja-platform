@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Cms\Models;
+namespace Modules\Core\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string|null $field_name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\Cms\Models\Media $media
+ * @property-read \Modules\Core\Models\Media $media
  * @property-read \Illuminate\Database\Eloquent\Model $model
  */
 class MediaUsage extends Model

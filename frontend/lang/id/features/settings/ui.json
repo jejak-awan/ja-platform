@@ -11,9 +11,11 @@
         "security": "Keamanan",
         "comments": "Diskusi",
         "performance": "Performa",
+        "monitoring": "Monitoring",
         "media": "Media",
         "ai": "Bantuan AI",
-        "analytics": "Analitik"
+        "analytics": "Analitik",
+        "system": "Sistem"
     },
     "groups": {
         "ai": {
@@ -35,6 +37,10 @@
             "using_model": "Menggunakan: {model}",
             "connection_success": "Koneksi berhasil",
             "fetch_success": "Model berhasil diambil"
+        },
+        "brand": {
+            "title": "Identitas Aplikasi",
+            "description": "Logo, favicon, dan email admin untuk dashboard aplikasi"
         },
         "siteInfo": {
             "title": "Informasi Situs",
@@ -169,6 +175,14 @@
             "purgeButton": "Hapus semua analitik",
             "purgingNow": "Menghapus...",
             "purgeSuccess": "{count} rekaman analitik dihapus. Dashboard akan menampilkan data kosong."
+        },
+        "logs": {
+            "title": "Retensi Log Sistem",
+            "description": "Konfigurasi berapa lama log aktivitas dan sistem disimpan sebelum dihapus otomatis."
+        },
+        "backupMonitoring": {
+            "title": "Monitoring Cadangan",
+            "description": "Pengaturan pemantauan dan retensi file cadangan sistem."
         }
     },
     "enabled": "Aktif",

@@ -4,7 +4,7 @@ namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Tag;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 /**

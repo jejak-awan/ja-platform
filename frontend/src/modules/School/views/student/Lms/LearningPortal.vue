@@ -73,6 +73,7 @@
         <div v-else class="max-w-4xl mx-auto">
           <!-- Render Content based on type -->
           <div v-if="activeTopic.topicable_type.includes('RichText')" class="prose prose-slate dark:prose-invert max-w-none bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800">
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="activeTopic.topicable.value"></div>
           </div>
 
@@ -157,7 +158,7 @@ const markComplete = async () => {
 };
 
 const getYoutubeEmbedUrl = (url: string) => {
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const match = url.match(regExp);
   return (match && match[2] && match[2].length == 11) ? `https://www.youtube.com/embed/${match[2]}` : url;
 };

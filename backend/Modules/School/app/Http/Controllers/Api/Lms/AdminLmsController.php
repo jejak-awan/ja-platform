@@ -47,6 +47,10 @@ class AdminLmsController extends BaseController
             'summary' => 'nullable|string',
             'level' => 'required|in:beginner,intermediate,advanced',
             'status' => 'required|in:draft,published,archived',
+            'academic_year_id' => 'nullable|integer|exists:sch_acad_years,id',
+            'semester_id' => 'nullable|integer|exists:sch_acad_semesters,id',
+            'department_id' => 'nullable|integer|exists:sch_acad_departments,id',
+            'grade_id' => 'nullable|integer|exists:sch_acad_grades,id',
         ]);
 
         $schoolId = $request->header('X-School-Id');

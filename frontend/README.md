@@ -12,17 +12,14 @@ This is the frontend component of **JA-Platform**.
 - **Animation**: Native CSS/Vue transitions
 
 ## 🎓 LMS Features
+## LMS Dashboard & Learning Portal
 
-The frontend implements a premium learning experience with the following components:
+Antarmuka pengguna untuk Manajemen Kursus dan Portal Belajar Siswa yang dibangun secara *native* dan terintegrasi dengan modul School.
 
-### 📱 Student Experience
-- **Course Catalog**: Beautifully designed course listing and enrollment.
-- **Learning Portal**: A dedicated classroom view with a navigation sidebar, progress tracking, and dynamic content rendering.
-- **Quiz Renderer**: Interactive assessment interface with real-time feedback and score calculation.
-
-### ⚙️ Admin Management
-- **Course Management**: Full CRUD for courses.
-- **Curriculum Builder**: Intuitively manage lessons and topics for each course.
+## Struktur Modul
+- **Admin**: Manajemen Kursus, Kurikulum (Lessons), dan Materi (Topics).
+- **Student**: Katalog Kursus, Progres Belajar, dan Learning Portal (Viewer).
+- **Service**: Integrasi API yang dioptimasi untuk performa tinggi.
 - **Quiz Editor**: Build complex assessments with multiple question types.
 
 ## ✨ Animations

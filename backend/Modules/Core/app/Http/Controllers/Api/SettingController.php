@@ -17,7 +17,7 @@ class SettingController extends BaseApiController
             $query->where('group', $group);
         } else {
             // Exclude CMS specific groups from core settings list
-            $cmsGroups = ['seo', 'media', 'comments', 'ai', 'analytics'];
+            $cmsGroups = ['general', 'seo', 'comments', 'analytics'];
             $query->whereNotIn('group', $cmsGroups);
         }
 
@@ -43,7 +43,8 @@ class SettingController extends BaseApiController
         if (! $user->can('view settings')) {
             $allowedGroups = [
                 'media' => ['view media', 'upload media'],
-                'general' => [],
+                'system' => [],
+                'monitoring' => [],
             ];
 
             $requiredPermissions = $allowedGroups[$group] ?? null;
@@ -127,8 +128,8 @@ class SettingController extends BaseApiController
                 $sValue = $settingData['value'] ?? null;
                 $sTypeRaw = $settingData['type'] ?? 'string';
                 $sType = is_scalar($sTypeRaw) ? (string) $sTypeRaw : 'string';
-                $sGroupRaw = $settingData['group'] ?? 'general';
-                $sGroup = is_scalar($sGroupRaw) ? (string) $sGroupRaw : 'general';
+                $sGroupRaw = $settingData['group'] ?? 'system';
+                $sGroup = is_scalar($sGroupRaw) ? (string) $sGroupRaw : 'system';
 
                 Setting::set($sKey, $sValue, $sType, $sGroup);
             }

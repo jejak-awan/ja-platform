@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Modules\Cms\Models\Media;
+use Modules\Core\Models\Media;
 use Modules\Core\Traits\CoreLogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -31,7 +31,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Modules\Core\Models\TwoFactorAuth|null $twoFactorAuth
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\Media> $media
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Core\Models\Media> $media
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Core\Models\ActivityLog> $activityLogs
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Core\Models\Notification> $notifications
  */
@@ -117,7 +117,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\Cms\Models\Media, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\Core\Models\Media, $this>
      */
     public function media(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

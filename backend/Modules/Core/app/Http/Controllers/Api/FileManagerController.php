@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Modules\Cms\Helpers\MediaSettingsHelper;
+use Modules\Core\Helpers\UploadSettingsHelper;
 use Modules\Cms\Services\MediaService;
 use Modules\Core\Models\ActivityLog;
 use Modules\Core\Models\DeletedFile;
@@ -360,9 +360,9 @@ class FileManagerController extends BaseApiController
             return $this->forbidden('You do not have permission to upload files');
         }
 
-        // Get settings from MediaSettingsHelper (shared with Media component)
-        $maxSize = MediaSettingsHelper::getMaxUploadSize();
-        $allowedExtensions = MediaSettingsHelper::getAllowedExtensions();
+        // Get settings from UploadSettingsHelper (shared with Media component)
+        $maxSize = UploadSettingsHelper::getMaxUploadSize();
+        $allowedExtensions = UploadSettingsHelper::getAllowedExtensions();
         $allowedMimes = implode(',', $allowedExtensions);
 
         $request->validate([
@@ -398,7 +398,7 @@ class FileManagerController extends BaseApiController
         foreach ($files as $file) {
             // Double-check extension is allowed (in case mimes validation is bypassed)
             $extension = strtolower($file->getClientOriginalExtension());
-            if (! MediaSettingsHelper::isExtensionAllowed($extension)) {
+            if (! UploadSettingsHelper::isExtensionAllowed($extension)) {
                 return $this->validationError([
                     'file' => ["File type '{$extension}' is not allowed."],
                 ], 'Invalid file type');
@@ -488,7 +488,7 @@ class FileManagerController extends BaseApiController
 
         if ($permanent) {
             // Find media if any
-            $media = \Modules\Cms\Models\Media::where(function ($q) use ($path) {
+            $media = \Modules\Core\Models\Media::where(function ($q) use ($path) {
                 $q->where('path', $path)
                     ->orWhere('path', '/'.$path);
             })->first();
@@ -528,7 +528,7 @@ class FileManagerController extends BaseApiController
         // Sync with Media Library (Delete)
         try {
             // Find valid media
-            $media = \Modules\Cms\Models\Media::where(function ($q) use ($path) {
+            $media = \Modules\Core\Models\Media::where(function ($q) use ($path) {
                 $q->where('path', $path)
                     ->orWhere('path', '/'.$path)
                     ->orWhere('path', trim($path, '/'));
@@ -619,8 +619,20 @@ class FileManagerController extends BaseApiController
         Storage::disk($disk)->makeDirectory('.trash');
 
         // Move folder to trash
-        // Note: laravel Storage::move() works for both files and directories on most drivers
-        Storage::disk($disk)->move($path, $trashPath);
+        $sourcePath = Storage::disk($disk)->path($path);
+        $targetPath = Storage::disk($disk)->path($trashPath);
+
+        try {
+            if (is_dir($sourcePath)) {
+                File::moveDirectory($sourcePath, $targetPath);
+            } else {
+                // Fallback to Storage move if it's not a local directory or failed is_dir
+                Storage::disk($disk)->move($path, $trashPath);
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to move folder to trash: ' . $e->getMessage());
+            return $this->error('Failed to move folder to trash. It might be in use or permissions are insufficient.');
+        }
 
         ActivityLog::log('soft_deleted_folder', null, ['path' => $path, 'disk' => $disk], $request->user(), "Moved folder to trash: {$path}");
 
@@ -628,7 +640,7 @@ class FileManagerController extends BaseApiController
         try {
             // Find all media items starting with this path
             $searchPath = $path.'/';
-            $mediaItems = \Modules\Cms\Models\Media::where('path', 'like', $searchPath.'%')
+            $mediaItems = \Modules\Core\Models\Media::where('path', 'like', $searchPath.'%')
                 ->orWhere('path', 'like', '/'.$searchPath.'%')
                 ->get();
 
@@ -1052,7 +1064,7 @@ class FileManagerController extends BaseApiController
         // Sync with Media Library (Restore)
         if ($deletedFile->type === 'file') {
             try {
-                $media = \Modules\Cms\Models\Media::withTrashed()
+                $media = \Modules\Core\Models\Media::withTrashed()
                     ->where(function ($q) use ($trashPath) {
                         $q->where('path', $trashPath)
                             ->orWhere('path', '/'.$trashPath);
@@ -1075,7 +1087,7 @@ class FileManagerController extends BaseApiController
             // Sync with Media Library (Restore items inside folder)
             try {
                 // Find all media items starting with the trash path
-                $mediaItems = \Modules\Cms\Models\Media::withTrashed()
+                $mediaItems = \Modules\Core\Models\Media::withTrashed()
                     ->where('path', 'like', $trashPath.'%')
                     ->orWhere('path', 'like', '/'.$trashPath.'%')
                     ->get();
@@ -1130,7 +1142,7 @@ class FileManagerController extends BaseApiController
             // Sync with Media Library (Force Delete)
             if ($record->type === 'file') {
                 try {
-                    $media = \Modules\Cms\Models\Media::withTrashed()
+                    $media = \Modules\Core\Models\Media::withTrashed()
                         ->where(function ($q) use ($trashPath) {
                             $q->where('path', $trashPath)
                                 ->orWhere('path', '/'.$trashPath);
@@ -1147,7 +1159,7 @@ class FileManagerController extends BaseApiController
                 // For folders, find and force delete all media records inside
                 try {
                     $searchPath = $record->trash_path;
-                    $mediaItems = \Modules\Cms\Models\Media::withTrashed()
+                    $mediaItems = \Modules\Core\Models\Media::withTrashed()
                         ->where('path', 'like', $searchPath.'%')
                         ->orWhere('path', 'like', '/'.$searchPath.'%')
                         ->get();
@@ -1236,7 +1248,7 @@ class FileManagerController extends BaseApiController
         // Sync with Media Library (Force Delete)
         if ($deletedFile->type === 'file') {
             try {
-                $media = \Modules\Cms\Models\Media::withTrashed()
+                $media = \Modules\Core\Models\Media::withTrashed()
                     ->where(function ($q) use ($trashPath) {
                         $q->where('path', $trashPath)
                             ->orWhere('path', '/'.$trashPath);
@@ -1253,7 +1265,7 @@ class FileManagerController extends BaseApiController
             // For folders, find and force delete all media records inside
             try {
                 $searchPath = $deletedFile->trash_path;
-                $mediaItems = \Modules\Cms\Models\Media::withTrashed()
+                $mediaItems = \Modules\Core\Models\Media::withTrashed()
                     ->where('path', 'like', $searchPath.'%')
                     ->orWhere('path', 'like', '/'.$searchPath.'%')
                     ->get();

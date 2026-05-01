@@ -3,7 +3,7 @@
 namespace Modules\Cms\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Cms\Models\Media;
+use Modules\Core\Models\Media;
 
 class MediaFactory extends Factory
 {

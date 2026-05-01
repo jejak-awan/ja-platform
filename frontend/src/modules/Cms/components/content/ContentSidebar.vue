@@ -571,7 +571,7 @@
             <MediaPicker
               :label="$t('features.content.form.selectOgImage')"
               :constraints="{
-                allowedExtensions: ['jpg', 'jpeg', 'png', 'webp'],
+                allowedExtensions: settings.allowed_image_types ? String(settings.allowed_image_types).split(',').map(s => s.trim()) : ['jpg', 'jpeg', 'png', 'webp'],
                 minWidth: 1200,
                 minHeight: 630
               }"
@@ -613,6 +613,8 @@
 import { logger } from '@/utils/logger';
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { storeToRefs } from 'pinia';
+import { useCoreStore } from '@/modules/Core/stores/core';
 import api from '@/services/api';
 import {
     Label,
@@ -637,9 +639,12 @@ import ImageIcon from 'lucide-vue-next/dist/esm/icons/image.js';
 import MenuSquare from 'lucide-vue-next/dist/esm/icons/square-menu.js';
 import MessageSquare from 'lucide-vue-next/dist/esm/icons/message-square.js';
 import FeaturedImage from '@/modules/Cms/components/content/FeaturedImage.vue';
-import MediaPicker from '@/modules/Cms/components/media/MediaPicker.vue';
-import MarkdownEditor from '@/modules/Cms/components/editor/MarkdownEditor.vue';
+import MediaPicker from '@/components/shared/media/MediaPicker.vue';
+import MarkdownEditor from '@/components/shared/editor/MarkdownEditor.vue';
 import type { ContentForm, Category, Tag, MenuItem, Menu } from '@/types/cms/cms';
+
+const coreStore = useCoreStore();
+const { settings } = storeToRefs(coreStore);
 
 const { t } = useI18n();
 

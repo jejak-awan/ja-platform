@@ -230,6 +230,11 @@ Route::prefix('v1')->group(function () {
         Route::post('scheduled-tasks/{id}/run', [ScheduledTaskController::class, 'run'])->middleware('permission:manage scheduled tasks');
         Route::apiResource('scheduled-tasks', ScheduledTaskController::class)->middleware('permission:manage scheduled tasks');
 
+        // Media Manager (Global)
+        Route::get('media', [\Modules\Core\Http\Controllers\Api\MediaController::class, 'index'])->middleware('permission:manage files');
+        Route::get('media/stats', [\Modules\Core\Http\Controllers\Api\MediaController::class, 'stats'])->middleware('permission:manage files');
+        Route::delete('media/{id}', [\Modules\Core\Http\Controllers\Api\MediaController::class, 'destroy'])->middleware('permission:manage files');
+
         // File Manager
         Route::get('file-manager', [FileManagerController::class, 'index'])->middleware('permission:manage files');
         Route::post('file-manager/upload', [FileManagerController::class, 'upload'])->middleware('permission:manage files');
@@ -277,8 +282,8 @@ Route::prefix('v1')->group(function () {
 
         // Settings
         Route::get('settings/group/{group}', [SettingController::class, 'getGroup'])->middleware('permission:view settings');
-        Route::apiResource('settings', SettingController::class)->middleware('permission:view settings');
         Route::post('settings/bulk-update', [SettingController::class, 'bulkUpdate'])->middleware('permission:manage settings');
+        Route::apiResource('settings', SettingController::class)->middleware('permission:view settings');
 
         // Storage Migration
         Route::get('storage/migration/files', [StorageMigrationController::class, 'index'])->middleware('permission:manage settings');

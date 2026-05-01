@@ -8,6 +8,7 @@ use Modules\School\Services\Lms\LmsService;
 use Modules\School\Models\Lms\Course;
 use Modules\School\Models\Lms\Topic;
 use Modules\School\Models\Student\Student;
+use Modules\School\Models\Lms\Lesson;
 
 class StudentLmsController extends BaseController
 {
@@ -34,6 +35,7 @@ class StudentLmsController extends BaseController
     public function catalog(Request $request): \Illuminate\Http\JsonResponse
     {
         $schoolId = $request->header('X-School-Id');
+        
         if (!$schoolId) {
             $school = \Modules\School\Models\Institution\School::first();
             $schoolId = $school ? $school->id : 1;
@@ -61,11 +63,14 @@ class StudentLmsController extends BaseController
         $program = $this->service->getCourseProgram($courseId);
         
         // Hide correct answers from student
-        $program->each(function($lesson) {
-            $lesson->topics->each(function($topic) {
+        $program->each(function(Lesson $lesson) {
+            $lesson->topics->each(function(Topic $topic) {
                 if ($topic->topicable instanceof \Modules\School\Models\Lms\TopicContent\Quiz) {
                     $topic->topicable->questions->each(function($question) {
-                        $question->options->makeHidden(['is_correct']);
+                        /** @var \Modules\School\Models\Lms\QuizQuestion $question */
+                        /** @var \Illuminate\Database\Eloquent\Collection<int, \Modules\School\Models\Lms\QuizOption> $options */
+                        $options = $question->options;
+                        $options->makeHidden(['is_correct']);
                     });
                 }
             });
@@ -88,7 +93,10 @@ class StudentLmsController extends BaseController
         $student = Student::where('user_id', auth()->id())->first();
         if (!$student) return $this->sendError('Student not found.', [], 404);
 
-        $progress = $this->service->markTopicAsCompleted($topicId, (int)$student->id, $request->input('metadata', []));
+        $metadata = $request->input('metadata');
+        $metadataArray = is_array($metadata) ? $metadata : [];
+
+        $progress = $this->service->markTopicAsCompleted($topicId, (int)$student->id, $metadataArray);
         return $this->sendResponse($progress, 'Topic marked as completed.');
     }
 
@@ -104,15 +112,20 @@ class StudentLmsController extends BaseController
 
     public function submitQuiz(Request $request, int $attemptId): \Illuminate\Http\JsonResponse
     {
+        /** @var \Modules\School\Models\Lms\QuizAttempt $attempt */
         $attempt = \Modules\School\Models\Lms\QuizAttempt::findOrFail($attemptId);
         
         // Ensure student owns the attempt
+        /** @var Student|null $student */
         $student = Student::where('user_id', auth()->id())->first();
-        if (!$student || $attempt->student_id !== $student->id) {
+        if (!$student || (int)$attempt->student_id !== (int)$student->id) {
             return $this->sendError('Unauthorized.', [], 403);
         }
 
-        $attempt = $this->service->submitQuizAttempt($attempt, $request->input('answers', []));
+        $answers = $request->input('answers');
+        $answersArray = is_array($answers) ? $answers : [];
+
+        $attempt = $this->service->submitQuizAttempt($attempt, $answersArray);
         return $this->sendResponse($attempt, 'Quiz submitted.');
     }
 }

@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import TiptapEditor from '@/modules/Cms/components/editor/TiptapEditor.vue';
+import TiptapEditor from '@/components/shared/editor/TiptapEditor.vue';
 import type { ContentForm } from '@/types/cms/cms';
 
 const props = defineProps<{

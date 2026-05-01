@@ -207,7 +207,7 @@ import { ref, computed, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useTheme } from '@/composables/useTheme'
 import { useMenu } from '@/composables/useMenu'
-import { useCmsStore } from '@/modules/Cms/stores/cms'
+import { useCoreStore } from '@/modules/Core/stores/core'
 import { useToast } from '@/composables/useToast'
 import { useFormValidation } from '@/composables/useFormValidation'
 import { useResponsiveDevice } from '@/composables/useResponsiveDevice';
@@ -252,8 +252,8 @@ const loading = ref(false)
 const email = ref('')
 
 const brandingDisplay = computed(() => getSetting('branding_display', 'logo_only'));
-const cmsStore = useCmsStore();
-const siteSettings = computed(() => cmsStore.siteSettings);
+const coreStore = useCoreStore();
+const siteSettings = computed(() => coreStore.settings);
 const { displaySiteName, displaySiteDescription } = useJanariIdentity();
 
 const siteName = computed(() => displaySiteName.value);

@@ -5,7 +5,7 @@ namespace Modules\Core\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Media;
+use Modules\Core\Models\Media;
 use Modules\Core\Models\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;

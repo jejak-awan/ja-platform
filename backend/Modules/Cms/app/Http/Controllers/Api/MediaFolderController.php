@@ -5,7 +5,7 @@ namespace Modules\Cms\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Modules\Cms\Models\MediaFolder;
+use Modules\Core\Models\MediaFolder;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class MediaFolderController extends BaseApiController
@@ -342,14 +342,14 @@ class MediaFolderController extends BaseApiController
     protected function recursiveForceDelete(MediaFolder $folder): void
     {
         // 1. Permanently delete all media files in this folder
-        $mediaItems = \Modules\Cms\Models\Media::where('folder_id', $folder->id)->withTrashed()->get();
+        $mediaItems = \Modules\Core\Models\Media::where('folder_id', $folder->id)->withTrashed()->get();
         foreach ($mediaItems as $media) {
-            /** @var \Modules\Cms\Models\Media $media */
+            /** @var \Modules\Core\Models\Media $media */
             $media->forceDelete();
         }
 
         // 2. Recurse into children folders
-        $children = \Modules\Cms\Models\MediaFolder::where('parent_id', $folder->id)->withTrashed()->get();
+        $children = \Modules\Core\Models\MediaFolder::where('parent_id', $folder->id)->withTrashed()->get();
         foreach ($children as $child) {
             /** @var MediaFolder $child */
             $this->recursiveForceDelete($child);

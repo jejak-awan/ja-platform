@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Tag;
 use Modules\Cms\Services\ContentService;
 use Modules\Core\Models\User;
 use Tests\TestCase;

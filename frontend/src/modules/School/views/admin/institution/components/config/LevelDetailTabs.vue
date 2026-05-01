@@ -500,7 +500,7 @@ import {
   Button, Label, Input, Switch, Separator, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
   Badge
 } from '@/components/ui';
-import TiptapEditor from '@/modules/Cms/components/editor/TiptapEditor.vue';
+import TiptapEditor from '@/components/shared/editor/TiptapEditor.vue';
 import { IndonesianLocation, type LocationItem } from '@/services/IndonesianLocation';
 
 const provinces = ref<LocationItem[]>([]);

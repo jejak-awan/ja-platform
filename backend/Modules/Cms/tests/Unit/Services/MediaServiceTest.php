@@ -5,8 +5,8 @@ namespace Modules\Cms\Tests\Unit\Services;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Modules\Cms\Models\Media;
-use Modules\Cms\Models\MediaFolder;
+use Modules\Core\Models\Media;
+use Modules\Core\Models\MediaFolder;
 use Modules\Cms\Services\MediaService;
 use Tests\TestCase;
 
@@ -365,7 +365,7 @@ class MediaServiceTest extends TestCase
     public function test_get_usage_info_model_not_found()
     {
         $media = Media::factory()->create();
-        \Modules\Cms\Models\MediaUsage::create([
+        \Modules\Core\Models\MediaUsage::create([
             'media_id' => $media->id,
             'model_type' => 'App\Models\NonExistent',
             'model_id' => 999,

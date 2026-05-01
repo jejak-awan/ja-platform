@@ -194,7 +194,7 @@ import { useToast } from '@/composables/useToast';
 import { useFormValidation } from '@/composables/useFormValidation';
 import { categorySchema } from '@/schemas';
 import type { z } from 'zod';
-import MediaPicker from '@/modules/Cms/components/media/MediaPicker.vue';
+import MediaPicker from '@/components/shared/media/MediaPicker.vue';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import type { Category } from '@/types/cms/cms';

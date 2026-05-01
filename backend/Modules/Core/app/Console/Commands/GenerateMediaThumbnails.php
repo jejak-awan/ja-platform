@@ -5,7 +5,7 @@ namespace Modules\Core\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Modules\Cms\Http\Controllers\Api\MediaController;
-use Modules\Cms\Models\Media;
+use Modules\Core\Models\Media;
 
 class GenerateMediaThumbnails extends Command
 {

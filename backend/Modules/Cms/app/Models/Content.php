@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Core\Models\AnalyticsVisit;
+use Modules\Core\Models\Tag;
 use Modules\Core\Models\User;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -46,7 +47,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property array<string, mixed>|null $lock_status
  * @property-read \Modules\Core\Models\User $author
  * @property-read \Modules\Cms\Models\Category|null $category
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\Tag> $tags
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Core\Models\Tag> $tags
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\Comment> $comments
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\ContentRevision> $revisions
  * @property-read \Modules\Core\Models\User|null $lockedBy

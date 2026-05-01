@@ -182,7 +182,7 @@ import {
 } from '@/components/ui';
 import api from '@/services/api';
 import { useToast } from '@/composables/useToast';
-import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useCoreStore } from '@/modules/Core/stores/core';
 
 interface AiProvider {
     id: string;
@@ -209,7 +209,7 @@ const emit = defineEmits<{
 }>();
 
 const toast = useToast();
-const cmsStore = useCmsStore();
+const coreStore = useCoreStore();
 
 const isOpen = ref(false);
 const customPrompt = ref('');
@@ -224,7 +224,7 @@ const loadingModels = ref(false);
 const activeProviders = computed(() => {
     return providers.value.filter(p => {
         // Check if provider API key is set in settings
-        const key = (cmsStore.settings as Record<string, any>)?.[`${p.id}_api_key`];
+        const key = (coreStore.settings as Record<string, any>)?.[`${p.id}_api_key`];
         return !!key;
     });
 });
@@ -313,7 +313,7 @@ const fetchProviders = async () => {
             toast.service.warning('No active AI providers found. Please configure them in settings.');
         } else {
              // Use default provider from settings if available & active
-            const defaultProvider = cmsStore.settings?.ai_default_provider as string;
+            const defaultProvider = coreStore.settings?.ai_default_provider as string;
             const isDefaultActive = activeProviders.value.find(p => p.id === defaultProvider);
            
             if (isDefaultActive) {

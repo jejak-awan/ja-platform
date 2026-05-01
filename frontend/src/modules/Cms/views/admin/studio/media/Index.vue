@@ -237,20 +237,20 @@ import {
     ContextMenuItem,
     ContextMenuSeparator
 } from '@/components/ui';
-import MediaUploadModal from '@/modules/Cms/components/media/MediaUploadModal.vue';
-import MediaViewModal from '@/modules/Cms/components/media/MediaViewModal.vue';
-import FolderModal from '@/modules/Cms/components/media/FolderModal.vue';
-import MoveToFolderModal from '@/modules/Cms/components/media/MoveToFolderModal.vue';
-import BulkUpdateAltModal from '@/modules/Cms/components/media/BulkUpdateAltModal.vue';
+import MediaUploadModal from '@/components/shared/media/MediaUploadModal.vue';
+import MediaViewModal from '@/components/shared/media/MediaViewModal.vue';
+import FolderModal from '@/components/shared/media/FolderModal.vue';
+import MoveToFolderModal from '@/components/shared/media/MoveToFolderModal.vue';
+import BulkUpdateAltModal from '@/components/shared/media/BulkUpdateAltModal.vue';
 
 // Composables & Sub-components
 import { useMediaManager } from '@/composables/useMediaManager';
-import MediaStats from '@/modules/Cms/components/media/MediaStats.vue';
-import MediaSidebar from '@/modules/Cms/components/media/MediaSidebar.vue';
-import MediaToolbar from '@/modules/Cms/components/media/MediaToolbar.vue';
-import MediaPropertiesPanel from '@/modules/Cms/components/media/MediaPropertiesPanel.vue';
-import MediaGridView from '@/modules/Cms/components/media/MediaGridView.vue';
-import MediaListView from '@/modules/Cms/components/media/MediaListView.vue';
+import MediaStats from '@/components/shared/media/MediaStats.vue';
+import MediaSidebar from '@/components/shared/media/MediaSidebar.vue';
+import MediaToolbar from '@/components/shared/media/MediaToolbar.vue';
+import MediaPropertiesPanel from '@/components/shared/media/MediaPropertiesPanel.vue';
+import MediaGridView from '@/components/shared/media/MediaGridView.vue';
+import MediaListView from '@/components/shared/media/MediaListView.vue';
 
 import { MediaManagerKey } from '@/keys';
 

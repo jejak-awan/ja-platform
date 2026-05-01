@@ -1,105 +1,191 @@
 <template>
-  <div class="p-6">
-    <div class="mb-8 flex justify-between items-center">
+  <div class="p-6 space-y-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
       <div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Manajemen Kursus</h1>
-        <p class="text-slate-500 text-sm">Kelola kurikulum dan materi pembelajaran sekolah.</p>
+        <h1 class="text-3xl font-bold tracking-tight text-foreground">Manajemen Kursus</h1>
+        <p class="text-muted-foreground text-sm mt-1">Kelola kurikulum dan materi pembelajaran sekolah secara terpusat.</p>
       </div>
-      <button 
-        @click="showCreateModal = true"
-        class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/20 transition-all flex items-center"
-      >
-        <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" /></svg>
+      <Button @click="showCreateModal = true" class="font-bold shadow-lg shadow-primary/20 transition-all">
+        <Plus class="w-4 h-4 mr-2" />
         Tambah Kursus Baru
-      </button>
+      </Button>
     </div>
 
-    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="bg-slate-50 dark:bg-slate-800/50">
-            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">Judul Kursus</th>
-            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">Level</th>
-            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">Status</th>
-            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">Modul</th>
-            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">Aksi</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-          <tr v-if="loading" v-for="i in 3" :key="i">
-            <td colspan="5" class="px-6 py-4 animate-pulse bg-slate-50/50 dark:bg-slate-800/20 h-16"></td>
-          </tr>
-          <tr v-else v-for="course in courses" :key="course.id" class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-            <td class="px-6 py-4">
-              <div class="font-bold text-slate-900 dark:text-white">{{ course.title }}</div>
-              <div class="text-xs text-slate-500 mt-1">{{ course.slug }}</div>
-            </td>
-            <td class="px-6 py-4">
-              <span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+    <!-- Courses Table -->
+    <Card class="border-border/50 shadow-sm overflow-hidden">
+      <Table>
+        <TableHeader class="bg-muted/30">
+          <TableRow>
+            <TableHead class="font-bold py-4 px-6">Judul Kursus</TableHead>
+            <TableHead class="font-bold">Konteks Akademik</TableHead>
+            <TableHead class="font-bold text-center">Level</TableHead>
+            <TableHead class="font-bold text-center">Status</TableHead>
+            <TableHead class="font-bold text-center">Modul</TableHead>
+            <TableHead class="font-bold text-right px-6">Aksi</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <template v-if="loading">
+            <TableRow v-for="i in 3" :key="i">
+              <TableCell colspan="6" class="py-6 px-6">
+                <SkeletonLoader class="h-12 w-full rounded-xl" />
+              </TableCell>
+            </TableRow>
+          </template>
+          <template v-else>
+            <TableRow v-for="course in courses" :key="course.id" class="hover:bg-muted/10 transition-colors">
+            <TableCell class="py-4 px-6">
+              <div class="font-bold text-foreground">{{ course.title }}</div>
+              <div class="text-xs text-muted-foreground font-mono mt-0.5">{{ course.slug }}</div>
+            </TableCell>
+            <TableCell>
+              <div class="flex flex-wrap gap-1.5">
+                <Badge v-if="course.academic_year" variant="outline" class="text-[9px] font-bold">{{ course.academic_year?.year }}</Badge>
+                <Badge v-if="course.semester" variant="secondary" class="text-[9px] font-bold">Sem {{ course.semester?.semester }}</Badge>
+                <Badge v-if="course.department" variant="default" class="text-[9px] font-bold bg-indigo-500 hover:bg-indigo-600">{{ course.department?.name }}</Badge>
+              </div>
+            </TableCell>
+            <TableCell class="text-center">
+              <Badge variant="outline" class="uppercase text-[9px] font-bold tracking-wider">
                 {{ course.level }}
-              </span>
-            </td>
-            <td class="px-6 py-4">
-              <span 
-                class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider"
-                :class="course.status === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-700'"
+              </Badge>
+            </TableCell>
+            <TableCell class="text-center">
+              <Badge 
+                :variant="course.status === 'published' ? 'default' : 'secondary'"
+                class="uppercase text-[9px] font-bold tracking-wider"
+                :class="{ 'bg-emerald-500 hover:bg-emerald-600': course.status === 'published' }"
               >
                 {{ course.status }}
-              </span>
-            </td>
-            <td class="px-6 py-4 text-sm text-slate-500 font-medium">
-              {{ course.lessons_count || 0 }} Modul
-            </td>
-            <td class="px-6 py-4">
-              <router-link 
-                :to="{ name: 'admin-lms-course-detail', params: { id: course.id }}"
-                class="text-indigo-600 hover:text-indigo-700 text-sm font-bold flex items-center"
-              >
-                Kelola Kurikulum
-                <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </router-link>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+              </Badge>
+            </TableCell>
+            <TableCell class="text-center font-bold text-muted-foreground text-sm">
+              {{ course.lessons_count || 0 }}
+            </TableCell>
+            <TableCell class="text-right px-6">
+              <Button variant="ghost" size="sm" as-child class="font-bold text-primary hover:text-primary hover:bg-primary/10">
+                <router-link :to="{ name: 'admin-lms-course-detail', params: { id: course.id }}">
+                  Kelola
+                  <ChevronRight class="w-4 h-4 ml-1" />
+                </router-link>
+              </Button>
+            </TableCell>
+          </TableRow>
+        </template>
+      </TableBody>
+    </Table>
+    </Card>
 
-    <!-- Simple Create Modal placeholder -->
-    <div v-if="showCreateModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-8 shadow-2xl border border-slate-200 dark:border-slate-800">
-        <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Buat Kursus Baru</h2>
-        <form @submit.prevent="createCourse" class="space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Judul Kursus</label>
-            <input v-model="form.title" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white" required placeholder="Contoh: Web Dev Mastery">
+    <!-- Create Course Modal -->
+    <Dialog v-model:open="showCreateModal">
+      <DialogContent class="sm:max-w-xl rounded-3xl p-0 overflow-hidden">
+        <DialogHeader class="p-8 pb-4 text-left">
+          <DialogTitle class="text-2xl font-bold">Buat Kursus Baru</DialogTitle>
+        </DialogHeader>
+        
+        <div class="p-8 pt-0 space-y-6 overflow-y-auto max-h-[60vh]">
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-muted-foreground uppercase">Judul Kursus</label>
+            <Input v-model="form.title" placeholder="Contoh: Web Dev Mastery" class="h-12" />
           </div>
+
           <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Level</label>
-              <select v-model="form.level" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white">
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-muted-foreground uppercase">Tahun Ajaran</label>
+              <Select v-model="form.academic_year_id">
+                <SelectTrigger class="h-12">
+                  <SelectValue placeholder="Pilih Tahun" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem v-for="year in academicYears" :key="year.id" :value="String(year.id)">
+                    {{ year.year }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Status</label>
-              <select v-model="form.status" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white">
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-              </select>
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-muted-foreground uppercase">Semester</label>
+              <Select v-model="form.semester_id">
+                <SelectTrigger class="h-12">
+                  <SelectValue placeholder="Pilih Semester" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem v-for="sem in semesters" :key="sem.id" :value="String(sem.id)">
+                    Semester {{ sem.semester }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
-          <div class="flex gap-4 mt-8">
-            <button type="button" @click="showCreateModal = false" class="flex-1 px-4 py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl font-bold hover:opacity-80 transition-all">Batal</button>
-            <button type="submit" :disabled="submitting" class="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center">
-              <span v-if="submitting" class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-              Simpan Kursus
-            </button>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-muted-foreground uppercase">Jurusan / Departemen</label>
+              <Select v-model="form.department_id">
+                <SelectTrigger class="h-12">
+                  <SelectValue placeholder="Pilih Jurusan" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem v-for="dept in departments" :key="dept.id" :value="String(dept.id)">
+                    {{ dept.name }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-muted-foreground uppercase">Tingkatan / Grade</label>
+              <Select v-model="form.grade_id">
+                <SelectTrigger class="h-12">
+                  <SelectValue placeholder="Pilih Tingkat" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem v-for="g in grades" :key="g.id" :value="String(g.id)">
+                    Tingkat {{ g.name }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-        </form>
-      </div>
-    </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-muted-foreground uppercase">Level Kesulitan</label>
+              <Select v-model="form.level">
+                <SelectTrigger class="h-12">
+                  <SelectValue placeholder="Pilih Level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="beginner">Beginner</SelectItem>
+                  <SelectItem value="intermediate">Intermediate</SelectItem>
+                  <SelectItem value="advanced">Advanced</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-muted-foreground uppercase">Status</label>
+              <Select v-model="form.status">
+                <SelectTrigger class="h-12">
+                  <SelectValue placeholder="Pilih Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="draft">Draft</SelectItem>
+                  <SelectItem value="published">Published</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter class="p-8 pt-4 border-t bg-muted/20 gap-2 sm:gap-0">
+          <Button variant="outline" @click="showCreateModal = false" class="flex-1 rounded-xl font-bold h-12">Batal</Button>
+          <Button @click="createCourse" :disabled="submitting" class="flex-1 rounded-xl font-bold h-12 shadow-lg shadow-primary/20">
+            <Spinner v-if="submitting" class="mr-2 h-4 w-4" />
+            Simpan Kursus
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
 
@@ -108,16 +194,37 @@ import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useLmsStore } from '../../../stores/lms';
 import LmsService from '../../../services/LmsService';
+import AcademicService from '../../../services/AcademicService';
+import { Button } from '@/components/ui';
+import { Input } from '@/components/ui';
+import { Card } from '@/components/ui';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
+import { Badge } from '@/components/ui';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui';
+import { Spinner, SkeletonLoader } from '@/components/ui';
+import { Plus, ChevronRight } from 'lucide-vue-next';
 
 const lmsStore = useLmsStore();
 const { courses, loading } = storeToRefs(lmsStore);
 
 const showCreateModal = ref(false);
 const submitting = ref(false);
+
+// Academic Context Data
+const academicYears = ref<any[]>([]);
+const semesters = ref<any[]>([]);
+const departments = ref<any[]>([]);
+const grades = ref<any[]>([]);
+
 const form = ref({
   title: '',
   level: 'beginner',
   status: 'draft',
+  academic_year_id: '',
+  semester_id: '',
+  department_id: '',
+  grade_id: '',
 });
 
 const createCourse = async () => {
@@ -126,7 +233,10 @@ const createCourse = async () => {
     await LmsService.createCourse(form.value);
     await lmsStore.fetchAdminCourses();
     showCreateModal.value = false;
-    form.value = { title: '', level: 'beginner', status: 'draft' };
+    form.value = { 
+      title: '', level: 'beginner', status: 'draft',
+      academic_year_id: '', semester_id: '', department_id: '', grade_id: ''
+    };
   } catch (err) {
     console.error(err);
   } finally {
@@ -134,7 +244,26 @@ const createCourse = async () => {
   }
 };
 
+const loadAcademicContext = async () => {
+  try {
+    const [years, sems, depts] = await Promise.all([
+      AcademicService.getAcademicYears(),
+      AcademicService.getSemesters(),
+      AcademicService.getDepartments()
+    ]);
+    academicYears.value = years.data;
+    semesters.value = sems.data;
+    departments.value = depts.data;
+    
+    // Grades usually come from institution settings or academic service
+    // For now we use a default if not found
+  } catch (err) {
+    console.error('Failed to load academic context', err);
+  }
+};
+
 onMounted(() => {
   lmsStore.fetchAdminCourses();
+  loadAcademicContext();
 });
 </script>

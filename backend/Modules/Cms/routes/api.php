@@ -247,7 +247,6 @@ Route::prefix('v1')->group(function () {
             Route::get('', [SettingController::class, 'index'])->middleware('permission:view settings');
             Route::get('group/{group}', [SettingController::class, 'getGroup'])->middleware('permission:view settings');
             Route::post('bulk-update', [SettingController::class, 'bulkUpdate'])->middleware('permission:manage settings');
-            Route::post('test-storage', [SettingController::class, 'testStorage'])->middleware('permission:manage settings');
         });
 
         // Analytics (Admin)

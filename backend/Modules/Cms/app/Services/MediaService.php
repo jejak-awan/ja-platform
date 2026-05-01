@@ -5,9 +5,10 @@ namespace Modules\Cms\Services;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Modules\Cms\Models\Media;
-use Modules\Cms\Models\MediaFolder;
-use Modules\Cms\Models\Tag;
+use Modules\Core\Models\Media;
+use Modules\Core\Models\MediaFolder;
+use Modules\Core\Models\Tag;
+use Modules\Core\Helpers\UploadSettingsHelper;
 use Modules\Core\Models\Setting;
 use Modules\Core\Services\CacheService;
 
@@ -32,7 +33,7 @@ class MediaService
             $this->sanitizeSvg($file->getRealPath());
         }
 
-        $pathRaw = $file->store('media', 'public');
+        $pathRaw = $file->store('cms/media', 'public');
         $path = is_string($pathRaw) ? $pathRaw : '';
         $fullPath = Storage::disk('public')->path($path);
 
@@ -42,13 +43,11 @@ class MediaService
         $mimeTypeStr = (string) $file->getMimeType(); // Original mime type as string for checks
         $mimeType = $mimeTypeStr; // This variable will hold the final mime type for the media record
         if ($optimize && str_starts_with($mimeTypeStr, 'image/') && $mimeTypeStr !== 'image/svg+xml') {
-            /** @var mixed $maxWidthRaw */
-            $maxWidthRaw = Setting::get('media_max_width', 1920);
-            $maxWidth = is_numeric($maxWidthRaw) ? (int) $maxWidthRaw : 1920;
+            $maxWidth = Setting::get('media_max_width', 1920);
+            $maxWidth = is_numeric($maxWidth) ? (int) $maxWidth : 1920;
 
-            /** @var mixed $qualityRaw */
-            $qualityRaw = Setting::get('media_optimization_quality', 85);
-            $quality = is_numeric($qualityRaw) ? (int) $qualityRaw : 85;
+            $quality = Setting::get('media_optimization_quality', 85);
+            $quality = is_numeric($quality) ? (int) $quality : 85;
 
             $autoConvert = (bool) Setting::get('media_auto_convert_webp', true);
 
@@ -58,7 +57,7 @@ class MediaService
                 $webpPath = $this->convertToWebP($fullPath, $quality);
                 if ($webpPath) {
                     $fullPath = $webpPath;
-                    $path = 'media/'.basename($fullPath);
+                    $path = 'cms/media/'.basename($fullPath);
                     $mimeType = 'image/webp';
                     $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).'.webp';
                 }
@@ -69,6 +68,7 @@ class MediaService
         $metadataAlt = $metadata['alt'] ?? null;
 
         $media = Media::create([
+            'module' => 'cms',
             'name' => $fileName ?? $file->getClientOriginalName(),
             'file_name' => $fileName ?? $file->getClientOriginalName(),
             'mime_type' => $mimeType,
@@ -180,12 +180,14 @@ class MediaService
     /**
      * Generate thumbnail for media
      */
-    public function generateThumbnail(Media $media, int $width = 300, int $height = 300): ?string
+    public function generateThumbnail(Media $media, ?int $width = null, ?int $height = null): ?string
     {
+        $width = $width ?? UploadSettingsHelper::getThumbnailWidth();
+        $height = $height ?? UploadSettingsHelper::getThumbnailHeight();
         $fullPath = Storage::disk($media->disk)->path($media->path);
 
         // Create thumbnails directory
-        $thumbnailDir = Storage::disk($media->disk)->path('media/thumbnails');
+        $thumbnailDir = Storage::disk($media->disk)->path('cms/media/thumbnails');
         if (! is_dir($thumbnailDir)) {
             mkdir($thumbnailDir, 0755, true);
         }
@@ -197,7 +199,7 @@ class MediaService
         // SVG files get converted to PNG for thumbnail
         $isSvg = $media->mime_type === 'image/svg+xml' || strtolower($extension) === 'svg';
         $thumbnailExtension = $isSvg ? 'png' : $extension;
-        $thumbnailPath = 'media/thumbnails/'.$fileName.'_thumb.'.$thumbnailExtension;
+        $thumbnailPath = 'cms/media/thumbnails/'.$fileName.'_thumb.'.$thumbnailExtension;
         $thumbnailFullPath = Storage::disk($media->disk)->path($thumbnailPath);
 
         // Handle SVG with Imagick
@@ -427,20 +429,20 @@ class MediaService
         $extension = pathinfo($media->path, PATHINFO_EXTENSION);
 
         // Delete thumbnail
-        $thumbnailPath = 'media/thumbnails/'.$fileName.'_thumb.'.$extension;
+        $thumbnailPath = 'cms/media/thumbnails/'.$fileName.'_thumb.'.$extension;
         if (Storage::disk($media->disk)->exists($thumbnailPath)) {
             Storage::disk($media->disk)->delete($thumbnailPath);
         }
 
         // Delete PNG thumbnail for SVG
-        $pngThumbnailPath = 'media/thumbnails/'.$fileName.'_thumb.png';
+        $pngThumbnailPath = 'cms/media/thumbnails/'.$fileName.'_thumb.png';
         if (Storage::disk($media->disk)->exists($pngThumbnailPath)) {
             Storage::disk($media->disk)->delete($pngThumbnailPath);
         }
 
         // Delete sized variants
         foreach (['small', 'medium', 'large'] as $size) {
-            $sizePath = str_replace('media/', "media/{$size}/", $media->path);
+            $sizePath = str_replace('cms/media/', "cms/media/{$size}/", $media->path);
             if (Storage::disk($media->disk)->exists($sizePath)) {
                 Storage::disk($media->disk)->delete($sizePath);
             }
@@ -458,15 +460,15 @@ class MediaService
         $disk = $media->disk ?? 'public';
 
         // Move thumbnail
-        $oldThumb = 'media/thumbnails/'.$oldFileName.'_thumb.'.$extension;
-        $newThumb = 'media/thumbnails/'.$newFileName.'_thumb.'.$extension;
+        $oldThumb = 'cms/media/thumbnails/'.$oldFileName.'_thumb.'.$extension;
+        $newThumb = 'cms/media/thumbnails/'.$newFileName.'_thumb.'.$extension;
         if (Storage::disk($disk)->exists($oldThumb)) {
             Storage::disk($disk)->move($oldThumb, $newThumb);
         }
 
         // Handle SVG PNG thumb
-        $oldPngThumb = 'media/thumbnails/'.$oldFileName.'_thumb.png';
-        $newPngThumb = 'media/thumbnails/'.$newFileName.'_thumb.png';
+        $oldPngThumb = 'cms/media/thumbnails/'.$oldFileName.'_thumb.png';
+        $newPngThumb = 'cms/media/thumbnails/'.$newFileName.'_thumb.png';
         if (Storage::disk($disk)->exists($oldPngThumb)) {
             Storage::disk($disk)->move($oldPngThumb, $newPngThumb);
         }
@@ -483,15 +485,15 @@ class MediaService
         $disk = $media->disk ?? 'public';
 
         // Move thumbnail back
-        $oldThumb = 'media/thumbnails/'.$trashFileName.'_thumb.'.$extension;
-        $newThumb = 'media/thumbnails/'.$restoredFileName.'_thumb.'.$extension;
+        $oldThumb = 'cms/media/thumbnails/'.$trashFileName.'_thumb.'.$extension;
+        $newThumb = 'cms/media/thumbnails/'.$restoredFileName.'_thumb.'.$extension;
         if (Storage::disk($disk)->exists($oldThumb)) {
             Storage::disk($disk)->move($oldThumb, $newThumb);
         }
 
         // Handle SVG PNG thumb
-        $oldPngThumb = 'media/thumbnails/'.$trashFileName.'_thumb.png';
-        $newPngThumb = 'media/thumbnails/'.$restoredFileName.'_thumb.png';
+        $oldPngThumb = 'cms/media/thumbnails/'.$trashFileName.'_thumb.png';
+        $newPngThumb = 'cms/media/thumbnails/'.$restoredFileName.'_thumb.png';
         if (Storage::disk($disk)->exists($oldPngThumb)) {
             Storage::disk($disk)->move($oldPngThumb, $newPngThumb);
         }
@@ -546,7 +548,7 @@ class MediaService
 
         // Process Folders
         if (! empty($folderIds)) {
-            $folderQuery = \Modules\Cms\Models\MediaFolder::withTrashed();
+            $folderQuery = \Modules\Core\Models\MediaFolder::withTrashed();
             if ($action === 'restore') {
                 $folderQuery->onlyTrashed();
             }
@@ -630,7 +632,7 @@ class MediaService
         $usages = $media->usages()->get();
 
         return $usages->map(function ($usage) {
-            /** @var \Modules\Cms\Models\MediaUsage $usage */
+            /** @var \Modules\Core\Models\MediaUsage $usage */
             /** @var mixed $modelTypeRaw */
             $modelTypeRaw = $usage->getAttribute('model_type');
             $modelClass = is_string($modelTypeRaw) ? $modelTypeRaw : '';

@@ -22,7 +22,6 @@ export const navigationGroups: Record<string, NavItem[]> = {
             label: 'Content', labelKey: 'common.navigation.sections.content_studio', icon: 'layers', children: [
                 { name: 'studio', to: '/dash/studio', label: 'Contents', labelKey: 'common.navigation.menu.studio', permission: 'view content' },
                 { name: 'media', to: '/dash/media', label: 'Media Library', labelKey: 'common.navigation.menu.mediaLibrary', permission: 'view media' },
-                { name: 'file-manager', to: '/dash/file-manager', label: 'File Manager', labelKey: 'common.navigation.menu.fileManager', permission: 'view files' },
                 { name: 'comments', to: '/dash/comments', label: 'Comments', labelKey: 'common.navigation.menu.comments', permission: 'view comments' },
             ]
         },
@@ -136,6 +135,7 @@ export const navigationGroups: Record<string, NavItem[]> = {
                 { name: 'settings', to: '/dash/settings', label: 'System Settings', labelKey: 'common.navigation.menu.settings', permission: 'view settings' },
                 { name: 'system-notifications', to: '/dash/system/notifications', label: 'Notifications', labelKey: 'common.navigation.menu.systemNotifications', permission: 'manage system' },
                 { name: 'backups', to: '/dash/backups', label: 'Backups', labelKey: 'common.navigation.menu.backups', permission: 'view backups' },
+                { name: 'file-manager', to: '/dash/file-manager', label: 'File Manager', labelKey: 'common.navigation.menu.fileManager', permission: 'manage files' },
                 { name: 'redis', to: '/dash/redis', label: 'Redis Cache', labelKey: 'common.navigation.menu.redis', permission: 'manage settings' },
                 { name: 'scheduled-tasks', to: '/dash/scheduled-tasks', label: 'Scheduled Tasks', labelKey: 'common.navigation.menu.scheduledTasks', permission: 'view scheduled tasks' },
                 { name: 'languages', to: '/dash/languages', label: 'Languages', labelKey: 'common.navigation.menu.languages', permission: 'view settings' },

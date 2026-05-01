@@ -6,6 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * @property int $id
+ * @property int $lesson_id
+ * @property string $title
+ * @property int $order
+ * @property bool $is_active
+ * @property bool $preview
+ * @property string $topicable_type
+ * @property int $topicable_id
+ * @property-read \Modules\School\Models\Lms\Lesson $lesson
+ * @property-read \Illuminate\Database\Eloquent\Model $topicable
+ */
 class Topic extends Model
 {
     protected $table = 'sch_lms_topics';
@@ -20,6 +32,9 @@ class Topic extends Model
         'topicable_id',
     ];
 
+    /**
+     * @return BelongsTo<Lesson, $this>
+     */
     public function lesson(): BelongsTo
     {
         return $this->belongsTo(Lesson::class);
@@ -27,12 +42,16 @@ class Topic extends Model
 
     /**
      * Get the actual content of the topic (Polymorphic).
+     * @return MorphTo<Model, $this>
      */
     public function topicable(): MorphTo
     {
         return $this->morphTo();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TopicProgress, $this>
+     */
     public function progress(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(TopicProgress::class);

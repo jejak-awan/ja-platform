@@ -317,7 +317,7 @@ import { isAxiosError } from 'axios';
 // Standardized Async Components
 const LoginHistory = defineAsyncComponent(() => import('@/modules/Core/components/admin/LoginHistory.vue'));
 const TwoFactorSettings = defineAsyncComponent(() => import('@/modules/Core/components/admin/TwoFactorSettings.vue'));
-const MediaPicker = defineAsyncComponent(() => import('@/modules/Cms/components/media/MediaPicker.vue'));
+const MediaPicker = defineAsyncComponent(() => import('@/components/shared/media/MediaPicker.vue'));
 
 // Shadcn Components
 // Shadcn Components

@@ -814,8 +814,8 @@ import LayoutGrid from 'lucide-vue-next/dist/esm/icons/layout-grid.js';
 import Sparkles from 'lucide-vue-next/dist/esm/icons/sparkles.js';
 import Smile from 'lucide-vue-next/dist/esm/icons/smile.js';
 
-import { useCmsStore } from '@/modules/Cms/stores/cms';
-import AiAssistPopover from '@/modules/Cms/components/editor/AiAssistPopover.vue';
+import { useCoreStore } from '@/modules/Core/stores/core';
+import AiAssistPopover from '@/components/shared/editor/AiAssistPopover.vue';
 import type { Editor } from '@tiptap/vue-3';
 
 const props = defineProps<{
@@ -831,7 +831,7 @@ const emit = defineEmits<{
     (e: 'insertIcon', iconName: string): void;
 }>();
 
-const cmsStore = useCmsStore();
+const coreStore = useCoreStore();
 const activeTab = ref('home');
 
 const handleIconSelect = (iconName: string) => {
@@ -888,19 +888,19 @@ watch(() => props.editor?.isActive('table'), (isInTable) => {
 }, { immediate: true });
 
 const isAiEnabled = computed(() => {
-    const enabled = cmsStore.settings['ai_enabled'];
+    const enabled = coreStore.settings['ai_enabled'];
     const isEnabled = enabled && enabled !== '0' && enabled !== 'false';
     if (!isEnabled) return false;
     
     // Check if default provider has key
-    const provider = (cmsStore.settings['ai_default_provider'] as string) || 'gemini';
-    return !!cmsStore.settings[`${provider}_api_key`];
+    const provider = (coreStore.settings['ai_default_provider'] as string) || 'gemini';
+    return !!coreStore.settings[`${provider}_api_key`];
 });
 
 onMounted(() => {
     // Check if store has ai settings, if not fetch them
-    if (!cmsStore.settings['gemini_api_key']) {
-        cmsStore.fetchSettingsGroup('ai');
+    if (!coreStore.settings['gemini_api_key']) {
+        coreStore.fetchSettingsGroup('ai');
     }
 });
 
