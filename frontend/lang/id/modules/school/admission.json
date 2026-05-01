@@ -5,6 +5,8 @@
     "admitted": "Diterima",
     "applicants": "Pendaftar",
     "labels": {
+        "academicYear": "Tahun Ajaran",
+        "level": "Jenjang",
         "admitted": "Diterima",
         "applicantDetail": "Detail Pelamar",
         "full_name": "Nama Lengkap",
@@ -28,7 +30,7 @@
         "full_name": "Sesuai Ijazah / Akta",
         "gender": "Pilih Jenis Kelamin",
         "religion": "Pilih Agama",
-        "level": "Pilih Jenjang",
+        "selectLevel": "Pilih Jenjang",
         "fullNameHint": "Sesuai Ijazah / Akta",
         "noDocuments": "Belum ada dokumen yang diunggah.",
         "search": "Cari pelamar...",
