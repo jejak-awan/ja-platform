@@ -13,7 +13,6 @@
         "no": "Batal",
         "reject": "Apakah Anda yakin ingin menolak {item} ini?",
         "restore": "Apakah Anda yakin ingin memulihkan {item} ini?",
-        "selectedItems": "{count} item dipilih",
         "title": "Konfirmasi",
         "unsaved": "Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman?",
         "warning": "Peringatan",
@@ -98,5 +97,6 @@
         "success": "Berhasil",
         "updated": "Data berhasil diperbarui.",
         "warning": "Peringatan"
-    }
+    },
+    "selectedItems": "{count} item dipilih"
 }
