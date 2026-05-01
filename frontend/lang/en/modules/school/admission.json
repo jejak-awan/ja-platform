@@ -5,6 +5,8 @@
     "admitted": "Admitted",
     "applicants": "Applicants",
     "labels": {
+        "academicYear": "Academic Year",
+        "level": "Level",
         "admitted": "Admitted",
         "applicantDetail": "Applicant Detail",
         "full_name": "Full Name",
@@ -28,7 +30,7 @@
         "full_name": "According to ID / Certificate",
         "gender": "Select Gender",
         "religion": "Select Religion",
-        "level": "Select Level",
+        "selectLevel": "Select Level",
         "fullNameHint": "According to ID / Certificate",
         "noDocuments": "No documents uploaded yet.",
         "search": "Search applicants...",
