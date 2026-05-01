@@ -1,4 +1,4 @@
-@reference "../app.css";
+@reference "../base.css";
 
 /**
  * Janari (public): editorial monochrome canvas + selectable accent presets.
@@ -981,34 +981,35 @@
 
 @layer components {
     .janari-breadcrumb {
-        display: flex;
-        align-items: center;
-        font-size: 10px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        color: hsl(var(--foreground) / 0.6);
+        @apply flex items-center gap-1.5 py-4 overflow-x-auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
+    .janari-breadcrumb::-webkit-scrollbar { display: none; }
 
     .janari-breadcrumb-item {
-        display: flex;
-        align-items: center;
+        @apply flex items-center whitespace-nowrap;
     }
 
     .janari-breadcrumb-separator {
-        margin-left: 0.75rem;
-        margin-right: 0.75rem;
-        opacity: 0.3;
+        @apply mx-2 text-[8px] opacity-20 font-light select-none;
     }
 
     .janari-breadcrumb-link {
-        transition: color 0.2s ease;
+        @apply text-[9px] font-black uppercase tracking-[0.3em] text-foreground/40 hover:text-foreground transition-all duration-500 ease-out;
+        position: relative;
     }
-    .janari-breadcrumb-link:hover {
-        color: hsl(var(--foreground));
+
+    .janari-breadcrumb-link::after {
+        content: '';
+        @apply absolute -bottom-1 left-0 w-full h-[1px] bg-foreground scale-x-0 origin-right transition-transform duration-500 ease-out;
+    }
+
+    .janari-breadcrumb-link:hover::after {
+        @apply scale-x-100 origin-left;
     }
 
     .janari-breadcrumb-current {
-        color: hsl(var(--foreground));
+        @apply text-[9px] font-black uppercase tracking-[0.3em] text-foreground;
     }
 }

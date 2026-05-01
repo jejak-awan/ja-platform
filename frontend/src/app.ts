@@ -1,5 +1,5 @@
 import './bootstrap';
-import '../css/app.css';
+import '../css/base.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -14,6 +14,7 @@ import { attemptChunkRecoveryReload, isChunkLoadError } from '@/utils/chunkRecov
 // Keep admin/dashboard and public theme styles isolated.
 const isAdminRoute = resolveIsAdminEntrypoint(window.location.pathname);
 if (isAdminRoute) {
+    void import('../css/admin.css');
     void import('../css/editor.css');
 } else {
     // Current active public theme stylesheet (Janari for now).
