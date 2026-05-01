@@ -19,7 +19,10 @@ class DatabaseSeeder extends Seeder
         // 1. Foundation (Roles, Permissions, Settings, Languages, Tasks)
         $this->call(\Modules\Core\Database\Seeders\FoundationSeeder::class);
 
-        // 2. Create Default Admin User
+        // 2. Global Infrastructure (Tags, Global Media Folders, etc.)
+        $this->call(\Modules\Core\Database\Seeders\InfrastructureSeeder::class);
+
+        // 3. Create Default Admin User
         $admin = User::firstOrCreate(
             ['email' => 'admin@kdua.net'],
             [
@@ -30,7 +33,7 @@ class DatabaseSeeder extends Seeder
         );
         $admin->assignRole('super-admin');
 
-        // 3. Studio Structure (Categories, Tags, Menus, Forms)
+        // 4. Studio Structure (Categories, Menus, Forms)
         $this->call(\Modules\Cms\Database\Seeders\StudioSeeder::class);
 
         // 4. Sample Data (Optional, for development)

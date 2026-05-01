@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
+            $table->string('image')->nullable();
             $table->boolean('is_active')->default(true)->index();
             $table->integer('sort_order')->default(0);
             $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('set null');
@@ -25,18 +26,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        // 2. Tags Table
-        Schema::create('tags', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->text('description')->nullable();
-            $table->foreignId('author_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        // 3. Contents Table (Posts, Pages, Custom)
+        // 2. Contents Table (Posts, Pages, Custom)
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -79,14 +69,14 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        // 4. Content Tag Pivot
+        // 3. Content Tag Pivot (Uses tags table from Core)
         Schema::create('content_tag', function (Blueprint $table) {
             $table->foreignId('content_id')->constrained('contents')->onDelete('cascade');
             $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade');
             $table->primary(['content_id', 'tag_id']);
         });
 
-        // 5. Content Revisions
+        // 4. Content Revisions
         Schema::create('content_revisions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('content_id')->constrained('contents')->onDelete('cascade');
@@ -98,67 +88,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 6. Media Folders
-        Schema::create('media_folders', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->foreignId('parent_id')->nullable()->constrained('media_folders')->onDelete('cascade');
-            $table->integer('sort_order')->default(0);
-            $table->foreignId('author_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->boolean('is_shared')->default(false)->index();
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->index('parent_id');
-            $table->index('slug');
-        });
-
-        // 7. Media Table
-        Schema::create('media', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('folder_id')->nullable()->constrained('media_folders')->onDelete('set null');
-            $table->string('name');
-            $table->string('file_name');
-            $table->string('mime_type')->nullable();
-            $table->string('disk')->default('public');
-            $table->string('path');
-            $table->unsignedBigInteger('size')->default(0);
-            $table->json('manipulations')->nullable();
-            $table->json('custom_properties')->nullable();
-            $table->json('responsive_images')->nullable();
-            $table->unsignedBigInteger('order_column')->nullable();
-            $table->string('alt')->nullable();
-            $table->text('description')->nullable();
-            $table->string('caption')->nullable();
-            $table->foreignId('author_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->boolean('is_shared')->default(false)->index();
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->index('mime_type');
-            $table->index('created_at');
-        });
-
-        // 8. Media Tag Pivot
-        Schema::create('media_tag', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('media_id')->constrained('media')->onDelete('cascade');
-            $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade');
-            $table->unique(['media_id', 'tag_id']);
-            $table->timestamps();
-        });
-
-        // 9. Media Usage (Tracking where media is used)
-        Schema::create('media_usage', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('media_id')->constrained('media')->onDelete('cascade');
-            $table->morphs('model');
-            $table->string('field_name')->nullable();
-            $table->timestamps();
-        });
-
-        // 10. Comments Table
+        // 5. Comments Table
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('content_id')->constrained('contents')->onDelete('cascade');
@@ -181,14 +111,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('comments');
-        Schema::dropIfExists('media_usage');
-        Schema::dropIfExists('media_tag');
-        Schema::dropIfExists('media');
-        Schema::dropIfExists('media_folders');
         Schema::dropIfExists('content_revisions');
         Schema::dropIfExists('content_tag');
         Schema::dropIfExists('contents');
-        Schema::dropIfExists('tags');
         Schema::dropIfExists('categories');
     }
 };

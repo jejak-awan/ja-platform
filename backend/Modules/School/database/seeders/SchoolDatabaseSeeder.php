@@ -14,6 +14,10 @@ class SchoolDatabaseSeeder extends Seeder
         $this->call([
             SchoolRoleSeeder::class,
             SchoolSampleUserSeeder::class,
+            AcademicInfrastructureSeeder::class,
+            LmsSeeder::class,
+            StaffSampleSeeder::class,
+            StudentSampleSeeder::class,
         ]);
     }
 }

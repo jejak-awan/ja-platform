@@ -43,23 +43,7 @@ class StudioSeeder extends Seeder
             }
         }
 
-        // 2. Tags
-        $tags = ['CMS', 'SaaS', 'Vue.js', 'Laravel', 'UI/UX', 'Premium'];
-        foreach ($tags as $tag) {
-            $slug = Str::slug($tag);
-            $tagModel = Tag::withTrashed()->updateOrCreate(
-                ['slug' => $slug],
-                [
-                    'name' => $tag,
-                    'author_id' => $admin->id,
-                ]
-            );
-            if ($tagModel->trashed()) {
-                $tagModel->restore();
-            }
-        }
-
-        // 3. Header Menu (reuse existing active header menu if available)
+        // 2. Header Menu (reuse existing active header menu if available)
         $mainMenu = Menu::withTrashed()
             ->where('location', 'header')
             ->orderByDesc('is_active')
