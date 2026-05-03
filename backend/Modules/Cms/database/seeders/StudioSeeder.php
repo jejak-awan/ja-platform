@@ -9,6 +9,7 @@ use Modules\Cms\Models\Form;
 use Modules\Cms\Models\FormField;
 use Modules\Cms\Models\Menu;
 use Modules\Cms\Models\MenuItem;
+use Modules\Cms\Models\Content;
 use Modules\Core\Models\Tag;
 use Modules\Core\Models\User;
 
@@ -43,7 +44,29 @@ class StudioSeeder extends Seeder
             }
         }
 
-        // 2. Header Menu (reuse existing active header menu if available)
+        // 2. CMS Pages (Wadah)
+        $pages = [
+            ['title' => 'Akademik', 'slug' => 'akademik'],
+            ['title' => 'Jurusan', 'slug' => 'jurusan'],
+            ['title' => 'Prestasi', 'slug' => 'prestasi'],
+            ['title' => 'PPDB', 'slug' => 'ppdb'],
+            ['title' => 'Kelulusan', 'slug' => 'graduation'],
+            ['title' => 'Berita', 'slug' => 'blog'],
+            ['title' => 'Kontak', 'slug' => 'contact'],
+        ];
+
+        $pageMap = [];
+        foreach ($pages as $p) {
+            $page = Content::updateOrCreate(['slug' => $p['slug']], array_merge($p, [
+                'type' => 'page',
+                'status' => 'published',
+                'author_id' => $admin->id,
+                'published_at' => now(),
+            ]));
+            $pageMap[$p['slug']] = $page->id;
+        }
+
+        // 3. Header Menu (reuse existing active header menu if available)
         $mainMenu = Menu::withTrashed()
             ->where('location', 'header')
             ->orderByDesc('is_active')
@@ -61,26 +84,66 @@ class StudioSeeder extends Seeder
             $mainMenu->restore();
         }
 
+        // Cleanup: Remove existing items to avoid duplicates from previous seeder versions
+        $mainMenu->items()->forceDelete();
+
         $menuItems = [
-            ['title' => 'Home', 'url' => '/', 'sort_order' => 1],
-            ['title' => 'Blog', 'url' => '/blog', 'sort_order' => 2],
-            ['title' => 'Services', 'url' => '/services', 'sort_order' => 3],
-            ['title' => 'About', 'url' => '/about', 'sort_order' => 4],
-            ['title' => 'Contact', 'url' => '/contact', 'sort_order' => 5],
+            ['title' => 'Beranda', 'url' => '/', 'sort_order' => 1, 'type' => 'custom'],
+            [
+                'title' => 'Akademik',
+                'type' => 'page',
+                'target_id' => $pageMap['akademik'] ?? null,
+                'url' => '/akademik',
+                'sort_order' => 2,
+                'children' => [
+                    [
+                        'title' => 'Jurusan',
+                        'type' => 'page',
+                        'target_id' => $pageMap['jurusan'] ?? null,
+                        'url' => '/jurusan',
+                        'sort_order' => 1
+                    ],
+                    ['title' => 'Karir & BKK', 'url' => '/karir', 'sort_order' => 2, 'type' => 'custom'],
+                ]
+            ],
+            [
+                'title' => 'Prestasi',
+                'type' => 'page',
+                'target_id' => $pageMap['prestasi'] ?? null,
+                'url' => '/prestasi',
+                'sort_order' => 3
+            ],
+            [
+                'title' => 'PPDB',
+                'type' => 'page',
+                'target_id' => $pageMap['ppdb'] ?? null,
+                'url' => '/ppdb',
+                'sort_order' => 4
+            ],
+            [
+                'title' => 'Kelulusan',
+                'type' => 'page',
+                'target_id' => $pageMap['graduation'] ?? null,
+                'url' => '/graduation',
+                'sort_order' => 5
+            ],
+            [
+                'title' => 'Berita',
+                'type' => 'page',
+                'target_id' => $pageMap['blog'] ?? null,
+                'url' => '/blog',
+                'sort_order' => 6
+            ],
+            [
+                'title' => 'Kontak',
+                'type' => 'page',
+                'target_id' => $pageMap['contact'] ?? null,
+                'url' => '/contact',
+                'sort_order' => 7
+            ],
         ];
 
-        foreach ($menuItems as $item) {
-            $menuItem = MenuItem::withTrashed()->updateOrCreate(
-                [
-                    'menu_id' => $mainMenu->id,
-                    'title' => $item['title'],
-                ],
-                array_merge($item, ['menu_id' => $mainMenu->id])
-            );
-            if ($menuItem->trashed()) {
-                $menuItem->restore();
-            }
-        }
+        $this->seedMenuItems($mainMenu, $menuItems);
 
         // 4. Default public contact form (slug must match theme setting contact_form_slug, default "contact")
         /** @var Form $contactForm */
@@ -158,5 +221,35 @@ class StudioSeeder extends Seeder
         }
 
         $this->command->info('Studio structure seeded successfully!');
+    }
+
+    /**
+     * Recursively seed menu items
+     */
+    private function seedMenuItems($menu, array $items, $parentId = null): void
+    {
+        foreach ($items as $itemData) {
+            $children = $itemData['children'] ?? [];
+            unset($itemData['children']);
+
+            $type = $itemData['type'] ?? 'custom';
+            $targetType = null;
+
+            if ($type === 'page') {
+                $targetType = 'Modules\Cms\Models\Content';
+            } elseif ($type === 'category') {
+                $targetType = 'Modules\Cms\Models\Category';
+            }
+
+            $menuItem = $menu->items()->create(array_merge($itemData, [
+                'parent_id' => $parentId,
+                'type' => $type,
+                'target_type' => $targetType
+            ]));
+
+            if (!empty($children)) {
+                $this->seedMenuItems($menu, $children, $menuItem->id);
+            }
+        }
     }
 }
