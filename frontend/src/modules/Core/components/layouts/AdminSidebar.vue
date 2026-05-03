@@ -56,11 +56,11 @@
 
       <!-- Active Context Indicator (Ultra Premium & Unified) -->
       <div
-        v-if="!sidebarMinimized"
+        v-if="!sidebarMinimized && schoolStore.currentSchool?.is_multi_unit"
         class="px-3 pt-5 pb-3 border-b border-border bg-sidebar"
       >
         <!-- School Unit Context -->
-        <div v-if="schoolStore.currentSchool?.is_multi_unit" class="space-y-1">
+        <div class="space-y-1">
           <transition name="context-fade" mode="out-in">
            <div 
              :key="unitStore.activeUnitId ?? 'global'"
@@ -450,8 +450,10 @@ const isSectionActive = (key: string) => {
 
 const filteredNavigation = computed(() => {
     const filtered: Record<string, NavItem[]> = {};
+    const isMultiUnit = !!schoolStore.currentSchool?.is_multi_unit;
     const activeUnitId = Number(unitStore.activeUnitId);
-    const isGlobal = activeUnitId === 0;
+    // In single-unit schools, we are effectively never in a "Global" mode that hides unit features
+    const isGlobal = isMultiUnit && activeUnitId === 0;
 
     for (const [group, items] of Object.entries(navigationGroups)) {
         filtered[group] = items

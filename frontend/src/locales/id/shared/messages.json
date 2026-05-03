@@ -20,10 +20,10 @@
     },
     "empty": {
         "default": "Tidak ada data",
-        "ecosystemSubtitle": "Monitoring rekapitulasi performa dan KPI lintas unit lembaga",
         "filter": "Tidak ada item yang cocok dengan filter",
         "search": "Tidak ada hasil untuk \"{query}\""
     },
+    "ecosystemSubtitle": "Monitoring rekapitulasi performa dan KPI lintas unit lembaga",
     "error": {
         "action": "Gagal Melakukan Tindakan",
         "canOnlyAction": "Anda hanya dapat {action}",
@@ -49,6 +49,9 @@
         "searching": "Mencari...",
         "uploading": "Mengunggah..."
     },
+    "preparingChart": "Menyiapkan visualisasi data...",
+    "unitAddressNotSet": "Alamat belum diatur untuk unit ini.",
+    "activeStatus": "AKTIF: {name}",
     "noMapLocation": "Alamat belum lengkap untuk menampilkan peta.",
     "addressNotSet": "Alamat belum diatur",
     "no_data": "Tidak ada data yang ditemukan",

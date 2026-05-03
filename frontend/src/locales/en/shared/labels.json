@@ -248,5 +248,17 @@
     "globalContext": "Global",
     "systemGlobal": "Global / System",
     "foundationGlobal": "Central / Foundation",
-    "ecosystemSummary": "Ecosystem Summary"
+    "ecosystemSummary": "Ecosystem Summary",
+    "schoolProfile": "School Profile",
+    "unitTechnicalDetail": "Unit Technical Details",
+    "foundationInfo": "Foundation / Central Information",
+    "foundationInfoDesc": "Legal entity information of the educational organizer.",
+    "organizingInstitution": "Organizing Institution",
+    "unitMainIdentity": "Main Unit Identity",
+    "unitEduIdentity": "Education Unit Identity",
+    "unitMainIdentityDesc": "Operational information of the default school unit.",
+    "unitActiveIdentityDesc": "Operational identity details of the currently active unit.",
+    "unitEducation": "Education Unit",
+    "npsnFull": "National School Identification Number",
+    "operationalLocation": "Operational Location"
 }

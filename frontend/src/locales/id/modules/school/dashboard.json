@@ -32,7 +32,8 @@
                 "on_time": "Hadir Tepat Waktu",
                 "late": "Terlambat",
                 "present": "Hadir"
-            }
+            },
+            "empty": "Belum ada data kehadiran terekam hari ini."
         },
         "alerts": {
             "title": "Sistem Peringatan Dinamis",
@@ -73,6 +74,15 @@
                 "osis_candidates": "Kandidat Ketua",
                 "upcoming_events": "Event Mendatang"
             }
+        },
+        "charts": {
+            "studentDist": "Distribusi Siswa Per Unit",
+            "studentStatus": "Status Akademik Siswa",
+            "studentDistDesc": "Perbandingan populasi siswa di seluruh unit pendidikan.",
+            "studentStatusDesc": "Ringkasan status keberadaan siswa saat ini.",
+            "comparative": "Analitik Komparatif",
+            "comparativeDesc": "Visualisasi perbandingan sumber daya manusia antar unit.",
+            "globalOnly": "Detail analitik tersedia di mode Global"
         }
     }
 }

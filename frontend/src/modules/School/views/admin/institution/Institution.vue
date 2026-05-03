@@ -161,19 +161,25 @@
                   name="LayoutDashboard"
                   class="w-3.5 h-3.5 mr-2"
                 />
-                {{ unitStore.activeUnitId === 0 ? $t('common.labels.identity') : 'Profil Unit' }}
+                <template v-if="!isMultiLevel">
+                  {{ $t('common.labels.schoolProfile') }}
+                </template>
+                <template v-else>
+                  {{ unitStore.activeUnitId === 0 ? $t('common.labels.identity') : 'Profil Unit' }}
+                </template>
               </TabsTrigger>
               <TabsTrigger
-                v-if="showLevelsTab && isGlobalAdmin && unitStore.activeUnitId === 0"
+                v-if="showLevelsTab && isGlobalAdmin && (unitStore.activeUnitId === 0 || !isMultiLevel)"
                 value="levels"
                 class="h-12 px-2 bg-transparent border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground rounded-none font-bold text-xs transition-all shadow-none"
               >
                 <LucideIcon
-                  name="School"
+                  name="Settings2"
                   class="w-3.5 h-3.5 mr-2"
                 />
-                {{ $t('features.school.units.title') }}
+                {{ isMultiLevel ? $t('features.school.units.title') : $t('common.labels.unitTechnicalDetail') }}
                 <Badge
+                  v-if="isMultiLevel"
                   variant="secondary"
                   class="ml-2 rounded-full px-1.5 h-4 text-[10px] bg-foreground/5 text-foreground border-none font-black"
                 >
@@ -195,9 +201,9 @@
               />
             </TabsContent>
 
-            <!-- TAB: UNIT JENJANG -->
+            <!-- TAB: UNIT JENJANG / DETAIL TEKNIS -->
             <TabsContent
-              v-if="showLevelsTab && isGlobalAdmin && unitStore.activeUnitId === 0"
+              v-if="showLevelsTab && isGlobalAdmin && (unitStore.activeUnitId === 0 || !isMultiLevel)"
               value="levels"
               class="mt-0"
             >

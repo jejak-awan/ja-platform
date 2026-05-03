@@ -23,6 +23,7 @@
         "filter": "No items match the filters",
         "search": "No results found for \"{query}\""
     },
+    "ecosystemSubtitle": "Monitoring summarized performance and KPIs across institution units",
     "error": {
         "action": "Action Failed",
         "canOnlyAction": "You can only {action}",
@@ -48,6 +49,9 @@
         "searching": "Searching...",
         "uploading": "Uploading..."
     },
+    "preparingChart": "Preparing data visualization...",
+    "unitAddressNotSet": "Address not yet set for this unit.",
+    "activeStatus": "ACTIVE: {name}",
     "noMapLocation": "Address is incomplete to display map.",
     "addressNotSet": "Address not set",
     "no_data": "No data found",

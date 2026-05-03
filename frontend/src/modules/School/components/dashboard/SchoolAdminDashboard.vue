@@ -11,11 +11,11 @@
             />
           </div>
           <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
-            {{ unitStore.activeUnitId === 0 ? $t('common.labels.ecosystemSummary') : $t('features.school.dashboard.v2.hero.title') }}
+            {{ unitStore.activeUnitId === 0 ? $t('common.labels.ecosystemSummary') : $t('dashboard.v2.hero.title') }}
           </h1>
         </div>
         <p class="text-muted-foreground text-sm font-medium">
-          {{ unitStore.activeUnitId === 0 ? $t('common.messages.ecosystemSubtitle') : $t('features.school.dashboard.v2.hero.subtitle') }}
+          {{ unitStore.activeUnitId === 0 ? $t('common.messages.ecosystemSubtitle') : $t('dashboard.v2.hero.subtitle') }}
         </p>
       </div>
       <div class="flex items-center gap-2">
@@ -25,7 +25,7 @@
           @click="$router.push({ name: 'schools.index' })"
         >
           <LucideIcon name="Settings" class="w-4 h-4 mr-2" />
-          {{ $t('features.school.dashboard.v2.hero.actions.config') }}
+          {{ $t('dashboard.v2.hero.actions.config') }}
         </Button>
       </div>
     </div>
@@ -65,10 +65,10 @@
       <Card class="border-border/40 bg-card shadow-none rounded-xl">
         <CardHeader class="p-6 pb-2">
           <CardTitle class="text-lg font-bold">
-            {{ unitStore.activeUnitId === 0 ? 'Distribusi Siswa Per Unit' : 'Status Akademik Siswa' }}
+            {{ unitStore.activeUnitId === 0 ? $t('dashboard.v2.charts.studentDist') : $t('dashboard.v2.charts.studentStatus') }}
           </CardTitle>
           <CardDescription>
-            {{ unitStore.activeUnitId === 0 ? 'Perbandingan populasi siswa di seluruh unit pendidikan.' : 'Ringkasan status keberadaan siswa saat ini.' }}
+            {{ unitStore.activeUnitId === 0 ? $t('dashboard.v2.charts.studentDistDesc') : $t('dashboard.v2.charts.studentStatusDesc') }}
           </CardDescription>
         </CardHeader>
         <CardContent class="p-6">
@@ -84,17 +84,17 @@
               :options="doughnutChartOptions"
             />
             <div v-else class="text-muted-foreground text-sm italic animate-pulse">
-              Menyiapkan visualisasi data...
+              {{ $t('common.messages.preparingChart') }}
             </div>
           </div>
         </CardContent>
       </Card>
-
+ 
       <!-- Activity/Growth Chart -->
       <Card class="border-border/40 bg-card shadow-none rounded-xl">
         <CardHeader class="p-6 pb-2">
-          <CardTitle class="text-lg font-bold">Analitik Komparatif</CardTitle>
-          <CardDescription>Visualisasi perbandingan sumber daya manusia antar unit.</CardDescription>
+          <CardTitle class="text-lg font-bold">{{ $t('dashboard.v2.charts.comparative') }}</CardTitle>
+          <CardDescription>{{ $t('dashboard.v2.charts.comparativeDesc') }}</CardDescription>
         </CardHeader>
         <CardContent class="p-6">
           <div class="h-[300px] flex items-center justify-center">
@@ -105,23 +105,23 @@
             />
              <div v-else class="flex flex-col items-center gap-4 text-muted-foreground opacity-40">
                 <LucideIcon name="BarChart3" class="w-12 h-12" />
-                <p class="text-xs font-bold uppercase tracking-widest">Detail analitik tersedia di mode Global</p>
+                <p class="text-xs font-bold uppercase tracking-widest">{{ $t('dashboard.v2.charts.globalOnly') }}</p>
              </div>
           </div>
         </CardContent>
       </Card>
     </div>
-
+ 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
       <!-- Personnel Presence -->
       <Card class="lg:col-span-2 border-border/40 bg-card shadow-none rounded-xl group">
         <CardHeader class="flex flex-row items-center justify-between p-8 pb-4">
           <div>
             <CardTitle class="text-xl font-bold tracking-tight text-foreground/90">
-              {{ $t('features.school.dashboard.v2.hr_presence.title') }}
+              {{ $t('dashboard.v2.hr_presence.title') }}
             </CardTitle>
             <CardDescription>
-              {{ $t('features.school.dashboard.v2.hr_presence.subtitle') }}
+              {{ $t('dashboard.v2.hr_presence.subtitle') }}
             </CardDescription>
           </div>
           <Button
@@ -160,12 +160,12 @@
                 >
                   {{ staff.time }}
                 </Badge>
-                <span class="text-[8px] font-bold opacity-40">{{ $t(`features.school.dashboard.v2.hr_presence.status.${staff.statusKey}`) }}</span>
+                <span class="text-[8px] font-bold opacity-40">{{ $t(`dashboard.v2.hr_presence.status.${staff.statusKey}`) }}</span>
               </div>
             </div>
             <!-- Empty state if no personnel -->
             <div v-if="personnelList.length === 0" class="md:col-span-2 p-8 text-center text-muted-foreground text-sm italic opacity-60">
-                Belum ada data kehadiran terekam hari ini.
+                {{ $t('features.school.dashboard.v2.hr_presence.empty') }}
             </div>
           </div>
         </CardContent>
@@ -176,7 +176,7 @@
         <Card class="border-border/40 bg-destructive/5 dark:bg-destructive/10 border-l-4 border-destructive rounded-xl p-8 shadow-none group">
           <h4 class="text-xs font-bold text-destructive flex items-center gap-3 mb-6">
             <div class="w-2 h-2 rounded-full bg-destructive group-hover:animate-ping" />
-            {{ $t('features.school.dashboard.v2.alerts.title') }}
+            {{ $t('dashboard.v2.alerts.title') }}
           </h4>
           <div class="space-y-6">
             <div

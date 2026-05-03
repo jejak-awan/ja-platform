@@ -32,7 +32,8 @@
                 "on_time": "On Time",
                 "late": "Late",
                 "present": "Present"
-            }
+            },
+            "empty": "No attendance data recorded today."
         },
         "alerts": {
             "title": "Dynamic Alert System",
@@ -73,6 +74,15 @@
                 "osis_candidates": "OSIS Candidates",
                 "upcoming_events": "Upcoming Events"
             }
+        },
+        "charts": {
+            "studentDist": "Student Distribution Per Unit",
+            "studentStatus": "Student Academic Status",
+            "studentDistDesc": "Comparison of student populations across all education units.",
+            "studentStatusDesc": "Summary of current student existence status.",
+            "comparative": "Comparative Analytics",
+            "comparativeDesc": "Visualization of human resource comparisons between units.",
+            "globalOnly": "Detailed analytics available in Global mode"
         }
     }
 }

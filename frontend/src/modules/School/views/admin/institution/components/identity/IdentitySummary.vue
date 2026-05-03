@@ -12,10 +12,10 @@
           </div>
           <div>
             <h4 class="font-bold text-base text-foreground tracking-tight">
-              {{ unitStore.activeUnitId === 0 ? $t('common.labels.foundationLegality') : 'Informasi Yayasan / Pusat' }}
+              {{ unitStore.activeUnitId === 0 ? $t('common.labels.foundationLegality') : $t('common.labels.foundationInfo') }}
             </h4>
             <p class="text-xs text-muted-foreground mt-0.5 font-medium">
-              {{ unitStore.activeUnitId === 0 ? $t('common.labels.foundationLegalityDesc') : 'Informasi entitas induk penyelenggara pendidikan.' }}
+              {{ unitStore.activeUnitId === 0 ? $t('common.labels.foundationLegalityDesc') : $t('common.labels.foundationInfoDesc') }}
             </p>
           </div>
         </div>
@@ -69,7 +69,7 @@
           <LucideIcon v-else name="Building" class="w-4 h-4 text-muted-foreground/20" />
         </div>
         <div>
-          <p class="text-[10px] font-black uppercase text-muted-foreground/60 tracking-wider">Lembaga Penyelenggara</p>
+          <p class="text-[10px] font-black uppercase text-muted-foreground/60 tracking-wider">{{ $t('common.labels.organizingInstitution') }}</p>
           <h5 class="text-sm font-bold text-foreground/80">{{ localForm.foundation_name || localForm.name }}</h5>
         </div>
       </div>
@@ -86,15 +86,15 @@
           </div>
           <div>
             <h4 class="font-bold text-base text-foreground tracking-tight">
-                {{ unitStore.activeUnitId === 0 ? 'Identitas Unit Utama' : 'Identitas Unit Pendidikan' }}
+                {{ unitStore.activeUnitId === 0 ? $t('common.labels.unitMainIdentity') : $t('common.labels.unitEduIdentity') }}
             </h4>
             <p class="text-xs text-muted-foreground mt-0.5 font-medium">
-                {{ unitStore.activeUnitId === 0 ? 'Informasi operasional unit sekolah default.' : 'Detail identitas operasional unit yang sedang aktif.' }}
+                {{ unitStore.activeUnitId === 0 ? $t('common.labels.unitMainIdentityDesc') : $t('common.labels.unitActiveIdentityDesc') }}
             </p>
           </div>
         </div>
         <Badge v-if="currentUnit" variant="outline" class="rounded-lg bg-success/5 text-success border-success/20 font-black px-3">
-            AKTIF: {{ currentUnit.name }}
+            {{ $t('common.messages.activeStatus', { name: currentUnit.name }) }}
         </Badge>
       </div>
 
@@ -109,7 +109,7 @@
             <LucideIcon v-else name="School" class="w-7 h-7 text-primary/30" />
           </div>
           <div class="space-y-1">
-            <Label class="text-[10px] font-black uppercase tracking-wider text-muted-foreground/60">Unit Pendidikan</Label>
+            <Label class="text-[10px] font-black uppercase tracking-wider text-muted-foreground/60">{{ $t('common.labels.unitEducation') }}</Label>
             <div class="flex items-center gap-3">
               <span class="text-xl font-black text-foreground">{{ displayUnit?.name || localForm.name }}</span>
               <Badge v-if="displayUnit" variant="secondary" class="text-[9px] h-4 bg-primary/10 text-primary border-none uppercase tracking-widest font-black px-2">{{ displayUnit.level }}</Badge>
@@ -118,7 +118,7 @@
         </div>
 
         <div class="space-y-2">
-          <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">Nomor Pokok Sekolah Nasional</Label>
+          <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">{{ $t('common.labels.npsnFull') }}</Label>
           <div class="flex items-center gap-3 p-3 rounded-xl bg-muted/30 border border-border/40">
             <div class="p-1.5 rounded-lg bg-background border border-border">
                 <LucideIcon name="Fingerprint" class="w-4 h-4 text-primary" />
@@ -138,7 +138,7 @@
         </div>
 
         <div class="space-y-2">
-          <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">Akreditasi</Label>
+          <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">{{ $t('common.labels.accreditation') }}</Label>
           <div class="flex items-center gap-3 p-3 rounded-xl bg-muted/30 border border-border/40">
             <div class="p-1.5 rounded-lg bg-background border border-border">
                 <LucideIcon name="Award" class="w-4 h-4 text-primary" />
@@ -149,12 +149,12 @@
 
         <!-- Address specific to unit if available -->
         <div class="md:col-span-3 mt-4 space-y-3">
-            <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">Lokasi Operasional</Label>
+            <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">{{ $t('common.labels.operationalLocation') }}</Label>
             <div class="p-5 rounded-xl bg-muted/10 border border-border/60 flex gap-4">
                 <LucideIcon name="MapPin" class="w-5 h-5 text-muted-foreground/40 shrink-0" />
                 <div>
                     <p class="text-sm font-medium text-foreground/70 leading-relaxed">
-                        {{ displayUnit?.settings?.address || localForm.address || 'Alamat belum diatur untuk unit ini.' }}
+                        {{ displayUnit?.settings?.address || localForm.address || $t('common.messages.unitAddressNotSet') }}
                     </p>
                 </div>
             </div>

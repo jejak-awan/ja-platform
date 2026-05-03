@@ -248,5 +248,17 @@
     "globalContext": "Global",
     "systemGlobal": "Global / Sistem",
     "foundationGlobal": "Pusat / Yayasan",
-    "ecosystemSummary": "Ringkasan Ekosistem"
+    "ecosystemSummary": "Ringkasan Ekosistem",
+    "schoolProfile": "Profil Sekolah",
+    "unitTechnicalDetail": "Detail Teknis Unit",
+    "foundationInfo": "Informasi Yayasan / Pusat",
+    "foundationInfoDesc": "Informasi entitas induk penyelenggara pendidikan.",
+    "organizingInstitution": "Lembaga Penyelenggara",
+    "unitMainIdentity": "Identitas Unit Utama",
+    "unitEduIdentity": "Identitas Unit Pendidikan",
+    "unitMainIdentityDesc": "Informasi operasional unit sekolah default.",
+    "unitActiveIdentityDesc": "Detail identitas operasional unit yang sedang aktif.",
+    "unitEducation": "Unit Pendidikan",
+    "npsnFull": "Nomor Pokok Sekolah Nasional",
+    "operationalLocation": "Lokasi Operasional"
 }
