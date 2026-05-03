@@ -156,6 +156,8 @@
     "foundation": "Foundation",
     "gender": "Gender",
     "government": "Government",
+    "negeri": "Public",
+    "swasta": "Private",
     "student": "Student",
     "students": "Students",
     "amount": "Amount",

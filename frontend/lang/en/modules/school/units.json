@@ -16,6 +16,9 @@
     "errors": {
         "nameRequired": "Unit name is required"
     },
+    "hints": {
+        "editViaLevel": "This data is managed at the Unit/Level tier"
+    },
     "form": {
         "addTitle": "Add Unit",
         "name": "Unit Name",

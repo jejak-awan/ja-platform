@@ -161,6 +161,8 @@
     "foundation": "Yayasan",
     "gender": "Jenis Kelamin",
     "government": "Pemerintah",
+    "negeri": "Negeri",
+    "swasta": "Swasta",
     "student": "Siswa",
     "students": "Siswa",
     "amount": "Nominal / Jumlah",
