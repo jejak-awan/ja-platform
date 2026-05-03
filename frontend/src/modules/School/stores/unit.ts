@@ -74,10 +74,21 @@ export const useUnitStore = defineStore('unit', {
                     settings: (l as any).settings || { use_primary_address: true }
                 } as ExtendedSchoolUnit));
 
-                if (!this.activeUnitId && this.levels.length > 0) {
-                    const defaultLevel = this.levels.find(l => (l as any).settings?.is_default);
-                    const idToSet = defaultLevel?.id || this.levels[0]?.id;
-                    if (idToSet !== undefined) this.setActiveLevel(idToSet);
+                if (this.activeUnitId === null && this.levels.length > 0) {
+                    const schoolStore = (await import('./school')).useSchoolStore();
+                    const authStore = (await import('../../Core/stores/auth')).useAuthStore();
+                    const school = schoolStore.currentSchool;
+                    const isSuper = authStore.isAtLeastRole('super');
+                    
+                    // Logic: If Multi-Unit AND (Private school OR Super Admin), default to Global/Pusat (ID 0)
+                    if (school?.is_multi_unit && (school?.type === 'private' || isSuper)) {
+                        this.setActiveLevel(0);
+                    } else {
+                        // Fallback: Use default setting or first unit
+                        const defaultLevel = this.levels.find(l => (l as any).settings?.is_default);
+                        const idToSet = defaultLevel?.id || this.levels[0]?.id;
+                        if (idToSet !== undefined) this.setActiveLevel(idToSet);
+                    }
                 }
             } catch (e) {
                 console.error('[LevelStore] Failed to fetch levels:', e);
@@ -86,9 +97,20 @@ export const useUnitStore = defineStore('unit', {
             }
         },
 
-        setActiveLevel(id: number) {
+        async setActiveLevel(id: number, silent = false) {
             this.activeUnitId = id;
             localStorage.setItem('active_level_id', id.toString());
+            
+            try {
+                await InstitutionService.switchUnit(id);
+                // After switching unit on backend, we usually want to reload the page 
+                // to ensure all other stores refresh their data based on the new context
+                if (!silent) {
+                    window.location.reload();
+                }
+            } catch (e) {
+                console.error('[LevelStore] Failed to sync unit switch with backend:', e);
+            }
         },
 
         async createUnit(payload: Partial<SchoolUnit>) {

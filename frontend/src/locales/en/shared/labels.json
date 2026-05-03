@@ -7,6 +7,7 @@
         "TT": "Not Accredited"
     },
     "active": "Active",
+    "activeUnit": "Active Unit",
     "activeOnly": "Active Only",
     "addressUnit": "Full Unit Address",
     "all": "All",
@@ -243,5 +244,9 @@
     "selectUnitTitle": "Select Education Unit",
     "selectUnitDesc": "Select a unit from the list to view and manage its settings.",
     "selectLevel": "Select Level",
-    "selectUnitLevel": "Select Unit / Level"
+    "selectUnitLevel": "Select Unit / Level",
+    "globalContext": "Global",
+    "systemGlobal": "Global / System",
+    "foundationGlobal": "Central / Foundation",
+    "ecosystemSummary": "Ecosystem Summary"
 }

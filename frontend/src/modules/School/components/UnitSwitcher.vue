@@ -56,6 +56,7 @@
 
 <script setup lang="ts">
 import { onMounted, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useUnitStore } from '../stores/unit';
 import { useSchoolStore } from '../stores/school';
 import { useAuthStore } from '../../Core/stores/auth';
@@ -64,28 +65,59 @@ import {
   Button, LucideIcon
 } from '@/components/ui';
 
+const { t } = useI18n();
 const unitStore = useUnitStore();
 const schoolStore = useSchoolStore();
 const authStore = useAuthStore();
 
 const school = computed(() => schoolStore.schools.length > 0 ? schoolStore.schools[0] : null);
-const activeUnit = computed(() => unitStore.activeUnit);
+
+const globalLabel = computed(() => {
+  const roleRank = authStore.getRoleRank();
+  if (roleRank >= 100) return t('common.labels.systemGlobal'); // Super Admin
+  if (roleRank >= 95) return t('common.labels.foundationGlobal'); // Yayasan/Foundation
+  return t('common.labels.globalContext');
+});
+
+const activeUnit = computed(() => {
+  const unitId = Number(unitStore.activeUnitId);
+  if (unitId === 0) {
+    return {
+      id: 0,
+      name: globalLabel.value,
+      level: 'global'
+    };
+  }
+  return unitStore.activeUnit;
+});
 
 const isFoundationAdmin = computed(() => authStore.getRoleRank() >= 95);
 
 const displayLevels = computed(() => {
+  const levels = isFoundationAdmin.value ? [...unitStore.levels] : [...(authStore.user?.levels || [])];
+  
+  // Add Global option for Foundation Admins
   if (isFoundationAdmin.value) {
-    return unitStore.levels;
+    levels.unshift({
+      id: 0,
+      name: globalLabel.value,
+      level: 'global',
+      school_id: school.value?.id || 0
+    } as any);
   }
-  return authStore.user?.levels || [];
+  
+  return levels;
 });
 
 const canSwitchLevel = computed(() => {
-  // 1. School must be multi-level
+  // 1. School must be multi-unit to show switcher at all
   if (!school.value?.is_multi_unit) return false;
   
-  // 2. Allowed if Foundation Admin OR User is assigned to multiple levels
-  return isFoundationAdmin.value || displayLevels.value.length > 1;
+  // 2. Foundation Admin can always see switcher if multi-unit
+  if (isFoundationAdmin.value) return true;
+  
+  // 3. Allowed if User is assigned to multiple levels
+  return displayLevels.value.length > 1;
 });
 
 onMounted(async () => {
@@ -99,8 +131,9 @@ onMounted(async () => {
   // If user is restricted and current level is not in their assigned list,
   // we should potentially redirect them to their first assigned level.
   if (!isFoundationAdmin.value && authStore.user?.levels?.length) {
-    const isAssigned = authStore.user.levels.some(l => l.id === unitStore.activeUnitId);
-    if (!isAssigned && unitStore.activeUnitId) {
+    const activeId = Number(unitStore.activeUnitId);
+    const isAssigned = authStore.user.levels.some(l => l.id === activeId);
+    if (!isAssigned && activeId !== 0) {
       const firstLevelId = authStore.user.levels[0]?.id;
       if (firstLevelId) handleSwitch(firstLevelId);
     }
@@ -109,6 +142,7 @@ onMounted(async () => {
 
 const getUnitIcon = (type: string | undefined) => {
   switch (type?.toLowerCase()) {
+    case 'global': return 'Building2';
     case 'sd': return 'Baby';
     case 'smp': return 'GraduationCap';
     case 'sma': return 'BookOpen';
@@ -117,9 +151,7 @@ const getUnitIcon = (type: string | undefined) => {
   }
 };
 
-const handleSwitch = (id: number) => {
-  unitStore.setActiveLevel(id);
-  // Reload page to re-initialize all stores with the new level context
-  window.location.reload();
+const handleSwitch = async (id: number) => {
+  await unitStore.setActiveLevel(id);
 };
 </script>

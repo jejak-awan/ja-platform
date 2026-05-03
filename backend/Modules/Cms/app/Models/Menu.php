@@ -5,9 +5,11 @@ namespace Modules\Cms\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\School\Traits\ScopedByUnit;
 
 /**
  * @property int $id
+ * @property int|null $school_unit_id
  * @property string $name
  * @property string $slug
  * @property string $location
@@ -21,9 +23,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Menu extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, ScopedByUnit;
 
     protected $fillable = [
+        'school_unit_id',
         'name',
         'slug',
         'location',

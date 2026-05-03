@@ -184,6 +184,7 @@ import {
 import { useToast } from '@/composables/useToast';
 import { useConfirm } from '@/composables/useConfirm';
 import { useCoreStore } from '@/modules/Core/stores/core';
+import { useAuthStore } from '@/modules/Core/stores/auth';
 import type { CacheStatus, QueueStatus, EmailLog, SettingValue } from '@/types/core/settings';
 import SettingsIcon from 'lucide-vue-next/dist/esm/icons/settings.js';
 import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
@@ -218,6 +219,7 @@ interface Tab {
 }
 
 const { t } = useI18n();
+const authStore = useAuthStore();
 const coreStore = useCoreStore();
 const route = useRoute();
 const { confirm } = useConfirm();
@@ -267,15 +269,26 @@ const cacheStatus = ref<CacheStatus | null>(null);
 const clearingCache = ref(false);
 const warmingCache = ref(false);
 
-const tabs: Tab[] = [
-    { id: 'system', label: 'System' },
-    { id: 'security', label: 'Security' },
-    { id: 'performance', label: 'Performance' },
-    { id: 'monitoring', label: 'Monitoring' },
-    { id: 'media', label: 'Media' },
-    { id: 'ai', label: 'AI Assistance' },
-    { id: 'email', label: 'Email' },
-];
+const tabs = computed<Tab[]>(() => {
+    const allTabs: Tab[] = [
+        { id: 'system', label: 'System' },
+        { id: 'security', label: 'Security' },
+        { id: 'performance', label: 'Performance' },
+        { id: 'monitoring', label: 'Monitoring' },
+        { id: 'media', label: 'Media' },
+        { id: 'ai', label: 'AI Assistance' },
+        { id: 'email', label: 'Email' },
+    ];
+
+    // If super admin, show all tabs
+    if (authStore.isAtLeastRole('super')) {
+        return allTabs;
+    }
+
+    // Otherwise, only show operational tabs
+    const operationalTabs = ['system', 'media'];
+    return allTabs.filter(tab => operationalTabs.includes(tab.id));
+});
 
 const getTabIcon = (tabId: string) => {
     switch (tabId) {

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Core\Models\AnalyticsVisit;
 use Modules\Core\Models\Tag;
 use Modules\Core\Models\User;
+use Modules\School\Traits\ScopedByUnit;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -29,6 +30,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property string $status
  * @property string $type
  * @property int $author_id
+ * @property int|null $school_unit_id
  * @property int|null $category_id
  * @property \Illuminate\Support\Carbon|null $published_at
  * @property int $views
@@ -55,7 +57,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Content extends Model
 {
     /** @use HasFactory<\Modules\Cms\Database\Factories\ContentFactory> */
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, LogsActivity, SoftDeletes, ScopedByUnit;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -108,6 +110,7 @@ class Content extends Model
         'status',
         'type',
         'author_id',
+        'school_unit_id',
         'category_id',
         'published_at',
         'views',

@@ -7,6 +7,7 @@
         "TT": "Belum Terakreditasi"
     },
     "active": "Aktif",
+    "activeUnit": "Unit Aktif",
     "activeOnly": "Hanya Aktif",
     "addressUnit": "Alamat Lengkap Unit",
     "all": "Semua",
@@ -243,5 +244,9 @@
     "selectUnitTitle": "Pilih Unit Pendidikan",
     "selectUnitDesc": "Pilih unit dari daftar di samping untuk melihat dan mengelola detail pengaturannya.",
     "selectLevel": "Pilih Jenjang",
-    "selectUnitLevel": "Pilih Unit / Jenjang"
+    "selectUnitLevel": "Pilih Unit / Jenjang",
+    "globalContext": "Global",
+    "systemGlobal": "Global / Sistem",
+    "foundationGlobal": "Pusat / Yayasan",
+    "ecosystemSummary": "Ringkasan Ekosistem"
 }

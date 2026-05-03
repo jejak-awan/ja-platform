@@ -6,16 +6,16 @@
         <div class="flex items-center gap-3 mb-1">
           <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
             <LucideIcon
-              name="School"
+              :name="unitStore.activeUnitId === 0 ? 'Globe' : 'School'"
               class="w-5 h-5 text-primary"
             />
           </div>
           <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
-            {{ $t('features.school.dashboard.v2.hero.title') }}
+            {{ unitStore.activeUnitId === 0 ? $t('common.labels.ecosystemSummary') : $t('features.school.dashboard.v2.hero.title') }}
           </h1>
         </div>
         <p class="text-muted-foreground text-sm font-medium">
-          {{ $t('features.school.dashboard.v2.hero.subtitle') }}
+          {{ unitStore.activeUnitId === 0 ? $t('common.messages.ecosystemSubtitle') : $t('features.school.dashboard.v2.hero.subtitle') }}
         </p>
       </div>
       <div class="flex items-center gap-2">
@@ -156,10 +156,12 @@ import {
   Card, CardContent, CardHeader, CardTitle, CardDescription,
   Button, LucideIcon, Badge
 } from '@/components/ui';
+import { useUnitStore } from '@/modules/School/stores/unit';
 import { InstitutionService } from '@/modules/School/services/InstitutionService';
 import { parseResponse } from '@/utils/responseParser';
 
 const { t } = useI18n();
+const unitStore = useUnitStore();
 
 
 const statsData = ref<any[]>([]);

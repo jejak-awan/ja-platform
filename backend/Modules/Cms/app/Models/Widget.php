@@ -3,9 +3,11 @@
 namespace Modules\Cms\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\School\Traits\ScopedByUnit;
 
 /**
  * @property int $id
+ * @property int|null $school_unit_id
  * @property string $title
  * @property string $type
  * @property string $location
@@ -18,7 +20,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Widget extends Model
 {
+    use ScopedByUnit;
+
     protected $fillable = [
+        'school_unit_id',
         'title',
         'type',
         'location',

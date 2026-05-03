@@ -61,6 +61,7 @@ class Staff extends Model
         'last_education',
         'major',
         'certification_status',
+        'is_shared',
         'metadata',
     ];
 

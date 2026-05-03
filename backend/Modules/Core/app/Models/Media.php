@@ -5,6 +5,7 @@ namespace Modules\Core\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\School\Traits\ScopedByUnit;
 use Illuminate\Support\Facades\Storage;
 use Modules\Core\Helpers\CdnHelper;
 use Modules\Core\Models\User;
@@ -39,7 +40,7 @@ use Modules\Core\Models\User;
 class Media extends Model
 {
     /** @use HasFactory<\Modules\Core\Database\Factories\MediaFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, ScopedByUnit;
 
     /**
      * Create a new factory instance for the model.
@@ -50,6 +51,7 @@ class Media extends Model
     }
 
     protected $fillable = [
+        'school_unit_id',
         'module',
         'name',
         'file_name',

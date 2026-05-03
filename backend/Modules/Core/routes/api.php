@@ -39,13 +39,17 @@ Route::prefix('v1')->group(function () {
     });
 
     // Public Settings
-    Route::get('/public/settings', [PublicSettingsController::class, 'index']);
-    Route::get('/public-settings', [PublicSettingsController::class, 'index']);
+    Route::middleware(['bypass_unit_scope:always'])->group(function () {
+        Route::get('/public/settings', [PublicSettingsController::class, 'index']);
+        Route::get('/public-settings', [PublicSettingsController::class, 'index']);
+    });
 
     // Captcha
-    Route::get('/captcha/generate', [CaptchaController::class, 'generate']);
-    Route::post('/captcha/verify', [CaptchaController::class, 'verify']);
-    Route::get('/captcha/settings', [CaptchaController::class, 'settings']);
+    Route::middleware(['bypass_unit_scope:always'])->group(function () {
+        Route::get('/captcha/generate', [CaptchaController::class, 'generate']);
+        Route::post('/captcha/verify', [CaptchaController::class, 'verify']);
+        Route::get('/captcha/settings', [CaptchaController::class, 'settings']);
+    });
 
     // System Public
     Route::post('/clear-rate-limit', [SystemController::class, 'clearRateLimit'])->middleware(['auth:sanctum', 'permission:manage settings', 'throttle:5,1']);
@@ -114,7 +118,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Admin Core
-    Route::prefix('admin/core')->middleware(['auth:sanctum', 'throttle:admin'])->group(function () {
+    Route::prefix('admin/core')->middleware(['auth:sanctum', 'throttle:admin', 'bypass_unit_scope'])->group(function () {
         // AI
         Route::get('ai/providers', [AiController::class, 'getProviders'])->middleware('permission:create content');
         Route::get('ai/models/{provider}', [AiController::class, 'getModels'])->middleware('permission:create content');

@@ -61,6 +61,42 @@ class ThemeService
      */
     public function activateTheme(Theme $theme): bool
     {
+        $levelId = \Illuminate\Support\Facades\Context::get('school_unit_id');
+
+        // If theme is global and we have a unit context, we must ensure we activate/create a unit-specific record
+        if ($theme->school_unit_id === null && $levelId) {
+            $existing = Theme::withoutGlobalScope('school_unit')
+                ->where('slug', $theme->slug)
+                ->where('school_unit_id', $levelId)
+                ->first();
+
+            if ($existing) {
+                $theme = $existing;
+            } else {
+                // Clone the global theme template to this unit
+                $theme = Theme::create([
+                    'school_unit_id' => $levelId,
+                    'name' => $theme->name,
+                    'slug' => $theme->slug,
+                    'type' => $theme->type,
+                    'path' => $theme->path,
+                    'parent_theme' => $theme->parent_theme,
+                    'version' => $theme->version,
+                    'description' => $theme->description,
+                    'author' => $theme->author,
+                    'author_url' => $theme->author_url,
+                    'license' => $theme->license,
+                    'preview_image' => $theme->preview_image,
+                    'settings' => $theme->settings,
+                    'custom_css' => $theme->custom_css,
+                    'dependencies' => $theme->dependencies,
+                    'supports' => $theme->supports,
+                    'status' => 'active',
+                    'is_active' => true,
+                ]);
+            }
+        }
+
         // Fire before activation hook
         if ($this->hooks) {
             $this->hooks->doAction('theme.before_activate', $theme);

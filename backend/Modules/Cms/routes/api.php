@@ -59,7 +59,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Admin CMS
-    Route::prefix('admin/cms')->middleware(['auth:sanctum', 'throttle:admin-cms'])->group(function () {
+    Route::prefix('admin/cms')->middleware(['auth:sanctum', 'throttle:admin-cms', 'bypass_unit_scope'])->group(function () {
         // Contents
         Route::get('contents/stats', [ContentController::class, 'stats'])->middleware('permission:view content');
         Route::get('contents', [ContentController::class, 'adminIndex'])->middleware('permission:view content');

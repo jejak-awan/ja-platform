@@ -189,12 +189,24 @@ const isDirty = computed(() => {
 
 
 
-const tabs: Tab[] = [
-    { id: 'identity', label: t('features.settings.tabs.identity') },
-    { id: 'comments', label: t('features.settings.tabs.comments') },
-    { id: 'seo', label: t('features.settings.tabs.seo') },
-    { id: 'analytics', label: t('features.settings.tabs.analytics') },
-];
+import { useAuthStore } from '@/modules/Core/stores/auth';
+
+const authStore = useAuthStore();
+const tabs = computed<Tab[]>(() => {
+    const allTabs: Tab[] = [
+        { id: 'identity', label: t('features.settings.tabs.identity') },
+        { id: 'comments', label: t('features.settings.tabs.comments') },
+        { id: 'seo', label: t('features.settings.tabs.seo') },
+        { id: 'analytics', label: t('features.settings.tabs.analytics') },
+    ];
+
+    if (authStore.isAtLeastRole('super')) {
+        return allTabs;
+    }
+
+    const operationalTabs = ['identity', 'comments'];
+    return allTabs.filter(tab => operationalTabs.includes(tab.id));
+});
 
 const getTabIcon = (tabId: string) => {
     switch (tabId) {

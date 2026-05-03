@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Modules\Cms\Services\ThemeCacheService;
 use Modules\Cms\Support\ThemeViews;
+use Modules\School\Traits\ScopedByUnit;
 
 /**
  * @property int $id
+ * @property int|null $school_unit_id
  * @property string $name
  * @property string $slug
  * @property string $type
@@ -39,7 +41,7 @@ use Modules\Cms\Support\ThemeViews;
 class Theme extends Model
 {
     /** @use HasFactory<\Modules\Cms\Database\Factories\ThemeFactory> */
-    use HasFactory;
+    use HasFactory, ScopedByUnit;
 
     /**
      * Create a new factory instance for the model.
@@ -50,6 +52,7 @@ class Theme extends Model
     }
 
     protected $fillable = [
+        'school_unit_id',
         'name',
         'slug',
         'type',
@@ -96,25 +99,46 @@ class Theme extends Model
      */
     public static function getActiveTheme(string $type = 'frontend'): ?self
     {
-        $activeTheme = self::where('is_active', true)
+        $levelId = \Illuminate\Support\Facades\Context::get('school_unit_id');
+
+        // 1. Try to find unit-specific active theme
+        if ($levelId) {
+            $activeTheme = self::withoutGlobalScope('school_unit')
+                ->where('school_unit_id', $levelId)
+                ->where('is_active', true)
+                ->where('type', $type)
+                ->where('status', 'active')
+                ->first();
+
+            if ($activeTheme) {
+                return $activeTheme;
+            }
+        }
+
+        // 2. Fallback to global active theme
+        $activeTheme = self::withoutGlobalScope('school_unit')
+            ->whereNull('school_unit_id')
+            ->where('is_active', true)
             ->where('type', $type)
             ->where('status', 'active')
             ->first();
 
-        // If no active theme, try to auto-activate default theme
+        // 3. Auto-activate default global theme if still none
         if (! $activeTheme) {
-            $defaultTheme = self::where('type', $type)
+            $defaultTheme = self::withoutGlobalScope('school_unit')
+                ->whereNull('school_unit_id')
+                ->where('type', $type)
                 ->where('slug', 'default')
                 ->first();
 
-            // If no default theme, get first available theme
             if (! $defaultTheme) {
-                $defaultTheme = self::where('type', $type)
+                $defaultTheme = self::withoutGlobalScope('school_unit')
+                    ->whereNull('school_unit_id')
+                    ->where('type', $type)
                     ->orderBy('id')
                     ->first();
             }
 
-            // Auto-activate if found
             if ($defaultTheme) {
                 try {
                     $defaultTheme->update([

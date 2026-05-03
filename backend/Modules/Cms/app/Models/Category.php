@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Core\Models\User;
+use Modules\School\Traits\ScopedByUnit;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property int $id
+ * @property int|null $school_unit_id
  * @property string $name
  * @property string $slug
  * @property string|null $description
@@ -35,7 +37,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Category extends Model
 {
     /** @use HasFactory<\Modules\Cms\Database\Factories\CategoryFactory> */
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, LogsActivity, SoftDeletes, ScopedByUnit;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -54,6 +56,7 @@ class Category extends Model
     }
 
     protected $fillable = [
+        'school_unit_id',
         'name',
         'slug',
         'description',

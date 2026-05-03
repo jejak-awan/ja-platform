@@ -73,21 +73,32 @@ class InstitutionService
      */
     public function getSchoolStats(int $schoolId): array
     {
+        $rawUnitId = \Illuminate\Support\Facades\Context::get('school_unit_id');
+        $unitId = is_numeric($rawUnitId) ? (int) $rawUnitId : 0;
+        $cacheKey = "school_stats_{$schoolId}_unit_{$unitId}";
+
         /** @var array{stats: array<int, array{title: string, value: string, icon: string}>, personnel: array<int, array{initials: string, name: string, role: string, time: string, statusKey: string}>, alerts: array<int, array{id: int, title: string, status: string, icon: string}>} $result */
-        $result = Cache::remember("school_stats_{$schoolId}", 300, function () use ($schoolId) {
+        $result = Cache::remember($cacheKey, 300, function () use ($schoolId, $unitId) {
+            $queryStudents = Student::query()->where('school_id', $schoolId);
+            $queryStaff = Staff::query()->where('school_id', $schoolId);
+            $queryStudyGroups = StudyGroup::query()->where('school_id', $schoolId);
+
+            // If global mode, bypass unit scoping to get aggregate totals
+            if ($unitId === 0) {
+                $queryStudents->withoutGlobalScope('school_unit');
+                $queryStaff->withoutGlobalScope('school_unit');
+                $queryStudyGroups->withoutGlobalScope('school_unit');
+            }
+
             $stats = [
-                ['title' => 'Total Siswa', 'value' => (string) Student::where('school_id', $schoolId)->count(), 'icon' => 'Users'],
-                ['title' => 'Total Guru/PTK', 'value' => (string) Staff::where('school_id', $schoolId)->count(), 'icon' => 'UserSquare'],
-                ['title' => 'Rombel', 'value' => (string) StudyGroup::where('school_id', $schoolId)->count(), 'icon' => 'Layers'],
-                ['title' => 'Aset Sarpras', 'value' => (string) \Modules\School\Models\Logistics\SchoolAsset::whereHas('room.building.landAsset', function ($q) use ($schoolId) {
-                    $q->where('school_id', $schoolId);
-                })->count(), 'icon' => 'Package'],
+                ['title' => $unitId === 0 ? 'Total Siswa (Ecosystem)' : 'Total Siswa', 'value' => (string) $queryStudents->count(), 'icon' => 'Users'],
+                ['title' => $unitId === 0 ? 'Total Guru/PTK (Ecosystem)' : 'Total Guru/PTK', 'value' => (string) $queryStaff->count(), 'icon' => 'UserSquare'],
+                ['title' => 'Rombel', 'value' => (string) $queryStudyGroups->count(), 'icon' => 'Layers'],
+                ['title' => 'Aset Sarpras', 'value' => (string) \Modules\School\Models\Logistics\SchoolAsset::query()->where('school_id', $schoolId)->count(), 'icon' => 'Package'],
             ];
 
-            // Get recent personnel presence (mocked for now until attendance module is complete)
-            $personnel = Staff::where('school_id', $schoolId)
-                ->limit(4)
-                ->get()
+            // Get recent personnel presence
+            $personnel = $queryStaff->limit(4)->get()
                 ->map(function (Staff $staff) {
                     $names = explode(' ', $staff->full_name);
                     $firstName = $names[0];
@@ -96,12 +107,11 @@ class InstitutionService
                         'initials' => strtoupper($initials),
                         'name' => $staff->full_name,
                         'role' => $staff->ptk_type ?? 'Guru',
-                        'time' => '07:00', // Mock time
-                        'statusKey' => 'present' // Mock status
+                        'time' => '07:00',
+                        'statusKey' => 'present'
                     ];
                 })->toArray();
 
-            // Get alerts (mocked for now)
             $alerts = [
                 ['id' => 1, 'title' => 'Realisasi Anggaran Melampaui 90%', 'status' => 'Urgent • Finance', 'icon' => 'AlertTriangle'],
                 ['id' => 2, 'title' => 'Pembaruan Data Dapodik', 'status' => 'Open • Info', 'icon' => 'Info'],
@@ -134,8 +144,8 @@ class InstitutionService
                 'school_units' => $levelIds->count() > 0,
                 'academic_year' => $school->activeAcademicYear !== null,
                 'semesters' => $school->activeAcademicYear?->semesters->count() > 0,
-                'departments' => Department::whereIn('school_unit_id', $levelIds)->count() > 0,
-                'study_groups' => StudyGroup::where('school_id', $schoolId)->count() > 0,
+                'departments' => Department::query()->whereIn('school_unit_id', $levelIds)->count() > 0,
+                'study_groups' => StudyGroup::query()->where('school_id', $schoolId)->count() > 0,
             ];
 
             $isCompleted = !in_array(false, array_values($status), true);

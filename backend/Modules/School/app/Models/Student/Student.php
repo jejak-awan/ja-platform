@@ -127,6 +127,7 @@ class Student extends Model
         'guardian_education',
         'guardian_occupation',
         'guardian_income',
+        'is_shared',
         'metadata',
     ];
 

@@ -16,6 +16,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property array<string, mixed>|null $settings
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property bool $is_active
+ * @property string|null $domain
+ * @property string|null $subdomain
  * @property-read School $school
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\School\Models\Academic\Department> $departments
  */
@@ -37,12 +40,17 @@ class SchoolUnit extends Model
         'name',
         'type',
         'npsn',
+        'domain',
+        'subdomain',
+        'kurikulum',
         'accreditation',
         'settings',
+        'is_active',
     ];
 
     protected $casts = [
         'settings' => 'array',
+        'is_active' => 'boolean',
     ];
 
     /**

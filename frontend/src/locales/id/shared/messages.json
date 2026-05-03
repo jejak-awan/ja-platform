@@ -20,6 +20,7 @@
     },
     "empty": {
         "default": "Tidak ada data",
+        "ecosystemSubtitle": "Monitoring rekapitulasi performa dan KPI lintas unit lembaga",
         "filter": "Tidak ada item yang cocok dengan filter",
         "search": "Tidak ada hasil untuk \"{query}\""
     },

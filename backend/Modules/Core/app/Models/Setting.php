@@ -4,6 +4,7 @@ namespace Modules\Core\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\School\Traits\ScopedByUnit;
 
 /**
  * @property int $id
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 class Setting extends Model
 {
     /** @use HasFactory<\Modules\Core\Database\Factories\SettingFactory> */
-    use HasFactory;
+    use HasFactory, ScopedByUnit;
 
     /**
      * Create a new factory instance for the model.
@@ -30,6 +31,7 @@ class Setting extends Model
     }
 
     protected $fillable = [
+        'school_unit_id',
         'key',
         'value',
         'type',
@@ -47,7 +49,10 @@ class Setting extends Model
 
     public static function get(string $key, mixed $default = null): mixed
     {
-        $setting = static::where('key', $key)->first();
+        // Prioritize unit-specific records (non-null school_unit_id) over global ones
+        $setting = static::where('key', $key)
+            ->orderByRaw('school_unit_id IS NULL ASC')
+            ->first();
 
         if (! $setting) {
             return $default;
@@ -60,7 +65,7 @@ class Setting extends Model
     {
         /** @var self $setting */
         $setting = static::updateOrCreate(
-            ['key' => $key],
+            ['key' => $key, 'school_unit_id' => \Illuminate\Support\Facades\Context::get('school_unit_id')],
             [
                 'value' => is_array($value) ? json_encode($value) : $value,
                 'type' => $type,
@@ -77,7 +82,26 @@ class Setting extends Model
     public static function getGroup(string $group): array
     {
         /** @var \Illuminate\Database\Eloquent\Collection<int, self> $settings */
-        $settings = static::where('group', $group)->get();
+        $settings = static::where('group', $group)
+            ->orderByRaw('school_unit_id IS NULL DESC')
+            ->get();
+
+        // Use mapWithKeys but because of the ordering, 
+        // the global record (processed first or last?) will be overwritten.
+        // If we want unit to win, unit should be processed LAST in mapWithKeys.
+        // So we should order Global first, then Unit.
+        
+        // Wait! IS NULL ASC puts NULL (1) last in MySQL?
+        // No, in MySQL: NULL IS NULL is 1. 1 IS NULL is 0.
+        // So NULL IS NULL ASC -> 0 (non-null), then 1 (null). Correct.
+        // mapWithKeys: if same key, later one wins.
+        // So if we have Global (last) it will overwrite Unit? NO!
+        // We want Unit (0) first, then Global (1) last.
+        // Then mapWithKeys will have Global overwrite Unit. BAD.
+        
+        // REVERSE: ORDER BY school_unit_id IS NULL DESC
+        // This puts NULL (1) first, then Unit (0) last.
+        // mapWithKeys: Unit (last) will overwrite Global. GOOD.
 
         return $settings->mapWithKeys(function ($setting) {
             return [(string) $setting->key => static::castValue($setting->value, (string) $setting->type)];

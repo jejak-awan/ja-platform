@@ -25,6 +25,25 @@ class StudioSeeder extends Seeder
             return;
         }
 
+        $units = \Modules\School\Models\Institution\SchoolUnit::all();
+        if ($units->isEmpty()) {
+            $this->command->warn('No school units found. Seeding with null unit ID.');
+            $this->seedUnitData($admin, null);
+        } else {
+            foreach ($units as $unit) {
+                $this->command->info("Seeding data for unit: {$unit->name}");
+                $this->seedUnitData($admin, $unit->id);
+            }
+        }
+
+        $this->command->info('Studio structure seeded successfully!');
+    }
+
+    /**
+     * Seed data for a specific unit
+     */
+    private function seedUnitData(User $admin, ?int $unitId): void
+    {
         // 1. Categories
         $categories = [
             ['name' => 'Uncategorized', 'slug' => 'uncategorized', 'description' => 'Default category'],
@@ -34,10 +53,12 @@ class StudioSeeder extends Seeder
         ];
 
         foreach ($categories as $cat) {
-            // Include soft-deleted rows so we update instead of inserting duplicate slugs (unique index).
-            $category = Category::withTrashed()->updateOrCreate(
-                ['slug' => $cat['slug']],
-                array_merge($cat, ['author_id' => $admin->id])
+            $category = Category::withoutGlobalScopes()->withTrashed()->updateOrCreate(
+                ['slug' => $cat['slug'], 'school_unit_id' => $unitId],
+                array_merge($cat, [
+                    'author_id' => $admin->id,
+                    'school_unit_id' => $unitId
+                ])
             );
             if ($category->trashed()) {
                 $category->restore();
@@ -57,20 +78,23 @@ class StudioSeeder extends Seeder
 
         $pageMap = [];
         foreach ($pages as $p) {
-            $page = Content::updateOrCreate(['slug' => $p['slug']], array_merge($p, [
-                'type' => 'page',
-                'status' => 'published',
-                'author_id' => $admin->id,
-                'published_at' => now(),
-            ]));
+            $page = Content::withoutGlobalScopes()->updateOrCreate(
+                ['slug' => $p['slug'], 'school_unit_id' => $unitId],
+                array_merge($p, [
+                    'type' => 'page',
+                    'status' => 'published',
+                    'author_id' => $admin->id,
+                    'school_unit_id' => $unitId,
+                    'published_at' => now(),
+                ])
+            );
             $pageMap[$p['slug']] = $page->id;
         }
 
-        // 3. Header Menu (reuse existing active header menu if available)
-        $mainMenu = Menu::withTrashed()
+        // 3. Header Menu
+        $mainMenu = Menu::withoutGlobalScopes()->withTrashed()
             ->where('location', 'header')
-            ->orderByDesc('is_active')
-            ->orderBy('id')
+            ->where('school_unit_id', $unitId)
             ->first();
 
         if (! $mainMenu) {
@@ -79,12 +103,13 @@ class StudioSeeder extends Seeder
                 'slug' => 'menu-header-primary',
                 'location' => 'header',
                 'is_active' => true,
+                'school_unit_id' => $unitId,
             ]);
         } elseif ($mainMenu->trashed()) {
             $mainMenu->restore();
         }
 
-        // Cleanup: Remove existing items to avoid duplicates from previous seeder versions
+        // Cleanup items
         $mainMenu->items()->forceDelete();
 
         $menuItems = [
@@ -145,15 +170,14 @@ class StudioSeeder extends Seeder
 
         $this->seedMenuItems($mainMenu, $menuItems);
 
-        // 4. Default public contact form (slug must match theme setting contact_form_slug, default "contact")
-        /** @var Form $contactForm */
-        $contactForm = Form::withTrashed()->updateOrCreate(['slug' => 'contact'], [
+        // 4. Default public contact form
+        $contactForm = Form::withoutGlobalScopes()->withTrashed()->updateOrCreate(['slug' => 'contact', 'school_unit_id' => $unitId], [
             'name' => 'Formulir Kontak Publik',
-            'description' => 'Formulir untuk pertanyaan umum, PPDB, dan kerja sama. Tanpa unggah berkas — arahkan pengunjung ke email/WA di blok informasi.',
-            'success_message' => 'Terima kasih! Pesan Anda telah terkirim. Tim kami akan menghubungi Anda segera.',
-            'redirect_url' => null,
+            'description' => 'Formulir untuk pertanyaan umum, PPDB, dan kerja sama.',
+            'success_message' => 'Terima kasih! Pesan Anda telah terkirim.',
             'is_active' => true,
             'author_id' => $admin->id,
+            'school_unit_id' => $unitId,
             'settings' => [
                 'email_notifications' => true,
                 'notification_email' => $admin->email,
@@ -164,63 +188,18 @@ class StudioSeeder extends Seeder
         }
 
         $fieldDefs = [
-            [
-                'name' => 'first_name',
-                'label' => 'Nama Depan',
-                'type' => 'text',
-                'placeholder' => 'Nama depan',
-                'help_text' => null,
-                'options' => null,
-                'validation_rules' => ['string', 'max:120'],
-                'is_required' => true,
-                'sort_order' => 1,
-            ],
-            [
-                'name' => 'last_name',
-                'label' => 'Nama Belakang',
-                'type' => 'text',
-                'placeholder' => 'Nama belakang',
-                'help_text' => null,
-                'options' => null,
-                'validation_rules' => ['string', 'max:120'],
-                'is_required' => true,
-                'sort_order' => 2,
-            ],
-            [
-                'name' => 'email',
-                'label' => 'Email',
-                'type' => 'email',
-                'placeholder' => 'nama@email.com',
-                'help_text' => null,
-                'options' => null,
-                'validation_rules' => ['max:255'],
-                'is_required' => true,
-                'sort_order' => 3,
-            ],
-            [
-                'name' => 'message',
-                'label' => 'Pesan',
-                'type' => 'textarea',
-                'placeholder' => 'Tuliskan pertanyaan atau pesan Anda…',
-                'help_text' => null,
-                'options' => null,
-                'validation_rules' => ['string', 'max:5000'],
-                'is_required' => true,
-                'sort_order' => 4,
-            ],
+            ['name' => 'first_name', 'label' => 'Nama Depan', 'type' => 'text', 'is_required' => true, 'sort_order' => 1],
+            ['name' => 'last_name', 'label' => 'Nama Belakang', 'type' => 'text', 'is_required' => true, 'sort_order' => 2],
+            ['name' => 'email', 'label' => 'Email', 'type' => 'email', 'is_required' => true, 'sort_order' => 3],
+            ['name' => 'message', 'label' => 'Pesan', 'type' => 'textarea', 'is_required' => true, 'sort_order' => 4],
         ];
 
         foreach ($fieldDefs as $def) {
             FormField::updateOrCreate(
-                [
-                    'form_id' => $contactForm->id,
-                    'name' => $def['name'],
-                ],
+                ['form_id' => $contactForm->id, 'name' => $def['name']],
                 array_merge($def, ['form_id' => $contactForm->id])
             );
         }
-
-        $this->command->info('Studio structure seeded successfully!');
     }
 
     /**

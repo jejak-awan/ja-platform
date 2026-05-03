@@ -21,7 +21,15 @@ class ThemeController extends BaseApiController
     {
         $typeRaw = $request->input('type', 'frontend');
         $type = is_string($typeRaw) ? $typeRaw : 'frontend';
-        $themes = Theme::ofType($type)->latest()->get();
+        $levelId = \Illuminate\Support\Facades\Context::get('school_unit_id');
+        $themes = Theme::withoutGlobalScope('school_unit')
+            ->where(function ($query) use ($levelId) {
+                $query->where('school_unit_id', $levelId)
+                    ->orWhereNull('school_unit_id');
+            })
+            ->ofType($type)
+            ->latest()
+            ->get();
 
         // Attach manifest to each theme
         $themes->each(function ($theme) {

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\School\Traits\ScopedByUnit;
 use Modules\Core\Models\User;
 
 /**
@@ -29,7 +30,7 @@ use Modules\Core\Models\User;
 class MediaFolder extends Model
 {
     /** @use HasFactory<\Modules\Core\Database\Factories\MediaFolderFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, ScopedByUnit;
 
     /**
      * Create a new factory instance for the model.
@@ -40,6 +41,7 @@ class MediaFolder extends Model
     }
 
     protected $fillable = [
+        'school_unit_id',
         'name',
         'slug',
         'parent_id',

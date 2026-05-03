@@ -57,7 +57,7 @@
       <!-- Role Context Indicator -->
       <div
         v-if="!sidebarMinimized"
-        class="px-5 py-3 border-b border-border bg-accent/10"
+        class="px-5 py-3 border-b border-border bg-accent/5"
       >
         <p class="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 mb-1">
           {{ t('common.navigation.sidebar.activeRole') }}
@@ -66,6 +66,17 @@
           <div class="w-2 h-2 rounded-full bg-primary/60" />
           <span class="text-[11px] font-black truncate text-foreground/80 tracking-wide uppercase">{{ currentRoleName }}</span>
         </div>
+        
+        <!-- School Unit Context (New) -->
+        <template v-if="schoolStore.currentSchool?.is_multi_unit && unitStore.activeUnit">
+          <p class="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 mb-1 mt-4">
+            {{ t('common.labels.activeUnit') }}
+          </p>
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-secondary" />
+            <span class="text-[11px] font-black truncate text-foreground/80 tracking-wide uppercase">{{ unitStore.activeUnit.name }}</span>
+          </div>
+        </template>
       </div>
 
       <!-- Navigation -->
@@ -307,6 +318,8 @@ import { navigationGroups, type NavItem } from '@/utils/navigation';
 import { getIcon } from '@/utils/icons';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useUnitStore } from '@/modules/School/stores/unit';
+import { useSchoolStore } from '@/modules/School/stores/school';
 import AdminLogo from '@/modules/Core/components/layouts/AdminLogo.vue';
 // Inline SVG icons from icons.ts - no lucide bundle needed
 import { 
@@ -343,6 +356,8 @@ defineEmits<{
 const { t, te } = useI18n();
 const $route = useRoute();
 const authStore = useAuthStore();
+const unitStore = useUnitStore();
+const schoolStore = useSchoolStore();
 import { ROLE_RANKS } from '@/modules/Core/stores/auth';
 
 const currentRoleName = computed(() => {
@@ -429,13 +444,21 @@ const isSectionActive = (key: string) => {
 
 const filteredNavigation = computed(() => {
     const filtered: Record<string, NavItem[]> = {};
+    const activeUnitId = Number(unitStore.activeUnitId);
+    const isGlobal = activeUnitId === 0;
+
     for (const [group, items] of Object.entries(navigationGroups)) {
         filtered[group] = items
             .map(item => {
                 const newItem = { ...item };
                 if (newItem.children) {
                     newItem.children = newItem.children.filter(child => {
-                        // Role check (priority)
+                        // 1. Context check — only hide 'unit' items in global mode
+                        //    'global' items remain visible in unit mode (settings, users, etc.)
+                        const context = child.context || item.context || 'both';
+                        if (isGlobal && context === 'unit') return false;
+
+                        // 2. Role check (priority)
                         if (child.role) {
                             const roles = Array.isArray(child.role) ? child.role : [child.role];
                             const hasRole = authStore.user?.roles?.some(r => roles.includes(r.name));
@@ -449,7 +472,11 @@ const filteredNavigation = computed(() => {
                 return newItem;
             })
             .filter(item => {
-                // Role check (priority)
+                // 1. Context check — only hide 'unit' items in global mode
+                const context = item.context || 'both';
+                if (isGlobal && context === 'unit') return false;
+
+                // 2. Role check (priority)
                 if (item.role) {
                     const roles = Array.isArray(item.role) ? item.role : [item.role];
                     const hasRole = authStore.user?.roles?.some(r => roles.includes(r.name));
