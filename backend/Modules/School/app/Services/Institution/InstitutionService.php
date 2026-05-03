@@ -97,6 +97,22 @@ class InstitutionService
                 ['title' => 'Aset Sarpras', 'value' => (string) \Modules\School\Models\Logistics\SchoolAsset::query()->where('school_id', $schoolId)->count(), 'icon' => 'Package'],
             ];
 
+            $breakdown = [];
+            if ($unitId === 0) {
+                // Aggregate counts per unit for the dashboard charts
+                $breakdown = SchoolUnit::where('school_id', $schoolId)
+                    ->get()
+                    ->map(function ($unit) {
+                        return [
+                            'unit_id' => $unit->id,
+                            'name' => $unit->name,
+                            'level' => $unit->level,
+                            'student_count' => Student::where('school_unit_id', $unit->id)->count(),
+                            'staff_count' => Staff::where('school_unit_id', $unit->id)->count(),
+                        ];
+                    })->toArray();
+            }
+
             // Get recent personnel presence
             $personnel = $queryStaff->limit(4)->get()
                 ->map(function (Staff $staff) {
@@ -119,6 +135,7 @@ class InstitutionService
 
             return [
                 'stats' => $stats,
+                'breakdown' => $breakdown,
                 'personnel' => $personnel,
                 'alerts' => $alerts
             ];

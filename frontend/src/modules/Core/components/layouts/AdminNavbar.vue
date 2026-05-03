@@ -156,10 +156,19 @@
                 {{ userInitial }}
               </div>
               <div class="hidden md:block text-left">
-                <p class="text-sm font-medium text-foreground">
-                  {{ user?.name || t('common.labels.user') }}
-                </p>
-                <p class="text-xs text-muted-foreground truncate max-w-[120px]">
+                <div class="flex items-center gap-2 mb-0.5">
+                  <p class="text-sm font-bold text-foreground leading-none">
+                    {{ user?.name || t('common.labels.user') }}
+                  </p>
+                  <Badge 
+                    variant="secondary" 
+                    class="h-4.5 px-2 py-0 text-[9px] font-black bg-primary/10 text-primary border border-primary/20 rounded-full uppercase tracking-widest shrink-0 max-w-[100px] truncate block leading-relaxed"
+                    :title="currentRoleName"
+                  >
+                    {{ currentRoleName }}
+                  </Badge>
+                </div>
+                <p class="text-[11px] text-muted-foreground/70 truncate max-w-[140px] leading-none">
                   {{ user?.email || '' }}
                 </p>
               </div>
@@ -275,7 +284,8 @@ import {
     DropdownMenuContent, 
     DropdownMenuItem,
     DropdownMenuSeparator,
-    DropdownMenuLabel
+    DropdownMenuLabel,
+    Badge
 } from '@/components/ui';
 
 import type { User } from '@/types/core/auth';
@@ -293,6 +303,23 @@ interface Notification {
 // const router = useRouter();
 const authStore = useAuthStore();
 const { t } = useI18n();
+
+import { ROLE_RANKS } from '@/modules/Core/stores/auth';
+
+const currentRoleName = computed(() => {
+    const roles = authStore.user?.roles;
+    if (!roles || roles.length === 0) return t('common.auth.roles.guest');
+    
+    const sortedRoles = [...roles].sort((a, b) => {
+        const rankA = ROLE_RANKS[a.name] || 0;
+        const rankB = ROLE_RANKS[b.name] || 0;
+        return rankB - rankA;
+    });
+    
+    const topRole = sortedRoles[0];
+    const label = (topRole as any)?.label || topRole?.name || '';
+    return label.replace(/-/g, ' ');
+});
 
 // Language Composable
 const {

@@ -161,10 +161,10 @@
                   name="LayoutDashboard"
                   class="w-3.5 h-3.5 mr-2"
                 />
-                {{ $t('common.labels.identity') }}
+                {{ unitStore.activeUnitId === 0 ? $t('common.labels.identity') : 'Profil Unit' }}
               </TabsTrigger>
               <TabsTrigger
-                v-if="showLevelsTab && isGlobalAdmin"
+                v-if="showLevelsTab && isGlobalAdmin && unitStore.activeUnitId === 0"
                 value="levels"
                 class="h-12 px-2 bg-transparent border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground rounded-none font-bold text-xs transition-all shadow-none"
               >
@@ -197,7 +197,7 @@
 
             <!-- TAB: UNIT JENJANG -->
             <TabsContent
-              v-if="showLevelsTab && isGlobalAdmin"
+              v-if="showLevelsTab && isGlobalAdmin && unitStore.activeUnitId === 0"
               value="levels"
               class="mt-0"
             >

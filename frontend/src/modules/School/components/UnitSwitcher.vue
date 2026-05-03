@@ -34,7 +34,7 @@
           :key="lv.id" 
           class="flex items-center justify-between cursor-pointer"
           :class="{ 'bg-primary/10 text-primary font-bold': lv.id === activeUnit?.id }"
-          @click="lv.id && handleSwitch(lv.id)"
+          @click="lv.id !== undefined && handleSwitch(lv.id)"
         >
           <div class="flex items-center gap-2">
             <LucideIcon

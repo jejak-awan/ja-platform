@@ -54,29 +54,51 @@
         </div>
       </div>
 
-      <!-- Role Context Indicator -->
+      <!-- Active Context Indicator (Ultra Premium & Unified) -->
       <div
         v-if="!sidebarMinimized"
-        class="px-5 py-3 border-b border-border bg-accent/5"
+        class="px-3 pt-5 pb-3 border-b border-border bg-sidebar"
       >
-        <p class="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 mb-1">
-          {{ t('common.navigation.sidebar.activeRole') }}
-        </p>
-        <div class="flex items-center gap-2">
-          <div class="w-2 h-2 rounded-full bg-primary/60" />
-          <span class="text-[11px] font-black truncate text-foreground/80 tracking-wide uppercase">{{ currentRoleName }}</span>
+        <!-- School Unit Context -->
+        <div v-if="schoolStore.currentSchool?.is_multi_unit" class="space-y-1">
+          <transition name="context-fade" mode="out-in">
+           <div 
+             :key="unitStore.activeUnitId ?? 'global'"
+             class="flex items-center gap-3 p-3 rounded-2xl transition-all duration-500 border border-white/20 group/unit relative overflow-hidden shadow-md"
+             :class="[
+               unitStore.activeUnitId === 0 
+                 ? 'bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 text-white' 
+                 : 'bg-gradient-to-br from-blue-600 via-indigo-700 to-blue-800 text-white'
+             ]"
+           >
+             <!-- Subtle glass overlay -->
+             <div class="absolute inset-0 bg-white/5 opacity-0 group-hover/unit:opacity-100 transition-opacity duration-500" />
+             
+             <!-- Icon Box: Perfectly Centered -->
+             <div 
+                class="flex h-10 w-10 items-center justify-center rounded-xl border border-white/30 bg-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] shrink-0 transition-transform duration-500 group-hover/unit:scale-105"
+             >
+                <component 
+                 :is="getIcon(unitStore.activeUnitId === 0 ? 'globe' : 'building')" 
+                 class="w-5 h-5 text-white" 
+                />
+             </div>
+
+             <!-- Text Content -->
+             <div class="flex flex-col min-w-0 relative z-10">
+                 <div class="flex items-center gap-1.5">
+                    <span class="text-[11px] font-black truncate tracking-tight uppercase text-white leading-tight">
+                        {{ unitStore.activeUnitId === 0 ? 'Sistem Global' : unitStore.activeUnit?.name }}
+                    </span>
+                    <div v-if="unitStore.activeUnitId === 0" class="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+                 </div>
+                 <span class="text-[9px] font-bold truncate uppercase tracking-[0.12em] leading-none mt-1 text-white/80">
+                     {{ unitStore.activeUnitId === 0 ? 'Ekosistem Pusat' : (unitStore.activeUnit?.level || 'Unit') }}
+                 </span>
+             </div>
+           </div>
+          </transition>
         </div>
-        
-        <!-- School Unit Context (New) -->
-        <template v-if="schoolStore.currentSchool?.is_multi_unit && unitStore.activeUnit">
-          <p class="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 mb-1 mt-4">
-            {{ t('common.labels.activeUnit') }}
-          </p>
-          <div class="flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full bg-secondary" />
-            <span class="text-[11px] font-black truncate text-foreground/80 tracking-wide uppercase">{{ unitStore.activeUnit.name }}</span>
-          </div>
-        </template>
       </div>
 
       <!-- Navigation -->
@@ -358,23 +380,7 @@ const $route = useRoute();
 const authStore = useAuthStore();
 const unitStore = useUnitStore();
 const schoolStore = useSchoolStore();
-import { ROLE_RANKS } from '@/modules/Core/stores/auth';
 
-const currentRoleName = computed(() => {
-    const roles = authStore.user?.roles;
-    if (!roles || roles.length === 0) return t('common.auth.roles.guest');
-    
-    // Sort roles by rank to find the highest
-    const sortedRoles = [...roles].sort((a, b) => {
-        const rankA = ROLE_RANKS[a.name] || 0;
-        const rankB = ROLE_RANKS[b.name] || 0;
-        return rankB - rankA;
-    });
-    
-    const topRole = sortedRoles[0];
-    const label = (topRole as any)?.label || topRole?.name || '';
-    return label.replace(/-/g, ' ');
-});
 const cmsStore = useCmsStore();
 
 const sidebarSections: SidebarSection[] = [
@@ -551,3 +557,20 @@ onMounted(() => {
     autoExpandActiveSection();
 });
 </script>
+
+<style scoped>
+.context-fade-enter-active,
+.context-fade-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.context-fade-enter-from {
+  opacity: 0;
+  transform: translateY(4px) scale(0.98);
+}
+
+.context-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.98);
+}
+</style>

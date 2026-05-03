@@ -59,6 +59,59 @@
       </Card>
     </div>
 
+    <!-- Visual Analytics Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 px-2">
+      <!-- Unit Distribution Chart (Global Mode) / Student Status (Unit Mode) -->
+      <Card class="border-border/40 bg-card shadow-none rounded-xl">
+        <CardHeader class="p-6 pb-2">
+          <CardTitle class="text-lg font-bold">
+            {{ unitStore.activeUnitId === 0 ? 'Distribusi Siswa Per Unit' : 'Status Akademik Siswa' }}
+          </CardTitle>
+          <CardDescription>
+            {{ unitStore.activeUnitId === 0 ? 'Perbandingan populasi siswa di seluruh unit pendidikan.' : 'Ringkasan status keberadaan siswa saat ini.' }}
+          </CardDescription>
+        </CardHeader>
+        <CardContent class="p-6">
+          <div class="h-[300px] flex items-center justify-center">
+            <Bar 
+              v-if="unitStore.activeUnitId === 0 && chartData.labels.length > 0"
+              :data="chartData" 
+              :options="barChartOptions" 
+            />
+            <Doughnut 
+              v-else-if="unitStore.activeUnitId !== 0"
+              :data="doughnutChartData"
+              :options="doughnutChartOptions"
+            />
+            <div v-else class="text-muted-foreground text-sm italic animate-pulse">
+              Menyiapkan visualisasi data...
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <!-- Activity/Growth Chart -->
+      <Card class="border-border/40 bg-card shadow-none rounded-xl">
+        <CardHeader class="p-6 pb-2">
+          <CardTitle class="text-lg font-bold">Analitik Komparatif</CardTitle>
+          <CardDescription>Visualisasi perbandingan sumber daya manusia antar unit.</CardDescription>
+        </CardHeader>
+        <CardContent class="p-6">
+          <div class="h-[300px] flex items-center justify-center">
+             <Bar 
+              v-if="unitStore.activeUnitId === 0 && staffChartData.labels.length > 0"
+              :data="staffChartData" 
+              :options="barChartOptions" 
+            />
+             <div v-else class="flex flex-col items-center gap-4 text-muted-foreground opacity-40">
+                <LucideIcon name="BarChart3" class="w-12 h-12" />
+                <p class="text-xs font-bold uppercase tracking-widest">Detail analitik tersedia di mode Global</p>
+             </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
       <!-- Personnel Presence -->
       <Card class="lg:col-span-2 border-border/40 bg-card shadow-none rounded-xl group">
@@ -110,6 +163,10 @@
                 <span class="text-[8px] font-bold opacity-40">{{ $t(`features.school.dashboard.v2.hr_presence.status.${staff.statusKey}`) }}</span>
               </div>
             </div>
+            <!-- Empty state if no personnel -->
+            <div v-if="personnelList.length === 0" class="md:col-span-2 p-8 text-center text-muted-foreground text-sm italic opacity-60">
+                Belum ada data kehadiran terekam hari ini.
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -159,12 +216,20 @@ import {
 import { useUnitStore } from '@/modules/School/stores/unit';
 import { InstitutionService } from '@/modules/School/services/InstitutionService';
 import { parseResponse } from '@/utils/responseParser';
+import { Bar, Doughnut } from 'vue-chartjs';
+import { 
+    Chart as ChartJS, Title, Tooltip, Legend, 
+    BarElement, CategoryScale, LinearScale, ArcElement 
+} from 'chart.js';
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement);
 
 const { t } = useI18n();
 const unitStore = useUnitStore();
 
 
 const statsData = ref<any[]>([]);
+const breakdownData = ref<any[]>([]);
 const personnelList = ref<Personnel[]>([]);
 const alertsList = ref<any[]>([]);
 const loading = ref(true);
@@ -176,6 +241,66 @@ const adminQuickStats = computed(() => [
   { label: t('features.school.stats.assets'), value: statsData.value[3]?.value ?? '0', icon: 'Package', routeName: 'sarpras.index' },
 ]);
 
+// Chart Configurations
+const chartData = computed(() => ({
+  labels: breakdownData.value.map(b => b.name),
+  datasets: [
+    {
+      label: 'Jumlah Siswa',
+      backgroundColor: '#3b82f6',
+      borderRadius: 8,
+      data: breakdownData.value.map(b => b.student_count)
+    }
+  ]
+}));
+
+const staffChartData = computed(() => ({
+  labels: breakdownData.value.map(b => b.name),
+  datasets: [
+    {
+      label: 'Jumlah Guru/PTK',
+      backgroundColor: '#10b981',
+      borderRadius: 8,
+      data: breakdownData.value.map(b => b.staff_count)
+    }
+  ]
+}));
+
+const doughnutChartData = computed(() => ({
+  labels: ['Aktif', 'Lulus', 'Keluar'],
+  datasets: [
+    {
+      backgroundColor: ['#3b82f6', '#10b981', '#ef4444'],
+      hoverOffset: 4,
+      data: [
+          parseInt(statsData.value[0]?.value || '0'), 
+          0, 
+          0
+      ]
+    }
+  ]
+}));
+
+const barChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false }
+  },
+  scales: {
+      y: { beginAtZero: true, grid: { display: false } },
+      x: { grid: { display: false } }
+  }
+};
+
+const doughnutChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+      legend: { position: 'bottom' as const }
+  }
+};
+
 interface Personnel {
     initials: string;
     name: string;
@@ -184,26 +309,20 @@ interface Personnel {
     statusKey: string;
 }
 
-
-
-
-
 const fetchData = async () => {
     loading.value = true;
     try {
         const statsRes = await InstitutionService.getStats();
         const data = parseResponse(statsRes).data as any;
         
-        // Handle new structured response or fallback to old array structure
         if (data.stats) {
             statsData.value = data.stats;
+            breakdownData.value = data.breakdown || [];
             personnelList.value = data.personnel || [];
             alertsList.value = data.alerts || [];
         } else {
             statsData.value = data;
         }
-        
-
     } catch (e) {
         console.error(e);
     } finally {
