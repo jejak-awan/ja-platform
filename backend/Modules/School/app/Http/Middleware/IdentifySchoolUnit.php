@@ -31,6 +31,9 @@ class IdentifySchoolUnit
                 // Global context - explicitly set context to null/0
                 Context::add('school_unit_id', 0);
                 
+                // Allow seeing everything in Global context (Aggregated Dashboard)
+                Context::add('bypass_unit_scope', true);
+                
                 // Still need school_id for ScopedBySchool to work
                 // For now, we take the first school if it exists
                 $school = \Modules\School\Models\Institution\School::first();

@@ -170,10 +170,10 @@ const alertsList = ref<any[]>([]);
 const loading = ref(true);
 
 const adminQuickStats = computed(() => [
-  { label: t('features.school.stats.totalStudents'), value: statsData.value[0]?.value || '1.2k', icon: 'Users', routeName: 'students.index' },
-  { label: t('features.school.stats.totalStaff'), value: statsData.value[1]?.value || '86', icon: 'UserSquare', routeName: 'staff.index' },
-  { label: t('features.school.stats.studyGroups'), value: statsData.value[2]?.value || '32', icon: 'Layers', routeName: 'academic.index' },
-  { label: t('features.school.stats.assets'), value: statsData.value[3]?.value || '150', icon: 'Package', routeName: 'sarpras.index' },
+  { label: t('features.school.stats.totalStudents'), value: statsData.value[0]?.value ?? '0', icon: 'Users', routeName: 'students.index' },
+  { label: t('features.school.stats.totalStaff'), value: statsData.value[1]?.value ?? '0', icon: 'UserSquare', routeName: 'staff.index' },
+  { label: t('features.school.stats.studyGroups'), value: statsData.value[2]?.value ?? '0', icon: 'Layers', routeName: 'academic.index' },
+  { label: t('features.school.stats.assets'), value: statsData.value[3]?.value ?? '0', icon: 'Package', routeName: 'sarpras.index' },
 ]);
 
 interface Personnel {
