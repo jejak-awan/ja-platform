@@ -22,6 +22,7 @@
     "purpose": "Standard instructions for AI/coding agents when creating or updating this project.",
     "scope": "Monorepo root containing backend (Laravel) and frontend (Vue + Vite).",
     "when_creating_or_updating_project": [
+      "Strictly follow architectural patterns in .agent-rules.md and backend/docs/database_refinement.md.",
       "Use branch-based workflow; avoid direct edits on main.",
       "Prefer package managers for dependency changes (npm/composer), avoid manual lockfile edits.",
       "Keep changes minimal and focused; avoid unrelated refactors.",
