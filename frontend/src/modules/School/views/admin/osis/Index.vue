@@ -36,13 +36,6 @@ interface OsisMember {
     };
 }
 
-interface OsisFinance {
-    id: number;
-    type: 'income' | 'expense';
-    amount: number;
-    date: string;
-    description: string;
-}
 
 interface OsisSuggestion {
     id: number;
@@ -56,21 +49,18 @@ interface OsisSuggestion {
 // Data
 const programs = ref<OsisProgram[]>([]);
 const members = ref<OsisMember[]>([]);
-const finances = ref<OsisFinance[]>([]);
 const suggestions = ref<OsisSuggestion[]>([]);
 
 const fetchData = async () => {
     loading.value = true;
     try {
-        const [pRes, mRes, fRes, sRes] = await Promise.all([
+        const [pRes, mRes, sRes] = await Promise.all([
             axios.get('/api/v1/admin/osis/programs'),
             axios.get('/api/v1/admin/osis/members'),
-            axios.get('/api/v1/admin/osis/finances'),
             axios.get('/api/v1/admin/osis/suggestions')
         ]);
         programs.value = pRes.data.data;
         members.value = mRes.data.data;
-        finances.value = fRes.data.data;
         suggestions.value = sRes.data.data;
     } catch {
         toast.error.default('Failed to fetch OSIS data');
@@ -113,7 +103,6 @@ const formatCurrency = (val: number) => {
 
 <template>
   <div class="space-y-6 p-8 animate-in fade-in duration-700">
-
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-2">
       <div>
         <div class="flex items-center gap-3 mb-1">
@@ -199,12 +188,6 @@ const formatCurrency = (val: number) => {
           class="rounded-xl px-8 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
         >
           {{ t('features.school.osis.tabs.members') }}
-        </TabsTrigger>
-        <TabsTrigger
-          value="finances"
-          class="rounded-xl px-8 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
-        >
-          {{ t('features.school.osis.tabs.finances') }}
         </TabsTrigger>
         <TabsTrigger
           value="suggestions"
@@ -354,40 +337,6 @@ const formatCurrency = (val: number) => {
         </Card>
       </TabsContent>
 
-      <!-- Finance Tab -->
-      <TabsContent value="finances">
-        <Card class="border border-border/40 bg-card shadow-sm rounded-xl overflow-hidden">
-          <CardContent class="p-6">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 text-left">
-              <div>
-                <h2 class="text-xl font-bold text-foreground tracking-tight">
-                  {{ t('features.school.osis.finances.title') }}
-                </h2>
-                <p class="text-xs font-medium text-muted-foreground">Laporan keuangan organisasi periode berjalan</p>
-              </div>
-              <div class="flex gap-4 w-full md:w-auto">
-                <div class="px-5 py-2.5 bg-success/10 rounded-xl flex flex-col border border-success/20 flex-1 md:flex-none">
-                  <span class="text-[9px] uppercase font-black text-success tracking-widest mb-1">{{ t('features.school.osis.finances.income') }}</span>
-                  <span class="font-black text-success leading-tight text-lg">IDR 0</span>
-                </div>
-                <div class="px-5 py-2.5 bg-destructive/10 rounded-xl flex flex-col border border-destructive/20 flex-1 md:flex-none">
-                  <span class="text-[9px] uppercase font-black text-destructive tracking-widest mb-1">{{ t('features.school.osis.finances.expense') }}</span>
-                  <span class="font-black text-destructive leading-tight text-lg">IDR 0</span>
-                </div>
-              </div>
-            </div>
-            <div class="py-20 flex flex-col items-center justify-center bg-muted/10 rounded-xl border-2 border-dashed border-border/40">
-              <LucideIcon
-                name="Wallet"
-                class="w-12 h-12 text-muted-foreground/20 mb-4"
-              />
-              <p class="text-muted-foreground text-sm font-medium italic">
-                {{ t('features.school.osis.finances.empty') }}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </TabsContent>
 
       <!-- Suggestions Tab -->
       <TabsContent value="suggestions">

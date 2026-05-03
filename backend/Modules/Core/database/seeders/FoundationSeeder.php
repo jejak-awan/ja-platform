@@ -215,11 +215,9 @@ class FoundationSeeder extends Seeder
             ['key' => 'max_concurrent_sessions', 'value' => '3', 'group' => 'security', 'type' => 'integer'],
             ['key' => 'login_attempts_limit', 'value' => '5', 'group' => 'security', 'type' => 'integer'],
             ['key' => 'block_duration_minutes', 'value' => '30', 'group' => 'security', 'type' => 'integer'],
-            ['key' => 'security_alert_failed_login_threshold', 'value' => '5', 'group' => 'security', 'type' => 'integer'],
             ['key' => 'security_alert_blocked_ip_threshold', 'value' => '3', 'group' => 'security', 'type' => 'integer'],
             ['key' => 'security_alert_suspicious_ip_threshold', 'value' => '10', 'group' => 'security', 'type' => 'integer'],
             ['key' => 'security_alert_window_minutes', 'value' => '60', 'group' => 'security', 'type' => 'integer'],
-            ['key' => 'log_retention_days', 'value' => '90', 'group' => 'security', 'type' => 'integer'],
             ['key' => 'enable_captcha', 'value' => '0', 'group' => 'security', 'type' => 'boolean'],
             ['key' => 'captcha_method', 'value' => 'slider', 'group' => 'security', 'type' => 'string'],
             ['key' => 'captcha_on_login', 'value' => '1', 'group' => 'security', 'type' => 'boolean'],
@@ -231,6 +229,14 @@ class FoundationSeeder extends Seeder
             ['key' => 'shield_log_verification_success', 'value' => '0', 'group' => 'security', 'type' => 'boolean'],
             ['key' => 'shield_enable_ip_intelligence', 'value' => '0', 'group' => 'security', 'type' => 'boolean'],
             ['key' => 'shield_allowed_countries', 'value' => '[]', 'group' => 'security', 'type' => 'json'],
+
+            // Monitoring
+            ['key' => 'log_retention_days', 'value' => '90', 'group' => 'monitoring', 'type' => 'integer'],
+            ['key' => 'activity_log_retention_days', 'value' => '180', 'group' => 'monitoring', 'type' => 'integer'],
+            ['key' => 'security_log_retention_days', 'value' => '365', 'group' => 'monitoring', 'type' => 'integer'],
+            ['key' => 'login_history_retention_days', 'value' => '90', 'group' => 'monitoring', 'type' => 'integer'],
+            ['key' => 'security_alert_failed_login_threshold', 'value' => '5', 'group' => 'monitoring', 'type' => 'integer'],
+            ['key' => 'backup_retention_days', 'value' => '30', 'group' => 'monitoring', 'type' => 'integer'],
 
             // Performance
             ['key' => 'enable_cache', 'value' => '1', 'group' => 'performance', 'type' => 'boolean'],

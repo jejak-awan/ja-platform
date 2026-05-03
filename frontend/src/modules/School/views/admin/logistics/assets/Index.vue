@@ -332,7 +332,7 @@ const handleSave = async (formData: any) => {
             const data = { ...formData };
             if (type === 'tickets') {
                 data.school_id = 1;
-                data.school_level_id = 1;
+                data.school_unit_id = 1;
             }
             await LogisticsService.storeSarprasData(type, data);
             toast.success.action(t('features.school.academic.messages.addSuccess'));

@@ -1,56 +1,61 @@
 <template>
-  <div class="space-y-8 animate-in slide-in-from-right-4 duration-700">
-    <!-- Parent Header -->
-    <!-- Parent Header: Clean -->
-    <div class="p-8 rounded-xl bg-card border border-border/50 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
-      <div class="flex items-center gap-6">
-        <div class="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shrink-0">
-          <LucideIcon
-            name="ShieldCheck"
-            class="w-8 h-8"
-          />
-        </div>
-        <div>
-          <h1 class="text-2xl font-bold tracking-tight">
+  <div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Header: Clean & Standard -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 px-2">
+      <div>
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <LucideIcon
+              name="ShieldCheck"
+              class="w-5 h-5 text-primary"
+            />
+          </div>
+          <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
             Parent Monitor
           </h1>
-          <p class="text-muted-foreground text-sm">
-            Monitoring Akademik & Kehadiran Ananda.
-          </p>
         </div>
+        <p class="text-muted-foreground text-sm font-medium">
+          Monitoring Akademik & Kehadiran Ananda.
+        </p>
       </div>
-      <div class="flex gap-4">
-        <div class="text-right">
-          <p class="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em]">
+      <div class="flex items-center gap-2">
+        <div class="text-right px-4 py-2 bg-muted/30 border border-border/40 rounded-xl">
+          <p class="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-0.5">
             Siswa Terhubung
           </p>
-          <p class="font-bold text-primary text-sm">
-            Muhammad Al-Fatih (XI-RPL-1)
+          <p class="font-bold text-primary text-sm leading-tight">
+            Muhammad Al-Fatih <span class="text-muted-foreground/60 font-medium ml-1">(XI-RPL-1)</span>
           </p>
         </div>
       </div>
     </div>
 
     <!-- Monitoring Tiles -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-2">
       <Card
         v-for="tile in monitorTiles"
         :key="tile.label"
-        class="bg-card border-border/40 shadow-none hover:bg-accent/50 transition-colors cursor-pointer rounded-xl"
+        class="border-border/40 bg-card shadow-none rounded-xl hover:bg-muted/30 transition-all duration-300 group cursor-pointer"
       >
         <CardContent class="p-6">
-          <LucideIcon
-            :name="tile.icon"
-            :class="['w-5 h-5 mb-3', tile.iconClass]"
-          />
-          <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-            {{ tile.label }}
-          </p>
-          <div class="flex items-baseline gap-2 mt-1">
-            <h3 class="text-2xl font-black">
-              {{ tile.value }}
-            </h3>
-            <span :class="['text-[10px] font-bold', tile.trendClass]">{{ tile.trend }}</span>
+          <div class="flex items-start justify-between">
+            <div class="space-y-1">
+              <p class="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                {{ tile.label }}
+              </p>
+              <div class="flex items-baseline gap-2">
+                <p class="text-3xl font-black text-foreground">
+                  {{ tile.value }}
+                </p>
+                <span :class="['text-[10px] font-bold', tile.trendClass]">{{ tile.trend }}</span>
+              </div>
+            </div>
+            <div :class="['p-2.5 rounded-xl transition-transform group-hover:scale-110 bg-muted/50', tile.iconClass]">
+              <LucideIcon
+                :name="tile.icon"
+                class="w-5 h-5"
+              />
+            </div>
           </div>
         </CardContent>
       </Card>

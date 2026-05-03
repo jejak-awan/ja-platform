@@ -14,8 +14,10 @@
         "locationSubtitle": "Tentukan jumlah lokasi operasional lembaga.",
         "locationTitle": "Lokasi Lembaga",
         "lockedByName": "Dikunci oleh Analisis Nama",
-        "onlyForFoundations": "Hanya untuk Yayasan",
-        "statusSubtitle": "Tentukan status hukum lembaga Anda. Opsi dikunci berdasarkan analisis nama.",
+        "onlyForPrivate": "Hanya untuk Sekolah Swasta",
+        "statusNegeriDesc": "Sekolah milik pemerintah (SDN, SMPN, SMAN, SMKN). Pengaturan otomatis Single-Unit dan Satu Lokasi.",
+        "statusSwastaDescCombined": "Sekolah di bawah naungan Yayasan atau Lembaga Mandiri. Mendukung Multi-Unit dan Multi-Lokasi.",
+        "statusSubtitle": "Tentukan status hukum lembaga Anda. Sistem mengunci opsi berdasarkan analisis nama.",
         "statusTitle": "Status Lembaga"
     },
     "options": {

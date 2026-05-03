@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_level_id')->constrained()->onDelete('cascade');
+            $table->foreignId('school_unit_id')->constrained()->onDelete('cascade');
             $table->string('name'); // e.g., IPA, IPS, RPL, TKJ
             $table->string('code')->nullable();
             $table->text('description')->nullable();

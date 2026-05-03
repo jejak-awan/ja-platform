@@ -51,16 +51,45 @@ export const useSchoolStore = defineStore('school', {
         },
 
         // Legacy aliases
-        async createSchool(data: School) {
-            return this.saveInstitution(data);
+        async createSchool(data: Partial<School>) {
+            this.loading = true;
+            try {
+                const response = await InstitutionService.createInstitution(data);
+                this.currentSchool = parseSingleResponse<School>(response);
+                if (this.currentSchool) {
+                    this.schools = [this.currentSchool];
+                    if (this.currentSchool.id) {
+                        localStorage.setItem('active_school_id', String(this.currentSchool.id));
+                    }
+                }
+                return this.currentSchool;
+            } catch (e: unknown) {
+                logger.error('Failed to create institution:', e);
+                throw e;
+            } finally {
+                this.loading = false;
+            }
         },
 
         async updateSchool(_id: number, data: School) {
             return this.saveInstitution(data);
         },
 
-        async deleteSchool(_id: number) {
-            logger.warning('Delete school called but not supported for singleton institution');
+        async deleteSchool(id: number) {
+            this.loading = true;
+            try {
+                await InstitutionService.deleteInstitution(id);
+                if (this.currentSchool?.id === id) {
+                    this.currentSchool = null;
+                    this.schools = [];
+                    localStorage.removeItem('active_school_id');
+                }
+            } catch (e: unknown) {
+                logger.error('Failed to delete institution:', e);
+                throw e;
+            } finally {
+                this.loading = false;
+            }
         },
 
         async saveInstitution(data: Partial<School>) {
@@ -68,6 +97,12 @@ export const useSchoolStore = defineStore('school', {
             try {
                 const response = await InstitutionService.updateInstitution(data);
                 this.currentSchool = parseSingleResponse<School>(response);
+                if (this.currentSchool) {
+                    this.schools = [this.currentSchool];
+                    if (this.currentSchool.id) {
+                        localStorage.setItem('active_school_id', String(this.currentSchool.id));
+                    }
+                }
                 return this.currentSchool;
             } catch (e: unknown) {
                 logger.error('Failed to save institution:', e);

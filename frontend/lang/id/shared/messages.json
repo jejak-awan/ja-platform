@@ -49,6 +49,7 @@
         "uploading": "Mengunggah..."
     },
     "noMapLocation": "Alamat belum lengkap untuk menampilkan peta.",
+    "addressNotSet": "Alamat belum diatur",
     "no_data": "Tidak ada data yang ditemukan",
     "select_node": "Pilih node...",
     "slugConflict": {

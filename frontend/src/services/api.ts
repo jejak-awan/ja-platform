@@ -148,9 +148,9 @@ api.interceptors.request.use(
         }
 
         // LEVEL CONTEXT: Inject active level ID for multi-tenancy scoping
-        const activeLevelId = localStorage.getItem('active_level_id');
-        if (activeLevelId) {
-            config.headers['X-Level-ID'] = activeLevelId;
+        const activeUnitId = localStorage.getItem('active_level_id');
+        if (activeUnitId) {
+            config.headers['X-Level-ID'] = activeUnitId;
         }
 
         // SCHOOL CONTEXT: Inject active school ID

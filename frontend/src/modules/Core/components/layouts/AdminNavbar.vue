@@ -52,8 +52,8 @@
           />
         </div>
                 
-        <!-- Level Switcher -->
-        <LevelSwitcher />
+        <!-- Unit Switcher -->
+        <UnitSwitcher />
 
         <!-- Notifications -->
         <DropdownMenu>
@@ -258,7 +258,7 @@ import { getResponseList } from '@/utils/responseParser';
 import Breadcrumbs from '@/modules/Core/components/layout/Breadcrumbs.vue';
 import DarkModeToggle from '@/components/shared/DarkModeToggle.vue';
 import GlobalSearch from '@/components/shared/GlobalSearch.vue';
-import LevelSwitcher from '@/modules/School/components/LevelSwitcher.vue';
+import UnitSwitcher from '@/modules/School/components/UnitSwitcher.vue';
 
 import Menu from 'lucide-vue-next/dist/esm/icons/menu.js';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';

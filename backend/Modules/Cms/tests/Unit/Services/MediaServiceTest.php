@@ -342,12 +342,12 @@ class MediaServiceTest extends TestCase
 
     public function test_delete_variants_verified()
     {
-        $media = Media::factory()->create(['path' => 'media/test.jpg', 'file_name' => 'test.jpg', 'disk' => 'public']);
+        $media = Media::factory()->create(['path' => 'cms/media/test.jpg', 'file_name' => 'test.jpg', 'disk' => 'public']);
         $fileName = 'test';
-        $thumb = 'media/thumbnails/'.$fileName.'_thumb.jpg';
-        $sizedSmall = 'media/small/test.jpg';
-        $sizedMedium = 'media/medium/test.jpg';
-        $sizedLarge = 'media/large/test.jpg';
+        $thumb = 'cms/media/thumbnails/'.$fileName.'_thumb.jpg';
+        $sizedSmall = 'cms/media/small/test.jpg';
+        $sizedMedium = 'cms/media/medium/test.jpg';
+        $sizedLarge = 'cms/media/large/test.jpg';
 
         Storage::disk('public')->put($thumb, '');
         Storage::disk('public')->put($sizedSmall, '');

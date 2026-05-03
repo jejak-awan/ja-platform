@@ -1,42 +1,54 @@
 <template>
   <div class="space-y-8 animate-in fade-in duration-700">
-    <!-- Header: Clean & Professional -->
-    <div class="p-8 rounded-xl bg-card border border-border/50 shadow-sm">
-      <h1 class="text-3xl font-bold tracking-tight text-foreground">
-        {{ t('features.school.teacher_dashboard.welcome', { name: authStore.user?.name }) }}
-      </h1>
-      <p class="text-muted-foreground mt-2 text-lg">
-        {{ t('features.school.teacher_dashboard.subtitle') }}
-      </p>
+    <!-- Header: Clean & Standard -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 px-2">
+      <div>
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <LucideIcon
+              name="UserCog"
+              class="w-5 h-5 text-primary"
+            />
+          </div>
+          <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
+            {{ t('features.school.teacher_dashboard.welcome', { name: authStore.user?.name }) }}
+          </h1>
+        </div>
+        <p class="text-muted-foreground text-sm font-medium">
+          {{ t('features.school.teacher_dashboard.subtitle') }}
+        </p>
+      </div>
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-2">
       <Card
         v-for="stat in stats"
         :key="stat.key"
-        class="bg-card border-border/40 shadow-none hover:bg-accent/5 transition-colors"
+        class="border-border/40 bg-card shadow-none rounded-xl hover:bg-muted/30 transition-all duration-300 group"
       >
-        <CardContent class="p-6 flex items-center space-x-4">
-          <div :class="['p-3 rounded-xl bg-opacity-10', stat.colorClass]">
-            <LucideIcon
-              :name="stat.icon"
-              :class="['w-5 h-5', stat.iconClass]"
-            />
-          </div>
-          <div>
-            <p class="text-sm font-medium text-muted-foreground">
-              {{ t('features.school.teacher_dashboard.stats.' + stat.key) }}
-            </p>
-            <h3 class="text-2xl font-bold">
-              {{ stat.value }}
-            </h3>
+        <CardContent class="p-6">
+          <div class="flex items-start justify-between">
+            <div class="space-y-1">
+              <p class="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                {{ t('features.school.teacher_dashboard.stats.' + stat.key) }}
+              </p>
+              <p class="text-3xl font-black text-foreground">
+                {{ stat.value }}
+              </p>
+            </div>
+            <div :class="['p-2.5 rounded-xl transition-transform group-hover:scale-110', stat.colorClass.replace('bg-', 'bg-').concat('/10'), stat.iconClass]">
+              <LucideIcon
+                :name="stat.icon"
+                class="w-5 h-5"
+              />
+            </div>
           </div>
         </CardContent>
       </Card>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 px-2">
       <!-- Main Content Area -->
       <div class="lg:col-span-2 space-y-8">
         <!-- Schedule / Active Lessons -->
@@ -192,7 +204,8 @@ import {
   Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter,
   Button, LucideIcon, Badge
 } from '@/components/ui';
-import axios from 'axios';
+import api from '@/services/api';
+import { parseResponse } from '@/utils/responseParser';
 import dayjs from 'dayjs';
 
 const { t } = useI18n();
@@ -201,9 +214,9 @@ const loading = ref(true);
 
 const stats = ref([
   { key: 'totalClasses', label: 'Total Kelas', value: '0', icon: 'School', colorClass: 'bg-primary', iconClass: 'text-primary' },
-  { key: 'activeStudents', label: 'Siswa Aktif', value: '0', icon: 'Users', colorClass: 'bg-success', iconClass: 'text-success' },
-  { key: 'submittedJournals', label: 'Jurnal Masuk', value: '0', icon: 'BookMarked', colorClass: 'bg-info', iconClass: 'text-info' },
-  { key: 'gradingQueue', label: 'Koreksi Nilai', value: '0', icon: 'FileCheck', colorClass: 'bg-warning', iconClass: 'text-warning' },
+  { key: 'activeStudents', label: 'Siswa Aktif', value: '0', icon: 'Users', colorClass: 'bg-emerald-500', iconClass: 'text-emerald-500' },
+  { key: 'submittedJournals', label: 'Jurnal Masuk', value: '0', icon: 'BookMarked', colorClass: 'bg-blue-500', iconClass: 'text-blue-500' },
+  { key: 'gradingQueue', label: 'Koreksi Nilai', value: '0', icon: 'FileCheck', colorClass: 'bg-orange-500', iconClass: 'text-orange-500' },
 ]);
 
 const todaySchedules = ref<any[]>([]);
@@ -213,19 +226,19 @@ const fetchData = async () => {
     loading.value = true;
     try {
         const [statsRes, schedulesRes, journalsRes] = await Promise.all([
-            axios.get('/api/v1/admin/teacher/dashboard-stats'),
-            axios.get('/api/v1/admin/teacher/schedules', { params: { day: dayjs().format('dddd') } }),
-            axios.get('/api/v1/admin/teacher/recent-journals')
+            api.get('/admin/teacher/dashboard-stats'),
+            api.get('/admin/teacher/schedules', { params: { day: dayjs().format('dddd') } }),
+            api.get('/admin/teacher/recent-journals')
         ]);
 
-        const s = statsRes.data.data;
+        const s = parseResponse(statsRes).data as any;
         if (stats.value[0]) stats.value[0].value = String(s.total_classes || 0);
         if (stats.value[1]) stats.value[1].value = String(s.active_students || 0);
         if (stats.value[2]) stats.value[2].value = String(s.journals_count || 0);
         if (stats.value[3]) stats.value[3].value = String(s.grading_queue || 0);
 
-        todaySchedules.value = schedulesRes.data.data || [];
-        recentJournals.value = journalsRes.data.data || [];
+        todaySchedules.value = parseResponse(schedulesRes).data || [];
+        recentJournals.value = parseResponse(journalsRes).data || [];
 
     } catch (error) {
         console.error('Failed to fetch teacher dashboard data', error);

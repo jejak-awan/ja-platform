@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('school_levels', function (Blueprint $table) {
+        Schema::create('school_units', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
             $table->string('level'); // SD, SMP, SMA, SMK, etc.
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('school_levels');
+        Schema::dropIfExists('school_units');
     }
 };

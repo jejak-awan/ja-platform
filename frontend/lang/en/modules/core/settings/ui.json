@@ -18,6 +18,18 @@
         "system": "System"
     },
     "groups": {
+        "license": {
+            "title": "License & Service",
+            "description": "Status of platform license and service integration."
+        },
+        "brand": {
+            "title": "Application Identity (Whitelabel)",
+            "description": "Customize platform branding for admin and system."
+        },
+        "school": {
+            "title": "Institution Identity (Public)",
+            "description": "Institution identity for public portal and landing page."
+        },
         "ai": {
             "title": "AI Assistance",
             "description": "Configure AI features for content generation.",
@@ -37,10 +49,6 @@
             "using_model": "Using: {model}",
             "connection_success": "Connection successful",
             "fetch_success": "Models fetched successfully"
-        },
-        "brand": {
-            "title": "Application Identity",
-            "description": "Logo, favicon, and admin email for the application dashboard"
         },
         "siteInfo": {
             "title": "Site Information",

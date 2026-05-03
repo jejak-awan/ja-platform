@@ -2,14 +2,14 @@
   <TooltipProvider :delay-duration="400">
     <div
       v-if="editor"
-      class="editor-toolbar bg-card/30 flex flex-col"
+      class="editor-toolbar bg-transparent flex flex-col"
     >
       <Tabs
         v-model="activeTab"
         class="w-full flex flex-col"
       >
         <!-- Tabs Header -->
-        <div class="flex items-center justify-between px-3 py-1.5 bg-muted/10 h-10 shrink-0">
+        <div class="flex items-center justify-between px-3 py-1.5 bg-muted/5 h-10 shrink-0">
           <TabsList class="bg-muted/40 h-7 p-1 gap-1 rounded-md">
             <TabsTrigger
               value="home"
@@ -131,7 +131,7 @@
 
         <!-- Tab Content (Ribbon Content) -->
         <!-- ... existing content ... -->
-        <div class="bg-background flex-1 border-t border-border/10 overflow-x-auto custom-scrollbar">
+        <div class="bg-background flex-1 overflow-x-auto custom-scrollbar">
           <!-- ... tabs content ... -->
           <TabsContent
             value="home"

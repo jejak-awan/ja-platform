@@ -10,12 +10,14 @@
         "institutionNameHint": "Use full formal name (e.g., SMP NEGERI 1 JAKARTA or YAYASAN PENDIDIKAN ABC). Provide the official name for your educational institution.",
         "institutionNamePlaceholder": "Enter official name...",
         "levelSubtitle": "Select one starting level for registration.",
-        "levelTitle": "Select School Level",
+        "levelTitle": "Select School Unit",
         "locationSubtitle": "Determine the number of operational locations.",
         "locationTitle": "Institution Location",
         "lockedByName": "Locked by Name Analysis",
-        "onlyForFoundations": "Only for Foundations",
-        "statusSubtitle": "Determine your institution legal status. Options are locked based on name analysis.",
+        "onlyForPrivate": "Only for Private Schools",
+        "statusNegeriDesc": "Government-owned schools (SDN, SMPN, etc). Fixed Single-Unit and Single-Location.",
+        "statusSwastaDescCombined": "Schools under Foundation or Independent management. Supports Multi-Unit and Multi-Location.",
+        "statusSubtitle": "Determine your institution legal status. System locks options based on name analysis.",
         "statusTitle": "Institution Status"
     },
     "options": {

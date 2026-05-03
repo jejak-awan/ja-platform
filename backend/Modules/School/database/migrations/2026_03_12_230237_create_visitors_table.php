@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('visitors', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('school_id');
-            $table->unsignedBigInteger('school_level_id');
+            $table->unsignedBigInteger('school_unit_id');
             $table->string('name');
             $table->string('phone')->nullable();
             $table->string('institution')->nullable();
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade');
-            $table->foreign('school_level_id')->references('id')->on('school_levels')->onDelete('cascade');
+            $table->foreign('school_unit_id')->references('id')->on('school_units')->onDelete('cascade');
         });
     }
 

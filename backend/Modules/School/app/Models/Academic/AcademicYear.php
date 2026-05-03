@@ -4,7 +4,7 @@ namespace Modules\School\Models\Academic;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\School\Traits\ScopedByLevel;
+use Modules\School\Traits\ScopedByUnit;
 use Modules\School\Models\Institution\School;
 
 /**
@@ -22,11 +22,11 @@ class AcademicYear extends Model
     protected $table = 'sch_acad_years';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByLevel;
+    use HasFactory, ScopedByUnit;
 
     protected $fillable = [
         'school_id',
-        'school_level_id',
+        'school_unit_id',
         'year',
         'is_active',
     ];

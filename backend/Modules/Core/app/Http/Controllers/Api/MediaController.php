@@ -16,8 +16,8 @@ class MediaController extends BaseApiController
         $query = Media::with(['folder', 'tags']);
 
         // Search
-        if ($request->filled('search')) {
-            $search = $request->input('search');
+        $search = $request->input('search');
+        if (is_string($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('file_name', 'like', "%{$search}%")
@@ -27,12 +27,18 @@ class MediaController extends BaseApiController
 
         // Filter by Module
         if ($request->filled('module')) {
-            $query->where('module', $request->input('module'));
+            $module = $request->input('module');
+            if (is_string($module)) {
+                $query->where('module', $module);
+            }
         }
 
         // Filter by Mime Type
         if ($request->filled('mime_type')) {
-            $query->where('mime_type', 'like', $request->input('mime_type') . '%');
+            $mimeType = $request->input('mime_type');
+            if (is_string($mimeType)) {
+                $query->where('mime_type', 'like', $mimeType . '%');
+            }
         }
 
         // Handle Trashed
@@ -42,7 +48,8 @@ class MediaController extends BaseApiController
             $query->withTrashed();
         }
 
-        $perPage = (int) $request->input('per_page', 30);
+        $perPageValue = $request->input('per_page', 30);
+        $perPage = is_numeric($perPageValue) ? (int) $perPageValue : 30;
         $media = $query->latest()->paginate($perPage);
 
         return $this->success($media, 'Global media retrieved successfully');

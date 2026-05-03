@@ -1,4 +1,6 @@
 {
+    "multiLevel": "Multi-Jenjang",
+    "singleLevel": "Single-Jenjang",
     "addLevel": "Tambah Jenjang Baru",
     "contactHeader": "Kontak Utama",
     "deleteConfirm": "PERINGATAN: Menghapus lembaga akan menghapus seluruh data terkait (Jenjang, Siswa, Guru, dll). Lanjutkan?",
@@ -15,8 +17,7 @@
     "setupNow": "Setup Lembaga Sekarang",
     "status": {
         "negeri": "Sekolah Negeri",
-        "swasta": "Sekolah Swasta / Independen",
-        "yayasan": "Yayasan / Group",
+        "swasta": "Sekolah Swasta / Yayasan",
         "public": "Sekolah Negeri",
         "private": "Sekolah Swasta",
         "undefined": "Status Belum Ditentukan"

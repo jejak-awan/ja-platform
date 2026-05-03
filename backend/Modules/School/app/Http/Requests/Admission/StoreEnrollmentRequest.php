@@ -13,7 +13,7 @@ class StoreEnrollmentRequest extends FormRequest
     {
         return [
             'school_id' => 'required|exists:sch_ins_schools,id',
-            'school_level_id' => 'required|exists:sch_ins_levels,id',
+            'school_unit_id' => 'required|exists:sch_ins_levels,id',
             'academic_year_id' => 'required|exists:sch_acad_years,id',
             'full_name' => 'required|string|max:255',
             'gender' => 'nullable|string',

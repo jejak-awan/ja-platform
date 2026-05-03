@@ -121,7 +121,7 @@ return new class extends Migration
 
         Schema::create('content_custom_fields', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('content_id')->constrained('contents')->onDelete('cascade');
+            $table->unsignedBigInteger('content_id')->index();
             $table->foreignId('custom_field_id')->constrained('custom_fields')->onDelete('cascade');
             $table->text('value')->nullable();
             $table->timestamps();
@@ -200,7 +200,7 @@ return new class extends Migration
             $table->text('excerpt_template')->nullable();
             $table->json('default_fields')->nullable();
             $table->json('meta')->nullable();
-            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
+            $table->unsignedBigInteger('category_id')->nullable()->index();
             $table->boolean('is_active')->default(true);
             $table->integer('usage_count')->default(0);
             $table->foreignId('author_id')->nullable()->constrained('users')->nullOnDelete();

@@ -3,7 +3,7 @@
 namespace Modules\School\Services\Institution;
 
 use Modules\School\Models\Institution\School;
-use Modules\School\Models\Institution\SchoolLevel;
+use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\Student\Student;
 use Modules\School\Models\HR\Staff;
 use Modules\School\Models\Academic\StudyGroup;
@@ -35,7 +35,7 @@ class InstitutionService
         $school = School::create($schoolData);
 
         // Auto-create initial level if single-level or if initial_level is provided
-        if (!$school->is_multi_level || isset($data['initial_level'])) {
+        if (!$school->is_multi_unit || isset($data['initial_level'])) {
             $initialLevel = $data['initial_level'] ?? 'smk';
             $initialLevelName = $data['initial_level_name'] ?? $school->name;
             $school->levels()->create([
@@ -131,10 +131,10 @@ class InstitutionService
 
             $status = [
                 'school_profile' => !empty($school->npsn) && !empty($school->address),
-                'school_levels' => $levelIds->count() > 0,
+                'school_units' => $levelIds->count() > 0,
                 'academic_year' => $school->activeAcademicYear !== null,
                 'semesters' => $school->activeAcademicYear?->semesters->count() > 0,
-                'departments' => Department::whereIn('school_level_id', $levelIds)->count() > 0,
+                'departments' => Department::whereIn('school_unit_id', $levelIds)->count() > 0,
                 'study_groups' => StudyGroup::where('school_id', $schoolId)->count() > 0,
             ];
 

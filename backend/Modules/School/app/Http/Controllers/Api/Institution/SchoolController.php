@@ -79,6 +79,20 @@ class SchoolController extends BaseController
     }
 
     /**
+     * Update the singleton institution (first school found).
+     */
+    public function updateSingleton(UpdateSchoolRequest $request): \Illuminate\Http\JsonResponse
+    {
+        /** @var School|null $school */
+        $school = School::first();
+        if (!$school) {
+            return $this->sendError('School not found', [], 404);
+        }
+
+        return $this->update($request, $school);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(School $school): \Illuminate\Http\JsonResponse

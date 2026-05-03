@@ -1,0 +1,49 @@
+{
+    "add": "Add Unit",
+    "branchLocation": "Unit Location & Contact",
+    "branchLocationDesc": "Determine if this unit uses the primary address or a different one.",
+    "delete": "Delete Unit",
+    "deleteConfirm": "Delete this unit? All related data (students, classes) in this unit will be affected.",
+    "deleteStrictAction": "Yes, Delete Unit",
+    "deleteStrictConfirmPrompt": "Please type the unit name below to confirm deletion:",
+    "deleteStrictPlaceholder": "Type the exact unit name",
+    "deleteStrictTitle": "Permanently Delete Unit",
+    "deleteStrictWarning": "This action is PERMANENT and will delete all data related to this unit (Students, Teachers, Schedules, etc). Data cannot be recovered.",
+    "deleteSuccess": "Unit deleted successfully",
+    "edit": "Edit Unit",
+    "empty": "No units added yet.",
+    "emptyAction": "Add Now",
+    "errors": {
+        "nameRequired": "Unit name is required"
+    },
+    "form": {
+        "addTitle": "Add Unit",
+        "name": "Unit Name",
+        "namePlaceholder": "Example: SMK TI AZZAHRA",
+        "npsn": "Unit NPSN",
+        "npsnPlaceholder": "Example: 12345678",
+        "save": "Save Unit",
+        "saving": "Saving...",
+        "type": "Educational Level",
+        "typePlaceholder": "Select educational level"
+    },
+    "sections": {
+        "legality": "Legality & Finance",
+        "legalityDesc": "Establishment, operational licenses, and bank account info.",
+        "location": "Location & Contact",
+        "locationDesc": "Operational address and unit contact information.",
+        "profile": "Profile & History",
+        "profileDesc": "Vision, mission, history, and leadership information."
+    },
+    "selectPrompt": "Select a unit on the left to manage its identity.",
+    "singleUnitInfo": {
+        "addTitle": "Add Unit Unit",
+        "description": "Your institution is set as <b>Single-Unit</b>. The primary unit unit has been created and is ready to be managed. If you are a Foundation with multiple units, please activate Multi-Unit mode in settings.",
+        "editDetail": "Change Unit Details",
+        "title": "Unit Unit Registered"
+    },
+    "subtitle": "Manage various educational units (Elementary, Junior High, Senior High, Vocational) in your institution.",
+    "title": "Unit Management",
+    "updateData": "Update Unit Data",
+    "updateSuccess": "Unit data updated successfully"
+}

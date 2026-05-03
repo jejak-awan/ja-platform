@@ -271,7 +271,7 @@ const fetchData = async (page = 1) => {
 
 const fetchFilters = async () => {
     try {
-        const lvRes = await InstitutionService.getLevels();
+        const lvRes = await InstitutionService.getUnits();
         await academicStore.fetchStudyGroups();
         levels.value = parseResponse(lvRes).data;
         groups.value = academicStore.studyGroups;

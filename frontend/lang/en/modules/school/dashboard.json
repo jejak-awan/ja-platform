@@ -8,7 +8,7 @@
         "completed": "Completed",
         "steps": {
             "school_profile": { "label": "School Profile", "desc": "Main school identity" },
-            "school_levels": { "label": "Education Levels", "desc": "SD, SMP, SMA, etc" },
+            "school_units": { "label": "Education Levels", "desc": "SD, SMP, SMA, etc" },
             "academic_year": { "label": "Academic Year", "desc": "Active academic calendar" },
             "semesters": { "label": "Semesters", "desc": "Odd / Even" },
             "departments": { "label": "Departments", "desc": "Student majors" },

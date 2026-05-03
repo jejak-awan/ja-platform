@@ -1,6 +1,12 @@
 {
     "descriptions": {
         "site_name": "The name of your application displayed throughout the site",
+        "app_name": "Custom name for this application instance",
+        "school_name": "Official name of the school or institution",
+        "school_address": "The physical address of the institution",
+        "school_phone": "Main contact phone number for the institution",
+        "license_type": "The tier or version of your active license",
+        "license_key": "Unique license identifier for support and updates",
         "site_logo": "The URL of your site's logo used for branding",
         "site_favicon": "Icon displayed in the browser tab",
         "site_description": "A brief description of your site for SEO and meta tags",

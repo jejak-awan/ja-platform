@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('maintenance_tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
-            $table->foreignId('school_level_id')->constrained()->onDelete('cascade');
+            $table->foreignId('school_unit_id')->constrained()->onDelete('cascade');
             $table->foreignId('school_asset_id')->constrained('school_assets')->onDelete('cascade');
             $table->foreignId('reported_by')->constrained('staff')->onDelete('cascade');
             $table->date('date_reported');

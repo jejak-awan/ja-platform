@@ -165,7 +165,7 @@ import PhoneCall from 'lucide-vue-next/dist/esm/icons/phone-call.js';
 
 const { getSetting } = useTheme();
 const { whatsAppAdminUrl } = useJanariIdentity();
-const schoolLevel = computed(() => (getSetting('school_level') as string) || 'smk');
+const schoolUnit = computed(() => (getSetting('school_unit') as string) || 'smk');
 
 const schoolName = computed(() => {
     const names: Record<string, string> = {
@@ -175,13 +175,13 @@ const schoolName = computed(() => {
         smk: 'SMK',
         gabungan: 'Yayasan'
     };
-    return names[schoolLevel.value] || 'Sekolah';
+    return names[schoolUnit.value] || 'Sekolah';
 });
 
 const activeIndex = ref<number | null>(null);
 
 const ppdbSteps = computed(() => (getSetting('ppdb_steps') as any[]) || [
-    { title: 'Daftar Akun', desc: `Isi formulir dasar untuk mendapatkan nomor registrasi ${schoolLevel.value.toUpperCase()} dan login.`, icon: 'UserPlus' },
+    { title: 'Daftar Akun', desc: `Isi formulir dasar untuk mendapatkan nomor registrasi ${schoolUnit.value.toUpperCase()} dan login.`, icon: 'UserPlus' },
     { title: 'Lengkapi Data', desc: 'Upload berkas (Rapor, KK, Akta) dan isi data lengkap keluarga.', icon: 'FileCheck' },
     { title: 'Seleksi Mandiri', desc: 'Ikuti tes minat bakat atau wawancara sesuai jadwal.', icon: 'BadgeCheck' },
     { title: 'Daftar Ulang', desc: 'Konfirmasi kelulusan dan lakukan pembayaran seragam/atribut.', icon: 'CreditCard' },

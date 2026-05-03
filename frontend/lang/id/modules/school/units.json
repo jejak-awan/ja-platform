@@ -1,0 +1,54 @@
+{
+    "add": "Tambah Unit",
+    "branchLocation": "Lokasi & Kontak Unit",
+    "branchLocationDesc": "Tentukan apakah unit ini menggunakan alamat utama atau alamat berbeda.",
+    "delete": "Hapus Unit",
+    "deleteConfirm": "Hapus unit ini? Semua data terkait (siswa, kelas) di unit ini akan terpengaruh.",
+    "deleteStrictAction": "Ya, Hapus Unit",
+    "deleteStrictConfirmPrompt": "Silakan ketik nama unit di bawah untuk mengonfirmasi penghapusan:",
+    "deleteStrictPlaceholder": "Ketik nama unit tepat sesuai di atas",
+    "deleteStrictTitle": "Hapus Unit Secara Permanen",
+    "deleteStrictWarning": "Tindakan ini PERMANEN dan akan menghapus semua data yang berkaitan dengan unit ini (Siswa, Guru, Jadwal, dll). Data tidak dapat dikembalikan.",
+    "deleteSuccess": "Unit berhasil dihapus",
+    "edit": "Ubah Unit",
+    "empty": "Belum ada unit ditambahkan.",
+    "emptyAction": "Tambah Sekarang",
+    "errors": {
+        "nameRequired": "Nama lembaga wajib diisi"
+    },
+    "hints": {
+        "editViaLevel": "Data ini dikelola di tingkat Unit/Unit"
+    },
+    "form": {
+        "addTitle": "Tambah Unit",
+        "addTitleLevel": "Tambah Unit Pendidikan",
+        "name": "Nama Unit",
+        "nameLevel": "Nama Unit",
+        "namePlaceholder": "Contoh: SMK TI AZZAHRA",
+        "npsn": "NPSN Unit",
+        "npsnPlaceholder": "Contoh: 12345678",
+        "save": "Simpan Unit",
+        "saving": "Menyimpan...",
+        "type": "Jenjang Pendidikan",
+        "typePlaceholder": "Pilih jenjang pendidikan"
+    },
+    "sections": {
+        "legality": "Legalitas & Keuangan",
+        "legalityDesc": "SK pendirian, operasional, dan informasi rekening bank.",
+        "location": "Lokasi & Kontak",
+        "locationDesc": "Alamat operasional dan informasi kontak unit.",
+        "profile": "Profil & Sejarah",
+        "profileDesc": "Visi, misi, sejarah, dan informasi pimpinan."
+    },
+    "selectPrompt": "Pilih unit di sebelah kiri untuk mengelola identitasnya.",
+    "singleLevelInfo": {
+        "addTitle": "Tambah Unit",
+        "description": "Lembaga Anda diatur sebagai <b>Single-Unit</b>. Unit unit utama telah dibuat dan siap dikelola. Jika Anda adalah Yayasan yang memiliki banyak unit, silakan aktifkan mode Multi-Unit di pengaturan.",
+        "editDetail": "Ubah Detail Unit",
+        "title": "Unit Telah Terdaftar"
+    },
+    "subtitle": "Kelola berbagai unit pendidikan (SD, SMP, SMA, SMK) di lembaga Anda.",
+    "title": "Manajemen Unit",
+    "updateData": "Perbarui Data Unit",
+    "updateSuccess": "Data unit berhasil diperbarui"
+}

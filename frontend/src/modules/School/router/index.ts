@@ -10,7 +10,7 @@ const schoolRoutes: RouteRecordRaw[] = [
     {
         path: 'schools',
         name: 'schools.index',
-        component: () => import('@/modules/School/views/admin/institution/InstitutionTabs.vue'),
+        component: () => import('@/modules/School/views/admin/institution/Institution.vue'),
         meta: { permission: 'view schools' },
     },
     {

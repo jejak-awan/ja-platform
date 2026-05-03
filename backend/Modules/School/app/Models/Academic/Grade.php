@@ -4,12 +4,12 @@ namespace Modules\School\Models\Academic;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\School\Traits\ScopedByLevel;
+use Modules\School\Traits\ScopedByUnit;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_level_id
+ * @property int $school_unit_id
  * @property int $student_id
  * @property int $subject_id
  * @property int $academic_year_id
@@ -40,13 +40,13 @@ use Modules\School\Traits\ScopedByLevel;
 class Grade extends Model
 {
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByLevel;
+    use HasFactory, ScopedByUnit;
 
     protected $table = 'sch_acad_grades';
 
     protected $fillable = [
         'school_id',
-        'school_level_id',
+        'school_unit_id',
         'student_id',
         'subject_id',
         'academic_year_id',

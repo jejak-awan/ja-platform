@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('school_levels', function (Blueprint $table) {
-            if (! Schema::hasColumn('school_levels', 'type')) {
+        Schema::table('school_units', function (Blueprint $table) {
+            if (! Schema::hasColumn('school_units', 'type')) {
                 $table->string('type')->default('smk')->after('school_id'); // sd, smp, sma, smk
             }
-            if (! Schema::hasColumn('school_levels', 'settings')) {
+            if (! Schema::hasColumn('school_units', 'settings')) {
                 $table->json('settings')->nullable()->after('name');
             }
-            if (! Schema::hasColumn('school_levels', 'npsn')) {
+            if (! Schema::hasColumn('school_units', 'npsn')) {
                 $table->string('npsn', 8)->nullable()->after('type');
             }
-            if (! Schema::hasColumn('school_levels', 'accreditation')) {
+            if (! Schema::hasColumn('school_units', 'accreditation')) {
                 $table->string('accreditation')->nullable()->after('npsn');
             }
         });
@@ -32,7 +32,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('school_levels', function (Blueprint $table) {
+        Schema::table('school_units', function (Blueprint $table) {
             $table->dropColumn(['type', 'settings', 'npsn', 'accreditation']);
         });
     }

@@ -55,7 +55,7 @@ class GradeController extends BaseController
     {
         $this->authorize('manage academic', Grade::class);
 
-        /** @var array{student_id: int, subject_id: int, academic_year_id: int, semester_id: int, daily_score?: float|null, mid_score?: float|null, final_score?: float|null, practice_score?: float|null, project_score?: float|null, portfolio_score?: float|null, description?: string|null, school_id?: int|null, school_level_id?: int|null} $validated */
+        /** @var array{student_id: int, subject_id: int, academic_year_id: int, semester_id: int, daily_score?: float|null, mid_score?: float|null, final_score?: float|null, practice_score?: float|null, project_score?: float|null, portfolio_score?: float|null, description?: string|null, school_id?: int|null, school_unit_id?: int|null} $validated */
         $validated = $request->validate([
             'student_id' => 'required|exists:sch_std_students,id',
             'subject_id' => 'required|exists:sch_acad_subjects,id',
@@ -72,10 +72,10 @@ class GradeController extends BaseController
 
         // Add context for school/level
         $contextSchoolId = Context::get('school_id');
-        $contextLevelId = Context::get('school_level_id');
+        $contextLevelId = Context::get('school_unit_id');
         
         $validated['school_id'] = is_numeric($contextSchoolId) ? (int)$contextSchoolId : null;
-        $validated['school_level_id'] = is_numeric($contextLevelId) ? (int)$contextLevelId : null;
+        $validated['school_unit_id'] = is_numeric($contextLevelId) ? (int)$contextLevelId : null;
 
         try {
             /** @var array<string, mixed> $gradeData */
@@ -104,7 +104,7 @@ class GradeController extends BaseController
         ]);
 
         $contextSchoolId = Context::get('school_id');
-        $contextLevelId = Context::get('school_level_id');
+        $contextLevelId = Context::get('school_unit_id');
         
         $schoolId = is_numeric($contextSchoolId) ? (int)$contextSchoolId : 1;
         $levelId = is_numeric($contextLevelId) ? (int)$contextLevelId : 1;
@@ -115,7 +115,7 @@ class GradeController extends BaseController
         $gradesData = array_map(function($g) use ($schoolId, $levelId) {
             /** @var array<string, mixed> $g */
             $g['school_id'] = $schoolId;
-            $g['school_level_id'] = $levelId;
+            $g['school_unit_id'] = $levelId;
             return $g;
         }, $rawGrades);
 

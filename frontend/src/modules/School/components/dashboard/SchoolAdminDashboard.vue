@@ -1,49 +1,62 @@
 <template>
-  <div class="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-1000 p-2">
-    <!-- Admin Hero Section: Clean & Modern -->
-    <div class="p-10 rounded-xl bg-card border border-border/50 shadow-sm overflow-hidden relative">
-      <div class="relative z-10 flex flex-col lg:flex-row justify-between items-center gap-10">
-        <div class="space-y-4 text-center lg:text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
-            <div class="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span class="text-[10px] font-bold text-primary/80">{{ $t('features.school.dashboard.v2.hero.badge') }}</span>
+  <div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Header Section: Clean & Standard -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 px-2">
+      <div>
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <LucideIcon
+              name="School"
+              class="w-5 h-5 text-primary"
+            />
           </div>
-          <h1 class="text-4xl font-bold tracking-tight leading-tight text-foreground">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
             {{ $t('features.school.dashboard.v2.hero.title') }}
           </h1>
-          <p class="text-muted-foreground max-w-xl text-lg leading-relaxed">
-            {{ $t('features.school.dashboard.v2.hero.subtitle') }}
-          </p>
-          <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
-            <Button class="rounded-xl h-12 px-8 shadow-sm">
-              {{ $t('features.school.dashboard.v2.hero.actions.reports') }}
-            </Button>
-            <Button
-              variant="outline"
-              class="rounded-xl h-12 px-6"
-            >
-              {{ $t('features.school.dashboard.v2.hero.actions.config') }}
-            </Button>
-          </div>
         </div>
+        <p class="text-muted-foreground text-sm font-medium">
+          {{ $t('features.school.dashboard.v2.hero.subtitle') }}
+        </p>
+      </div>
+      <div class="flex items-center gap-2">
+        <Button
+          variant="outline"
+          class="rounded-xl h-10 px-6 font-bold shadow-sm"
+          @click="$router.push({ name: 'schools.index' })"
+        >
+          <LucideIcon name="Settings" class="w-4 h-4 mr-2" />
+          {{ $t('features.school.dashboard.v2.hero.actions.config') }}
+        </Button>
+      </div>
+    </div>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div
-            v-for="(stat, idx) in adminQuickStats"
-            :key="idx" 
-            class="p-6 rounded-xl bg-muted/30 border border-border/40 flex flex-col items-center justify-center w-36 h-36 hover:bg-muted/50 transition-all duration-300 cursor-pointer group/stat"
-          >
-            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-3 group-hover/stat:scale-110 transition-transform text-primary">
+    <!-- Quick Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-2">
+      <Card
+        v-for="(stat, idx) in adminQuickStats"
+        :key="idx" 
+        class="border-border/40 bg-card shadow-none rounded-xl hover:bg-muted/30 transition-all duration-300 cursor-pointer group active:scale-[0.98]"
+        @click="$router.push({ name: stat.routeName })"
+      >
+        <CardContent class="p-6">
+          <div class="flex items-start justify-between">
+            <div class="space-y-1">
+              <p class="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                {{ stat.label }}
+              </p>
+              <p class="text-3xl font-black text-foreground">
+                {{ stat.value }}
+              </p>
+            </div>
+            <div class="p-2.5 rounded-xl bg-primary/10 text-primary group-hover:scale-110 transition-transform">
               <LucideIcon
                 :name="stat.icon"
                 class="w-5 h-5"
               />
             </div>
-            <span class="text-2xl font-bold tracking-tight leading-none text-foreground">{{ stat.value }}</span>
-            <span class="text-[10px] font-medium mt-1 text-center text-muted-foreground">{{ stat.label }}</span>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -155,10 +168,10 @@ const alertsList = ref<any[]>([]);
 const loading = ref(true);
 
 const adminQuickStats = computed(() => [
-  { label: t('features.school.stats.totalStudents'), value: statsData.value[0]?.value || '1.2k', icon: 'Users' },
-  { label: t('features.school.stats.totalStaff'), value: statsData.value[1]?.value || '86', icon: 'UserCog' },
-  { label: t('features.school.stats.studyGroups'), value: statsData.value[2]?.value || '32', icon: 'DoorOpen' },
-  { label: t('features.school.stats.assets'), value: statsData.value[3]?.value || '150', icon: 'Package' },
+  { label: t('features.school.stats.totalStudents'), value: statsData.value[0]?.value || '1.2k', icon: 'Users', routeName: 'students.index' },
+  { label: t('features.school.stats.totalStaff'), value: statsData.value[1]?.value || '86', icon: 'UserSquare', routeName: 'staff.index' },
+  { label: t('features.school.stats.studyGroups'), value: statsData.value[2]?.value || '32', icon: 'Layers', routeName: 'academic.index' },
+  { label: t('features.school.stats.assets'), value: statsData.value[3]?.value || '150', icon: 'Package', routeName: 'sarpras.index' },
 ]);
 
 interface Personnel {

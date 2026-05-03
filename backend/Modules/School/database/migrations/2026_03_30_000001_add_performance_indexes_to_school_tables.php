@@ -15,9 +15,9 @@ return new class extends Migration
         // Students table indexes
         Schema::table('sch_std_students', function (Blueprint $table) {
             $table->index('school_id', 'idx_students_school_id');
-            $table->index('school_level_id', 'idx_students_school_level_id');
+            $table->index('school_unit_id', 'idx_students_school_unit_id');
             $table->index('department_id', 'idx_students_department_id');
-            $table->index(['school_id', 'school_level_id'], 'idx_students_school_level');
+            $table->index(['school_id', 'school_unit_id'], 'idx_students_school_unit');
         });
 
         if (Schema::hasColumn('sch_std_students', 'status')) {
@@ -99,7 +99,7 @@ return new class extends Migration
     public function down(): void
     {
         $indexDrops = [
-            'sch_std_students' => ['idx_students_school_id', 'idx_students_school_level_id', 'idx_students_department_id', 'idx_students_school_level', 'idx_students_status', 'idx_students_school_status', 'idx_students_user_id'],
+            'sch_std_students' => ['idx_students_school_id', 'idx_students_school_unit_id', 'idx_students_department_id', 'idx_students_school_unit', 'idx_students_status', 'idx_students_school_status', 'idx_students_user_id'],
             'sch_hr_staff' => ['idx_staff_school_id', 'idx_staff_ptk_type', 'idx_staff_employment_status'],
 
             'sch_acad_schedules' => ['idx_schedules_staff_id', 'idx_schedules_study_group_id', 'idx_schedules_day', 'idx_schedules_staff_day', 'idx_schedules_group_day', 'idx_schedules_room_day'],

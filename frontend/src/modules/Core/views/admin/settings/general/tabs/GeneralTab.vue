@@ -213,8 +213,8 @@ const generalSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'license',
-            title: 'Lisensi & Layanan',
-            description: 'Status lisensi dan integrasi platform.',
+            title: t('features.settings.groups.license.title'),
+            description: t('features.settings.groups.license.description'),
             icon: ToolIcon,
             color: 'purple',
             keys: ['license_key', 'license_type'],
@@ -223,8 +223,8 @@ const generalSettingsGrouped = computed(() => {
         },
         {
             id: 'brand',
-            title: 'Identitas Aplikasi (Whitelabel)',
-            description: 'Sesuaikan branding platform admin dan sistem.',
+            title: t('features.settings.groups.brand.title'),
+            description: t('features.settings.groups.brand.description'),
             icon: BrandIcon,
             color: 'indigo',
             keys: ['app_name', 'brand_logo', 'brand_favicon', 'branding_display'],
@@ -233,8 +233,8 @@ const generalSettingsGrouped = computed(() => {
         },
         {
             id: 'school',
-            title: 'Identitas Lembaga (Public)',
-            description: 'Identitas sekolah untuk portal publik dan landing page.',
+            title: t('features.settings.groups.school.title'),
+            description: t('features.settings.groups.school.description'),
             icon: BrandIcon,
             color: 'emerald',
             keys: ['school_name', 'admin_email', 'school_address', 'school_phone'],

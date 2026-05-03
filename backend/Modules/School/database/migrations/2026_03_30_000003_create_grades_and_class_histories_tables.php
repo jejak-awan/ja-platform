@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sch_acad_grades', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_level_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
+            $table->foreignId('school_unit_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
             $table->foreignId('student_id')->constrained('sch_std_students')->onDelete('cascade');
             $table->foreignId('subject_id')->constrained('sch_acad_subjects')->onDelete('cascade');
             $table->foreignId('academic_year_id')->constrained('sch_acad_years')->onDelete('cascade');

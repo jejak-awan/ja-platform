@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('teaching_journals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
-            $table->foreignId('school_level_id')->constrained()->onDelete('cascade');
+            $table->foreignId('school_unit_id')->constrained()->onDelete('cascade');
             $table->foreignId('schedule_id')->constrained()->onDelete('cascade');
             $table->date('date');
             $table->string('topic');

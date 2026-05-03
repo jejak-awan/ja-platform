@@ -33,13 +33,17 @@ class DatabaseSeeder extends Seeder
         );
         $admin->assignRole('super-admin');
 
-        // 4. Studio Structure (Categories, Menus, Forms)
+        // 4. Module Seeders
+        $this->call(\Modules\Cms\Database\Seeders\CmsDatabaseSeeder::class);
+        $this->call(\Modules\School\Database\Seeders\SchoolDatabaseSeeder::class);
+
+        // 5. Studio Structure & Themes
+        app(\Modules\Cms\Services\ThemeService::class)->scanThemes();
         $this->call(\Modules\Cms\Database\Seeders\StudioSeeder::class);
 
-        // 4. Sample Data (Optional, for development)
+        // 6. Sample Data (Optional, for development)
         if (app()->environment('local', 'development', 'testing')) {
             $this->call(\Modules\Core\Database\Seeders\SampleDataSeeder::class);
-            // $this->call(ThemeContentSeeder::class); // Re-enable if you want theme-specific blocks
         }
 
         // 5. Sync Media Files

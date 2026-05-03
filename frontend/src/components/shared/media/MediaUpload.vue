@@ -101,6 +101,8 @@ import type { MediaConstraints, Media } from '@/types/cms/cms';
 const props = defineProps<{
     folderId?: number | string | null;
     constraints?: Partial<MediaConstraints>;
+    path?: string;
+    module?: string;
 }>();
 
 const emit = defineEmits<{
@@ -267,6 +269,14 @@ const uploadFile = async () => {
     
     if (props.folderId) {
         formData.append('folder_id', props.folderId.toString());
+    }
+
+    if (props.path) {
+        formData.append('path', props.path);
+    }
+
+    if (props.module) {
+        formData.append('module', props.module);
     }
 
     // Pass constraints to backend for double-checked validation

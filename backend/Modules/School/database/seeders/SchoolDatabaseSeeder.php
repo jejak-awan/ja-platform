@@ -12,12 +12,14 @@ class SchoolDatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            SchoolInfrastructureSeeder::class,
             SchoolRoleSeeder::class,
+            StaffSampleSeeder::class,
             SchoolSampleUserSeeder::class,
             AcademicInfrastructureSeeder::class,
-            LmsSeeder::class,
-            StaffSampleSeeder::class,
             StudentSampleSeeder::class,
+            LmsSeeder::class,
+            OsisSeeder::class,
         ]);
     }
 }

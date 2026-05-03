@@ -138,7 +138,7 @@
   "items": {
     "site_title": "Judul Situs",
     "site_title_hint": "Judul utama yang terlihat di tab browser dan mesin pencari.",
-    "school_level": "Jenjang Sekolah",
+    "school_unit": "Jenjang Sekolah",
     "school_status": "Status Sekolah (Negeri/Swasta)",
     "active_levels": "Jenjang Aktif",
     "active_levels_hint": "Pilih jenjang sekolah yang dikelola (untuk yayasan/gabungan).",

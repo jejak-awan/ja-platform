@@ -79,7 +79,7 @@ class SchoolRoleSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::findOrCreate($permission, 'web');
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
         // 2. Define Roles and Assign Relevant Permissions
@@ -90,6 +90,13 @@ class SchoolRoleSeeder extends Seeder
 
         $adminSekolah = Role::findOrCreate('admin-sekolah', 'web');
         $adminSekolah->syncPermissions($permissions);
+
+        // Foundation Leadership
+        $ketuaYayasan = Role::findOrCreate('ketua-yayasan', 'web');
+        $ketuaYayasan->syncPermissions($permissions);
+
+        $adminYayasan = Role::findOrCreate('admin-yayasan', 'web');
+        $adminYayasan->syncPermissions($permissions);
 
         // Specialized Admins
         $adminKurikulum = Role::findOrCreate('admin-kurikulum', 'web');

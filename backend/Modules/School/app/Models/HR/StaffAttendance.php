@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class StaffAttendance extends Model
 {
+    protected $table = 'sch_hr_attendances';
+
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
     use HasFactory;
 

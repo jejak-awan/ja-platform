@@ -23,7 +23,7 @@ class Semester extends Model
 
     protected $fillable = [
         'academic_year_id',
-        'school_level_id',
+        'school_unit_id',
         'type',
         'is_active',
     ];

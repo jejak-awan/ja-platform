@@ -26,7 +26,7 @@ return new class extends Migration
         Schema::create('study_groups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
-            $table->foreignId('school_level_id')->constrained()->onDelete('cascade');
+            $table->foreignId('school_unit_id')->constrained()->onDelete('cascade');
             $table->foreignId('department_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('academic_year_id')->constrained()->onDelete('cascade');
             $table->foreignId('homeroom_teacher_id')->nullable()->constrained('staff')->onDelete('set null');

@@ -19,28 +19,40 @@ We utilize two primary local partitions (defined in `config/filesystems.php`):
 | `core/` | User profiles (avatars), system public assets. |
 | `cms/` | Blog post images, banners. |
 | `lms/` | Course cover images, category thumbnails. |
+| `school/school_{id}/identity/` | Institution logo, header backgrounds. |
+| `school/school_{id}/level_{id}/identity/` | Unit-specific logos and branding. |
 
 ---
 
 ### B. Private Materials (`storage/app/private/`)
-*Course materials and student data. MUST go through LmsFileController.*
+*Course materials, staff documents, and student data. MUST go through respective secure controllers.*
 
-Structure pattern: `{module}/school_{id}/course_{id}/{type}/`
+Structure pattern: `{module}/school_{id}/[level_{id}]/{type}/`
 
-#### LMS Module Scope:
+#### 1. LMS Module Scope:
 | Path | Description |
 | :--- | :--- |
 | `lms/school_{id}/course_{id}/materials/` | Documents (PDF, Docx, PPT) for lessons. |
 | `lms/school_{id}/course_{id}/media/` | Private video/audio content. |
 | `lms/school_{id}/course_{id}/tasks/` | Student-submitted assignments. |
 
+#### 2. School Module Scope:
+| Path | Description |
+| :--- | :--- |
+| `school/school_{id}/hr/staff_{id}/` | Staff legal documents (CV, KTP, Certificates). |
+| `school/school_{id}/level_{id}/students/` | Student academic records, health docs. |
+| `school/school_{id}/level_{id}/operations/` | Operational reports, asset photos (private). |
+
 ---
 
 ## 3. Isolation Rules
 
-1. **No Cross-Course Leakage**: Every course has its own unique folder ID. 
-2. **Multi-Tenant (School) Scoping**: The top-level folder inside a module is the `school_id`.
-3. **Helper Method**: Use `LmsService::uploadCourseFile()` to ensure files are placed in the correct isolated directory.
+1. **No Cross-Entity Leakage**: Files must never be accessible across different `school_id` or `level_id` unless explicitly marked as shared.
+2. **Multi-Tenant Scoping**: The top-level folder inside a module MUST be the `school_id` (e.g., `school/school_1/...`).
+3. **Hierarchy Consistency**: Follow the folder naming pattern `school_{id}` and `level_{id}` to allow automated permission parsing in secure controllers.
+4. **Helper Methods**: 
+    - LMS: Use `LmsService::uploadCourseFile()`.
+    - School: Use `SchoolMediaHelper::getIsolatedPath()` (TODO) or standardized manual scoping.
 
 ## 4. Secure File Access (Streaming)
 

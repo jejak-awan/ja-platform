@@ -15,8 +15,8 @@
             "default": "JA-Platform",
             "category": "General"
         },
-        "school_level": {
-            "label": "School Level",
+        "school_unit": {
+            "label": "School Unit",
             "type": "select",
             "options": [
                 {
@@ -84,7 +84,7 @@
                 "smk"
             ],
             "category": "Education Info",
-            "description": "Specify which levels are managed if School Level is 'Gabungan'"
+            "description": "Specify which levels are managed if School Unit is 'Gabungan'"
         },
         "theme_style": {
             "label": "Theme Visual Style",

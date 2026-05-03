@@ -8,7 +8,7 @@
         "accreditationSubtitle": "Select latest official accreditation rank.",
         "autoOwnershipStatus": "Ownership status is automatically managed based on institution type.",
         "editNameViaWizard": "Institution name can only be changed through the settings wizard.",
-        "levelNameFormat": "Use official full name (e.g., TI Nurul Iman Vocational School).",
+        "levelNameFormat": "Use official full name (e.g., SMK TI Azzahra).",
         "npsnFormat": "NPSN must be 8 digits long.",
         "statusLocked": "Institution status is locked after initial setup."
     },

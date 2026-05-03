@@ -8,7 +8,7 @@
         "completed": "Selesai",
         "steps": {
             "school_profile": { "label": "Profil Sekolah", "desc": "Identitas utama sekolah" },
-            "school_levels": { "label": "Jenjang Pendidikan", "desc": "SD, SMP, SMA, dsb" },
+            "school_units": { "label": "Jenjang Pendidikan", "desc": "SD, SMP, SMA, dsb" },
             "academic_year": { "label": "Tahun Ajaran", "desc": "Kalender akademik aktif" },
             "semesters": { "label": "Semester", "desc": "Ganjil / Genap" },
             "departments": { "label": "Program Keahlian", "desc": "Jurusan siswa" },

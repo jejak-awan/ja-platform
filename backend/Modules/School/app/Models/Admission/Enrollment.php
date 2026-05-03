@@ -4,12 +4,12 @@ namespace Modules\School\Models\Admission;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\School\Traits\ScopedByLevel;
+use Modules\School\Traits\ScopedByUnit;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_level_id
+ * @property int $school_unit_id
  * @property int $academic_year_id
  * @property string $registration_number
  * @property string $full_name
@@ -25,7 +25,7 @@ use Modules\School\Traits\ScopedByLevel;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Modules\School\Models\Institution\School $school
- * @property-read \Modules\School\Models\Institution\SchoolLevel $level
+ * @property-read \Modules\School\Models\Institution\SchoolUnit $level
  * @property-read \Modules\School\Models\Academic\AcademicYear $academicYear
  * @property-read \Illuminate\Database\Eloquent\Collection<int, EnrollmentDocument> $documents
  * @property-read \Modules\School\Models\Student\Student|null $admittedStudent
@@ -35,11 +35,11 @@ class Enrollment extends Model
     protected $table = 'sch_adm_enrollments';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByLevel;
+    use HasFactory, ScopedByUnit;
 
     protected $fillable = [
         'school_id',
-        'school_level_id',
+        'school_unit_id',
         'academic_year_id',
         'registration_number',
         'full_name',
@@ -67,11 +67,11 @@ class Enrollment extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Institution\SchoolLevel, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Institution\SchoolUnit, $this>
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\SchoolLevel::class, 'school_level_id');
+        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'school_unit_id');
     }
 
     /**

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property string $name
  * @property string $type
- * @property bool $is_multi_level
+ * @property bool $is_multi_unit
  * @property bool $is_multi_branch
  * @property string|null $npsn
  * @property string|null $nss
@@ -44,6 +44,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $bank_account_number
  * @property string|null $bank_account_holder
  * @property string|null $foundation_name
+ * @property string|null $akta_pendirian_yayasan
+ * @property string|null $tgl_akta_pendirian_yayasan
+ * @property string|null $sk_kemenkumham
+ * @property string|null $tgl_sk_kemenkumham
+ * @property string|null $nib
  * @property string|null $principal_name
  * @property string|null $vision
  * @property string|null $mission
@@ -53,7 +58,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, SchoolLevel> $levels
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, SchoolUnit> $levels
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\School\Models\Academic\AcademicYear> $academicYears
  * @property-read \Modules\School\Models\Academic\AcademicYear|null $activeAcademicYear
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\School\Models\Student\Student> $students
@@ -77,7 +82,7 @@ class School extends Model
     protected $fillable = [
         'name',
         'type',
-        'is_multi_level',
+        'is_multi_unit',
         'is_multi_branch',
         'npsn',
         'nss',
@@ -109,6 +114,11 @@ class School extends Model
         'bank_account_number',
         'bank_account_holder',
         'foundation_name',
+        'akta_pendirian_yayasan',
+        'tgl_akta_pendirian_yayasan',
+        'sk_kemenkumham',
+        'tgl_sk_kemenkumham',
+        'nib',
         'principal_name',
         'vision',
         'mission',
@@ -118,11 +128,11 @@ class School extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<SchoolLevel, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<SchoolUnit, $this>
      */
     public function levels(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(SchoolLevel::class);
+        return $this->hasMany(SchoolUnit::class);
     }
 
     /**

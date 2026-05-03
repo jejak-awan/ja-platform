@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function run(): void
+    public function up(): void
     {
         // OSIS Work Programs (Proker)
         Schema::create('sch_osis_programs', function (Blueprint $blueprint) {

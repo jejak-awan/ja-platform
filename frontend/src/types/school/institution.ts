@@ -3,7 +3,7 @@ export interface School {
     npsn?: string;
     name: string;
     type: 'public' | 'private';
-    is_multi_level?: boolean;
+    is_multi_unit?: boolean;
     is_multi_branch?: boolean;
     level: string;
     address?: string;
@@ -18,7 +18,7 @@ export interface School {
     updated_at?: string;
 }
 
-export interface SchoolLevel {
+export interface SchoolUnit {
     id: number;
     school_id: number;
     name: string; // e.g., Grade 1, Grade 2

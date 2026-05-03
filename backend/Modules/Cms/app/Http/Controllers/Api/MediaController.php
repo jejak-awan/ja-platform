@@ -45,7 +45,8 @@ class MediaController extends BaseApiController
      */
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
-        $query = Media::where('module', 'cms')->with(['folder', 'usages', 'tags']);
+        $module = $request->input('module', 'cms');
+        $query = Media::where('module', $module)->with(['folder', 'usages', 'tags']);
 
         $user = $request->user();
         if (! $user) {
@@ -276,6 +277,8 @@ class MediaController extends BaseApiController
                 'caption' => 'nullable|string',
                 'alt' => 'nullable|string',
                 'tags' => 'nullable|array',
+                'path' => 'nullable|string',
+                'module' => 'nullable|string',
             ]));
 
             $file = $request->file('file');
@@ -338,6 +341,12 @@ class MediaController extends BaseApiController
         $optimizeRaw = $request->input('optimize', config('media.optimize', true));
         $optimize = (bool) $optimizeRaw;
 
+        $reqPath = $request->input('path');
+        $subPath = is_string($reqPath) ? $reqPath : null;
+
+        $reqModule = $request->input('module');
+        $module = is_string($reqModule) ? $reqModule : (is_string($reqPath) && str_starts_with($reqPath, 'school/') ? 'school' : 'cms');
+
         $media = $this->mediaService->upload(
             $file,
             $folderId,
@@ -348,7 +357,9 @@ class MediaController extends BaseApiController
                 'caption' => is_string($cap = $request->input('caption')) ? $cap : '',
                 'alt' => is_string($alt = $request->input('alt')) ? $alt : '',
                 'tags' => is_array($request->input('tags')) ? $request->input('tags') : [],
-            ]
+            ],
+            $subPath,
+            $module
         );
 
         ActivityLog::log('uploaded_media', $media, [], $user, "Uploaded media: {$media->name}");

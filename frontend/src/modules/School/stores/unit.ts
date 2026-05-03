@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import { parseResponse } from '@/utils/responseParser';
 import InstitutionService from '../services/InstitutionService';
-import type { SchoolLevel } from '@/types';
+import type { SchoolUnit } from '@/types';
 
-export interface LevelSettings {
+export interface UnitSettings {
     // Location
     use_primary_address?: boolean;
     address?: string;
@@ -31,9 +31,10 @@ export interface LevelSettings {
     mission?: string;
     goals?: string;
     history?: string;
-    kurikulum?: string;
     // Legal
     npwp?: string;
+    nss?: string;
+    nds?: string;
     sk_pendirian?: string;
     tgl_sk_pendirian?: string;
     sk_operasional?: string;
@@ -41,38 +42,42 @@ export interface LevelSettings {
     bank_name?: string;
     bank_account_number?: string;
     bank_account_holder?: string;
+    logo?: string;
+    logo_dinas?: string;
+    logo_yayasan?: string;
     [key: string]: any;
 }
 
-export interface ExtendedSchoolLevel extends SchoolLevel {
-    settings?: LevelSettings;
+export interface ExtendedSchoolUnit extends SchoolUnit {
+    settings?: UnitSettings;
 }
 
-export const useLevelStore = defineStore('level', {
+export const useUnitStore = defineStore('unit', {
     state: () => ({
-        levels: [] as SchoolLevel[],
+        levels: [] as SchoolUnit[],
         loading: false,
-        activeLevelId: localStorage.getItem('active_level_id') ? Number(localStorage.getItem('active_level_id')) : null as number | null,
+        activeUnitId: localStorage.getItem('active_level_id') ? Number(localStorage.getItem('active_level_id')) : null as number | null,
     }),
 
     getters: {
-        activeLevel: (state) => state.levels.find(l => l.id === state.activeLevelId) || null,
+        activeUnit: (state) => state.levels.find(l => l.id === state.activeUnitId) || null,
     },
 
     actions: {
-        async fetchLevels(_schoolId?: number) {
+        async fetchUnits(_schoolId?: number) {
             this.loading = true;
             try {
-                const response = await InstitutionService.getLevels();
-                const { data } = parseResponse<SchoolLevel>(response);
+                const response = await InstitutionService.getUnits(_schoolId);
+                const { data } = parseResponse<SchoolUnit>(response);
                 this.levels = data.map(l => ({
                     ...l,
                     settings: (l as any).settings || { use_primary_address: true }
-                } as ExtendedSchoolLevel));
+                } as ExtendedSchoolUnit));
 
-                if (!this.activeLevelId && this.levels.length > 0) {
-                    const firstId = this.levels[0]?.id;
-                    if (firstId !== undefined) this.setActiveLevel(firstId);
+                if (!this.activeUnitId && this.levels.length > 0) {
+                    const defaultLevel = this.levels.find(l => (l as any).settings?.is_default);
+                    const idToSet = defaultLevel?.id || this.levels[0]?.id;
+                    if (idToSet !== undefined) this.setActiveLevel(idToSet);
                 }
             } catch (e) {
                 console.error('[LevelStore] Failed to fetch levels:', e);
@@ -82,15 +87,16 @@ export const useLevelStore = defineStore('level', {
         },
 
         setActiveLevel(id: number) {
-            this.activeLevelId = id;
+            this.activeUnitId = id;
             localStorage.setItem('active_level_id', id.toString());
         },
 
-        async createLevel(payload: Partial<SchoolLevel>) {
+        async createUnit(payload: Partial<SchoolUnit>) {
             this.loading = true;
             try {
-                await InstitutionService.storeLevel(payload);
-                await this.fetchLevels();
+                const response = await InstitutionService.storeLevel(payload);
+                const schoolId = response.data?.school_id || payload.school_id;
+                await this.fetchUnits(schoolId);
             } catch (e) {
                 console.error('[LevelStore] Failed to create level:', e);
                 throw e;
@@ -99,11 +105,12 @@ export const useLevelStore = defineStore('level', {
             }
         },
 
-        async updateLevel(id: number, payload: Partial<SchoolLevel>) {
+        async updateUnit(id: number, payload: Partial<SchoolUnit>) {
             this.loading = true;
             try {
-                await InstitutionService.updateLevel(id, payload);
-                await this.fetchLevels();
+                const response = await InstitutionService.updateUnit(id, payload);
+                const schoolId = response.data?.school_id || payload.school_id;
+                if (schoolId) await this.fetchUnits(schoolId);
             } catch (e) {
                 console.error(`[LevelStore] Failed to update level ${id}:`, e);
                 throw e;
@@ -112,14 +119,14 @@ export const useLevelStore = defineStore('level', {
             }
         },
 
-        async deleteLevel(id: number) {
+        async deleteUnit(id: number) {
             this.loading = true;
             try {
-                await InstitutionService.deleteLevel(id);
+                await InstitutionService.deleteUnit(id);
                 this.levels = this.levels.filter(l => l.id !== id);
-                if (this.activeLevelId === id) {
+                if (this.activeUnitId === id) {
                     const firstLevelId = this.levels[0]?.id;
-                    this.activeLevelId = firstLevelId !== undefined ? firstLevelId : null;
+                    this.activeUnitId = firstLevelId !== undefined ? firstLevelId : null;
                 }
             } finally {
                 this.loading = false;

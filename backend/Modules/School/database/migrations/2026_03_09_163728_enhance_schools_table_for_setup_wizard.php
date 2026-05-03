@@ -15,8 +15,8 @@ return new class extends Migration
         // We often need to change it to string first or use raw SQL.
         Schema::table('schools', function (Blueprint $table) {
             $table->string('type')->default('swasta')->change();
-            if (! Schema::hasColumn('schools', 'is_multi_level')) {
-                $table->boolean('is_multi_level')->default(false)->after('type');
+            if (! Schema::hasColumn('schools', 'is_multi_unit')) {
+                $table->boolean('is_multi_unit')->default(false)->after('type');
             }
         });
     }
@@ -27,7 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('schools', function (Blueprint $table) {
-            $table->dropColumn('is_multi_level');
+            $table->dropColumn('is_multi_unit');
         });
     }
 };

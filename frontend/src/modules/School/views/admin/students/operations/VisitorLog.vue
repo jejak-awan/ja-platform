@@ -150,7 +150,7 @@ const handleCheckIn = async (formData: FormData) => {
     loading.value = true;
     try {
         formData.append('school_id', '1');
-        formData.append('school_level_id', '1');
+        formData.append('school_unit_id', '1');
         await OperationsService.checkInVisitor(formData);
         toast.success.action(t('features.school.operations.visitors.messages.registerSuccess'));
         dialogs.value.checkIn = false;

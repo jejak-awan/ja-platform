@@ -13,7 +13,7 @@ class CheckInVisitorRequest extends FormRequest
     {
         return [
             'school_id' => 'required|exists:sch_ins_schools,id',
-            'school_level_id' => 'required|exists:sch_ins_levels,id',
+            'school_unit_id' => 'required|exists:sch_ins_levels,id',
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'institution' => 'nullable|string|max:255',

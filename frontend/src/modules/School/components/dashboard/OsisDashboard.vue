@@ -1,42 +1,43 @@
 <template>
-  <div class="space-y-8 animate-in zoom-in-95 duration-700">
-    <!-- OSIS Header: Clean -->
-    <div class="p-8 rounded-xl bg-card border border-border/50 shadow-sm relative overflow-hidden group">
-      <div class="relative z-10">
-        <div class="flex items-center gap-3">
-          <div class="p-2.5 bg-primary/10 rounded-xl text-primary border border-primary/20">
+  <div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Header: Clean & Standard -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 px-2">
+      <div>
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
             <LucideIcon
               name="Shield"
-              class="w-6 h-6"
+              class="w-5 h-5 text-primary"
             />
           </div>
-          <h1 class="text-3xl font-bold tracking-tight text-foreground">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
             {{ t('features.school.osis.dashboard.title') }}
           </h1>
         </div>
-        <p class="text-muted-foreground mt-2 max-w-xl text-lg font-medium">
+        <p class="text-muted-foreground text-sm font-medium">
           {{ t('features.school.osis.dashboard.subtitle') }}
         </p>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-2">
       <Card
         v-for="stat in osisStats"
         :key="stat.key"
-        class="bg-card border-border/40 shadow-none rounded-xl"
+        class="border-border/40 bg-card shadow-none rounded-xl hover:bg-muted/30 transition-all duration-300 group"
       >
         <CardContent class="p-6">
-          <div class="flex justify-between items-start">
+          <div class="flex items-start justify-between">
             <div class="space-y-1">
-              <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+              <p class="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 {{ t('features.school.osis.stats.' + stat.key) }}
               </p>
-              <h3 class="text-3xl font-bold text-foreground">
+              <p class="text-3xl font-black text-foreground">
                 {{ stat.value }}
-              </h3>
+              </p>
             </div>
-            <div :class="['p-2 rounded-xl bg-opacity-10', stat.colorClass]">
+            <div :class="['p-2.5 rounded-xl transition-transform group-hover:scale-110', stat.colorClass.replace('text-', 'bg-').concat('/10'), stat.colorClass]">
               <LucideIcon
                 :name="stat.icon"
                 class="w-5 h-5"
@@ -162,7 +163,8 @@ import {
   Card, CardContent, CardHeader, CardTitle, CardDescription,
   Button, LucideIcon, Badge
 } from '@/components/ui';
-import axios from 'axios';
+import api from '@/services/api';
+import { parseResponse } from '@/utils/responseParser';
 import dayjs from 'dayjs';
 
 const { t } = useI18n();
@@ -181,17 +183,17 @@ const fetchData = async () => {
     loading.value = true;
     try {
         const [pRes, mRes, sRes, fRes] = await Promise.all([
-            axios.get('/api/v1/admin/osis/programs'),
-            axios.get('/api/v1/admin/osis/members'),
-            axios.get('/api/v1/admin/osis/suggestions'),
-            axios.get('/api/v1/admin/osis/finances')
+            api.get('/admin/osis/programs'),
+            api.get('/admin/osis/members'),
+            api.get('/admin/osis/suggestions'),
+            api.get('/admin/osis/finances')
         ]);
         
-        const programs = pRes.data.data || [];
+        const programs = parseResponse(pRes).data || [];
         stats.value.programs = programs.length;
         stats.value.completedPrograms = programs.filter((p: any) => p.status === 'completed').length;
-        stats.value.members = (mRes.data.data || []).length;
-        stats.value.suggestions = (sRes.data.data || []).filter((s: any) => s.status === 'pending').length;
+        stats.value.members = (parseResponse(mRes).data || []).length;
+        stats.value.suggestions = (parseResponse(sRes).data || []).filter((s: any) => s.status === 'pending').length;
         
         // Upcoming programs (planned/in_progress)
         upcomingPrograms.value = programs
@@ -199,12 +201,12 @@ const fetchData = async () => {
             .sort((a: any, b: any) => new Date(a.planned_date).getTime() - new Date(b.planned_date).getTime())
             .slice(0, 3);
 
-        recentSuggestions.value = (sRes.data.data || [])
+        recentSuggestions.value = (parseResponse(sRes).data || [])
             .filter((s: any) => s.status === 'pending')
             .slice(0, 2);
 
         // Budget calc
-        const finances = fRes.data.data || [];
+        const finances = parseResponse(fRes).data || [];
         const income = finances.filter((f: any) => f.type === 'income').reduce((acc: number, cur: any) => acc + Number(cur.amount), 0);
         const expense = finances.filter((f: any) => f.type === 'expense').reduce((acc: number, cur: any) => acc + Number(cur.amount), 0);
         stats.value.budget = income - expense;

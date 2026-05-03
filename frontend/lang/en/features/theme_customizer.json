@@ -137,7 +137,7 @@
   "items": {
     "site_title": "Site Title",
     "site_title_hint": "Main title seen in browser tabs and search engines.",
-    "school_level": "School Level",
+    "school_unit": "School Unit",
     "school_status": "School Type / Status",
     "active_levels": "Active Levels",
     "active_levels_hint": "Select school levels for combined foundation.",

@@ -1,6 +1,6 @@
 import api from '@/services/api';
 import type { AxiosResponse } from 'axios';
-import type { Staff, LeaveRequest, Shift, SalaryStructure, Payroll } from '@/types';
+import type { Staff, LeaveRequest, Shift } from '@/types';
 
 export const HRService = {
     async getStaff(params: Record<string, any> = {}): Promise<AxiosResponse<Staff[]>> {
@@ -53,7 +53,8 @@ export const HRService = {
         return api.delete(`admin/hr/shifts/${id}`);
     },
 
-    // Payroll
+    /* 
+    // Payroll & Salary (Disabled for BOS compliance)
     async getPayrolls(params: Record<string, any> = {}): Promise<AxiosResponse<Payroll[]>> {
         return api.get('admin/hr/payrolls', { params });
     },
@@ -61,18 +62,21 @@ export const HRService = {
     async getSalaryStructures(staffId: number | string): Promise<AxiosResponse<SalaryStructure[]>> {
         return api.get('admin/hr/salary-structures', { params: { staff_id: staffId } });
     },
+    */
 
     async storeLeave(data: Partial<LeaveRequest>): Promise<AxiosResponse<LeaveRequest>> {
         return api.post('admin/hr/leaves', data);
     },
 
+    /*
     async storeSalaryStructure(data: Partial<SalaryStructure>): Promise<AxiosResponse<SalaryStructure>> {
         return api.post('admin/hr/salary-structures', data);
     },
 
-    async generatePayroll(data: { period: string; school_id: number; school_level_id: number }): Promise<AxiosResponse<{ message: string; generated_count: number }>> {
+    async generatePayroll(data: { period: string; school_id: number; school_unit_id: number }): Promise<AxiosResponse<{ message: string; generated_count: number }>> {
         return api.post('admin/hr/payrolls/generate', data);
     }
+    */
 };
 
 export default HRService;

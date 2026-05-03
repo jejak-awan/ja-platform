@@ -13,7 +13,7 @@ return new class extends Migration
     {
         // Institution
         if (Schema::hasTable('schools')) Schema::rename('schools', 'sch_ins_schools');
-        if (Schema::hasTable('school_levels')) Schema::rename('school_levels', 'sch_ins_levels');
+        if (Schema::hasTable('school_units')) Schema::rename('school_units', 'sch_ins_levels');
 
         // Academic
         if (Schema::hasTable('academic_years')) Schema::rename('academic_years', 'sch_acad_years');
@@ -142,7 +142,7 @@ return new class extends Migration
         Schema::rename('sch_acad_semesters', 'semesters');
         Schema::rename('sch_acad_years', 'academic_years');
 
-        Schema::rename('sch_ins_levels', 'school_levels');
+        Schema::rename('sch_ins_levels', 'school_units');
         Schema::rename('sch_ins_schools', 'schools');
     }
 };

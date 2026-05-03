@@ -170,11 +170,11 @@ import api from '@/services/api';
 import { parseResponse } from '@/utils/responseParser';
 import { useToast } from '@/composables/useToast';
 import { useSchoolStore } from '@/modules/School/stores/school';
-import { useLevelStore } from '@/modules/School/stores/level';
+import { useUnitStore } from '@/modules/School/stores/unit';
 
 const toast = useToast();
 const schoolStore = useSchoolStore();
-const levelStore = useLevelStore();
+const unitStore = useUnitStore();
 
 const loading = ref(true);
 const submitLoading = ref(false);
@@ -222,7 +222,7 @@ const submitJournal = async () => {
    try {
       await api.post('/school/admin/academic/journals', {
          school_id: schoolStore.currentSchool?.id,
-         school_level_id: levelStore.activeLevelId,
+         school_unit_id: unitStore.activeUnitId,
          schedule_id: activeSchedule.value.id,
          date: journalForm.value.date,
          topic: journalForm.value.topic,

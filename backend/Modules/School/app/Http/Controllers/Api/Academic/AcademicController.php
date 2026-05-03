@@ -213,10 +213,10 @@ class AcademicController extends BaseController
     {
         $this->authorize('create', StudyGroup::class);
 
-        /** @var array{school_id: int, school_level_id: int, department_id?: int|null, academic_year_id: int, homeroom_teacher_id?: int|null, name: string} $validated */
+        /** @var array{school_id: int, school_unit_id: int, department_id?: int|null, academic_year_id: int, homeroom_teacher_id?: int|null, name: string} $validated */
         $validated = $request->validate([
             'school_id' => 'required|exists:sch_ins_schools,id',
-            'school_level_id' => 'required|exists:sch_ins_levels,id',
+            'school_unit_id' => 'required|exists:sch_ins_levels,id',
             'department_id' => 'nullable|exists:sch_acad_departments,id',
             'academic_year_id' => 'required|exists:sch_acad_years,id',
             'homeroom_teacher_id' => 'nullable|exists:sch_hr_staff,id',
@@ -236,9 +236,9 @@ class AcademicController extends BaseController
         $group = StudyGroup::findOrFail($id);
         $this->authorize('update', $group);
 
-        /** @var array{school_level_id: int, department_id?: int|null, academic_year_id: int, homeroom_teacher_id?: int|null, name: string} $validated */
+        /** @var array{school_unit_id: int, department_id?: int|null, academic_year_id: int, homeroom_teacher_id?: int|null, name: string} $validated */
         $validated = $request->validate([
-            'school_level_id' => 'required|exists:sch_ins_levels,id',
+            'school_unit_id' => 'required|exists:sch_ins_levels,id',
             'department_id' => 'nullable|exists:sch_acad_departments,id',
             'academic_year_id' => 'required|exists:sch_acad_years,id',
             'homeroom_teacher_id' => 'nullable|exists:sch_hr_staff,id',
@@ -317,9 +317,9 @@ class AcademicController extends BaseController
     {
         $this->authorize('create', Department::class);
 
-        /** @var array{school_level_id: int, name: string, code: string, description?: string|null} $validated */
+        /** @var array{school_unit_id: int, name: string, code: string, description?: string|null} $validated */
         $validated = $request->validate([
-            'school_level_id' => 'required|exists:sch_ins_levels,id',
+            'school_unit_id' => 'required|exists:sch_ins_levels,id',
             'name' => 'required|string|max:150',
             'code' => 'required|string|max:50',
             'description' => 'nullable|string',
@@ -336,9 +336,9 @@ class AcademicController extends BaseController
         $department = Department::findOrFail($id);
         $this->authorize('update', $department);
 
-        /** @var array{school_level_id: int, name: string, code: string, description?: string|null} $validated */
+        /** @var array{school_unit_id: int, name: string, code: string, description?: string|null} $validated */
         $validated = $request->validate([
-            'school_level_id' => 'required|exists:sch_ins_levels,id',
+            'school_unit_id' => 'required|exists:sch_ins_levels,id',
             'name' => 'required|string|max:150',
             'code' => 'required|string|max:50',
             'description' => 'nullable|string',

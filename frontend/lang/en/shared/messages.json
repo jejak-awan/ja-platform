@@ -49,6 +49,7 @@
         "uploading": "Uploading..."
     },
     "noMapLocation": "Address is incomplete to display map.",
+    "addressNotSet": "Address not set",
     "no_data": "No data found",
     "select_node": "Select node...",
     "slugConflict": {

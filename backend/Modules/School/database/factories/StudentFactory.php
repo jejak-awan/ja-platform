@@ -5,7 +5,7 @@ namespace Modules\School\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\School\Models\Student\Student;
 use Modules\School\Models\Institution\School;
-use Modules\School\Models\Institution\SchoolLevel;
+use Modules\School\Models\Institution\SchoolUnit;
 
 class StudentFactory extends Factory
 {
@@ -18,7 +18,7 @@ class StudentFactory extends Factory
 
         return [
             'school_id' => School::factory(),
-            'school_level_id' => null,
+            'school_unit_id' => null,
             'department_id' => null,
             'user_id' => null,
             'status' => 'active',
@@ -59,10 +59,10 @@ class StudentFactory extends Factory
         return $this->state(fn() => ['school_id' => $school->id]);
     }
 
-    public function forLevel(SchoolLevel $level): static
+    public function forLevel(SchoolUnit $level): static
     {
         return $this->state(fn() => [
-            'school_level_id' => $level->id,
+            'school_unit_id' => $level->id,
             'school_id' => $level->school_id,
         ]);
     }

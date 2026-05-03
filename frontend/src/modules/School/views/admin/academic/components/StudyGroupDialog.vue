@@ -16,7 +16,7 @@
           <Input
             id="name"
             v-model="form.name"
-            :placeholder="$t('features.school.levels.form.namePlaceholder')"
+            :placeholder="$t('features.school.units.form.namePlaceholder')"
             required
           />
         </div>
@@ -24,7 +24,7 @@
           <div class="space-y-2">
             <Label>{{ $t('common.labels.institutionStatus') }} <span class="text-destructive">*</span></Label>
             <Select
-              v-model="form.school_level_id"
+              v-model="form.school_unit_id"
               required
             >
               <SelectTrigger><SelectValue :placeholder="$t('features.school.academic.placeholders.selectLevel')" /></SelectTrigger>
@@ -120,7 +120,7 @@ const staff = ref<any[]>([]);
 
 const form = ref({
   name: '',
-  school_level_id: undefined as string | undefined,
+  school_unit_id: undefined as string | undefined,
   academic_year_id: undefined as string | undefined,
   homeroom_teacher_id: undefined as string | undefined,
 });
@@ -129,20 +129,20 @@ watch(() => props.initialData, (val) => {
   if (val) {
       form.value = { 
           name: val.name,
-          school_level_id: val.school_level_id ? String(val.school_level_id) : undefined,
+          school_unit_id: val.school_unit_id ? String(val.school_unit_id) : undefined,
           academic_year_id: val.academic_year_id ? String(val.academic_year_id) : undefined,
           homeroom_teacher_id: val.homeroom_teacher_id ? String(val.homeroom_teacher_id) : 'none',
       };
   }
   else {
-      form.value = { name: '', school_level_id: undefined, academic_year_id: undefined, homeroom_teacher_id: 'none' };
+      form.value = { name: '', school_unit_id: undefined, academic_year_id: undefined, homeroom_teacher_id: 'none' };
   }
 }, { immediate: true });
 
 const fetchMetadata = async () => {
     try {
         const [lRes, yRes, sRes] = await Promise.all([
-            InstitutionService.getLevels(),
+            InstitutionService.getUnits(),
             AcademicService.getAcademicYears(),
             HRService.getStaff({ per_page: 100, ptk_type: 'Guru Mapel' })
         ]);

@@ -1,0 +1,78 @@
+<?php
+
+namespace Modules\School\Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Modules\School\Models\Osis\OsisProgram;
+use Modules\School\Models\Osis\OsisMember;
+use Modules\School\Models\Osis\OsisSuggestion;
+use Modules\School\Models\Student\Student;
+
+class OsisSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $schoolId = 15;
+        $students = Student::where('school_id', $schoolId)->get();
+
+        if ($students->isEmpty()) {
+            return;
+        }
+
+        // 1. Seed Programs
+        $programs = [
+            [
+                'school_id' => $schoolId,
+                'name' => 'LDKS (Latihan Dasar Kepemimpinan Siswa)',
+                'description' => 'Pelatihan kepemimpinan untuk pengurus OSIS baru.',
+                'planned_date' => now()->addMonths(1),
+                'status' => 'planned',
+                'estimated_budget' => 5000000,
+            ],
+            [
+                'school_id' => $schoolId,
+                'name' => 'PORSENI 2024',
+                'description' => 'Pekan Olahraga dan Seni antar kelas.',
+                'planned_date' => now()->addMonths(3),
+                'status' => 'planned',
+                'estimated_budget' => 15000000,
+            ],
+        ];
+
+        foreach ($programs as $program) {
+            OsisProgram::updateOrCreate(['name' => $program['name'], 'school_id' => $schoolId], $program);
+        }
+
+        // 2. Seed Members
+        $positions = ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Bendahara'];
+        foreach ($positions as $index => $pos) {
+            if (isset($students[$index])) {
+                OsisMember::updateOrCreate(
+                    ['school_id' => $schoolId, 'student_id' => $students[$index]->id],
+                    ['position' => $pos, 'period' => '2023/2024']
+                );
+            }
+        }
+
+        // 3. Seed Suggestions
+        $suggestions = [
+            [
+                'school_id' => $schoolId,
+                'subject' => 'Fasilitas Kantin',
+                'content' => 'Mohon kebersihan kantin lebih diperhatikan lagi.',
+                'status' => 'pending',
+            ],
+            [
+                'school_id' => $schoolId,
+                'subject' => 'Ekskul Robotik',
+                'content' => 'Apakah bisa diadakan ekskul robotik di sekolah kita?',
+                'status' => 'reviewed',
+                'response' => 'Akan dipertimbangkan untuk tahun ajaran depan.',
+            ],
+        ];
+
+        foreach ($suggestions as $suggestion) {
+            OsisSuggestion::create($suggestion);
+        }
+    }
+}

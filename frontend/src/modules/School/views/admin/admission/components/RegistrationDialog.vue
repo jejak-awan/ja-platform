@@ -25,12 +25,12 @@
           <!-- Jenjang -->
           <div class="space-y-2 col-span-2 md:col-span-1">
             <Label>{{ $t('features.school.admission.labels.level') }} <span class="text-destructive">*</span></Label>
-            <Select v-model="form.school_level_id" required>
+            <Select v-model="form.school_unit_id" required>
               <SelectTrigger class="h-11 rounded-xl">
                 <SelectValue :placeholder="$t('features.school.admission.placeholders.selectLevel')" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem v-for="level in schoolLevels" :key="level.id" :value="String(level.id)">
+                <SelectItem v-for="level in schoolUnits" :key="level.id" :value="String(level.id)">
                   {{ level.name }}
                 </SelectItem>
               </SelectContent>
@@ -121,7 +121,7 @@ const { t } = useI18n();
 const toast = useToast();
 const loading = ref(false);
 const academicYears = ref<any[]>([]);
-const schoolLevels = ref<any[]>([]);
+const schoolUnits = ref<any[]>([]);
 
 const form = ref({
   full_name: '',
@@ -129,21 +129,21 @@ const form = ref({
   nisn: '',
   academic_year_id: '',
   school_id: 1,
-  school_level_id: ''
+  school_unit_id: ''
 });
 
 const fetchData = async () => {
   try {
     const [yearsRes, levelsRes] = await Promise.all([
       AcademicService.getAcademicYears(),
-      InstitutionService.getLevels()
+      InstitutionService.getUnits()
     ]);
     academicYears.value = parseResponse(yearsRes).data;
-    schoolLevels.value = parseResponse(levelsRes).data;
+    schoolUnits.value = parseResponse(levelsRes).data;
 
     // Auto select first level if available
-    if (schoolLevels.value.length > 0) {
-      form.value.school_level_id = String(schoolLevels.value[0].id);
+    if (schoolUnits.value.length > 0) {
+      form.value.school_unit_id = String(schoolUnits.value[0].id);
     }
   } catch (e) {
     console.error('Failed to fetch dialog data', e);

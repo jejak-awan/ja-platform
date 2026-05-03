@@ -100,8 +100,8 @@ class StaffAdvancedController extends BaseController
         return $this->sendResponse($leaveRequest, 'Leave status updated successfully.');
     }
 
-    // --- Salary Structures ---
-
+    /* 
+    // Salary Structures (Disabled for BOS compliance)
     public function salaryStructures(Request $request): \Illuminate\Http\JsonResponse
     {
         $query = SalaryStructure::with('staff');
@@ -117,7 +117,7 @@ class StaffAdvancedController extends BaseController
     {
         $validated = $request->validate([
             'school_id' => 'required|exists:schools,id',
-            'school_level_id' => 'required|exists:school_levels,id',
+            'school_unit_id' => 'required|exists:school_units,id',
             'staff_id' => 'required|exists:staff,id',
             'base_salary' => 'required|numeric|min:0',
             'transport_allowance' => 'nullable|numeric|min:0',
@@ -126,15 +126,16 @@ class StaffAdvancedController extends BaseController
         ]);
 
         $structure = SalaryStructure::updateOrCreate(
-            ['staff_id' => $validated['staff_id'], 'school_level_id' => $validated['school_level_id']],
+            ['staff_id' => $validated['staff_id'], 'school_unit_id' => $validated['school_unit_id']],
             $validated
         );
 
         return $this->sendResponse($structure, 'Salary structure saved successfully.');
     }
+    */
 
-    // --- Payrolls ---
-
+    /*
+    // Payrolls (Disabled for BOS compliance)
     public function payrolls(Request $request): \Illuminate\Http\JsonResponse
     {
         $query = Payroll::with('staff');
@@ -153,7 +154,7 @@ class StaffAdvancedController extends BaseController
     {
         $validated = $request->validate([
             'school_id' => 'required|exists:schools,id',
-            'school_level_id' => 'required|exists:school_levels,id',
+            'school_unit_id' => 'required|exists:school_units,id',
             'period' => 'required|string', // YYYY-MM
         ]);
 
@@ -187,7 +188,7 @@ class StaffAdvancedController extends BaseController
                 $totalAllowance = (float)$structure->transport_allowance + (float)$structure->meal_allowance + (float)$structure->other_allowance;
                 Payroll::create([
                     'school_id' => $validated['school_id'],
-                    'school_level_id' => $validated['school_level_id'],
+                    'school_unit_id' => $validated['school_unit_id'],
                     'staff_id' => $staff->id,
                     'period' => $validated['period'],
                     'basic_salary' => $structure->base_salary,
@@ -202,4 +203,5 @@ class StaffAdvancedController extends BaseController
 
         return $this->sendResponse([], "Successfully generated payroll for $count staff members with attendance-linked deductions.");
     }
+    */
 }

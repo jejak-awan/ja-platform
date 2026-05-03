@@ -20,6 +20,8 @@ export const ROLE_RANKS: Record<string, number> = {
     'superadmin': 100,
     'super_admin': 100,
     'supe_admin': 100,
+    'ketua-yayasan': 95,
+    'admin-yayasan': 95,
     'kepala-sekolah': 90,
     'admin-sekolah': 90,
     'admin-kurikulum': 85,

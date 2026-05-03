@@ -27,6 +27,7 @@ export interface User {
     location?: string | null;
     created_at?: string;
     updated_at?: string;
+    levels?: Array<{ id: number; name: string; level: string }>;
 }
 
 export interface AuthState {

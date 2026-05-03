@@ -1,10 +1,10 @@
 <template>
   <div
-    class="relative flex flex-col bg-card border border-border rounded-xl shadow-sm overflow-hidden"
+    class="relative flex flex-col bg-muted/10 border border-border/60 rounded-xl shadow-none overflow-hidden"
     @contextmenu="handleContextMenu"
   >
     <!-- Toolbar Component (Sticky) -->
-    <div class="sticky top-0 z-50 bg-card/80 backdrop-blur-sm border-b border-border/50">
+    <div class="sticky top-0 z-30 bg-background/30 backdrop-blur-sm border-b border-border/40">
       <Toolbar 
         v-if="editor" 
         :editor="editor" 
@@ -19,17 +19,18 @@
 
     <!-- Scrollable Content Area -->
     <div 
-      class="flex-1 overflow-y-auto"
+      class="relative overflow-auto border-b border-border/10 group/editor"
       :class="[
-        compact ? 'min-h-[200px] max-h-[400px]' : 'min-h-[500px] max-h-[calc(100vh-16rem)]',
-        'resize-y overflow-hidden'
+        compact ? 'min-h-[120px] max-h-[600px]' : 'min-h-[400px] max-h-[calc(100vh-16rem)]',
+        'resize-y'
       ]"
+      style="display: block; width: 100%;"
     >
       <!-- Editor Content (WYSIWYG View) -->
       <editor-content 
         v-show="!showHtmlView"
         :editor="editor" 
-        class="prose prose-sm sm:prose-base dark:prose-invert max-w-none focus:outline-none p-8 text-card-foreground" 
+        class="prose prose-sm sm:prose-base dark:prose-invert max-w-none focus:outline-none p-5 text-card-foreground" 
       />
 
       <!-- HTML Source View -->
@@ -258,7 +259,7 @@ const editor = useEditor({
     ],
     editorProps: {
         attributes: {
-            class: 'focus:outline-none min-h-[400px]',
+            class: 'focus:outline-none min-h-full',
         },
         handleDOMEvents: {
             dblclick: (_view, _event) => {
@@ -450,3 +451,18 @@ onBeforeUnmount(() => {
     editor.value?.destroy()
 })
 </script>
+
+<style scoped>
+.resize-y {
+  resize: vertical;
+  overflow: auto;
+}
+
+/* Custom resize handle visibility */
+.resize-y::-webkit-resizer {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-horizontal"><circle cx="12" cy="9" r="1"/><circle cx="19" cy="9" r="1"/><circle cx="5" cy="9" r="1"/><circle cx="12" cy="15" r="1"/><circle cx="19" cy="15" r="1"/><circle cx="5" cy="15" r="1"/></svg>');
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  opacity: 0.5;
+}
+</style>

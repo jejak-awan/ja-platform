@@ -15,7 +15,8 @@ class MediaFolderController extends BaseApiController
         try {
             $user = $request->user();
             /** @var \Modules\Core\Models\User|null $user */
-            $query = MediaFolder::query();
+            $module = $request->input('module', 'cms');
+            $query = MediaFolder::where('module', $module);
 
             // Scope logic
             if ($user && ! $user->can('manage media')) {
@@ -149,6 +150,7 @@ class MediaFolderController extends BaseApiController
                 'sort_order' => 'integer|min:0',
                 'author_id' => 'nullable|exists:users,id',
                 'is_shared' => 'sometimes|boolean',
+                'module' => 'nullable|string',
             ]);
 
             $name = is_string($validated['name']) ? $validated['name'] : '';
@@ -160,6 +162,10 @@ class MediaFolderController extends BaseApiController
             } else {
                 $validated['author_id'] = $user->id;
                 $validated['is_shared'] = false;
+            }
+
+            if (! isset($validated['module']) || empty($validated['module'])) {
+                $validated['module'] = 'cms';
             }
 
             // Ensure slug is unique within the same parent

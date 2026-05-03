@@ -166,13 +166,13 @@
               <div 
                 class="p-5 border-2 rounded-2xl transition-all flex items-start gap-4 active:scale-[0.98]"
                 :class="[
-                  form.type !== 'yayasan' ? 'opacity-40 cursor-not-allowed grayscale-[0.5] border-muted bg-muted/5' : (form.is_multi_branch ? 'border-primary bg-primary/5 shadow-md shadow-primary/5' : 'border-muted bg-muted/5 cursor-pointer hover:bg-primary/5')
+                  form.type !== 'swasta' ? 'opacity-40 cursor-not-allowed grayscale-[0.5] border-muted bg-muted/5' : (form.is_multi_branch ? 'border-primary bg-primary/5 shadow-md shadow-primary/5' : 'border-muted bg-muted/5 cursor-pointer hover:bg-primary/5')
                 ]"
-                @click="form.type === 'yayasan' && (form.is_multi_branch = true)"
+                @click="form.type === 'swasta' && (form.is_multi_branch = true)"
               >
                 <div 
                   class="p-3 rounded-xl shadow-sm border border-muted transition-colors"
-                  :class="form.is_multi_branch && form.type === 'yayasan' ? 'bg-primary text-white border-primary/20' : 'bg-white text-primary'"
+                  :class="form.is_multi_branch && form.type === 'swasta' ? 'bg-primary text-white border-primary/20' : 'bg-white text-primary'"
                 >
                   <LucideIcon
                     name="Network"
@@ -187,10 +187,10 @@
                     {{ $t('features.school.wizard.options.multiLocationDesc') }}
                   </div>
                   <div
-                    v-if="form.type !== 'yayasan'"
+                    v-if="form.type !== 'swasta'"
                     class="mt-2 text-[10px] font-bold text-primary/70 bg-primary/5 px-2 py-0.5 rounded w-fit uppercase"
                   >
-                    {{ $t('features.school.wizard.labels.onlyForFoundations') }}
+                    {{ $t('features.school.wizard.labels.onlyForPrivate') }}
                   </div>
                 </div>
               </div>
@@ -202,8 +202,8 @@
             v-if="step === 4"
             class="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500 text-left"
           >
-            <!-- Negeri / Swasta: select level directly -->
-            <template v-if="form.type === 'negeri' || form.type === 'swasta'">
+            <!-- Negeri: strictly select level directly -->
+            <template v-if="form.type === 'negeri'">
               <div class="space-y-1">
                 <h2 class="text-xl font-bold tracking-tight">
                   {{ $t('features.school.wizard.labels.levelTitle') }}
@@ -242,26 +242,26 @@
               </div>
             </template>
 
-            <!-- Foundation: choose single/multi level -->
+            <!-- Foundation / Swasta: choose single/multi level -->
             <template v-else>
               <div class="space-y-1">
                 <h2 class="text-xl font-bold tracking-tight">
-                  {{ $t('features.school.levels.title') }}
+                  {{ $t('features.school.units.title') }}
                 </h2>
                 <p class="text-sm text-muted-foreground">
-                  {{ $t('features.school.levels.subtitle') }}
+                  {{ $t('features.school.units.subtitle') }}
                 </p>
               </div>
 
               <div class="grid grid-cols-1 gap-4">
                 <div 
                   class="p-5 border-2 rounded-2xl cursor-pointer transition-all hover:bg-primary/5 flex items-start gap-4 active:scale-[0.98]"
-                  :class="!form.is_multi_level ? 'border-primary bg-primary/5 shadow-md shadow-primary/5' : 'border-muted bg-muted/5'"
-                  @click="form.is_multi_level = false"
+                  :class="!form.is_multi_unit ? 'border-primary bg-primary/5 shadow-md shadow-primary/5' : 'border-muted bg-muted/5'"
+                  @click="form.is_multi_unit = false"
                 >
                   <div 
                     class="p-3 rounded-xl shadow-sm border border-muted transition-colors"
-                    :class="!form.is_multi_level ? 'bg-primary text-white border-primary/20' : 'bg-white text-primary'"
+                    :class="!form.is_multi_unit ? 'bg-primary text-white border-primary/20' : 'bg-white text-primary'"
                   >
                     <LucideIcon
                       name="Layers"
@@ -273,19 +273,19 @@
                       {{ $t('common.labels.single_level') }}
                     </div>
                     <div class="text-xs text-muted-foreground mt-1 leading-relaxed">
-                      {{ $t('features.school.levels.singleLevelInfo.description') }}
+                      {{ $t('features.school.units.singleLevelInfo.description') }}
                     </div>
                   </div>
                 </div>
 
                 <div 
                   class="p-5 border-2 rounded-2xl cursor-pointer transition-all hover:bg-primary/5 flex items-start gap-4 active:scale-[0.98]"
-                  :class="form.is_multi_level ? 'border-primary bg-primary/5 shadow-md shadow-primary/5' : 'border-muted bg-muted/5'"
-                  @click="form.is_multi_level = true"
+                  :class="form.is_multi_unit ? 'border-primary bg-primary/5 shadow-md shadow-primary/5' : 'border-muted bg-muted/5'"
+                  @click="form.is_multi_unit = true"
                 >
                   <div 
                     class="p-3 rounded-xl shadow-sm border border-muted transition-colors"
-                    :class="form.is_multi_level ? 'bg-primary text-white border-primary/20' : 'bg-white text-primary'"
+                    :class="form.is_multi_unit ? 'bg-primary text-white border-primary/20' : 'bg-white text-primary'"
                   >
                     <LucideIcon
                       name="LayoutGrid"
@@ -297,7 +297,7 @@
                       {{ $t('common.labels.multi_level') }}
                     </div>
                     <div class="text-xs text-muted-foreground mt-1 leading-relaxed">
-                      {{ $t('features.school.levels.subtitle') }}
+                      {{ $t('features.school.units.subtitle') }}
                     </div>
                   </div>
                 </div>
@@ -417,7 +417,7 @@ const step = ref(1);
 const form = reactive({
   name: '',
   type: 'swasta',
-  is_multi_level: false,
+  is_multi_unit: false,
   is_multi_branch: false,
   initial_level: '' as string,
   initial_level_name: '' as string,
@@ -435,14 +435,12 @@ const detectedType = computed(() => {
   if (!form.name) return 'swasta';
   const nameLower = form.name.toLowerCase().trim();
   
-  // Rule: Starts with "yayasan"
-  if (nameLower.startsWith('yayasan')) return 'yayasan';
-  
   // Rule: Contains "negeri" keywords
   if (nameLower.includes('negeri') || /\b(sdn|smpn|sman|smkn)\b/.test(nameLower)) {
     return 'negeri';
   }
   
+  // Everything else is swasta (including those starting with "yayasan")
   return 'swasta';
 });
 
@@ -459,8 +457,8 @@ watch(() => form.name, (newName) => {
   // Update type automatically
   form.type = detectedType.value;
   
-  // Reset multi-branch if not yayasan
-  if (form.type !== 'yayasan') {
+  // Reset multi-branch if not swasta
+  if (form.type !== 'swasta') {
     form.is_multi_branch = false;
   }
 
@@ -491,37 +489,36 @@ watch(() => form.name, (newName) => {
 });
 
 const statuses = computed(() => [
-  { id: 'negeri', name: t('features.school.institution.status.negeri'), icon: 'ShieldCheck', description: t('features.school.institution.status.negeri') },
-  { id: 'swasta', name: t('features.school.institution.status.swasta'), icon: 'Building', description: t('features.school.institution.status.swasta') },
-  { id: 'yayasan', name: t('features.school.institution.status.yayasan'), icon: 'Component', description: t('features.school.institution.status.yayasan') },
+  { id: 'negeri', name: t('features.school.institution.status.negeri'), icon: 'ShieldCheck', description: t('features.school.wizard.labels.statusNegeriDesc') },
+  { id: 'swasta', name: t('features.school.institution.status.swasta'), icon: 'Building', description: t('features.school.wizard.labels.statusSwastaDescCombined') },
 ]);
 
 const isValidStep = computed(() => {
   if (step.value === 1) return form.name.length >= 3;
   if (step.value === 2) return !!form.type;
-  if (step.value === 4 && (form.type === 'negeri' || form.type === 'swasta')) {
+  if (step.value === 4 && form.type === 'negeri') {
     return !!form.initial_level;
   }
   return true;
 });
 
-// Whether to show step 3 (multi-location) — only for yayasan
-const showLocationStep = computed(() => form.type === 'yayasan');
+// Whether to show step 3 (multi-location) — only for swasta
+const showLocationStep = computed(() => form.type === 'swasta');
 
 // Whether current step is the last step — always step 4 internally
 const isLastStep = computed(() => step.value === 4);
 
 // Dynamic wizard steps for progress indicator
 const wizardSteps = computed(() => {
-  if (showLocationStep.value) {
+  if (showLocationStep.value || form.type === 'swasta') {
     return [
       { num: 1, display: 1, label: t('features.school.wizard.steps.basic') },
       { num: 2, display: 2, label: t('features.school.wizard.steps.status') },
-      { num: 3, display: 3, label: t('features.school.wizard.steps.location') },
-      { num: 4, display: 4, label: t('features.school.wizard.steps.level') },
+      ...(showLocationStep.value ? [{ num: 3, display: 3, label: t('features.school.wizard.steps.location') }] : []),
+      { num: 4, display: showLocationStep.value ? 4 : 3, label: t('features.school.wizard.steps.level') },
     ];
   }
-  // negeri/swasta: skip lokasi, remap step 4 → display 3
+  // negeri: skip lokasi, remap step 4 → display 3
   return [
     { num: 1, display: 1, label: t('features.school.wizard.steps.basic') },
     { num: 2, display: 2, label: t('features.school.wizard.steps.status') },
@@ -536,7 +533,7 @@ const nextStep = () => {
     if (step.value === 2 && !showLocationStep.value) {
       // negeri/swasta: skip lokasi (step 3), go straight to jenjang (step 4)
       form.is_multi_branch = false;
-      if (form.type === 'negeri' || form.type === 'swasta') form.is_multi_level = false;
+      if (form.type === 'negeri') form.is_multi_unit = false;
       step.value = 4;
     } else {
       step.value++;
@@ -556,7 +553,7 @@ const prevStep = () => {
 const submit = async () => {
   try {
     await schoolStore.createSchool(form as any);
-    toast.success.action(t('features.school.levels.updateSuccess')); // Generic success for now
+    toast.success.action(t('features.school.units.updateSuccess')); // Generic success for now
     router.push({ name: 'schools.index' });
   } catch (e: any) {
     toast.error.fromResponse(e);

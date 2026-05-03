@@ -5,7 +5,7 @@ namespace Modules\School\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\School\Models\Academic\Department;
 use Modules\School\Models\Institution\School;
-use Modules\School\Models\Institution\SchoolLevel;
+use Modules\School\Models\Institution\SchoolUnit;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -91,8 +91,8 @@ class SchoolModuleCrudTest extends TestCase
     public function it_can_perform_student_crud()
     {
         $school = School::factory()->create();
-        $level = SchoolLevel::factory()->forSchool($school)->smk()->create();
-        $dept = Department::create(['school_level_id' => $level->id, 'name' => 'Science', 'code' => 'SCI']);
+        $level = SchoolUnit::factory()->forSchool($school)->smk()->create();
+        $dept = Department::create(['school_unit_id' => $level->id, 'name' => 'Science', 'code' => 'SCI']);
 
         // Create
         $response = $this->actingAsAdmin()->postJson('/api/v1/admin/students', [

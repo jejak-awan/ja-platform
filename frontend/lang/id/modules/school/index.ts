@@ -4,7 +4,7 @@ import hr from './hr.json';
 import ops from './ops.json';
 import logistics from './logistics.json';
 import institution from './institution.json';
-import levels from './levels.json';
+import units from './units.json';
 import audit from './audit.json';
 import dashboard from './dashboard.json';
 import students from './students.json';
@@ -25,7 +25,8 @@ export default {
     operations: ops,
     logistics,
     institution,
-    levels,
+    units,
+    levels: units,
     audit,
     dashboard,
     students,

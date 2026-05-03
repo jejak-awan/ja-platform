@@ -4,6 +4,16 @@ namespace Modules\School\Models\Operations;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $graduation_year
+ * @property bool $is_open
+ * @property \Illuminate\Support\Carbon|null $announcement_date
+ * @property array<string, mixed>|null $subjects
+ * @property array<string, mixed>|null $config
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class GraduationSetting extends Model
 {
     protected $table = 'sch_grad_settings';

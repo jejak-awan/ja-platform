@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('salary_structures', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
-            $table->foreignId('school_level_id')->constrained()->onDelete('cascade');
+            $table->foreignId('school_unit_id')->constrained()->onDelete('cascade');
             $table->foreignId('staff_id')->constrained()->onDelete('cascade');
             $table->decimal('base_salary', 15, 2);
             $table->decimal('transport_allowance', 15, 2)->default(0);

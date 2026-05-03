@@ -3,12 +3,12 @@
 namespace Modules\School\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\School\Models\Institution\SchoolLevel;
+use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\Institution\School;
 
-class SchoolLevelFactory extends Factory
+class SchoolUnitFactory extends Factory
 {
-    protected $model = SchoolLevel::class;
+    protected $model = SchoolUnit::class;
 
     public function definition(): array
     {

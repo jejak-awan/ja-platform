@@ -141,6 +141,29 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\HR\Staff, $this>
+     */
+    public function staff(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\Modules\School\Models\HR\Staff::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough<\Modules\School\Models\Institution\SchoolUnit, \Modules\School\Models\HR\Staff, $this>
+     */
+    public function levels(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    {
+        return $this->hasManyThrough(
+            \Modules\School\Models\Institution\SchoolUnit::class,
+            \Modules\School\Models\HR\Staff::class,
+            'user_id',
+            'id',
+            'id',
+            'school_unit_id'
+        );
+    }
+
+    /**
      * Get the two factor authentication record.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne<\Modules\Core\Models\TwoFactorAuth, $this>
@@ -193,6 +216,8 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $roleRanks = [
             'super-admin' => 100,
+            'ketua-yayasan' => 100,
+            'admin-yayasan' => 95,
             'admin' => 80,
             'kepala-sekolah' => 90,
             'admin-sekolah' => 90,
@@ -241,6 +266,8 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $roleRanks = [
             'super-admin' => 100,
+            'ketua-yayasan' => 100,
+            'admin-yayasan' => 95,
             'admin' => 80,
             'kepala-sekolah' => 90,
             'admin-sekolah' => 90,

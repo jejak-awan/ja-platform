@@ -5,19 +5,19 @@ namespace Modules\School\Http\Controllers\Api\Institution;
 use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
 use Modules\School\Models\Institution\School;
-use Modules\School\Models\Institution\SchoolLevel;
+use Modules\School\Models\Institution\SchoolUnit;
 
-class SchoolLevelController extends BaseController
+class SchoolUnitController extends BaseController
 {
     /**
      * Display a listing of levels for a specific school.
      */
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
-        $this->authorize('viewAny', SchoolLevel::class);
+        $this->authorize('viewAny', SchoolUnit::class);
         $schoolIdValue = $request->input('school_id', 1);
         $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : 1;
-        $levels = SchoolLevel::where('school_id', $schoolId)->get();
+        $levels = SchoolUnit::where('school_id', $schoolId)->get();
 
         return $this->sendResponse($levels, 'School levels retrieved successfully.');
     }
@@ -27,7 +27,7 @@ class SchoolLevelController extends BaseController
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        $this->authorize('create', SchoolLevel::class);
+        $this->authorize('create', SchoolUnit::class);
         /** @var array<string, mixed> $validated */
         $validated = $request->validate([
             'school_id' => 'required|exists:sch_ins_schools,id',
@@ -38,8 +38,8 @@ class SchoolLevelController extends BaseController
             'settings' => 'nullable|array',
         ]);
 
-        /** @var SchoolLevel $level */
-        $level = SchoolLevel::create($validated);
+        /** @var SchoolUnit $level */
+        $level = SchoolUnit::create($validated);
 
         return $this->sendResponse($level, 'School level created successfully.', 201);
     }
@@ -47,7 +47,7 @@ class SchoolLevelController extends BaseController
     /**
      * Display the specified level.
      */
-    public function show(SchoolLevel $level): \Illuminate\Http\JsonResponse
+    public function show(SchoolUnit $level): \Illuminate\Http\JsonResponse
     {
         $this->authorize('view', $level);
         return $this->sendResponse($level, 'School level retrieved successfully.');
@@ -56,7 +56,7 @@ class SchoolLevelController extends BaseController
     /**
      * Update the specified level.
      */
-    public function update(Request $request, SchoolLevel $level): \Illuminate\Http\JsonResponse
+    public function update(Request $request, SchoolUnit $level): \Illuminate\Http\JsonResponse
     {
         $this->authorize('update', $level);
         /** @var array<string, mixed> $validated */
@@ -76,7 +76,7 @@ class SchoolLevelController extends BaseController
     /**
      * Remove the specified level.
      */
-    public function destroy(SchoolLevel $level): \Illuminate\Http\JsonResponse
+    public function destroy(SchoolUnit $level): \Illuminate\Http\JsonResponse
     {
         $this->authorize('delete', $level);
         $level->delete();

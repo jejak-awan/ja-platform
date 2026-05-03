@@ -355,6 +355,8 @@
           </h3>
           <MediaUpload 
             :folder-id="currentFolderId"
+            :path="path"
+            :module="module"
             :constraints="constraints"
             @uploaded="handleMediaUploaded" 
           />
@@ -394,6 +396,8 @@ const props = defineProps<{
     label?: string;
     constraints?: Partial<MediaConstraints>;
     open?: boolean;
+    path?: string;
+    module?: string;
 }>();
 
 const emit = defineEmits<{
@@ -478,11 +482,12 @@ const fetchMedia = async () => {
         const folderId = currentFolderId.value;
         const params = {
             folder_id: folderId || 'null',
+            module: props.module || 'cms',
         };
         
         // Fetch both folders and media in parallel
         const [foldersRes, mediaRes] = await Promise.all([
-             api.get('/admin/cms/media-folders', { params: { parent_id: folderId || 'null' } }),
+             api.get('/admin/cms/media-folders', { params: { parent_id: folderId || 'null', module: props.module || 'cms' } }),
              api.get('/admin/cms/media', { params })
         ]);
 

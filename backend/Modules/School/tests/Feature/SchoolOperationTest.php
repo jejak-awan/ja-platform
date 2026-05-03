@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\School\Models\Academic\AcademicYear;
 use Modules\School\Models\Academic\Semester;
 use Modules\School\Models\Institution\School;
-use Modules\School\Models\Institution\SchoolLevel;
+use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\Student\Student;
 use Modules\School\Models\Student\Violation;
 use PHPUnit\Framework\Attributes\Test;
@@ -41,7 +41,7 @@ class SchoolOperationTest extends TestCase
             'is_active' => true,
         ]);
 
-        $level = SchoolLevel::factory()->forSchool($this->school)->smk()->create();
+        $level = SchoolUnit::factory()->forSchool($this->school)->smk()->create();
         $this->student = Student::factory()->forSchool($this->school)->forLevel($level)->create([
             'full_name' => 'John Doe',
             'gender' => 'L',

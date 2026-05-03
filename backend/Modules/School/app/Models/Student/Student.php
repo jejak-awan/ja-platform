@@ -5,11 +5,11 @@ namespace Modules\School\Models\Student;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\School\Traits\ScopedByLevel;
+use Modules\School\Traits\ScopedByUnit;
 use Modules\School\Traits\ScopedBySchool;
 use Modules\School\Traits\HasVerificationHash;
 use Modules\School\Models\Institution\School;
-use Modules\School\Models\Institution\SchoolLevel;
+use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\Academic\Department;
 use Modules\School\Models\Academic\StudyGroup;
 use Modules\School\Models\Academic\Attendance;
@@ -19,7 +19,7 @@ use Modules\School\Models\Operations\UksVisit;
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_level_id
+ * @property int $school_unit_id
  * @property int|null $user_id
  * @property string $status
  * @property int|null $department_id
@@ -61,7 +61,7 @@ use Modules\School\Models\Operations\UksVisit;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read School $school
- * @property-read SchoolLevel $level
+ * @property-read SchoolUnit $level
  * @property-read Department|null $department
  * @property-read \Illuminate\Database\Eloquent\Collection<int, StudyGroup> $studyGroups
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Attendance> $attendances
@@ -75,7 +75,7 @@ class Student extends Model
     protected $table = 'sch_std_students';
 
     /** @use HasFactory<\Modules\School\Database\Factories\StudentFactory> */
-    use HasFactory, SoftDeletes, ScopedBySchool, ScopedByLevel, HasVerificationHash;
+    use HasFactory, SoftDeletes, ScopedBySchool, ScopedByUnit, HasVerificationHash;
 
     protected static function newFactory(): \Modules\School\Database\Factories\StudentFactory
     {
@@ -84,7 +84,7 @@ class Student extends Model
 
     protected $fillable = [
         'school_id',
-        'school_level_id',
+        'school_unit_id',
         'user_id',
         'status',
         'department_id',
@@ -133,11 +133,11 @@ class Student extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SchoolLevel, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SchoolUnit, $this>
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(SchoolLevel::class, 'school_level_id');
+        return $this->belongsTo(SchoolUnit::class, 'school_unit_id');
     }
 
     /**

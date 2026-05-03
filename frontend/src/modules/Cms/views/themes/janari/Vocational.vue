@@ -184,17 +184,17 @@ onMounted(() => {
 
 const getIcon = (name: string) => iconMap[name] || iconMap['BookOpen'];
 
-const schoolLevel = computed(() => getSetting('school_level', 'smk') as string);
+const schoolUnit = computed(() => getSetting('school_unit', 'smk') as string);
 
 const programsLabel = computed(() => {
-  if (schoolLevel.value === 'smk') return 'Program Keahlian';
-  if (schoolLevel.value === 'sma') return 'Program Peminatan';
+  if (schoolUnit.value === 'smk') return 'Program Keahlian';
+  if (schoolUnit.value === 'sma') return 'Program Peminatan';
   return 'Program Unggulan';
 });
 
 // Mock Fallback
 const mockMajors = computed(() => {
-  const level = schoolLevel.value;
+  const level = schoolUnit.value;
   if (level === 'smk') {
     return [
       { title: 'T. Komputer & Jaringan', icon: markRaw(Laptop), description: 'Mempelajari cara merakit, menginstalasi jaringan, dan administrasi server.' },

@@ -43,5 +43,3 @@
 <script setup lang="ts">
 import { Card, CardContent, Button, LucideIcon } from '@/components/ui';
 </script>
-"
-,Complexity:3,Description:

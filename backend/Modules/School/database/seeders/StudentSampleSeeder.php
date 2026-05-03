@@ -52,11 +52,11 @@ class StudentSampleSeeder extends Seeder
                 }
 
                 // 2. Create Student
-                $student = Student::updateOrCreate(
+                $student = Student::withoutGlobalScopes()->updateOrCreate(
                     ['nisn' => $nisn],
                     [
                         'school_id' => $schoolId,
-                        'school_level_id' => $levelId,
+                        'school_unit_id' => $levelId,
                         'user_id' => $user->id,
                         'status' => 'active',
                         'department_id' => $group->department_id,

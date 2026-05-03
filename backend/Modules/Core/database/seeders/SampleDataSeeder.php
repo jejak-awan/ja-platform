@@ -51,18 +51,23 @@ class SampleDataSeeder extends Seeder
         ];
 
         foreach ($posts as $postData) {
+            if ($categories->isNotEmpty()) {
+                $postData['category_id'] = $categories->random()->id;
+            }
+            
             $content = Content::updateOrCreate(
                 ['slug' => $postData['slug']],
                 array_merge($postData, [
                     'author_id' => $admin->id,
-                    'category_id' => $categories->random()->id,
                     'status' => 'published',
                     'published_at' => now()->subDays(rand(1, 30)),
                 ])
             );
 
             // Attach random tags
-            $content->tags()->sync($tags->random(rand(2, 4))->pluck('id'));
+            if ($tags->isNotEmpty()) {
+                $content->tags()->sync($tags->random(min($tags->count(), rand(2, 4)))->pluck('id'));
+            }
 
             // Add sample comments
             for ($i = 0; $i < rand(1, 4); $i++) {

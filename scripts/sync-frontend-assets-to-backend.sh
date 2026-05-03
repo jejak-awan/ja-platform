@@ -33,7 +33,8 @@ fi
 
 mkdir -p "$DST"
 rsync -a --delete "$SRC" "$DST"
+cp "$ROOT/frontend/dist/index.html" "$ROOT/backend/public/index.html"
 
-echo "OK: synced $SRC → $DST"
+echo "OK: synced $SRC → $DST and index.html"
 echo "Tip: on the server, after pull: cd ja-apps && npm run deploy:assets"
 echo "Tip: optional Laravel: cd ja-apps/backend && php artisan optimize:clear && php artisan view:cache"

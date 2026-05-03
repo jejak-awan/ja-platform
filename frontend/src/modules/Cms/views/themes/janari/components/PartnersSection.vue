@@ -1,6 +1,6 @@
 <template>
   <section
-    v-if="schoolLevel === 'smk'"
+    v-if="schoolUnit === 'smk'"
     class="py-24 bg-background border-b border-border overflow-hidden"
   >
     <div class="container mx-auto px-6 text-center">
@@ -50,7 +50,7 @@ const { marquee } = useThemeMotion()
 const marqueeRef = ref<HTMLElement>()
 const { data: dynamicItems } = useThemeDataBindings('partners', 'partners')
 
-const schoolLevel = computed(() => (getSetting('school_level') as string) || 'smk')
+const schoolUnit = computed(() => (getSetting('school_unit') as string) || 'smk')
 const titleText = computed(() => (getSetting('partners_title') as string) || 'LINK & MATCH INDUSTRI')
 const marqueeSpeed = computed(() => parseInt(String(getSetting('partners_marquee_speed', 25)), 10))
 

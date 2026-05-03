@@ -22,8 +22,8 @@ return new class extends Migration
         foreach ($tables as $tableName) {
             if (Schema::hasTable($tableName)) {
                 Schema::table($tableName, function (Blueprint $table) use ($tableName) {
-                    if (! Schema::hasColumn($tableName, 'school_level_id')) {
-                        $table->foreignId('school_level_id')->nullable()->after('school_id')->constrained()->onDelete('set null');
+                    if (! Schema::hasColumn($tableName, 'school_unit_id')) {
+                        $table->foreignId('school_unit_id')->nullable()->after('school_id')->constrained()->onDelete('set null');
                     }
                 });
             }
@@ -46,8 +46,8 @@ return new class extends Migration
         foreach ($tables as $tableName) {
             if (Schema::hasTable($tableName)) {
                 Schema::table($tableName, function (Blueprint $table) use ($tableName) {
-                    $table->dropForeign([$tableName.'_school_level_id_foreign']);
-                    $table->dropColumn('school_level_id');
+                    $table->dropForeign([$tableName.'_school_unit_id_foreign']);
+                    $table->dropColumn('school_unit_id');
                 });
             }
         }

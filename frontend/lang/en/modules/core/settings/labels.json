@@ -1,6 +1,12 @@
 {
     "labels": {
         "site_name": "Site Name",
+        "app_name": "Application Name",
+        "school_name": "School Name",
+        "school_address": "School Address",
+        "school_phone": "School Phone",
+        "license_type": "License Type",
+        "license_key": "License Key",
         "site_logo": "Site Logo",
         "site_favicon": "Site Favicon",
         "site_description": "Site Description",

@@ -66,7 +66,7 @@ const isCompleted = ref(true);
 
 const labels: Record<string, { label: string, desc: string }> = {
   school_profile: { label: t('features.school.dashboard.setup.steps.school_profile.label'), desc: t('features.school.dashboard.setup.steps.school_profile.desc') },
-  school_levels: { label: t('features.school.dashboard.setup.steps.school_levels.label'), desc: t('features.school.dashboard.setup.steps.school_levels.desc') },
+  school_units: { label: t('features.school.dashboard.setup.steps.school_units.label'), desc: t('features.school.dashboard.setup.steps.school_units.desc') },
   academic_year: { label: t('features.school.dashboard.setup.steps.academic_year.label'), desc: t('features.school.dashboard.setup.steps.academic_year.desc') },
   semesters: { label: t('features.school.dashboard.setup.steps.semesters.label'), desc: t('features.school.dashboard.setup.steps.semesters.desc') },
   departments: { label: t('features.school.dashboard.setup.steps.departments.label'), desc: t('features.school.dashboard.setup.steps.departments.desc') },

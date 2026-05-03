@@ -19,15 +19,7 @@
       </div>
       
       <div class="flex flex-wrap gap-3">
-        <Button
-          v-if="activeTab === 'payroll'"
-          size="lg"
-          class="rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95 font-bold h-11 px-6"
-          @click="handleGeneratePayroll"
-        >
-          <LucideIcon name="Coins" class="w-5 h-5 mr-2" />
-          {{ $t('features.school.hr.staff.btnGeneratePayroll') }}
-        </Button>
+        <!-- Removed Generate Payroll Button (BOS Compliance) -->
 
         <Button
           variant="outline"
@@ -60,20 +52,7 @@
             <LucideIcon name="Users" class="w-4 h-4 mr-2" />
             {{ $t('features.school.hr.staff.tabs.staff') }}
           </TabsTrigger>
-          <TabsTrigger 
-            value="salary" 
-            class="rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm px-6 py-2.5 transition-all font-bold"
-          >
-            <LucideIcon name="Wallet" class="w-4 h-4 mr-2" />
-            {{ $t('features.school.hr.staff.tabs.salary') }}
-          </TabsTrigger>
-          <TabsTrigger 
-            value="payroll" 
-            class="rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm px-6 py-2.5 transition-all font-bold"
-          >
-            <LucideIcon name="FileDigit" class="w-4 h-4 mr-2" />
-            {{ $t('features.school.hr.staff.tabs.payroll') }}
-          </TabsTrigger>
+          <!-- Salary and Payroll tabs removed for BOS compliance -->
         </TabsList>
 
         <div v-if="activeTab === 'staff'" class="hidden lg:flex items-center gap-2 max-w-sm w-full">
@@ -120,24 +99,16 @@
         </CardContent>
       </Card>
     </Tabs>
-
-    <!-- Dialogs -->
-    <SalaryStructureDialog 
-      v-model:open="dialogs.salary"
-      :staff-name="selectedStaff?.full_name || ''"
-      :initial-data="selectedSalaryStructure"
-      :loading="saving"
-      @submit="handleSaveSalaryStructure"
-    />
   </div>
 </template>
 
 <script setup lang="ts">
+
 import { ref, onMounted, h, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { HRService } from '@/modules/School/services/HRService';
 import {
-  Card, CardContent, Button, LucideIcon, DataTable, Pagination, Tabs, TabsList, TabsTrigger, Badge, Input
+  Card, CardContent, Button, LucideIcon, DataTable, Pagination, Badge, Input, Tabs, TabsList, TabsTrigger
 } from '@/components/ui';
 import Breadcrumbs from '@/modules/Core/components/layout/Breadcrumbs.vue';
 import { useToast } from '@/composables/useToast';
@@ -149,7 +120,6 @@ import {
 } from '@tanstack/vue-table';
 import { useRouter } from 'vue-router';
 import { exportToCSV } from '@/utils/exportUtils';
-import SalaryStructureDialog from './components/SalaryStructureDialog.vue';
 import { parseResponse } from '@/utils/responseParser';
 import _ from 'lodash';
 
@@ -159,14 +129,9 @@ const { confirm } = useConfirm();
 const router = useRouter();
 
 const staff = ref<any[]>([]);
-const payrolls = ref<any[]>([]);
 const activeTab = ref('staff');
 const loading = ref(false);
-const saving = ref(false);
 const searchQuery = ref('');
-const selectedStaff = ref<any>(null);
-const selectedSalaryStructure = ref<any>(null);
-const dialogs = ref({ salary: false });
 const pagination = ref({ total: 0, per_page: 20, current_page: 1 });
 
 const handleExport = () => {
@@ -225,60 +190,14 @@ const staffColumns = [
   }),
 ];
 
-const salaryColumns = [
-    columnHelper.accessor('full_name', { 
-        header: t('features.school.hr.staff.labels.fullName'),
-        cell: ({ row }) => h('span', { class: 'font-semibold' }, row.original.full_name)
-    }),
-    columnHelper.accessor('ptk_type', { header: t('features.school.hr.staff.labels.ptkType') }),
-    columnHelper.display({
-        id: 'actions',
-        header: t('features.school.hr.staff.labels.salarySetting'),
-        cell: ({ row }) => h(Button, {
-            size: 'sm',
-            variant: 'secondary',
-            class: 'bg-primary/5 text-primary hover:bg-primary/10 transition-colors rounded-lg font-bold',
-            onClick: () => handleSetupSalary(row.original)
-        }, () => [
-            h(LucideIcon, { name: 'Settings2', class: 'w-3 h-3 mr-2' }),
-            t('features.school.hr.staff.actions.setupSalary')
-        ])
-    })
-];
-
-const payrollColumns = [
-    columnHelper.accessor('staff.full_name', { 
-        header: t('features.school.hr.staff.labels.fullName'),
-        cell: info => h('span', { class: 'font-semibold' }, info.getValue())
-    }),
-    columnHelper.accessor('period', { header: t('features.school.hr.staff.labels.period') }),
-    columnHelper.accessor('net_salary', { 
-        header: t('features.school.hr.staff.labels.netSalary'),
-        cell: info => h('span', { class: 'font-mono text-success font-bold' }, 
-            new Intl.NumberFormat(t('common.language') === 'id' ? 'id-ID' : 'en-US', { 
-                style: 'currency', currency: 'IDR' 
-            }).format(info.getValue())
-        )
-    }),
-    columnHelper.accessor('status', { 
-        header: t('common.labels.status'),
-        cell: info => h(Badge, { 
-            variant: info.getValue() === 'Paid' ? 'success' : 'warning',
-            class: 'capitalize font-bold rounded-lg' 
-        }, () => info.getValue())
-    }),
-];
+/* Payroll columns removed */
 
 const table = useVueTable({
   get data() { 
-      if (activeTab.value === 'staff') return staff.value;
-      if (activeTab.value === 'salary') return staff.value;
-      return payrolls.value;
+      return staff.value;
   },
   get columns() {
-      if (activeTab.value === 'staff') return staffColumns;
-      if (activeTab.value === 'salary') return salaryColumns;
-      return payrollColumns;
+      return staffColumns;
   },
   getCoreRowModel: getCoreRowModel(),
 });
@@ -329,80 +248,10 @@ const handleDelete = async (id: number) => {
   }
 };
 
-const fetchPayroll = async (page = 1) => {
-    loading.value = true;
-    try {
-        const response = await HRService.getPayrolls({ page });
-        const res = parseResponse(response);
-        payrolls.value = res.data;
-        if (res.pagination) {
-            pagination.value = {
-                total: res.pagination.total,
-                per_page: res.pagination.per_page || 20,
-                current_page: res.pagination.current_page,
-            };
-        }
-    } catch (e) {
-        toast.error.fromResponse(e);
-    } finally {
-        loading.value = false;
-    }
-}
+/* Payroll and Salary methods removed for BOS compliance */
 
-const handleSetupSalary = async (member: any) => {
-    selectedStaff.value = member;
-    saving.value = true;
-    try {
-        const response = await HRService.getSalaryStructures(member.id);
-        const res = parseResponse(response);
-        selectedSalaryStructure.value = res.data.length > 0 ? res.data[0] : null;
-        dialogs.value.salary = true;
-    } catch (e) {
-        toast.error.fromResponse(e);
-    } finally {
-        saving.value = false;
-    }
-}
-
-const handleSaveSalaryStructure = async (formData: any) => {
-    saving.value = true;
-    try {
-        await HRService.storeSalaryStructure({ 
-            ...formData, 
-            staff_id: selectedStaff.value.id,
-            school_id: 15,
-            school_level_id: 1,
-        });
-        toast.success.action(t('features.school.hr.staff.messages.saveSalarySuccess'));
-        dialogs.value.salary = false;
-    } catch (e) {
-        toast.error.fromResponse(e);
-    } finally {
-        saving.value = false;
-    }
-}
-
-const handleGeneratePayroll = async () => {
-    const period = new Date().toISOString().slice(0, 7);
-    if (await confirm({ title: t('features.school.hr.staff.btnGeneratePayroll'), message: t('features.school.hr.staff.messages.generatePayrollConfirm', { period }), variant: 'info' })) {
-        loading.value = true;
-        try {
-            await HRService.generatePayroll({ 
-                period, school_id: 15, school_level_id: 1 
-            });
-            toast.success.action(t('features.school.hr.staff.messages.generatePayrollSuccess'));
-            if (activeTab.value === 'payroll') fetchPayroll();
-        } catch (e) {
-            toast.error.fromResponse(e);
-        } finally {
-            loading.value = false;
-        }
-    }
-}
-
-watch(activeTab, (val) => {
-    if (val === 'staff' || val === 'salary') fetchStaff();
-    if (val === 'payroll') fetchPayroll();
+watch(activeTab, () => {
+    fetchStaff();
 });
 
 onMounted(() => {

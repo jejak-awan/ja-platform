@@ -7,7 +7,7 @@ use Modules\School\Http\Controllers\Api\Admission\AdmissionController;
 use Modules\School\Http\Controllers\Api\Logistics\FacilityController;
 
 use Modules\School\Http\Controllers\Api\Institution\SchoolController;
-use Modules\School\Http\Controllers\Api\Institution\SchoolLevelController;
+use Modules\School\Http\Controllers\Api\Institution\SchoolUnitController;
 use Modules\School\Http\Controllers\Api\HR\StaffController;
 use Modules\School\Http\Controllers\Api\HR\StaffAdvancedController;
 use Modules\School\Http\Controllers\Api\HR\CareerController;
@@ -35,7 +35,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('admin')->middleware([
         'auth:sanctum',
         'throttle:admin',
-        \Modules\School\Http\Middleware\LevelContextMiddleware::class,
+        \Modules\School\Http\Middleware\UnitContextMiddleware::class,
     ])->group(function () {
         Route::middleware('permission:view schools|manage schools|create schools|edit schools|delete schools')->group(function () {
             Route::get('school/stats', [SchoolController::class, 'stats']);
@@ -45,10 +45,11 @@ Route::prefix('v1')->group(function () {
 
             Route::prefix('institution')->group(function () {
                 Route::get('/', [SchoolController::class, 'index']);
+                Route::put('/', [SchoolController::class, 'updateSingleton']);
                 Route::get('stats', [SchoolController::class, 'stats']);
                 Route::get('setup-status', [SchoolController::class, 'checkSetupStatus']);
                 Route::post('logo', [SchoolController::class, 'updateLogo']);
-                Route::apiResource('levels', SchoolLevelController::class);
+                Route::apiResource('levels', SchoolUnitController::class);
             });
         });
 
@@ -202,8 +203,8 @@ Route::prefix('v1')->group(function () {
                 Route::get('members', [OsisController::class, 'members']);
                 Route::post('members', [OsisController::class, 'storeMember']);
 
-                Route::get('finances', [OsisController::class, 'finances']);
-                Route::post('finances', [OsisController::class, 'storeFinance']);
+//                Route::get('finances', [OsisController::class, 'finances']);
+//                Route::post('finances', [OsisController::class, 'storeFinance']);
 
                 Route::get('suggestions', [OsisController::class, 'suggestions']);
                 Route::patch('suggestions/{id}', [OsisController::class, 'updateSuggestion']);
@@ -254,11 +255,11 @@ Route::prefix('v1')->group(function () {
                 Route::post('leaves', [StaffAdvancedController::class, 'storeLeaveRequest']);
                 Route::patch('leaves/{id}/status', [StaffAdvancedController::class, 'updateLeaveStatus']);
 
-                Route::get('salary-structures', [StaffAdvancedController::class, 'salaryStructures']);
-                Route::post('salary-structures', [StaffAdvancedController::class, 'storeSalaryStructure']);
+//                Route::get('salary-structures', [StaffAdvancedController::class, 'salaryStructures']);
+//                Route::post('salary-structures', [StaffAdvancedController::class, 'storeSalaryStructure']);
 
-                Route::get('payrolls', [StaffAdvancedController::class, 'payrolls']);
-                Route::post('payrolls/generate', [StaffAdvancedController::class, 'generatePayroll']);
+//                Route::get('payrolls', [StaffAdvancedController::class, 'payrolls']);
+//                Route::post('payrolls/generate', [StaffAdvancedController::class, 'generatePayroll']);
             });
         });
 

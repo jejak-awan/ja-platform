@@ -19,14 +19,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read School $school
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\School\Models\Academic\Department> $departments
  */
-class SchoolLevel extends Model
+class SchoolUnit extends Model
 {
-    /** @use HasFactory<\Modules\School\Database\Factories\SchoolLevelFactory> */
+    /** @use HasFactory<\Modules\School\Database\Factories\SchoolUnitFactory> */
     use HasFactory;
 
-    protected static function newFactory(): \Modules\School\Database\Factories\SchoolLevelFactory
+    protected static function newFactory(): \Modules\School\Database\Factories\SchoolUnitFactory
     {
-        return \Modules\School\Database\Factories\SchoolLevelFactory::new();
+        return \Modules\School\Database\Factories\SchoolUnitFactory::new();
     }
 
     protected $table = 'sch_ins_levels';

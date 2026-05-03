@@ -107,7 +107,7 @@
               </div>
               <div class="space-y-2">
                 <Label for="level">{{ $t('features.school.students.labels.level') }}</Label>
-                <Select v-model="form.school_level_id">
+                <Select v-model="form.school_unit_id">
                   <SelectTrigger><SelectValue :placeholder="$t('features.school.admission.placeholders.level')" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem
@@ -338,7 +338,7 @@ const departments = ref<any[]>([]);
 
 const form = ref<any>({
   school_id: 1,
-  school_level_id: '',
+  school_unit_id: '',
   full_name: '',
   nisn: '',
   nis: '',
@@ -367,7 +367,7 @@ const form = ref<any>({
 const fetchMetadata = async () => {
     try {
         const [levelRes, deptRes] = await Promise.all([
-            InstitutionService.getLevels(),
+            InstitutionService.getUnits(),
             AcademicService.getDepartments()
         ]);
         

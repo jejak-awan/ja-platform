@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\School\Models\Student\Student;
 use Modules\School\Models\Institution\School;
-use Modules\School\Models\Institution\SchoolLevel;
+use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\Academic\Department;
 use Modules\School\Models\HR\Staff;
-use Modules\School\Traits\ScopedByLevel;
+use Modules\School\Traits\ScopedByUnit;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_level_id
+ * @property int $school_unit_id
  * @property int|null $department_id
  * @property int $academic_year_id
  * @property int|null $homeroom_teacher_id
@@ -22,7 +22,7 @@ use Modules\School\Traits\ScopedByLevel;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read School $school
- * @property-read SchoolLevel $level
+ * @property-read SchoolUnit $level
  * @property-read Department|null $department
  * @property-read AcademicYear $academicYear
  * @property-read Staff|null $homeroomTeacher
@@ -33,11 +33,11 @@ class StudyGroup extends Model
     protected $table = 'sch_acad_study_groups';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByLevel;
+    use HasFactory, ScopedByUnit;
 
     protected $fillable = [
         'school_id',
-        'school_level_id',
+        'school_unit_id',
         'department_id',
         'academic_year_id',
         'homeroom_teacher_id',
@@ -53,11 +53,11 @@ class StudyGroup extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SchoolLevel, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SchoolUnit, $this>
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(SchoolLevel::class, 'school_level_id');
+        return $this->belongsTo(SchoolUnit::class, 'school_unit_id');
     }
 
     /**

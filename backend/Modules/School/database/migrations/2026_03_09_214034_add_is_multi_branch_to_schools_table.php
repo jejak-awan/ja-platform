@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('schools', function (Blueprint $table) {
             if (! Schema::hasColumn('schools', 'is_multi_branch')) {
-                $table->boolean('is_multi_branch')->default(false)->after('is_multi_level');
+                $table->boolean('is_multi_branch')->default(false)->after('is_multi_unit');
             }
         });
     }

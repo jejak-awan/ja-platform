@@ -5,7 +5,7 @@ namespace Modules\School\Models\HR;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\School\Traits\ScopedByLevel;
+use Modules\School\Traits\ScopedByUnit;
 use Modules\School\Traits\ScopedBySchool;
 use Modules\School\Models\Institution\School;
 
@@ -39,7 +39,7 @@ class Staff extends Model
     protected $table = 'sch_hr_staff';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, SoftDeletes, ScopedBySchool, ScopedByLevel;
+    use HasFactory, SoftDeletes, ScopedBySchool, ScopedByUnit;
 
     protected $fillable = [
         'school_id',

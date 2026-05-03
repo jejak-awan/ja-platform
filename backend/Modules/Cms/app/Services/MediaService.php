@@ -26,14 +26,15 @@ class MediaService
      *
      * @param  array<string, mixed>  $metadata
      */
-    public function upload(UploadedFile $file, ?int $folderId = null, bool $optimize = true, ?int $authorId = null, bool $isShared = false, array $metadata = []): Media
+    public function upload(UploadedFile $file, ?int $folderId = null, bool $optimize = true, ?int $authorId = null, bool $isShared = false, array $metadata = [], ?string $subPath = null, string $module = 'cms'): Media
     {
         // Check for SVG and sanitize BEFORE optimization or other processing
         if ($file->getMimeType() === 'image/svg+xml' || strtolower($file->getClientOriginalExtension()) === 'svg') {
             $this->sanitizeSvg($file->getRealPath());
         }
 
-        $pathRaw = $file->store('cms/media', 'public');
+        $uploadPath = $subPath ?: 'cms/media';
+        $pathRaw = $file->store($uploadPath, 'public');
         $path = is_string($pathRaw) ? $pathRaw : '';
         $fullPath = Storage::disk('public')->path($path);
 
@@ -57,7 +58,7 @@ class MediaService
                 $webpPath = $this->convertToWebP($fullPath, $quality);
                 if ($webpPath) {
                     $fullPath = $webpPath;
-                    $path = 'cms/media/'.basename($fullPath);
+                    $path = $uploadPath . '/' . basename($fullPath);
                     $mimeType = 'image/webp';
                     $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).'.webp';
                 }
@@ -68,7 +69,7 @@ class MediaService
         $metadataAlt = $metadata['alt'] ?? null;
 
         $media = Media::create([
-            'module' => 'cms',
+            'module' => $module,
             'name' => $fileName ?? $file->getClientOriginalName(),
             'file_name' => $fileName ?? $file->getClientOriginalName(),
             'mime_type' => $mimeType,
@@ -873,6 +874,7 @@ class MediaService
                         'folder_id' => null, // Or try to find folder by name?
                         'author_id' => null, // System imported
                         'is_shared' => true, // Imported files usually visible to all
+                        'module' => 'cms',
                     ]);
 
                     $stats['added']++;

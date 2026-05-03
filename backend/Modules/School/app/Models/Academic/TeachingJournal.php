@@ -5,13 +5,13 @@ namespace Modules\School\Models\Academic;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\School\Models\Institution\School;
-use Modules\School\Models\Institution\SchoolLevel;
-use Modules\School\Traits\ScopedByLevel;
+use Modules\School\Models\Institution\SchoolUnit;
+use Modules\School\Traits\ScopedByUnit;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_level_id
+ * @property int $school_unit_id
  * @property int $schedule_id
  * @property \Illuminate\Support\Carbon $date
  * @property string $topic
@@ -22,7 +22,7 @@ use Modules\School\Traits\ScopedByLevel;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read School $school
- * @property-read SchoolLevel $level
+ * @property-read SchoolUnit $level
  * @property-read Schedule $schedule
  */
 class TeachingJournal extends Model
@@ -30,11 +30,11 @@ class TeachingJournal extends Model
     protected $table = 'sch_acad_teaching_journals';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByLevel;
+    use HasFactory, ScopedByUnit;
 
     protected $fillable = [
         'school_id',
-        'school_level_id',
+        'school_unit_id',
         'schedule_id',
         'date',
         'topic',
@@ -58,11 +58,11 @@ class TeachingJournal extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SchoolLevel, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SchoolUnit, $this>
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(SchoolLevel::class, 'school_level_id');
+        return $this->belongsTo(SchoolUnit::class, 'school_unit_id');
     }
 
     /**

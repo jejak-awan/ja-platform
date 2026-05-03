@@ -272,7 +272,7 @@ const handleSave = async (formData: any) => {
       await AcademicService.storeSchedule({
           ...formData,
           school_id: 1, // Will be handled by backend usually but let's be safe
-          school_level_id: 1, // Will be handled by context middleware
+          school_unit_id: 1, // Will be handled by context middleware
           academic_year_id: 1, // Should be dynamic
           semester_id: 1, // Should be dynamic
       });

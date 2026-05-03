@@ -22,6 +22,7 @@ class MediaFactory extends Factory
             'size' => $this->faker->numberBetween(10000, 5000000),
             'alt' => $this->faker->optional()->sentence(),
             'description' => $this->faker->optional()->text(),
+            'module' => 'cms',
         ];
     }
 

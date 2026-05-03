@@ -46,6 +46,7 @@ class MediaFolder extends Model
         'sort_order',
         'author_id',
         'is_shared',
+        'module',
     ];
 
     protected $casts = [

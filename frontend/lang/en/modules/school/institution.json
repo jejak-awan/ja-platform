@@ -15,8 +15,7 @@
     "setupNow": "Setup Institution Now",
     "status": {
         "negeri": "Public School",
-        "swasta": "Private / Independent School",
-        "yayasan": "Foundation / Group",
+        "swasta": "Private School / Foundation",
         "public": "Public School",
         "private": "Private School",
         "undefined": "Status Not Defined"

@@ -13,7 +13,7 @@ class StoreScheduleRequest extends FormRequest
     {
         return [
             'school_id' => 'required|exists:sch_ins_schools,id',
-            'school_level_id' => 'required|exists:sch_ins_levels,id',
+            'school_unit_id' => 'required|exists:sch_ins_levels,id',
             'academic_year_id' => 'required|exists:sch_acad_years,id',
             'semester_id' => 'required|exists:sch_acad_semesters,id',
             'study_group_id' => 'required|exists:sch_acad_study_groups,id',

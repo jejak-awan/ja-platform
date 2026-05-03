@@ -77,10 +77,11 @@ class StaffSampleSeeder extends Seeder
                 $user->assignRole('guru');
             }
 
-            Staff::updateOrCreate(
+            Staff::withoutGlobalScopes()->updateOrCreate(
                 ['user_id' => $user->id],
                 [
                     'school_id' => $schoolId,
+                    'school_unit_id' => 15,
                     'full_name' => $data['name'],
                     'nuptk' => $data['nuptk'],
                     'nik' => $data['nik'],

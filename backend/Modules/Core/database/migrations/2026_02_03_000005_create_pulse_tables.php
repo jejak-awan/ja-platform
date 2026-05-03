@@ -62,7 +62,7 @@ return new class extends Migration
             $table->string('event_category')->nullable();
             $table->json('event_data')->nullable();
             $table->string('url')->nullable();
-            $table->foreignId('content_id')->nullable()->constrained('contents')->onDelete('set null');
+            $table->unsignedBigInteger('content_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->timestamp('occurred_at')->index();
             $table->timestamps();

@@ -54,7 +54,7 @@
         class="inline-flex items-center px-0 text-[10px] font-bold tracking-[0.5em] uppercase text-primary mb-6"
       >
         <span class="w-8 h-[1px] bg-primary mr-3" />
-        {{ schoolLevelLabel }} {{ schoolStatus === 'negeri' ? 'Negeri' : 'Vokasi Unggulan' }}
+        {{ schoolUnitLabel }} {{ schoolStatus === 'negeri' ? 'Negeri' : 'Vokasi Unggulan' }}
       </span>
 
       <!-- Large Centered Title -->
@@ -83,10 +83,10 @@
           Gabung Sekarang
         </router-link>
         <router-link 
-          :to="schoolLevel === 'smk' ? '/jurusan' : '/profil/akademik'"
+          :to="schoolUnit === 'smk' ? '/jurusan' : '/profil/akademik'"
           class="w-full sm:w-auto px-10 py-4 text-xs font-black text-center tracking-[0.3em] uppercase border border-white/30 text-white/70 hover:border-primary hover:text-white transition-all duration-500"
         >
-          {{ schoolLevel === 'smk' ? 'Eksplorasi Jurusan' : 'Lihat Keunggulan' }}
+          {{ schoolUnit === 'smk' ? 'Eksplorasi Jurusan' : 'Lihat Keunggulan' }}
         </router-link>
       </div>
 
@@ -335,11 +335,11 @@ const slideElements = ref<HTMLElement[]>([])
 
 const { data: dynamicHeroNews, hasBinding: hasHeroNewsBinding } = useThemeDataBindings('hero', 'news')
 
-const schoolLevel = computed(() => (getSetting('school_level') as string) || 'smk');
+const schoolUnit = computed(() => (getSetting('school_unit') as string) || 'smk');
 const schoolStatus = computed(() => (getSetting('school_status') as string) || 'negeri');
-const schoolLevelLabel = computed(() => {
+const schoolUnitLabel = computed(() => {
     const levels: Record<string, string> = { sd: 'Sekolah Dasar', smp: 'SMP', sma: 'SMA', smk: 'SMK', gabungan: 'Yayasan' };
-    return levels[schoolLevel.value] || 'Education';
+    return levels[schoolUnit.value] || 'Education';
 });
 
 const heroTitleText = computed(

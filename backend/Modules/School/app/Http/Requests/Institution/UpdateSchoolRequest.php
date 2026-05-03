@@ -22,7 +22,7 @@ class UpdateSchoolRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'type' => 'nullable|string|max:50',
-            'is_multi_level' => 'sometimes|boolean',
+            'is_multi_unit' => 'sometimes|boolean',
             'is_multi_branch' => 'sometimes|boolean',
             'npsn' => 'nullable|string|size:8|unique:sch_ins_schools,npsn,' . (string)$schoolId,
             'nss' => 'nullable|string|max:20',
