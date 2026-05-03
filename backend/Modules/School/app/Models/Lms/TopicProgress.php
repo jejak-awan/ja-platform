@@ -31,7 +31,7 @@ class TopicProgress extends Model
     protected $casts = [
         'is_completed' => 'boolean',
         'completed_at' => 'datetime',
-        'metadata' => 'json',
+        'metadata' => 'array',
     ];
 
     /**

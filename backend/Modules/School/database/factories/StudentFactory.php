@@ -41,6 +41,7 @@ class StudentFactory extends Factory
             'mother_name' => $this->faker->name('female'),
             'mother_nik' => $this->faker->numerify('################'),
             'mother_occupation' => $this->faker->jobTitle(),
+            'metadata' => [],
         ];
     }
 

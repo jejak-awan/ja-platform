@@ -78,12 +78,12 @@ class UserTest extends TestCase
         if (! Role::where('name', 'member')->exists()) {
             Role::create(['name' => 'member', 'guard_name' => 'web']);
         }
-        if (! Role::where('name', 'super-admin')->exists()) {
-            Role::create(['name' => 'super-admin', 'guard_name' => 'web']);
+        if (! Role::where('name', 'super')->exists()) {
+            Role::create(['name' => 'super', 'guard_name' => 'web']);
         }
 
         $userLow->assignRole('member');
-        $userHigh->assignRole('super-admin');
+        $userHigh->assignRole('super');
 
         $this->assertEquals(20, $userLow->getRoleRank());
         $this->assertEquals(100, $userHigh->getRoleRank());
@@ -95,7 +95,7 @@ class UserTest extends TestCase
         // Test isAtLeastRole
         $this->assertTrue($userLow->isAtLeastRole('member'));
         $this->assertFalse($userLow->isAtLeastRole('admin'));
-        $this->assertTrue($userHigh->isAtLeastRole('super-admin'));
+        $this->assertTrue($userHigh->isAtLeastRole('super'));
 
         // Test unknown role check
         $this->assertFalse($userLow->isAtLeastRole('non_existent_role'));

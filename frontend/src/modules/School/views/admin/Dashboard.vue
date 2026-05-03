@@ -13,7 +13,7 @@
         class="w-16 h-16 text-muted-foreground/20 animate-pulse"
       />
       <p class="text-muted-foreground font-medium italic animate-pulse">
-        {{ $t('common.messages.loading') }}...
+        {{ $t('common.messages.loading.default') }}...
       </p>
     </div>
   </div>
@@ -42,7 +42,7 @@ const dashboardComponent = computed(() => {
 
   const roles = authStore.user.roles?.map(r => r.name) || [];
 
-  if (roles.some(r => ['super-admin', 'admin-sekolah', 'kepala-sekolah', 'admin'].includes(r))) {
+  if (roles.some(r => ['super', 'admin-yayasan', 'admin-unit', 'admin', 'operator-unit'].includes(r))) {
     return SchoolAdminDashboard;
   }
   

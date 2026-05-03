@@ -42,7 +42,7 @@ class FileManagerController extends BaseApiController
         $disk = $disk ?: 'public';
 
         $user = Auth::user();
-        if ($user instanceof User && $user->hasRole('super-admin')) {
+        if ($user instanceof User && $user->hasRole('super')) {
             $configuredDisks = config('filesystems.disks');
             $configuredDisks = is_array($configuredDisks) ? array_keys($configuredDisks) : [];
             if (in_array($disk, $configuredDisks, true)) {

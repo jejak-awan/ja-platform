@@ -72,15 +72,15 @@ class CheckMaintenanceMode
                 $user = \Illuminate\Support\Facades\Auth::guard($guard)->user();
                 if ($user instanceof \Modules\Core\Models\User) {
                     // Core Admin roles
-                    if ($user->hasAnyRole(['admin', 'super-admin'])) {
+                    if ($user->hasAnyRole(['admin', 'super'])) {
                         return true;
                     }
                     
-                    // School Admin roles (starts with admin- or is kepala-sekolah)
+                    // School Admin roles (starts with admin- or is admin-unit)
                     /** @var iterable<string> $roles */
                     $roles = $user->getRoleNames();
                     foreach ($roles as $role) {
-                        if ($role === 'kepala-sekolah' || str_starts_with($role, 'admin-')) {
+                        if ($role === 'admin-unit' || str_starts_with($role, 'admin-')) {
                             return true;
                         }
                     }

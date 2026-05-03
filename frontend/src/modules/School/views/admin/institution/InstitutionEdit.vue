@@ -414,7 +414,7 @@ const toast = useToast();
 const { t } = useI18n();
 
 const loading = computed(() => schoolStore.loading);
-const isSuperAdmin = computed(() => authStore.isAtLeastRole('super-admin'));
+const isSuperAdmin = computed(() => authStore.isAtLeastRole('super'));
 
 /**
  * Form state for institutional basic profile.

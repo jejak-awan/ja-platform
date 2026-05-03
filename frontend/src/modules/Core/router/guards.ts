@@ -92,7 +92,7 @@ export const handleBeforeEachGuard = async (
         }
     }
 
-    if (to.meta.requiresSuperAdmin && !authStore.isAtLeastRole('super-admin')) {
+    if (to.meta.requiresSuperAdmin && !authStore.isAtLeastRole('super')) {
         next({ name: 'forbidden' });
         return;
     }

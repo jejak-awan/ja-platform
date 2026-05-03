@@ -25,17 +25,17 @@ class OsisSeeder extends Seeder
                 'school_id' => $schoolId,
                 'name' => 'LDKS (Latihan Dasar Kepemimpinan Siswa)',
                 'description' => 'Pelatihan kepemimpinan untuk pengurus OSIS baru.',
-                'planned_date' => now()->addMonths(1),
+                'start_date' => now()->addMonths(1),
                 'status' => 'planned',
-                'estimated_budget' => 5000000,
+                'budget' => 5000000,
             ],
             [
                 'school_id' => $schoolId,
                 'name' => 'PORSENI 2024',
                 'description' => 'Pekan Olahraga dan Seni antar kelas.',
-                'planned_date' => now()->addMonths(3),
+                'start_date' => now()->addMonths(3),
                 'status' => 'planned',
-                'estimated_budget' => 15000000,
+                'budget' => 15000000,
             ],
         ];
 
@@ -58,16 +58,15 @@ class OsisSeeder extends Seeder
         $suggestions = [
             [
                 'school_id' => $schoolId,
-                'subject' => 'Fasilitas Kantin',
+                'title' => 'Fasilitas Kantin',
                 'content' => 'Mohon kebersihan kantin lebih diperhatikan lagi.',
                 'status' => 'pending',
             ],
             [
                 'school_id' => $schoolId,
-                'subject' => 'Ekskul Robotik',
+                'title' => 'Ekskul Robotik',
                 'content' => 'Apakah bisa diadakan ekskul robotik di sekolah kita?',
                 'status' => 'reviewed',
-                'response' => 'Akan dipertimbangkan untuk tahun ajaran depan.',
             ],
         ];
 

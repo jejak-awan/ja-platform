@@ -1,4 +1,7 @@
 <?php
+/**
+ * Antigravity: Standardized LMS Lesson Model (Level 9)
+ */
 
 namespace Modules\School\Models\Lms;
 
@@ -9,24 +12,25 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property int $id
  * @property int $course_id
- * @property int|null $parent_id
+ * @property int $section_id
  * @property string $title
+ * @property string $slug
  * @property string|null $summary
  * @property int $order
- * @property bool $is_active
  * @property-read Course $course
+ * @property-read Section $section
  */
 class Lesson extends Model
 {
     protected $table = 'sch_lms_lessons';
 
     protected $fillable = [
+        'section_id',
         'course_id',
-        'parent_id',
         'title',
+        'slug',
         'summary',
         'order',
-        'is_active',
     ];
 
     /**
@@ -38,19 +42,11 @@ class Lesson extends Model
     }
 
     /**
-     * @return BelongsTo<Lesson, $this>
+     * @return BelongsTo<Section, $this>
      */
-    public function parent(): BelongsTo
+    public function section(): BelongsTo
     {
-        return $this->belongsTo(Lesson::class, 'parent_id');
-    }
-
-    /**
-     * @return HasMany<Lesson, $this>
-     */
-    public function subLessons(): HasMany
-    {
-        return $this->hasMany(Lesson::class, 'parent_id')->orderBy('order');
+        return $this->belongsTo(Section::class);
     }
 
     /**

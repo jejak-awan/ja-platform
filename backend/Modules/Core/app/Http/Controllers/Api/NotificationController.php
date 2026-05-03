@@ -121,7 +121,7 @@ class NotificationController extends BaseApiController
             return $this->unauthorized('Unauthenticated');
         }
 
-        if (! $user->hasRole('super-admin')) {
+        if (! $user->hasRole('super')) {
             if (! $user->can('manage system')) {
                 return $this->forbidden('Unauthorized');
             }
@@ -147,7 +147,7 @@ class NotificationController extends BaseApiController
             return $this->unauthorized('Unauthenticated');
         }
 
-        if (! $user->hasRole('super-admin') && ! $user->can('manage system')) {
+        if (! $user->hasRole('super') && ! $user->can('manage system')) {
             return $this->forbidden('Unauthorized');
         }
 
@@ -183,7 +183,7 @@ class NotificationController extends BaseApiController
             return $this->unauthorized('Unauthenticated');
         }
 
-        if (! $user->hasRole('super-admin') && ! $user->can('manage system')) {
+        if (! $user->hasRole('super') && ! $user->can('manage system')) {
             return $this->forbidden('Unauthorized');
         }
 
@@ -235,7 +235,7 @@ class NotificationController extends BaseApiController
             return $this->unauthorized('Unauthenticated');
         }
 
-        if (! $user->hasRole('super-admin') && ! $user->can('manage system')) {
+        if (! $user->hasRole('super') && ! $user->can('manage system')) {
             return $this->forbidden('Unauthorized');
         }
 

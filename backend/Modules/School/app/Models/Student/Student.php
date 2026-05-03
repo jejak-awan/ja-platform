@@ -77,6 +77,11 @@ class Student extends Model
     /** @use HasFactory<\Modules\School\Database\Factories\StudentFactory> */
     use HasFactory, SoftDeletes, ScopedBySchool, ScopedByUnit, HasVerificationHash;
 
+    protected $casts = [
+        'date_of_birth' => 'date',
+        'metadata' => 'array',
+    ];
+
     protected static function newFactory(): \Modules\School\Database\Factories\StudentFactory
     {
         return \Modules\School\Database\Factories\StudentFactory::new();
@@ -122,6 +127,7 @@ class Student extends Model
         'guardian_education',
         'guardian_occupation',
         'guardian_income',
+        'metadata',
     ];
 
     /**

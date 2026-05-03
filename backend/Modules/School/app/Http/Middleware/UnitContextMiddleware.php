@@ -20,7 +20,7 @@ class UnitContextMiddleware
         }
 
         $levelId = $request->header('X-Level-ID');
-        $isGlobalAdmin = $user->getRoleRank() >= 95; // super-admin (100), ketua-yayasan (100), admin-yayasan (95)
+        $isGlobalAdmin = $user->getRoleRank() >= 95; // super-admin (100), admin-yayasan (100), admin-yayasan (95)
 
         if ($levelId) {
             $levelId = (int) $levelId;

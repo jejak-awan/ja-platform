@@ -17,9 +17,11 @@ class SchoolDatabaseSeeder extends Seeder
             StaffSampleSeeder::class,
             SchoolSampleUserSeeder::class,
             AcademicInfrastructureSeeder::class,
+            SubjectSeeder::class,
             StudentSampleSeeder::class,
             LmsSeeder::class,
             OsisSeeder::class,
+            GraduationSeeder::class,
         ]);
     }
 }

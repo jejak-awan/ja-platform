@@ -30,14 +30,16 @@ class OsisProgram extends Model
         'school_id',
         'name',
         'description',
-        'planned_date',
+        'start_date',
+        'end_date',
         'status',
-        'estimated_budget',
+        'budget',
     ];
 
     protected $casts = [
-        'planned_date' => 'date',
-        'estimated_budget' => 'decimal:2',
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'budget' => 'decimal:2',
     ];
 
     /**

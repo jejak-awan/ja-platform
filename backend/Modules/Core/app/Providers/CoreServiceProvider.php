@@ -50,7 +50,7 @@ class CoreServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::before(function ($user, $capability) {
-            return $user->hasRole('super-admin') ? true : null;
+            return $user->hasRole('super') ? true : null;
         });
 
         // Register Request Macro for CSP Nonce

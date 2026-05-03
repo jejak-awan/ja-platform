@@ -4,6 +4,7 @@ namespace Modules\School\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\School\Models\Lms\Course;
+use Modules\School\Models\Lms\Section;
 use Modules\School\Models\Lms\Lesson;
 use Modules\School\Models\Lms\Topic;
 use Modules\School\Models\Lms\TopicContent\RichText;
@@ -24,55 +25,71 @@ class LmsSeeder extends Seeder
         if (!$school || !$author) return;
 
         // 1. Create a Sample Course
-        $course = Course::create([
-            'school_id' => $school->id,
-            'title' => 'Dasar-Dasar Pemrograman Web',
-            'slug' => 'dasar-pemrograman-web',
-            'summary' => 'Belajar HTML, CSS, dan JavaScript dari nol.',
-            'description' => 'Kursus ini dirancang untuk pemula yang ingin terjun ke dunia web development.',
-            'level' => 'beginner',
-            'status' => 'published',
-            'author_id' => $author->id,
-        ]);
+        $course = Course::updateOrCreate(
+            ['slug' => 'dasar-pemrograman-web'],
+            [
+                'school_id' => $school->id,
+                'title' => 'Dasar-Dasar Pemrograman Web',
+                'summary' => 'Belajar HTML, CSS, dan JavaScript dari nol.',
+                'description' => 'Kursus ini dirancang untuk pemula yang ingin terjun ke dunia web development.',
+                'level' => 'beginner',
+                'status' => 'published',
+                'author_id' => $author->id,
+            ]
+        );
 
-        // 2. Create Lessons
-        $lesson1 = Lesson::create([
-            'course_id' => $course->id,
-            'title' => 'Pengenalan HTML',
-            'order' => 1,
-        ]);
+        // 2. Create Section
+        $section = Section::updateOrCreate(
+            ['course_id' => $course->id, 'title' => 'Bab 1: Dasar HTML'],
+            ['order' => 1]
+        );
 
-        $lesson2 = Lesson::create([
-            'course_id' => $course->id,
-            'title' => 'Styling dengan CSS',
-            'order' => 2,
-        ]);
+        // 3. Create Lessons
+        $lesson1 = Lesson::updateOrCreate(
+            [
+                'section_id' => $section->id,
+                'course_id' => $course->id,
+                'slug' => 'pengenalan-html-css',
+            ],
+            [
+                'title' => 'Pengenalan HTML & CSS',
+                'summary' => 'Dasar-dasar struktur web dan styling.',
+                'order' => 1,
+            ]
+        );
 
-        // 3. Create Topics with Polymorphic Content
+        $lesson2 = Lesson::updateOrCreate(
+            ['section_id' => $section->id, 'course_id' => $course->id, 'title' => 'Styling dengan CSS'],
+            ['order' => 2, 'slug' => 'styling-dengan-css']
+        );
+
+        // 4. Create Topics with Polymorphic Content
         
         // Topic 1: RichText
         $text = RichText::create([
             'value' => '<h1>Selamat Datang!</h1><p>HTML adalah bahasa standar untuk membuat halaman web.</p>'
         ]);
-        Topic::create([
-            'lesson_id' => $lesson1->id,
-            'title' => 'Apa itu HTML?',
-            'order' => 1,
-            'topicable_type' => RichText::class,
-            'topicable_id' => $text->id,
-        ]);
+        Topic::updateOrCreate(
+            ['lesson_id' => $lesson1->id, 'title' => 'Apa itu HTML?'],
+            [
+                'order' => 1,
+                'topicable_type' => RichText::class,
+                'topicable_id' => $text->id,
+            ]
+        );
 
         // Topic 2: Video
         $video = Video::create([
             'value' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
             'duration' => 212,
         ]);
-        Topic::create([
-            'lesson_id' => $lesson1->id,
-            'title' => 'Struktur Dasar Dokumen HTML',
-            'order' => 2,
-            'topicable_type' => Video::class,
-            'topicable_id' => $video->id,
-        ]);
+        Topic::updateOrCreate(
+            ['lesson_id' => $lesson1->id, 'title' => 'Struktur Dasar Dokumen HTML'],
+            [
+                'order' => 2,
+                'topicable_type' => Video::class,
+                'topicable_id' => $video->id,
+            ]
+        );
     }
 }

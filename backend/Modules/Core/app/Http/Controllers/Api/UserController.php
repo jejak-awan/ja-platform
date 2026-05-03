@@ -159,13 +159,7 @@ class UserController extends BaseApiController
             $rolesInput = $request->input('roles', []);
             $roles = \Spatie\Permission\Models\Role::whereIn('id', is_array($rolesInput) ? $rolesInput : [])->get();
 
-            $roleRanks = [
-                'super-admin' => 100,
-                'admin' => 80,
-                'editor' => 60,
-                'author' => 40,
-                'member' => 20,
-            ];
+            $roleRanks = User::getRoleRankMap();
 
             foreach ($roles as $role) {
                 $rank = $roleRanks[(string) $role->name] ?? 0;
@@ -436,7 +430,7 @@ class UserController extends BaseApiController
         $user->update($validated);
 
         // Guard: Hierarchy check
-        // Allow if self OR if super-admin (rank >= 100) OR if strictly higher rank
+        // Allow if self OR if super (rank >= 100) OR if strictly higher rank
         if ($authUser->id !== $user->id && $authUser->getRoleRank() < 100 && ! $authUser->isHigherThan($user)) {
             return $this->forbidden(trans('features.users.messages.hierarchy_restriction'));
         }
@@ -446,13 +440,7 @@ class UserController extends BaseApiController
             $rolesInput = $request->input('roles', []);
             $roles = \Spatie\Permission\Models\Role::whereIn('id', is_array($rolesInput) ? $rolesInput : [])->get();
 
-            $roleRanks = [
-                'super-admin' => 100,
-                'admin' => 80,
-                'editor' => 60,
-                'author' => 40,
-                'member' => 20,
-            ];
+            $roleRanks = User::getRoleRankMap();
 
             foreach ($roles as $role) {
                 $rank = $roleRanks[(string) $role->name] ?? 0;
@@ -466,14 +454,14 @@ class UserController extends BaseApiController
                 return $this->forbidden('You cannot assign a role higher than your own rank');
             }
 
-            // Guard: cannot remove super-admin role from the last super-admin
-            $isCurrentlySuperAdmin = $user->hasRole('super-admin');
-            $requestedSuperAdmin = $roles->contains('name', 'super-admin');
+            // Guard: cannot remove super role from the last super
+            $isCurrentlySuperAdmin = $user->hasRole('super');
+            $requestedSuperAdmin = $roles->contains('name', 'super');
 
             if ($isCurrentlySuperAdmin && ! $requestedSuperAdmin) {
-                $superAdminCount = User::role('super-admin')->count();
+                $superAdminCount = User::role('super')->count();
                 if ($superAdminCount <= 1) {
-                    return $this->validationError(['roles' => ['Cannot remove the last super-admin role']], 'Cannot remove the last super-admin role');
+                    return $this->validationError(['roles' => ['Cannot remove the last super role']], 'Cannot remove the last super role');
                 }
             }
 
@@ -504,16 +492,16 @@ class UserController extends BaseApiController
             return $this->validationError(['user' => ['You cannot delete your own account']], 'You cannot delete your own account');
         }
 
-        // Prevent deleting users with higher or equal rank (unless super-admin)
+        // Prevent deleting users with higher or equal rank (unless super)
         if ($authUser->getRoleRank() < 100 && ! $authUser->isHigherThan($user)) {
             return $this->forbidden(trans('features.users.messages.hierarchy_restriction'));
         }
 
-        // Prevent deleting the last super-admin
-        if ($user->hasRole('super-admin')) {
-            $superAdminCount = User::role('super-admin')->count();
+        // Prevent deleting the last super
+        if ($user->hasRole('super')) {
+            $superAdminCount = User::role('super')->count();
             if ($superAdminCount <= 1) {
-                return $this->validationError(['user' => ['Cannot delete the last super-admin account']], 'Cannot delete the last super-admin account');
+                return $this->validationError(['user' => ['Cannot delete the last super account']], 'Cannot delete the last super account');
             }
         }
 
@@ -646,16 +634,16 @@ class UserController extends BaseApiController
             return $this->validationError(['user' => ['You cannot delete your own account']], 'You cannot delete your own account');
         }
 
-        // Prevent deleting users with higher or equal rank (unless super-admin)
+        // Prevent deleting users with higher or equal rank (unless super)
         if ($authUser->getRoleRank() < 100 && ! $authUser->isHigherThan($user)) {
             return $this->forbidden(trans('features.users.messages.hierarchy_restriction'));
         }
 
-        // Prevent deleting the last super-admin
-        if ($user->hasRole('super-admin')) {
-            $superAdminCount = User::role('super-admin')->count();
+        // Prevent deleting the last super
+        if ($user->hasRole('super')) {
+            $superAdminCount = User::role('super')->count();
             if ($superAdminCount <= 1) {
-                return $this->validationError(['user' => ['Cannot delete the last super-admin account']], 'Cannot delete the last super-admin account');
+                return $this->validationError(['user' => ['Cannot delete the last super account']], 'Cannot delete the last super account');
             }
         }
 
@@ -717,12 +705,12 @@ class UserController extends BaseApiController
                 return true;
             });
 
-            // Prevent deleting the last super-admin in bulk delete
-            $superAdminsToDelete = User::whereIn('id', $ids)->role('super-admin')->count();
+            // Prevent deleting the last super in bulk delete
+            $superAdminsToDelete = User::whereIn('id', $ids)->role('super')->count();
             if ($superAdminsToDelete > 0) {
-                $totalSuperAdmins = User::role('super-admin')->count();
+                $totalSuperAdmins = User::role('super')->count();
                 if ($totalSuperAdmins - $superAdminsToDelete < 1) {
-                    return $this->validationError(['ids' => ['Bulk action would leave the system without a super-admin']], 'Cannot delete the last super-admin');
+                    return $this->validationError(['ids' => ['Bulk action would leave the system without a super role']], 'Cannot delete the last super role');
                 }
             }
 
@@ -752,12 +740,12 @@ class UserController extends BaseApiController
                 return true;
             });
 
-            // Prevent deleting the last super-admin in bulk delete
-            $superAdminsToDelete = User::withTrashed()->whereIn('id', $ids)->role('super-admin')->count();
+            // Prevent deleting the last super in bulk delete
+            $superAdminsToDelete = User::withTrashed()->whereIn('id', $ids)->role('super')->count();
             if ($superAdminsToDelete > 0) {
-                $totalSuperAdmins = User::role('super-admin')->count();
+                $totalSuperAdmins = User::role('super')->count();
                 if ($totalSuperAdmins - $superAdminsToDelete < 1) {
-                    return $this->validationError(['ids' => ['Bulk action would leave the system without a super-admin']], 'Cannot delete the last super-admin');
+                    return $this->validationError(['ids' => ['Bulk action would leave the system without a super role']], 'Cannot delete the last super role');
                 }
             }
 

@@ -23,7 +23,7 @@ const ViewerDashboard = defineAsyncComponent(() => import('@/modules/Core/compon
 // Determine which dashboard to show based on roles and permissions
 const activeDashboard = computed<Component>(() => {
     // 1. Super Admin / Core System Admin
-    if (authStore.user?.roles?.some(r => r.name === 'super-admin')) {
+    if (authStore.user?.roles?.some(r => r.name === 'super')) {
         return AdminDashboard;
     }
 

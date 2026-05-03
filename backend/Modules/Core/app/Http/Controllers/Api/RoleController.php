@@ -71,7 +71,7 @@ class RoleController extends BaseApiController
             }
 
             // Prevent deleting protected roles
-            if ($role->name === 'super-admin') {
+            if ($role->name === 'super') {
                 continue;
             }
 
@@ -132,7 +132,7 @@ class RoleController extends BaseApiController
     public function update(Request $request, Role $role): \Illuminate\Http\JsonResponse
     {
         // Prevent editing protected roles
-        if ($role->name === 'super-admin') {
+        if ($role->name === 'super') {
             return $this->error('Cannot modify protected role', 403);
         }
 
@@ -156,7 +156,7 @@ class RoleController extends BaseApiController
     public function destroy(Role $role): \Illuminate\Http\JsonResponse
     {
         // Prevent deleting protected roles
-        if ($role->name === 'super-admin') {
+        if ($role->name === 'super') {
             return $this->error('Cannot delete protected role', 403);
         }
 
@@ -187,9 +187,9 @@ class RoleController extends BaseApiController
 
     public function syncPermissions(Request $request, Role $role): \Illuminate\Http\JsonResponse
     {
-        // Prevent modifying super-admin permissions
-        if ($role->name === 'super-admin') {
-            return $this->error('Cannot modify super-admin permissions', 403);
+        // Prevent modifying super permissions
+        if ($role->name === 'super') {
+            return $this->error('Cannot modify super permissions', 403);
         }
 
         $validated = $request->validate([

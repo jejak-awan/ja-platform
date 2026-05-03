@@ -214,28 +214,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getRoleRank(): int
     {
-        $roleRanks = [
-            'super-admin' => 100,
-            'ketua-yayasan' => 100,
-            'admin-yayasan' => 95,
-            'admin' => 80,
-            'kepala-sekolah' => 90,
-            'admin-sekolah' => 90,
-            'admin-kurikulum' => 85,
-            'admin-kesiswaan' => 85,
-            'admin-sarpras' => 85,
-            'admin-humas' => 85,
-            'admin-bk' => 85,
-            'guru' => 70,
-            'wali-kelas' => 75,
-            'editor' => 60,
-            'admin-osis' => 50,
-            'author' => 40,
-            'orang-tua' => 30,
-            'member' => 20,
-            'siswa' => 20,
-        ];
-
+        $roleRanks = $this->getRoleRankMap();
         $userRoles = $this->getRoleNames();
 
         $maxRank = 0;
@@ -264,33 +243,49 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isAtLeastRole(string $roleName): bool
     {
-        $roleRanks = [
-            'super-admin' => 100,
-            'ketua-yayasan' => 100,
-            'admin-yayasan' => 95,
-            'admin' => 80,
-            'kepala-sekolah' => 90,
-            'admin-sekolah' => 90,
-            'admin-kurikulum' => 85,
-            'admin-kesiswaan' => 85,
-            'admin-sarpras' => 85,
-            'admin-humas' => 85,
-            'admin-bk' => 85,
-            'guru' => 70,
-            'wali-kelas' => 75,
-            'editor' => 60,
-            'admin-osis' => 50,
-            'author' => 40,
-            'orang-tua' => 30,
-            'member' => 20,
-            'siswa' => 20,
-        ];
+        $roleRanks = self::getRoleRankMap();
 
         if (! isset($roleRanks[$roleName])) {
             return false;
         }
 
         return $this->getRoleRank() >= $roleRanks[$roleName];
+    }
+
+    /**
+     * Get the standardized role rank map for the system.
+     * Higher number means higher authority.
+     *
+     * @return array<string, int>
+     */
+    public static function getRoleRankMap(): array
+    {
+        return [
+            // Global Roles
+            'super' => 100,
+            'admin' => 95,
+            'operator' => 85,
+
+            // School Module (Contextual)
+            'admin-yayasan' => 90,
+            'operator-yayasan' => 85,
+            'admin-unit' => 80,
+            'operator-unit' => 70,
+            
+            // Staff & Academic
+            'staff' => 50,
+            'guru' => 50,
+            'wali-kelas' => 55,
+            'editor' => 60,
+            'author' => 40,
+            
+            // Personal/Public
+            'siswa' => 10,
+            'student' => 10,
+            'orang-tua' => 5,
+            'parent' => 5,
+            'member' => 20,
+        ];
     }
 
     /**

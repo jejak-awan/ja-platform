@@ -43,6 +43,7 @@ class Staff extends Model
 
     protected $fillable = [
         'school_id',
+        'school_unit_id',
         'user_id',
         'nuptk',
         'nik',
@@ -60,10 +61,15 @@ class Staff extends Model
         'last_education',
         'major',
         'certification_status',
+        'metadata',
     ];
 
     protected $casts = [
         'certification_status' => 'boolean',
+        'metadata' => 'array',
+        'date_of_birth' => 'date',
+        'tmt_pengangkatan' => 'date',
+        'tmt_penugasan' => 'date',
     ];
 
     /**

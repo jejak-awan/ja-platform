@@ -19,17 +19,17 @@ class SchoolSampleUserSeeder extends Seeder
             [
                 'name' => 'Kepala Sekolah (Drs. Mulyana)',
                 'email' => 'kepsek@cijulang.sch.id',
-                'role' => 'kepala-sekolah',
+                'role' => 'admin-unit',
             ],
             [
                 'name' => 'Admin Kurikulum (Siti Aminah)',
                 'email' => 'kurikulum@cijulang.sch.id',
-                'role' => 'admin-kurikulum',
+                'role' => 'operator-unit',
             ],
             [
                 'name' => 'Admin Kesiswaan (Budi Santoso)',
                 'email' => 'kesiswaan@cijulang.sch.id',
-                'role' => 'admin-kesiswaan',
+                'role' => 'operator-unit',
             ],
             [
                 'name' => 'Guru (Ani Maryani)',
@@ -44,7 +44,7 @@ class SchoolSampleUserSeeder extends Seeder
             [
                 'name' => 'Admin OSIS (Siti Rahma)',
                 'email' => 'osis@cijulang.sch.id',
-                'role' => 'admin-osis',
+                'role' => 'operator-unit',
             ],
         ];
 

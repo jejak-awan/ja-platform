@@ -34,6 +34,7 @@ class StaffFactory extends Factory
             'last_education' => $this->faker->randomElement($educations),
             'major' => $this->faker->randomElement(['Pendidikan Teknik Informatika', 'Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'Fisika']),
             'certification_status' => $this->faker->boolean(60),
+            'metadata' => [],
         ];
     }
 

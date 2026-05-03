@@ -29,11 +29,9 @@ class OsisSuggestion extends Model
 
     protected $fillable = [
         'school_id',
-        'student_id',
-        'subject',
+        'title',
         'content',
         'status',
-        'response',
     ];
 
     /**

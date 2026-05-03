@@ -89,7 +89,7 @@ class FoundationSeeder extends Seeder
         }
 
         // Standard Roles
-        $superAdmin = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
+        $superAdmin = Role::firstOrCreate(['name' => 'super', 'guard_name' => 'web']);
         $superAdmin->syncPermissions(Permission::all());
 
         $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
@@ -204,7 +204,7 @@ class FoundationSeeder extends Seeder
             ['key' => 'require_email_verification', 'value' => '1', 'group' => 'security', 'type' => 'boolean'],
             ['key' => 'enable_2fa', 'value' => '0', 'group' => 'security', 'type' => 'boolean'],
             ['key' => 'two_factor_method', 'value' => 'authenticator', 'group' => 'security', 'type' => 'string'],
-            ['key' => 'two_factor_enforced_roles', 'value' => '["admin", "super-admin"]', 'group' => 'security', 'type' => 'json'],
+            ['key' => 'two_factor_enforced_roles', 'value' => '["admin", "super"]', 'group' => 'security', 'type' => 'json'],
             ['key' => 'password_min_length', 'value' => '8', 'group' => 'security', 'type' => 'integer'],
             ['key' => 'password_require_uppercase', 'value' => '1', 'group' => 'security', 'type' => 'boolean'],
             ['key' => 'password_require_lowercase', 'value' => '1', 'group' => 'security', 'type' => 'boolean'],

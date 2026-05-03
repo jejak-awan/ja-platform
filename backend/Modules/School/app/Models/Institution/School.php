@@ -127,6 +127,15 @@ class School extends Model
         'org_structure_path',
     ];
 
+    protected $casts = [
+        'is_multi_unit' => 'boolean',
+        'is_multi_branch' => 'boolean',
+        'tgl_sk_pendirian' => 'date',
+        'tgl_sk_operasional' => 'date',
+        'tgl_akta_pendirian_yayasan' => 'date',
+        'tgl_sk_kemenkumham' => 'date',
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<SchoolUnit, $this>
      */

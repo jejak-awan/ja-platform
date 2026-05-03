@@ -20,7 +20,7 @@ class InfrastructureSeeder extends Seeder
         }
 
         // 1. Standard Global Tags
-        $tags = ['CMS', 'SaaS', 'Vue.js', 'Laravel', 'UI/UX', 'Premium', 'Education', 'Technology'];
+        $tags = ['Education', 'Technology', 'School', 'LMS', 'CMS', 'Announcement'];
         foreach ($tags as $tag) {
             $slug = Str::slug($tag);
             $tagModel = Tag::withTrashed()->updateOrCreate(
@@ -33,6 +33,26 @@ class InfrastructureSeeder extends Seeder
             if ($tagModel->trashed()) {
                 $tagModel->restore();
             }
+        }
+
+        // 2. Standard Media Folders
+        $folders = [
+            ['name' => 'Logos', 'slug' => 'logos', 'module' => 'Core'],
+            ['name' => 'CMS Content', 'slug' => 'cms-content', 'module' => 'Cms'],
+            ['name' => 'Students', 'slug' => 'students', 'module' => 'School'],
+            ['name' => 'Staff', 'slug' => 'staff', 'module' => 'School'],
+            ['name' => 'Documents', 'slug' => 'documents', 'module' => 'Core'],
+        ];
+
+        foreach ($folders as $folder) {
+            \Modules\Core\Models\MediaFolder::withTrashed()->updateOrCreate(
+                ['slug' => $folder['slug']],
+                array_merge($folder, [
+                    'author_id' => $admin->id,
+                    'is_shared' => true,
+                    'sort_order' => 0,
+                ])
+            );
         }
 
         $this->command->info('Global infrastructure seeded successfully!');

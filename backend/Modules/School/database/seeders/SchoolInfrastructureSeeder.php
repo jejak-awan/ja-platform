@@ -9,7 +9,7 @@ class SchoolInfrastructureSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Create Default School
+        // 1. Create Default School (SMK Negeri 1 Cijulang)
         DB::table('sch_ins_schools')->updateOrInsert(
             ['id' => 15],
             [
@@ -22,6 +22,10 @@ class SchoolInfrastructureSeeder extends Seeder
                 'phone' => '0265-123456',
                 'email' => 'info@smkn1cijulang.sch.id',
                 'website' => 'https://smkn1cijulang.sch.id',
+                'vision' => 'Terwujudnya Lulusan yang Unggul, Berkarakter, dan Berdaya Saing Global.',
+                'mission' => "1. Menyelenggarakan pendidikan vokasi yang berkualitas.\n2. Menanamkan nilai-nilai karakter bangsa.\n3. Menjalin kerja sama dengan dunia usaha dan dunia industri.",
+                'history' => 'SMK Negeri 1 Cijulang didirikan untuk memenuhi kebutuhan tenaga kerja terampil di wilayah Pangandaran.',
+                'principal_name' => 'Dr. H. Ahmad Fauzi, M.Pd.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

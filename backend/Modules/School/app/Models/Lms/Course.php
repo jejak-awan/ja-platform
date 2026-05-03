@@ -60,9 +60,10 @@ class Course extends Model
     ];
 
     protected $casts = [
-        'metadata' => 'json',
+        'metadata' => 'array',
         'base_price' => 'decimal:2',
         'discount_price' => 'decimal:2',
+        'is_global' => 'boolean',
     ];
 
     /**

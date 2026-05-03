@@ -16,28 +16,31 @@ interface ApiErrorResponse {
 }
 
 export const ROLE_RANKS: Record<string, number> = {
-    'super-admin': 100,
-    'superadmin': 100,
-    'super_admin': 100,
-    'supe_admin': 100,
-    'ketua-yayasan': 95,
-    'admin-yayasan': 95,
-    'kepala-sekolah': 90,
-    'admin-sekolah': 90,
-    'admin-kurikulum': 85,
-    'admin-kesiswaan': 85,
-    'admin-sarpras': 85,
-    'admin-humas': 85,
-    'admin-bk': 85,
-    'guru': 70,
-    'wali-kelas': 75,
-    'admin': 80,
+    // Global Roles
+    'super': 100,
+    'admin': 95,
+    'operator': 85,
+
+    // School Module (Contextual)
+    'admin-yayasan': 90,
+    'operator-yayasan': 85,
+    'admin-unit': 80,
+    'operator-unit': 70,
+    
+    // Academic & Staff
+    'staff': 50,
+    'guru': 50,
+    'wali-kelas': 55,
+    'non-editing-teacher': 50,
     'editor': 60,
-    'admin-osis': 50,
     'author': 40,
-    'orang-tua': 30,
+    
+    // Personal/Public
+    'siswa': 10,
+    'student': 10,
+    'orang-tua': 5,
+    'parent': 5,
     'member': 20,
-    'siswa': 20,
 };
 
 // Define extended window interface for circuit breaker flags

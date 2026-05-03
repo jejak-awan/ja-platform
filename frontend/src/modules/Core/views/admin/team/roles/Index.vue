@@ -606,7 +606,7 @@ const form = ref<{
     matrixPermissions: {}
 });
 
-const protectedRoles = ['super-admin', 'superadmin', 'super_admin', 'supe_admin'];
+const protectedRoles = ['super', 'super-admin', 'superadmin', 'super_admin', 'supe_admin'];
 const isProtectedRole = (name: string) => protectedRoles.includes(name) || (ROLE_RANKS[name] || 0) >= 100;
 
 // Computed
