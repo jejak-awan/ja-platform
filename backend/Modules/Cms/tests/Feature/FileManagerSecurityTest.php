@@ -86,7 +86,7 @@ class FileManagerSecurityTest extends TestCase
         // User ID 1: needs super-admin role so FileManagerController allows any configured disk.
         $superAdmin = User::find(1);
         $superAdmin->givePermissionTo('manage files');
-        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
+        $superAdminRole = Role::firstOrCreate(['name' => 'super', 'guard_name' => 'web']);
         $superAdmin->assignRole($superAdminRole);
 
         // Mock local disk to avoid real error

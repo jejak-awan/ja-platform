@@ -508,7 +508,7 @@ class ContentController extends BaseApiController
 
         // Basic permission check
         if ($content->author_id !== $user->id) {
-            if (! $user->hasRole('super-admin') && ! $user->hasRole('admin') && ! $user->can('manage content')) {
+            if (! $user->hasRole('super') && ! $user->hasRole('admin') && ! $user->can('manage content')) {
                 return $this->forbidden('Unauthorized to update this content');
             }
         }
@@ -946,7 +946,7 @@ class ContentController extends BaseApiController
 
         if ($this->contentService->isLockedByOther($content, (int) $user->id)) {
             // Allow Admins/Super Admins to steal the lock
-            if (! $user->hasRole('super-admin') && ! $user->hasRole('admin')) {
+            if (! $user->hasRole('super') && ! $user->hasRole('admin')) {
                 /** @var \Modules\Core\Models\User|null $lockedBy */
                 $lockedBy = $content->lockedBy;
 

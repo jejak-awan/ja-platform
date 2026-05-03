@@ -44,6 +44,6 @@ class SchoolPolicy
      */
     public function delete(User $user, School $school): bool
     {
-        return $user->hasAnyRole(['super-admin']);
+        return $user->hasAnyRole(['super']);
     }
 }

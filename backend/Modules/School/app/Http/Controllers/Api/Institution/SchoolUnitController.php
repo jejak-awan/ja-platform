@@ -80,7 +80,7 @@ class SchoolUnitController extends BaseController
     {
         // Only allow super-admin or admin to switch context
         $user = $request->user();
-        if (!$user || (!$user->hasRole('super-admin') && !$user->hasRole('admin'))) {
+        if (!$user || (!$user->hasRole('super') && !$user->hasRole('admin'))) {
             return $this->sendError('Unauthorized', [], 403);
         }
 
