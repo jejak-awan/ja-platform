@@ -35,6 +35,20 @@
                 <XCircle v-else class="w-5 h-5 text-destructive" />
               </div>
             </div>
+
+            <!-- Troubleshooting Section -->
+            <div v-if="!isRequirementsMet" class="mt-6 p-4 rounded-lg bg-destructive/5 border border-destructive/20 animate-in fade-in zoom-in duration-300">
+                <h3 class="text-sm font-bold text-destructive mb-2 flex items-center gap-2">
+                    <XCircle class="w-4 h-4" />
+                    How to Fix:
+                </h3>
+                <ul class="text-xs space-y-2 text-muted-foreground list-disc pl-4">
+                    <li v-if="!requirements.php_supported">Upgrade PHP to 8.2 or higher.</li>
+                    <li v-if="!requirements.writable_env">Run: <code class="bg-muted px-1 rounded text-foreground">chmod 666 .env</code></li>
+                    <li v-if="!requirements.writable_storage">Run: <code class="bg-muted px-1 rounded text-foreground">chmod -R 775 storage bootstrap/cache</code></li>
+                    <li v-if="!requirements.pdo_enabled">Install PDO: <code class="bg-muted px-1 rounded text-foreground">sudo apt install php-pgsql php-mysql</code></li>
+                </ul>
+            </div>
           </div>
 
           <Button 
@@ -161,11 +175,11 @@ const toast = useToast();
 const form = ref({
   app_name: 'JA-Platform',
   app_url: window.location.origin,
-  db_connection: 'mysql',
+  db_connection: 'pgsql',
   db_host: '127.0.0.1',
-  db_port: '3306',
+  db_port: '5432',
   db_database: 'ja_apps',
-  db_username: 'root',
+  db_username: 'postgres',
   db_password: ''
 });
 

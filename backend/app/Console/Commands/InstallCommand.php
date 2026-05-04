@@ -124,7 +124,7 @@ class InstallCommand extends Command
     {
         $this->comment('🗄️ Setting up database...');
 
-        $connection = $this->choice('Database Connection', ['mysql', 'pgsql', 'sqlite'], 'mysql');
+        $connection = $this->choice('Database Connection', ['mysql', 'pgsql', 'sqlite'], 'pgsql');
 
         if ($connection === 'sqlite') {
             $path = $this->ask('Database Path (absolute)', database_path('database.sqlite'));
@@ -138,7 +138,7 @@ class InstallCommand extends Command
             ]);
         } else {
             $host = $this->ask('Database Host', env('DB_HOST', '127.0.0.1'));
-            $port = $this->ask('Database Port', $connection === 'mysql' ? '3306' : '5432');
+            $port = $this->ask('Database Port', $connection === 'pgsql' ? '5432' : '3306');
             $database = $this->ask('Database Name', env('DB_DATABASE', 'ja_apps'));
             $username = $this->ask('Database Username', env('DB_USERNAME', 'root'));
             $password = $this->secret('Database Password');
