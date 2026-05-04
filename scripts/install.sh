@@ -268,10 +268,33 @@ if [ -f "$REDIS_CONF_TARGET" ]; then
     sudo systemctl restart redis-server || sudo systemctl restart redis
 fi
 
-# 7. Server Configuration (Nginx, Supervisor, Cron)
+# 7. Server Configuration (PHP, Nginx, Supervisor, Cron)
 echo -e "${BLUE}==================================================${NC}"
 echo -e "${BLUE}       Configuring Server Services                ${NC}"
 echo -e "${BLUE}==================================================${NC}"
+
+# PHP & FPM Tuning
+echo -e "${YELLOW}Applying PHP & FPM optimization...${NC}"
+PHP_INI_PATH="/etc/php.ini"
+[ ! -f "$PHP_INI_PATH" ] && PHP_INI_PATH="/etc/php/8.3/fpm/php.ini"
+
+if [ -f "$PHP_INI_PATH" ]; then
+    sudo cp scripts/templates/php.ini.template $PHP_INI_PATH
+fi
+
+FPM_WWW_PATH="/etc/php-fpm.d/www.conf"
+[ ! -f "$FPM_WWW_PATH" ] && FPM_WWW_PATH="/etc/php/8.3/fpm/pool.d/www.conf"
+
+if [ -f "$FPM_WWW_PATH" ]; then
+    # Detect socket path for template
+    SOCKET_PATH=$(echo $PHP_FPM_SOCK | sed 's/unix://')
+    sed -e "s|{{USER}}|$USER|g" \
+        -e "s|{{GROUP}}|www-data|g" \
+        -e "s|{{PHP_FPM_SOCK_PATH}}|$SOCKET_PATH|g" \
+        scripts/templates/fpm-www.conf.template | sudo tee $FPM_WWW_PATH > /dev/null
+fi
+
+sudo systemctl restart php-fpm || sudo systemctl restart php8.3-fpm || true
 
 # Ask for Domain
 read -p "Enter your Domain/IP (e.g., example.com): " DOMAIN_NAME
