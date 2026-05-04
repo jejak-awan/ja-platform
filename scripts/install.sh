@@ -224,18 +224,38 @@ read -p "Enter your Domain/IP (e.g., example.com): " DOMAIN_NAME
 DOMAIN_NAME=${DOMAIN_NAME:-$SERVER_IP}
 
 # Variables for templates
-PHP_VER="8.3"
 CURRENT_PATH=$(pwd)
 
+# Detect PHP-FPM Socket
+if [ -S /run/php-fpm/www.sock ]; then
+    PHP_FPM_SOCK="unix:/run/php-fpm/www.sock"
+elif [ -S /var/run/php/php8.3-fpm.sock ]; then
+    PHP_FPM_SOCK="unix:/var/run/php/php8.3-fpm.sock"
+elif [ -S /var/run/php/php8.2-fpm.sock ]; then
+    PHP_FPM_SOCK="unix:/var/run/php/php8.2-fpm.sock"
+else
+    # Fallback/Guess
+    PHP_FPM_SOCK="unix:/var/run/php-fpm.sock"
+fi
+
+echo -e "${GREEN}Detected PHP-FPM Sock: $PHP_FPM_SOCK${NC}"
+
 # Configure Nginx
-if [[ "$OS" == "ubuntu" || "$OS" == "debian" ]]; then
+if command -v nginx &> /dev/null; then
     echo -e "${YELLOW}Deploying Nginx configuration...${NC}"
+    NGINX_CONF_PATH="/etc/nginx/sites-available/ja-platform.conf"
+    if [ ! -d /etc/nginx/sites-available ]; then
+        NGINX_CONF_PATH="/etc/nginx/conf.d/ja-platform.conf"
+    fi
+
     sed -e "s|{{DOMAIN}}|$DOMAIN_NAME|g" \
         -e "s|{{APP_PATH}}|$CURRENT_PATH|g" \
-        -e "s|{{PHP_VERSION}}|$PHP_VER|g" \
-        scripts/templates/nginx.conf.template | sudo tee /etc/nginx/sites-available/ja-platform.conf > /dev/null
+        -e "s|{{PHP_FPM_SOCK}}|$PHP_FPM_SOCK|g" \
+        scripts/templates/nginx.conf.template | sudo tee $NGINX_CONF_PATH > /dev/null
     
-    sudo ln -sf /etc/nginx/sites-available/ja-platform.conf /etc/nginx/sites-enabled/
+    if [ -d /etc/nginx/sites-enabled ]; then
+        sudo ln -sf /etc/nginx/sites-available/ja-platform.conf /etc/nginx/sites-enabled/
+    fi
     sudo nginx -t && sudo systemctl restart nginx
 fi
 
