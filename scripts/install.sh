@@ -12,9 +12,32 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Error Handling Function
+trap 'on_error $LINENO' ERR
+on_error() {
+    echo -e "\n${RED}==================================================${NC}"
+    echo -e "${RED}  ERROR: Installation Failed at line $1          ${NC}"
+    echo -e "${RED}==================================================${NC}"
+    echo -e "${YELLOW}Common Solutions:${NC}"
+    echo -e "1. Check your internet connection."
+    echo -e "2. Run 'sudo apt update' or 'sudo dnf check-update' manually."
+    echo -e "3. If a repo is blocked, check your firewall/DNS settings."
+    echo -e "4. Ensure you have enough disk space."
+    exit 1
+}
+
 echo -e "${BLUE}==================================================${NC}"
-echo -e "${BLUE}       JA-Platform Auto-Installer v2.0            ${NC}"
+echo -e "${BLUE}       JA-Platform Auto-Installer v2.1            ${NC}"
 echo -e "${BLUE}==================================================${NC}"
+
+# 0. Connectivity Check
+echo -e "${YELLOW}Checking internet connectivity...${NC}"
+if ! ping -c 1 8.8.8.8 &> /dev/null; then
+    echo -e "${RED}Error: No internet connection detected.${NC}"
+    echo -e "${YELLOW}Tip: Check your proxy or DNS settings (/etc/resolv.conf).${NC}"
+    exit 1
+fi
+echo -e "${GREEN}Internet: OK${NC}"
 
 # 1. OS Detection
 if [ -f /etc/os-release ]; then
