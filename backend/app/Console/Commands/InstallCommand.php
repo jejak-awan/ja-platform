@@ -57,13 +57,39 @@ class InstallCommand extends Command
     {
         $this->comment('🏁 Finalizing installation...');
         
-        // 1. Create Lock File
+        // 1. Create Default Super User
+        $this->comment('👤 Creating super administrator account...');
+        try {
+            $userClass = '\App\Models\User';
+            if (class_exists($userClass)) {
+                $userClass::updateOrCreate(
+                    ['username' => 'super'],
+                    [
+                        'name' => 'Super Administrator',
+                        'email' => 'super@ja-platform.com',
+                        'password' => \Hash::make('Senja@jejakawan'),
+                        'email_verified_at' => now(),
+                    ]
+                );
+            }
+        } catch (\Exception $e) {
+            $this->error('❌ Failed to create super user: ' . $e->getMessage());
+        }
+
+        // 2. Create Lock File
         File::put(storage_path('installed'), 'Installation completed at: ' . now());
         
-        // 2. Set Installed Flag in Env
+        // 3. Set Installed Flag in Env
         $this->updateEnv(['APP_INSTALLED' => 'true']);
         
         $this->info('✅ Installation lock created.');
+
+        $this->info("\n" . str_repeat('=', 40));
+        $this->info('  DEFAULT CREDENTIALS');
+        $this->info(str_repeat('=', 40));
+        $this->line("  Username : <fg=green>super</>");
+        $this->line("  Password : <fg=green>Senja@jejakawan</>");
+        $this->info(str_repeat('=', 40) . "\n");
     }
 
     protected function checkRequirements()

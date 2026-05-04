@@ -214,7 +214,18 @@ echo -e "${YELLOW}Setting up permissions...${NC}"
 sudo chmod -R 775 backend/storage backend/bootstrap/cache
 sudo chown -R $USER:www-data backend/storage backend/bootstrap/cache || true
 
+# Final Summary
+SERVER_IP=$(curl -s https://ifconfig.me || hostname -I | awk '{print $1}')
+APP_URL=$(grep APP_URL backend/.env | cut -d= -f2)
+
 echo -e "${GREEN}==================================================${NC}"
-echo -e "${GREEN}   Environment is Ready!                          ${NC}"
-echo -e "${GREEN}   Please visit your domain to finish setup.      ${NC}"
+echo -e "${GREEN}   JA-PLATFORM INSTALLATION COMPLETE!             ${NC}"
+echo -e "${GREEN}==================================================${NC}"
+echo -e "${YELLOW}Access URL:${NC} ${BLUE}${APP_URL:-http://$SERVER_IP}${NC}"
+echo -e ""
+echo -e "${YELLOW}Default Credentials:${NC}"
+echo -e "Username : ${GREEN}super${NC}"
+echo -e "Password : ${GREEN}Senja@jejakawan${NC}"
+echo -e "${GREEN}==================================================${NC}"
+echo -e "${YELLOW}Next Step:${NC} Please visit the URL to finish setup."
 echo -e "${GREEN}==================================================${NC}"

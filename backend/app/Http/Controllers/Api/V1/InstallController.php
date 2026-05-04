@@ -84,11 +84,12 @@ class InstallController extends Controller
             }
 
             // 3. Run Migrations
-            // Note: In web environment, this might time out if database is large.
-            // For first install, it should be fine.
             Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
 
-            // 4. Finalize
+            // 4. Create Default Super User
+            $this->createSuperUser();
+
+            // 5. Finalize
             File::put(storage_path('installed'), 'Web installation completed at: ' . now());
             $this->updateEnv(['APP_INSTALLED' => 'true']);
 
@@ -125,6 +126,27 @@ class InstallController extends Controller
         }
 
         return $results;
+    }
+
+    protected function createSuperUser()
+    {
+        // Assuming User model exists and uses Hash
+        try {
+            $userClass = '\App\Models\User';
+            if (class_exists($userClass)) {
+                $userClass::updateOrCreate(
+                    ['username' => 'super'],
+                    [
+                        'name' => 'Super Administrator',
+                        'email' => 'super@ja-platform.com',
+                        'password' => \Hash::make('Senja@jejakawan'),
+                        'email_verified_at' => now(),
+                    ]
+                );
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to create super user: ' . $e->getMessage());
+        }
     }
 
     protected function updateEnv(array $data)
