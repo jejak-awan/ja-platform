@@ -83,13 +83,25 @@ class InstallController extends Controller
 
     protected function checkRequirements()
     {
-        return [
+        $extensions = [
+            'bcmath', 'ctype', 'curl', 'dom', 'fileinfo', 'gd', 
+            'intl', 'json', 'mbstring', 'openssl', 'pdo_pgsql', 
+            'tokenizer', 'xml', 'zip'
+        ];
+
+        $results = [
             'php_version' => PHP_VERSION,
             'php_supported' => version_compare(PHP_VERSION, '8.2.0', '>='),
             'writable_env' => is_writable(base_path('.env')) || is_writable(base_path()),
-            'writable_storage' => is_writable(storage_path()),
-            'pdo_enabled' => extension_loaded('pdo'),
+            'writable_storage' => is_writable(storage_path()) && is_writable(bootstrap_path('cache')),
+            'pdo_enabled' => extension_loaded('pdo_pgsql'),
         ];
+
+        foreach ($extensions as $ext) {
+            $results["ext_$ext"] = extension_loaded($ext);
+        }
+
+        return $results;
     }
 
     protected function updateEnv(array $data)

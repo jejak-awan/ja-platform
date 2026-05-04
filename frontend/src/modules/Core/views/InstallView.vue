@@ -22,17 +22,37 @@
             <Loader2 class="w-8 h-8 animate-spin text-primary" />
           </div>
 
-          <div v-else class="space-y-3">
-            <div 
-              v-for="(status, key) in requirements" 
-              :key="key"
-              class="flex items-center justify-between p-3 rounded-lg border border-border/50 bg-muted/30"
-            >
-              <span class="text-sm font-medium capitalize">{{ String(key).replace('_', ' ') }}</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs text-muted-foreground">{{ status === true ? 'OK' : status }}</span>
-                <CheckCircle2 v-if="status === true || (typeof status === 'string' && key === 'php_version')" class="w-5 h-5 text-green-500" />
-                <XCircle v-else class="w-5 h-5 text-destructive" />
+          <div v-else class="space-y-6">
+            <div class="space-y-3">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Core Requirements</h3>
+              <div 
+                v-for="(status, key) in requirements" 
+                :key="key"
+                v-show="!String(key).startsWith('ext_') && String(key) !== 'php_version'"
+                class="flex items-center justify-between p-2.5 rounded-lg border border-border/50 bg-muted/30"
+              >
+                <span class="text-sm font-medium capitalize">{{ String(key).replace('_', ' ') }}</span>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-muted-foreground">{{ status === true ? 'OK' : (key === 'php_version' ? status : 'Missing') }}</span>
+                  <CheckCircle2 v-if="status === true" class="w-4 h-4 text-green-500" />
+                  <XCircle v-else class="w-4 h-4 text-destructive" />
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-muted-foreground">PHP Extensions</h3>
+              <div class="grid grid-cols-2 gap-2">
+                <div 
+                  v-for="(status, key) in requirements" 
+                  :key="key"
+                  v-show="String(key).startsWith('ext_')"
+                  class="flex items-center justify-between p-2 rounded border border-border/40 bg-card"
+                >
+                  <span class="text-xs font-medium">{{ String(key).replace('ext_', '') }}</span>
+                  <CheckCircle2 v-if="status === true" class="w-3.5 h-3.5 text-green-500" />
+                  <XCircle v-else class="w-3.5 h-3.5 text-destructive" />
+                </div>
               </div>
             </div>
 
@@ -40,13 +60,13 @@
             <div v-if="!isRequirementsMet" class="mt-6 p-4 rounded-lg bg-destructive/5 border border-destructive/20 animate-in fade-in zoom-in duration-300">
                 <h3 class="text-sm font-bold text-destructive mb-2 flex items-center gap-2">
                     <XCircle class="w-4 h-4" />
-                    How to Fix:
+                    Troubleshooting:
                 </h3>
                 <ul class="text-xs space-y-2 text-muted-foreground list-disc pl-4">
-                    <li v-if="!requirements.php_supported">Upgrade PHP to 8.2 or higher.</li>
-                    <li v-if="!requirements.writable_env">Run: <code class="bg-muted px-1 rounded text-foreground">chmod 666 .env</code></li>
+                    <li v-if="!requirements.php_supported">Upgrade PHP to 8.2 or 8.3 (Recommended).</li>
+                    <li v-if="!requirements.writable_env">Ensure <code class="bg-muted px-1 rounded text-foreground">.env</code> exists and is writable.</li>
                     <li v-if="!requirements.writable_storage">Run: <code class="bg-muted px-1 rounded text-foreground">chmod -R 775 storage bootstrap/cache</code></li>
-                    <li v-if="!requirements.pdo_enabled">Install PDO: <code class="bg-muted px-1 rounded text-foreground">sudo apt install php-pgsql php-mysql</code></li>
+                    <li v-if="!isRequirementsMet">Install missing extensions: <code class="bg-muted px-1 rounded text-foreground">sudo apt install php8.3-{common,pgsql,bcmath,curl,gd,intl,xml,zip,mbstring}</code></li>
                 </ul>
             </div>
           </div>
@@ -184,10 +204,17 @@ const form = ref({
 });
 
 const isRequirementsMet = computed(() => {
-  return requirements.value.php_supported && 
+  const basicMet = requirements.value.php_supported && 
          requirements.value.writable_env && 
          requirements.value.writable_storage && 
          requirements.value.pdo_enabled;
+  
+  if (!basicMet) return false;
+
+  // Check all extensions
+  return Object.keys(requirements.value)
+    .filter(key => key.startsWith('ext_'))
+    .every(key => requirements.value[key] === true);
 });
 
 const fetchStatus = async () => {
