@@ -26,7 +26,12 @@ cd ..
 echo "🚚 Copying backend files..."
 cp -r backend/. "$RELEASE_DIR/"
 
-# 4. Clean up unnecessary files from release
+# 4. Code Protection (Optional)
+# Uncomment the following lines if you have an obfuscator like YAKPRO-PO or ionCube installed
+# echo "🔐 Protecting source code..."
+# find "$RELEASE_DIR/app" -name "*.php" -exec php obfuscator.php {} \;
+
+# 5. Clean up unnecessary files from release
 echo "🧹 Cleaning up development files..."
 rm -rf "$RELEASE_DIR/node_modules"
 rm -rf "$RELEASE_DIR/vendor"
