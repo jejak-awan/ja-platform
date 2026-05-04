@@ -26,6 +26,21 @@ on_error() {
     exit 1
 }
 
+# DNS Fallback Function
+try_alternative_dns() {
+    echo -e "${YELLOW}Resolving issues detected. Trying alternative DNS (8.8.8.8)...${NC}"
+    echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
+}
+
+# Mirror Switcher for Ubuntu/Debian
+switch_mirror() {
+    if [[ "$OS" == "ubuntu" || "$OS" == "debian" ]]; then
+        echo -e "${YELLOW}Mirror issue detected. Switching to main global mirror...${NC}"
+        sudo sed -i 's/[a-z]\{2\}\.archive\.ubuntu\.com/archive.ubuntu.com/g' /etc/apt/sources.list
+        sudo apt-get update -y
+    fi
+}
+
 # Retry Command Function
 retry_cmd() {
     local n=1
@@ -38,9 +53,18 @@ retry_cmd() {
             if [[ $n -lt $max ]]; then
                 ((n++))
                 echo -e "${YELLOW}Command failed. Attempt $n/$max. Retrying in ${delay}s...${NC}"
+                
+                # Attempt alternative paths on second failure
+                if [[ $n -eq 2 ]]; then
+                    try_alternative_dns || true
+                fi
+                if [[ $n -eq 3 ]]; then
+                    switch_mirror || true
+                fi
+                
                 sleep $delay
             else
-                echo -e "${RED}Command failed after $max attempts.${NC}"
+                echo -e "${RED}Command failed after $max attempts and alternative paths.${NC}"
                 return 1
             fi
         fi
@@ -48,7 +72,7 @@ retry_cmd() {
 }
 
 echo -e "${BLUE}==================================================${NC}"
-echo -e "${BLUE}       JA-Platform Auto-Installer v2.2            ${NC}"
+echo -e "${BLUE}       JA-Platform Auto-Installer v2.3            ${NC}"
 echo -e "${BLUE}==================================================${NC}"
 
 # 0. Connectivity Check
