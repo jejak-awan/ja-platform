@@ -12,6 +12,14 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Ensure script is run as root or with sudo
+if [ "$EUID" -ne 0 ]; then
+    echo -e "${YELLOW}This script requires sudo privileges. Refreshing sudo session...${NC}"
+    sudo -v
+    # Keep sudo alive during the process
+    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+fi
+
 # Error Handling Function
 trap 'on_error $LINENO' ERR
 on_error() {
