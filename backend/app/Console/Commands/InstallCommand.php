@@ -36,6 +36,8 @@ class InstallCommand extends Command
 
         $this->setupEnvironment();
         $this->setupDatabase();
+        $this->setupRedis();
+        $this->setupMail();
         $this->setupFrontend();
 
         $this->info('✅ JA-Platform has been installed successfully!');
@@ -100,30 +102,99 @@ class InstallCommand extends Command
     {
         $this->comment('🗄️ Setting up database...');
 
-        $host = $this->ask('Database Host', env('DB_HOST', '127.0.0.1'));
-        $port = $this->ask('Database Port', env('DB_PORT', '3306'));
-        $database = $this->ask('Database Name', env('DB_DATABASE', 'ja_apps'));
-        $username = $this->ask('Database Username', env('DB_USERNAME', 'root'));
-        $password = $this->secret('Database Password');
+        $connection = $this->choice('Database Connection', ['mysql', 'pgsql', 'sqlite'], 'mysql');
 
-        $this->updateEnv([
-            'DB_HOST' => $host,
-            'DB_PORT' => $port,
-            'DB_DATABASE' => $database,
-            'DB_USERNAME' => $username,
-            'DB_PASSWORD' => $password,
-        ]);
+        if ($connection === 'sqlite') {
+            $path = $this->ask('Database Path (absolute)', database_path('database.sqlite'));
+            if (!File::exists($path)) {
+                File::put($path, '');
+                $this->info("✅ Created SQLite database at $path");
+            }
+            $this->updateEnv([
+                'DB_CONNECTION' => 'sqlite',
+                'DB_DATABASE' => $path,
+            ]);
+        } else {
+            $host = $this->ask('Database Host', env('DB_HOST', '127.0.0.1'));
+            $port = $this->ask('Database Port', $connection === 'mysql' ? '3306' : '5432');
+            $database = $this->ask('Database Name', env('DB_DATABASE', 'ja_apps'));
+            $username = $this->ask('Database Username', env('DB_USERNAME', 'root'));
+            $password = $this->secret('Database Password');
 
-        // Refresh config
-        config(['database.connections.mysql.host' => $host]);
-        config(['database.connections.mysql.port' => $port]);
-        config(['database.connections.mysql.database' => $database]);
-        config(['database.connections.mysql.username' => $username]);
-        config(['database.connections.mysql.password' => $password]);
+            $this->updateEnv([
+                'DB_CONNECTION' => $connection,
+                'DB_HOST' => $host,
+                'DB_PORT' => $port,
+                'DB_DATABASE' => $database,
+                'DB_USERNAME' => $username,
+                'DB_PASSWORD' => $password,
+            ]);
+            
+            // Temporary update for migration check
+            config(["database.connections.$connection.host" => $host]);
+            config(["database.connections.$connection.port" => $port]);
+            config(["database.connections.$connection.database" => $database]);
+            config(["database.connections.$connection.username" => $username]);
+            config(["database.connections.$connection.password" => $password]);
+        }
 
         if ($this->confirm('Do you want to run migrations and seeders?', true)) {
             $this->call('migrate:fresh', ['--seed' => true]);
         }
+    }
+
+    protected function setupRedis()
+    {
+        if (!$this->confirm('Do you want to configure Redis?', false)) {
+            return;
+        }
+
+        $this->comment('🚀 Setting up Redis...');
+
+        $host = $this->ask('Redis Host', env('REDIS_HOST', '127.0.0.1'));
+        $password = $this->secret('Redis Password (leave null if none)');
+        $port = $this->ask('Redis Port', env('REDIS_PORT', '6379'));
+
+        $this->updateEnv([
+            'REDIS_HOST' => $host,
+            'REDIS_PASSWORD' => $password ?: 'null',
+            'REDIS_PORT' => $port,
+        ]);
+        
+        $this->info('✅ Redis configured.');
+    }
+
+    protected function setupMail()
+    {
+        if (!$this->confirm('Do you want to configure Mail settings?', false)) {
+            return;
+        }
+
+        $this->comment('📧 Setting up Mail...');
+
+        $mailer = $this->choice('Mail Mailer', ['smtp', 'mailgun', 'ses', 'log'], 'smtp');
+        
+        if ($mailer === 'log') {
+            $this->updateEnv(['MAIL_MAILER' => 'log']);
+            return;
+        }
+
+        $host = $this->ask('Mail Host', env('MAIL_HOST', '127.0.0.1'));
+        $port = $this->ask('Mail Port', env('MAIL_PORT', '2525'));
+        $username = $this->ask('Mail Username', env('MAIL_USERNAME'));
+        $password = $this->secret('Mail Password');
+        $from = $this->ask('Mail From Address', env('MAIL_FROM_ADDRESS', 'hello@example.com'));
+
+        $this->updateEnv([
+            'MAIL_MAILER' => $mailer,
+            'MAIL_HOST' => $host,
+            'MAIL_PORT' => $port,
+            'MAIL_USERNAME' => $username,
+            'MAIL_PASSWORD' => $password,
+            'MAIL_FROM_ADDRESS' => "\"$from\"",
+        ]);
+
+        $this->info('✅ Mail configured.');
     }
 
     protected function setupFrontend()
