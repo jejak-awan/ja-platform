@@ -1,4 +1,4 @@
-const DEFAULT_FAVICON = '/favicon.svg';
+const DEFAULT_FAVICON = '/favicon.ico';
 
 let lastAppliedFavicon = '';
 

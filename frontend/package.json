@@ -21,7 +21,8 @@
         "clean:vite": "rm -rf node_modules/.vite",
         "clean:dist": "rm -rf dist",
         "clean:cache": "npm run clean:ts && npm run clean:vite",
-        "rebuild": "npm run clean:cache && npm run clean:dist && npm run build"
+        "rebuild": "npm run clean:cache && npm run clean:dist && npm run build",
+        "deploy:assets:full": "bash ../scripts/sync-frontend-assets-to-backend.sh"
     },
     "dependencies": {
         "@fullcalendar/core": "^6.1.19",

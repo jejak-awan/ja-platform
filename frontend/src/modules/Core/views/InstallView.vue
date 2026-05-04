@@ -271,7 +271,7 @@ const isRequirementsMet = computed(() => {
 
 const fetchStatus = async () => {
   try {
-    const response = await api.get('/v1/install/status', { _skipManualRedirect: true } as any);
+    const response = await api.get('/install/status', { _skipManualRedirect: true } as any);
     requirements.value = response.data.requirements;
     serverOS.value = response.data.os || { family: 'unknown', distro: 'unknown' };
     if (response.data.is_installed) {
@@ -288,7 +288,7 @@ const fetchStatus = async () => {
 const handleInstall = async () => {
   submitting.value = true;
   try {
-    const response = await api.post('/v1/install', form.value, { _skipManualRedirect: true } as any);
+    const response = await api.post('/install', form.value, { _skipManualRedirect: true } as any);
     toast.success.default(response.data.message);
     step.value = 'success';
   } catch (err: any) {

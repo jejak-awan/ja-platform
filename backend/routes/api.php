@@ -1,3 +1,5 @@
+<?php
+
 use App\Http\Controllers\Api\V1\InstallController;
 
 Route::prefix('v1/install')->group(function () {

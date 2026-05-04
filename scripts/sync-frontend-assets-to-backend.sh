@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the Vue dashboard and sync hashed chunks to Laravel public/assets (typical smkn1cijulang-style deploy).
+# Build the Vue dashboard and sync whole dist content to Laravel public (including root files like logo.png, favicon.ico).
 #
 # Usage (from ja-apps/):
 #   npm run deploy:assets              # full rebuild + rsync
@@ -9,8 +9,8 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SRC="$ROOT/frontend/dist/assets/"
-DST="$ROOT/backend/public/assets/"
+SRC_DIST="$ROOT/frontend/dist/"
+DST_PUBLIC="$ROOT/backend/public/"
 
 for bin in npm rsync; do
   if ! command -v "$bin" >/dev/null 2>&1; then
@@ -20,21 +20,27 @@ for bin in npm rsync; do
 done
 
 if [ "${SYNC_ONLY:-0}" != "1" ]; then
+  echo "Full build and sync..."
   cd "$ROOT/frontend"
   npm run rebuild
 else
   echo "SYNC_ONLY=1 — skipping npm run rebuild"
 fi
 
-if [ ! -d "$SRC" ]; then
-  echo "error: missing $SRC (run without SYNC_ONLY first)" >&2
+if [ ! -d "$SRC_DIST" ]; then
+  echo "error: missing $SRC_DIST (run without SYNC_ONLY first)" >&2
   exit 1
 fi
 
-mkdir -p "$DST"
-rsync -a --delete "$SRC" "$DST"
-cp "$ROOT/frontend/dist/index.html" "$ROOT/backend/public/index.html"
+mkdir -p "$DST_PUBLIC"
+# Sync all contents of dist to backend/public, but PROTECT core Laravel entrance files
+rsync -a --delete \
+  --exclude='index.php' \
+  --exclude='.htaccess' \
+  --exclude='robots.txt' \
+  --exclude='.well-known' \
+  "$SRC_DIST" "$DST_PUBLIC"
 
-echo "OK: synced $SRC → $DST and index.html"
+echo "OK: synced $SRC_DIST → $DST_PUBLIC"
 echo "Tip: on the server, after pull: cd ja-apps && npm run deploy:assets"
 echo "Tip: optional Laravel: cd ja-apps/backend && php artisan optimize:clear && php artisan view:cache"

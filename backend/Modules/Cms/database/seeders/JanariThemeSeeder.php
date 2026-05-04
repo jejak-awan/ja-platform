@@ -3,9 +3,10 @@
 namespace Modules\Cms\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
+use Modules\Cms\Models\Theme;
 use Modules\Core\Models\User;
 
 class JanariThemeSeeder extends Seeder
@@ -15,65 +16,74 @@ class JanariThemeSeeder extends Seeder
         $user = User::first();
         if (!$user) return;
 
-        $this->seedNews($user);
-        $this->seedMajors($user);
-        $this->seedStats($user);
-        $this->seedTestimonials($user);
-        $this->seedPartners($user);
+        $this->seedThemeSettings();
+        $this->seedCategories($user);
+        $this->seedEssentialContent($user);
     }
 
-    private function seedNews($user)
+    private function seedThemeSettings()
     {
-        Category::updateOrCreate(['slug' => 'news-announcement'], [
-            'name' => 'News & Announcements',
-            'slug' => 'news-announcement',
-            'author_id' => $user->id,
-            'is_active' => true
-        ]);
-        // No sample news for production
+        $theme = Theme::withoutGlobalScopes()->whereIn('slug', ['janari', 'janari-education'])->first();
+        if (!$theme) return;
+
+        $manifestPath = base_path('../frontend/src/modules/Cms/views/themes/janari/theme.json');
+        
+        if (File::exists($manifestPath)) {
+            $manifest = json_decode(File::get($manifestPath), true);
+            $settings = $theme->settings ?? [];
+
+            if (isset($manifest['settings_schema'])) {
+                foreach ($manifest['settings_schema'] as $key => $schema) {
+                    if (isset($schema['default']) && !isset($settings[$key])) {
+                        $settings[$key] = $schema['default'];
+                    }
+                }
+            }
+
+            $settings['site_title'] = $settings['site_title'] ?? 'SEKOLAHK2ID';
+            $settings['hero_title'] = $settings['hero_title'] ?? 'SEKOLAHK2ID';
+            $settings['hero_subtitle'] = $settings['hero_subtitle'] ?? 'Mencetak Generasi Unggul Siap Kerja, Kuliah, dan Berwirausaha';
+            $settings['brand_logo'] = $settings['brand_logo'] ?? '/logo.png';
+            $settings['brand_favicon'] = $settings['brand_favicon'] ?? '/favicon.ico';
+
+            $theme->update(['settings' => $settings]);
+        }
     }
 
-    private function seedMajors($user)
+    private function seedCategories($user)
     {
-        Category::updateOrCreate(['slug' => 'academic-programs'], [
-            'name' => 'Academic Programs',
-            'slug' => 'academic-programs',
-            'author_id' => $user->id,
-            'is_active' => true
-        ]);
-        // No sample programs for production
+        $categories = [
+            'news-announcement' => 'News & Announcements',
+            'academic-programs' => 'Academic Programs',
+            'school-stats' => 'School Stats',
+            'testimonials' => 'Testimonials',
+            'industry-partners' => 'Industry Partners',
+        ];
+
+        foreach ($categories as $slug => $name) {
+            Category::withTrashed()->withoutGlobalScopes()->updateOrCreate(
+                ['slug' => $slug, 'school_unit_id' => null],
+                [
+                    'name' => $name,
+                    'author_id' => $user->id,
+                    'is_active' => true
+                ]
+            );
+        }
     }
 
-    private function seedStats($user)
+    private function seedEssentialContent($user)
     {
-        Category::updateOrCreate(['slug' => 'school-stats'], [
-            'name' => 'School Stats',
-            'slug' => 'school-stats',
-            'author_id' => $user->id,
-            'is_active' => true
-        ]);
-        // No sample stats for production
-    }
-
-    private function seedTestimonials($user)
-    {
-        Category::updateOrCreate(['slug' => 'testimonials'], [
-            'name' => 'Testimonials',
-            'slug' => 'testimonials',
-            'author_id' => $user->id,
-            'is_active' => true
-        ]);
-        // No sample testimonials for production
-    }
-
-    private function seedPartners($user)
-    {
-        Category::updateOrCreate(['slug' => 'industry-partners'], [
-            'name' => 'Industry Partners',
-            'slug' => 'industry-partners',
-            'author_id' => $user->id,
-            'is_active' => true
-        ]);
-        // No sample partners for production
+        // 1. Essential Home Page Record (Global)
+        Content::withTrashed()->withoutGlobalScopes()->updateOrCreate(
+            ['slug' => 'home', 'school_unit_id' => null],
+            [
+                'title' => 'Home',
+                'type' => 'page',
+                'status' => 'published',
+                'author_id' => $user->id,
+                'body' => 'Welcome to JA-Platform. This is a clean production foundation.',
+            ]
+        );
     }
 }

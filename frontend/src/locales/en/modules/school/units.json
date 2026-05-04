@@ -22,7 +22,7 @@
     "form": {
         "addTitle": "Add Unit",
         "name": "Unit Name",
-        "namePlaceholder": "Example: SMK TI AZZAHRA",
+        "namePlaceholder": "Example: SMP SEKOLAHK2ID",
         "npsn": "Unit NPSN",
         "npsnPlaceholder": "Example: 12345678",
         "save": "Save Unit",
