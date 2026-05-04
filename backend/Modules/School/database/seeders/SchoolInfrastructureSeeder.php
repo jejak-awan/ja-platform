@@ -9,23 +9,23 @@ class SchoolInfrastructureSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Create Default School (SMK Negeri 1 Cijulang)
+        // 1. Create Default School (Foundation)
         DB::table('sch_ins_schools')->updateOrInsert(
             ['id' => 15],
             [
-                'name' => 'SMK Negeri 1 Cijulang',
-                'npsn' => '20252525',
+                'name' => 'JA-Platform Edu Unit',
+                'npsn' => '10000001',
                 'type' => 'negeri',
                 'status_kepemilikan' => 'negeri',
                 'is_multi_unit' => false,
-                'address' => 'Jl. Ciwaru No. 1, Cijulang, Pangandaran',
-                'phone' => '0265-123456',
-                'email' => 'info@smkn1cijulang.sch.id',
-                'website' => 'https://smkn1cijulang.sch.id',
-                'vision' => 'Terwujudnya Lulusan yang Unggul, Berkarakter, dan Berdaya Saing Global.',
-                'mission' => "1. Menyelenggarakan pendidikan vokasi yang berkualitas.\n2. Menanamkan nilai-nilai karakter bangsa.\n3. Menjalin kerja sama dengan dunia usaha dan dunia industri.",
-                'history' => 'SMK Negeri 1 Cijulang didirikan untuk memenuhi kebutuhan tenaga kerja terampil di wilayah Pangandaran.',
-                'principal_name' => 'Dr. H. Ahmad Fauzi, M.Pd.',
+                'address' => 'Jl. Pendidikan No. 1, Kota Digital',
+                'phone' => '021-12345678',
+                'email' => 'admin@sekolahk2.id',
+                'website' => 'https://sekolahk2.id',
+                'vision' => 'Mewujudkan Pendidikan Digital yang Terintegrasi dan Inovatif.',
+                'mission' => "1. Menyediakan infrastruktur pendidikan modern.\n2. Digitalisasi administrasi sekolah.\n3. Optimalisasi proses belajar mengajar.",
+                'history' => 'Unit pendidikan ini dikembangkan menggunakan JA-Platform untuk standarisasi manajemen institusi.',
+                'principal_name' => 'Administrator',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
@@ -33,7 +33,7 @@ class SchoolInfrastructureSeeder extends Seeder
  
         // 2. Create Units (Levels) - Only 1 unit for Negeri
         $units = [
-            ['id' => 15, 'name' => 'SMK Negeri 1 Cijulang', 'type' => 'smk', 'level' => 'SMK'],
+            ['id' => 15, 'name' => 'JA-Platform Edu Unit', 'type' => 'smk', 'level' => 'SMK'],
         ];
  
         foreach ($units as $unit) {

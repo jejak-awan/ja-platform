@@ -66,10 +66,12 @@ class DatabaseSeeder extends Seeder
         // 7. Studio Structure (Menus, Widgets)
         $this->call(\Modules\Cms\Database\Seeders\StudioSeeder::class);
 
-        // 8. Sample Data (Development environment only)
+        // 8. Sample Data (Disabled for Production Readiness)
+        /*
         if (app()->environment('local', 'development', 'testing')) {
             $this->call(\Modules\Core\Database\Seeders\SampleDataSeeder::class);
         }
+        */
 
         // 9. Sync Media Files (Final check)
         $this->command->info('Scanning filesystem for media files...');
