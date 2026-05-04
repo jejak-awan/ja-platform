@@ -136,12 +136,12 @@ if ! command -v php &> /dev/null || [[ $(php -r "echo PHP_VERSION_ID;") -lt 8020
         retry_cmd sudo apt-get install -y software-properties-common
         retry_cmd sudo add-apt-repository -y ppa:ondrej/php
         retry_cmd sudo apt-get update
-        install_pkg php8.3 php8.3-cli php8.3-common php8.3-pgsql php8.3-bcmath php8.3-curl php8.3-gd php8.3-intl php8.3-xml php8.3-zip php8.3-mbstring php8.3-redis
+        install_pkg php8.3 php8.3-cli php8.3-common php8.3-pgsql php8.3-bcmath php8.3-curl php8.3-gd php8.3-intl php8.3-xml php8.3-zip php8.3-mbstring php8.3-redis nginx supervisor
     elif [[ "$OS" == "centos" || "$OS" == "almalinux" || "$OS" == "rhel" ]]; then
         retry_cmd sudo dnf install -y https://rpms.remirepo.net/enterprise/remi-release-$(echo $VER | cut -d. -f1).rpm
         sudo dnf module reset php -y
         sudo dnf module enable php:remi-8.3 -y
-        install_pkg php php-cli php-common php-pgsql php-bcmath php-curl php-gd php-intl php-xml php-zip php-mbstring php-redis
+        install_pkg php php-cli php-common php-pgsql php-bcmath php-curl php-gd php-intl php-xml php-zip php-mbstring php-redis nginx supervisor
     fi
 else
     echo -e "${GREEN}PHP is up to date: $(php -v | head -n 1)${NC}"
@@ -214,18 +214,66 @@ echo -e "${YELLOW}Setting up permissions...${NC}"
 sudo chmod -R 775 backend/storage backend/bootstrap/cache
 sudo chown -R $USER:www-data backend/storage backend/bootstrap/cache || true
 
+# 6. Server Configuration (Nginx, Supervisor, Cron)
+echo -e "${BLUE}==================================================${NC}"
+echo -e "${BLUE}       Configuring Server Services                ${NC}"
+echo -e "${BLUE}==================================================${NC}"
+
+# Ask for Domain
+read -p "Enter your Domain/IP (e.g., example.com): " DOMAIN_NAME
+DOMAIN_NAME=${DOMAIN_NAME:-$SERVER_IP}
+
+# Variables for templates
+PHP_VER="8.3"
+CURRENT_PATH=$(pwd)
+
+# Configure Nginx
+if [[ "$OS" == "ubuntu" || "$OS" == "debian" ]]; then
+    echo -e "${YELLOW}Deploying Nginx configuration...${NC}"
+    sed -e "s|{{DOMAIN}}|$DOMAIN_NAME|g" \
+        -e "s|{{APP_PATH}}|$CURRENT_PATH|g" \
+        -e "s|{{PHP_VERSION}}|$PHP_VER|g" \
+        scripts/templates/nginx.conf.template | sudo tee /etc/nginx/sites-available/ja-platform.conf > /dev/null
+    
+    sudo ln -sf /etc/nginx/sites-available/ja-platform.conf /etc/nginx/sites-enabled/
+    sudo nginx -t && sudo systemctl restart nginx
+fi
+
+# Configure Supervisor (Workers)
+if command -v supervisord &> /dev/null || [ -d /etc/supervisor/conf.d ]; then
+    echo -e "${YELLOW}Deploying Supervisor worker configuration...${NC}"
+    sed -e "s|{{APP_PATH}}|$CURRENT_PATH|g" \
+        -e "s|{{USER}}|$USER|g" \
+        scripts/templates/supervisor.conf.template | sudo tee /etc/supervisor/conf.d/ja-worker.conf > /dev/null
+    
+    sudo supervisorctl reread
+    sudo supervisorctl update
+    sudo supervisorctl start ja-worker:* || true
+fi
+
+# Configure Cron
+echo -e "${YELLOW}Deploying Cron job...${NC}"
+sed -e "s|{{APP_PATH}}|$CURRENT_PATH|g" scripts/templates/cron.template > scripts/current_cron
+# Append to crontab if not already exists
+(crontab -l 2>/dev/null | grep -v "php artisan schedule:run" ; cat scripts/current_cron) | crontab -
+rm scripts/current_cron
+
 # Final Summary
 SERVER_IP=$(curl -s https://ifconfig.me || hostname -I | awk '{print $1}')
-APP_URL=$(grep APP_URL backend/.env | cut -d= -f2)
+APP_URL="http://$DOMAIN_NAME"
+
+# Update .env with finalized domain
+sed -i "s|APP_URL=.*|APP_URL=$APP_URL|g" backend/.env
+sed -i "s|VITE_API_URL=.*|VITE_API_URL=$APP_URL|g" backend/.env
 
 echo -e "${GREEN}==================================================${NC}"
 echo -e "${GREEN}   JA-PLATFORM INSTALLATION COMPLETE!             ${NC}"
 echo -e "${GREEN}==================================================${NC}"
-echo -e "${YELLOW}Access URL:${NC} ${BLUE}${APP_URL:-http://$SERVER_IP}${NC}"
+echo -e "${YELLOW}Access URL:${NC} ${BLUE}${APP_URL}${NC}"
 echo -e ""
 echo -e "${YELLOW}Default Credentials:${NC}"
 echo -e "Username : ${GREEN}super${NC}"
 echo -e "Password : ${GREEN}Senja@jejakawan${NC}"
 echo -e "${GREEN}==================================================${NC}"
-echo -e "${YELLOW}Next Step:${NC} Please visit the URL to finish setup."
+echo -e "${YELLOW}Next Step:${NC} All services (Nginx, Worker, Cron) are ready!"
 echo -e "${GREEN}==================================================${NC}"
