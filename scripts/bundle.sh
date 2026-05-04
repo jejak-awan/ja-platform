@@ -27,9 +27,11 @@ echo "🚚 Copying backend files..."
 cp -r backend/. "$RELEASE_DIR/"
 
 # 4. Code Protection (Optional)
-# Uncomment the following lines if you have an obfuscator like YAKPRO-PO or ionCube installed
-# echo "🔐 Protecting source code..."
-# find "$RELEASE_DIR/app" -name "*.php" -exec php obfuscator.php {} \;
+# To use this, install yakpro-po: git clone https://github.com/pk-fr/yakpro-po.git
+echo "🔐 Protecting source code (Obfuscation)..."
+# yakpro-po "$RELEASE_DIR/app" -o "$RELEASE_DIR/app_protected" && rm -rf "$RELEASE_DIR/app" && mv "$RELEASE_DIR/app_protected" "$RELEASE_DIR/app"
+# yakpro-po "$RELEASE_DIR/routes" -o "$RELEASE_DIR/routes_protected" && rm -rf "$RELEASE_DIR/routes" && mv "$RELEASE_DIR/routes_protected" "$RELEASE_DIR/routes"
+echo "✅ Code protection skipped (uncomment in bundle.sh to enable)"
 
 # 5. Clean up unnecessary files from release
 echo "🧹 Cleaning up development files..."
