@@ -76,7 +76,7 @@ retry_cmd() {
 }
 
 echo -e "${BLUE}==================================================${NC}"
-echo -e "${BLUE}       JA-Platform Auto-Installer v2.3            ${NC}"
+echo -e "${BLUE}       JA-Platform Auto-Installer v2.5            ${NC}"
 echo -e "${BLUE}==================================================${NC}"
 
 # 0. Connectivity Check
@@ -214,7 +214,44 @@ echo -e "${YELLOW}Setting up permissions...${NC}"
 sudo chmod -R 775 backend/storage backend/bootstrap/cache
 sudo chown -R $USER:www-data backend/storage backend/bootstrap/cache || true
 
-# 6. Server Configuration (Nginx, Supervisor, Cron)
+# 6. Database & Redis Configuration
+echo -e "${BLUE}==================================================${NC}"
+echo -e "${BLUE}       Configuring Database & Redis               ${NC}"
+echo -e "${BLUE}==================================================${NC}"
+
+# Read DB values from .env (populated by earlier steps)
+DB_CONN=$(grep DB_CONNECTION backend/.env | cut -d= -f2)
+DB_NAME=$(grep DB_DATABASE backend/.env | cut -d= -f2)
+DB_USER=$(grep DB_USERNAME backend/.env | cut -d= -f2)
+DB_PASS=$(grep DB_PASSWORD backend/.env | cut -d= -f2)
+
+# Automated DB Creation
+if [ "$DB_CONN" == "pgsql" ]; then
+    echo -e "${YELLOW}Provisioning PostgreSQL Database...${NC}"
+    sudo -u postgres psql -c "CREATE DATABASE $DB_NAME;" || true
+    sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';" || true
+    sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;" || true
+elif [ "$DB_CONN" == "mysql" ]; then
+    echo -e "${YELLOW}Provisioning MySQL Database...${NC}"
+    # This assumes root has no password or is configured via .my.cnf
+    mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" || true
+    mysql -e "CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';" || true
+    mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';" || true
+    mysql -e "FLUSH PRIVILEGES;" || true
+fi
+
+# Configure Redis
+echo -e "${YELLOW}Deploying Redis configuration...${NC}"
+REDIS_CONF_TARGET="/etc/redis.conf"
+[ ! -f "$REDIS_CONF_TARGET" ] && REDIS_CONF_TARGET="/etc/redis/redis.conf"
+
+if [ -f "$REDIS_CONF_TARGET" ]; then
+    sed -e "s|{{REDIS_PORT}}|6379|g" \
+        scripts/templates/redis.conf.template | sudo tee $REDIS_CONF_TARGET > /dev/null
+    sudo systemctl restart redis-server || sudo systemctl restart redis
+fi
+
+# 7. Server Configuration (Nginx, Supervisor, Cron)
 echo -e "${BLUE}==================================================${NC}"
 echo -e "${BLUE}       Configuring Server Services                ${NC}"
 echo -e "${BLUE}==================================================${NC}"
