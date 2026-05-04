@@ -17,6 +17,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { public: true, title: 'Under Maintenance' },
     },
     {
+        path: '/install',
+        name: 'install',
+        component: () => import('@/modules/Core/views/InstallView.vue'),
+        meta: { public: true, title: 'Installation Wizard' },
+    },
+    {
         path: '/403',
         name: 'forbidden',
         component: () => import('@/modules/Core/views/errors/Forbidden.vue'),

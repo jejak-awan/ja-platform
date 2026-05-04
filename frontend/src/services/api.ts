@@ -245,6 +245,13 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
+        // HANDLE 426 UPGRADE REQUIRED (Installation Needed)
+        if (error.response?.status === 426 && !window.location.pathname.startsWith('/install')) {
+            logger.warning('Server returned 426 - Installation Required');
+            window.location.href = '/install';
+            return Promise.reject(error);
+        }
+
         // Handle 419 CSRF token mismatch / Session Expired
         if (error.response?.status === 419) {
             const url = error.config?.url || '';

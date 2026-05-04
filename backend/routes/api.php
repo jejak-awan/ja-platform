@@ -1,4 +1,10 @@
-<?php
+use App\Http\Controllers\Api\V1\InstallController;
+
+Route::prefix('v1/install')->group(function () {
+    Route::get('/status', [InstallController::class, 'getStatus']);
+    Route::post('/', [InstallController::class, 'install']);
+});
+
 
 /*
 |--------------------------------------------------------------------------

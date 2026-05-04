@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ])
     ->withMiddleware(function (Middleware $middleware): void {
         // Security Layer: Order matters (TrustProxies first, then Domain enforcement, then WAF, etc.)
+        $middleware->prepend(\App\Http\Middleware\CheckIfInstalled::class);
         $middleware->prepend(\Modules\Core\Http\Middleware\TrustProxies::class);
 
         // Enable Sanctum stateful API for SPA

@@ -19,6 +19,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Maintenance.vue'),
         meta: { public: true, title: 'Under Maintenance' },
     },
+    {
+        path: '/install',
+        name: 'install',
+        component: () => import('@/modules/Core/views/InstallView.vue'),
+        meta: { public: true, title: 'Installation Wizard' },
+    },
 
     // Auth routes (admin/auth app)
     {
