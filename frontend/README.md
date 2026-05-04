@@ -3,7 +3,7 @@
 **Theme**: janari v.1.0.0  
 **Version**: 1.0.0-beta.1
 
-This is the frontend component of **JA-Platform**. Developed by **Jejakawan** (sekolahk2.id).
+This is the frontend component of **JA-Platform**. Developed by **Jejakawan** ([jejakawan.com](https://jejakawan.com)) for **PT. Kirana Karina Network (K2NET)**.
 
 ## 🚀 Stack
 

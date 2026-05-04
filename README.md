@@ -45,7 +45,9 @@ npm run release
 
 ## 🛠 Developer
 Developed with ❤️ by **Jejakawan**  
-Website: [sekolahk2.id](https://sekolahk2.id)
+Website: [jejakawan.com](https://jejakawan.com)  
+Company: **PT. Kirana Karina Network (K2NET)**  
+Corporate: [k2net.id](https://k2net.id)
 
 ---
 
