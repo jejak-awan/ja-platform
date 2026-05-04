@@ -1,4 +1,5 @@
 import { logger } from '@/utils/logger';
+import { appConfig } from '@/config';
 import { defineStore } from 'pinia';
 import type { AxiosResponse } from 'axios';
 import { isCancel, isAxiosError } from 'axios';
@@ -364,7 +365,7 @@ export const useAuthStore = defineStore('auth', {
                         }
                     } catch (parseError) {
                         // Invalid JSON in localStorage, clear it
-                        if (import.meta.env.DEV) {
+                if (appConfig.isDev) {
                             logger.warning('Invalid user data in localStorage, clearing:', parseError);
                         }
                         this.clearAuth();

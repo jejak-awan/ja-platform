@@ -6,6 +6,8 @@ import { useSystemError } from '@/composables/useSystemError';
 import { triggerVaporLock } from '@/services/api';
 import api from '@/services/api';
 
+import { authConfig } from '@/config';
+
 export function useSessionTimeout() {
     const router = useRouter();
     const authStore = useAuthStore();
@@ -13,7 +15,7 @@ export function useSessionTimeout() {
     const { showError } = useSystemError();
 
     // Session configuration (in seconds)
-    const SESSION_LIFETIME = parseInt(import.meta.env.VITE_SESSION_LIFETIME || '28800'); // 8 hours default
+    const SESSION_LIFETIME = authConfig.sessionLifetime;
     const WARNING_TIME = 300; // Show warning 5 minutes before expiry
 
     // State

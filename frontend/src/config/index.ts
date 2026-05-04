@@ -1,18 +1,35 @@
 /**
- * Standardized Configuration for JA-Apps Frontend
- * Eliminates hardcoded domains by prioritizing Environment Variables (Vite)
+ * Standardized Hybrid Configuration for JA-Platform
+ * Centrally manages environment variables with type safety and defaults.
  */
 
-export const config = {
-    // Domains
-    appDomain: import.meta.env.VITE_ROOT_DOMAIN || 'smkn1cijulang.sch.id',
+import { appConfig, type AppConfig } from './app';
+import { apiConfig, type ApiConfig } from './api';
+import { authConfig, type AuthConfig } from './auth';
+
+export interface RootConfig {
+    app: AppConfig;
+    api: ApiConfig;
+    auth: AuthConfig;
     
-    // URLs
-    appUrl: import.meta.env.VITE_PORTAL_URL || `https://${import.meta.env.VITE_ROOT_DOMAIN || 'smkn1cijulang.sch.id'}`,
+    // Legacy support for common fields
+    appDomain: string;
+    appUrl: string;
+    apiBaseUrl: string;
+    storageBaseUrl: string;
+}
+
+export const config: RootConfig = {
+    app: appConfig,
+    api: apiConfig,
+    auth: authConfig,
     
-    // API Defaults
-    apiBaseUrl: '/api/v1',
+    // Flattened legacy mappings to prevent breaking existing code
+    appDomain: appConfig.domain,
+    appUrl: appConfig.url,
+    apiBaseUrl: apiConfig.baseUrl,
     storageBaseUrl: '/storage',
 };
 
 export default config;
+export { appConfig, apiConfig, authConfig };

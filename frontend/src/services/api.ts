@@ -1,4 +1,5 @@
 import { logger } from '@/utils/logger';
+import { appConfig } from '@/config';
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosError, type AxiosResponse, type AxiosRequestConfig } from 'axios';
 import { SystemMonitor } from './SystemMonitor';
 import { type ZodSchema } from 'zod';
@@ -192,7 +193,7 @@ api.interceptors.response.use(
                         errors: result.error.format()
                     });
                     
-                    if (import.meta.env.DEV) {
+                    if (appConfig.isDev) {
                         console.error(`[TS-Security] Schema mismatch on ${config.url}`, result.error.format());
                     }
                 } else {

@@ -401,6 +401,7 @@ import {
     FlexRender
 } from '@tanstack/vue-table';
 import api from '@/services/api';
+import { apiConfig } from '@/config';
 import { parseSingleResponse } from '@/utils/responseParser';
 import { useToast } from '@/composables/useToast';
 import { useConfirm } from '@/composables/useConfirm';
@@ -824,7 +825,7 @@ const exportSubmissions = async (format = 'xlsx') => {
             ...(dateFrom.value && { date_from: dateFrom.value }),
             ...(dateTo.value && { date_to: dateTo.value })
         });
-        const baseUrl = import.meta.env.VITE_API_URL || '';
+        const baseUrl = apiConfig.externalUrl;
         const url = `${baseUrl}/api/v1/admin/cms/forms/${formId.value}/submissions/export?${params.toString()}`;
         const link = document.createElement('a');
         link.href = url;
@@ -842,7 +843,7 @@ const exportSubmissions = async (format = 'xlsx') => {
 const exportPdf = (submission: Submission) => {
     if (!submission) return;
     try {
-        const baseUrl = import.meta.env.VITE_API_URL || '';
+        const baseUrl = apiConfig.externalUrl;
         const exportUrl = `${baseUrl}/api/v1/admin/cms/form-submissions/${submission.id}/export-pdf`;
         window.open(exportUrl, '_blank');
     } catch (error: unknown) {

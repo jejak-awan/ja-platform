@@ -20,7 +20,7 @@ return [
     'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
     'allowed_origins' => env('CORS_ALLOWED_ORIGINS') ? explode(',', env('CORS_ALLOWED_ORIGINS')) : [
-        'https://' . env('APP_ROOT_DOMAIN', 'smkn1cijulang.sch.id'),
+        'https://' . env('APP_ROOT_DOMAIN', 'localhost'),
         env('APP_URL'),
     ],
 

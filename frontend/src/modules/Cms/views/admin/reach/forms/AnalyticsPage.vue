@@ -429,6 +429,7 @@ import { ref, computed, onMounted, h } from 'vue';
 import { useRoute } from 'vue-router';
 import { logger } from '@/utils/logger';
 import api from '@/services/api';
+import { apiConfig } from '@/config';
 import { parseSingleResponse } from '@/utils/responseParser';
 import { 
     useVueTable, 
@@ -665,7 +666,7 @@ const exportData = (format = 'xlsx') => {
             days: analyticsDays.value
         })
     });
-    const baseUrl = import.meta.env.VITE_API_URL || '';
+    const baseUrl = apiConfig.externalUrl;
     const url = `${baseUrl}/api/v1/admin/cms/forms/${formId.value}/submissions/export?${params.toString()}`;
     window.open(url, '_blank');
 };
