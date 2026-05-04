@@ -51,3 +51,9 @@ backend/storage/framework/views/*
 !backend/storage/framework/views/.gitignore
 backend/phpstan-output.txt
 backend/public/assets/
+backend/public/index.html
+backend/public/favicon.ico
+backend/public/logo.png
+backend/public/logo-bw.png
+backend/public/site.webmanifest
+backend/public/stats.html
