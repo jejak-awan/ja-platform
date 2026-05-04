@@ -55,6 +55,7 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'root_domain' => env('APP_ROOT_DOMAIN', 'localhost'),
+    'installed' => env('APP_INSTALLED', false),
 
     'trusted_proxies' => env('TRUSTED_PROXIES', '127.0.0.1,::1'),
 

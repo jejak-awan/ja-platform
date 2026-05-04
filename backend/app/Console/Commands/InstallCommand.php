@@ -28,6 +28,12 @@ class InstallCommand extends Command
      */
     public function handle()
     {
+        if (File::exists(storage_path('installed')) && !$this->option('force')) {
+            $this->error('❌ JA-Platform is already installed.');
+            $this->info('Use --force to reinstall, but BE CAREFUL as it may overwrite your data.');
+            return 1;
+        }
+
         $this->info('🚀 Starting JA-Platform Installation...');
 
         if (!$this->checkRequirements()) {
@@ -40,8 +46,24 @@ class InstallCommand extends Command
         $this->setupMail();
         $this->setupFrontend();
 
+        // Finalize Installation
+        $this->finalizeInstallation();
+
         $this->info('✅ JA-Platform has been installed successfully!');
         return 0;
+    }
+
+    protected function finalizeInstallation()
+    {
+        $this->comment('🏁 Finalizing installation...');
+        
+        // 1. Create Lock File
+        File::put(storage_path('installed'), 'Installation completed at: ' . now());
+        
+        // 2. Set Installed Flag in Env
+        $this->updateEnv(['APP_INSTALLED' => 'true']);
+        
+        $this->info('✅ Installation lock created.');
     }
 
     protected function checkRequirements()
