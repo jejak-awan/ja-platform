@@ -80,8 +80,8 @@ class InstallCommand extends Command
         }
 
         $appName = $this->ask('Application Name', config('app.name', 'JA-Platform'));
-        $appUrl = $this->ask('Application URL', config('app.url', 'http://localhost'));
-        $rootDomain = $this->ask('Root Domain (for multi-tenancy)', env('VITE_ROOT_DOMAIN', 'localhost'));
+        $appUrl = $this->ask('Application URL (leave as default for auto-detection)', config('app.url', 'http://localhost'));
+        $rootDomain = $this->ask('Root Domain (leave as default for auto-detection)', env('VITE_ROOT_DOMAIN', 'localhost'));
 
         $this->updateEnv([
             'APP_NAME' => "\"$appName\"",
