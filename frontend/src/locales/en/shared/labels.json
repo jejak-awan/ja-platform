@@ -260,5 +260,7 @@
     "unitActiveIdentityDesc": "Operational identity details of the currently active unit.",
     "unitEducation": "Education Unit",
     "npsnFull": "National School Identification Number",
-    "operationalLocation": "Operational Location"
+    "operationalLocation": "Operational Location",
+    "ecosystem": "Ecosystem",
+    "unitContext": "Unit Context"
 }

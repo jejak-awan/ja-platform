@@ -260,5 +260,7 @@
     "unitActiveIdentityDesc": "Detail identitas operasional unit yang sedang aktif.",
     "unitEducation": "Unit Pendidikan",
     "npsnFull": "Nomor Pokok Sekolah Nasional",
-    "operationalLocation": "Lokasi Operasional"
+    "operationalLocation": "Lokasi Operasional",
+    "ecosystem": "Ekosistem",
+    "unitContext": "Konteks Unit"
 }

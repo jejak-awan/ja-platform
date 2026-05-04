@@ -1,57 +1,104 @@
 <template>
   <div class="space-y-8 animate-in fade-in duration-700">
-    <!-- Header Section: Clean & Standard -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 px-2">
-      <div>
-        <div class="flex items-center gap-3 mb-1">
-          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+    <!-- Header Section: Premium & Dynamic -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 p-8 mb-8 shadow-2xl group">
+      <!-- Mesh Gradient Background Decoration -->
+      <div class="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full -mr-32 -mt-32 blur-[100px] group-hover:bg-primary/30 transition-colors duration-1000" />
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full -ml-32 -mb-32 blur-[80px]" />
+      
+      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="flex items-center gap-5">
+          <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner group-hover:scale-105 transition-transform duration-500">
             <LucideIcon
               :name="unitStore.activeUnitId === 0 ? 'Globe' : 'School'"
-              class="w-5 h-5 text-primary"
+              class="w-8 h-8 text-white drop-shadow-md"
             />
           </div>
-          <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
-            {{ unitStore.activeUnitId === 0 ? $t('common.labels.ecosystemSummary') : $t('dashboard.v2.hero.title') }}
-          </h1>
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <Badge variant="outline" class="bg-primary/20 text-primary-foreground border-primary/30 text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded-md">
+                {{ unitStore.activeUnitId === 0 ? $t('common.labels.ecosystem') : $t('common.labels.unitContext') }}
+              </Badge>
+              <span class="w-1 h-1 rounded-full bg-white/20" />
+              <span class="text-white/40 text-[10px] font-bold tracking-widest uppercase">V2.0 PRO</span>
+            </div>
+            <h1 class="text-4xl font-black tracking-tighter text-white uppercase">
+              {{ unitStore.activeUnitId === 0 ? $t('common.labels.ecosystemSummary') : $t('dashboard.v2.hero.title') }}
+            </h1>
+            <p class="text-white/60 text-sm font-medium max-w-xl leading-relaxed">
+              {{ unitStore.activeUnitId === 0 ? $t('common.messages.ecosystemSubtitle') : $t('dashboard.v2.hero.subtitle') }}
+            </p>
+          </div>
         </div>
-        <p class="text-muted-foreground text-sm font-medium">
-          {{ unitStore.activeUnitId === 0 ? $t('common.messages.ecosystemSubtitle') : $t('dashboard.v2.hero.subtitle') }}
-        </p>
-      </div>
-      <div class="flex items-center gap-2">
-        <Button
-          variant="outline"
-          class="rounded-xl h-10 px-6 font-bold shadow-sm"
-          @click="$router.push({ name: 'schools.index' })"
-        >
-          <LucideIcon name="Settings" class="w-4 h-4 mr-2" />
-          {{ $t('dashboard.v2.hero.actions.config') }}
-        </Button>
+        
+        <div class="flex items-center gap-3">
+          <Button
+            variant="outline"
+            class="rounded-xl h-12 px-6 font-bold bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-white/20 transition-all shadow-lg backdrop-blur-sm"
+            @click="$router.push({ name: 'schools.index' })"
+          >
+            <LucideIcon name="Settings2" class="w-4 h-4 mr-2" />
+            {{ $t('dashboard.v2.hero.actions.config') }}
+          </Button>
+          <Button
+            variant="default"
+            class="rounded-xl h-12 px-6 font-bold bg-primary text-primary-foreground hover:opacity-90 transition-all shadow-xl shadow-primary/20"
+          >
+            <LucideIcon name="Download" class="w-4 h-4 mr-2" />
+            {{ $t('dashboard.v2.hero.actions.reports') }}
+          </Button>
+        </div>
       </div>
     </div>
 
     <!-- Quick Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2">
       <Card
         v-for="(stat, idx) in adminQuickStats"
         :key="idx" 
-        class="border-border/40 bg-card shadow-none rounded-xl hover:bg-muted/30 transition-all duration-300 cursor-pointer group active:scale-[0.98]"
+        class="relative overflow-hidden border-border/40 bg-card/50 backdrop-blur-sm shadow-sm rounded-2xl hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 cursor-pointer group active:scale-[0.98] border-l-4"
+        :class="[
+          idx === 0 ? 'border-l-blue-500' : 
+          idx === 1 ? 'border-l-emerald-500' : 
+          idx === 2 ? 'border-l-amber-500' : 'border-l-indigo-500'
+        ]"
         @click="$router.push({ name: stat.routeName })"
       >
-        <CardContent class="p-6">
-          <div class="flex items-start justify-between">
+        <!-- Subtle Background Glow -->
+        <div 
+          class="absolute -right-8 -top-8 w-32 h-32 blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-700 pointer-events-none rounded-full"
+          :class="[
+            idx === 0 ? 'bg-blue-500' : 
+            idx === 1 ? 'bg-emerald-500' : 
+            idx === 2 ? 'bg-amber-500' : 'bg-indigo-500'
+          ]"
+        />
+
+        <CardContent class="p-6 relative z-10">
+          <div class="flex items-center justify-between">
             <div class="space-y-1">
-              <p class="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+              <p class="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
                 {{ stat.label }}
               </p>
-              <p class="text-3xl font-black text-foreground">
-                {{ stat.value }}
-              </p>
+              <div class="flex items-baseline gap-1">
+                <p class="text-3xl font-black text-foreground tracking-tight leading-none">
+                  {{ stat.value }}
+                </p>
+                <div class="w-1 h-1 rounded-full bg-primary/40 group-hover:animate-ping" />
+              </div>
             </div>
-            <div class="p-2.5 rounded-xl bg-primary/10 text-primary group-hover:scale-110 transition-transform">
+            <div 
+              class="p-3.5 rounded-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 shadow-sm"
+              :class="[
+                idx === 0 ? 'bg-blue-500/10 text-blue-500 group-hover:bg-blue-500 group-hover:text-white' : 
+                idx === 1 ? 'bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white' : 
+                idx === 2 ? 'bg-amber-500/10 text-amber-500 group-hover:bg-amber-500 group-hover:text-white' : 
+                'bg-indigo-500/10 text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white'
+              ]"
+            >
               <LucideIcon
                 :name="stat.icon"
-                class="w-5 h-5"
+                class="w-6 h-6"
               />
             </div>
           </div>
@@ -165,7 +212,7 @@
             </div>
             <!-- Empty state if no personnel -->
             <div v-if="personnelList.length === 0" class="md:col-span-2 p-8 text-center text-muted-foreground text-sm italic opacity-60">
-                {{ $t('features.school.dashboard.v2.hr_presence.empty') }}
+                {{ $t('dashboard.v2.hr_presence.empty') }}
             </div>
           </div>
         </CardContent>
@@ -173,33 +220,45 @@
 
       <div class="space-y-10">
         <!-- Strategic Alerts -->
-        <Card class="border-border/40 bg-destructive/5 dark:bg-destructive/10 border-l-4 border-destructive rounded-xl p-8 shadow-none group">
-          <h4 class="text-xs font-bold text-destructive flex items-center gap-3 mb-6">
-            <div class="w-2 h-2 rounded-full bg-destructive group-hover:animate-ping" />
+        <Card class="border-border/40 bg-slate-900 shadow-2xl rounded-3xl p-8 group relative overflow-hidden">
+          <!-- Decoration -->
+          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-destructive/10 rounded-full blur-3xl group-hover:bg-destructive/20 transition-colors" />
+          
+          <h4 class="text-xs font-black text-destructive flex items-center gap-3 mb-8 uppercase tracking-[0.3em]">
+            <div class="w-2.5 h-2.5 rounded-full bg-destructive animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
             {{ $t('dashboard.v2.alerts.title') }}
           </h4>
-          <div class="space-y-6">
+          
+          <div class="space-y-6 relative z-10">
             <div
               v-for="alert in alertsList"
               :key="alert.id"
-              class="flex gap-4 group/alert cursor-pointer"
+              class="flex items-start gap-5 p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all duration-300 cursor-pointer group/item"
             >
-              <div class="w-9 h-9 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive transition-transform group-hover/alert:scale-110">
+              <div class="p-3 rounded-xl bg-destructive/20 text-destructive group-hover/item:scale-110 transition-transform">
                 <LucideIcon
                   :name="alert.icon"
-                  class="w-4 h-4"
+                  class="w-5 h-5"
                 />
               </div>
-              <div>
-                <p class="text-sm font-bold text-foreground/80 leading-tight group-hover/alert:text-destructive transition-colors">
+              <div class="space-y-1">
+                <h5 class="text-sm font-bold text-white/90 leading-snug">
                   {{ alert.title }}
-                </p>
-                <p class="text-[10px] font-medium text-muted-foreground/60 mt-1">
+                </h5>
+                <p class="text-[10px] font-black text-white/40 uppercase tracking-widest">
                   {{ alert.status }}
                 </p>
               </div>
             </div>
           </div>
+
+          <Button
+            variant="ghost"
+            class="w-full mt-8 rounded-xl text-white/40 hover:text-white hover:bg-white/5 font-bold text-xs uppercase tracking-widest border border-white/5"
+          >
+            {{ $t('common.actions.viewAll') }}
+            <LucideIcon name="ArrowRight" class="w-3.5 h-3.5 ml-2" />
+          </Button>
         </Card>
       </div>
     </div>
@@ -246,9 +305,10 @@ const chartData = computed(() => ({
   labels: breakdownData.value.map(b => b.name),
   datasets: [
     {
-      label: 'Jumlah Siswa',
+      label: t('features.school.stats.totalStudents'),
       backgroundColor: '#3b82f6',
-      borderRadius: 8,
+      hoverBackgroundColor: '#2563eb',
+      borderRadius: 12,
       data: breakdownData.value.map(b => b.student_count)
     }
   ]
@@ -258,20 +318,22 @@ const staffChartData = computed(() => ({
   labels: breakdownData.value.map(b => b.name),
   datasets: [
     {
-      label: 'Jumlah Guru/PTK',
+      label: t('features.school.stats.totalStaff'),
       backgroundColor: '#10b981',
-      borderRadius: 8,
+      hoverBackgroundColor: '#059669',
+      borderRadius: 12,
       data: breakdownData.value.map(b => b.staff_count)
     }
   ]
 }));
 
 const doughnutChartData = computed(() => ({
-  labels: ['Aktif', 'Lulus', 'Keluar'],
+  labels: [t('common.status.active'), t('common.labels.graduated'), t('common.labels.deleted')],
   datasets: [
     {
       backgroundColor: ['#3b82f6', '#10b981', '#ef4444'],
-      hoverOffset: 4,
+      borderWidth: 0,
+      hoverOffset: 15,
       data: [
           parseInt(statsData.value[0]?.value || '0'), 
           0, 
