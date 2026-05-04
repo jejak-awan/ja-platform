@@ -239,13 +239,22 @@ if [ "$DB_CONN" == "pgsql" ]; then
     sudo -u postgres psql -c "CREATE DATABASE $DB_NAME;" || true
     sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';" || true
     sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;" || true
+    
+    # Optional Tuning
+    echo -e "${YELLOW}Applying PostgreSQL optimization...${NC}"
+    PG_CONF="/var/lib/pgsql/data/postgresql.conf"
+    [ -f "$PG_CONF" ] && sudo cp scripts/templates/postgresql.conf.template $PG_CONF && sudo systemctl restart postgresql
 elif [ "$DB_CONN" == "mysql" ]; then
-    echo -e "${YELLOW}Provisioning MySQL Database...${NC}"
-    # This assumes root has no password or is configured via .my.cnf
+    echo -e "${YELLOW}Provisioning MySQL/MariaDB Database...${NC}"
     mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" || true
     mysql -e "CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';" || true
     mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';" || true
     mysql -e "FLUSH PRIVILEGES;" || true
+    
+    # Optional Tuning
+    echo -e "${YELLOW}Applying MariaDB optimization...${NC}"
+    MY_CONF="/etc/my.cnf.d/ja-platform.cnf"
+    [ -d /etc/my.cnf.d ] && sudo cp scripts/templates/mariadb.conf.template $MY_CONF && sudo systemctl restart mariadb
 fi
 
 # Configure Redis
