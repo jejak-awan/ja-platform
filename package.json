@@ -16,7 +16,9 @@
     "quality:all": "npm run quality:frontend && npm run quality:backend",
     "test:e2e:list": "npm --prefix frontend run test:e2e:list",
     "test:e2e:smoke": "npm --prefix frontend run test:e2e:smoke",
-    "test:e2e:auth": "npm --prefix frontend run test:e2e:auth"
+    "test:e2e:auth": "npm --prefix frontend run test:e2e:auth",
+    "release": "bash scripts/bundle.sh",
+    "install:server": "sudo bash scripts/install.sh"
   },
   "x-agent-guidelines": {
     "purpose": "Standard instructions for AI/coding agents when creating or updating this project.",
