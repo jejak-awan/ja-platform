@@ -3,9 +3,30 @@
     <Card class="w-full max-w-lg border-border/40 shadow-2xl bg-card/50 backdrop-blur-xl overflow-hidden">
       <!-- Header -->
       <div class="bg-primary p-8 text-primary-foreground relative overflow-hidden">
-        <div class="relative z-10">
-          <h1 class="text-3xl font-bold tracking-tight mb-2">JA-Platform</h1>
-          <p class="text-primary-foreground/80 font-medium">Installation Wizard</p>
+        <div class="relative z-10 flex justify-between items-start">
+          <div>
+            <h1 class="text-3xl font-bold tracking-tight mb-2">JA-Platform</h1>
+            <p class="text-primary-foreground/80 font-medium">{{ t('modules.core.installer.title') }}</p>
+          </div>
+          
+          <!-- Language Switcher -->
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" class="text-primary-foreground hover:bg-white/10 h-8 w-8">
+                <Languages class="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem 
+                v-for="lang in availableLocales" 
+                :key="lang.code"
+                @click="setLocale(lang.code)"
+                :class="{ 'bg-muted font-bold': currentLocale === lang.code }"
+              >
+                {{ lang.name }}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <!-- Decorative Background Circle -->
         <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none" />
@@ -14,8 +35,8 @@
       <CardContent class="p-8">
         <div v-if="step === 'requirements'" class="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div class="space-y-2">
-            <h2 class="text-xl font-semibold text-foreground">System Check</h2>
-            <p class="text-sm text-muted-foreground">Checking if your server meets the requirements.</p>
+            <h2 class="text-xl font-semibold text-foreground">{{ t('modules.core.installer.requirements.title') }}</h2>
+            <p class="text-sm text-muted-foreground">{{ t('modules.core.installer.requirements.description') }}</p>
           </div>
 
           <div v-if="loading" class="flex justify-center py-8">
@@ -24,7 +45,7 @@
 
           <div v-else class="space-y-6">
             <div class="space-y-3">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Core Requirements</h3>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-muted-foreground">{{ t('modules.core.installer.requirements.core') }}</h3>
               <div 
                 v-for="(status, key) in requirements" 
                 :key="key"
@@ -33,7 +54,7 @@
               >
                 <span class="text-sm font-medium capitalize">{{ String(key).replace('_', ' ') }}</span>
                 <div class="flex items-center gap-2">
-                  <span class="text-xs text-muted-foreground">{{ status === true ? 'OK' : (key === 'php_version' ? status : 'Missing') }}</span>
+                  <span class="text-xs text-muted-foreground">{{ status === true ? t('modules.core.installer.requirements.status_ok') : (key === 'php_version' ? status : t('modules.core.installer.requirements.status_missing')) }}</span>
                   <CheckCircle2 v-if="status === true" class="w-4 h-4 text-green-500" />
                   <XCircle v-else class="w-4 h-4 text-destructive" />
                 </div>
@@ -41,7 +62,7 @@
             </div>
 
             <div class="space-y-3">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-muted-foreground">PHP Extensions</h3>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-muted-foreground">{{ t('modules.core.installer.requirements.extensions') }}</h3>
               <div class="grid grid-cols-2 gap-2">
                 <div 
                   v-for="(status, key) in requirements" 
@@ -60,26 +81,26 @@
             <div v-if="!isRequirementsMet" class="mt-6 p-4 rounded-lg bg-destructive/5 border border-destructive/20 animate-in fade-in zoom-in duration-300">
                 <h3 class="text-sm font-bold text-destructive mb-2 flex items-center gap-2">
                     <XCircle class="w-4 h-4" />
-                    Troubleshooting for {{ serverOS.distro !== 'unknown' ? serverOS.distro : serverOS.family }}:
+                    {{ t('modules.core.installer.troubleshooting.title', { os: serverOS.distro !== 'unknown' ? serverOS.distro : serverOS.family }) }}
                 </h3>
                 <ul class="text-xs space-y-2 text-muted-foreground list-disc pl-4">
-                    <li v-if="!requirements.php_supported">Upgrade PHP to 8.2 or 8.3 (Recommended).</li>
-                    <li v-if="!requirements.writable_env">Ensure <code class="bg-muted px-1 rounded text-foreground">.env</code> exists and is writable.</li>
-                    <li v-if="!requirements.writable_storage">Run: <code class="bg-muted px-1 rounded text-foreground">chmod -R 775 storage bootstrap/cache</code></li>
+                    <li v-if="!requirements.php_supported">{{ t('modules.core.installer.troubleshooting.php_version') }}</li>
+                    <li v-if="!requirements.writable_env">{{ t('modules.core.installer.troubleshooting.writable_env') }}</li>
+                    <li v-if="!requirements.writable_storage">{{ t('modules.core.installer.troubleshooting.writable_storage') }}</li>
                     
                     <!-- Debian/Ubuntu -->
                     <li v-if="!isRequirementsMet && serverOS.distro === 'debian'">
-                      Install missing: <code class="bg-muted px-1 rounded text-foreground">sudo apt install php8.3-{common,pgsql,bcmath,curl,gd,intl,xml,zip,mbstring}</code>
+                      {{ t('modules.core.installer.troubleshooting.install_missing') }} <code class="bg-muted px-1 rounded text-foreground">sudo apt install php8.3-{common,pgsql,bcmath,curl,gd,intl,xml,zip,mbstring}</code>
                     </li>
 
                     <!-- RHEL/CentOS/AlmaLinux -->
                     <li v-if="!isRequirementsMet && serverOS.distro === 'rhel'">
-                      Install missing: <code class="bg-muted px-1 rounded text-foreground">sudo dnf install php-{common,pgsql,bcmath,curl,gd,intl,xml,zip,mbstring}</code>
+                      {{ t('modules.core.installer.troubleshooting.install_missing') }} <code class="bg-muted px-1 rounded text-foreground">sudo dnf install php-{common,pgsql,bcmath,curl,gd,intl,xml,zip,mbstring}</code>
                     </li>
 
                     <!-- Windows -->
                     <li v-if="!isRequirementsMet && serverOS.family === 'Windows'">
-                      Enable extensions in your <code class="bg-muted px-1 rounded text-foreground">php.ini</code> (remove ';' prefix for: pdo_pgsql, bcmath, curl, gd, intl, mbstring, openssl, xml, zip).
+                      {{ t('modules.core.installer.troubleshooting.windows_hint') }}
                     </li>
 
                     <!-- Other/Unknown -->
@@ -95,31 +116,31 @@
             :disabled="loading || !isRequirementsMet"
             @click="step = 'config'"
           >
-            Continue to Configuration
+            {{ t('modules.core.installer.requirements.continue') }}
             <ArrowRight class="ml-2 w-4 h-4" />
           </Button>
         </div>
 
         <div v-if="step === 'config'" class="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
           <div class="space-y-2">
-            <h2 class="text-xl font-semibold text-foreground">Basic Configuration</h2>
-            <p class="text-sm text-muted-foreground">Set up your application identity and database.</p>
+            <h2 class="text-xl font-semibold text-foreground">{{ t('modules.core.installer.config.title') }}</h2>
+            <p class="text-sm text-muted-foreground">{{ t('modules.core.installer.config.description') }}</p>
           </div>
 
           <div class="space-y-4">
             <div class="space-y-2">
-              <Label>Application Name</Label>
+              <Label>{{ t('modules.core.installer.config.app_name') }}</Label>
               <Input v-model="form.app_name" placeholder="My JA-Platform" />
             </div>
             <div class="space-y-2">
-              <Label>Application URL</Label>
+              <Label>{{ t('modules.core.installer.config.app_url') }}</Label>
               <Input v-model="form.app_url" placeholder="https://example.com" />
             </div>
             
             <Separator class="my-4" />
             
             <div class="space-y-2">
-              <Label>Database Connection</Label>
+              <Label>{{ t('modules.core.installer.config.db_connection') }}</Label>
               <Select v-model="form.db_connection">
                 <SelectTrigger>
                   <SelectValue placeholder="Select Connection" />
@@ -135,42 +156,42 @@
             <template v-if="form.db_connection !== 'sqlite'">
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
-                  <Label>Host</Label>
+                  <Label>{{ t('modules.core.installer.config.db_host') }}</Label>
                   <Input v-model="form.db_host" placeholder="127.0.0.1" />
                 </div>
                 <div class="space-y-2">
-                  <Label>Port</Label>
+                  <Label>{{ t('modules.core.installer.config.db_port') }}</Label>
                   <Input v-model="form.db_port" placeholder="3306" />
                 </div>
               </div>
               <div class="space-y-2">
-                <Label>Database Name</Label>
+                <Label>{{ t('modules.core.installer.config.db_database') }}</Label>
                 <Input v-model="form.db_database" placeholder="ja_platform" />
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
-                  <Label>Username</Label>
+                  <Label>{{ t('modules.core.installer.config.db_username') }}</Label>
                   <Input v-model="form.db_username" placeholder="root" />
                 </div>
                 <div class="space-y-2">
-                  <Label>Password</Label>
+                  <Label>{{ t('modules.core.installer.config.db_password') }}</Label>
                   <Input v-model="form.db_password" type="password" />
                 </div>
               </div>
             </template>
             <template v-else>
                <div class="space-y-2">
-                  <Label>Database Path</Label>
+                  <Label>{{ t('modules.core.installer.config.db_database') }}</Label>
                   <Input v-model="form.db_database" placeholder="absolute path to .sqlite" />
                 </div>
             </template>
           </div>
 
           <div class="flex gap-3">
-            <Button variant="outline" class="flex-1" @click="step = 'requirements'">Back</Button>
+            <Button variant="outline" class="flex-1" @click="step = 'requirements'">{{ t('modules.core.installer.config.back') }}</Button>
             <Button class="flex-[2] h-11" :disabled="submitting" @click="handleInstall">
               <Loader2 v-if="submitting" class="mr-2 w-4 h-4 animate-spin" />
-              Run Installation
+              {{ t('modules.core.installer.config.run') }}
             </Button>
           </div>
         </div>
@@ -180,11 +201,11 @@
             <CheckCircle2 class="w-12 h-12 text-green-500" />
           </div>
           <div class="space-y-2">
-            <h2 class="text-2xl font-bold text-foreground">Success!</h2>
-            <p class="text-muted-foreground">JA-Platform has been installed successfully.</p>
+            <h2 class="text-2xl font-bold text-foreground">{{ t('modules.core.installer.success.title') }}</h2>
+            <p class="text-muted-foreground">{{ t('modules.core.installer.success.description') }}</p>
           </div>
           <Button class="w-full h-11" @click="finish">
-            Go to Dashboard
+            {{ t('modules.core.installer.success.finish') }}
           </Button>
         </div>
       </CardContent>
@@ -200,10 +221,21 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { Card, CardContent, Button, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Separator } from '@/components/ui';
-import { Loader2, CheckCircle2, XCircle, ArrowRight } from 'lucide-vue-next';
+import { 
+  Card, CardContent, Button, Input, Label, Select, 
+  SelectContent, SelectItem, SelectTrigger, SelectValue, 
+  Separator, DropdownMenu, DropdownMenuContent, 
+  DropdownMenuItem, DropdownMenuTrigger 
+} from '@/components/ui';
+import { Loader2, CheckCircle2, XCircle, ArrowRight, Languages } from 'lucide-vue-next';
 import api from '@/services/api';
 import { useToast } from '@/composables/useToast';
+import { useI18n } from 'vue-i18n';
+import { getAvailableLocales, getLocale, setLocale } from '@/i18n';
+
+const { t } = useI18n();
+const availableLocales = getAvailableLocales();
+const currentLocale = computed(() => getLocale());
 
 const step = ref('requirements');
 const loading = ref(true);
@@ -233,7 +265,7 @@ const isRequirementsMet = computed(() => {
 
   // Check all extensions
   return Object.keys(requirements.value)
-    .filter(key => key.startsWith('ext_'))
+    .filter(key => String(key).startsWith('ext_'))
     .every(key => requirements.value[key] === true);
 });
 

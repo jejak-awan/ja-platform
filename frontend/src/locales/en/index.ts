@@ -8,6 +8,7 @@ import analytics from './modules/core/analytics.json';
 import notifications from './modules/core/notifications.json';
 import system from './modules/core/system.json';
 import settings from './modules/core/settings';
+import installer from './modules/core/installer.json';
 
 // Modules - CMS
 import content from './modules/cms/content.json';
@@ -71,6 +72,7 @@ const modules = {
         notifications,
         system,
         settings,
+        installer,
     },
     cms: {
         content,

@@ -1,0 +1,45 @@
+{
+    "title": "Panduan Instalasi",
+    "subtitle": "Atur identitas aplikasi dan infrastruktur Anda.",
+    "steps": {
+        "requirements": "Cek Sistem",
+        "config": "Konfigurasi",
+        "success": "Berhasil"
+    },
+    "requirements": {
+        "title": "Pengecekan Sistem",
+        "description": "Memastikan server Anda memenuhi persyaratan minimum.",
+        "core": "Persyaratan Inti",
+        "extensions": "Ekstensi PHP",
+        "status_ok": "Oke",
+        "status_missing": "Tidak Ada",
+        "continue": "Lanjut ke Konfigurasi"
+    },
+    "config": {
+        "title": "Konfigurasi Dasar",
+        "description": "Atur identitas aplikasi dan database Anda.",
+        "app_name": "Nama Aplikasi",
+        "app_url": "URL Aplikasi",
+        "db_connection": "Koneksi Database",
+        "db_host": "Host",
+        "db_port": "Port",
+        "db_database": "Nama Database",
+        "db_username": "Username",
+        "db_password": "Password",
+        "back": "Kembali",
+        "run": "Jalankan Instalasi"
+    },
+    "success": {
+        "title": "Berhasil!",
+        "description": "JA-Platform telah berhasil diinstal.",
+        "finish": "Buka Dashboard"
+    },
+    "troubleshooting": {
+        "title": "Panduan Perbaikan untuk {os}:",
+        "php_version": "Tingkatkan versi PHP ke 8.2 atau 8.3 (Disarankan).",
+        "writable_env": "Pastikan berkas .env ada dan dapat ditulisi.",
+        "writable_storage": "Jalankan: chmod -R 775 storage bootstrap/cache",
+        "install_missing": "Instal ekstensi yang kurang:",
+        "windows_hint": "Aktifkan ekstensi di php.ini Anda (hapus awalan ';' untuk ekstensi yang terdaftar)."
+    }
+}

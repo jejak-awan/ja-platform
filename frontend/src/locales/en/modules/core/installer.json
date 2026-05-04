@@ -1,0 +1,45 @@
+{
+    "title": "Installation Wizard",
+    "subtitle": "Setup your application identity and infrastructure.",
+    "steps": {
+        "requirements": "System Check",
+        "config": "Configuration",
+        "success": "Success"
+    },
+    "requirements": {
+        "title": "System Check",
+        "description": "Checking if your server meets the requirements.",
+        "core": "Core Requirements",
+        "extensions": "PHP Extensions",
+        "status_ok": "OK",
+        "status_missing": "Missing",
+        "continue": "Continue to Configuration"
+    },
+    "config": {
+        "title": "Basic Configuration",
+        "description": "Set up your application identity and database.",
+        "app_name": "Application Name",
+        "app_url": "Application URL",
+        "db_connection": "Database Connection",
+        "db_host": "Host",
+        "db_port": "Port",
+        "db_database": "Database Name",
+        "db_username": "Username",
+        "db_password": "Password",
+        "back": "Back",
+        "run": "Run Installation"
+    },
+    "success": {
+        "title": "Success!",
+        "description": "JA-Platform has been installed successfully.",
+        "finish": "Go to Dashboard"
+    },
+    "troubleshooting": {
+        "title": "Troubleshooting for {os}:",
+        "php_version": "Upgrade PHP to 8.2 or 8.3 (Recommended).",
+        "writable_env": "Ensure .env exists and is writable.",
+        "writable_storage": "Run: chmod -R 775 storage bootstrap/cache",
+        "install_missing": "Install missing extensions:",
+        "windows_hint": "Enable extensions in your php.ini (remove ';' prefix for the listed extensions)."
+    }
+}
