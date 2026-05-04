@@ -26,12 +26,21 @@ cd ..
 echo "🚚 Copying backend files..."
 cp -r backend/. "$RELEASE_DIR/"
 
-# 4. Code Protection (Optional)
-# To use this, install yakpro-po: git clone https://github.com/pk-fr/yakpro-po.git
-echo "🔐 Protecting source code (Obfuscation)..."
-# yakpro-po "$RELEASE_DIR/app" -o "$RELEASE_DIR/app_protected" && rm -rf "$RELEASE_DIR/app" && mv "$RELEASE_DIR/app_protected" "$RELEASE_DIR/app"
-# yakpro-po "$RELEASE_DIR/routes" -o "$RELEASE_DIR/routes_protected" && rm -rf "$RELEASE_DIR/routes" && mv "$RELEASE_DIR/routes_protected" "$RELEASE_DIR/routes"
-echo "✅ Code protection skipped (uncomment in bundle.sh to enable)"
+# 4. Code Protection (Using YAKPRO-PO)
+OBFUSCATOR="/var/www/k2net/tools/yakpro-po/yakpro-po.php"
+if [ -f "$OBFUSCATOR" ]; then
+    echo "🔐 Protecting source code (Obfuscation)..."
+    # Protect app folder
+    php "$OBFUSCATOR" "$RELEASE_DIR/app" -o "$RELEASE_DIR/app_protected"
+    rm -rf "$RELEASE_DIR/app" && mv "$RELEASE_DIR/app_protected" "$RELEASE_DIR/app"
+    
+    # Protect routes folder
+    php "$OBFUSCATOR" "$RELEASE_DIR/routes" -o "$RELEASE_DIR/routes_protected"
+    rm -rf "$RELEASE_DIR/routes" && mv "$RELEASE_DIR/routes_protected" "$RELEASE_DIR/routes"
+    echo "✅ Source code protected successfully."
+else
+    echo "⚠️ Obfuscator not found at $OBFUSCATOR. Skipping protection."
+fi
 
 # 5. Clean up unnecessary files from release
 echo "🧹 Cleaning up development files..."
