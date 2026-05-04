@@ -16,18 +16,39 @@ NC='\033[0m' # No Color
 trap 'on_error $LINENO' ERR
 on_error() {
     echo -e "\n${RED}==================================================${NC}"
-    echo -e "${RED}  ERROR: Installation Failed at line $1          ${NC}"
+    echo -e "${RED}  FINAL ERROR: Installation Failed at line $1     ${NC}"
     echo -e "${RED}==================================================${NC}"
     echo -e "${YELLOW}Common Solutions:${NC}"
-    echo -e "1. Check your internet connection."
-    echo -e "2. Run 'sudo apt update' or 'sudo dnf check-update' manually."
-    echo -e "3. If a repo is blocked, check your firewall/DNS settings."
-    echo -e "4. Ensure you have enough disk space."
+    echo -e "1. Check your internet connection (ISP/Proxy)."
+    echo -e "2. Mirrors might be down. Try again later."
+    echo -e "3. Run manual cleanup: sudo rm -rf /var/lib/apt/lists/*"
+    echo -e "4. Check for lock files (another update running)."
     exit 1
 }
 
+# Retry Command Function
+retry_cmd() {
+    local n=1
+    local max=3
+    local delay=3
+    while true; do
+        if "$@"; then
+            break
+        else
+            if [[ $n -lt $max ]]; then
+                ((n++))
+                echo -e "${YELLOW}Command failed. Attempt $n/$max. Retrying in ${delay}s...${NC}"
+                sleep $delay
+            else
+                echo -e "${RED}Command failed after $max attempts.${NC}"
+                return 1
+            fi
+        fi
+    done
+}
+
 echo -e "${BLUE}==================================================${NC}"
-echo -e "${BLUE}       JA-Platform Auto-Installer v2.1            ${NC}"
+echo -e "${BLUE}       JA-Platform Auto-Installer v2.2            ${NC}"
 echo -e "${BLUE}==================================================${NC}"
 
 # 0. Connectivity Check
@@ -63,19 +84,19 @@ echo -e "RAM OK: ${TOTAL_RAM}MB"
 # 3. Cleanup & Update
 echo -e "${YELLOW}Cleaning up and updating package manager...${NC}"
 if [[ "$OS" == "ubuntu" || "$OS" == "debian" ]]; then
-    sudo apt-get update -y
+    retry_cmd sudo apt-get update -y
     sudo apt-get autoremove -y
 elif [[ "$OS" == "centos" || "$OS" == "almalinux" || "$OS" == "rhel" ]]; then
     sudo dnf clean all
-    sudo dnf update -y
+    retry_cmd sudo dnf check-update || true
 fi
 
 # 4. Dependency Management
 install_pkg() {
     if [[ "$OS" == "ubuntu" || "$OS" == "debian" ]]; then
-        sudo apt-get install -y "$@"
+        retry_cmd sudo apt-get install -y "$@"
     elif [[ "$OS" == "centos" || "$OS" == "almalinux" || "$OS" == "rhel" ]]; then
-        sudo dnf install -y "$@"
+        retry_cmd sudo dnf install -y "$@"
     fi
 }
 
@@ -84,12 +105,12 @@ echo -e "${YELLOW}Checking PHP requirements...${NC}"
 if ! command -v php &> /dev/null || [[ $(php -r "echo PHP_VERSION_ID;") -lt 80200 ]]; then
     echo -e "Installing/Upgrading PHP 8.3..."
     if [[ "$OS" == "ubuntu" || "$OS" == "debian" ]]; then
-        sudo apt-get install -y software-properties-common
-        sudo add-apt-repository -y ppa:ondrej/php
-        sudo apt-get update
+        retry_cmd sudo apt-get install -y software-properties-common
+        retry_cmd sudo add-apt-repository -y ppa:ondrej/php
+        retry_cmd sudo apt-get update
         install_pkg php8.3 php8.3-cli php8.3-common php8.3-pgsql php8.3-bcmath php8.3-curl php8.3-gd php8.3-intl php8.3-xml php8.3-zip php8.3-mbstring php8.3-redis
     elif [[ "$OS" == "centos" || "$OS" == "almalinux" || "$OS" == "rhel" ]]; then
-        sudo dnf install -y https://rpms.remirepo.net/enterprise/remi-release-$(echo $VER | cut -d. -f1).rpm
+        retry_cmd sudo dnf install -y https://rpms.remirepo.net/enterprise/remi-release-$(echo $VER | cut -d. -f1).rpm
         sudo dnf module reset php -y
         sudo dnf module enable php:remi-8.3 -y
         install_pkg php php-cli php-common php-pgsql php-bcmath php-curl php-gd php-intl php-xml php-zip php-mbstring php-redis
@@ -125,10 +146,10 @@ fi
 if ! command -v node &> /dev/null || [[ $(node -v | cut -d. -f1 | sed 's/v//') -lt 22 ]]; then
     echo -e "${YELLOW}Installing Node.js 22...${NC}"
     if [[ "$OS" == "ubuntu" || "$OS" == "debian" ]]; then
-        curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+        retry_cmd curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
         install_pkg nodejs
     elif [[ "$OS" == "centos" || "$OS" == "almalinux" || "$OS" == "rhel" ]]; then
-        curl -fsSL https://rpm.nodesource.com/setup_22.x | sudo bash -
+        retry_cmd curl -fsSL https://rpm.nodesource.com/setup_22.x | sudo bash -
         install_pkg nodejs
     fi
 fi
