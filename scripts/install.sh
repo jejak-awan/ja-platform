@@ -84,7 +84,7 @@ retry_cmd() {
 }
 
 echo -e "${BLUE}==================================================${NC}"
-echo -e "${BLUE}       JA-Platform Auto-Installer v2.5            ${NC}"
+echo -e "${BLUE}       JA-Platform Auto-Installer v1.0.0-beta.1   ${NC}"
 echo -e "${BLUE}==================================================${NC}"
 
 # 0. Connectivity Check

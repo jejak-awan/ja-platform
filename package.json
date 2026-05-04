@@ -1,5 +1,6 @@
 {
-  "name": "ja-apps",
+  "name": "ja-platform",
+  "version": "1.0.0-beta.1",
   "private": true,
   "engines": {
     "node": ">=22.12.0"

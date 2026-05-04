@@ -346,7 +346,7 @@ const heroTitleText = computed(
     () =>
         (getSetting('hero_title') as string) ||
         displaySiteName.value ||
-        'SMK Negeri 1 Cijulang'
+        'sekolahk2.id'
 );
 const heroSubtitleText = computed(() => (getSetting('hero_subtitle') as string) || 'Mencetak Generasi Unggul Siap Kerja, Kuliah, dan Berwirausaha');
 const heroSlideCount = computed(() => parseInt(String(getSetting('hero_slide_count', 3)), 10))

@@ -423,7 +423,7 @@ const fetchSettings = async () => {
         // Inject Brand / App Identity Settings (Core domain)
         ensureSetting('admin_email', '', 'string', 'brand');
         ensureSetting('app_name', 'JA-Platform', 'string', 'brand');
-        ensureSetting('school_name', 'SMK Negeri 1 Cijulang', 'string', 'general');
+        ensureSetting('school_name', 'sekolahk2.id', 'string', 'general');
         ensureSetting('license_key', 'senja@jejakawan', 'string', 'system');
         ensureSetting('license_type', 'Pro+', 'string', 'system');
         ensureSetting('brand_logo', '', 'image', 'brand');

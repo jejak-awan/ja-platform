@@ -1090,7 +1090,7 @@
         "footer_text": {
             "label": "Copyright Text",
             "type": "text",
-            "default": "© 2026 SMK Negeri 1 Cijulang. All rights reserved.",
+            "default": "© 2026 sekolahk2.id. All rights reserved.",
             "category": "Footer"
         },
         "back_to_top": {

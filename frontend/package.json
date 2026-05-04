@@ -1,7 +1,7 @@
 {
     "name": "ja-platform-dashboard",
     "private": true,
-    "version": "1.0.0",
+    "version": "1.0.0-beta.1",
     "author": "Jejakawan <jejakawan007@github.com>",
     "type": "module",
     "engines": {

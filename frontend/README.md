@@ -1,6 +1,9 @@
 # JA-Platform - Frontend
+**Edition**: edu v.1.0.0  
+**Theme**: janari v.1.0.0  
+**Version**: 1.0.0-beta.1
 
-This is the frontend component of **JA-Platform**.
+This is the frontend component of **JA-Platform**. Developed by **Jejakawan** (sekolahk2.id).
 
 ## 🚀 Stack
 

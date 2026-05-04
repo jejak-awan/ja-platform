@@ -44,7 +44,7 @@
               ref="aboutTitle"
               class="text-4xl md:text-6xl font-extrabold mb-6 text-foreground"
             >
-              <JanariSplitText :text="pageTitle || 'SMK Negeri 1 Cijulang'" />
+              <JanariSplitText :text="pageTitle || 'sekolahk2.id'" />
             </h1>
             <p class="motion-fade text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
               {{ pageSubtitle || 'Membangun masa depan generasi vokasi yang unggul, kompeten, dan berdaya saing global.' }}
@@ -69,7 +69,7 @@
                     cakap dalam teknologi, dan siap menjawab tantangan industri masa kini.
                   </p>
                   <p class="text-muted-foreground text-lg leading-relaxed">
-                    Berdiri sejak tahun 2004, SMK Negeri 1 Cijulang terus berinovasi dalam kurikulum 
+                    Berdiri sejak tahun 2004, sekolahk2.id terus berinovasi dalam kurikulum 
                     dan fasilitas untuk memberikan pengalaman belajar terbaik bagi putra-putri daerah.
                   </p>
                 </div>
