@@ -16,13 +16,17 @@ NC='\033[0m' # No Color
 trap 'on_error $LINENO' ERR
 on_error() {
     echo -e "\n${RED}==================================================${NC}"
-    echo -e "${RED}  FINAL ERROR: Installation Failed at line $1     ${NC}"
+    echo -e "${RED}  CRITICAL ERROR: Installation Stalled            ${NC}"
+    echo -e "${RED}  Failed at line $1                               ${NC}"
     echo -e "${RED}==================================================${NC}"
     echo -e "${YELLOW}Common Solutions:${NC}"
-    echo -e "1. Check your internet connection (ISP/Proxy)."
-    echo -e "2. Mirrors might be down. Try again later."
-    echo -e "3. Run manual cleanup: sudo rm -rf /var/lib/apt/lists/*"
-    echo -e "4. Check for lock files (another update running)."
+    echo -e "1. Check internet connection / firewall."
+    echo -e "2. Mirrors might be down. Try again in 5 minutes."
+    echo -e "3. Manual fix: sudo apt-get install -f"
+    echo -e "\n${RED}NUCLEAR OPTION (If all fails):${NC}"
+    echo -e "If this server has many legacy conflicts, it is highly recommended to:"
+    echo -e "${GREEN}-> Reinstall a FRESH OS (Ubuntu 24.04 LTS or AlmaLinux 9 recommended)${NC}"
+    echo -e "${GREEN}-> Use a clean, empty server to avoid dependency hell.${NC}"
     exit 1
 }
 
