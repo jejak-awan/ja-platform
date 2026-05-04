@@ -60,13 +60,32 @@
             <div v-if="!isRequirementsMet" class="mt-6 p-4 rounded-lg bg-destructive/5 border border-destructive/20 animate-in fade-in zoom-in duration-300">
                 <h3 class="text-sm font-bold text-destructive mb-2 flex items-center gap-2">
                     <XCircle class="w-4 h-4" />
-                    Troubleshooting:
+                    Troubleshooting for {{ serverOS.distro !== 'unknown' ? serverOS.distro : serverOS.family }}:
                 </h3>
                 <ul class="text-xs space-y-2 text-muted-foreground list-disc pl-4">
                     <li v-if="!requirements.php_supported">Upgrade PHP to 8.2 or 8.3 (Recommended).</li>
                     <li v-if="!requirements.writable_env">Ensure <code class="bg-muted px-1 rounded text-foreground">.env</code> exists and is writable.</li>
                     <li v-if="!requirements.writable_storage">Run: <code class="bg-muted px-1 rounded text-foreground">chmod -R 775 storage bootstrap/cache</code></li>
-                    <li v-if="!isRequirementsMet">Install missing extensions: <code class="bg-muted px-1 rounded text-foreground">sudo apt install php8.3-{common,pgsql,bcmath,curl,gd,intl,xml,zip,mbstring}</code></li>
+                    
+                    <!-- Debian/Ubuntu -->
+                    <li v-if="!isRequirementsMet && serverOS.distro === 'debian'">
+                      Install missing: <code class="bg-muted px-1 rounded text-foreground">sudo apt install php8.3-{common,pgsql,bcmath,curl,gd,intl,xml,zip,mbstring}</code>
+                    </li>
+
+                    <!-- RHEL/CentOS/AlmaLinux -->
+                    <li v-if="!isRequirementsMet && serverOS.distro === 'rhel'">
+                      Install missing: <code class="bg-muted px-1 rounded text-foreground">sudo dnf install php-{common,pgsql,bcmath,curl,gd,intl,xml,zip,mbstring}</code>
+                    </li>
+
+                    <!-- Windows -->
+                    <li v-if="!isRequirementsMet && serverOS.family === 'Windows'">
+                      Enable extensions in your <code class="bg-muted px-1 rounded text-foreground">php.ini</code> (remove ';' prefix for: pdo_pgsql, bcmath, curl, gd, intl, mbstring, openssl, xml, zip).
+                    </li>
+
+                    <!-- Other/Unknown -->
+                    <li v-if="!isRequirementsMet && serverOS.distro === 'unknown' && serverOS.family !== 'Windows'">
+                      Install the missing PHP extensions listed above using your OS package manager.
+                    </li>
                 </ul>
             </div>
           </div>
@@ -190,6 +209,7 @@ const step = ref('requirements');
 const loading = ref(true);
 const submitting = ref(false);
 const requirements = ref<any>({});
+const serverOS = ref({ family: 'unknown', distro: 'unknown' });
 const toast = useToast();
 
 const form = ref({
@@ -221,6 +241,7 @@ const fetchStatus = async () => {
   try {
     const response = await api.get('/v1/install/status', { _skipManualRedirect: true } as any);
     requirements.value = response.data.requirements;
+    serverOS.value = response.data.os || { family: 'unknown', distro: 'unknown' };
     if (response.data.is_installed) {
         toast.info('Already installed', 'Redirecting...');
         setTimeout(() => window.location.href = '/', 1500);

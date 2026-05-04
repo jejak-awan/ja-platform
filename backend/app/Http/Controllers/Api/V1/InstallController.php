@@ -15,8 +15,31 @@ class InstallController extends Controller
     {
         return response()->json([
             'is_installed' => config('app.installed', false),
-            'requirements' => $this->checkRequirements()
+            'requirements' => $this->checkRequirements(),
+            'os' => $this->detectOS()
         ]);
+    }
+
+    protected function detectOS()
+    {
+        $family = PHP_OS_FAMILY;
+        $distro = 'unknown';
+
+        if ($family === 'Linux') {
+            if (File::exists('/etc/os-release')) {
+                $osRelease = File::get('/etc/os-release');
+                if (str_contains($osRelease, 'ubuntu') || str_contains($osRelease, 'debian')) {
+                    $distro = 'debian';
+                } elseif (str_contains($osRelease, 'centos') || str_contains($osRelease, 'almalinux') || str_contains($osRelease, 'rhel') || str_contains($osRelease, 'fedora')) {
+                    $distro = 'rhel';
+                }
+            }
+        }
+
+        return [
+            'family' => $family,
+            'distro' => $distro
+        ];
     }
 
     public function install(Request $request)
