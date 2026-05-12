@@ -1,0 +1,28 @@
+{
+    "sections": {
+        "usersAccess": "Team",
+        "monitoring": "Monitoring",
+        "infrastructure": "Infrastructure",
+        "developer": "Dev",
+        "advanced": "Advanced"
+    },
+    "menu": {
+        "users": "Users",
+        "roles": "Roles & Permissions",
+        "journalDashboard": "Journal Dashboard",
+        "activityJournal": "Activity Journal",
+        "securityJournal": "Security Journal",
+        "systemJournal": "System Journal",
+        "accessJournal": "Access History",
+        "systemInfo": "System Info",
+        "settings": "Settings",
+        "systemNotifications": "Notifications",
+        "backups": "Backups",
+        "fileManager": "File Manager",
+        "redis": "Redis Cache",
+        "scheduledTasks": "Scheduled Tasks",
+        "languages": "Languages",
+        "webhooks": "Webhooks",
+        "plugins": "Plugins"
+    }
+}

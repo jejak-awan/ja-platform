@@ -1,0 +1,81 @@
+{
+    "tabs": {
+        "identity": "Identitas",
+        "general": "Umum",
+        "email": "Email",
+        "seo": "SEO",
+        "security": "Keamanan",
+        "comments": "Diskusi",
+        "performance": "Performa",
+        "monitoring": "Monitoring",
+        "media": "Media",
+        "ai": "Bantuan AI",
+        "analytics": "Analitik",
+        "system": "Sistem"
+    },
+    "title": "Pengaturan CMS",
+    "description": "Kelola konfigurasi, identitas, diskusi, dan performa CMS",
+    "reset": "Reset Pengaturan",
+    "save": "Simpan Pengaturan",
+    "groups": {
+        "siteInfo": {
+            "title": "Informasi Situs",
+            "description": "Informasi dasar tentang situs web Anda"
+        },
+        "analytics": {
+            "retentionTitle": "Retensi Data",
+            "description": "Konfigurasi berapa lama data analitik harus disimpan di database.",
+            "cleanupTitle": "Pembersihan Data Manual",
+            "cleanupDescription": "Jalankan pembersihan manual data analitik lama berdasarkan pengaturan retensi. Proses ini akan menghapus data yang lebih tua dari periode retensi yang ditentukan secara permanen.",
+            "cleanupButton": "Jalankan Pembersihan Sekarang",
+            "cleaningNow": "Membersihkan...",
+            "cleanupConfirm": "Apakah Anda yakin ingin menghapus data analitik lama sekarang?",
+            "cleanupSuccess": "Berhasil membersihkan {count} data.",
+            "purgeTitle": "Hapus semua data analitik",
+            "purgeConfirm": "Ini akan menghapus permanen semua kunjungan, event, dan sesi analitik (termasuk hari ini). Penghitung tayang di konten CMS tidak ikut direset. Lanjutkan?",
+            "purgeButton": "Hapus semua analitik",
+            "purgingNow": "Menghapus...",
+            "purgeSuccess": "{count} rekaman analitik dihapus. Dashboard akan menampilkan data kosong."
+        },
+        "discussion": {
+            "title": "Pengaturan Diskusi",
+            "description": "Konfigurasi sistem komentar"
+        }
+    },
+    "labels": {
+        "site_name": "Nama Situs",
+        "site_logo": "Logo Situs",
+        "site_favicon": "Favicon Situs",
+        "site_description": "Deskripsi Situs",
+        "site_url": "URL Situs",
+        "admin_email": "Email Admin",
+        "comments": {
+            "security": {
+                "enable_reply": "Aktifkan Balasan",
+                "allow_guests": "Izinkan Komentar Tamu",
+                "moderation_enabled": "Aktifkan Moderasi",
+                "guest_captcha": "Captcha Tamu",
+                "max_links": "Maksimal Tautan",
+                "banned_words": "Kata-kata Terlarang"
+            }
+        }
+    },
+    "descriptions": {
+        "site_name": "Nama publik situs CMS Anda",
+        "site_logo": "Logo utama situs CMS",
+        "site_favicon": "Ikon browser situs (rekomendasi 16x16 atau 32x32)",
+        "site_description": "Penjelasan singkat tentang situs Anda untuk keperluan SEO",
+        "site_url": "URL utama aplikasi CMS Anda",
+        "admin_email": "Email kontak untuk keperluan administratif situs CMS",
+        "comments": {
+            "security": {
+                "enable_reply": "Izinkan pengguna untuk membalas komentar lain",
+                "allow_guests": "Izinkan pengguna berkomentar tanpa login",
+                "moderation_enabled": "Komentar baru memerlukan persetujuan admin sebelum muncul",
+                "guest_captcha": "Wajibkan tamu menyelesaikan captcha untuk memposting",
+                "max_links": "Jumlah maksimum tautan yang diperbolehkan dalam satu komentar (0 untuk tidak terbatas)",
+                "banned_words": "Daftar kata yang akan menyebabkan komentar ditandai sebagai spam (array JSON)"
+            }
+        }
+    }
+}

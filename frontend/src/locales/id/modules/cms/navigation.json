@@ -1,0 +1,26 @@
+{
+    "sections": {
+        "content": "Studio",
+        "marketing": "Reach",
+        "marketing_insights": "Marketing & Insight",
+        "seo_optimization": "SEO & Optimasi",
+        "design_config": "Tampilan & Desain",
+        "content_studio": "Konten & Media"
+    },
+    "menu": {
+        "studio": "Konten",
+        "mediaLibrary": "Pustaka Media",
+        "comments": "Komentar",
+        "analytics": "Analitik",
+        "forms": "Formulir",
+        "newsletter": "Buletin",
+        "emailTemplates": "Template Email",
+        "seoTools": "Alat SEO",
+        "redirects": "Pengalihan",
+        "themes": "Tema",
+        "menus": "Menu",
+        "widgets": "Widget",
+        "cmsSettings": "Pengaturan CMS",
+        "customFields": "Bidang Kustom"
+    }
+}

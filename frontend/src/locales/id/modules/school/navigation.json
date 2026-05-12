@@ -1,0 +1,32 @@
+{
+    "sections": {
+        "institution": "Institusi",
+        "academic_kurikulum": "Akademik & Kurikulum",
+        "kesiswaan_ops": "Kesiswaan & Ops",
+        "hr_kepegawaian": "HR & Kepegawaian",
+        "logistik_sarpras": "Logistik & Sarpras",
+        "osis_alumni": "Osis & Alumni",
+        "keuangan_monitoring": "Keuangan & Monitoring",
+        "student_portal": "Portal Siswa"
+    },
+    "menu": {
+        "foundationDashboard": "Dasbor Yayasan",
+        "schoolsDashboard": "Dasbor Unit",
+        "foundationIdentity": "Identitas Yayasan",
+        "schoolsIndex": "Manajemen Unit",
+        "schoolsOrganization": "Struktur Organisasi",
+        "academicIndex": "Manajemen Akademik",
+        "studentsIndex": "Data Siswa",
+        "attendanceIndex": "Presensi Siswa",
+        "studentAffairsIndex": "Layanan Kesiswaan",
+        "graduation": "Manajemen Kelulusan",
+        "staffIndex": "Data Pegawai",
+        "hrIndex": "Manajemen HR",
+        "admissionIndex": "PPDB (Admission)",
+        "sarprasIndex": "Sarana & Prasarana",
+        "logisticsIndex": "Ekosistem Sekolah",
+        "osisIndex": "Manajemen OSIS",
+        "alumniIndex": "Tracer Study & Alumni",
+        "settingsLogs": "Log Audit"
+    }
+}

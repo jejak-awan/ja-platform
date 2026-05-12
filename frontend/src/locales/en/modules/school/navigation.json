@@ -1,0 +1,32 @@
+{
+    "sections": {
+        "institution": "Institution",
+        "academic_kurikulum": "Academic & Curriculum",
+        "kesiswaan_ops": "Students & Ops",
+        "hr_kepegawaian": "HR & Personnel",
+        "logistik_sarpras": "Logistics & Facilities",
+        "osis_alumni": "OSIS & Alumni",
+        "keuangan_monitoring": "Finance & Monitoring",
+        "student_portal": "Student Portal"
+    },
+    "menu": {
+        "foundationDashboard": "Foundation Dashboard",
+        "schoolsDashboard": "Unit Dashboard",
+        "foundationIdentity": "Foundation Identity",
+        "schoolsIndex": "Unit Management",
+        "schoolsOrganization": "Organizational Structure",
+        "academicIndex": "Academic Management",
+        "studentsIndex": "Student Data",
+        "attendanceIndex": "Student Attendance",
+        "studentAffairsIndex": "Student Services",
+        "graduation": "Graduation Management",
+        "staffIndex": "Staff Data",
+        "hrIndex": "HR Management",
+        "admissionIndex": "PPDB (Admission)",
+        "sarprasIndex": "Facilities & Assets",
+        "logisticsIndex": "School Ecosystem",
+        "osisIndex": "OSIS Management",
+        "alumniIndex": "Tracer Study & Alumni",
+        "settingsLogs": "Audit Logs"
+    }
+}

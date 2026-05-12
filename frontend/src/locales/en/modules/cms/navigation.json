@@ -1,0 +1,26 @@
+{
+    "sections": {
+        "content": "Studio",
+        "marketing": "Reach",
+        "marketing_insights": "Marketing & Insights",
+        "seo_optimization": "SEO & Optimization",
+        "design_config": "Design & Config",
+        "content_studio": "Content & Media"
+    },
+    "menu": {
+        "studio": "Content",
+        "mediaLibrary": "Media Library",
+        "comments": "Comments",
+        "analytics": "Analytics",
+        "forms": "Forms",
+        "newsletter": "Newsletter",
+        "emailTemplates": "Email Templates",
+        "seoTools": "SEO Tools",
+        "redirects": "Redirects",
+        "themes": "Themes",
+        "menus": "Menus",
+        "widgets": "Widgets",
+        "cmsSettings": "CMS Settings",
+        "customFields": "Custom Fields"
+    }
+}

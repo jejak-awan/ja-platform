@@ -1,0 +1,32 @@
+{
+    "title": "Content Templates",
+    "title_singular": "Content Template",
+    "description": "Manage reusable content layouts and snippets",
+    "search": "Search templates...",
+    "loading": "Loading templates...",
+    "empty": "No templates found",
+    "create": "Create New Template",
+    "actions": {
+        "delete": "Delete Template",
+        "createContent": "Create content from this template"
+    },
+    "table": {
+        "name": "Template Name",
+        "type": "Type",
+        "description": "Description",
+        "updated": "Last Updated",
+        "actions": "Actions",
+        "selected": "{count} templates selected"
+    },
+    "types": {
+        "all": "All Types",
+        "post": "Post",
+        "page": "Page",
+        "custom": "Custom"
+    },
+    "messages": {
+        "deleteConfirm": "Are you sure you want to delete template '{name}'?",
+        "forceDeleteConfirm": "This will permanently delete template '{name}'. This action cannot be undone.",
+        "restoreConfirm": "Are you sure you want to restore template '{name}'?"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "ecosystemSubtitle": "Monitoring summarized performance and KPIs across institution units",
+    "unitAddressNotSet": "Address not yet set for this unit.",
+    "activeStatus": "ACTIVE: {name}",
+    "noMapLocation": "Address is incomplete to display map.",
+    "addressNotSet": "Address not set"
+}

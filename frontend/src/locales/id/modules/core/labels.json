@@ -1,0 +1,18 @@
+{
+    "roles": "Peran",
+    "role": "Peran",
+    "permissions": "Izin",
+    "permission": "Izin",
+    "users": "Pengguna",
+    "user": "Pengguna",
+    "system": "Sistem",
+    "systemGlobal": "Global / Sistem",
+    "globalContext": "Global",
+    "logs": "Log Audit",
+    "security": "Keamanan",
+    "redis": "Cache Redis",
+    "scheduledTasks": "Tugas Terjadwal",
+    "webhooks": "Webhooks",
+    "plugins": "Plugin",
+    "extensions": "Ekstensi Admin"
+}

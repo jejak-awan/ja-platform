@@ -1,0 +1,28 @@
+{
+    "sections": {
+        "usersAccess": "Tim",
+        "monitoring": "Pemantauan",
+        "infrastructure": "Infrastruktur",
+        "developer": "Dev",
+        "advanced": "Lanjutan"
+    },
+    "menu": {
+        "users": "Pengguna",
+        "roles": "Peran & Izin",
+        "journalDashboard": "Dasbor Jurnal",
+        "activityJournal": "Jurnal Aktivitas",
+        "securityJournal": "Jurnal Keamanan",
+        "systemJournal": "Jurnal Sistem",
+        "accessJournal": "Riwayat Akses",
+        "systemInfo": "Info Sistem",
+        "settings": "Pengaturan",
+        "systemNotifications": "Notifikasi",
+        "backups": "Cadangan",
+        "fileManager": "Manajer File",
+        "redis": "Cache Redis",
+        "scheduledTasks": "Tugas Terjadwal",
+        "languages": "Bahasa",
+        "webhooks": "Webhooks",
+        "plugins": "Plugin"
+    }
+}

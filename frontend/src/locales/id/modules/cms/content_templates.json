@@ -1,0 +1,32 @@
+{
+    "title": "Template Konten",
+    "title_singular": "Template Konten",
+    "description": "Kelola tata letak dan cuplikan konten yang dapat digunakan kembali",
+    "search": "Cari template...",
+    "loading": "Memuat template...",
+    "empty": "Template tidak ditemukan",
+    "create": "Buat Template Baru",
+    "actions": {
+        "delete": "Hapus Template",
+        "createContent": "Buat konten dari template ini"
+    },
+    "table": {
+        "name": "Nama Template",
+        "type": "Tipe",
+        "description": "Deskripsi",
+        "updated": "Terakhir Diperbarui",
+        "actions": "Aksi",
+        "selected": "{count} template terpilih"
+    },
+    "types": {
+        "all": "Semua Tipe",
+        "post": "Postingan",
+        "page": "Halaman",
+        "custom": "Kustom"
+    },
+    "messages": {
+        "deleteConfirm": "Apakah Anda yakin ingin menghapus template '{name}'?",
+        "forceDeleteConfirm": "Ini akan menghapus template '{name}' secara permanen. Tindakan ini tidak dapat dibatalkan.",
+        "restoreConfirm": "Apakah Anda yakin ingin memulihkan template '{name}'?"
+    }
+}

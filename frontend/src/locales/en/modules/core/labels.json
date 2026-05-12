@@ -1,0 +1,18 @@
+{
+    "roles": "Roles",
+    "role": "Role",
+    "permissions": "Permissions",
+    "permission": "Permission",
+    "users": "Users",
+    "user": "User",
+    "system": "System",
+    "systemGlobal": "Global / System",
+    "globalContext": "Global",
+    "logs": "Audit Logs",
+    "security": "Security",
+    "redis": "Redis Cache",
+    "scheduledTasks": "Scheduled Tasks",
+    "webhooks": "Webhooks",
+    "plugins": "Plugins",
+    "extensions": "Admin Extensions"
+}

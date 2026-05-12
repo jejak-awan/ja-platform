@@ -1,0 +1,173 @@
+<template>
+  <div 
+    class="min-h-screen bg-background text-foreground admin-instant admin-layout"
+    :class="{ 'no-transitions': resizing }"
+  >
+    <!-- Sidebar -->
+    <TheSidebar
+      :sidebar-minimized="sidebarMinimized"
+      :sidebar-open="sidebarOpen"
+      :user="authStore.user || undefined"
+      @toggle-minimize="toggleSidebarMinimize"
+      @close="closeSidebar"
+      @logout="handleLogout"
+    />
+
+    <!-- Mobile Backdrop -->
+    <div 
+      v-if="sidebarOpen" 
+      class="fixed inset-0 z-40 bg-background/60 lg:hidden"
+      @click="closeSidebar"
+    />
+
+    <!-- Main Content -->
+    <div
+      :class="[
+        'min-h-screen',
+        sidebarMinimized ? 'lg:pl-[68px]' : 'lg:pl-64'
+      ]"
+    >
+      <!-- Top Navbar -->
+      <TheNavbar
+        :is-authenticated="authStore.isAuthenticated"
+        :user="authStore.user || undefined"
+        @toggle-sidebar="toggleSidebarOpen"
+        @logout="handleLogout"
+      />
+
+      <!-- Page Content -->
+      <main class="p-6 relative overflow-hidden">
+        <router-view v-slot="{ Component, route: slotRoute }">
+          <KeepAlive
+            v-if="!slotRoute.meta?.noCache"
+            :max="12"
+          >
+            <component
+              :is="Component"
+              :key="`cached:${String(slotRoute.name || slotRoute.path)}`"
+            />
+          </KeepAlive>
+          <component
+            v-else
+            :is="Component"
+            :key="`live:${String(slotRoute.fullPath || slotRoute.path)}`"
+          />
+        </router-view>
+      </main>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useSidebar } from '@/shared/composables/useSidebar';
+import { useHead } from '@unhead/vue';
+import { useI18n } from 'vue-i18n';
+import TheSidebar from '@/shared/layouts/partials/TheSidebar.vue';
+import TheNavbar from '@/shared/layouts/partials/TheNavbar.vue';
+import { useCoreStore } from '@/modules/Core/stores/core';
+import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useUnitStore } from '@/modules/School/stores/unit';
+import { useSchoolStore } from '@/modules/School/stores/school';
+
+const router = useRouter();
+const route = useRoute();
+const coreStore = useCoreStore();
+const authStore = useAuthStore();
+const unitStore = useUnitStore();
+const schoolStore = useSchoolStore();
+const { t, te } = useI18n();
+const { sidebarMinimized, sidebarOpen, toggleSidebarMinimize, toggleSidebarOpen, closeSidebar } = useSidebar();
+
+// Use shared mounted state for synchronized transitions
+
+// Resize Throttling
+const resizing = ref(false);
+let resizeTimer: ReturnType<typeof setTimeout> | null = null;
+
+const handleResize = () => {
+    resizing.value = true;
+    document.body.classList.add('no-transitions');
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        resizing.value = false;
+        document.body.classList.remove('no-transitions');
+    }, 200);
+};
+
+// Reactive Global Title Management
+const pageTitle = ref('Janari App');
+
+watch([() => route?.name, () => coreStore.appIdentity?.app_name, () => route?.meta], () => {
+    // Stability guard
+    if (!route) return;
+
+    const appName = coreStore.appIdentity?.app_name || 'Janari App';
+    
+    // 1. Route Meta Title
+    if (route.meta?.title) {
+        const titleKey = route.meta.title as string;
+        const title = te(titleKey) ? t(titleKey) : titleKey;
+        pageTitle.value = `${appName} | ${title}`;
+        return;
+    }
+    
+    // 2. Auto-generated from Route Name
+    if (route.name) {
+        const name = String(route.name);
+        const segments = name.replace(/-([a-z])/g, (_, g1) => (g1 || '').toUpperCase()).split('.');
+        const camelName = segments[0] || ''; 
+        const key = `common.navigation.menu.${camelName}`;
+        
+        let label: string;
+        if (te(key)) {
+            label = t(key);
+        } else {
+            const baseLabel = name.split('.').pop() || name;
+            label = baseLabel.charAt(0).toUpperCase() + baseLabel.slice(1);
+        }
+        
+        pageTitle.value = `${appName} | ${label}`;
+        return;
+    }
+
+    pageTitle.value = appName;
+}, { immediate: true });
+
+onMounted(async () => {
+    window.addEventListener('resize', handleResize);
+    
+    // Fire all fetches in parallel for faster load
+    const promises: Promise<unknown>[] = [coreStore.fetchAppIdentity()];
+    
+    if (authStore.isAuthenticated) {
+        promises.push(
+            schoolStore.fetchSchool().then(() => {
+                if (schoolStore.currentSchool?.id) {
+                    return unitStore.fetchUnits(schoolStore.currentSchool.id, true);
+                }
+            })
+        );
+    }
+    
+    await Promise.allSettled(promises);
+});
+
+onUnmounted(() => {
+    if (resizeTimer) clearTimeout(resizeTimer);
+    document.body.classList.remove('no-transitions');
+    window.removeEventListener('resize', handleResize);
+});
+
+useHead({
+    title: pageTitle
+});
+
+const handleLogout = async () => {
+    await authStore.logout();
+    router.push({ name: 'login' });
+};
+
+</script>
+

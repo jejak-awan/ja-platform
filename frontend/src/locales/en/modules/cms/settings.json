@@ -1,0 +1,81 @@
+{
+    "tabs": {
+        "identity": "Identity",
+        "general": "General",
+        "email": "Email",
+        "seo": "SEO",
+        "security": "Security",
+        "comments": "Discussion",
+        "performance": "Performance",
+        "monitoring": "Monitoring",
+        "media": "Media",
+        "ai": "AI Assistance",
+        "analytics": "Analytics",
+        "system": "System"
+    },
+    "title": "CMS Settings",
+    "description": "Manage CMS configuration, identity, discussion, and performance",
+    "reset": "Reset Settings",
+    "save": "Save Settings",
+    "groups": {
+        "siteInfo": {
+            "title": "Site Information",
+            "description": "Basic information about your website"
+        },
+        "analytics": {
+            "retentionTitle": "Data Retention",
+            "description": "Configure how long analytics data should be kept in the database.",
+            "cleanupTitle": "Manual Data Cleanup",
+            "cleanupDescription": "Trigger a manual cleanup of old analytics data based on the retention settings. This will permanently delete data older than the specified retention periods.",
+            "cleanupButton": "Run Cleanup Now",
+            "cleaningNow": "Cleaning...",
+            "cleanupConfirm": "Are you sure you want to delete old analytics data now?",
+            "cleanupSuccess": "Successfully cleaned up {count} records.",
+            "purgeTitle": "Reset all analytics",
+            "purgeConfirm": "This permanently deletes every visit, event, and session in analytics (including today). Content page view counters are not changed. Continue?",
+            "purgeButton": "Delete all analytics",
+            "purgingNow": "Deleting...",
+            "purgeSuccess": "Removed {count} analytics records. Dashboards will reflect empty data immediately."
+        },
+        "discussion": {
+            "title": "Discussion Settings",
+            "description": "Configure comment system behavior"
+        }
+    },
+    "labels": {
+        "site_name": "Site Name",
+        "site_logo": "Site Logo",
+        "site_favicon": "Site Favicon",
+        "site_description": "Site Description",
+        "site_url": "Site URL",
+        "admin_email": "Admin Email",
+        "comments": {
+            "security": {
+                "enable_reply": "Enable Replies",
+                "allow_guests": "Allow Guest Comments",
+                "moderation_enabled": "Enable Moderation",
+                "guest_captcha": "Guest Captcha",
+                "max_links": "Max Links Allowed",
+                "banned_words": "Banned Words"
+            }
+        }
+    },
+    "descriptions": {
+        "site_name": "The public name of your CMS site",
+        "site_logo": "The main logo of the CMS site",
+        "site_favicon": "The browser icon for your site (recommended 16x16 or 32x32)",
+        "site_description": "A brief description of your site for SEO purposes",
+        "site_url": "The main URL of your CMS application",
+        "admin_email": "Contact email for administrative purposes",
+        "comments": {
+            "security": {
+                "enable_reply": "Allow users to reply to other comments",
+                "allow_guests": "Allow users to comment without logging in",
+                "moderation_enabled": "New comments require admin approval before appearing",
+                "guest_captcha": "Require guests to solve a captcha to post",
+                "max_links": "Maximum number of links allowed in a comment (0 for unlimited)",
+                "banned_words": "List of words that will cause a comment to be marked as spam (JSON array)"
+            }
+        }
+    }
+}
