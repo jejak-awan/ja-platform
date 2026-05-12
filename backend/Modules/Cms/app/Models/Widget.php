@@ -3,7 +3,7 @@
 namespace Modules\Cms\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\School\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByUnit;
 
 /**
  * @property int $id

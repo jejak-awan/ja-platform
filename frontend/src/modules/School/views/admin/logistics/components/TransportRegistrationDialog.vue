@@ -5,13 +5,13 @@
   >
     <DialogContent class="sm:max-w-[425px] rounded-2xl overflow-hidden border-border/50">
       <DialogHeader>
-        <DialogTitle class="text-xl font-bold tracking-tight">{{ $t('features.school.logistics.transport.actions.registerTransport') }}</DialogTitle>
-        <DialogDescription class="text-sm italic font-medium">{{ $t('features.school.logistics.transport.labels.studentListDesc') }}</DialogDescription>
+        <DialogTitle class="text-xl font-bold tracking-tight">{{ $t('modules.school.logistics.transport.actions.registerTransport') }}</DialogTitle>
+        <DialogDescription class="text-sm italic font-medium">{{ $t('modules.school.logistics.transport.labels.studentListDesc') }}</DialogDescription>
       </DialogHeader>
 
       <div class="grid gap-6 py-6">
         <div class="grid gap-2">
-          <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('features.school.logistics.transport.placeholders.searchStudent') }}</Label>
+          <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.logistics.transport.placeholders.searchStudent') }}</Label>
           <div class="relative">
             <LucideIcon
               name="Search"
@@ -19,7 +19,7 @@
             />
             <Input
               v-model="search"
-              :placeholder="$t('features.school.logistics.transport.placeholders.searchHint')"
+              :placeholder="$t('modules.school.logistics.transport.placeholders.searchHint')"
               class="pl-10 h-11 rounded-xl bg-muted/20 border-border/50"
               @input="fetchStudents"
             />
@@ -55,9 +55,9 @@
 
         <div class="grid grid-cols-2 gap-4">
           <div class="grid gap-2">
-            <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('features.school.logistics.transport.labels.vehicle') }}</Label>
+            <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.logistics.transport.labels.vehicle') }}</Label>
             <Select v-model="form.vehicle_id">
-              <SelectTrigger class="h-11 rounded-xl bg-muted/20 border-border/50"><SelectValue :placeholder="$t('features.school.logistics.transport.placeholders.selectFleet')" /></SelectTrigger>
+              <SelectTrigger class="h-11 rounded-xl bg-muted/20 border-border/50"><SelectValue :placeholder="$t('modules.school.logistics.transport.placeholders.selectFleet')" /></SelectTrigger>
               <SelectContent>
                 <SelectItem
                   v-for="v in vehicles"
@@ -70,9 +70,9 @@
             </Select>
           </div>
           <div class="grid gap-2">
-            <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('features.school.logistics.transport.labels.route') }}</Label>
+            <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.logistics.transport.labels.route') }}</Label>
             <Select v-model="form.route_id">
-              <SelectTrigger class="h-11 rounded-xl bg-muted/20 border-border/50"><SelectValue :placeholder="$t('features.school.logistics.transport.placeholders.selectRoute')" /></SelectTrigger>
+              <SelectTrigger class="h-11 rounded-xl bg-muted/20 border-border/50"><SelectValue :placeholder="$t('modules.school.logistics.transport.placeholders.selectRoute')" /></SelectTrigger>
               <SelectContent>
                 <SelectItem
                   v-for="r in routes"
@@ -87,17 +87,17 @@
         </div>
 
         <div class="grid gap-2">
-          <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('features.school.logistics.transport.labels.pickupPoint') }}</Label>
+          <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.logistics.transport.labels.pickupPoint') }}</Label>
           <Input
             id="pickup"
             v-model="form.pickup_point"
-            :placeholder="$t('features.school.logistics.transport.placeholders.pickupHint')"
+            :placeholder="$t('modules.school.logistics.transport.placeholders.pickupHint')"
             class="h-11 rounded-xl bg-muted/20 border-border/50"
           />
         </div>
 
         <div class="grid gap-2">
-          <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('features.school.logistics.transport.labels.startService') }}</Label>
+          <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.logistics.transport.labels.startService') }}</Label>
           <Input
             id="start"
             v-model="form.start_date"
@@ -135,11 +135,11 @@ import { useI18n } from 'vue-i18n';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Label, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { LogisticsService } from '@/modules/School/services/LogisticsService';
 import { StudentService } from '@/modules/School/services/StudentService';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const { t } = useI18n();
 const toast = useToast();
@@ -179,13 +179,13 @@ const fetchStudents = async () => {
 
 const handleSubmit = async () => {
    if (!form.value.student_id || !form.value.vehicle_id || !form.value.route_id) {
-      return toast.error.action(t('features.school.logistics.transport.messages.fillAll'));
+      return toast.error.action(t('modules.school.logistics.transport.messages.fillAll'));
    }
 
    loading.value = true;
    try {
       await LogisticsService.registerTransport(form.value);
-      toast.success.action(t('features.school.logistics.transport.messages.saveSuccess'));
+      toast.success.action(t('modules.school.logistics.transport.messages.saveSuccess'));
       emit('save');
       emit('update:open', false);
       form.value = { student_id: null, vehicle_id: '', route_id: '', pickup_point: '', start_date: new Date().toISOString().split('T')[0] };

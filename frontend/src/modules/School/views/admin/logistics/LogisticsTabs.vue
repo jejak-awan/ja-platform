@@ -10,11 +10,11 @@
             />
           </div>
           <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
-            {{ $t('features.school.logistics.labels.logisticsEcosystem') }}
+            {{ $t('modules.school.logistics.labels.logisticsEcosystem') }}
           </h1>
         </div>
         <p class="text-muted-foreground text-sm">
-          {{ $t('features.school.logistics.subtitle') }}
+          {{ $t('modules.school.logistics.subtitle') }}
         </p>
       </div>
     </div>
@@ -32,7 +32,7 @@
             name="Home"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.labels.hostelManagement') }}
+          {{ $t('modules.school.logistics.labels.hostelManagement') }}
         </TabsTrigger>
         <TabsTrigger 
           value="transport" 
@@ -42,7 +42,7 @@
             name="Bus"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.labels.transport') }}
+          {{ $t('modules.school.logistics.labels.transport') }}
         </TabsTrigger>
         <TabsTrigger 
           value="inventory" 
@@ -52,7 +52,7 @@
             name="Box"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.labels.inventory') }}
+          {{ $t('modules.school.logistics.labels.inventory') }}
         </TabsTrigger>
         <TabsTrigger 
           value="career" 
@@ -62,7 +62,7 @@
             name="Briefcase"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.labels.careerCenter') }}
+          {{ $t('modules.school.logistics.labels.careerCenter') }}
         </TabsTrigger>
       </TabsList>
 
@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Tabs, TabsList, TabsTrigger, TabsContent, LucideIcon } from '@/components/ui';
+import { Tabs, TabsList, TabsTrigger, TabsContent, LucideIcon } from '@/shared/components/ui';
 import Hostel from './Hostel.vue';
 import Transport from './Transport.vue';
 import Inventory from './Inventory.vue';

@@ -3,10 +3,10 @@
     <div class="mb-6 flex items-center justify-between">
       <div>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.themes.title') }}
+          {{ $t('modules.cms.themes.title') }}
         </h1>
         <p class="text-sm text-muted-foreground mt-1">
-          {{ $t('features.themes.subtitle') }}
+          {{ $t('modules.cms.themes.subtitle') }}
         </p>
       </div>
       <div class="flex items-center gap-3">
@@ -15,20 +15,20 @@
           @update:model-value="fetchThemes"
         >
           <SelectTrigger class="w-[180px]">
-            <SelectValue :placeholder="$t('features.themes.types.all')" />
+            <SelectValue :placeholder="$t('modules.cms.themes.types.all')" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
-              {{ $t('features.themes.types.all') }}
+              {{ $t('modules.cms.themes.types.all') }}
             </SelectItem>
             <SelectItem value="frontend">
-              {{ $t('features.themes.types.frontend') }}
+              {{ $t('modules.cms.themes.types.frontend') }}
             </SelectItem>
             <SelectItem value="admin">
-              {{ $t('features.themes.types.admin') }}
+              {{ $t('modules.cms.themes.types.admin') }}
             </SelectItem>
             <SelectItem value="email">
-              {{ $t('features.themes.types.email') }}
+              {{ $t('modules.cms.themes.types.email') }}
             </SelectItem>
           </SelectContent>
         </Select>
@@ -37,7 +37,7 @@
           variant="secondary"
           @click="scanThemes"
         >
-          {{ scanning ? $t('features.themes.scanning') : $t('features.themes.scan') }}
+          {{ scanning ? $t('modules.cms.themes.scanning') : $t('modules.cms.themes.scan') }}
         </Button>
       </div>
     </div>
@@ -48,16 +48,16 @@
     >
       <Palette class="mx-auto h-12 w-12 text-muted-foreground" />
       <h3 class="mt-2 text-sm font-medium text-foreground">
-        {{ $t('features.themes.list.empty') }}
+        {{ $t('modules.cms.themes.list.empty') }}
       </h3>
       <p class="mt-1 text-sm text-muted-foreground">
-        {{ $t('features.themes.list.emptySubtitle') }}
+        {{ $t('modules.cms.themes.list.emptySubtitle') }}
       </p>
       <div class="mt-6">
         <Button
           @click="scanThemes"
         >
-          {{ $t('features.themes.scan') }}
+          {{ $t('modules.cms.themes.scan') }}
         </Button>
       </div>
     </div>
@@ -101,14 +101,14 @@
               variant="success"
               class="shadow-sm"
             >
-              {{ $t('features.themes.status.active') }}
+              {{ $t('modules.cms.themes.status.active') }}
             </Badge>
             <Badge
               v-else-if="theme.status && theme.status !== 'active'"
               class="shadow-sm"
               :variant="theme.status === 'broken' ? 'destructive' : (theme.status === 'pending' ? 'warning' : 'secondary')"
             >
-              {{ $t('features.themes.status.' + (theme.status || 'inactive')) }}
+              {{ $t('modules.cms.themes.status.' + (theme.status || 'inactive')) }}
             </Badge>
           </div>
 
@@ -119,14 +119,14 @@
               size="sm"
               @click="openPreview(theme)"
             >
-              {{ $t('features.themes.actions.preview') }}
+              {{ $t('modules.cms.themes.actions.preview') }}
             </Button>
             <Button
               v-if="theme.is_active"
               size="sm"
               @click="openThemeCustomizer(theme)"
             >
-              {{ $t('features.themes.actions.openCustomizer') }}
+              {{ $t('modules.cms.themes.actions.openCustomizer') }}
             </Button>
           </div>
         </div>
@@ -139,15 +139,15 @@
                 {{ theme.name }}
               </h3>
               <div class="flex items-center gap-2 mt-1">
-                <span class="text-sm text-muted-foreground">{{ $t('features.themes.list.version', { version: theme.version || '1.0.0' }) }}</span>
+                <span class="text-sm text-muted-foreground">{{ $t('modules.cms.themes.list.version', { version: theme.version || '1.0.0' }) }}</span>
                 <span class="text-xs px-2 py-0.5 bg-secondary text-muted-foreground rounded">
-                  {{ $t('features.themes.types.' + (theme.type || 'frontend')) }}
+                  {{ $t('modules.cms.themes.types.' + (theme.type || 'frontend')) }}
                 </span>
                 <span
                   v-if="theme.parent_theme"
                   class="text-xs px-2 py-0.5 bg-blue-100 text-blue-600 rounded"
                 >
-                  {{ $t('features.themes.list.child') }}
+                  {{ $t('modules.cms.themes.list.child') }}
                 </span>
               </div>
             </div>
@@ -164,7 +164,7 @@
             v-if="theme.author"
             class="mt-2 text-xs text-muted-foreground"
           >
-            {{ $t('features.themes.list.by', { author: theme.author }) }}
+            {{ $t('modules.cms.themes.list.by', { author: theme.author }) }}
           </div>
 
           <!-- Actions -->
@@ -178,7 +178,7 @@
                   @click="openThemeCustomizer(theme)"
                 >
                   <Palette class="w-4 h-4 mr-2" />
-                  {{ $t('features.themes.actions.openCustomizer') }}
+                  {{ $t('modules.cms.themes.actions.openCustomizer') }}
                 </Button>
                 <Button
                   v-else
@@ -186,7 +186,7 @@
                   @click="activateTheme(theme)"
                 >
                   <Check class="w-4 h-4 mr-2" />
-                  {{ $t('features.themes.actions.activate') }}
+                  {{ $t('modules.cms.themes.actions.activate') }}
                 </Button>
               </div>
             </div>
@@ -195,7 +195,7 @@
             <Button
               variant="outline"
               size="icon"
-              :title="$t('features.themes.actions.preview')"
+              :title="$t('modules.cms.themes.actions.preview')"
               @click="openPreview(theme)"
             >
               <Eye class="w-4 h-4" />
@@ -203,7 +203,7 @@
             <Button
               variant="outline"
               size="icon"
-              :title="$t('features.themes.actions.validate')"
+              :title="$t('modules.cms.themes.actions.validate')"
               @click="validateTheme(theme)"
             >
               <CheckCircle class="w-4 h-4" />
@@ -222,7 +222,7 @@
       <div class="bg-card rounded-lg w-full max-w-6xl h-[90vh] flex flex-col">
         <div class="flex items-center justify-between p-4 border-b">
           <h3 class="text-lg font-semibold">
-            {{ $t('features.themes.modals.previewTitle', { name: selectedTheme?.name }) }}
+            {{ $t('modules.cms.themes.modals.previewTitle', { name: selectedTheme?.name }) }}
           </h3>
           <button
             class="text-muted-foreground hover:text-muted-foreground"
@@ -245,13 +245,13 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, toRaw } from 'vue';
 import { useRouter } from 'vue-router';
-import api from '@/services/api';
-import toast from '@/services/toast';
-import { useConfirm } from '@/composables/useConfirm';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
+import api from '@/core/api/client';
+import toast from '@/shared/services/legacy-toast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import Palette from 'lucide-vue-next/dist/esm/icons/palette.js';
 import Image from 'lucide-vue-next/dist/esm/icons/image.js';
 import Check from 'lucide-vue-next/dist/esm/icons/check.js';
@@ -261,7 +261,7 @@ import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import ThemePreview from '@/modules/Cms/components/themes/ThemePreview.vue';
 
 import { useI18n } from 'vue-i18n';
-import { Badge, Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui';
+import { Badge, Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui';
 
 const { t } = useI18n();
 const { confirm } = useConfirm();
@@ -305,10 +305,10 @@ const scanThemes = async () => {
         const response = await api.post('/admin/cms/themes/scan');
         await fetchThemes();
         const count = response.data?.count || 0;
-        toast.success(t('features.themes.messages.scanSuccess', { count }));
+        toast.success(t('modules.cms.themes.messages.scanSuccess', { count }));
     } catch (error: unknown) {
         logger.error('Failed to scan themes:', error);
-        toast.error(t('common.toast.error'), t('features.themes.messages.scanFailed'));
+        toast.error(t('common.toast.error'), t('modules.cms.themes.messages.scanFailed'));
     } finally {
         scanning.value = false;
     }
@@ -316,10 +316,10 @@ const scanThemes = async () => {
 
 const activateTheme = async (theme: Theme) => {
     const confirmed = await confirm({
-        title: t('features.themes.actions.activate'),
-        message: t('features.themes.messages.activateConfirm', { name: theme.name }),
+        title: t('modules.cms.themes.actions.activate'),
+        message: t('modules.cms.themes.messages.activateConfirm', { name: theme.name }),
         variant: 'info',
-        confirmText: t('features.themes.actions.activate'),
+        confirmText: t('modules.cms.themes.actions.activate'),
     });
 
     if (!confirmed) return;
@@ -327,10 +327,10 @@ const activateTheme = async (theme: Theme) => {
     try {
         await api.post(`/admin/cms/themes/${theme.slug}/activate`);
         await fetchThemes();
-        toast.success(t('features.themes.messages.activateSuccess'));
+        toast.success(t('modules.cms.themes.messages.activateSuccess'));
     } catch (error: unknown) {
         logger.error('Failed to activate theme:', error);
-        toast.error(error instanceof Error ? error.message : t('features.themes.messages.activateFailed'));
+        toast.error(error instanceof Error ? error.message : t('modules.cms.themes.messages.activateFailed'));
     }
 };
 
@@ -340,18 +340,18 @@ const validateTheme = async (theme: Theme) => {
         const data = response.data;
         
         if (data.valid) {
-            toast.success(t('features.themes.messages.validateSuccess'));
+            toast.success(t('modules.cms.themes.messages.validateSuccess'));
         } else {
             // Can be replaced with a modal or detailed toast if needed, 
             // but multiline toast might be tricky. Using error toast with detail.
             logger.error('Validation errors:', data.errors);
-            toast.error(t('features.themes.messages.validateFailed'), data.errors.join(', '));
+            toast.error(t('modules.cms.themes.messages.validateFailed'), data.errors.join(', '));
         }
         
         await fetchThemes();
     } catch (error: unknown) {
         logger.error('Failed to validate theme:', error);
-        toast.error(t('common.toast.error'), t('features.themes.messages.validateError'));
+        toast.error(t('common.toast.error'), t('modules.cms.themes.messages.validateError'));
     }
 };
 

@@ -131,7 +131,7 @@
 <script setup lang="ts">
 import { computed, markRaw, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useTheme } from '@/composables/useTheme';
+import { useTheme } from '@/shared/composables/useTheme';
 import PageDisabled from './components/PageDisabled.vue';
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings';
 import Cpu from 'lucide-vue-next/dist/esm/icons/cpu.js';

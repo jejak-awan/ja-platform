@@ -27,6 +27,12 @@ class PublicSettingsController extends BaseApiController
             'site_version' => config('app.version'),
             'site_logo' => Setting::get('site_logo', '/logo.png'),
             'site_favicon' => Setting::get('site_favicon', '/favicon.ico'),
+            
+            // App Branding (Core)
+            'app_name' => Setting::get('app_name', 'Janari App'),
+            'app_logo' => Setting::get('app_logo', ''),
+            'app_favicon' => Setting::get('app_favicon', ''),
+            'app_license_tier' => Setting::get('license_type') ?: Setting::get('app_license_tier', 'basic'),
 
             // Contact Info
             'contact_email' => Setting::get('contact_email', 'hello@janari.com'),

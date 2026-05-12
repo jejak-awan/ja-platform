@@ -5,10 +5,10 @@ import {
     Card, CardHeader, CardTitle, CardContent,
     Tabs, TabsList, TabsTrigger, TabsContent,
     Button, Badge, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { useToast } from '@/composables/useToast';
+import { useToast } from '@/shared/composables/useToast';
 
 const { t } = useI18n();
 const toast = useToast();
@@ -113,11 +113,11 @@ const formatCurrency = (val: number) => {
             />
           </div>
           <h1 class="text-3xl font-bold tracking-tight text-foreground">
-            {{ t('features.school.osis.title') }}
+            {{ t('modules.school.osis.title') }}
           </h1>
         </div>
         <p class="text-sm text-muted-foreground">
-          {{ t('features.school.osis.subtitle') }}
+          {{ t('modules.school.osis.subtitle') }}
         </p>
       </div>
       <div class="flex gap-2">
@@ -137,7 +137,7 @@ const formatCurrency = (val: number) => {
             name="plus"
             class="w-4 h-4 mr-2"
           />
-          {{ t('features.school.osis.actions.newActivity') }}
+          {{ t('modules.school.osis.actions.newActivity') }}
         </Button>
       </div>
     </div>
@@ -161,7 +161,7 @@ const formatCurrency = (val: number) => {
               class="w-5 h-5"
             />
           </div>
-          <span class="text-[10px] font-semibold text-muted-foreground/60">{{ t('features.school.osis.stats.' + stat.key) }}</span>
+          <span class="text-[10px] font-semibold text-muted-foreground/60">{{ t('modules.school.osis.stats.' + stat.key) }}</span>
         </div>
         <div class="flex items-baseline gap-2">
           <h3 class="text-2xl font-bold tracking-tight text-foreground">
@@ -181,19 +181,19 @@ const formatCurrency = (val: number) => {
           value="programs"
           class="rounded-xl px-8 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
         >
-          {{ t('features.school.osis.tabs.programs') }}
+          {{ t('modules.school.osis.tabs.programs') }}
         </TabsTrigger>
         <TabsTrigger
           value="members"
           class="rounded-xl px-8 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
         >
-          {{ t('features.school.osis.tabs.members') }}
+          {{ t('modules.school.osis.tabs.members') }}
         </TabsTrigger>
         <TabsTrigger
           value="suggestions"
           class="rounded-xl px-8 py-2.5 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40"
         >
-          {{ t('features.school.osis.tabs.suggestions') }}
+          {{ t('modules.school.osis.tabs.suggestions') }}
           <Badge
             v-if="stats.pendingSuggestions"
             variant="destructive"
@@ -232,7 +232,7 @@ const formatCurrency = (val: number) => {
               </p>
               <div class="flex items-center justify-between pt-4 border-t border-border/40">
                 <div class="flex flex-col">
-                  <span class="text-[9px] font-black text-muted-foreground/60 uppercase tracking-widest mb-1">{{ t('features.school.osis.programs.estimatedBudget') }}</span>
+                  <span class="text-[9px] font-black text-muted-foreground/60 uppercase tracking-widest mb-1">{{ t('modules.school.osis.programs.estimatedBudget') }}</span>
                   <span class="font-black text-sm text-foreground">{{ formatCurrency(program.estimated_budget) }}</span>
                 </div>
                 <Button
@@ -258,10 +258,10 @@ const formatCurrency = (val: number) => {
               class="w-12 h-12 text-muted-foreground/20 mb-4"
             />
             <h3 class="text-xl font-bold text-foreground">
-              {{ t('features.school.osis.programs.emptyTitle') }}
+              {{ t('modules.school.osis.programs.emptyTitle') }}
             </h3>
             <p class="text-muted-foreground text-sm font-medium">
-              {{ t('features.school.osis.programs.emptyDesc') }}
+              {{ t('modules.school.osis.programs.emptyDesc') }}
             </p>
           </div>
         </div>
@@ -275,16 +275,16 @@ const formatCurrency = (val: number) => {
                 <thead>
                   <tr class="text-[11px] font-semibold text-muted-foreground/70 border-b border-border/40 bg-muted/20">
                     <th class="p-6">
-                      {{ t('features.school.osis.members.name') }}
+                      {{ t('modules.school.osis.members.name') }}
                     </th>
                     <th class="p-6">
-                      {{ t('features.school.osis.members.position') }}
+                      {{ t('modules.school.osis.members.position') }}
                     </th>
                     <th class="p-6">
-                      {{ t('features.school.osis.members.period') }}
+                      {{ t('modules.school.osis.members.period') }}
                     </th>
                     <th class="p-6 text-right">
-                      {{ t('common.labels.actions') }}
+                      {{ t('common.actions.title') }}
                     </th>
                   </tr>
                 </thead>
@@ -326,7 +326,7 @@ const formatCurrency = (val: number) => {
                         size="sm"
                         class="rounded-xl h-8 text-destructive hover:bg-destructive/10 hover:text-destructive font-bold"
                       >
-                        {{ t('features.school.osis.members.remove') }}
+                        {{ t('modules.school.osis.members.remove') }}
                       </Button>
                     </td>
                   </tr>
@@ -370,7 +370,7 @@ const formatCurrency = (val: number) => {
                     class="mt-6 p-4 bg-primary/5 rounded-xl border border-primary/20 relative overflow-hidden"
                   >
                     <p class="text-[9px] uppercase font-black tracking-widest text-primary mb-2 relative z-10">
-                      {{ t('features.school.osis.suggestions.officialResponse') }}
+                      {{ t('modules.school.osis.suggestions.officialResponse') }}
                     </p>
                     <p class="text-sm font-bold italic text-foreground/80 relative z-10 leading-relaxed">
                       "{{ suggestion.response }}"
@@ -383,14 +383,14 @@ const formatCurrency = (val: number) => {
                     size="sm"
                     class="rounded-xl flex-1 md:flex-none h-9 font-bold px-6"
                   >
-                    {{ t('features.school.osis.suggestions.respond') }}
+                    {{ t('modules.school.osis.suggestions.respond') }}
                   </Button>
                   <Button
                     size="sm"
                     variant="ghost"
                     class="rounded-xl flex-1 md:flex-none h-9 font-bold px-6 text-muted-foreground hover:bg-muted/50"
                   >
-                    {{ t('features.school.osis.suggestions.archive') }}
+                    {{ t('modules.school.osis.suggestions.archive') }}
                   </Button>
                 </div>
               </div>
@@ -405,7 +405,7 @@ const formatCurrency = (val: number) => {
               class="w-12 h-12 text-muted-foreground/20 mb-4"
             />
             <p class="text-muted-foreground text-sm font-medium italic">
-              {{ t('features.school.osis.suggestions.empty') }}
+              {{ t('modules.school.osis.suggestions.empty') }}
             </p>
           </div>
         </div>

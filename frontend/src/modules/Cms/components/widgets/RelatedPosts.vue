@@ -112,9 +112,9 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import Image from 'lucide-vue-next/dist/esm/icons/image.js';
 import User from 'lucide-vue-next/dist/esm/icons/user.js';
 import Calendar from 'lucide-vue-next/dist/esm/icons/calendar.js';

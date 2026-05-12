@@ -108,9 +108,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { Card, CardContent, LucideIcon, Button } from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
+import { Card, CardContent, LucideIcon, Button } from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const route = useRoute();
 const loading = ref(true);

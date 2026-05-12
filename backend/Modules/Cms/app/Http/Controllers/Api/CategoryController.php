@@ -5,13 +5,19 @@ namespace Modules\Cms\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Modules\Cms\Models\Category;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
-use Modules\Core\Services\CacheService;
+use Modules\Cms\Services\CmsCacheService;
 
 /**
  * @OA\Tag(name="Categories")
  */
 class CategoryController extends BaseApiController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show', 'tree']);
+        $this->middleware('permission:view content')->only(['tree']);
+        $this->middleware('permission:manage categories')->only(['store', 'update', 'destroy', 'reorder', 'bulkDelete']);
+    }
     /**
      * @OA\Get(
      *     path="/api/v1/categories",
@@ -96,8 +102,18 @@ class CategoryController extends BaseApiController
                       $sq->whereNull('published_at')
                         ->orWhere('published_at', '<=', now()->toDateTimeString());
                   });
-            }])
-            ->orderBy('sort_order');
+            }]);
+
+        if ($request->filled('search')) {
+            $searchRaw = $request->input('search');
+            $search = is_scalar($searchRaw) ? (string) $searchRaw : '';
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $query->orderBy('sort_order');
 
         if ($request->has('per_page')) {
             $perPageRaw = $request->input('per_page', 20);
@@ -190,7 +206,7 @@ class CategoryController extends BaseApiController
         $category = Category::create($validated);
 
         // Clear caches (kept for global lists, though index is not cached per auth now)
-        $cacheService = new CacheService;
+        $cacheService = app(CmsCacheService::class);
         $cacheService->clearCategoryCaches();
         $cacheService->clearSeoCaches();
 
@@ -339,7 +355,7 @@ class CategoryController extends BaseApiController
         $category->update($validated);
 
         // Clear caches
-        $cacheService = new CacheService;
+        $cacheService = app(CmsCacheService::class);
         $cacheService->clearCategoryCaches();
 
         return $this->success($category->load(['parent', 'children']), 'Category updated successfully');
@@ -409,7 +425,7 @@ class CategoryController extends BaseApiController
         $category->delete();
 
         // Clear caches
-        $cacheService = new CacheService;
+        $cacheService = app(CmsCacheService::class);
         $cacheService->clearCategoryCaches($categoryId);
         $cacheService->clearSeoCaches();
 
@@ -488,7 +504,7 @@ class CategoryController extends BaseApiController
         $category->update($validated);
 
         // Clear caches
-        $cacheService = new CacheService;
+        $cacheService = app(CmsCacheService::class);
         $cacheService->clearCategoryCaches();
 
         return $this->success($category->load(['parent', 'children']), 'Category moved successfully');
@@ -576,7 +592,7 @@ class CategoryController extends BaseApiController
         }
 
         // Clear caches
-        $cacheService = new CacheService;
+        $cacheService = app(CmsCacheService::class);
         $cacheService->clearCategoryCaches();
         $cacheService->clearSeoCaches();
 
@@ -589,5 +605,33 @@ class CategoryController extends BaseApiController
         }
 
         return $this->success(['deleted_count' => $count], 'Categories deleted successfully');
+    }
+
+    /**
+     * Restore a deleted category.
+     */
+    public function restore(int|string $id): \Illuminate\Http\JsonResponse
+    {
+        /** @var Category $category */
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->restore();
+
+        app(CmsCacheService::class)->clearCategoryCaches();
+
+        return $this->success($category, 'Category restored successfully');
+    }
+
+    /**
+     * Permanently delete a category.
+     */
+    public function forceDelete(int|string $id): \Illuminate\Http\JsonResponse
+    {
+        /** @var Category $category */
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->forceDelete();
+
+        app(CmsCacheService::class)->clearCategoryCaches();
+
+        return $this->success(null, 'Category permanently deleted');
     }
 }

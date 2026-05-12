@@ -40,18 +40,18 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, watch, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import { useConfirm } from '@/composables/useConfirm';
-import { useSessionTimeout } from '@/composables/useSessionTimeout';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { useSessionTimeout } from '@/shared/composables/useSessionTimeout';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
-import { useTheme } from '@/composables/useTheme';
-import { syncDocumentDarkClassForRoute } from '@/composables/useDarkMode';
+import { useTheme } from '@/shared/composables/useTheme';
+import { syncDocumentDarkClassForRoute } from '@/shared/composables/useDarkMode';
 import { useHead } from '@unhead/vue';
-import { applyFavicon, resolveFavicon } from '@/utils/favicon';
+import { applyFavicon, resolveFavicon } from '@/shared/utils/favicon';
 
-const Toast = defineAsyncComponent(() => import('@/components/ui/Toast.vue'));
-const ConfirmModal = defineAsyncComponent(() => import('@/components/ui/ConfirmModal.vue'));
-const GlobalErrorModal = defineAsyncComponent(() => import('@/components/ui/GlobalErrorModal.vue'));
-const SessionTimeoutModal = defineAsyncComponent(() => import('@/components/ui/SessionTimeoutModal.vue'));
+const Toast = defineAsyncComponent(() => import('@/shared/components/ui/Toast.vue'));
+const ConfirmModal = defineAsyncComponent(() => import('@/shared/components/ui/ConfirmModal.vue'));
+const GlobalErrorModal = defineAsyncComponent(() => import('@/shared/components/ui/GlobalErrorModal.vue'));
+const SessionTimeoutModal = defineAsyncComponent(() => import('@/shared/components/ui/SessionTimeoutModal.vue'));
 
 const { confirmState } = useConfirm();
 const { isWarningVisible, timeRemaining, extendSession, manualLogout } = useSessionTimeout();

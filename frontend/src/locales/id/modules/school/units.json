@@ -42,6 +42,9 @@
     },
     "selectPrompt": "Pilih unit di sebelah kiri untuk mengelola identitasnya.",
     "singleLevelInfo": {
+        "description": "Lembaga Anda diatur sebagai Satu Jenjang. Jika Anda adalah Yayasan dengan banyak jenjang (misal SD, SMP, SMA), silakan aktifkan mode Multi-Jenjang di pengaturan."
+    },
+    "singleUnitInfo": {
         "addTitle": "Tambah Unit",
         "description": "Lembaga Anda diatur sebagai <b>Single-Unit</b>. Unit unit utama telah dibuat dan siap dikelola. Jika Anda adalah Yayasan yang memiliki banyak unit, silakan aktifkan mode Multi-Unit di pengaturan.",
         "editDetail": "Ubah Detail Unit",
@@ -49,6 +52,5 @@
     },
     "subtitle": "Kelola berbagai unit pendidikan (SD, SMP, SMA, SMK) di lembaga Anda.",
     "title": "Manajemen Unit",
-    "updateData": "Perbarui Data Unit",
     "updateSuccess": "Data unit berhasil diperbarui"
 }

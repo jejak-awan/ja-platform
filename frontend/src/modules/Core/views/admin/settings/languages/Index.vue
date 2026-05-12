@@ -300,15 +300,15 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { languageSchema } from '@/schemas/common';
-import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Checkbox, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Input, Label, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { languageSchema } from '@/shared/schemas/common';
+import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Checkbox, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Input, Label, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Upload from 'lucide-vue-next/dist/esm/icons/upload.js';
@@ -317,8 +317,8 @@ import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import CheckCircle2 from 'lucide-vue-next/dist/esm/icons/circle-check-big.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import LanguagesIcon from 'lucide-vue-next/dist/esm/icons/languages.js';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
-import { getLocale, getAvailableLocales, getBrowserLocale } from '@/i18n';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
+import { getLocale, getAvailableLocales, getBrowserLocale } from '@/core/i18n';
 interface Language {
     id: number;
     code: string;

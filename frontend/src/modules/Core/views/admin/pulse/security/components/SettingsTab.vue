@@ -116,7 +116,7 @@ import { reactive, watch } from 'vue';
 import {
     Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter,
     Button, Input, Label
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Save from 'lucide-vue-next/dist/esm/icons/save.js';
 

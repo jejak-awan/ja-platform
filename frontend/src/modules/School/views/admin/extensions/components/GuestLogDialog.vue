@@ -5,7 +5,7 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('common.labels.edit') || 'Edit' : $t('features.school.extensions.tabs.guest') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('common.labels.edit') || 'Edit' : $t('modules.school.extensions.tabs.guest') }}</DialogTitle>
       </DialogHeader>
       <form
         class="space-y-4 py-4"
@@ -75,7 +75,7 @@ import { ref, watch } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const props = defineProps<{
   open: boolean;

@@ -226,12 +226,12 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import api from '@/services/api';
-import { parseSingleResponse, ensureArray } from '@/utils/responseParser';
-import type { SystemStats, TrafficItem, TrafficDataPoint, DashboardData } from '@/types/core/dashboard';
+import api from '@/core/api/client';
+import { parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
+import type { SystemStats, TrafficItem, TrafficDataPoint, DashboardData } from '@/core/types/dashboard';
 
 import {
     Card,
@@ -244,7 +244,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 import AreaChart from 'lucide-vue-next/dist/esm/icons/chart-area.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';

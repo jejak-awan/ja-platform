@@ -5,18 +5,18 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('common.actions.edit') + ' ' + $t('features.school.academic.tabs.timetable') : $t('common.actions.add') + ' ' + $t('features.school.academic.tabs.timetable') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('common.actions.edit') + ' ' + $t('modules.school.academic.tabs.timetable') : $t('common.actions.add') + ' ' + $t('modules.school.academic.tabs.timetable') }}</DialogTitle>
         <DialogDescription>
-          {{ $t('features.school.academic.messages.setupScheduleDescription') }}
+          {{ $t('modules.school.academic.messages.setupScheduleDescription') }}
         </DialogDescription>
       </DialogHeader>
 
       <div class="grid gap-4 py-4">
         <div class="grid gap-2">
-          <Label>{{ $t('features.school.academic.labels.day') }}</Label>
+          <Label>{{ $t('modules.school.academic.labels.day') }}</Label>
           <Select v-model="form.day">
             <SelectTrigger>
-              <SelectValue :placeholder="$t('features.school.academic.placeholders.selectDay')" />
+              <SelectValue :placeholder="$t('modules.school.academic.placeholders.selectDay')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Monday">
@@ -42,10 +42,10 @@
         </div>
 
         <div class="grid gap-2">
-          <Label>{{ $t('features.school.academic.labels.subject') }}</Label>
+          <Label>{{ $t('modules.school.academic.labels.subject') }}</Label>
           <Select v-model="form.subject_id">
             <SelectTrigger>
-              <SelectValue :placeholder="$t('features.school.academic.placeholders.selectSubject')" />
+              <SelectValue :placeholder="$t('modules.school.academic.placeholders.selectSubject')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem
@@ -60,10 +60,10 @@
         </div>
 
         <div class="grid gap-2">
-          <Label>{{ $t('features.school.academic.labels.teacher') }}</Label>
+          <Label>{{ $t('modules.school.academic.labels.teacher') }}</Label>
           <Select v-model="form.staff_id">
             <SelectTrigger>
-              <SelectValue :placeholder="$t('features.school.academic.placeholders.selectTeacher')" />
+              <SelectValue :placeholder="$t('modules.school.academic.placeholders.selectTeacher')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem
@@ -79,14 +79,14 @@
 
         <div class="grid grid-cols-2 gap-4">
           <div class="grid gap-2">
-            <Label>{{ $t('features.school.academic.labels.startTime') }}</Label>
+            <Label>{{ $t('modules.school.academic.labels.startTime') }}</Label>
             <Input
               v-model="form.start_time"
               type="time"
             />
           </div>
           <div class="grid gap-2">
-            <Label>{{ $t('features.school.academic.labels.endTime') }}</Label>
+            <Label>{{ $t('modules.school.academic.labels.endTime') }}</Label>
             <Input
               v-model="form.end_time"
               type="time"
@@ -95,10 +95,10 @@
         </div>
 
         <div class="grid gap-2">
-          <Label>{{ $t('features.school.academic.labels.room') }}</Label>
+          <Label>{{ $t('modules.school.academic.labels.room') }}</Label>
           <Select v-model="form.room_id">
             <SelectTrigger>
-              <SelectValue :placeholder="$t('features.school.academic.placeholders.selectRoom')" />
+              <SelectValue :placeholder="$t('modules.school.academic.placeholders.selectRoom')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem
@@ -142,7 +142,7 @@
               name="Loader2"
               class="w-4 h-4 mr-2 animate-spin"
             />
-            {{ $t('common.actions.save') }} {{ $t('features.school.academic.tabs.timetable') }}
+            {{ $t('common.actions.save') }} {{ $t('modules.school.academic.tabs.timetable') }}
           </Button>
         </div>
       </DialogFooter>
@@ -158,8 +158,8 @@ import { LogisticsService } from '@/modules/School/services/LogisticsService';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Label, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, LucideIcon
-} from '@/components/ui';
-import { parseResponse } from '@/utils/responseParser';
+} from '@/shared/components/ui';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const props = defineProps<{
   open: boolean;

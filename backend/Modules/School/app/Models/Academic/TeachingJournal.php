@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
-use Modules\School\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByUnit;
 
 /**
  * @property int $id

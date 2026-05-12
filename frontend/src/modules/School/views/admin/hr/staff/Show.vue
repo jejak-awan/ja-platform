@@ -3,7 +3,7 @@
     <!-- Header with Breadcrumbs & Actions -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="space-y-1">
-        <Breadcrumbs class="mb-2" />
+        <BreadcrumbTrail class="mb-2" />
         <h1 class="text-3xl font-extrabold tracking-tight text-foreground">{{ staff.full_name }}</h1>
       </div>
 
@@ -71,13 +71,13 @@
         <Tabs v-model="activeTab" class="w-full">
           <TabsList class="bg-muted/30 p-1 rounded-xl border border-border/50 w-full justify-start overflow-x-auto h-auto gap-1">
             <TabsTrigger value="profile" class="rounded-lg px-6 py-3 transition-all data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold">
-              <LucideIcon name="User" class="w-4 h-4 mr-2" /> {{ $t('features.school.hr.staff.tabs.profile') || 'Profil' }}
+              <LucideIcon name="User" class="w-4 h-4 mr-2" /> {{ $t('modules.school.hr.staff.tabs.profile') || 'Profil' }}
             </TabsTrigger>
             <TabsTrigger value="employment" class="rounded-lg px-6 py-3 transition-all data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold">
-              <LucideIcon name="History" class="w-4 h-4 mr-2" /> {{ $t('features.school.hr.staff.tabs.employment') || 'Kepegawaian' }}
+              <LucideIcon name="History" class="w-4 h-4 mr-2" /> {{ $t('modules.school.hr.staff.tabs.employment') || 'Kepegawaian' }}
             </TabsTrigger>
             <TabsTrigger value="education" class="rounded-lg px-6 py-3 transition-all data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold">
-              <LucideIcon name="GraduationCap" class="w-4 h-4 mr-2" /> {{ $t('features.school.hr.staff.tabs.education') || 'Pendidikan' }}
+              <LucideIcon name="GraduationCap" class="w-4 h-4 mr-2" /> {{ $t('modules.school.hr.staff.tabs.education') || 'Pendidikan' }}
             </TabsTrigger>
           </TabsList>
 
@@ -184,13 +184,13 @@
 import { ref, onMounted, h } from 'vue';
 import { useRoute } from 'vue-router';
 import { HRService } from '@/modules/School/services/HRService';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 import { 
   Tabs, TabsList, TabsTrigger, TabsContent, 
   Card, CardHeader, CardTitle, CardContent, 
   Button, LucideIcon, Badge
-} from '@/components/ui';
-import Breadcrumbs from '@/modules/Core/components/layout/Breadcrumbs.vue';
+} from '@/shared/components/ui';
+import BreadcrumbTrail from '@/shared/components/BreadcrumbTrail.vue';
 
 const route = useRoute();
 const staff = ref<any>({});

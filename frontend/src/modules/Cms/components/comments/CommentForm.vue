@@ -1,7 +1,7 @@
 <template>
   <Card class="comment-form">
     <CardHeader>
-      <CardTitle>{{ $t('features.comments.leaveComment') }}</CardTitle>
+      <CardTitle>{{ $t('modules.cms.comments.leaveComment') }}</CardTitle>
     </CardHeader>
     <CardContent>
       <form
@@ -13,7 +13,7 @@
           class="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           <div class="space-y-2">
-            <Label for="name">{{ $t('features.comments.name') }}</Label>
+            <Label for="name">{{ $t('modules.cms.comments.name') }}</Label>
             <Input
               id="name"
               v-model="form.name"
@@ -22,7 +22,7 @@
             />
           </div>
           <div class="space-y-2">
-            <Label for="email">{{ $t('features.comments.email') }}</Label>
+            <Label for="email">{{ $t('modules.cms.comments.email') }}</Label>
             <Input
               id="email"
               v-model="form.email"
@@ -36,7 +36,7 @@
           v-if="!authStore.isAuthenticated"
           class="space-y-2"
         >
-          <Label>{{ $t('features.settings.labels.enable_captcha') }}</Label>
+          <Label>{{ $t('modules.core.settings.labels.enable_captcha') }}</Label>
           <CaptchaWrapper 
             action="comment" 
             @verified="handleCaptchaVerified" 
@@ -44,7 +44,7 @@
         </div>
 
         <div class="space-y-2">
-          <Label for="body">{{ $t('features.comments.comment') }}</Label>
+          <Label for="body">{{ $t('modules.cms.comments.comment') }}</Label>
           <Textarea
             id="body"
             v-model="form.body"
@@ -62,7 +62,7 @@
             v-if="loading"
             class="w-4 h-4 mr-2 animate-spin"
           />
-          {{ loading ? $t('features.comments.submitting') : $t('features.comments.submit') }}
+          {{ loading ? $t('modules.cms.comments.submitting') : $t('modules.cms.comments.submit') }}
         </Button>
       </form>
     </CardContent>
@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import CaptchaWrapper from '@/modules/Core/components/captcha/CaptchaWrapper.vue';
@@ -85,10 +85,10 @@ import {
     Label,
     Textarea,
     Button
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { commentSchema } from '@/schemas';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { commentSchema } from '@/shared/schemas';
 
 interface CommentForm {
     name: string;

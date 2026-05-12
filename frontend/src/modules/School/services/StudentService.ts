@@ -1,6 +1,6 @@
-import api from '@/services/api';
+import api from '@/core/api/client';
 import type { AxiosResponse } from 'axios';
-import type { Student, Violation, Achievement, CounselingRecord } from '@/types';
+import type { Student, Violation, Achievement, CounselingRecord } from '@/modules/School/types';
 
 export const StudentService = {
     async getStudents(params: Record<string, any> = {}): Promise<AxiosResponse<Student[]>> {

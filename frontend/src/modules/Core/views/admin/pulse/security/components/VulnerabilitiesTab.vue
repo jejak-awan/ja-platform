@@ -281,13 +281,13 @@
 import { ref, computed, h, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVueTable, getCoreRowModel, getSortedRowModel, createColumnHelper, type SortingState } from '@tanstack/vue-table';
-import api from '@/services/api';
-import { logger } from '@/utils/logger';
+import api from '@/core/api/client';
+import { logger } from '@/shared/utils/logger';
 import {
     Card, CardHeader, CardTitle, CardDescription, CardContent,
     Button, Badge, Input, Label, DataTable, Pagination, Switch,
     Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 import ShieldAlert from 'lucide-vue-next/dist/esm/icons/shield-alert.js';

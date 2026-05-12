@@ -3,10 +3,10 @@
     <div class="flex justify-between items-center bg-card p-4 rounded-xl border border-border/50 text-left">
       <div class="flex gap-4 items-center">
         <div class="space-y-1">
-          <Label class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{{ $t('features.school.logistics.hostel.labels.hostelBlock') }}</Label>
+          <Label class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{{ $t('modules.school.logistics.hostel.labels.hostelBlock') }}</Label>
           <Select v-model="selectedBlock">
             <SelectTrigger class="w-[200px] h-9 bg-background/50">
-              <SelectValue :placeholder="$t('features.school.academic.placeholders.select') + ' ' + $t('features.school.logistics.hostel.labels.hostelBlock')" />
+              <SelectValue :placeholder="$t('modules.school.academic.placeholders.select') + ' ' + $t('modules.school.logistics.hostel.labels.hostelBlock')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem
@@ -31,7 +31,7 @@
             name="Building"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.hostel.actions.addBlock') }}
+          {{ $t('modules.school.logistics.hostel.actions.addBlock') }}
         </Button>
         <Button
           size="sm"
@@ -42,7 +42,7 @@
             name="Plus"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.hostel.actions.addRoom') }}
+          {{ $t('modules.school.logistics.hostel.actions.addRoom') }}
         </Button>
       </div>
     </div>
@@ -61,7 +61,7 @@
       v-else-if="!selectedBlock"
       class="p-12 text-center text-muted-foreground border-2 border-dashed rounded-xl"
     >
-      {{ $t('features.school.logistics.hostel.messages.selectBlockFirst') }}
+      {{ $t('modules.school.logistics.hostel.messages.selectBlockFirst') }}
     </div>
     <div
       v-else
@@ -75,17 +75,17 @@
         <CardHeader class="bg-muted/30 pb-4">
           <div class="flex justify-between items-center">
             <CardTitle class="text-lg font-bold">
-              {{ $t('features.school.logistics.hostel.labels.room') }} {{ room.room_number }}
+              {{ $t('modules.school.logistics.hostel.labels.room') }} {{ room.room_number }}
             </CardTitle>
             <Badge
               variant="outline"
               class="text-[10px] uppercase font-bold"
             >
-              {{ room.capacity }} {{ $t('features.school.logistics.hostel.labels.bed') }}
+              {{ room.capacity }} {{ $t('modules.school.logistics.hostel.labels.bed') }}
             </Badge>
           </div>
           <CardDescription class="text-xs">
-            {{ room.features?.join(', ') || $t('features.school.logistics.hostel.labels.standardFacility') }}
+            {{ room.features?.join(', ') || $t('modules.school.logistics.hostel.labels.standardFacility') }}
           </CardDescription>
         </CardHeader>
         <CardContent class="p-4">
@@ -111,7 +111,7 @@
                   variant="outline"
                   class="bg-success/10 text-success border-success/20 text-[10px]"
                 >
-                  {{ $t('features.school.logistics.hostel.labels.available') }}
+                  {{ $t('modules.school.logistics.hostel.labels.available') }}
                 </Badge>
                 <Button
                   size="icon"
@@ -176,10 +176,10 @@ import {
   Card, CardHeader, CardTitle, CardDescription, CardContent, 
   Button, LucideIcon, Label, Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
   Badge, ConfirmModal
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
-import { parseResponse } from '@/utils/responseParser';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 // Dialog Components (to be created)
 import BlockDialog from './components/BlockDialog.vue';
@@ -235,7 +235,7 @@ const fetchRooms = async () => {
 
 const handleAddRoom = () => {
     if (!selectedBlock.value) {
-        toast.error.action(t('features.school.academic.messages.select') + ' ' + t('features.school.logistics.hostel.labels.hostelBlock'));
+        toast.error.action(t('modules.school.academic.messages.select') + ' ' + t('modules.school.logistics.hostel.labels.hostelBlock'));
         return;
     }
     dialogs.value.room = true;
@@ -248,13 +248,13 @@ const handleAllocate = (bed: any) => {
 
 const handleRelease = async (allocationId: number) => {
     if (await confirm({ 
-        title: t('features.school.logistics.hostel.actions.releaseStudent'), 
-        description: t('features.school.logistics.hostel.messages.releaseConfirm'), 
+        title: t('modules.school.logistics.hostel.actions.releaseStudent'), 
+        description: t('modules.school.logistics.hostel.messages.releaseConfirm'), 
         variant: 'destructive' 
     })) {
         try {
             await LogisticsService.releaseBed(allocationId);
-            toast.success.action(t('features.school.academic.messages.deleteSuccess'));
+            toast.success.action(t('modules.school.academic.messages.deleteSuccess'));
             fetchRooms();
         } catch (e) {
             toast.error.fromResponse(e);

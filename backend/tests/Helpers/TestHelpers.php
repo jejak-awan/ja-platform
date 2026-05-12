@@ -4,9 +4,6 @@ namespace Tests\Helpers;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Modules\Cms\Models\Category;
-use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Tag;
 use Modules\Core\Models\User;
 
 class TestHelpers

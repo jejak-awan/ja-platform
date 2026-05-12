@@ -5,7 +5,7 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ t('features.menus.form.createTitle') }}</DialogTitle>
+        <DialogTitle>{{ t('modules.cms.menus.form.createTitle') }}</DialogTitle>
       </DialogHeader>
 
       <form
@@ -14,22 +14,22 @@
       >
         <div class="space-y-2">
           <Label>
-            {{ t('features.menus.form.name') }} <span class="text-red-500">*</span>
+            {{ t('modules.cms.menus.form.name') }} <span class="text-red-500">*</span>
           </Label>
           <Input
             v-model="form.name"
             type="text"
             required
-            :placeholder="t('features.menus.form.placeholders.name')"
+            :placeholder="t('modules.cms.menus.form.placeholders.name')"
           />
         </div>
         <div class="space-y-2">
           <Label>
-            {{ t('features.menus.form.location') }}
+            {{ t('modules.cms.menus.form.location') }}
           </Label>
           <Select v-model="form.location">
             <SelectTrigger>
-              <SelectValue :placeholder="t('features.menus.form.placeholders.location')" />
+              <SelectValue :placeholder="t('modules.cms.menus.form.placeholders.location')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem 
@@ -49,7 +49,7 @@
           variant="outline"
           @click="$emit('close')"
         >
-          {{ t('features.menus.actions.cancel') }}
+          {{ t('modules.cms.menus.actions.cancel') }}
         </Button>
         <Button
           :disabled="saving || !isValid"
@@ -59,7 +59,7 @@
             v-if="saving"
             class="w-4 h-4 mr-2 animate-spin"
           />
-          {{ saving ? t('features.menus.actions.creating') : t('features.menus.actions.createAction') }}
+          {{ saving ? t('modules.cms.menus.actions.creating') : t('modules.cms.menus.actions.createAction') }}
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -67,28 +67,28 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted } from 'vue';
 
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import Dialog from '@/components/ui/Dialog.vue';
-import DialogContent from '@/components/ui/DialogContent.vue';
-import DialogHeader from '@/components/ui/DialogHeader.vue';
-import DialogTitle from '@/components/ui/DialogTitle.vue';
-import DialogFooter from '@/components/ui/DialogFooter.vue';
-import Button from '@/components/ui/Button.vue';
-import Input from '@/components/ui/Input.vue';
-import Label from '@/components/ui/Label.vue';
-import Select from '@/components/ui/Select.vue';
-import SelectTrigger from '@/components/ui/SelectTrigger.vue';
-import SelectValue from '@/components/ui/SelectValue.vue';
-import SelectContent from '@/components/ui/SelectContent.vue';
-import SelectItem from '@/components/ui/SelectItem.vue';
+import api from '@/core/api/client';
+import Dialog from '@/shared/components/ui/Dialog.vue';
+import DialogContent from '@/shared/components/ui/DialogContent.vue';
+import DialogHeader from '@/shared/components/ui/DialogHeader.vue';
+import DialogTitle from '@/shared/components/ui/DialogTitle.vue';
+import DialogFooter from '@/shared/components/ui/DialogFooter.vue';
+import Button from '@/shared/components/ui/Button.vue';
+import Input from '@/shared/components/ui/Input.vue';
+import Label from '@/shared/components/ui/Label.vue';
+import Select from '@/shared/components/ui/Select.vue';
+import SelectTrigger from '@/shared/components/ui/SelectTrigger.vue';
+import SelectValue from '@/shared/components/ui/SelectValue.vue';
+import SelectContent from '@/shared/components/ui/SelectContent.vue';
+import SelectItem from '@/shared/components/ui/SelectItem.vue';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { menuSchema } from '@/schemas';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { menuSchema } from '@/shared/schemas';
 
 const { t } = useI18n();
 const toast = useToast();
@@ -148,7 +148,7 @@ const handleSubmit = async () => {
     try {
         const response = await api.post('/admin/cms/menus', form.value);
         const menu = response.data;
-        toast.success.create(t('features.menus.title'));
+        toast.success.create(t('modules.cms.menus.title'));
         emit('saved', menu);
         emit('close');
     } catch (error: unknown) {
@@ -160,7 +160,7 @@ const handleSubmit = async () => {
                 toast.error.fromResponse(error);
             }
         } else {
-            toast.error.action(t('features.menus.messages.saveFailed'));
+            toast.error.action(t('modules.cms.menus.messages.saveFailed'));
         }
     } finally {
         saving.value = false;

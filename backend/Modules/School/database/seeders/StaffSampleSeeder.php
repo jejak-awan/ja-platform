@@ -12,7 +12,11 @@ class StaffSampleSeeder extends Seeder
 {
     public function run(): void
     {
-        $schoolId = 15; // SMK NEGERI 1 CIJULANG
+        $school = \Illuminate\Support\Facades\DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        $unit = $school ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
+        if (!$school || !$unit) { return; }
+        $schoolId = $school->id;
+        $unitId = $unit->id;
 
         $staffData = [
             [
@@ -67,7 +71,7 @@ class StaffSampleSeeder extends Seeder
                 ['email' => $data['email']],
                 [
                     'name' => $data['name'],
-                    'password' => Hash::make('password'),
+                    'password' => Hash::make(env('DEFAULT_USER_PASSWORD', 'password')),
                     'email_verified_at' => now(),
                 ]
             );
@@ -81,7 +85,7 @@ class StaffSampleSeeder extends Seeder
                 ['user_id' => $user->id],
                 [
                     'school_id' => $schoolId,
-                    'school_unit_id' => 15,
+                    'school_unit_id' => $unitId,
                     'full_name' => $data['name'],
                     'nuptk' => $data['nuptk'],
                     'nik' => $data['nik'],

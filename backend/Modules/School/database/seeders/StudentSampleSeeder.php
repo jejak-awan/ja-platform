@@ -13,8 +13,11 @@ class StudentSampleSeeder extends Seeder
 {
     public function run(): void
     {
-        $schoolId = 15;
-        $levelId = 15;
+        $school = \Illuminate\Support\Facades\DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        $unit = $school ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
+        if (!$school || !$unit) { return; }
+        $schoolId = $school->id;
+        $levelId = $unit->id;
 
         $studyGroups = StudyGroup::where('school_id', $schoolId)->get();
 
@@ -42,7 +45,7 @@ class StudentSampleSeeder extends Seeder
                     ['email' => $email],
                     [
                         'name' => $fullName,
-                        'password' => Hash::make('password'),
+                        'password' => Hash::make(env('DEFAULT_USER_PASSWORD', 'password')),
                         'email_verified_at' => now(),
                     ]
                 );

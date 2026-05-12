@@ -38,7 +38,7 @@
         "selectYear": "Select Year",
         "nisnHint": "10 Digit NISN",
         "nisHint": "Student Identification Number",
-        "emailHint": "example@email.com",
+        "emailHint": "example{'@'}email.com",
         "previousSchoolHint": "Previous school name"
     },
     "subtitle": "Manage registration, document verification, and admission selection.",

@@ -99,13 +99,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useCoreStore } from '@/modules/Core/stores/core';
 import ShieldCheck from 'lucide-vue-next/dist/esm/icons/shield-check.js';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 
-const cmsStore = useCmsStore();
-const siteName = computed(() => cmsStore.siteSettings?.site_name || 'Janari CMS');
-const contactEmail = computed(() => cmsStore.siteSettings?.contact_email || 'support@janari.io');
+const coreStore = useCoreStore();
+const siteName = computed(() => coreStore.siteSettings?.site_name || 'Janari App');
+const contactEmail = computed(() => coreStore.siteSettings?.admin_email || 'support@janari.io');
 const lastUpdated = computed(() => {
     const today = new Date();
     return today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });

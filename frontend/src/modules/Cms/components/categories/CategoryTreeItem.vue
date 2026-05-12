@@ -92,7 +92,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import ChevronRight from 'lucide-vue-next/dist/esm/icons/chevron-right.js';
-import { Button, Badge } from '@/components/ui';
+import { Button, Badge } from '@/shared/components/ui';
 
 interface Category {
     id: number | string;

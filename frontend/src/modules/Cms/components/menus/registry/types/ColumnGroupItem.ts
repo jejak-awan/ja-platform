@@ -1,5 +1,5 @@
 import Columns from 'lucide-vue-next/dist/esm/icons/columns-2.js';
-import type { MenuItemDefinition } from '@/types/cms/menu';
+import type { MenuItemDefinition } from '@/modules/Cms/types/menu';
 
 const definition: MenuItemDefinition = {
     name: 'column_group',

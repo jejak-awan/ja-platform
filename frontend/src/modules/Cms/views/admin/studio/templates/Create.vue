@@ -2,14 +2,14 @@
   <div class="max-w-7xl mx-auto">
     <div class="mb-6 flex justify-between items-center">
       <h1 class="text-2xl font-bold tracking-tight text-foreground">
-        {{ t('features.content_templates.form.createTitle') }}
+        {{ t('modules.cms.content_templates.form.createTitle') }}
       </h1>
       <Button
         variant="ghost"
         @click="router.push({ name: 'studio', query: { tab: 'templates' } })"
       >
         <ChevronLeft class="w-4 h-4 mr-2" />
-        {{ t('features.content_templates.form.back') }}
+        {{ t('modules.cms.content_templates.form.back') }}
       </Button>
     </div>
 
@@ -23,41 +23,41 @@
           <Card>
             <CardHeader>
               <CardTitle class="text-lg font-semibold">
-                {{ t('features.content_templates.form.content') }}
+                {{ t('modules.cms.content_templates.form.content') }}
               </CardTitle>
             </CardHeader>
             <CardContent class="space-y-4">
               <div class="space-y-2">
                 <Label for="title">
-                  {{ t('features.content_templates.form.titleLabel') }}
+                  {{ t('modules.cms.content_templates.form.titleLabel') }}
                 </Label>
                 <Input
                   id="title"
                   v-model="form.title_template"
-                  :placeholder="t('features.content_templates.form.titlePlaceholder')"
+                  :placeholder="t('modules.cms.content_templates.form.titlePlaceholder')"
                 />
               </div>
 
               <div class="space-y-2">
                 <Label>
-                  {{ t('features.content_templates.form.body') }}
+                  {{ t('modules.cms.content_templates.form.body') }}
                 </Label>
                 <TiptapEditor
                   :model-value="form.body_template"
-                  :placeholder="t('features.content_templates.form.bodyPlaceholder')"
+                  :placeholder="t('modules.cms.content_templates.form.bodyPlaceholder')"
                   @update:model-value="(val) => form.body_template = val"
                 />
               </div>
 
               <div class="space-y-2">
                 <Label for="excerpt">
-                  {{ t('features.content_templates.form.excerpt') }}
+                  {{ t('modules.cms.content_templates.form.excerpt') }}
                 </Label>
                 <Textarea
                   id="excerpt"
                   v-model="form.excerpt_template"
                   rows="3"
-                  :placeholder="t('features.content_templates.form.excerptPlaceholder')"
+                  :placeholder="t('modules.cms.content_templates.form.excerptPlaceholder')"
                 />
               </div>
             </CardContent>
@@ -69,20 +69,20 @@
           <Card>
             <CardHeader>
               <CardTitle class="text-lg font-semibold">
-                {{ t('features.content_templates.form.details') }}
+                {{ t('modules.cms.content_templates.form.details') }}
               </CardTitle>
             </CardHeader>
             <CardContent class="space-y-4">
               <div class="space-y-2">
                 <Label for="name">
-                  {{ t('features.content_templates.form.name') }} <span class="text-destructive">*</span>
+                  {{ t('modules.cms.content_templates.form.name') }} <span class="text-destructive">*</span>
                 </Label>
                 <Input
                   id="name"
                   v-model="form.name"
                   required
                   :class="{ 'border-destructive focus-visible:ring-destructive': errors.name }"
-                  :placeholder="t('features.content_templates.form.namePlaceholder')"
+                  :placeholder="t('modules.cms.content_templates.form.namePlaceholder')"
                   @input="generateSlug"
                 />
                 <p
@@ -95,7 +95,7 @@
 
               <div class="space-y-2">
                 <Label for="slug">
-                  {{ t('features.content_templates.form.slug') || 'Slug' }} <span class="text-destructive">*</span>
+                  {{ t('modules.cms.content_templates.form.slug') || 'Slug' }} <span class="text-destructive">*</span>
                 </Label>
                 <Input
                   id="slug"
@@ -105,7 +105,7 @@
                   placeholder="template-slug"
                 />
                 <p class="text-xs text-muted-foreground">
-                  {{ t('features.content_templates.form.slugHelp') || 'URL-friendly version' }}
+                  {{ t('modules.cms.content_templates.form.slugHelp') || 'URL-friendly version' }}
                 </p>
                 <p
                   v-if="errors.slug"
@@ -117,19 +117,19 @@
 
               <div class="space-y-2">
                 <Label for="description">
-                  {{ t('features.content_templates.form.description') }}
+                  {{ t('modules.cms.content_templates.form.description') }}
                 </Label>
                 <Textarea
                   id="description"
                   v-model="form.description"
                   rows="3"
-                  :placeholder="t('features.content_templates.form.descriptionPlaceholder')"
+                  :placeholder="t('modules.cms.content_templates.form.descriptionPlaceholder')"
                 />
               </div>
 
               <div class="space-y-2">
                 <Label for="type">
-                  {{ t('features.content_templates.form.type') }} <span class="text-destructive">*</span>
+                  {{ t('modules.cms.content_templates.form.type') }} <span class="text-destructive">*</span>
                 </Label>
                 <Select
                   v-model="form.type"
@@ -140,13 +140,13 @@
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="post">
-                      {{ t('features.content_templates.types.post') }}
+                      {{ t('modules.cms.content_templates.types.post') }}
                     </SelectItem>
                     <SelectItem value="page">
-                      {{ t('features.content_templates.types.page') }}
+                      {{ t('modules.cms.content_templates.types.page') }}
                     </SelectItem>
                     <SelectItem value="custom">
-                      {{ t('features.content_templates.types.custom') }}
+                      {{ t('modules.cms.content_templates.types.custom') }}
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -161,7 +161,7 @@
               type="button"
               @click="router.push({ name: 'studio', query: { tab: 'templates' } })"
             >
-              {{ t('features.content_templates.form.cancel') }}
+              {{ t('modules.cms.content_templates.form.cancel') }}
             </Button>
             <Button
               type="submit"
@@ -175,7 +175,7 @@
                 v-else
                 class="w-4 h-4 mr-2"
               />
-              {{ saving ? t('features.content_templates.form.saving') : t('features.content_templates.form.save') }}
+              {{ saving ? t('modules.cms.content_templates.form.saving') : t('modules.cms.content_templates.form.save') }}
             </Button>
           </div>
         </div>
@@ -188,13 +188,13 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { contentTemplateSchema } from '@/schemas';
-import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Textarea } from '@/components/ui';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { contentTemplateSchema } from '@/shared/schemas';
+import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Textarea } from '@/shared/components/ui';
 
-import TiptapEditor from '@/components/shared/editor/TiptapEditor.vue';
+import TiptapEditor from '@/shared/components/editor/TiptapEditor.vue';
 import ChevronLeft from 'lucide-vue-next/dist/esm/icons/chevron-left.js';
 import Save from 'lucide-vue-next/dist/esm/icons/save.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
@@ -244,7 +244,7 @@ const handleSubmit = async () => {
     clearErrors();
     try {
         await api.post('/admin/cms/content-templates', form.value);
-        toast.success.create(t('features.content_templates.title_singular'));
+        toast.success.create(t('modules.cms.content_templates.title_singular'));
         router.push({ name: 'studio', query: { tab: 'templates' } });
     } catch (error: unknown) {
         if (error && typeof error === 'object' && 'response' in error) {

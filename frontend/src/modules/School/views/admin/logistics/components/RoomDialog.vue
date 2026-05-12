@@ -62,9 +62,9 @@ import { ref } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Label
-} from '@/components/ui';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
 
 const props = defineProps<{
   open: boolean;

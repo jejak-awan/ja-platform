@@ -1,7 +1,7 @@
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { defineStore } from 'pinia';
-import api from '@/services/api';
-import type { Content } from '@/types/cms/cms';
+import api from '@/core/api/client';
+import type { Content } from '@/modules/Cms/types/cms';
 
 interface ContentState {
     currentContent: Content | null;

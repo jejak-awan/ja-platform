@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { logger } from '@/utils/logger';
-import { parseResponse, parseSingleResponse, type PaginationData } from '@/utils/responseParser';
+import { logger } from '@/shared/utils/logger';
+import { parseResponse, parseSingleResponse, type PaginationData } from '@/shared/utils/responseParser';
 import HRService from '../services/HRService';
-import type { Staff, LeaveRequest, Shift } from '@/types';
+import type { Staff, LeaveRequest, Shift } from '@/modules/School/types';
 
 interface HRState {
     staff: Staff[];

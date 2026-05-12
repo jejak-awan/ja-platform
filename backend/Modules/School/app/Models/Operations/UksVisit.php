@@ -25,7 +25,7 @@ class UksVisit extends Model
     protected $table = 'sch_ops_uks_visits';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, \Modules\School\Traits\ScopedByUnit;
+    use HasFactory, \Modules\Core\Traits\ScopedByUnit;
 
     protected $fillable = [
         'school_id',

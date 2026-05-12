@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseResponse, parseSingleResponse, parsePagination, ensureArray } from '@/utils/responseParser';
+import { parseResponse, parseSingleResponse, parsePagination, ensureArray } from '@/shared/utils/responseParser';
 import type { AxiosResponse } from 'axios';
 
 describe('responseParser util', () => {

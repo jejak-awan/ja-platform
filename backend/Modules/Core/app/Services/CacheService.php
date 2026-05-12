@@ -3,58 +3,30 @@
 namespace Modules\Core\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Cms\Models\Category;
-use Modules\Cms\Models\Content;
-
 class CacheService
 {
     /**
-     * Clear all CMS-related caches
+     * @var array<string, callable>
+     */
+    protected static array $clearers = [];
+
+    /**
+     * Register a cache clearer for a module.
+     */
+    public static function registerClearer(string $name, callable $callback): void
+    {
+        self::$clearers[$name] = $callback;
+    }
+
+    /**
+     * Clear all system caches
      */
     public function clearAll(): void
     {
         Cache::flush();
-        $this->clearContentCaches();
-        $this->clearCategoryCaches();
-    }
 
-    /**
-     * Clear content-related caches
-     *
-     * @param  int|string|null  $contentId
-     */
-    public function clearContentCaches($contentId = null): void
-    {
-        // Clear content list cache
-        Cache::forget('contents_list');
-        Cache::forget('contents_published');
-
-        // Clear specific content cache
-        if ($contentId) {
-            Cache::forget("content_{$contentId}");
-            Cache::forget("content_slug_{$contentId}");
-        }
-
-        // Clear sitemap cache
-        Cache::forget('sitemap_index');
-        Cache::forget('sitemap_pages');
-        Cache::forget('sitemap_posts');
-        Cache::forget('sitemap_categories');
-    }
-
-    /**
-     * Clear category-related caches
-     *
-     * @param  int|string|null  $categoryId
-     */
-    public function clearCategoryCaches($categoryId = null): void
-    {
-        Cache::forget('categories_list');
-        Cache::forget('categories_tree');
-        Cache::forget('categories_flat');
-
-        if ($categoryId) {
-            Cache::forget("category_{$categoryId}");
+        foreach (self::$clearers as $clearer) {
+            $clearer();
         }
     }
 
@@ -89,26 +61,13 @@ class CacheService
     }
 
     /**
-     * Clear SEO caches
-     */
-    public function clearSeoCaches(): void
-    {
-        Cache::forget('sitemap_index');
-        Cache::forget('sitemap_pages');
-        Cache::forget('sitemap_posts');
-        Cache::forget('sitemap_categories');
-    }
-
-    /**
      * Warm up important caches
      *
      * @deprecated Use CacheWarmingService instead
      */
     public function warmUp(): void
     {
-        // Pre-cache frequently accessed data
-        Category::all();
-        Content::where('status', 'published')->limit(20)->get();
+        // Handled by CacheWarmingService
     }
 
     /**

@@ -98,6 +98,8 @@ Route::prefix('v1')->group(function () {
 
         // Categories
         Route::post('categories/bulk-destroy', [CategoryController::class, 'bulkDestroy'])->middleware('permission:edit categories');
+        Route::put('categories/{id}/restore', [CategoryController::class, 'restore'])->middleware('permission:edit categories');
+        Route::delete('categories/{id}/force-delete', [CategoryController::class, 'forceDelete'])->middleware('permission:delete categories');
         Route::apiResource('categories', CategoryController::class)->middleware('permission:view categories');
         Route::post('categories/{category}/move', [CategoryController::class, 'move'])->middleware('permission:edit categories');
 

@@ -188,14 +188,14 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import RedirectModal from '@/modules/Cms/components/redirects/RedirectModal.vue';
-import { Badge, Button, Card, CardContent, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
+import { Badge, Button, Card, CardContent, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
@@ -205,7 +205,7 @@ import ArrowRightLeft from 'lucide-vue-next/dist/esm/icons/arrow-right-left.js';
 import CheckCircle2 from 'lucide-vue-next/dist/esm/icons/circle-check-big.js';
 import BarChart3 from 'lucide-vue-next/dist/esm/icons/chart-bar-stacked.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import { parseResponse, ensureArray, parseSingleResponse } from '@/utils/responseParser';
+import { parseResponse, ensureArray, parseSingleResponse } from '@/shared/utils/responseParser';
 
 interface Redirect {
     id: number | string;

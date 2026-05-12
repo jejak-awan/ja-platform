@@ -10,6 +10,12 @@ use Modules\Core\Models\Setting;
 
 class SettingController extends BaseApiController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+        $this->middleware('permission:view settings')->only(['index', 'getGroup']);
+        $this->middleware('permission:manage settings')->only(['bulkUpdate']);
+    }
     /**
      * Get all CMS settings.
      */

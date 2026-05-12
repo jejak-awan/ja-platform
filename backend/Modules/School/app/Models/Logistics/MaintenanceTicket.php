@@ -4,7 +4,7 @@ namespace Modules\School\Models\Logistics;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\School\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByUnit;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\HR\Staff;

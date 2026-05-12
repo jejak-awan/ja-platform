@@ -3,7 +3,7 @@ import PageItem from './PageItem';
 import PostItem from './PostItem';
 import CategoryItem from './CategoryItem';
 import ColumnGroupItem from './ColumnGroupItem';
-import type { MenuItemDefinition } from '@/types/cms/menu';
+import type { MenuItemDefinition } from '@/modules/Cms/types/menu';
 
 const definitions: MenuItemDefinition[] = [
     CustomLinkItem,

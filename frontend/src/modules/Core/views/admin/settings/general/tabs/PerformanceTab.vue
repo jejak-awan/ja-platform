@@ -23,10 +23,10 @@
           </div>
           <div>
             <h3 class="text-sm font-semibold text-foreground">
-              {{ $t('features.settings.cache.status') }}
+              {{ $t('modules.core.settings.cache.status') }}
             </h3>
             <p class="text-xs text-muted-foreground">
-              Kelola driver dan status cache aplikasi
+              {{ $t('modules.core.settings.descriptions.cache_status') }}
             </p>
           </div>
         </div>
@@ -56,13 +56,13 @@
               v-if="!cacheStatus"
               class="text-center py-8 text-muted-foreground text-sm"
             >
-              {{ $t('features.settings.cache.loading') }}
+              {{ $t('modules.core.settings.cache.loading') }}
             </div>
             <div v-else>
               <div class="grid grid-cols-2 gap-4 mb-4">
                 <div class="p-3 rounded-lg bg-muted border border-border/50">
                   <p class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
-                    {{ $t('features.settings.cache.driver') }}
+                    {{ $t('modules.core.settings.cache.driver') }}
                   </p>
                   <p class="text-sm font-bold text-foreground mt-1">
                     {{ cacheStatus.driver }}
@@ -70,15 +70,15 @@
                 </div>
                 <div class="p-3 rounded-lg bg-muted border border-border/50">
                   <p class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
-                    {{ $t('features.settings.cache.status') }}
+                    {{ $t('modules.core.settings.cache.status') }}
                   </p>
                   <p class="text-sm font-bold text-foreground mt-1">
-                    {{ cacheStatus.enabled ? $t('features.settings.enabled') : $t('features.settings.disabled') }}
+                    {{ cacheStatus.enabled ? $t('modules.core.settings.enabled') : $t('modules.core.settings.disabled') }}
                   </p>
                 </div>
                 <div class="p-3 rounded-lg bg-muted border border-border/50">
                   <p class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
-                    {{ $t('features.settings.cache.keys') }}
+                    {{ $t('modules.core.settings.cache.keys') }}
                   </p>
                   <p class="text-sm font-bold text-foreground mt-1">
                     {{ cacheStatus.keys }}
@@ -86,7 +86,7 @@
                 </div>
                 <div class="p-3 rounded-lg bg-muted border border-border/50">
                   <p class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
-                    {{ $t('features.settings.cache.size') }}
+                    {{ $t('modules.core.settings.cache.size') }}
                   </p>
                   <p class="text-sm font-bold text-foreground mt-1">
                     {{ cacheStatus.size }}
@@ -130,7 +130,7 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   ><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
-                  {{ clearingCache ? $t('features.settings.cache.clearing') : $t('features.settings.cache.clear') }}
+                  {{ clearingCache ? $t('modules.core.settings.cache.clearing') : $t('modules.core.settings.cache.clear') }}
                 </button>
                 <button
                   type="button"
@@ -167,7 +167,7 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   ><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.24-2.14.7-3.09C7.07 13.1 8 13.9 8.5 14.5z" /></svg>
-                  {{ warmingCache ? $t('features.settings.cache.warming') : $t('features.settings.cache.warm') }}
+                  {{ warmingCache ? $t('modules.core.settings.cache.warming') : $t('modules.core.settings.cache.warm') }}
                 </button>
               </div>
             </div>
@@ -181,13 +181,13 @@
             >
               <div>
                 <label class="block text-sm font-medium text-foreground mb-1">
-                  {{ $t('features.settings.labels.' + setting.key) }}
+                  {{ $t('modules.core.settings.labels.' + setting.key) }}
                 </label>
                 <p
                   v-if="setting.description"
                   class="text-xs text-muted-foreground mb-2"
                 >
-                  {{ $t('features.settings.descriptions.' + setting.key) }}
+                  {{ $t('modules.core.settings.descriptions.' + setting.key) }}
                 </p>
 
                 <select
@@ -198,16 +198,16 @@
                   @change="(e) => updateField(setting.key, (e.target as HTMLSelectElement).value)"
                 >
                   <option value="file">
-                    File (Development)
+                    File (Local Storage)
                   </option>
                   <option value="database">
-                    Database
+                    Database (Default)
                   </option>
                   <option value="redis">
-                    Redis
+                    Redis (High Performance)
                   </option>
-                  <option value="redis_failover">
-                    Redis + Failover ke File (Recommended)
+                  <option value="failover">
+                    Redis + Failover (Recommended)
                   </option>
                 </select>
 
@@ -223,7 +223,7 @@
                       <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after: after:shadow-md peer-checked:bg-success" />
                     </div>
                     <span class="ml-3 text-sm text-foreground">
-                      {{ formData[setting.key] ? $t('features.settings.enabled') : $t('features.settings.disabled') }}
+                      {{ formData[setting.key] ? $t('modules.core.settings.enabled') : $t('modules.core.settings.disabled') }}
                     </span>
                   </label>
                 </div>
@@ -247,60 +247,42 @@
           </div>
         </div>
 
-        <!-- Redis Info -->
+        <!-- Redis Infrastructure Link (More prominent) -->
         <div
-          v-if="formData.cache_driver === 'redis' || formData.cache_driver === 'redis_failover'"
-          class="mx-6 mb-6 p-4 rounded-lg border border-primary/20 bg-primary/5"
+          v-if="formData.cache_driver === 'redis' || formData.cache_driver === 'failover'"
+          class="mx-6 mb-6 p-5 rounded-xl border border-primary/20 bg-primary/5 shadow-sm"
         >
-          <div class="flex items-start gap-3">
-            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-primary"
-              ><circle
-                cx="12"
-                cy="12"
-                r="10"
-              /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
-            </div>
-            <div>
-              <h4 class="font-semibold text-sm text-foreground mb-1">
-                {{ $t('features.settings.cache.redisInfo.title') }}
-              </h4>
-              <p class="text-xs text-muted-foreground mb-3 leading-relaxed">
-                {{ $t('features.settings.cache.redisInfo.description') }}
-              </p>
-              <router-link
-                to="/dash/redis"
-                class="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80"
-              >
-                {{ $t('features.settings.cache.redisInfo.linkText') }}
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                ><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line
-                  x1="10"
-                  x2="21"
-                  y1="14"
-                  y2="3"
-                /></svg>
-              </router-link>
+                ><path d="M12 2v8" /><path d="m16 6-4 4-4-4" /><path d="M12 16v6" /><path d="m8 18 4 4 4-4" /><path d="M19 9h2" /><path d="M15 9h2" /><path d="M3 9h2" /><path d="M7 9h2" /><path d="M19 15h2" /><path d="M15 15h2" /><path d="M3 15h2" /><path d="M7 15h2" /></svg>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-foreground">
+                  Redis Server Infrastructure
+                </h4>
+                <p class="text-xs text-muted-foreground leading-relaxed mt-0.5">
+                  Server Redis terdeteksi sebagai driver aktif. Gunakan halaman manajemen untuk memantau penggunaan memory, client, dan statistik performa server secara detail.
+                </p>
+              </div>
             </div>
+            <router-link
+              to="/dash/redis"
+              class="flex-shrink-0 px-4 py-2 text-xs font-semibold bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-all flex items-center gap-2"
+            >
+              Monitor Server
+              <ArrowRight class="w-3.5 h-3.5" />
+            </router-link>
           </div>
         </div>
       </div>
@@ -336,7 +318,7 @@
               CDN Configuration
             </h3>
             <p class="text-xs text-muted-foreground">
-              Konfigurasi Content Delivery Network
+              {{ $t('modules.core.settings.descriptions.cdn_status') }}
             </p>
           </div>
         </div>
@@ -373,13 +355,13 @@
           <!-- Enable CDN -->
           <div v-if="cdnEnabledSetting">
             <label class="block text-sm font-medium text-foreground mb-1">
-              {{ $t('features.settings.labels.' + (cdnEnabledSetting?.key || '')) }}
+              {{ $t('modules.core.settings.labels.' + (cdnEnabledSetting?.key || '')) }}
             </label>
             <p
               v-if="cdnEnabledSetting?.description"
               class="text-xs text-muted-foreground mb-3"
             >
-              {{ $t('features.settings.descriptions.' + (cdnEnabledSetting?.key || '')) }}
+              {{ $t('modules.core.settings.descriptions.' + (cdnEnabledSetting?.key || '')) }}
             </p>
             <label class="flex items-center cursor-pointer">
               <div class="relative">
@@ -392,7 +374,7 @@
                 <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after: after:shadow-md peer-checked:bg-success" />
               </div>
               <span class="ml-3 text-sm text-foreground">
-                {{ formData[cdnEnabledSetting?.key || ''] ? $t('features.settings.enabled') : $t('features.settings.disabled') }}
+                {{ formData[cdnEnabledSetting?.key || ''] ? $t('modules.core.settings.enabled') : $t('modules.core.settings.disabled') }}
               </span>
             </label>
           </div>
@@ -403,13 +385,13 @@
               class="block text-sm font-medium text-foreground mb-1"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              CDN Provider
+              {{ cdnPresetSetting ? $t('modules.core.settings.labels.' + cdnPresetSetting.key) : 'CDN Provider' }}
             </label>
             <p
               class="text-xs text-muted-foreground mb-2"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              Select your CDN provider for optimized configuration
+              {{ cdnPresetSetting ? $t('modules.core.settings.descriptions.' + cdnPresetSetting.key) : 'Pilih provider CDN Anda' }}
             </p>
             <select
               :value="formData[cdnPresetSetting?.key || '']"
@@ -441,14 +423,14 @@
               class="block text-sm font-medium text-foreground mb-1"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              {{ $t('features.settings.labels.' + (cdnUrlSetting?.key || '')) }}
+              {{ $t('modules.core.settings.labels.' + (cdnUrlSetting?.key || '')) }}
             </label>
             <p
               v-if="cdnUrlSetting?.description"
               class="text-xs text-muted-foreground mb-2"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              {{ $t('features.settings.descriptions.' + (cdnUrlSetting?.key || '')) }}
+              {{ $t('modules.core.settings.descriptions.' + (cdnUrlSetting?.key || '')) }}
             </p>
             <input
               :value="(formData[cdnUrlSetting?.key || ''] as any)"
@@ -479,13 +461,13 @@
               class="block text-sm font-medium text-foreground mb-1"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              Included Directories
+              {{ cdnIncludedDirsSetting ? $t('modules.core.settings.labels.' + cdnIncludedDirsSetting.key) : 'Direktori yang Disertakan' }}
             </label>
             <p
               class="text-xs text-muted-foreground mb-2"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              Comma-separated list of directories to serve via CDN
+              {{ cdnIncludedDirsSetting ? $t('modules.core.settings.descriptions.' + cdnIncludedDirsSetting.key) : 'Daftar direktori untuk dilayani via CDN' }}
             </p>
             <input
               :value="(formData[cdnIncludedDirsSetting?.key || ''] as any)"
@@ -509,13 +491,13 @@
               class="block text-sm font-medium text-foreground mb-1"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              Excluded Extensions
+              {{ cdnExcludedExtsSetting ? $t('modules.core.settings.labels.' + cdnExcludedExtsSetting.key) : 'Ekstensi yang Dikecualikan' }}
             </label>
             <p
               class="text-xs text-muted-foreground mb-2"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              File extensions to exclude from CDN
+              {{ cdnExcludedExtsSetting ? $t('modules.core.settings.descriptions.' + cdnExcludedExtsSetting.key) : 'Ekstensi file yang dikecualikan dari CDN' }}
             </p>
             <input
               :value="(formData[cdnExcludedExtsSetting?.key || ''] as any)"
@@ -566,10 +548,10 @@
           </div>
           <div>
             <h3 class="text-sm font-semibold text-foreground">
-              {{ $t('features.settings.tabs.performance') }} Settings
+              {{ $t('modules.core.settings.tabs.performance') }} Settings
             </h3>
             <p class="text-xs text-muted-foreground">
-              Optimasi gambar, lazy loading, dan lainnya
+              {{ $t('modules.core.settings.descriptions.performance_status') }}
             </p>
           </div>
         </div>
@@ -599,13 +581,13 @@
           >
             <div>
               <label class="block text-sm font-medium text-foreground mb-1">
-                {{ $t('features.settings.labels.' + setting.key) }}
+                {{ $t('modules.core.settings.labels.' + setting.key) }}
               </label>
               <p
                 v-if="setting.description"
                 class="text-xs text-muted-foreground mb-2"
               >
-                {{ $t('features.settings.descriptions.' + setting.key) }}
+                {{ $t('modules.core.settings.descriptions.' + setting.key) }}
               </p>
 
               <input
@@ -636,7 +618,7 @@
                     <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after: after:shadow-md peer-checked:bg-success" />
                   </div>
                   <span class="ml-3 text-sm text-foreground">
-                    {{ formData[setting.key] ? $t('features.settings.enabled') : $t('features.settings.disabled') }}
+                    {{ formData[setting.key] ? $t('modules.core.settings.enabled') : $t('modules.core.settings.disabled') }}
                   </span>
                 </label>
               </div>
@@ -656,7 +638,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { CacheStatus } from '@/types/core/settings'
+import { ArrowRight } from 'lucide-vue-next'
+import type { CacheStatus } from '@/core/types/settings'
 
 interface Setting {
     id: number | string;

@@ -12,9 +12,9 @@
           />
         </div>
         <div class="text-left">
-          <span class="font-bold text-foreground text-sm tracking-tight">{{ $t('features.school.units.sections.profile') }}</span>
+          <span class="font-bold text-foreground text-sm tracking-tight">{{ $t('modules.school.units.sections.profile') }}</span>
           <p class="text-[10px] text-muted-foreground font-medium mt-0.5 opacity-70">
-            {{ $t('features.school.units.sections.profileDesc') }}
+            {{ $t('modules.school.units.sections.profileDesc') }}
           </p>
         </div>
       </div>
@@ -95,19 +95,19 @@
 
       <div class="grid grid-cols-1 gap-12 mt-4 pt-4 border-t border-border/40">
         <div class="space-y-4">
-          <Label class="text-sm font-bold text-foreground/80">{{ $t('common.labels.vision') }}</Label>
+          <Label class="text-sm font-bold text-foreground/80">{{ $t('modules.school.labels.vision') }}</Label>
           <TiptapEditor
             v-model="localForm.vision"
-            :placeholder="$t('common.labels.vision')"
+            :placeholder="$t('modules.school.labels.vision')"
             compact
             class="min-h-[120px]"
           />
         </div>
         <div class="space-y-4">
-          <Label class="text-sm font-bold text-foreground/80">{{ $t('common.labels.mission') }}</Label>
+          <Label class="text-sm font-bold text-foreground/80">{{ $t('modules.school.labels.mission') }}</Label>
           <TiptapEditor
             v-model="localForm.mission"
-            :placeholder="$t('common.labels.mission')"
+            :placeholder="$t('modules.school.labels.mission')"
             compact
             class="min-h-[120px]"
           />
@@ -151,9 +151,9 @@ import { ref, reactive, watch, computed } from 'vue';
 import { 
   AccordionItem, AccordionTrigger, AccordionContent, 
   Label, Input, LucideIcon
-} from '@/components/ui';
-import TiptapEditor from '@/components/shared/editor/TiptapEditor.vue';
-import MediaPicker from '@/components/shared/media/MediaPicker.vue';
+} from '@/shared/components/ui';
+import TiptapEditor from '@/shared/components/editor/TiptapEditor.vue';
+import MediaPicker from '@/shared/components/media/MediaPicker.vue';
 
 const props = defineProps<{
   settings: any;

@@ -3,10 +3,10 @@
     <!-- Header Section -->
     <div class="mb-8 text-left">
       <h2 class="text-3xl font-bold tracking-tight text-foreground">
-        {{ $t('features.school.organization.title') }}
+        {{ $t('modules.school.organization.title') }}
       </h2>
       <p class="text-muted-foreground mt-2">
-        {{ $t('features.school.organization.subtitle') }}
+        {{ $t('modules.school.organization.subtitle') }}
       </p>
     </div>
 
@@ -21,10 +21,10 @@
         </div>
         <div class="space-y-2">
           <h3 class="text-2xl font-bold tracking-tight">
-            {{ $t('features.school.organization.comingSoon') }}
+            {{ $t('modules.school.organization.comingSoon') }}
           </h3>
           <p class="text-muted-foreground max-w-md mx-auto leading-relaxed italic">
-            {{ $t('features.school.organization.comingSoonDesc') }}
+            {{ $t('modules.school.organization.comingSoonDesc') }}
           </p>
         </div>
         <Button
@@ -32,7 +32,7 @@
           as-child
         >
           <router-link :to="{ name: 'schools.index' }">
-            {{ $t('common.actions.backTo') }} {{ $t('features.school.dashboard.title') }}
+            {{ $t('common.actions.backTo') }} {{ $t('modules.school.dashboard.title') }}
           </router-link>
         </Button>
       </CardContent>
@@ -41,5 +41,5 @@
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, Button, LucideIcon } from '@/components/ui';
+import { Card, CardContent, Button, LucideIcon } from '@/shared/components/ui';
 </script>

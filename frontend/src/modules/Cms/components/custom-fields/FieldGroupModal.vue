@@ -88,11 +88,11 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
 import {
     Dialog,
     DialogContent,
@@ -108,7 +108,7 @@ import {
     SelectValue,
     SelectContent,
     SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
 interface FieldGroup {

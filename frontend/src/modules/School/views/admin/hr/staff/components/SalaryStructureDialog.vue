@@ -82,7 +82,7 @@ import { ref, watch } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Label, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const props = defineProps<{
   open: boolean;

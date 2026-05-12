@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { logger } from '@/utils/logger';
-import { parseResponse, parseSingleResponse } from '@/utils/responseParser';
+import { logger } from '@/shared/utils/logger';
+import { parseResponse, parseSingleResponse } from '@/shared/utils/responseParser';
 import StudentService from '../services/StudentService';
-import type { Student, Violation, Achievement, CounselingRecord } from '@/types';
-import type { PaginationData } from '@/utils/responseParser';
+import type { Student, Violation, Achievement, CounselingRecord } from '@/modules/School/types';
+import type { PaginationData } from '@/shared/utils/responseParser';
 
 interface StudentState {
     students: Student[];

@@ -186,12 +186,12 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import { parseSingleResponse } from '@/utils/responseParser';
+import { parseSingleResponse } from '@/shared/utils/responseParser';
 import { 
     Card, 
     CardHeader, 
@@ -200,7 +200,7 @@ import {
     CardFooter, 
     Button, 
     Badge 
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 import Cpu from 'lucide-vue-next/dist/esm/icons/cpu.js';

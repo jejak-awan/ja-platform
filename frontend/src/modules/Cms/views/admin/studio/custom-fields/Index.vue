@@ -254,16 +254,16 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import FieldGroupModal from '@/modules/Cms/components/custom-fields/FieldGroupModal.vue';
 import FieldModal from '@/modules/Cms/components/custom-fields/FieldModal.vue';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
-import { Badge, Button, Card, CardContent, CardHeader, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
+import { Badge, Button, Card, CardContent, CardHeader, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
@@ -273,7 +273,7 @@ import Layout from 'lucide-vue-next/dist/esm/icons/layout-dashboard.js';
 import FileCode from 'lucide-vue-next/dist/esm/icons/file-code.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
-import type { FieldGroup, CustomField } from '@/types/cms/custom-fields';
+import type { FieldGroup, CustomField } from '@/modules/Cms/types/custom-fields';
 
 const { t } = useI18n();
 const { confirm } = useConfirm();

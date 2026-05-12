@@ -4,7 +4,7 @@
     <div class="mb-6 flex items-center justify-between">
       <div>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.forms.submissions.title') }}
+          {{ $t('modules.cms.forms.submissions.title') }}
         </h1>
         <p class="text-sm text-muted-foreground">
           {{ form?.name || '-' }}
@@ -23,13 +23,13 @@
           @click="$router.push({ name: 'forms.analytics', params: { id: formId } })"
         >
           <TrendingUp class="w-4 h-4 mr-2" />
-          {{ $t('features.forms.actions.analysis') }}
+          {{ $t('modules.cms.forms.actions.analysis') }}
         </Button>
         <Popover>
           <PopoverTrigger as-child>
             <Button variant="outline">
               <Download class="w-4 h-4 mr-2" />
-              {{ $t('features.forms.actions.export') }}
+              {{ $t('modules.cms.forms.actions.export') }}
             </Button>
           </PopoverTrigger>
           <PopoverContent
@@ -42,21 +42,21 @@
                 class="w-full justify-start text-left h-9 px-3"
                 @click="exportSubmissions('xlsx')"
               >
-                <span class="mr-2 text-lg">📊</span> {{ $t('features.forms.submissions.analytics.excel') || 'Excel (.xlsx)' }}
+                <span class="mr-2 text-lg">📊</span> {{ $t('modules.cms.forms.submissions.analytics.excel') || 'Excel (.xlsx)' }}
               </Button>
               <Button
                 variant="ghost"
                 class="w-full justify-start text-left h-9 px-3"
                 @click="exportSubmissions('csv')"
               >
-                <span class="mr-2 text-lg">📝</span> {{ $t('features.forms.submissions.analytics.csv') || 'CSV (.csv)' }}
+                <span class="mr-2 text-lg">📝</span> {{ $t('modules.cms.forms.submissions.analytics.csv') || 'CSV (.csv)' }}
               </Button>
               <Button
                 variant="ghost"
                 class="w-full justify-start text-left h-9 px-3"
                 @click="exportSubmissions('pdf')"
               >
-                <span class="mr-2 text-lg">📕</span> {{ $t('features.forms.submissions.analytics.pdf') || 'PDF (.pdf)' }}
+                <span class="mr-2 text-lg">📕</span> {{ $t('modules.cms.forms.submissions.analytics.pdf') || 'PDF (.pdf)' }}
               </Button>
             </div>
           </PopoverContent>
@@ -76,7 +76,7 @@
       >
         <div class="flex flex-col">
           <span class="text-2xl font-bold text-primary">{{ statistics.total || 0 }}</span>
-          <span class="text-sm text-muted-foreground">{{ $t('features.forms.stats.total') }}</span>
+          <span class="text-sm text-muted-foreground">{{ $t('modules.cms.forms.stats.total') }}</span>
         </div>
       </Card>
       <Card 
@@ -86,7 +86,7 @@
       >
         <div class="flex flex-col">
           <span class="text-2xl font-bold text-green-500">{{ statistics.new || 0 }}</span>
-          <span class="text-sm text-green-500/70">{{ $t('features.forms.stats.new') }}</span>
+          <span class="text-sm text-green-500/70">{{ $t('modules.cms.forms.stats.new') }}</span>
         </div>
       </Card>
       <Card 
@@ -96,7 +96,7 @@
       >
         <div class="flex flex-col">
           <span class="text-2xl font-bold text-yellow-500">{{ statistics.read || 0 }}</span>
-          <span class="text-sm text-yellow-500/70">{{ $t('features.forms.stats.read') }}</span>
+          <span class="text-sm text-yellow-500/70">{{ $t('modules.cms.forms.stats.read') }}</span>
         </div>
       </Card>
       <Card 
@@ -106,7 +106,7 @@
       >
         <div class="flex flex-col">
           <span class="text-2xl font-bold text-muted-foreground">{{ statistics.archived || 0 }}</span>
-          <span class="text-sm text-muted-foreground">{{ $t('features.forms.stats.archived') }}</span>
+          <span class="text-sm text-muted-foreground">{{ $t('modules.cms.forms.stats.archived') }}</span>
         </div>
       </Card>
     </div>
@@ -119,26 +119,26 @@
           <Input
             v-model="search"
             type="text"
-            :placeholder="$t('features.forms.submissions.search')"
+            :placeholder="$t('modules.cms.forms.submissions.search')"
             class="pl-9"
           />
         </div>
         <Select v-model="statusFilter">
           <SelectTrigger>
-            <SelectValue :placeholder="$t('features.forms.filters.status')" />
+            <SelectValue :placeholder="$t('modules.cms.forms.filters.status')" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
-              {{ $t('features.forms.filters.status') }}
+              {{ $t('modules.cms.forms.filters.status') }}
             </SelectItem>
             <SelectItem value="new">
-              {{ $t('features.forms.stats.new') }}
+              {{ $t('modules.cms.forms.stats.new') }}
             </SelectItem>
             <SelectItem value="read">
-              {{ $t('features.forms.stats.read') }}
+              {{ $t('modules.cms.forms.stats.read') }}
             </SelectItem>
             <SelectItem value="archived">
-              {{ $t('features.forms.stats.archived') }}
+              {{ $t('modules.cms.forms.stats.archived') }}
             </SelectItem>
           </SelectContent>
         </Select>
@@ -167,7 +167,7 @@
         class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 bg-background border border-border px-6 py-3 rounded-full shadow-2xl ring-4 ring-primary/5"
       >
         <span class="text-sm font-medium text-foreground whitespace-nowrap">
-          {{ selectedRowsCount }} {{ $t('features.forms.bulk.selected') }}
+          {{ selectedRowsCount }} {{ $t('modules.cms.forms.bulk.selected') }}
         </span>
         <div class="h-4 w-px bg-border mx-2" />
         <div class="flex items-center gap-1">
@@ -178,7 +178,7 @@
             @click="handleBulkMarkRead"
           >
             <Check class="w-4 h-4 mr-2" />
-            {{ $t('features.forms.submissions.actions.markRead') }}
+            {{ $t('modules.cms.forms.submissions.actions.markRead') }}
           </Button>
           <Button
             variant="ghost"
@@ -187,7 +187,7 @@
             @click="handleBulkArchive"
           >
             <Archive class="w-4 h-4 mr-2" />
-            {{ $t('features.forms.submissions.actions.archive') }}
+            {{ $t('modules.cms.forms.submissions.actions.archive') }}
           </Button>
           <Button
             variant="ghost"
@@ -228,7 +228,7 @@
       >
         <Loader2 class="w-8 h-8 mx-auto animate-spin text-muted-foreground" />
         <p class="text-muted-foreground mt-2">
-          {{ $t('features.forms.messages.loading') }}
+          {{ $t('modules.cms.forms.messages.loading') }}
         </p>
       </div>
 
@@ -239,7 +239,7 @@
       >
         <FileText class="mx-auto h-12 w-12 text-muted-foreground opacity-50" />
         <p class="mt-4 text-muted-foreground">
-          {{ $t('features.forms.submissions.empty') }}
+          {{ $t('modules.cms.forms.submissions.empty') }}
         </p>
       </Card>
 
@@ -311,7 +311,7 @@
     <Dialog v-model:open="showDetail">
       <DialogContent class="max-w-2xl max-h-[80vh] overflow-y-auto duration-100">
         <DialogHeader class="flex flex-row items-center justify-between space-y-0">
-          <DialogTitle>{{ $t('features.forms.submissions.detailTitle') }}</DialogTitle>
+          <DialogTitle>{{ $t('modules.cms.forms.submissions.detailTitle') }}</DialogTitle>
           <div class="flex items-center gap-2 mr-6">
             <Button 
               v-if="selectedSubmission"
@@ -331,7 +331,7 @@
         >
           <div class="grid grid-cols-2 gap-4 text-sm">
             <div class="flex items-center gap-2">
-              <span class="font-medium text-foreground">{{ $t('features.forms.submissions.status') }}:</span>
+              <span class="font-medium text-foreground">{{ $t('modules.cms.forms.submissions.status') }}:</span>
               <Badge
                 :class="{
                   'bg-green-500/10 text-green-500 border-green-500/20': selectedSubmission.status === 'new',
@@ -343,21 +343,21 @@
               </Badge>
             </div>
             <div>
-              <span class="font-medium text-foreground">{{ $t('features.forms.submissions.submitted') }}:</span>
+              <span class="font-medium text-foreground">{{ $t('modules.cms.forms.submissions.submitted') }}:</span>
               <span class="ml-2 text-muted-foreground">{{ formatDate(selectedSubmission.created_at) }}</span>
             </div>
             <div>
-              <span class="font-medium text-foreground">{{ $t('features.forms.submissions.ipAddress') }}:</span>
+              <span class="font-medium text-foreground">{{ $t('modules.cms.forms.submissions.ipAddress') }}:</span>
               <span class="ml-2 text-muted-foreground font-mono">{{ selectedSubmission.ip_address || '-' }}</span>
             </div>
             <div v-if="selectedSubmission.user">
-              <span class="font-medium text-foreground">{{ $t('features.forms.submissions.user') }}:</span>
+              <span class="font-medium text-foreground">{{ $t('modules.cms.forms.submissions.user') }}:</span>
               <span class="ml-2 text-muted-foreground">{{ selectedSubmission.user.name || selectedSubmission.user.email }}</span>
             </div>
           </div>
           <div class="border-t border-border pt-4">
             <h4 class="font-semibold text-foreground mb-3">
-              {{ $t('features.forms.submissions.formData') }}
+              {{ $t('modules.cms.forms.submissions.formData') }}
             </h4>
             <div class="bg-muted/50 rounded-lg border border-border overflow-hidden">
               <dl class="divide-y divide-border/50">
@@ -390,7 +390,7 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { h, ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
@@ -400,12 +400,12 @@ import {
     createColumnHelper,
     FlexRender
 } from '@tanstack/vue-table';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import { apiConfig } from '@/config';
-import { parseSingleResponse } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
-import { BackToTop, Badge, Button, Card, Checkbox, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Pagination, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Popover, PopoverTrigger, PopoverContent } from '@/components/ui';
+import { parseSingleResponse } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { BackToTop, Badge, Button, Card, Checkbox, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Pagination, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Popover, PopoverTrigger, PopoverContent } from '@/shared/components/ui';
 
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import Download from 'lucide-vue-next/dist/esm/icons/download.js';
@@ -526,13 +526,13 @@ const columns = [
             onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
             class: '-ml-3 h-8 data-[state=open]:bg-accent',
         }, () => [
-            t('features.forms.submissions.submitted'),
+            t('modules.cms.forms.submissions.submitted'),
             h(renderSortIcon(column.getIsSorted()), { class: 'ml-2 h-4 w-4' })
         ]),
         cell: info => h('span', { class: 'text-sm text-muted-foreground font-mono' }, formatDate(info.getValue())),
     }),
     columnHelper.accessor('data', {
-        header: () => t('features.forms.submissions.formData'),
+        header: () => t('modules.cms.forms.submissions.formData'),
         cell: info => h('div', { class: 'flex flex-wrap gap-2 max-w-md' }, 
             Object.entries(getFirstFields(info.getValue())).map(([key, value]) => 
                 h('span', { class: 'text-xs bg-muted/80 text-foreground border border-border/40 px-2 py-0.5 rounded-sm' }, [
@@ -550,7 +550,7 @@ const columns = [
             onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
             class: '-ml-3 h-8 data-[state=open]:bg-accent',
         }, () => [
-            t('features.forms.submissions.ipAddress'),
+            t('modules.cms.forms.submissions.ipAddress'),
             h(renderSortIcon(column.getIsSorted()), { class: 'ml-2 h-4 w-4' })
         ]),
         cell: info => h('span', { class: 'text-sm text-muted-foreground font-mono' }, info.getValue() || '-'),
@@ -565,7 +565,7 @@ const columns = [
                     variant: 'ghost',
                     size: 'icon',
                     class: 'h-8 w-8 text-amber-500 hover:text-amber-600 hover:bg-amber-500/10 transition-none',
-                    title: t('features.forms.stats.read'),
+                    title: t('modules.cms.forms.stats.read'),
                     onClick: (e: MouseEvent) => {
                         e.stopPropagation();
                         markAsRead(submission);
@@ -719,8 +719,8 @@ const archiveSubmission = async (submission: Submission) => {
 
 const deleteSubmission = async (submission: Submission) => {
     const confirmed = await confirm({
-        title: t('features.forms.submissions.actions.delete'),
-        message: t('features.forms.submissions.messages.deleteConfirm'),
+        title: t('modules.cms.forms.submissions.actions.delete'),
+        message: t('modules.cms.forms.submissions.messages.deleteConfirm'),
         variant: 'danger',
         confirmText: t('common.actions.delete'),
     });
@@ -730,7 +730,7 @@ const deleteSubmission = async (submission: Submission) => {
     try {
         await api.delete(`/admin/cms/form-submissions/${submission.id}`);
         submissions.value = submissions.value.filter(s => s.id !== submission.id);
-        toast.success.default(t('features.forms.submissions.messages.deleteSuccess'));
+        toast.success.default(t('modules.cms.forms.submissions.messages.deleteSuccess'));
         fetchStatistics();
         table.resetRowSelection();
     } catch (error: unknown) {
@@ -746,7 +746,7 @@ const handleBulkMarkRead = async () => {
     
     try {
         await Promise.all(selectedIds.map(id => api.put(`/admin/cms/form-submissions/${id}/read`)));
-        toast.success.default(t('features.forms.submissions.messages.bulkReadSuccess', { count: selectedIds.length }));
+        toast.success.default(t('modules.cms.forms.submissions.messages.bulkReadSuccess', { count: selectedIds.length }));
         fetchSubmissions(pagination.value?.current_page || 1);
         fetchStatistics();
     } catch (error: unknown) {
@@ -760,17 +760,17 @@ const handleBulkArchive = async () => {
     const selectedIds = selectedRows.map(row => row.original.id);
     
     const confirmed = await confirm({
-        title: t('features.forms.submissions.actions.archive'),
-        message: t('features.forms.submissions.messages.bulkArchiveConfirm', { count: selectedIds.length }),
+        title: t('modules.cms.forms.submissions.actions.archive'),
+        message: t('modules.cms.forms.submissions.messages.bulkArchiveConfirm', { count: selectedIds.length }),
         variant: 'warning',
-        confirmText: t('features.forms.submissions.actions.archive'),
+        confirmText: t('modules.cms.forms.submissions.actions.archive'),
     });
 
     if (!confirmed) return;
 
     try {
         await Promise.all(selectedIds.map(id => api.put(`/admin/cms/form-submissions/${id}/archive`)));
-        toast.success.default(t('features.forms.submissions.messages.bulkArchiveSuccess', { count: selectedIds.length }));
+        toast.success.default(t('modules.cms.forms.submissions.messages.bulkArchiveSuccess', { count: selectedIds.length }));
         fetchSubmissions(pagination.value?.current_page || 1);
         fetchStatistics();
     } catch (error: unknown) {
@@ -785,7 +785,7 @@ const handleBulkDelete = async () => {
     
     const confirmed = await confirm({
         title: t('common.actions.delete'),
-        message: t('features.forms.submissions.messages.bulkDeleteConfirm', { count: selectedIds.length }),
+        message: t('modules.cms.forms.submissions.messages.bulkDeleteConfirm', { count: selectedIds.length }),
         variant: 'danger',
         confirmText: t('common.actions.delete'),
     });
@@ -794,7 +794,7 @@ const handleBulkDelete = async () => {
 
     try {
         await Promise.all(selectedIds.map(id => api.delete(`/admin/cms/form-submissions/${id}`)));
-        toast.success.default(t('features.forms.submissions.messages.bulkDeleteSuccess', { count: selectedIds.length }));
+        toast.success.default(t('modules.cms.forms.submissions.messages.bulkDeleteSuccess', { count: selectedIds.length }));
         fetchSubmissions(pagination.value?.current_page || 1);
         fetchStatistics();
     } catch (error: unknown) {
@@ -833,7 +833,7 @@ const exportSubmissions = async (format = 'xlsx') => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        toast.success.default(t('features.forms.submissions.messages.exportSuccess'));
+        toast.success.default(t('modules.cms.forms.submissions.messages.exportSuccess'));
     } catch (error: unknown) {
         logger.error('Error exporting submissions:', error);
         toast.error.fromResponse(error);
@@ -848,16 +848,16 @@ const exportPdf = (submission: Submission) => {
         window.open(exportUrl, '_blank');
     } catch (error: unknown) {
         logger.error('Failed to export PDF:', error);
-        toast.error.default(t('features.forms.submissions.messages.exportFailed'));
+        toast.error.default(t('modules.cms.forms.submissions.messages.exportFailed'));
     }
 };
 
 // --- Helper Functions ---
 const getStatusLabel = (status: string) => {
     const labels: Record<string, string> = {
-        new: t('features.forms.stats.new'),
-        read: t('features.forms.stats.read'),
-        archived: t('features.forms.stats.archived')
+        new: t('modules.cms.forms.stats.new'),
+        read: t('modules.cms.forms.stats.read'),
+        archived: t('modules.cms.forms.stats.archived')
     };
     return labels[status] || status;
 };

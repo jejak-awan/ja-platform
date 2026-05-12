@@ -110,7 +110,7 @@ class SettingController extends BaseApiController
         return $this->success($setting, 'Setting updated successfully');
     }
 
-    public function bulkUpdate(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkUpdate(Request $request, \Modules\Core\app\Services\LicenseService $licenseService): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'settings' => 'required|array',
@@ -121,18 +121,43 @@ class SettingController extends BaseApiController
         ]);
 
         $settings = is_array($validated['settings']) ? $validated['settings'] : [];
+        $hasWhiteLabel = $licenseService->hasWhiteLabel();
+
         foreach ($settings as $settingData) {
             if (is_array($settingData) && isset($settingData['key'])) {
-                $sKeyRaw = $settingData['key'];
-                $sKey = is_scalar($sKeyRaw) ? (string) $sKeyRaw : '';
+                $sKey = is_scalar($settingData['key']) ? (string) $settingData['key'] : '';
+                
+                // Security Check: White Label Protection
+                if ($licenseService->isProtectedKey($sKey) && !$hasWhiteLabel) {
+                    continue; // Skip protected keys if no white label license
+                }
+
                 $sValue = $settingData['value'] ?? null;
                 $sTypeRaw = $settingData['type'] ?? 'string';
                 $sType = is_scalar($sTypeRaw) ? (string) $sTypeRaw : 'string';
                 $sGroupRaw = $settingData['group'] ?? 'system';
                 $sGroup = is_scalar($sGroupRaw) ? (string) $sGroupRaw : 'system';
 
-                Setting::set($sKey, $sValue, $sType, $sGroup);
+                // In Core context, we want settings to be Global by default unless explicitly specified.
+                // Since this controller manages system-wide infrastructure, we pass NULL for school_unit_id.
+                Setting::set($sKey, $sValue, $sType, $sGroup, null);
+
+                // Sync with Redis Settings if cache driver is changed to Redis-based
+                if ($sKey === 'cache_driver' && in_array($sValue, ['redis', 'failover'])) {
+                    try {
+                        \Modules\Core\Models\RedisSetting::setValue('enable_redis', true);
+                    } catch (\Throwable $e) {
+                        // Silent fail if RedisSetting not available
+                    }
+                }
             }
+        }
+
+        // Clear config cache to apply changes immediately
+        try {
+            \Illuminate\Support\Facades\Artisan::call('config:clear');
+        } catch (\Throwable $e) {
+            // Silent fail
         }
 
         return $this->success(null, 'Settings updated successfully');

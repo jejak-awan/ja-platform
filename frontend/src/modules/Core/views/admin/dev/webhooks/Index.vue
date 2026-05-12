@@ -212,14 +212,14 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import WebhookModal from '@/modules/Core/components/webhooks/WebhookModal.vue';
-import { parseResponse, ensureArray, parseSingleResponse } from '@/utils/responseParser';
+import { parseResponse, ensureArray, parseSingleResponse } from '@/shared/utils/responseParser';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Zap from 'lucide-vue-next/dist/esm/icons/zap.js';
 import CheckCircle from 'lucide-vue-next/dist/esm/icons/circle-check.js';

@@ -47,9 +47,6 @@ class MediaFolderController extends BaseApiController
             // Get tree structure if requested
             if ($request->has('tree') && $request->boolean('tree')) {
                 // Apply same scope to tree root finding
-                // We need to apply the query constraint to the root query
-                // Note: The original code used MediaFolder::whereNull('parent_id') direct call.
-                // We must use the $query builder which has our scopes.
                 $foldersQuery = $query->clone()->whereNull('parent_id');
 
                 $folders = $foldersQuery->with(['children' => function ($q) use ($request, $user) {

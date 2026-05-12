@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import MenuTreeRecursive from './MenuTreeRecursive.vue';
-import type { MenuItem } from '@/types/cms/menu';
+import type { MenuItem } from '@/modules/Cms/types/menu';
 
 defineProps<{
     items: MenuItem[];

@@ -11,13 +11,13 @@
           </th>
           <th class="px-4 py-4 text-left w-12" />
           <th class="px-4 py-4 text-left uppercase tracking-widest text-[10px]">
-            {{ $t('features.file_manager.sort.name') }}
+            {{ $t('modules.core.file_manager.sort.name') }}
           </th>
           <th class="px-4 py-4 text-left uppercase tracking-widest text-[10px]">
-            {{ $t('features.file_manager.sort.size') }}
+            {{ $t('modules.core.file_manager.sort.size') }}
           </th>
           <th class="px-4 py-4 text-left uppercase tracking-widest text-[10px]">
-            {{ $t('features.file_manager.sort.date') }}
+            {{ $t('modules.core.file_manager.sort.date') }}
           </th>
           <th class="px-4 py-4 text-right w-24" />
         </tr>
@@ -161,11 +161,11 @@ import {
     Button, 
     ContextMenu, 
     ContextMenuTrigger
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import FileContextMenu from './FileContextMenu.vue';
 import FileActionDropdown from './FileActionDropdown.vue';
-import type { FileItem, FolderItem } from '@/types/cms/file-manager';
-import { FileManagerKey } from '@/keys';
+import type { FileItem, FolderItem } from '@/modules/Cms/types/file-manager';
+import { FileManagerKey } from '@/core/keys';
 
 defineEmits<{
     (e: 'preview', item: FileItem): void;

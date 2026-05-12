@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { logger } from '@/utils/logger';
-import { parseResponse, parseSingleResponse } from '@/utils/responseParser';
+import { logger } from '@/shared/utils/logger';
+import { parseResponse, parseSingleResponse } from '@/shared/utils/responseParser';
 import AcademicService from '../services/AcademicService';
-import type { AcademicYear, Semester, Subject, StudyGroup, Schedule, Journal, AcademicOverview } from '@/types';
+import type { AcademicYear, Semester, Subject, StudyGroup, Schedule, Journal, AcademicOverview } from '@/modules/School/types';
 
 interface AcademicState {
     overview: AcademicOverview | null;

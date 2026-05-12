@@ -5,10 +5,10 @@ namespace Modules\Core\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Modules\Cms\Models\Content;
 use Modules\Core\Models\Media;
 use Modules\Core\Models\AnalyticsVisit;
 use Modules\Core\Models\User;
+use Modules\Core\Services\DashboardRegistry;
 
 /**
  * @OA\Tag(name="Dashboard")
@@ -25,23 +25,21 @@ class DashboardController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function admin(Request $request): \Illuminate\Http\JsonResponse
+    public function admin(Request $request, DashboardRegistry $registry): \Illuminate\Http\JsonResponse
     {
         $daysRaw = $request->input('days', 30);
         $days = is_numeric($daysRaw) ? max(1, min(366, (int) $daysRaw)) : 30;
 
         $data = [
-            'stats' => [
-                'contents' => $this->getContentStats(),
+            'stats' => array_merge([
                 'media' => $this->getMediaStats(),
                 'users' => $this->getUserStats(),
-            ],
-            'charts' => [
-                'contentByStatus' => $this->getContentByStatus(),
+            ], $registry->getAllStats()),
+            'charts' => array_merge([
                 'mediaByType' => $this->getMediaByType(),
                 'contentTraffic' => $this->getSiteTrafficSeries($days),
                 'userActivity' => $this->getUserActivity($days),
-            ],
+            ], $registry->getAllCharts()),
         ];
 
         return $this->success($data);
@@ -59,7 +57,7 @@ class DashboardController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function creator(Request $request): \Illuminate\Http\JsonResponse
+    public function creator(Request $request, DashboardRegistry $registry): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\Core\Models\User|null $user */
@@ -73,17 +71,14 @@ class DashboardController extends BaseApiController
 
         $cacheKey = "dashboard_creator_data_{$userId}_{$days}";
 
-        $data = Cache::remember($cacheKey, 300, function () use ($userId, $days) {
+        $data = Cache::remember($cacheKey, 300, function () use ($userId, $registry) {
             return [
-                'stats' => [
-                    'myContents' => $this->getMyContentStats($userId),
+                'stats' => array_merge([
                     'myMedia' => $this->getMyMediaStats($userId),
-                ],
-                'charts' => [
-                    'myContentByStatus' => $this->getMyContentByStatus($userId),
-                    'contentTraffic' => $this->getMyContentTraffic($userId, $days),
-                ],
-                'topContent' => $this->getMyTopContent($userId),
+                ], $registry->getAllStats()), // Individual modules should handle userId filtering in their providers if needed
+                'charts' => array_merge([
+                    'mediaTraffic' => [], // Placeholder for media specific traffic if any
+                ], $registry->getAllCharts()),
             ];
         });
 
@@ -100,33 +95,14 @@ class DashboardController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function viewer(Request $request): \Illuminate\Http\JsonResponse
+    public function viewer(Request $request, DashboardRegistry $registry): \Illuminate\Http\JsonResponse
     {
-        $data = Cache::remember('dashboard_viewer_data', 600, function () {
-            return Content::where('status', 'published')
-                ->latest()
-                ->take(5)
-                ->select('id', 'title', 'slug', 'created_at')
-                ->get();
-        });
-
-        return $this->success($data);
+        // Viewer dashboard data is primarily module-specific (e.g. Latest Content)
+        return $this->success($registry->getAllStats()['viewer'] ?? []);
     }
 
-    // Helper methods
-    /**
-     * @return array{total: int, published: int, draft: int, pending: int}
-     */
-    private function getContentStats(): array
-    {
-        return [
-            'total' => Content::count(),
-            'published' => Content::where('status', 'published')->count(),
-            'draft' => Content::where('status', 'draft')->count(),
-            'pending' => Content::where('status', 'pending')->count(),
-        ];
-    }
-
+    // Helper methods (Core Only)
+    
     /**
      * @return array{total: int, images: int, videos: int, documents: int}
      */
@@ -150,16 +126,6 @@ class DashboardController extends BaseApiController
             'total' => User::count(),
             'active' => User::where('created_at', '>=', now()->subDays(30))->count(),
         ];
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\Content>
-     */
-    private function getContentByStatus(): \Illuminate\Support\Collection
-    {
-        return Content::select('status', DB::raw('count(*) as count'))
-            ->groupBy('status')
-            ->get();
     }
 
     /**
@@ -226,19 +192,6 @@ class DashboardController extends BaseApiController
     }
 
     /**
-     * @return array{total: int, published: int, draft: int, pending: int}
-     */
-    private function getMyContentStats(int $userId): array
-    {
-        return [
-            'total' => (int) Content::where('author_id', $userId)->count(),
-            'published' => (int) Content::where('author_id', $userId)->where('status', 'published')->count(),
-            'draft' => (int) Content::where('author_id', $userId)->where('status', 'draft')->count(),
-            'pending' => (int) Content::where('author_id', $userId)->where('status', 'pending')->count(),
-        ];
-    }
-
-    /**
      * @return array{total: int, size: float|int}
      */
     private function getMyMediaStats(int $userId): array
@@ -247,63 +200,5 @@ class DashboardController extends BaseApiController
             'total' => Media::where('author_id', $userId)->count(),
             'size' => (float) Media::where('author_id', $userId)->sum('size'),
         ];
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\Content>
-     */
-    private function getMyContentByStatus(int $userId): \Illuminate\Support\Collection
-    {
-        return Content::where('author_id', $userId)
-            ->select('status', DB::raw('count(*) as count'))
-            ->groupBy('status')
-            ->get();
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\Content>
-     */
-    private function getMyTopContent(int $userId): \Illuminate\Support\Collection
-    {
-        return Content::where('author_id', $userId)
-            ->orderBy('views', 'desc')
-            ->take(5)
-            ->select('id', 'title', 'slug', 'views', 'status', 'created_at', 'type')
-            ->get();
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Modules\Core\Models\AnalyticsVisit>|array<empty, empty>
-     */
-    private function getMyContentTraffic(int $userId, int $days = 30): \Illuminate\Support\Collection|array
-    {
-        $slugs = Content::where('author_id', $userId)->pluck('slug')->toArray();
-
-        if (empty($slugs)) {
-            return [];
-        }
-
-        // Optimize: Use whereIn if URLs are simple slugs, or optimized LIKE if they are paths.
-        // For CMS, URLs usually contain the slug at the end or as a segment.
-        // We'll use a more efficient approach by limiting the strings we search for.
-        $exactUrls = array_map(function ($s) {
-            $sStr = is_scalar($s) ? (string) $s : '';
-
-            return "/{$sStr}";
-        }, $slugs);
-
-        return AnalyticsVisit::where(function ($query) use ($exactUrls, $slugs) {
-            $query->whereIn('url', $exactUrls);
-            foreach ($slugs as $slug) {
-                $slugStr = is_scalar($slug) ? (string) $slug : '';
-                // Keep the LIKE for paths like /articles/slug-name
-                $query->orWhere('url', 'like', "%/{$slugStr}%");
-            }
-        })
-            ->where('visited_at', '>=', now()->subDays($days))
-            ->select(DB::raw('CAST(visited_at AS date) as date'), DB::raw('count(*) as count'))
-            ->groupBy(DB::raw('CAST(visited_at AS date)'))
-            ->orderBy('date')
-            ->get();
     }
 }

@@ -12,6 +12,11 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class MenuController extends BaseApiController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['getByLocation']);
+        $this->middleware('permission:manage menus')->except(['getByLocation']);
+    }
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $query = Menu::withCount('allItems');

@@ -5,14 +5,14 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('common.labels.edit') || 'Edit' : $t('features.school.extensions.tabs.alumni') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('common.labels.edit') || 'Edit' : $t('modules.school.extensions.tabs.alumni') }}</DialogTitle>
       </DialogHeader>
       <form
         class="space-y-4 py-4"
         @submit.prevent="handleSubmit"
       >
         <div class="space-y-2">
-          <Label>{{ $t('common.labels.student') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.labels.student') }} <span class="text-destructive">*</span></Label>
           <Select
             v-model="form.student_id"
             required
@@ -30,7 +30,7 @@
           </Select>
         </div>
         <div class="space-y-2">
-          <Label for="year">{{ $t('features.school.extensions.labels.graduationYear') }} <span class="text-destructive">*</span></Label>
+          <Label for="year">{{ $t('modules.school.extensions.labels.graduationYear') }} <span class="text-destructive">*</span></Label>
           <Input
             id="year"
             v-model="form.graduation_year"
@@ -39,7 +39,7 @@
           />
         </div>
         <div class="space-y-2">
-          <Label for="activity">{{ $t('features.school.extensions.labels.currentActivity') }}</Label>
+          <Label for="activity">{{ $t('modules.school.extensions.labels.currentActivity') }}</Label>
           <Input
             id="activity"
             v-model="form.current_activity"
@@ -47,7 +47,7 @@
           />
         </div>
         <div class="space-y-2">
-          <Label for="inst">{{ $t('features.school.extensions.labels.companyName') }} / Campus</Label>
+          <Label for="inst">{{ $t('modules.school.extensions.labels.companyName') }} / Campus</Label>
           <Input
             id="inst"
             v-model="form.institution_name"
@@ -76,9 +76,9 @@ import { ref, watch, onMounted } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const props = defineProps<{
   open: boolean;

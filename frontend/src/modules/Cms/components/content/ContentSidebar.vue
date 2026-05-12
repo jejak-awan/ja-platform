@@ -18,7 +18,7 @@
             <div class="p-1.5 rounded-md bg-success/10 text-success">
               <FileCheck class="w-3.5 h-3.5" />
             </div>
-            <span class="text-sm font-semibold text-foreground">{{ $t('features.content.form.publishing') }}</span>
+            <span class="text-sm font-semibold text-foreground">{{ $t('modules.cms.content.form.publishing') }}</span>
           </div>
           <ChevronDown 
             class="w-4 h-4 text-muted-foreground transition-transform duration-200"
@@ -30,7 +30,7 @@
           class="border-t border-border/5 p-5 space-y-5"
         >
           <div class="space-y-1.5">
-            <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.form.status') }}</Label>
+            <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.form.status') }}</Label>
             <Select
               :model-value="modelValue.status"
               @update:model-value="(val: string) => updateField('status', val)"
@@ -40,13 +40,13 @@
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="draft">
-                  {{ $t('features.content.status.draft') }}
+                  {{ $t('modules.cms.content.status.draft') }}
                 </SelectItem>
                 <SelectItem value="published">
-                  {{ $t('features.content.status.published') }}
+                  {{ $t('modules.cms.content.status.published') }}
                 </SelectItem>
                 <SelectItem value="archived">
-                  {{ $t('features.content.status.archived') }}
+                  {{ $t('modules.cms.content.status.archived') }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -57,7 +57,7 @@
             class="space-y-1.5 animate-in fade-in slide-in-from-top-1"
           >
             <div class="flex items-center justify-between gap-2">
-              <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.form.publishDate') }}</Label>
+              <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.form.publishDate') }}</Label>
               <Button
                 variant="link"
                 size="sm"
@@ -76,20 +76,20 @@
           </div>
 
           <div class="space-y-1.5">
-            <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.form.slug') }}</Label>
+            <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.form.slug') }}</Label>
             <div class="flex items-center gap-1 group">
               <span class="text-[10px] text-muted-foreground font-mono select-none px-1">/</span>
               <Input
                 :model-value="modelValue.slug"
                 class="text-xs font-mono h-9"
-                :placeholder="$t('features.content.form.slugPlaceholder')"
+                :placeholder="$t('modules.cms.content.form.slugPlaceholder')"
                 @update:model-value="(val) => updateField('slug', val as string)"
               />
             </div>
           </div>
 
           <div class="space-y-1.5">
-            <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.form.type') }}</Label>
+            <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.form.type') }}</Label>
             <Select
               :model-value="modelValue.type"
               @update:model-value="(val: string) => updateField('type', val)"
@@ -113,9 +113,9 @@
 
           <div class="flex items-center justify-between border border-border/40 rounded-lg p-3 bg-muted/20">
             <div class="space-y-0.5">
-              <Label class="text-xs font-medium leading-none">{{ $t('features.content.form.featured') }}</Label>
+              <Label class="text-xs font-medium leading-none">{{ $t('modules.cms.content.form.featured') }}</Label>
               <p class="text-[10px] text-muted-foreground leading-tight">
-                {{ $t('features.content.form.featuredDesc') }}
+                {{ $t('modules.cms.content.form.featuredDesc') }}
               </p>
             </div>
             <Switch
@@ -139,7 +139,7 @@
             </div>
             <div class="flex-1">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-semibold text-foreground">{{ t('features.content.form.sidebar.addToMenu') }}</span>
+                <span class="text-xs font-semibold text-foreground">{{ t('modules.cms.content.form.sidebar.addToMenu') }}</span>
                 <Badge
                   v-if="modelValue.menu_item?.add_to_menu"
                   variant="secondary"
@@ -161,9 +161,9 @@
         >
           <div class="flex items-center justify-between border border-border/40 rounded-lg p-3 bg-muted/20">
             <div class="space-y-0.5">
-              <Label class="text-xs font-medium leading-none">{{ $t('features.menus.actions.addToMenu') }}</Label>
+              <Label class="text-xs font-medium leading-none">{{ $t('modules.cms.menus.actions.addToMenu') }}</Label>
               <p class="text-[10px] text-muted-foreground leading-tight">
-                {{ $t('features.content.form.sidebar.addToMenuDesc') }}
+                {{ $t('modules.cms.content.form.sidebar.addToMenuDesc') }}
               </p>
             </div>
             <Switch
@@ -177,13 +177,13 @@
             class="space-y-4 animate-in fade-in slide-in-from-top-1"
           >
             <div class="space-y-1.5">
-              <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.menus.form.selectMenu') }}</Label>
+              <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.menus.form.selectMenu') }}</Label>
               <Select
                 :model-value="modelValue.menu_item.menu_id ? modelValue.menu_item.menu_id.toString() : ''"
                 @update:model-value="handleMenuChange"
               >
                 <SelectTrigger class="w-full h-9">
-                  <SelectValue :placeholder="$t('features.menus.form.selectMenu')" />
+                  <SelectValue :placeholder="$t('modules.cms.menus.form.selectMenu')" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem
@@ -198,18 +198,18 @@
             </div>
 
             <div class="space-y-1.5">
-              <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.menus.form.parentItem') }}</Label>
+              <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.menus.form.parentItem') }}</Label>
               <Select
                 :model-value="modelValue.menu_item.parent_id ? modelValue.menu_item.parent_id.toString() : 'root'"
                 :disabled="loadingParentItems"
                 @update:model-value="(val: string) => updateMenuField('parent_id', val === 'root' ? null : parseInt(val))"
               >
                 <SelectTrigger class="w-full h-9">
-                  <SelectValue :placeholder="loadingParentItems ? $t('common.messages.loading.default') : $t('features.menus.form.rootItem')" />
+                  <SelectValue :placeholder="loadingParentItems ? $t('common.messages.loading.default') : $t('modules.cms.menus.form.rootItem')" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="root">
-                    {{ $t('features.menus.form.rootItem') }}
+                    {{ $t('modules.cms.menus.form.rootItem') }}
                   </SelectItem>
                   <SelectItem
                     v-for="item in menuParentItems"
@@ -223,11 +223,11 @@
             </div>
 
             <div class="space-y-1.5">
-              <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.menus.form.label') }}</Label>
+              <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.menus.form.label') }}</Label>
               <Input
                 :model-value="modelValue.menu_item.title"
                 class="text-xs h-9"
-                :placeholder="$t('features.menus.form.labelPlaceholder')"
+                :placeholder="$t('modules.cms.menus.form.labelPlaceholder')"
                 @update:model-value="(val) => updateMenuField('title', val as string)"
               />
             </div>
@@ -246,7 +246,7 @@
             <div class="p-1.5 rounded-md bg-info/10 text-info">
               <Tags class="w-3.5 h-3.5" />
             </div>
-            <span class="text-sm font-semibold text-foreground">{{ $t('features.content.form.taxonomy') }}</span>
+            <span class="text-sm font-semibold text-foreground">{{ $t('modules.cms.content.form.taxonomy') }}</span>
           </div>
           <ChevronDown 
             class="w-4 h-4 text-muted-foreground transition-transform duration-200"
@@ -259,13 +259,13 @@
         >
           <!-- Category -->
           <div class="space-y-1.5">
-            <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.form.category') }}</Label>
+            <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.form.category') }}</Label>
             <Select
               :model-value="modelValue.category_id ? modelValue.category_id.toString() : ''"
               @update:model-value="(val: string) => updateField('category_id', val ? parseInt(val) : null)"
             >
               <SelectTrigger class="w-full h-9">
-                <SelectValue :placeholder="$t('features.content.form.selectCategory')" />
+                <SelectValue :placeholder="$t('modules.cms.content.form.selectCategory')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem
@@ -281,7 +281,7 @@
 
           <!-- Tags -->
           <div class="space-y-2">
-            <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.form.tags') }}</Label>
+            <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.form.tags') }}</Label>
             <div class="flex flex-wrap gap-1.5 mb-2">
               <Badge
                 v-for="tag in selectedTags"
@@ -305,7 +305,7 @@
               <Input 
                 :model-value="tagInput"
                 class="w-full text-xs h-9"
-                :placeholder="$t('features.content.form.tagInputPlaceholder')"
+                :placeholder="$t('modules.cms.content.form.tagInputPlaceholder')"
                 @input="handleTagInput"
                 @keydown.enter.prevent="handleTagEnter"
                 @focus="showTagSuggestions = true"
@@ -327,7 +327,7 @@
               </div>
             </div>
             <p class="text-[10px] text-muted-foreground/60 italic">
-              {{ $t('features.content.form.tagInputHint') }}
+              {{ $t('modules.cms.content.form.tagInputHint') }}
             </p>
           </div>
         </div>
@@ -344,7 +344,7 @@
             <div class="p-1.5 rounded-md bg-primary/10 text-primary">
               <ImageIcon class="w-3.5 h-3.5" />
             </div>
-            <span class="text-sm font-semibold text-foreground">{{ $t('features.content.form.featuredImage') }}</span>
+            <span class="text-sm font-semibold text-foreground">{{ $t('modules.cms.content.form.featuredImage') }}</span>
           </div>
           <div class="flex items-center gap-2">
             <div
@@ -425,7 +425,7 @@
             <div class="p-1.5 rounded-md bg-warning/10 text-warning">
               <FileText class="w-3.5 h-3.5" />
             </div>
-            <span class="text-sm font-semibold text-foreground">{{ $t('features.content.form.excerpt') }}</span>
+            <span class="text-sm font-semibold text-foreground">{{ $t('modules.cms.content.form.excerpt') }}</span>
           </div>
           <ChevronDown 
             class="w-4 h-4 text-muted-foreground transition-transform duration-200"
@@ -437,7 +437,7 @@
           class="border-t border-border/5 p-5"
         >
           <div class="space-y-1.5 mb-3">
-            <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.form.intro') }}</Label>
+            <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.form.intro') }}</Label>
             <div class="rounded-md border border-border/50 overflow-hidden bg-background">
               <MarkdownEditor
                 :model-value="modelValue.intro || ''"
@@ -463,7 +463,7 @@
             :model-value="modelValue.excerpt"
             rows="4"
             class="resize-none text-sm bg-muted/10"
-            :placeholder="$t('features.content.form.excerptPlaceholder')"
+            :placeholder="$t('modules.cms.content.form.excerptPlaceholder')"
             @update:model-value="(val) => updateField('excerpt', val as string)"
           />
         </div>
@@ -482,7 +482,7 @@
             </div>
             <div class="flex-1">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-semibold text-foreground">{{ t('features.content.form.sidebar.comments') }}</span>
+                <span class="text-xs font-semibold text-foreground">{{ t('modules.cms.content.form.sidebar.comments') }}</span>
                 <Badge
                   v-if="!modelValue.comment_status"
                   variant="secondary"
@@ -504,9 +504,9 @@
         >
           <div class="flex items-center justify-between border border-border/40 rounded-lg p-3 bg-muted/20">
             <div class="space-y-0.5">
-              <Label class="text-xs font-medium leading-none">{{ $t('features.content.form.allowComments') }}</Label>
+              <Label class="text-xs font-medium leading-none">{{ $t('modules.cms.content.form.allowComments') }}</Label>
               <p class="text-[10px] text-muted-foreground leading-tight">
-                {{ $t('features.content.form.allowCommentsDesc') }}
+                {{ $t('modules.cms.content.form.allowCommentsDesc') }}
               </p>
             </div>
             <Switch
@@ -528,7 +528,7 @@
             <div class="p-1.5 rounded-md bg-destructive/10 text-destructive">
               <Search class="w-3.5 h-3.5" />
             </div>
-            <span class="text-sm font-semibold text-foreground">{{ $t('features.content.form.seoSettings') }}</span>
+            <span class="text-sm font-semibold text-foreground">{{ $t('modules.cms.content.form.seoSettings') }}</span>
           </div>
           <ChevronDown 
             class="w-4 h-4 text-muted-foreground transition-transform duration-200"
@@ -540,7 +540,7 @@
           class="border-t border-border/5 p-5 space-y-5"
         >
           <div class="space-y-1.5">
-            <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.seo.metaTitle') }}</Label>
+            <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.seo.metaTitle') }}</Label>
             <Input
               :model-value="modelValue.meta_title"
               class="text-xs h-9"
@@ -548,7 +548,7 @@
             />
           </div>
           <div class="space-y-1.5">
-            <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.seo.metaDescription') }}</Label>
+            <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.seo.metaDescription') }}</Label>
             <Textarea
               :model-value="modelValue.meta_description"
               rows="3"
@@ -557,19 +557,19 @@
             />
           </div>
           <div class="space-y-1.5">
-            <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.form.metaKeywords') }}</Label>
+            <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.form.metaKeywords') }}</Label>
             <Textarea
               :model-value="modelValue.meta_keywords"
               rows="2"
               class="resize-none text-xs bg-muted/10"
-              :placeholder="$t('features.content.form.keywordsPlaceholder')"
+              :placeholder="$t('modules.cms.content.form.keywordsPlaceholder')"
               @update:model-value="(val) => updateField('meta_keywords', val as string)"
             />
           </div>
           <div class="space-y-1.5">
-            <Label class="text-xs font-medium text-muted-foreground">{{ $t('features.content.form.ogImage') }}</Label>
+            <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.form.ogImage') }}</Label>
             <MediaPicker
-              :label="$t('features.content.form.selectOgImage')"
+              :label="$t('modules.cms.content.form.selectOgImage')"
               :constraints="{
                 allowedExtensions: settings.allowed_image_types ? String(settings.allowed_image_types).split(',').map(s => s.trim()) : ['jpg', 'jpeg', 'png', 'webp'],
                 minWidth: 1200,
@@ -598,7 +598,7 @@
                   class="w-full text-xs h-9"
                   @click="open"
                 >
-                  <ImageIcon class="w-3 h-3 mr-2" /> {{ $t('features.content.form.selectOgImage') }}
+                  <ImageIcon class="w-3 h-3 mr-2" /> {{ $t('modules.cms.content.form.selectOgImage') }}
                 </Button>
               </template>
             </MediaPicker>
@@ -610,12 +610,12 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import { useCoreStore } from '@/modules/Core/stores/core';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import {
     Label,
     Input,
@@ -628,7 +628,7 @@ import {
     Badge,
     Button,
     Switch
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js';
 import FileCheck from 'lucide-vue-next/dist/esm/icons/file-check.js';
@@ -639,9 +639,9 @@ import ImageIcon from 'lucide-vue-next/dist/esm/icons/image.js';
 import MenuSquare from 'lucide-vue-next/dist/esm/icons/square-menu.js';
 import MessageSquare from 'lucide-vue-next/dist/esm/icons/message-square.js';
 import FeaturedImage from '@/modules/Cms/components/content/FeaturedImage.vue';
-import MediaPicker from '@/components/shared/media/MediaPicker.vue';
-import MarkdownEditor from '@/components/shared/editor/MarkdownEditor.vue';
-import type { ContentForm, Category, Tag, MenuItem, Menu } from '@/types/cms/cms';
+import MediaPicker from '@/shared/components/media/MediaPicker.vue';
+import MarkdownEditor from '@/shared/components/editor/MarkdownEditor.vue';
+import type { ContentForm, Category, Tag, MenuItem, Menu } from '@/modules/Cms/types/cms';
 
 const coreStore = useCoreStore();
 const { settings } = storeToRefs(coreStore);

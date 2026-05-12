@@ -64,6 +64,22 @@ class SchoolRoleSeeder extends Seeder
             'view staff', 'view visitors', 'manage visitors'
         ]);
 
+        // --- SPECIALIZED UNIT ROLES (Level 9 RBAC tests) ---
+        // Sarpras: logistics/inventory only (must NOT access operations routes)
+        $adminSarpras = Role::findOrCreate('admin-sarpras', 'web');
+        $adminSarpras->syncPermissions([
+            'view sarpras', 'manage sarpras',
+            'manage inventory', 'manage logistics',
+        ]);
+
+        // Kesiswaan: student affairs + attendance (must NOT access visitors)
+        $adminKesiswaan = Role::findOrCreate('admin-kesiswaan', 'web');
+        $adminKesiswaan->syncPermissions([
+            'view students', 'manage students',
+            'view attendance', 'manage attendance',
+            'view student affairs', 'manage student affairs',
+        ]);
+
         // --- ACADEMIC & STAFF LEVEL ---
         $guru = Role::findOrCreate('guru', 'web');
         $guru->syncPermissions(['grade assignments', 'input journal', 'view students', 'view attendance', 'manage attendance']);

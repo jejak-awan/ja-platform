@@ -13,7 +13,7 @@
           </router-link>
         </Button>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ t('features.system.logs.title') }}
+          {{ t('modules.core.system.logs.title') }}
         </h1>
       </div>
       <div class="flex items-center space-x-2">
@@ -23,7 +23,7 @@
           variant-type="outline"
           @click="clearLogs"
         >
-          {{ clearing ? t('features.system.logs.clearing') : t('features.system.logs.clear') }}
+          {{ clearing ? t('modules.core.system.logs.clearing') : t('modules.core.system.logs.clear') }}
         </Button>
       </div>
     </div>
@@ -34,7 +34,7 @@
         <div class="bg-card border border-border rounded-lg">
           <div class="px-6 py-4 border-b border-border">
             <h2 class="text-lg font-semibold text-foreground">
-              {{ t('features.system.logs.files') }}
+              {{ t('modules.core.system.logs.files') }}
             </h2>
           </div>
           <div class="divide-y divide-border">
@@ -74,7 +74,7 @@
         <div class="bg-card border border-border rounded-lg">
           <div class="px-6 py-4 border-b border-border flex items-center justify-between">
             <h2 class="text-lg font-semibold text-foreground">
-              {{ selectedLogFile ? selectedLogFile.name : t('features.system.logs.select') }}
+              {{ selectedLogFile ? selectedLogFile.name : t('modules.core.system.logs.select') }}
             </h2>
             <div
               v-if="selectedLogFile"
@@ -83,7 +83,7 @@
               <Input
                 v-model="logSearch"
                 type="text"
-                :placeholder="t('features.system.logs.search')"
+                :placeholder="t('modules.core.system.logs.search')"
                 class="h-8 w-48"
               />
               <Button
@@ -91,7 +91,7 @@
                 size="sm"
                 @click="refreshLog"
               >
-                {{ t('features.system.logs.refresh') }}
+                {{ t('modules.core.system.logs.refresh') }}
               </Button>
             </div>
           </div>
@@ -102,7 +102,7 @@
             >
               <FileText class="mx-auto h-12 w-12 text-muted-foreground" />
               <p class="mt-4 text-muted-foreground">
-                {{ t('features.system.logs.empty') }}
+                {{ t('modules.core.system.logs.empty') }}
               </p>
             </div>
             <div
@@ -110,7 +110,7 @@
               class="text-center py-12"
             >
               <p class="text-muted-foreground">
-                {{ t('features.system.logs.loading') }}
+                {{ t('modules.core.system.logs.loading') }}
               </p>
             </div>
             <div
@@ -131,15 +131,15 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
-import { parseResponse, ensureArray, parseSingleResponse } from '@/utils/responseParser';
-import { Button, Input } from '@/components/ui';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { parseResponse, ensureArray, parseSingleResponse } from '@/shared/utils/responseParser';
+import { Button, Input } from '@/shared/components/ui';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import Download from 'lucide-vue-next/dist/esm/icons/download.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
@@ -204,7 +204,7 @@ const selectLogFile = async (logFile: LogFile) : Promise<void> => {
         logContent.value = data.content || '';
     } catch (error: unknown) {
         logger.error('Failed to fetch log content:', error);
-        logContent.value = t('features.system.logs.failed_load') || 'Failed to load log content';
+        logContent.value = t('modules.core.system.logs.failed_load') || 'Failed to load log content';
     } finally {
         loadingLog.value = false;
     }
@@ -237,8 +237,8 @@ const downloadLog = async (logFile: LogFile) : Promise<void> => {
 
 const clearLogs = async () : Promise<void> => {
     const confirmed = await confirm({
-        title: t('features.system.logs.actions.clear'),
-        message: t('features.system.logs.confirm.clear') || 'Are you sure you want to clear all logs?',
+        title: t('modules.core.system.logs.actions.clear'),
+        message: t('modules.core.system.logs.confirm.clear') || 'Are you sure you want to clear all logs?',
         variant: 'danger',
         confirmText: t('common.actions.clear'),
     });
@@ -250,7 +250,7 @@ const clearLogs = async () : Promise<void> => {
         await api.post('admin/core/system-journal/clear', {
             reason: `Manual clear from system journal at ${new Date().toISOString()}`,
         });
-        toast.success.action(t('features.system.logs.messages.cleared'));
+        toast.success.action(t('modules.core.system.logs.messages.cleared'));
         logContent.value = '';
         await fetchLogFiles();
         selectedLogFile.value = null;

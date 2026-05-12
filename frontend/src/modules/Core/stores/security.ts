@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { AxiosResponse } from 'axios'
-import { logger } from '@/utils/logger'
-import i18n from '@/i18n'
+import { logger } from '@/shared/utils/logger'
+import i18n from '@/core/i18n'
 import type { Composer } from 'vue-i18n'
-import { getCanvasFingerprint } from '@/utils/fingerprint'
+import { getCanvasFingerprint } from '@/shared/utils/fingerprint'
 
 const composer = i18n.global as unknown as Composer
 const t = composer.t.bind(composer)

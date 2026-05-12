@@ -1,10 +1,10 @@
-import api from '@/services/api';
+import api from '@/core/api/client';
 import type { AxiosResponse } from 'axios';
 import type { 
     Asset, InventoryItem, TransportRoute, 
     HostelBlock, HostelRoom, HostelBed, 
     TransportVehicle, Vacancy, Application 
-} from '@/types';
+} from '@/modules/School/types';
 
 export const LogisticsService = {
     async getSarprasData(type: string, params: Record<string, any> = {}): Promise<AxiosResponse<any>> {

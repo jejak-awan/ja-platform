@@ -112,10 +112,10 @@ import { ref, watch } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Textarea, Input, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { HRService } from '@/modules/School/services/HRService';
-import { parseResponse } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
 
 const props = defineProps<{ open: boolean }>();
 const emit = defineEmits(['update:open', 'save']);

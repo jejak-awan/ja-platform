@@ -110,12 +110,12 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import { parseResponse, parseSingleResponse } from '@/utils/responseParser';
+import { parseResponse, parseSingleResponse } from '@/shared/utils/responseParser';
 import { 
     Card, 
     CardHeader, 
@@ -124,7 +124,7 @@ import {
     CardFooter, 
     Button, 
     Badge 
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 import Zap from 'lucide-vue-next/dist/esm/icons/zap.js';

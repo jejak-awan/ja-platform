@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { logger } from '@/utils/logger';
-import { parseResponse } from '@/utils/responseParser';
+import { logger } from '@/shared/utils/logger';
+import { parseResponse } from '@/shared/utils/responseParser';
 import AdmissionService from '../services/AdmissionService';
 
 interface AdmissionState {

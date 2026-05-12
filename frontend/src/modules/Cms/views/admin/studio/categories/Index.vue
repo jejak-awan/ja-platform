@@ -7,10 +7,10 @@
     >
       <div>
         <h1 class="text-3xl font-bold tracking-tight text-foreground">
-          {{ $t('features.categories.title') }}
+          {{ $t('modules.cms.categories.title') }}
         </h1>
         <p class="text-muted-foreground mt-2">
-          {{ $t('features.categories.description') }}
+          {{ $t('modules.cms.categories.description') }}
         </p>
       </div>
       <div class="flex space-x-3">
@@ -19,7 +19,7 @@
           @click="openCreateModal"
         >
           <Plus class="w-4 h-4 mr-2" />
-          {{ $t('features.categories.createNew') }}
+          {{ $t('modules.cms.categories.createNew') }}
         </Button>
       </div>
     </div>
@@ -35,7 +35,7 @@
               <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 v-model="search"
-                :placeholder="$t('features.categories.search')"
+                :placeholder="$t('modules.cms.categories.search')"
                 class="pl-9"
               />
             </div>
@@ -53,10 +53,10 @@
                   {{ $t('common.labels.all') }}
                 </SelectItem>
                 <SelectItem value="active">
-                  {{ $t('features.categories.status.active') }}
+                  {{ $t('modules.cms.categories.status.active') }}
                 </SelectItem>
                 <SelectItem value="inactive">
-                  {{ $t('features.categories.status.inactive') }}
+                  {{ $t('modules.cms.categories.status.inactive') }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -91,7 +91,7 @@
               @click="openCreateModal"
             >
               <Plus class="w-4 h-4 mr-1" />
-              {{ $t('features.categories.createNew') }}
+              {{ $t('modules.cms.categories.createNew') }}
             </Button>
           </div>
         </div>
@@ -101,7 +101,7 @@
           <DataTable
             :table="table"
             :loading="loading"
-            :empty-message="$t('features.categories.empty')"
+            :empty-message="$t('modules.cms.categories.empty')"
           />
         </div>
       </CardContent>
@@ -128,17 +128,17 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Edit2 from 'lucide-vue-next/dist/esm/icons/pen-line.js';
 import ChevronRight from 'lucide-vue-next/dist/esm/icons/chevron-right.js';
 import Filter from 'lucide-vue-next/dist/esm/icons/list-filter.js';
-import { debounce } from '@/utils/debounce';
+import { debounce } from '@/shared/utils/debounce';
 import CategoryFormModal from './CategoryFormModal.vue';
 
 // UI Components
@@ -156,7 +156,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { h } from 'vue';
 import { 
     useVueTable, 
@@ -169,10 +169,10 @@ import {
 
 // Stores & Composables
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import { useConfirm } from '@/composables/useConfirm';
-import { useToast } from '@/composables/useToast';
-import type { Category } from '@/types/cms/cms';
-import { parseResponse, type PaginationData } from '@/utils/responseParser';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { useToast } from '@/shared/composables/useToast';
+import type { Category } from '@/modules/Cms/types/cms';
+import { parseResponse, type PaginationData } from '@/shared/utils/responseParser';
 
 interface FlatCategory extends Category {
     _depth: number;
@@ -279,7 +279,7 @@ const columns = [
         size: 40,
     }),
     columnHelper.accessor('name', {
-        header: t('features.categories.table.name'),
+        header: t('modules.cms.categories.table.name'),
         cell: ({ row }) => {
             const category = row.original;
             return h('div', {
@@ -307,18 +307,18 @@ const columns = [
         }
     }),
     columnHelper.accessor('slug', {
-        header: t('features.categories.table.slug'),
+        header: t('modules.cms.categories.table.slug'),
         cell: ({ row }) => h('span', { class: 'text-muted-foreground font-mono text-xs' }, row.original.slug)
     }),
     columnHelper.accessor('is_active', {
-        header: t('features.categories.table.status'),
+        header: t('modules.cms.categories.table.status'),
         cell: ({ row }) => h(Badge, {
             variant: row.original.is_active ? 'default' : 'secondary'
-        }, row.original.is_active ? t('features.categories.status.active') : t('features.categories.status.inactive'))
+        }, row.original.is_active ? t('modules.cms.categories.status.active') : t('modules.cms.categories.status.inactive'))
     }),
     columnHelper.display({
         id: 'actions',
-        header: () => h('div', { class: 'text-center' }, t('features.categories.table.actions')),
+        header: () => h('div', { class: 'text-center' }, t('modules.cms.categories.table.actions')),
         cell: ({ row }) => h('div', { class: 'flex justify-center gap-1' }, [
             authStore.hasPermission('edit categories') && h(Button, {
                 variant: 'ghost',
@@ -462,8 +462,8 @@ const handleModalSuccess = () => {
 
 const deleteCategory = async (category: Category) => {
     const confirmed = await confirm({
-        title: t('features.categories.actions.delete'),
-        message: t('features.categories.messages.deleteConfirm', { name: category.name }),
+        title: t('modules.cms.categories.actions.delete'),
+        message: t('modules.cms.categories.messages.deleteConfirm', { name: category.name }),
         variant: 'danger',
         confirmText: t('common.actions.delete'),
     });
@@ -472,10 +472,10 @@ const deleteCategory = async (category: Category) => {
         try {
             await api.delete(`/admin/cms/categories/${category.id}`);
             fetchCategories(pagination.value.current_page);
-            toast.success.delete(t('features.categories.title_singular'));
+            toast.success.delete(t('modules.cms.categories.title_singular'));
         } catch (error: unknown) {
             logger.error('Failed to delete category:', error);
-            toast.error.delete(error, t('features.categories.title_singular'));
+            toast.error.delete(error, t('modules.cms.categories.title_singular'));
         }
     }
 };
@@ -496,7 +496,7 @@ const confirmBulkDelete = async () => {
             const count = selectedIds.value.length;
             selectedIds.value = [];
             fetchCategories(pagination.value.current_page);
-            toast.success.delete(t('features.categories.title', { count: count }));
+            toast.success.delete(t('modules.cms.categories.title', { count: count }));
         } catch (error: unknown) {
            logger.error('Bulk delete failed:', error);
            toast.error.action(error as Record<string, unknown>);

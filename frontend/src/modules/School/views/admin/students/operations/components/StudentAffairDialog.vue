@@ -183,10 +183,10 @@ import { ref, watch, onMounted } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, Textarea, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
-import type { Student } from '@/types';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
+import type { Student } from '@/modules/School/types';
 
 interface AffairForm {
     id?: number;

@@ -11,11 +11,11 @@
               />
             </div>
             <h1 class="text-3xl font-bold tracking-tight text-foreground">
-              {{ $t('features.school.academic.title') }}
+              {{ $t('modules.school.academic.title') }}
             </h1>
           </div>
           <p class="text-sm text-muted-foreground">
-            {{ $t('features.school.academic.subtitle') }}
+            {{ $t('modules.school.academic.subtitle') }}
           </p>
         </div>
         <div class="flex gap-2">
@@ -47,7 +47,7 @@
               name="BookOpen"
               class="w-4 h-4 mr-2"
             />
-            {{ $t('features.school.academic.tabs.subjects') }}
+            {{ $t('modules.school.academic.tabs.subjects') }}
           </TabsTrigger>
           <TabsTrigger 
             value="study-groups" 
@@ -57,7 +57,7 @@
               name="Users2"
               class="w-4 h-4 mr-2"
             />
-            {{ $t('features.school.academic.tabs.studyGroups') }}
+            {{ $t('modules.school.academic.tabs.studyGroups') }}
           </TabsTrigger>
           <TabsTrigger 
             value="timetable" 
@@ -67,7 +67,7 @@
               name="Calendar"
               class="w-4 h-4 mr-2"
             />
-            {{ $t('features.school.academic.tabs.timetable') }}
+            {{ $t('modules.school.academic.tabs.timetable') }}
           </TabsTrigger>
           <TabsTrigger 
             value="years" 
@@ -77,7 +77,7 @@
               name="CalendarDays"
               class="w-4 h-4 mr-2"
             />
-            {{ $t('features.school.academic.tabs.years') }}
+            {{ $t('modules.school.academic.tabs.years') }}
           </TabsTrigger>
         </TabsList>
 
@@ -133,13 +133,13 @@ import { ref, computed, onMounted, watch, h, toRefs } from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
   Tabs, TabsList, TabsTrigger, Card, CardContent, Button, LucideIcon, DataTable, ConfirmModal
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { 
   useVueTable, 
   getCoreRowModel, 
   createColumnHelper,
 } from '@tanstack/vue-table';
-import { useToast } from '@/composables/useToast';
+import { useToast } from '@/shared/composables/useToast';
 import { useAcademicStore } from '@/modules/School/stores/academic';
 
 import Timetable from './Timetable.vue';
@@ -183,7 +183,7 @@ const actionColumn = columnHelper.display({
       activeTab.value === 'study-groups' ? h(Button, {
       variant: 'ghost',
       size: 'icon',
-      title: t('features.school.academic.actions.manageMembers'),
+      title: t('modules.school.academic.actions.manageMembers'),
       class: 'h-8 w-8 text-muted-foreground hover:bg-success/10 hover:text-success rounded-lg',
       onClick: (e: MouseEvent) => {
           e.stopPropagation();
@@ -214,19 +214,19 @@ const actionColumn = columnHelper.display({
 
 const subjectColumns = [
   columnHelper.accessor('code', { 
-    header: t('features.school.academic.labels.subjectCode'),
+    header: t('modules.school.academic.labels.subjectCode'),
     cell: info => h('span', { class: 'font-bold text-[10px] text-muted-foreground uppercase opacity-80' }, info.getValue())
   }),
   columnHelper.accessor('name', { 
-    header: t('features.school.academic.labels.subjectName'),
+    header: t('modules.school.academic.labels.subjectName'),
     cell: info => h('span', { class: 'font-semibold' }, info.getValue())
   }),
   columnHelper.accessor('group', { 
-    header: t('features.school.academic.labels.group'),
+    header: t('modules.school.academic.labels.group'),
     cell: info => h('span', { class: 'px-2 py-0.5 rounded bg-muted text-[10px] font-semibold' }, info.getValue())
   }),
   columnHelper.accessor('kkm', { 
-    header: t('features.school.academic.labels.kkm'),
+    header: t('modules.school.academic.labels.kkm'),
     cell: info => h('span', { class: 'font-mono font-bold text-primary' }, info.getValue())
   }),
   actionColumn
@@ -234,15 +234,15 @@ const subjectColumns = [
 
 const studyGroupColumns = [
   columnHelper.accessor('name', { 
-    header: t('features.school.academic.labels.groupName'),
+    header: t('modules.school.academic.labels.groupName'),
     cell: info => h('span', { class: 'font-semibold' }, info.getValue())
   }),
   columnHelper.accessor('level.name', { 
-    header: t('common.labels.level'),
+    header: t('modules.school.labels.level'),
     cell: info => h('span', { class: 'px-2 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-bold border border-primary/20' }, info.getValue() || '-')
   }),
   columnHelper.accessor('homeroom_teacher.full_name', { 
-    header: t('features.school.academic.labels.homeroomTeacher'), 
+    header: t('modules.school.academic.labels.homeroomTeacher'), 
     cell: info => info.getValue() || '-' 
   }),
   actionColumn
@@ -250,7 +250,7 @@ const studyGroupColumns = [
 
 const yearColumns = [
   columnHelper.accessor('year', { 
-    header: t('features.school.academic.tabs.years'),
+    header: t('modules.school.academic.tabs.years'),
     cell: info => h('span', { class: 'font-semibold' }, info.getValue())
   }),
   columnHelper.accessor('is_active', { 
@@ -317,7 +317,7 @@ const handleSave = async (formData: any) => {
         else if (activeTab.value === 'subjects') await academicStore.saveSubject(formData, id);
         else if (activeTab.value === 'study-groups') await academicStore.saveStudyGroup(formData, id);
         
-        toast.success.action(id ? t('features.school.academic.messages.updateSuccess') : t('features.school.academic.messages.addSuccess'));
+        toast.success.action(id ? t('modules.school.academic.messages.updateSuccess') : t('modules.school.academic.messages.addSuccess'));
         
         // Close all dialogs
         Object.keys(dialogs.value).forEach(k => (dialogs.value as any)[k] = false);
@@ -331,7 +331,7 @@ const handleSave = async (formData: any) => {
 const handleDelete = async (item: any) => {
     const confirmed = await confirmModal.value.confirm({
         title: t('common.actions.delete'),
-        message: t('features.school.academic.messages.deleteConfirm', { name: item.name || item.year }),
+        message: t('modules.school.academic.messages.deleteConfirm', { name: item.name || item.year }),
         variant: 'destructive'
     });
 
@@ -340,7 +340,7 @@ const handleDelete = async (item: any) => {
             if (activeTab.value === 'years') await academicStore.deleteAcademicYear(item.id);
             else if (activeTab.value === 'subjects') await academicStore.deleteSubject(item.id);
             else if (activeTab.value === 'study-groups') await academicStore.deleteStudyGroup(item.id);
-            toast.success.action(t('features.school.academic.messages.deleteSuccess'));
+            toast.success.action(t('modules.school.academic.messages.deleteSuccess'));
         } catch (e: any) {
             toast.error.fromResponse(e);
         }

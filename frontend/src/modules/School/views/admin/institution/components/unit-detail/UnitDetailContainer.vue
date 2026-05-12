@@ -44,9 +44,9 @@
 <script setup lang="ts">
 import { reactive, watch, ref, onMounted } from 'vue';
 import type { UnitSettings } from '../../../../../stores/unit';
-import type { SchoolUnit } from '@/types';
-import { Accordion } from '@/components/ui';
-import { IndonesianLocation, type LocationItem } from '@/services/IndonesianLocation';
+import type { SchoolUnit } from '@/modules/School/types';
+import { Accordion } from '@/shared/components/ui';
+import { IndonesianLocation, type LocationItem } from '@/shared/services/IndonesianLocation';
 
 // Import split sections
 import LocationSection from './LocationSection.vue';

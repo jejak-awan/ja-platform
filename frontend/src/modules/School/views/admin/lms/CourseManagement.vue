@@ -12,11 +12,11 @@
               />
             </div>
             <h1 class="text-3xl font-bold tracking-tight text-foreground">
-              {{ $t('features.school.lms.title') }}
+              {{ $t('modules.school.lms.title') }}
             </h1>
           </div>
           <p class="text-sm text-muted-foreground">
-            {{ $t('features.school.lms.subtitle') }}
+            {{ $t('modules.school.lms.subtitle') }}
           </p>
         </div>
         <Button 
@@ -25,7 +25,7 @@
           @click="showCreateModal = true" 
         >
           <LucideIcon name="Plus" class="w-4 h-4 mr-2" />
-          {{ $t('features.school.lms.actions.addNew') }}
+          {{ $t('modules.school.lms.actions.addNew') }}
         </Button>
       </div>
 
@@ -35,11 +35,11 @@
           <Table>
             <TableHeader class="bg-muted/30">
               <TableRow>
-                <TableHead class="font-semibold py-4 px-6">{{ $t('features.school.lms.labels.courseTitle') }}</TableHead>
-                <TableHead class="font-semibold">{{ $t('features.school.lms.labels.academicContext') }}</TableHead>
-                <TableHead class="font-semibold text-center">{{ $t('features.school.lms.labels.level') }}</TableHead>
-                <TableHead class="font-semibold text-center">{{ $t('features.school.lms.labels.status') }}</TableHead>
-                <TableHead class="font-semibold text-center">{{ $t('features.school.lms.labels.modules') }}</TableHead>
+                <TableHead class="font-semibold py-4 px-6">{{ $t('modules.school.lms.labels.courseTitle') }}</TableHead>
+                <TableHead class="font-semibold">{{ $t('modules.school.lms.labels.academicContext') }}</TableHead>
+                <TableHead class="font-semibold text-center">{{ $t('modules.school.lms.labels.level') }}</TableHead>
+                <TableHead class="font-semibold text-center">{{ $t('modules.school.lms.labels.status') }}</TableHead>
+                <TableHead class="font-semibold text-center">{{ $t('modules.school.lms.labels.modules') }}</TableHead>
                 <TableHead class="font-semibold text-right px-6">{{ $t('common.labels.action') }}</TableHead>
               </TableRow>
             </TableHeader>
@@ -84,7 +84,7 @@
                   <TableCell class="text-right px-6">
                     <Button variant="ghost" size="sm" as-child class="font-bold rounded-lg h-8 px-4 hover:bg-primary/10 hover:text-primary transition-colors">
                       <router-link :to="{ name: 'admin-lms-course-detail', params: { id: course.id }}">
-                        {{ $t('features.school.lms.actions.manage') }}
+                        {{ $t('modules.school.lms.actions.manage') }}
                         <LucideIcon name="ChevronRight" class="w-4 h-4 ml-1" />
                       </router-link>
                     </Button>
@@ -100,21 +100,21 @@
       <Dialog v-model:open="showCreateModal">
         <DialogContent class="sm:max-w-xl rounded-2xl p-0 overflow-hidden border-border/50">
           <DialogHeader class="p-8 pb-4 text-left bg-muted/20 border-b border-border/40">
-            <DialogTitle class="text-2xl font-semibold tracking-tight">{{ $t('features.school.lms.actions.createTitle') }}</DialogTitle>
+            <DialogTitle class="text-2xl font-semibold tracking-tight">{{ $t('modules.school.lms.actions.createTitle') }}</DialogTitle>
           </DialogHeader>
           
           <div class="p-8 space-y-6 overflow-y-auto max-h-[60vh]">
             <div class="space-y-2">
-              <label class="text-[10px] font-bold text-muted-foreground">{{ $t('features.school.lms.labels.courseTitle') }}</label>
-              <Input v-model="form.title" :placeholder="$t('features.school.lms.placeholders.titleHint')" class="h-12 rounded-xl bg-muted/10 border-border/50" />
+              <label class="text-[10px] font-bold text-muted-foreground">{{ $t('modules.school.lms.labels.courseTitle') }}</label>
+              <Input v-model="form.title" :placeholder="$t('modules.school.lms.placeholders.titleHint')" class="h-12 rounded-xl bg-muted/10 border-border/50" />
             </div>
 
             <div class="grid grid-cols-2 gap-6">
               <div class="space-y-2">
-                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('features.school.lms.labels.academicYear') }}</label>
+                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('modules.school.lms.labels.academicYear') }}</label>
                 <Select v-model="form.academic_year_id">
                   <SelectTrigger class="h-12 rounded-xl bg-muted/10 border-border/50">
-                    <SelectValue :placeholder="$t('features.school.lms.placeholders.selectYear')" />
+                    <SelectValue :placeholder="$t('modules.school.lms.placeholders.selectYear')" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem v-for="year in academicYears" :key="year.id" :value="String(year.id)">
@@ -124,10 +124,10 @@
                 </Select>
               </div>
               <div class="space-y-2">
-                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('features.school.lms.labels.semester') }}</label>
+                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('modules.school.lms.labels.semester') }}</label>
                 <Select v-model="form.semester_id">
                   <SelectTrigger class="h-12 rounded-xl bg-muted/10 border-border/50">
-                    <SelectValue :placeholder="$t('features.school.lms.placeholders.selectSemester')" />
+                    <SelectValue :placeholder="$t('modules.school.lms.placeholders.selectSemester')" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem v-for="sem in semesters" :key="sem.id" :value="String(sem.id)">
@@ -140,10 +140,10 @@
 
             <div class="grid grid-cols-2 gap-6">
               <div class="space-y-2">
-                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('features.school.lms.labels.department') }}</label>
+                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('modules.school.lms.labels.department') }}</label>
                 <Select v-model="form.department_id">
                   <SelectTrigger class="h-12 rounded-xl bg-muted/10 border-border/50">
-                    <SelectValue :placeholder="$t('features.school.lms.placeholders.selectDept')" />
+                    <SelectValue :placeholder="$t('modules.school.lms.placeholders.selectDept')" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem v-for="dept in departments" :key="dept.id" :value="String(dept.id)">
@@ -153,10 +153,10 @@
                 </Select>
               </div>
               <div class="space-y-2">
-                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('features.school.lms.labels.grade') }}</label>
+                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('modules.school.lms.labels.grade') }}</label>
                 <Select v-model="form.grade_id">
                   <SelectTrigger class="h-12 rounded-xl bg-muted/10 border-border/50">
-                    <SelectValue :placeholder="$t('features.school.lms.placeholders.selectGrade')" />
+                    <SelectValue :placeholder="$t('modules.school.lms.placeholders.selectGrade')" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem v-for="g in grades" :key="g.id" :value="String(g.id)">
@@ -169,10 +169,10 @@
 
             <div class="grid grid-cols-2 gap-6">
               <div class="space-y-2">
-                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('features.school.lms.labels.difficulty') }}</label>
+                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('modules.school.lms.labels.difficulty') }}</label>
                 <Select v-model="form.level">
                   <SelectTrigger class="h-12 rounded-xl bg-muted/10 border-border/50">
-                    <SelectValue :placeholder="$t('features.school.lms.placeholders.selectLevel')" />
+                    <SelectValue :placeholder="$t('modules.school.lms.placeholders.selectLevel')" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="beginner">Beginner</SelectItem>
@@ -182,10 +182,10 @@
                 </Select>
               </div>
               <div class="space-y-2">
-                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('features.school.lms.labels.status') }}</label>
+                <label class="text-[10px] font-bold text-muted-foreground">{{ $t('modules.school.lms.labels.status') }}</label>
                 <Select v-model="form.status">
                   <SelectTrigger class="h-12 rounded-xl bg-muted/10 border-border/50">
-                    <SelectValue :placeholder="$t('features.school.lms.placeholders.selectStatus')" />
+                    <SelectValue :placeholder="$t('modules.school.lms.placeholders.selectStatus')" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="draft">Draft</SelectItem>
@@ -201,7 +201,7 @@
             <Button @click="createCourse" :disabled="submitting" class="flex-1 rounded-xl font-bold h-12 shadow-lg shadow-primary/20 transition-all active:scale-95">
               <Spinner v-if="submitting" class="mr-2 h-4 w-4" />
               <LucideIcon v-else name="CircleCheck2" class="w-4 h-4 mr-2" />
-              {{ $t('features.school.lms.actions.saveCourse') }}
+              {{ $t('modules.school.lms.actions.saveCourse') }}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -221,7 +221,7 @@ import {
   Badge, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, 
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue, 
   Spinner, SkeletonLoader, LucideIcon 
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const lmsStore = useLmsStore();
 const { courses, loading } = storeToRefs(lmsStore);

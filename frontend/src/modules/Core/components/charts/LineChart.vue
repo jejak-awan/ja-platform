@@ -26,7 +26,7 @@ import {
     Chart as ChartJS,
     registerables
 } from 'chart.js';
-import { useDarkMode } from '@/composables/useDarkMode';
+import { useDarkMode } from '@/shared/composables/useDarkMode';
 
 ChartJS.register(...registerables);
 

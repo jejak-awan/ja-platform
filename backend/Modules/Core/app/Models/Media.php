@@ -5,7 +5,7 @@ namespace Modules\Core\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\School\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByUnit;
 use Illuminate\Support\Facades\Storage;
 use Modules\Core\Helpers\CdnHelper;
 use Modules\Core\Models\User;
@@ -41,6 +41,12 @@ class Media extends Model
 {
     /** @use HasFactory<\Modules\Core\Database\Factories\MediaFactory> */
     use HasFactory, SoftDeletes, ScopedByUnit;
+    
+    /**
+     * Enable shared record visibility in unit scoping.
+     */
+    public bool $isSharedScoped = true;
+
 
     /**
      * Create a new factory instance for the model.

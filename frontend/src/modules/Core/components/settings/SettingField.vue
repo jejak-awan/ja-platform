@@ -213,7 +213,7 @@
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getFieldOptions, getMailPortOptions, getFieldPresets } from '@/config/settingsFieldOptions'
-import type { SettingValue } from '@/types/core/settings'
+import type { SettingValue } from '@/core/types/settings'
 import {
     Input,
     Textarea,
@@ -228,8 +228,8 @@ import {
     PopoverTrigger,
     Button,
     LucideIcon
-} from '@/components/ui'
-import MediaPicker from '@/components/shared/media/MediaPicker.vue'
+} from '@/shared/components/ui'
+import MediaPicker from '@/shared/components/media/MediaPicker.vue'
 
 interface SettingOption {
     value: string | number;

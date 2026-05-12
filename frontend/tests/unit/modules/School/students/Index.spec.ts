@@ -1,25 +1,25 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import Index from '@/modules/School/views/admin/students/Index.vue';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Mock services
-vi.mock('@/services/api');
-vi.mock('@/composables/useToast', () => ({
+vi.mock('@/core/api/client');
+vi.mock('@/shared/composables/useToast', () => ({
     useToast: () => ({
         success: { action: vi.fn() },
         error: { fromResponse: vi.fn() }
     })
 }));
-vi.mock('@/composables/useConfirm', () => ({
+vi.mock('@/shared/composables/useConfirm', () => ({
     useConfirm: () => ({
         confirm: vi.fn(() => Promise.resolve(true))
     })
 }));
 
 // Mock UI components to avoid deep rendering issues
-vi.mock('@/components/ui', () => ({
+vi.mock('@/shared/components/ui', () => ({
     Card: { template: '<div><slot /></div>' },
     CardContent: { template: '<div><slot /></div>' },
     Button: { template: '<button><slot /></button>' },

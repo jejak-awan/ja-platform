@@ -1,7 +1,7 @@
 <template>
   <div class="comments-list">
     <h3 class="text-xl font-bold text-foreground mb-4">
-      {{ $t('features.comments.title') }} ({{ comments.length }})
+      {{ $t('modules.cms.comments.title') }} ({{ comments.length }})
     </h3>
 
     <div
@@ -10,7 +10,7 @@
     >
       <Loader2 class="w-8 h-8 mx-auto animate-spin text-muted-foreground" />
       <p class="text-muted-foreground mt-2">
-        {{ $t('features.comments.loading') }}
+        {{ $t('modules.cms.comments.loading') }}
       </p>
     </div>
 
@@ -19,7 +19,7 @@
       class="text-center py-8"
     >
       <p class="text-muted-foreground">
-        {{ $t('features.comments.empty') }}
+        {{ $t('modules.cms.comments.empty') }}
       </p>
     </div>
 
@@ -60,7 +60,7 @@
                 class="p-0 h-auto font-medium"
                 @click="activeReplyId = activeReplyId === comment.id ? null : comment.id"
               >
-                {{ $t('features.comments.reply') }}
+                {{ $t('modules.cms.comments.reply') }}
               </Button>
             </div>
 
@@ -127,17 +127,17 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import {
     Avatar,
     AvatarImage,
     AvatarFallback,
     Button
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import CommentForm from '@/modules/Cms/components/comments/CommentForm.vue';
 
 interface User {

@@ -85,7 +85,7 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
 import LoaderCircle from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import api from '@/services/api';
+import api from '@/core/api/client';
 
 type NewsletterVariant = 'default' | 'compact' | 'inline';
 

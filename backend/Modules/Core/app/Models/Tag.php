@@ -18,8 +18,10 @@ use Modules\Core\Models\User;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Modules\Core\Models\User|null $author
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\Content> $contents
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Database\Eloquent\Model> $contents
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Media> $media
+ * @property int $contents_count
+ * @method \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Illuminate\Database\Eloquent\Model, $this> contents()
  */
 class Tag extends Model
 {
@@ -49,13 +51,7 @@ class Tag extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    /**
-     * @return BelongsToMany<\Modules\Cms\Models\Content, $this>
-     */
-    public function contents(): BelongsToMany
-    {
-        return $this->belongsToMany(\Modules\Cms\Models\Content::class, 'content_tag');
-    }
+
 
     /**
      * @return BelongsToMany<Media, $this>

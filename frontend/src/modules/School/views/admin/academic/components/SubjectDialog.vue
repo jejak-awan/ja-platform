@@ -5,14 +5,14 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('common.actions.edit') + ' ' + $t('features.school.academic.labels.subject') : $t('common.actions.add') + ' ' + $t('features.school.academic.labels.subject') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('common.actions.edit') + ' ' + $t('modules.school.academic.labels.subject') : $t('common.actions.add') + ' ' + $t('modules.school.academic.labels.subject') }}</DialogTitle>
       </DialogHeader>
       <form
         class="space-y-4 py-4"
         @submit.prevent="handleSubmit"
       >
         <div class="space-y-2">
-          <Label for="code">{{ $t('features.school.academic.labels.subjectCode') }} <span class="text-destructive">*</span></Label>
+          <Label for="code">{{ $t('modules.school.academic.labels.subjectCode') }} <span class="text-destructive">*</span></Label>
           <Input
             id="code"
             v-model="form.code"
@@ -21,7 +21,7 @@
           />
         </div>
         <div class="space-y-2">
-          <Label for="name">{{ $t('features.school.academic.labels.subjectName') }} <span class="text-destructive">*</span></Label>
+          <Label for="name">{{ $t('modules.school.academic.labels.subjectName') }} <span class="text-destructive">*</span></Label>
           <Input
             id="name"
             v-model="form.name"
@@ -29,27 +29,27 @@
           />
         </div>
         <div class="space-y-2">
-          <Label for="group">{{ $t('features.school.academic.labels.group') }} ({{ $t('common.labels.optional') }})</Label>
+          <Label for="group">{{ $t('modules.school.academic.labels.group') }} ({{ $t('common.labels.optional') }})</Label>
           <Select v-model="form.group">
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.academic.placeholders.selectSubjectGroup')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.academic.placeholders.selectSubjectGroup')" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="A">
-                {{ $t('features.school.academic.labels.groupA') }}
+                {{ $t('modules.school.academic.labels.groupA') }}
               </SelectItem>
               <SelectItem value="B">
-                {{ $t('features.school.academic.labels.groupB') }}
+                {{ $t('modules.school.academic.labels.groupB') }}
               </SelectItem>
               <SelectItem value="C">
-                {{ $t('features.school.academic.labels.groupC') }}
+                {{ $t('modules.school.academic.labels.groupC') }}
               </SelectItem>
               <SelectItem value="Muatan Lokal">
-                {{ $t('features.school.academic.labels.localContent') }}
+                {{ $t('modules.school.academic.labels.localContent') }}
               </SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div class="space-y-2">
-          <Label for="kkm">{{ $t('features.school.academic.labels.kkm') }}</Label>
+          <Label for="kkm">{{ $t('modules.school.academic.labels.kkm') }}</Label>
           <Input
             id="kkm"
             v-model="form.kkm"
@@ -81,7 +81,7 @@ import { ref, watch } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const props = defineProps<{
   open: boolean;

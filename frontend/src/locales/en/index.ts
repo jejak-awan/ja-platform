@@ -1,28 +1,6 @@
-// Modules - Core
-import auth from './modules/core/auth.json';
-import users from './modules/core/users.json';
-import roles from './modules/core/roles.json';
-import media from './modules/core/media.json';
-import file_manager from './modules/core/file_manager.json';
-import analytics from './modules/core/analytics.json';
-import notifications from './modules/core/notifications.json';
-import system from './modules/core/system.json';
-import settings from './modules/core/settings';
-import installer from './modules/core/installer.json';
-
-// Modules - CMS
-import content from './modules/cms/content.json';
-import categories from './modules/cms/categories.json';
-import tags from './modules/cms/tags.json';
-import comments from './modules/cms/comments.json';
-import forms from './modules/cms/forms.json';
-import menus from './modules/cms/menus.json';
-import themes from './modules/cms/themes.json';
-import seo from './modules/cms/seo.json';
-import editor from './modules/cms/editor.json';
-import newsletter from './modules/cms/newsletter.json';
-
-// Modules - School
+// Modules
+import core from './modules/core/index';
+import cms from './modules/cms/index';
 import school from './modules/school/index';
 
 // Shared / Common
@@ -38,7 +16,7 @@ import time from './shared/time.json';
 import errors from './shared/errors.json';
 import genders from './shared/genders.json';
 
-// Misc Features (Remaining)
+// Features (Remaining cross-cutting concerns)
 import languages from './features/languages.json';
 import dashboard from './features/dashboard.json';
 import security from './features/security.json';
@@ -61,34 +39,6 @@ import scheduled_tasks from './features/scheduled_tasks.json';
 import command_runner from './features/command_runner.json';
 import email_templates from './features/email_templates.json';
 
-const modules = {
-    core: {
-        auth,
-        users,
-        roles,
-        media,
-        file_manager,
-        analytics,
-        notifications,
-        system,
-        settings,
-        installer,
-    },
-    cms: {
-        content,
-        categories,
-        tags,
-        comments,
-        forms,
-        menus,
-        themes,
-        seo,
-        editor,
-        newsletter,
-    },
-    school,
-};
-
 const common = {
     actions,
     labels,
@@ -103,43 +53,27 @@ const common = {
     genders,
 };
 
+const modules = {
+    core,
+    cms,
+    school,
+};
+
 const features = {
-    ...modules.core,
-    ...modules.cms,
-    school: modules.school,
-    // Add legacy direct feature names
-    auth,
-    content,
-    comments,
     languages,
     dashboard,
-    file_manager,
-    newsletter,
-    notifications,
-    users,
-    widgets,
-    analytics,
-    seo,
-    redirects,
+    search,
+    frontend,
+    profile,
     security,
     redis,
-    settings,
-    categories,
-    tags,
-    roles,
-    themes,
-    forms,
-    menus,
+    developer,
+    widgets,
+    redirects,
     activityJournal,
     accessJournal,
     journalDashboard,
-    search,
-    frontend,
-    errors,
-    developer,
     content_templates,
-    system,
-    profile,
     content_studio,
     autosave,
     security_alerts: securityAlerts,
@@ -147,25 +81,16 @@ const features = {
     scheduled_tasks,
     command_runner,
     email_templates,
-    editor,
-    media,
 };
 
 export default {
-    // 1. Shared / Common Level
-    ...common,
+    // 1. Shared / Common Level (Standardized Utilities)
+    common,
     shared: common,
-    common: common,
 
-    // 2. Modular Level
+    // 2. Modular Level (Strictly Isolated)
     modules,
     
-    // 3. School Module Flattened (for $t('academic...'))
-    ...school,
-
-    // 4. Feature Alias Level (Backward Compatibility)
+    // 3. Feature Namespace (Cross-cutting concerns)
     features,
-
-    // 5. Case-insensitive aliases (Safety Net)
-    COMMON: common,
 };

@@ -1,7 +1,7 @@
 <template>
   <div
     id="app-container"
-    class="admin-no-motion min-h-screen bg-background text-foreground font-sans antialiased text-sharp"
+    class="min-h-screen bg-background text-foreground font-sans antialiased text-sharp"
   >
     <div class="noise-overlay" />
     <router-view />
@@ -33,18 +33,18 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useConfirm } from '@/composables/useConfirm';
-import { useSessionTimeout } from '@/composables/useSessionTimeout';
-import { syncDocumentDarkClassForRoute } from '@/composables/useDarkMode';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { useSessionTimeout } from '@/shared/composables/useSessionTimeout';
+import { syncDocumentDarkClassForRoute } from '@/shared/composables/useDarkMode';
 import { useHead } from '@unhead/vue';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
 import { useCoreStore } from '@/modules/Core/stores/core';
-import { applyFavicon, resolveFavicon } from '@/utils/favicon';
+import { applyFavicon, resolveFavicon } from '@/shared/utils/favicon';
 
-const Toast = defineAsyncComponent(() => import('@/components/ui/Toast.vue'));
-const ConfirmModal = defineAsyncComponent(() => import('@/components/ui/ConfirmModal.vue'));
-const GlobalErrorModal = defineAsyncComponent(() => import('@/components/ui/GlobalErrorModal.vue'));
-const SessionTimeoutModal = defineAsyncComponent(() => import('@/components/ui/SessionTimeoutModal.vue'));
+const Toast = defineAsyncComponent(() => import('@/shared/components/ui/Toast.vue'));
+const ConfirmModal = defineAsyncComponent(() => import('@/shared/components/ui/ConfirmModal.vue'));
+const GlobalErrorModal = defineAsyncComponent(() => import('@/shared/components/ui/GlobalErrorModal.vue'));
+const SessionTimeoutModal = defineAsyncComponent(() => import('@/shared/components/ui/SessionTimeoutModal.vue'));
 
 const { confirmState } = useConfirm();
 const { isWarningVisible, timeRemaining, extendSession, manualLogout } = useSessionTimeout();
@@ -65,7 +65,6 @@ useHead({
 });
 
 onMounted(async () => {
-    document.body.classList.add('admin-no-motion-global');
     await Promise.all([
         cmsStore.fetchPublicSettings(),
         coreStore.fetchPublicSettings(),
@@ -73,7 +72,6 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-    document.body.classList.remove('admin-no-motion-global');
 });
 
 const faviconHref = computed(() => resolveFavicon([
@@ -88,30 +86,3 @@ watch(
     { immediate: true },
 );
 </script>
-
-<style>
-/*
-  Admin UX preference: keep dashboard responsive and calm by disabling
-  non-essential CSS animations/transitions globally inside admin shell.
-*/
-#app-container.admin-no-motion *,
-#app-container.admin-no-motion *::before,
-#app-container.admin-no-motion *::after {
-  animation: none !important;
-  transition: none !important;
-  scroll-behavior: auto !important;
-}
-</style>
-<style>
-/*
-  Also disable motion for teleported overlays (Dialog/Popover/Dropdown)
-  that are mounted outside #app-container, usually under <body>.
-*/
-body.admin-no-motion-global *,
-body.admin-no-motion-global *::before,
-body.admin-no-motion-global *::after {
-  animation: none !important;
-  transition: none !important;
-  scroll-behavior: auto !important;
-}
-</style>

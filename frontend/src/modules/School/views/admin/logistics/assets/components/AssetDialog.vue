@@ -5,19 +5,19 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('features.school.logistics.sarpras.actions.editAsset') : $t('features.school.logistics.sarpras.actions.addAsset') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('modules.school.logistics.sarpras.actions.editAsset') : $t('modules.school.logistics.sarpras.actions.addAsset') }}</DialogTitle>
       </DialogHeader>
       <form
         class="space-y-4 py-4"
         @submit.prevent="handleSubmit"
       >
         <div class="space-y-2">
-          <Label>{{ $t('features.school.logistics.sarpras.placeholders.selectRoom') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.logistics.sarpras.placeholders.selectRoom') }} <span class="text-destructive">*</span></Label>
           <Select
             v-model="form.room_id"
             required
           >
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.logistics.sarpras.placeholders.selectRoom')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.logistics.sarpras.placeholders.selectRoom')" /></SelectTrigger>
             <SelectContent>
               <SelectItem
                 v-for="r in rooms"
@@ -30,7 +30,7 @@
           </Select>
         </div>
         <div class="space-y-2">
-          <Label for="name">{{ $t('features.school.logistics.sarpras.labels.assetName') }} <span class="text-destructive">*</span></Label>
+          <Label for="name">{{ $t('modules.school.logistics.sarpras.labels.assetName') }} <span class="text-destructive">*</span></Label>
           <Input
             id="name"
             v-model="form.name"
@@ -39,7 +39,7 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
-            <Label for="code">{{ $t('features.school.logistics.sarpras.labels.assetCode') }}</Label>
+            <Label for="code">{{ $t('modules.school.logistics.sarpras.labels.assetCode') }}</Label>
             <Input
               id="code"
               v-model="form.code"
@@ -65,9 +65,9 @@
             />
           </div>
           <div class="space-y-2">
-            <Label>{{ $t('features.school.logistics.sarpras.labels.condition') }}</Label>
+            <Label>{{ $t('modules.school.logistics.sarpras.labels.condition') }}</Label>
             <Select v-model="form.condition">
-              <SelectTrigger><SelectValue :placeholder="$t('features.school.logistics.sarpras.placeholders.selectCondition')" /></SelectTrigger>
+              <SelectTrigger><SelectValue :placeholder="$t('modules.school.logistics.sarpras.placeholders.selectCondition')" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="good">
                   {{ $t('common.labels.conditions.good') }}
@@ -105,9 +105,9 @@ import { ref, watch, onMounted } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { LogisticsService } from '@/modules/School/services/LogisticsService';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const props = defineProps<{
   open: boolean;

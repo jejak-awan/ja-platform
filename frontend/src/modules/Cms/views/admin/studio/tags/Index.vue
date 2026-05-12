@@ -6,7 +6,7 @@
       class="mb-6 flex justify-between items-center"
     >
       <h1 class="text-2xl font-bold text-foreground">
-        {{ $t('features.tags.title') }}
+        {{ $t('modules.cms.tags.title') }}
       </h1>
       <div class="flex space-x-3">
         <Button 
@@ -14,7 +14,7 @@
           @click="openCreateModal"
         >
           <Plus class="w-4 h-4 mr-2" />
-          {{ $t('features.tags.createNew') }}
+          {{ $t('modules.cms.tags.createNew') }}
         </Button>
       </div>
     </div>
@@ -32,7 +32,7 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-muted-foreground">
-                {{ $t('features.tags.stats.total') }}
+                {{ $t('modules.cms.tags.stats.total') }}
               </p>
               <p class="text-2xl font-semibold text-foreground">
                 {{ statistics.total_tags || 0 }}
@@ -49,7 +49,7 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-muted-foreground">
-                {{ $t('features.tags.stats.used') }}
+                {{ $t('modules.cms.tags.stats.used') }}
               </p>
               <p class="text-2xl font-semibold text-foreground">
                 {{ statistics.used_tags || 0 }}
@@ -66,7 +66,7 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-muted-foreground">
-                {{ $t('features.tags.stats.usage') }}
+                {{ $t('modules.cms.tags.stats.usage') }}
               </p>
               <p class="text-2xl font-semibold text-foreground">
                 {{ statistics.total_usage || 0 }}
@@ -88,7 +88,7 @@
               <Input
                 v-model="search"
                 type="text"
-                :placeholder="$t('features.tags.search')"
+                :placeholder="$t('modules.cms.tags.search')"
                 class="pl-9"
                 @input="onSearchInput"
               />
@@ -98,17 +98,17 @@
               @update:model-value="fetchTags(1)"
             >
               <SelectTrigger class="w-[180px]">
-                <SelectValue :placeholder="$t('features.tags.filters.usage')" />
+                <SelectValue :placeholder="$t('modules.cms.tags.filters.usage')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">
-                  {{ $t('features.tags.filters.all') }}
+                  {{ $t('modules.cms.tags.filters.all') }}
                 </SelectItem>
                 <SelectItem value="used">
-                  {{ $t('features.tags.filters.used') }}
+                  {{ $t('modules.cms.tags.filters.used') }}
                 </SelectItem>
                 <SelectItem value="unused">
-                  {{ $t('features.tags.filters.unused') }}
+                  {{ $t('modules.cms.tags.filters.unused') }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -139,7 +139,7 @@
               @click="openCreateModal"
             >
               <Plus class="w-4 h-4 mr-1" />
-              {{ $t('features.tags.createNew') }}
+              {{ $t('modules.cms.tags.createNew') }}
             </Button>
           </div>
         </div>
@@ -149,7 +149,7 @@
         <DataTable
           :table="table"
           :loading="loading"
-          :empty-message="$t('features.tags.empty')"
+          :empty-message="$t('modules.cms.tags.empty')"
         />
       </CardContent>
             
@@ -175,7 +175,7 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import BarChart3 from 'lucide-vue-next/dist/esm/icons/chart-bar-stacked.js';
@@ -184,11 +184,11 @@ import Edit from 'lucide-vue-next/dist/esm/icons/pen.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import SearchIcon from 'lucide-vue-next/dist/esm/icons/search.js';
-import api from '@/services/api';
-import { useConfirm } from '@/composables/useConfirm';
-import { useToast } from '@/composables/useToast';
-import { debounce } from '@/utils/debounce';
-import { parseResponse, type PaginationData } from '@/utils/responseParser';
+import api from '@/core/api/client';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { useToast } from '@/shared/composables/useToast';
+import { debounce } from '@/shared/utils/debounce';
+import { parseResponse, type PaginationData } from '@/shared/utils/responseParser';
 import TagFormModal from './TagFormModal.vue';
 
 // UI Components
@@ -205,7 +205,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { h } from 'vue';
 import { 
     useVueTable, 
@@ -217,7 +217,7 @@ import {
 } from '@tanstack/vue-table';
 
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import type { Tag } from '@/types/cms/cms';
+import type { Tag } from '@/modules/Cms/types/cms';
 
 defineProps<{
     isEmbedded?: boolean;
@@ -262,31 +262,31 @@ const columns = [
         size: 50,
     }),
     columnHelper.accessor('name', {
-        header: t('features.tags.table.name'),
+        header: t('modules.cms.tags.table.name'),
         cell: ({ row }) => h('div', { class: 'font-medium' }, [
             row.original.name,
             h('div', { class: 'md:hidden text-xs text-muted-foreground mt-1' }, row.original.slug)
         ])
     }),
     columnHelper.accessor('slug', {
-        header: t('features.tags.table.slug'),
+        header: t('modules.cms.tags.table.slug'),
         cell: ({ row }) => h('span', { class: 'text-muted-foreground' }, row.original.slug),
         meta: { className: 'hidden md:table-cell' }
     }),
     columnHelper.accessor('description', {
-        header: t('features.tags.table.description'),
+        header: t('modules.cms.tags.table.description'),
         cell: ({ row }) => h('div', { class: 'max-w-[300px] truncate', title: row.original.description }, row.original.description || '-'),
         meta: { className: 'hidden lg:table-cell' }
     }),
     columnHelper.accessor('contents_count', {
-        header: () => h('div', { class: 'text-right' }, t('features.tags.table.usage')),
+        header: () => h('div', { class: 'text-right' }, t('modules.cms.tags.table.usage')),
         cell: ({ row }) => h('div', { class: 'text-right' }, [
             h(Badge, { variant: 'secondary', class: 'font-mono' }, String(row.original.contents_count || 0))
         ])
     }),
     columnHelper.display({
         id: 'actions',
-        header: () => h('div', { class: 'text-right' }, t('features.tags.table.actions')),
+        header: () => h('div', { class: 'text-right' }, t('modules.cms.tags.table.actions')),
         cell: ({ row }) => h('div', { class: 'flex justify-end gap-1' }, [
             authStore.hasPermission('edit tags') && h(Button, {
                 variant: 'ghost', size: 'icon', class: 'h-8 w-8',
@@ -390,7 +390,7 @@ const bulkDelete = async () => {
     if (selectedIds.value.length === 0) return;
     
     const confirmed = await confirm({
-        title: t('features.tags.actions.bulkDelete'),
+        title: t('modules.cms.tags.actions.bulkDelete'),
         message: t('common.messages.confirm.bulkDelete', { count: selectedIds.value.length }),
         variant: 'danger',
         confirmText: t('common.actions.delete'),
@@ -402,7 +402,7 @@ const bulkDelete = async () => {
         await api.post('/admin/cms/tags/bulk-delete', { ids: selectedIds.value });
         selectedIds.value = [];
         await fetchTags(pagination.value.current_page);
-        toast.success.delete(t('features.tags.title', { count: 2 }));
+        toast.success.delete(t('modules.cms.tags.title', { count: 2 }));
     } catch (error: unknown) {
         logger.error('Bulk delete failed:', error);
         toast.error.fromResponse(error);
@@ -426,8 +426,8 @@ const handleModalSuccess = () => {
 
 const deleteTag = async (tag: Tag) => {
     const confirmed = await confirm({
-        title: t('features.tags.actions.delete'),
-        message: t('features.tags.messages.deleteConfirm', { name: tag.name }),
+        title: t('modules.cms.tags.actions.delete'),
+        message: t('modules.cms.tags.messages.deleteConfirm', { name: tag.name }),
         variant: 'danger',
         confirmText: t('common.actions.delete'),
     });
@@ -437,10 +437,10 @@ const deleteTag = async (tag: Tag) => {
     try {
         await api.delete(`/admin/cms/tags/${tag.id}`);
         await fetchTags();
-        toast.success.delete(t('features.tags.title_singular'));
+        toast.success.delete(t('modules.cms.tags.title_singular'));
     } catch (error: unknown) {
         logger.error('Failed to delete tag:', error);
-        toast.error.delete(error, t('features.tags.title_singular'));
+        toast.error.delete(error, t('modules.cms.tags.title_singular'));
     }
 };
 

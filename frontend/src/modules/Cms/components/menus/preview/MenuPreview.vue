@@ -7,10 +7,10 @@
       <DialogHeader>
         <DialogTitle class="flex items-center gap-2">
           <Eye class="w-5 h-5" />
-          {{ t('features.menus.actions.preview') }}
+          {{ t('modules.cms.menus.actions.preview') }}
         </DialogTitle>
         <DialogDescription>
-          {{ t('features.menus.messages.previewDescription') || 'Preview how your menu will appear on the frontend' }}
+          {{ t('modules.cms.menus.messages.previewDescription') || 'Preview how your menu will appear on the frontend' }}
         </DialogDescription>
       </DialogHeader>
 
@@ -264,16 +264,16 @@ const iconMap: Record<string, Component> = {
     LogOut, LogIn, UserPlus, ShoppingCart, Bell,
     Eye, ChevronDown, Monitor, Smartphone, Menu, LayoutGrid, Circle
 };
-import type { MenuItem } from '@/types/cms/menu';
+import type { MenuItem } from '@/modules/Cms/types/menu';
 
 // UI Components
-import Dialog from '@/components/ui/Dialog.vue';
-import DialogContent from '@/components/ui/DialogContent.vue';
-import DialogHeader from '@/components/ui/DialogHeader.vue';
-import DialogTitle from '@/components/ui/DialogTitle.vue';
-import DialogDescription from '@/components/ui/DialogDescription.vue';
-import DialogFooter from '@/components/ui/DialogFooter.vue';
-import Button from '@/components/ui/Button.vue';
+import Dialog from '@/shared/components/ui/Dialog.vue';
+import DialogContent from '@/shared/components/ui/DialogContent.vue';
+import DialogHeader from '@/shared/components/ui/DialogHeader.vue';
+import DialogTitle from '@/shared/components/ui/DialogTitle.vue';
+import DialogDescription from '@/shared/components/ui/DialogDescription.vue';
+import DialogFooter from '@/shared/components/ui/DialogFooter.vue';
+import Button from '@/shared/components/ui/Button.vue';
 
 const { t } = useI18n();
 

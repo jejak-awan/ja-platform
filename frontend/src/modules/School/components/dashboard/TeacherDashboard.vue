@@ -11,11 +11,11 @@
             />
           </div>
           <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
-            {{ t('features.school.teacher_dashboard.welcome', { name: authStore.user?.name }) }}
+            {{ t('modules.school.teacher_dashboard.welcome', { name: authStore.user?.name }) }}
           </h1>
         </div>
         <p class="text-muted-foreground text-sm font-medium">
-          {{ t('features.school.teacher_dashboard.subtitle') }}
+          {{ t('modules.school.teacher_dashboard.subtitle') }}
         </p>
       </div>
     </div>
@@ -31,7 +31,7 @@
           <div class="flex items-start justify-between">
             <div class="space-y-1">
               <p class="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                {{ t('features.school.teacher_dashboard.stats.' + stat.key) }}
+                {{ t('modules.school.teacher_dashboard.stats.' + stat.key) }}
               </p>
               <p class="text-3xl font-black text-foreground">
                 {{ stat.value }}
@@ -55,8 +55,8 @@
         <Card class="bg-card border-border/40 shadow-none">
           <CardHeader class="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>{{ t('features.school.teacher_dashboard.sections.schedule.title') }}</CardTitle>
-              <CardDescription>{{ t('features.school.teacher_dashboard.sections.schedule.desc') }}</CardDescription>
+              <CardTitle>{{ t('modules.school.teacher_dashboard.sections.schedule.title') }}</CardTitle>
+              <CardDescription>{{ t('modules.school.teacher_dashboard.sections.schedule.desc') }}</CardDescription>
             </div>
             <Button
               variant="ghost"
@@ -79,7 +79,7 @@
                   {{ schedule.subject?.name }} - {{ schedule.study_group?.name }}
                 </h4>
                 <p class="text-xs text-muted-foreground">
-                  {{ schedule.room?.name || t('features.school.academic.room') }} • {{ schedule.room?.location || 'Gedung' }}
+                  {{ schedule.room?.name || t('modules.school.academic.room') }} • {{ schedule.room?.location || 'Gedung' }}
                 </p>
               </div>
               <Badge
@@ -93,7 +93,7 @@
               v-if="todaySchedules.length === 0"
               class="py-10 text-center text-muted-foreground italic"
             >
-              {{ t('features.school.teacher_dashboard.sections.schedule.empty') }}
+              {{ t('modules.school.teacher_dashboard.sections.schedule.empty') }}
             </div>
           </CardContent>
         </Card>
@@ -101,8 +101,8 @@
         <!-- Recent Journals -->
         <Card class="bg-card border-border/40 shadow-none">
           <CardHeader>
-            <CardTitle>{{ t('features.school.teacher_dashboard.sections.recentJournals.title') }}</CardTitle>
-            <CardDescription>{{ t('features.school.teacher_dashboard.sections.recentJournals.desc') }}</CardDescription>
+            <CardTitle>{{ t('modules.school.teacher_dashboard.sections.recentJournals.title') }}</CardTitle>
+            <CardDescription>{{ t('modules.school.teacher_dashboard.sections.recentJournals.desc') }}</CardDescription>
           </CardHeader>
           <CardContent>
             <div class="space-y-6">
@@ -131,7 +131,7 @@
                 v-if="recentJournals.length === 0"
                 class="py-10 text-center text-muted-foreground italic"
               >
-                {{ t('features.school.teacher_dashboard.sections.recentJournals.empty') }}
+                {{ t('modules.school.teacher_dashboard.sections.recentJournals.empty') }}
               </div>
             </div>
           </CardContent>
@@ -148,18 +148,18 @@
               class="w-5 h-5 text-warning"
             />
             <CardTitle class="text-base">
-              {{ t('features.school.teacher_dashboard.sections.actionRequired.title') }}
+              {{ t('modules.school.teacher_dashboard.sections.actionRequired.title') }}
             </CardTitle>
           </CardHeader>
           <CardContent class="space-y-4">
             <div class="p-3 rounded-xl bg-warning/10 border border-warning/20">
               <p class="text-xs text-warning-foreground leading-relaxed">
-                <span class="font-bold">{{ t('features.school.teacher_dashboard.sections.actionRequired.attendanceShortage', { count: 5, class: 'Bahasa Inggris (X-C)' }) }}</span>
+                <span class="font-bold">{{ t('modules.school.teacher_dashboard.sections.actionRequired.attendanceShortage', { count: 5, class: 'Bahasa Inggris (X-C)' }) }}</span>
               </p>
             </div>
             <div class="p-3 rounded-xl bg-primary/10 border border-primary/20">
               <p class="text-xs text-primary leading-relaxed">
-                <span class="font-bold">{{ t('features.school.teacher_dashboard.sections.actionRequired.pendingTasks', { count: 12 }) }}</span>
+                <span class="font-bold">{{ t('modules.school.teacher_dashboard.sections.actionRequired.pendingTasks', { count: 12 }) }}</span>
               </p>
             </div>
           </CardContent>
@@ -168,7 +168,7 @@
               variant="outline"
               class="w-full text-xs h-9"
             >
-              {{ t('features.school.teacher_dashboard.sections.actionRequired.btnAction') }}
+              {{ t('modules.school.teacher_dashboard.sections.actionRequired.btnAction') }}
             </Button>
           </CardFooter>
         </Card>
@@ -176,7 +176,7 @@
         <!-- Quick Links -->
         <div class="space-y-3">
           <h4 class="text-sm font-bold text-muted-foreground px-2">
-            {{ t('features.school.teacher_dashboard.sections.quickLinks.title') }}
+            {{ t('modules.school.teacher_dashboard.sections.quickLinks.title') }}
           </h4>
           <Button
             v-for="link in quickLinks"
@@ -188,7 +188,7 @@
               :name="link.icon"
               class="w-4 h-4 mr-3 text-muted-foreground group-hover:text-primary transition-colors"
             />
-            {{ t('features.school.teacher_dashboard.sections.quickLinks.' + link.key) }}
+            {{ t('modules.school.teacher_dashboard.sections.quickLinks.' + link.key) }}
           </Button>
         </div>
       </div>
@@ -203,9 +203,9 @@ import { useAuthStore } from '@/modules/Core/stores/auth';
 import {
   Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter,
   Button, LucideIcon, Badge
-} from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
 import dayjs from 'dayjs';
 
 const { t } = useI18n();

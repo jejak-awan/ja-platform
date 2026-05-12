@@ -106,42 +106,17 @@ class VerifyConnection
             }
         }
 
-        // 4. Verified search engine bot bypass (with rDNS verification)
-        if ($this->isVerifiedSearchBot($request)) {
-            return $next($request);
-        }
-
         // 5. Verify existing trust session
         if ($this->securityService->isShieldVerified($ip, (string) $request->userAgent())) {
             return $next($request);
         }
 
-        // 6. Advanced Security Checks (DNSBL & Geolocation)
-        if (! $request->is('api/v1/security/verify-connection')) {
-            // Check Global Blacklist
-            if (Setting::get('shield_enable_ip_intelligence', false)) {
-                if ($this->securityService->isIpInGlobalBlacklist($ip)) {
-                    $this->securityService->recordGlobalBlacklistHit($ip, 'Detected in global blacklist (Spamhaus) - Proceeding to challenge');
-                    // We DO NOT block permanently here anymore.
-                    // Let the challenge logic handle the verification.
-                }
-            }
-
-            // Check Geolocation
-            $geoIpService = app(GeoIpService::class);
-            if (! $geoIpService->isCountryAllowed($ip)) {
-                // Soft enforcement: do not permanently block on geolocation mismatch.
-                // Route request to challenge flow to reduce false positives (e.g. VPN/WARP users).
-                $this->securityService->recordCountryBlock($ip, 'Geolocation mismatch detected; challenge required');
-            }
-        }
-
-        // 7. Verification endpoint bypass (must allow the verification itself)
+        // 6. Verification endpoint bypass (must allow the verification itself)
         if ($request->is('api/v1/security/verify-connection')) {
             return $next($request);
         }
 
-        // 8. Suspicious Only mode — challenge only genuinely suspicious requests
+        // 7. Suspicious Only mode — challenge only genuinely suspicious requests
         if ($mode === 'suspicious') {
             $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_' . md5($ip . ($request->userAgent() ?? ''));
 
@@ -152,11 +127,33 @@ class VerifyConnection
             }
 
             if ($this->anomalyService->shouldChallenge($ip, $sessionId) || $this->isSuspiciousRequest($request, $ip)) {
-                // Proceed to challenge
+                // Proceed to expensive verification before challenging
             } else {
                 return $next($request);
             }
         }
+
+        // 8. Expensive Verifications (Search Bots & Geolocation)
+        // These are only run if we are about to challenge the user
+        if ($this->isVerifiedSearchBot($request)) {
+            return $next($request);
+        }
+
+        if (Setting::get('shield_enable_ip_intelligence', false) || !empty(Setting::get('shield_allowed_countries', []))) {
+             // Check Global Blacklist
+            if (Setting::get('shield_enable_ip_intelligence', false)) {
+                if ($this->securityService->isIpInGlobalBlacklist($ip)) {
+                    $this->securityService->recordGlobalBlacklistHit($ip, 'Detected in global blacklist - Challenge required');
+                }
+            }
+
+            // Check Geolocation
+            $geoIpService = app(GeoIpService::class);
+            if (!$geoIpService->isCountryAllowed($ip)) {
+                $this->securityService->recordCountryBlock($ip, 'Geolocation mismatch detected; challenge required');
+            }
+        }
+
 
         // ISSUE CHALLENGE
         if ($request->expectsJson() || $request->is('api/*')) {

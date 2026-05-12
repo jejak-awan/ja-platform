@@ -31,6 +31,7 @@ use Modules\Core\Http\Controllers\Api\TranslationController;
 use Modules\Core\Http\Controllers\Api\TwoFactorController;
 use Modules\Core\Http\Controllers\Api\UserController;
 use Modules\Core\Http\Controllers\Api\WebhookController;
+use Modules\Core\Http\Controllers\Api\ModuleAccessController;
 
 Route::prefix('v1')->group(function () {
     // Test connectivity
@@ -145,6 +146,13 @@ Route::prefix('v1')->group(function () {
         Route::post('roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->middleware('permission:manage users');
         Route::post('roles/{role}/duplicate', [RoleController::class, 'duplicate'])->middleware('permission:manage users');
 
+        // Module access management (scoped RBAC)
+        Route::prefix('module-access')->group(function () {
+            Route::get('{module}/roles', [ModuleAccessController::class, 'roles'])->middleware('permission:manage cms access|manage school access');
+            Route::get('{module}/users', [ModuleAccessController::class, 'users'])->middleware('permission:manage cms access|manage school access');
+            Route::put('{module}/users/{user}/roles', [ModuleAccessController::class, 'updateUserRoles'])->middleware('permission:manage cms access|manage school access');
+        });
+
         // Activity Logs (Activity Journal)
         Route::get('activity-journal', [ActivityLogController::class, 'index'])->middleware('permission:manage users');
             Route::post('activity-journal/clear', [ActivityLogController::class, 'clear'])->middleware(['permission:manage settings', 'throttle:admin-journal-clear']);
@@ -234,10 +242,7 @@ Route::prefix('v1')->group(function () {
         Route::post('scheduled-tasks/{id}/run', [ScheduledTaskController::class, 'run'])->middleware('permission:manage scheduled tasks');
         Route::apiResource('scheduled-tasks', ScheduledTaskController::class)->middleware('permission:manage scheduled tasks');
 
-        // Media Manager (Global)
-        Route::get('media', [\Modules\Core\Http\Controllers\Api\MediaController::class, 'index'])->middleware('permission:manage files');
-        Route::get('media/stats', [\Modules\Core\Http\Controllers\Api\MediaController::class, 'stats'])->middleware('permission:manage files');
-        Route::delete('media/{id}', [\Modules\Core\Http\Controllers\Api\MediaController::class, 'destroy'])->middleware('permission:manage files');
+
 
         // File Manager
         Route::get('file-manager', [FileManagerController::class, 'index'])->middleware('permission:manage files');
@@ -269,7 +274,7 @@ Route::prefix('v1')->group(function () {
         // Redis
         Route::get('redis/settings', [RedisController::class, 'index'])->middleware('permission:manage settings');
         Route::put('redis/settings', [RedisController::class, 'update'])->middleware('permission:manage settings');
-        Route::get('redis/test-connection', [RedisController::class, 'testConnection'])->middleware('permission:manage settings');
+        Route::match(['GET', 'POST'], 'redis/test-connection', [RedisController::class, 'testConnection'])->middleware('permission:manage settings');
         Route::post('redis/flush-cache', [RedisController::class, 'flushCache'])->middleware(['permission:manage settings', 'throttle:5,1']);
         Route::post('redis/warm-cache', [RedisController::class, 'warmCache'])->middleware(['permission:manage settings', 'throttle:10,1']);
         Route::get('redis/info', [RedisController::class, 'info'])->middleware('permission:manage settings');

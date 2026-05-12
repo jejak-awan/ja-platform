@@ -4,7 +4,7 @@ namespace Modules\School\Models\Academic;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\School\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByUnit;
 
 /**
  * @property int $id

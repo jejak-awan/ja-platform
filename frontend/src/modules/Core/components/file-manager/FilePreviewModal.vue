@@ -141,10 +141,10 @@ import {
     Dialog, 
     DialogContent, 
     Button 
-} from '@/components/ui';
-import { FileManagerKey } from '@/keys';
-import type { FileItem } from '@/types/cms/file-manager';
-import { useToast } from '@/composables/useToast';
+} from '@/shared/components/ui';
+import { FileManagerKey } from '@/core/keys';
+import type { FileItem } from '@/modules/Cms/types/file-manager';
+import { useToast } from '@/shared/composables/useToast';
 
 defineProps<{
     file: FileItem | null;

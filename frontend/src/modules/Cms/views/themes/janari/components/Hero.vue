@@ -317,10 +317,10 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { useHead } from '@unhead/vue'
 import JanariSplitText from './JanariSplitText.vue'
-import { useTheme } from '@/composables/useTheme'
-import { useThemeMotion } from '@/composables/useThemeMotion'
+import { useTheme } from '@/shared/composables/useTheme'
+import { useThemeMotion } from '@/shared/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
-import api from '@/services/api'
+import api from '@/core/api/client'
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity'
 
 const { getSetting } = useTheme()
@@ -424,7 +424,8 @@ const updateStableData = async () => {
                     url: `/blog/${item.slug || idx}`
                 }))
             }
-        } catch (e) {
+        } catch (e: any) {
+            if (e.name === 'CanceledError' || e.code === 'ERR_CANCELED' || e.message?.includes('aborted')) return;
             console.error('[Hero] News Fallback Error:', e);
         }
     }

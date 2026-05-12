@@ -4,10 +4,10 @@
     <div class="mb-10 flex items-center justify-between">
       <div>
         <h1 class="text-3xl font-bold tracking-tight text-foreground">
-          {{ $t('features.users.title') }}
+          {{ $t('modules.core.users.title') }}
         </h1>
         <p class="text-muted-foreground">
-          {{ $t('features.users.subtitle') }}
+          {{ $t('modules.core.users.subtitle') }}
         </p>
       </div>
       <router-link
@@ -16,7 +16,7 @@
       >
         <Button class="gap-2 rounded-xl">
           <Plus class="w-4 h-4" />
-          {{ $t('features.users.createNew') }}
+          {{ $t('modules.core.users.createNew') }}
         </Button>
       </router-link>
     </div>
@@ -30,7 +30,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-muted-foreground">
-              {{ $t('features.users.stats.total') }}
+              {{ $t('modules.core.users.stats.total') }}
             </p>
             <p class="text-2xl font-bold text-foreground">
               {{ stats.total }}
@@ -46,7 +46,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-muted-foreground">
-              {{ $t('features.users.stats.verified') }}
+              {{ $t('modules.core.users.stats.verified') }}
             </p>
             <p class="text-2xl font-bold text-primary">
               {{ stats.verified }}
@@ -62,7 +62,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-muted-foreground">
-              {{ $t('features.users.stats.unverified') }}
+              {{ $t('modules.core.users.stats.unverified') }}
             </p>
             <p class="text-2xl font-bold text-warning">
               {{ stats.unverified }}
@@ -78,7 +78,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-muted-foreground">
-              {{ $t('features.users.stats.recent') }}
+              {{ $t('modules.core.users.stats.recent') }}
             </p>
             <p class="text-2xl font-bold text-success">
               {{ stats.recent }}
@@ -94,7 +94,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-muted-foreground">
-              {{ $t('features.users.stats.active') }}
+              {{ $t('modules.core.users.stats.active') }}
             </p>
             <p class="text-2xl font-bold text-info">
               {{ stats.active }}
@@ -117,17 +117,17 @@
               <Input
                 v-model="search"
                 type="text"
-                :placeholder="$t('features.users.search')"
+                :placeholder="$t('modules.core.users.search')"
                 class="pl-9"
               />
             </div>
             <Select v-model="roleFilter">
               <SelectTrigger class="w-[160px]">
-                <SelectValue :placeholder="$t('features.users.allRoles')" />
+                <SelectValue :placeholder="$t('modules.core.users.allRoles')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">
-                  {{ $t('features.users.allRoles') }}
+                  {{ $t('modules.core.users.allRoles') }}
                 </SelectItem>
                 <SelectItem
                   v-for="role in roles"
@@ -140,17 +140,17 @@
             </Select>
             <Select v-model="verificationFilter">
               <SelectTrigger class="w-[160px]">
-                <SelectValue :placeholder="$t('features.users.filters.all')" />
+                <SelectValue :placeholder="$t('modules.core.users.filters.all')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">
-                  {{ $t('features.users.filters.all') }}
+                  {{ $t('modules.core.users.filters.all') }}
                 </SelectItem>
                 <SelectItem value="verified">
-                  {{ $t('features.users.filters.verifiedOnly') }}
+                  {{ $t('modules.core.users.filters.verifiedOnly') }}
                 </SelectItem>
                 <SelectItem value="unverified">
-                  {{ $t('features.users.filters.unverifiedOnly') }}
+                  {{ $t('modules.core.users.filters.unverifiedOnly') }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -187,20 +187,20 @@
                 @update:model-value="handleBulkAction"
               >
                 <SelectTrigger class="w-[140px] h-7 border-primary/20 text-xs shadow-none">
-                  <SelectValue :placeholder="$t('features.content.list.bulkActions')" />
+                  <SelectValue :placeholder="$t('modules.cms.content.list.bulkActions')" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem
                     value="force_logout"
                     class="text-warning focus:text-warning"
                   >
-                    {{ $t('features.users.actions.forceLogout') }}
+                    {{ $t('modules.core.users.actions.forceLogout') }}
                   </SelectItem>
                   <SelectItem
                     value="verify"
                     class="text-primary focus:text-primary"
                   >
-                    {{ $t('features.users.actions.verify') }}
+                    {{ $t('modules.core.users.actions.verify') }}
                   </SelectItem>
                   <SelectItem
                     v-if="trashedFilter !== 'only'"
@@ -234,7 +234,7 @@
         <DataTable
           :table="table"
           :loading="loading"
-          :empty-message="$t('features.users.empty')"
+          :empty-message="$t('modules.core.users.empty')"
         />
 
         <!-- Pagination -->
@@ -255,14 +255,14 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
-import api from '@/services/api';
-import { cn } from '@/lib/utils';
-import { parseResponse, ensureArray, type PaginationData } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
+import api from '@/core/api/client';
+import { cn } from '@/shared/utils/lib-utils';
+import { parseResponse, ensureArray, type PaginationData } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
 import {
     Pagination,
     Button,
@@ -276,7 +276,7 @@ import {
     Checkbox,
     Badge,
     DataTable
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { h } from 'vue';
 import { 
     useVueTable, 
@@ -299,8 +299,8 @@ import UserPlus from 'lucide-vue-next/dist/esm/icons/user-plus.js';
 import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
 import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
 import { useAuthStore, ROLE_RANKS } from '@/modules/Core/stores/auth';
-import { useConfirm } from '@/composables/useConfirm';
-import type { User, Role } from '@/types/core/auth';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import type { User, Role } from '@/core/types/auth';
 
 const { t } = useI18n();
 const toast = useToast();
@@ -333,7 +333,7 @@ const columns = [
         size: 50,
     }),
     columnHelper.accessor('name', {
-        header: t('features.users.table.user'),
+        header: t('modules.core.users.table.user'),
         cell: ({ row }) => {
             const user = row.original;
             const avatarUrl = user.avatar ? (typeof user.avatar === 'string' ? user.avatar : user.avatar.url) : null;
@@ -357,22 +357,22 @@ const columns = [
         }
     }),
     columnHelper.accessor('email', {
-        header: t('features.users.table.email'),
+        header: t('modules.core.users.table.email'),
         cell: ({ row }) => {
             const user = row.original;
             return h('div', [
                 h('div', { class: 'text-sm text-foreground' }, user.email),
                 user.email_verified_at 
-                    ? h('div', { class: 'text-[10px] text-primary font-bold uppercase tracking-wider' }, t('features.users.status.verified'))
-                    : h('div', { class: 'text-[10px] text-muted-foreground italic uppercase tracking-wider' }, t('features.users.status.unverified'))
+                    ? h('div', { class: 'text-[10px] text-primary font-bold uppercase tracking-wider' }, t('modules.core.users.status.verified'))
+                    : h('div', { class: 'text-[10px] text-muted-foreground italic uppercase tracking-wider' }, t('modules.core.users.status.unverified'))
             ]);
         }
     }),
     columnHelper.accessor('roles', {
-        header: t('features.users.table.roles'),
+        header: t('modules.core.users.table.roles'),
         cell: ({ row }) => {
             const roles = row.original.roles || [];
-            if (roles.length === 0) return h('span', { class: 'text-xs text-muted-foreground italic' }, t('features.users.status.noRoles'));
+            if (roles.length === 0) return h('span', { class: 'text-xs text-muted-foreground italic' }, t('modules.core.users.status.noRoles'));
             
             return h('div', { class: 'flex flex-wrap gap-1.5' }, roles.map(role => h(Badge, {
                 variant: 'secondary',
@@ -381,16 +381,16 @@ const columns = [
         }
     }),
     columnHelper.accessor('last_login_at', {
-        header: t('features.users.table.lastLogin'),
+        header: t('modules.core.users.table.lastLogin'),
         cell: ({ row }) => {
             const date = row.original.last_login_at;
-            if (!date) return h('div', { class: 'text-xs text-muted-foreground/50' }, t('features.users.status.never'));
+            if (!date) return h('div', { class: 'text-xs text-muted-foreground/50' }, t('modules.core.users.status.never'));
             return h('div', { class: 'text-xs' }, formatDate(date));
         }
     }),
     columnHelper.display({
         id: 'actions',
-        header: () => h('div', { class: 'text-center' }, t('features.users.table.actions')),
+        header: () => h('div', { class: 'text-center' }, t('modules.core.users.table.actions')),
         cell: ({ row }) => {
             const user = row.original;
             const canManageUser = canManage(user);
@@ -399,12 +399,12 @@ const columns = [
             return h('div', { class: 'flex justify-center items-center gap-1' }, [
                 !user.email_verified_at && authStore.hasPermission('edit users') && h(Button, {
                     variant: 'ghost', size: 'icon', class: 'h-8 w-8 text-primary hover:bg-primary/10',
-                    disabled: !canManageUser, onClick: () => verifyUser(user), title: t('features.users.actions.verify')
+                    disabled: !canManageUser, onClick: () => verifyUser(user), title: t('modules.core.users.actions.verify')
                 }, [h(CheckCheck, { class: 'w-4 h-4' })]),
                 
                 authStore.hasPermission('edit users') && h(Button, {
                     variant: 'ghost', size: 'icon', class: 'h-8 w-8 text-warning hover:bg-warning/10',
-                    disabled: !canManageUser, onClick: () => forceLogoutUser(user), title: t('features.users.actions.forceLogout')
+                    disabled: !canManageUser, onClick: () => forceLogoutUser(user), title: t('modules.core.users.actions.forceLogout')
                 }, [h(LogOut, { class: 'w-4 h-4' })]),
                 
                 authStore.hasPermission('edit users') && h(Button, {
@@ -650,7 +650,7 @@ const editUser = (user: User) => {
 const deleteUser = async (user: User) => {
     const confirmed = await confirm({
         title: t('common.messages.confirm.title'),
-        message: t('features.users.messages.deleteConfirm', { name: user.name }),
+        message: t('modules.core.users.messages.deleteConfirm', { name: user.name }),
         variant: 'danger',
         confirmText: t('common.actions.delete'),
     });
@@ -671,10 +671,10 @@ const deleteUser = async (user: User) => {
 
 const forceLogoutUser = async (user: User) => {
     const confirmed = await confirm({
-        title: t('features.users.actions.forceLogout'),
-        message: t('features.users.messages.forceLogoutConfirm', { name: user.name }),
+        title: t('modules.core.users.actions.forceLogout'),
+        message: t('modules.core.users.messages.forceLogoutConfirm', { name: user.name }),
         variant: 'warning',
-        confirmText: t('features.users.actions.forceLogout'),
+        confirmText: t('modules.core.users.actions.forceLogout'),
     });
 
     if (!confirmed) {
@@ -758,18 +758,18 @@ const bulkAction = async (action: string) => {
     
     let confirmMessage = '';
     let confirmVariant = 'warning';
-    let confirmTitle = t('features.content.list.bulkActions');
+    let confirmTitle = t('modules.cms.content.list.bulkActions');
 
     if (action === 'delete') {
         confirmMessage = t('common.messages.confirm.bulkDelete', { count: selectedIds.value.length });
         confirmVariant = 'danger';
         confirmTitle = t('common.actions.delete');
     } else if (action === 'force_logout') {
-        confirmMessage = t('features.users.messages.bulkForceLogoutConfirm', { count: selectedIds.value.length }) || `Force logout ${selectedIds.value.length} users?`;
-        confirmTitle = t('features.users.actions.forceLogout');
+        confirmMessage = t('modules.core.users.messages.bulkForceLogoutConfirm', { count: selectedIds.value.length }) || `Force logout ${selectedIds.value.length} users?`;
+        confirmTitle = t('modules.core.users.actions.forceLogout');
     } else if (action === 'verify') {
-        confirmMessage = t('features.users.messages.bulkVerifyConfirm', { count: selectedIds.value.length }) || `Verify ${selectedIds.value.length} users?`;
-        confirmTitle = t('features.users.actions.verify');
+        confirmMessage = t('modules.core.users.messages.bulkVerifyConfirm', { count: selectedIds.value.length }) || `Verify ${selectedIds.value.length} users?`;
+        confirmTitle = t('modules.core.users.actions.verify');
     } else if (action === 'restore') {
         confirmMessage = `Restore ${selectedIds.value.length} users?`;
         confirmTitle = 'Restore Users';

@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
-use Symfony\Component\Process\Process;
 
 class InstallController extends Controller
 {
-    public function getStatus()
+    public function getStatus(): JsonResponse
     {
         return response()->json([
             'is_installed' => config('app.installed', false),
@@ -20,7 +19,10 @@ class InstallController extends Controller
         ]);
     }
 
-    protected function detectOS()
+    /**
+     * @return array{family: string, distro: string}
+     */
+    protected function detectOS(): array
     {
         $family = PHP_OS_FAMILY;
         $distro = 'unknown';
@@ -42,7 +44,7 @@ class InstallController extends Controller
         ];
     }
 
-    public function install(Request $request)
+    public function install(Request $request): JsonResponse
     {
         if (config('app.installed')) {
             return response()->json(['message' => 'Already installed.'], 403);
@@ -62,6 +64,9 @@ class InstallController extends Controller
 
         try {
             // 1. Update Environment
+            $host = parse_url($validated['app_url'], PHP_URL_HOST);
+            $hostString = is_string($host) ? $host : '';
+
             $this->updateEnv([
                 'APP_NAME' => "\"{$validated['app_name']}\"",
                 'APP_URL' => $validated['app_url'],
@@ -73,13 +78,14 @@ class InstallController extends Controller
                 'DB_PASSWORD' => $validated['db_password'] ?? '',
                 'VITE_APP_NAME' => "\"{$validated['app_name']}\"",
                 'VITE_API_URL' => $validated['app_url'],
-                'VITE_ROOT_DOMAIN' => parse_url($validated['app_url'], PHP_URL_HOST),
+                'VITE_ROOT_DOMAIN' => $hostString,
                 'VITE_PORTAL_URL' => $validated['app_url'],
-                'APP_ROOT_DOMAIN' => parse_url($validated['app_url'], PHP_URL_HOST),
+                'APP_ROOT_DOMAIN' => $hostString,
             ]);
 
             // 2. Generate Key if empty
-            if (empty(env('APP_KEY'))) {
+            $appKey = config('app.key');
+            if (! is_string($appKey) || $appKey === '') {
                 Artisan::call('key:generate', ['--force' => true]);
             }
 
@@ -105,7 +111,10 @@ class InstallController extends Controller
         }
     }
 
-    protected function checkRequirements()
+    /**
+     * @return array<string, bool|string>
+     */
+    protected function checkRequirements(): array
     {
         $extensions = [
             'bcmath', 'ctype', 'curl', 'dom', 'fileinfo', 'gd', 
@@ -117,7 +126,7 @@ class InstallController extends Controller
             'php_version' => PHP_VERSION,
             'php_supported' => version_compare(PHP_VERSION, '8.2.0', '>='),
             'writable_env' => is_writable(base_path('.env')) || is_writable(base_path()),
-            'writable_storage' => is_writable(storage_path()) && is_writable(bootstrap_path('cache')),
+            'writable_storage' => is_writable(storage_path()) && is_writable(base_path('bootstrap/cache')),
             'pdo_enabled' => extension_loaded('pdo_pgsql'),
         ];
 
@@ -128,7 +137,7 @@ class InstallController extends Controller
         return $results;
     }
 
-    protected function createSuperUser()
+    protected function createSuperUser(): void
     {
         // Assuming User model exists and uses Hash
         try {
@@ -149,7 +158,10 @@ class InstallController extends Controller
         }
     }
 
-    protected function updateEnv(array $data)
+    /**
+     * @param array<string, string> $data
+     */
+    protected function updateEnv(array $data): void
     {
         $path = base_path('.env');
         if (!File::exists($path)) {
@@ -159,7 +171,10 @@ class InstallController extends Controller
         $content = File::get($path);
         foreach ($data as $key => $value) {
             if (strpos($content, "{$key}=") !== false) {
-                $content = preg_replace("/^{$key}=.*/m", "{$key}={$value}", $content);
+                $updated = preg_replace("/^{$key}=.*/m", "{$key}={$value}", $content);
+                if ($updated !== null) {
+                    $content = $updated;
+                }
             } else {
                 $content .= "\n{$key}={$value}";
             }

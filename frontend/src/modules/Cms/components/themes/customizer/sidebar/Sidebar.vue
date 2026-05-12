@@ -121,7 +121,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { Button } from '@/components/ui'
+import { Button } from '@/shared/components/ui'
 import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js'
 import ChevronsLeft from 'lucide-vue-next/dist/esm/icons/chevrons-left.js'
 import ChevronsRight from 'lucide-vue-next/dist/esm/icons/chevrons-right.js'

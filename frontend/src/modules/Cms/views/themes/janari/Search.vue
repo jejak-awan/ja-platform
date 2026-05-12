@@ -37,15 +37,15 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch, defineAsyncComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import api from '@/services/api'
+import api from '@/core/api/client'
 const PostCard = defineAsyncComponent(() => import('./components/PostCard.vue'))
-import { useAnalytics } from '@/composables/useAnalytics'
+import { useAnalytics } from '@/shared/composables/useAnalytics'
 
-import type { Content } from '@/types/cms/cms'
+import type { Content } from '@/modules/Cms/types/cms'
 
 const { t } = useI18n()
 const { trackSearch } = useAnalytics()

@@ -11,10 +11,10 @@
               {{ $t('common.labels.biography') }}
             </TabsTrigger>
             <TabsTrigger value="address">
-              {{ $t('common.labels.locationContact') }}
+              {{ $t('modules.school.labels.locationContact') }}
             </TabsTrigger>
             <TabsTrigger value="parents">
-              {{ $t('common.labels.parentsGuardians') }}
+              {{ $t('modules.school.labels.parentsGuardians') }}
             </TabsTrigger>
           </TabsList>
 
@@ -25,11 +25,11 @@
           >
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
               <div class="md:col-span-2 space-y-2">
-                <Label for="full_name">{{ $t('features.school.admission.labels.full_name') }} <span class="text-destructive">*</span></Label>
+                <Label for="full_name">{{ $t('modules.school.admission.labels.full_name') }} <span class="text-destructive">*</span></Label>
                 <Input
                   id="full_name"
                   v-model="form.full_name"
-                  :placeholder="$t('features.school.admission.placeholders.full_name')"
+                  :placeholder="$t('modules.school.admission.placeholders.full_name')"
                   required
                 />
               </div>
@@ -39,7 +39,7 @@
                   id="nisn"
                   v-model="form.nisn"
                   maxlength="10"
-                  :placeholder="$t('features.school.admission.placeholders.nisnHint')"
+                  :placeholder="$t('modules.school.admission.placeholders.nisnHint')"
                 />
               </div>
               <div class="space-y-2">
@@ -47,13 +47,13 @@
                 <Input
                   id="nis"
                   v-model="form.nis"
-                  :placeholder="$t('features.school.admission.placeholders.nisHint')"
+                  :placeholder="$t('modules.school.admission.placeholders.nisHint')"
                 />
               </div>
               <div class="space-y-2">
                 <Label for="gender">{{ $t('common.labels.gender') }} <span class="text-destructive">*</span></Label>
                 <Select v-model="form.gender">
-                  <SelectTrigger><SelectValue :placeholder="$t('features.school.admission.placeholders.gender')" /></SelectTrigger>
+                  <SelectTrigger><SelectValue :placeholder="$t('modules.school.admission.placeholders.gender')" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="L">
                       {{ $t('common.genders.male') }}
@@ -67,7 +67,7 @@
               <div class="space-y-2">
                 <Label for="religion">{{ $t('common.labels.religion') }}</Label>
                 <Select v-model="form.religion">
-                  <SelectTrigger><SelectValue :placeholder="$t('features.school.admission.placeholders.religion')" /></SelectTrigger>
+                  <SelectTrigger><SelectValue :placeholder="$t('modules.school.admission.placeholders.religion')" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Islam">
                       Islam
@@ -106,9 +106,9 @@
                 />
               </div>
               <div class="space-y-2">
-                <Label for="level">{{ $t('features.school.students.labels.level') }}</Label>
+                <Label for="level">{{ $t('modules.school.students.labels.level') }}</Label>
                 <Select v-model="form.school_unit_id">
-                  <SelectTrigger><SelectValue :placeholder="$t('features.school.admission.placeholders.level')" /></SelectTrigger>
+                  <SelectTrigger><SelectValue :placeholder="$t('modules.school.labels.level')" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem
                       v-for="level in levels"
@@ -121,9 +121,9 @@
                 </Select>
               </div>
               <div class="space-y-2">
-                <Label for="department">{{ $t('features.school.academic.labels.department') }} ({{ $t('common.labels.other') }})</Label>
+                <Label for="department">{{ $t('modules.school.academic.labels.department') }} ({{ $t('common.labels.other') }})</Label>
                 <Select v-model="form.department_id">
-                  <SelectTrigger><SelectValue :placeholder="$t('features.school.academic.placeholders.department')" /></SelectTrigger>
+                  <SelectTrigger><SelectValue :placeholder="$t('modules.school.academic.placeholders.department')" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">
                       {{ $t('common.labels.none') }}
@@ -221,17 +221,17 @@
               <!-- Ayah -->
               <div class="space-y-4">
                 <h4 class="font-bold border-l-4 border-primary pl-2 uppercase text-sm">
-                  {{ $t('features.school.admission.labels.father_name') }}
+                  {{ $t('modules.school.admission.labels.father_name') }}
                 </h4>
                 <div class="space-y-2">
-                  <Label for="father_name">{{ $t('features.school.students.labels.fatherName') }}</Label>
+                  <Label for="father_name">{{ $t('modules.school.students.labels.fatherName') }}</Label>
                   <Input
                     id="father_name"
                     v-model="form.father_name"
                   />
                 </div>
                 <div class="space-y-2">
-                  <Label for="father_nik">NIK {{ $t('features.school.admission.labels.father_name') }}</Label>
+                  <Label for="father_nik">NIK {{ $t('modules.school.admission.labels.father_name') }}</Label>
                   <Input
                     id="father_nik"
                     v-model="form.father_nik"
@@ -239,7 +239,7 @@
                   />
                 </div>
                 <div class="space-y-2">
-                  <Label for="father_occupation">{{ $t('features.school.students.labels.fatherOccupation') }}</Label>
+                  <Label for="father_occupation">{{ $t('modules.school.students.labels.fatherOccupation') }}</Label>
                   <Input
                     id="father_occupation"
                     v-model="form.father_occupation"
@@ -250,17 +250,17 @@
               <!-- Ibu -->
               <div class="space-y-4">
                 <h4 class="font-bold border-l-4 border-primary pl-2 uppercase text-sm">
-                  {{ $t('features.school.admission.labels.mother_name') }}
+                  {{ $t('modules.school.admission.labels.mother_name') }}
                 </h4>
                 <div class="space-y-2">
-                  <Label for="mother_name">{{ $t('features.school.students.labels.motherName') }}</Label>
+                  <Label for="mother_name">{{ $t('modules.school.students.labels.motherName') }}</Label>
                   <Input
                     id="mother_name"
                     v-model="form.mother_name"
                   />
                 </div>
                 <div class="space-y-2">
-                  <Label for="mother_nik">NIK {{ $t('features.school.admission.labels.mother_name') }}</Label>
+                  <Label for="mother_nik">NIK {{ $t('modules.school.admission.labels.mother_name') }}</Label>
                   <Input
                     id="mother_nik"
                     v-model="form.mother_nik"
@@ -268,7 +268,7 @@
                   />
                 </div>
                 <div class="space-y-2">
-                  <Label for="mother_occupation">{{ $t('features.school.students.labels.motherName') }} {{ $t('features.school.students.labels.fatherOccupation') }}</Label>
+                  <Label for="mother_occupation">{{ $t('modules.school.students.labels.motherName') }} {{ $t('modules.school.students.labels.fatherOccupation') }}</Label>
                   <Input
                     id="mother_occupation"
                     v-model="form.mother_occupation"
@@ -306,7 +306,7 @@
               name="Loader2"
               class="w-4 h-4 mr-2 animate-spin"
             />
-            {{ isEdit ? $t('common.actions.saveChanges') : $t('features.school.students.actions.add') }}
+            {{ isEdit ? $t('common.actions.saveChanges') : $t('modules.school.students.actions.add') }}
           </Button>
         </div>
       </CardFooter>
@@ -319,10 +319,10 @@ import { ref, onMounted } from 'vue';
 import {
   Card, CardContent, CardFooter, Button, LucideIcon, Label, Input, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Textarea,
   Tabs, TabsList, TabsTrigger, TabsContent
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { InstitutionService } from '@/modules/School/services/InstitutionService';
 import { AcademicService } from '@/modules/School/services/AcademicService';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const props = defineProps<{
   initialData?: any;

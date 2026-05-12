@@ -163,7 +163,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
-import type { MenuItemSetting, PropertyValue } from '@/types/cms/menu';
+import type { MenuItemSetting, PropertyValue } from '@/modules/Cms/types/menu';
 
 // UI Components
 import {
@@ -178,9 +178,9 @@ import {
     SelectItem,
     Button,
     IconPicker
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
-import MediaPicker from '@/components/shared/media/MediaPicker.vue';
+import MediaPicker from '@/shared/components/media/MediaPicker.vue';
 
 const { t } = useI18n();
 

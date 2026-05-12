@@ -12,10 +12,10 @@
         {{ $t('common.actions.backTo') }} Dashboard
       </router-link>
       <h2 class="text-3xl font-bold text-foreground tracking-tight">
-        {{ $t('common.actions.edit') }} {{ $t('features.school.institution.title') }}
+        {{ $t('common.actions.edit') }} {{ $t('modules.school.institution.settings.institution.title') }}
       </h2>
       <p class="text-muted-foreground mt-2">
-        {{ $t('features.school.institution.subtitle') }}
+        {{ $t('modules.school.institution.subtitle') }}
       </p>
     </div>
 
@@ -44,10 +44,10 @@
           <div class="space-y-6 text-left">
             <div class="space-y-1">
               <h3 class="text-lg font-bold tracking-tight">
-                {{ $t('features.school.wizard.steps.basic') }}
+                {{ $t('modules.school.wizard.steps.basic') }}
               </h3>
               <p class="text-xs text-muted-foreground">
-                {{ $t('features.school.wizard.labels.institutionNameHint') }}
+                {{ $t('modules.school.wizard.labels.institutionNameHint') }}
               </p>
             </div>
             <div class="space-y-2">
@@ -78,10 +78,10 @@
           <div class="space-y-6 text-left">
             <div class="space-y-1">
               <h3 class="text-lg font-bold tracking-tight">
-                {{ $t('features.school.wizard.labels.statusTitle') }}
+                {{ $t('modules.school.wizard.labels.statusTitle') }}
               </h3>
               <p class="text-xs text-muted-foreground">
-                {{ $t('features.school.wizard.labels.statusSubtitle') }}
+                {{ $t('modules.school.wizard.labels.statusSubtitle') }}
               </p>
             </div>
             <div class="grid grid-cols-1 gap-4">
@@ -115,7 +115,7 @@
                     v-if="isStatusDisabled(status.id)"
                     class="mt-2 text-[10px] font-bold text-destructive/70 bg-destructive/5 px-2 py-0.5 rounded w-fit uppercase"
                   >
-                    {{ $t('features.school.wizard.labels.lockedByName') }}
+                    {{ $t('modules.school.wizard.labels.lockedByName') }}
                   </div>
                 </div>
               </div>
@@ -130,10 +130,10 @@
           <div class="space-y-6 text-left">
             <div class="space-y-1">
               <h3 class="text-lg font-bold tracking-tight">
-                {{ $t('features.school.wizard.labels.locationTitle') }}
+                {{ $t('modules.school.wizard.labels.locationTitle') }}
               </h3>
               <p class="text-xs text-muted-foreground">
-                {{ $t('features.school.wizard.labels.locationSubtitle') }}
+                {{ $t('modules.school.wizard.labels.locationSubtitle') }}
               </p>
             </div>
             <div class="grid grid-cols-1 gap-4">
@@ -153,10 +153,10 @@
                 </div>
                 <div>
                   <div class="font-bold text-lg">
-                    {{ $t('features.school.wizard.options.singleLocation') }}
+                    {{ $t('modules.school.wizard.options.singleLocation') }}
                   </div>
                   <div class="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    {{ $t('features.school.wizard.options.singleLocationDesc') }}
+                    {{ $t('modules.school.wizard.options.singleLocationDesc') }}
                   </div>
                 </div>
               </div>
@@ -179,16 +179,16 @@
                 </div>
                 <div>
                   <div class="font-bold text-lg">
-                    {{ $t('features.school.wizard.options.multiLocation') }}
+                    {{ $t('modules.school.wizard.options.multiLocation') }}
                   </div>
                   <div class="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    {{ $t('features.school.wizard.options.multiLocationDesc') }}
+                    {{ $t('modules.school.wizard.options.multiLocationDesc') }}
                   </div>
                   <div
                     v-if="form.type !== 'swasta'"
                     class="mt-2 text-[10px] font-bold text-primary/70 bg-primary/5 px-2 py-0.5 rounded w-fit uppercase"
                   >
-                    {{ $t('features.school.wizard.labels.onlyForPrivate') }}
+                    {{ $t('modules.school.wizard.labels.onlyForPrivate') }}
                   </div>
                 </div>
               </div>
@@ -206,10 +206,10 @@
           <div class="space-y-6 text-left">
             <div class="space-y-1">
               <h3 class="text-lg font-bold tracking-tight">
-                {{ $t('features.school.units.title') }}
+                {{ $t('modules.school.units.title') }}
               </h3>
               <p class="text-xs text-muted-foreground">
-                {{ $t('features.school.units.subtitle') }}
+                {{ $t('modules.school.units.subtitle') }}
               </p>
             </div>
             <div class="grid grid-cols-1 gap-4">
@@ -229,10 +229,10 @@
                 </div>
                 <div>
                   <div class="font-bold text-lg">
-                    {{ $t('common.labels.single_level') }}
+                    {{ $t('modules.school.labels.single_level') }}
                   </div>
                   <div class="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    {{ $t('features.school.units.singleLevelInfo.description') }}
+                    {{ $t('modules.school.units.singleLevelInfo.description') }}
                   </div>
                 </div>
               </div>
@@ -256,7 +256,7 @@
                     {{ $t('common.labels.multi_level') }}
                   </div>
                   <div class="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    {{ $t('features.school.units.subtitle') }}
+                    {{ $t('modules.school.units.subtitle') }}
                   </div>
                 </div>
               </div>
@@ -309,7 +309,7 @@
           {{ $t('common.errors.accessDenied') }}
         </h3>
         <p class="text-muted-foreground mt-2 max-w-sm mx-auto">
-          {{ $t('features.school.rbac.noPermissionEdit') }}
+          {{ $t('modules.school.rbac.noPermissionEdit') }}
         </p>
         <Button
           as-child
@@ -337,7 +337,7 @@
             {{ $t('common.actions.saveChanges') }}?
           </DialogTitle>
           <DialogDescription class="text-muted-foreground leading-relaxed">
-            Apakah Anda yakin ingin menyimpan perubahan pada identitas lembaga ini? Perubahan akan langsung diterapkan ke seluruh sistem.
+            {{ $t('modules.school.institution.saveStrictWarning') }}
           </DialogDescription>
         </DialogHeader>
 
@@ -347,7 +347,7 @@
               for="saveConfirmName"
               class="text-sm font-bold text-foreground"
             >
-              Silakan ketik nama lembaga di bawah untuk mengonfirmasi penyimpanan perubahan:
+              {{ $t('modules.school.institution.saveStrictConfirmPrompt') }}
             </Label>
             <div class="bg-muted/50 p-3 rounded-lg border border-border/50 font-mono text-sm text-center font-bold text-primary">
               {{ schoolStore.currentSchool?.name }}
@@ -355,7 +355,7 @@
             <Input 
               id="saveConfirmName"
               v-model="saveConfirmName"
-              :placeholder="$t('features.school.institution.deleteStrictPlaceholder')"
+              :placeholder="$t('modules.school.institution.deleteStrictPlaceholder')"
               class="h-12 rounded-xl border-primary/20 focus:ring-primary/20 focus:border-primary/30"
               @keyup.enter="saveConfirmName === schoolStore.currentSchool?.name && executeSubmit()"
             />
@@ -400,11 +400,11 @@ import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useSchoolStore } from '../../../stores/school';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import { useToast } from '@/composables/useToast';
+import { useToast } from '@/shared/composables/useToast';
 import {
   Card, CardContent, Button, Input, Label, Textarea, LucideIcon,
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const router = useRouter();
 const route = useRoute();
@@ -462,14 +462,14 @@ const isStatusDisabled = (statusId: string) => {
 const statusOptions = computed(() => [
   { 
     id: 'negeri', 
-    name: t('features.school.institution.status.negeri'), 
-    description: t('features.school.wizard.labels.statusNegeriDesc'), 
+    name: t('modules.school.institution.status.negeri'), 
+    description: t('modules.school.wizard.labels.statusNegeriDesc'), 
     icon: 'ShieldCheck' 
   },
   { 
     id: 'swasta', 
-    name: t('features.school.institution.status.swasta'), 
-    description: t('features.school.wizard.labels.statusSwastaDescCombined'), 
+    name: t('modules.school.institution.status.swasta'), 
+    description: t('modules.school.wizard.labels.statusSwastaDescCombined'), 
     icon: 'Building' 
   },
 ]);
@@ -507,7 +507,7 @@ const saveConfirmName = ref('');
  */
 const submit = async () => {
   if (!form.name) {
-    toast.error.action(t('features.school.units.errors.nameRequired'));
+    toast.error.action(t('modules.school.units.errors.nameRequired'));
     return;
   }
   saveConfirmName.value = '';
@@ -516,7 +516,7 @@ const submit = async () => {
 
 const executeSubmit = async () => {
   if (saveConfirmName.value !== schoolStore.currentSchool?.name) {
-    toast.error.action(t('features.school.units.errors.nameRequired'));
+    toast.error.action(t('modules.school.units.errors.nameRequired'));
     return;
   }
 

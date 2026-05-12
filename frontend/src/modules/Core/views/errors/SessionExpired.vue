@@ -11,18 +11,18 @@
     </template>
 
     <template #message>
-      {{ t('features.errors.419.title') }}
+      {{ t('common.errors.419.title') }}
     </template>
 
     <template #description>
       <span v-if="route.query.reason === 'concurrent'">
-        {{ t('features.errors.419.concurrent') }}
+        {{ t('common.errors.419.concurrent') }}
       </span>
       <span v-else-if="route.query.reason === 'timeout'">
-        {{ t('features.errors.419.timeout') }}
+        {{ t('common.errors.419.timeout') }}
       </span>
       <span v-else>
-        {{ t('features.errors.419.message') }}
+        {{ t('common.errors.419.message') }}
       </span>
     </template>
 
@@ -32,14 +32,14 @@
         @click="login"
       >
         <LogIn class="w-4 h-4 mr-2" />
-        {{ t('features.errors.419.login') }}
+        {{ t('common.errors.419.login') }}
       </button>
       <button
         class="flex-1 inline-flex items-center justify-center px-4 py-3 border border-border text-sm font-medium rounded-2xl text-foreground bg-muted hover:bg-muted/80 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-orange-500 transition-[background-color,transform] active:scale-95"
         @click="refresh"
       >
         <RefreshCw class="w-4 h-4 mr-2 text-muted-foreground" />
-        {{ t('features.errors.419.refresh') }}
+        {{ t('common.errors.419.refresh') }}
       </button>
     </template>
         
@@ -59,7 +59,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useI18n } from 'vue-i18n';
 import { SECURITY_ROUTES } from '@/config/security';
-import ErrorLayout from '@/layouts/core/ErrorLayout.vue';
+import ErrorLayout from '@/modules/Core/layouts/ErrorLayout.vue';
 import Fingerprint from 'lucide-vue-next/dist/esm/icons/fingerprint-pattern.js';
 import LogIn from 'lucide-vue-next/dist/esm/icons/log-in.js';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';

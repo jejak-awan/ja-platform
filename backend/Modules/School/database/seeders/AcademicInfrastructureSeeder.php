@@ -12,8 +12,11 @@ class AcademicInfrastructureSeeder extends Seeder
 {
     public function run(): void
     {
-        $schoolId = 15;
-        $levelId = 15;
+        $school = \Illuminate\Support\Facades\DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        $unit = $school ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
+        if (!$school || !$unit) { $this->command->warn('No school/unit found. Skipping AcademicInfrastructureSeeder.'); return; }
+        $schoolId = $school->id;
+        $levelId = $unit->id;
 
         // 1. Create Academic Year
         $year = AcademicYear::withoutGlobalScopes()->updateOrCreate(

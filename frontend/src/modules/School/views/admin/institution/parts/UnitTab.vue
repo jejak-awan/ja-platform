@@ -5,7 +5,7 @@
       <div class="p-6 border-b border-border bg-background/50 backdrop-blur-sm sticky top-0 z-10">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-xs font-bold text-foreground/70 tracking-tight flex items-center gap-2">
-            {{ $t('common.labels.unitList') }}
+            {{ $t('modules.school.labels.unitList') }}
             <Badge
               variant="secondary"
               class="rounded-full px-2 h-4 text-[10px] bg-foreground/5 text-foreground border-none font-bold"
@@ -144,7 +144,7 @@
                   name="MapPin"
                   class="w-3.5 h-3.5 opacity-50"
                 />
-                {{ selectedUnit.settings?.address || $t('common.messages.addressNotSet') }}
+                {{ selectedUnit.settings?.address || $t('modules.school.messages.addressNotSet') }}
               </p>
             </div>
           </div>
@@ -158,7 +158,7 @@
               @click="$emit('set-default', selectedUnit)"
             >
               <LucideIcon name="Star" class="w-4 h-4 mr-2" />
-              {{ $t('common.labels.markAsDefault') }}
+              {{ $t('modules.school.labels.markAsDefault') }}
             </Button>
             <Badge
               v-else-if="selectedUnit?.settings?.is_default"
@@ -254,7 +254,7 @@
             name="Plus"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.units.emptyAction') }}
+          {{ $t('modules.school.units.emptyAction') }}
         </Button>
       </div>
     </div>
@@ -263,9 +263,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Badge, Button, LucideIcon, Input } from '@/components/ui';
+import { Badge, Button, LucideIcon, Input } from '@/shared/components/ui';
 import UnitDetailContainer from '../components/unit-detail/UnitDetailContainer.vue';
-import type { SchoolUnit } from '@/types';
+import type { SchoolUnit } from '@/modules/School/types';
 
 const props = defineProps<{
   units: SchoolUnit[];

@@ -22,7 +22,7 @@
         variant-type="outline"
         @click="clearLogs"
       >
-        {{ t('features.system.logs.clear') }}
+        {{ t('modules.core.system.logs.clear') }}
       </Button>
     </div>
 
@@ -327,13 +327,13 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { getResponseList } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+import api from '@/core/api/client';
+import { getResponseList } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import {
     Button,
     Pagination,
@@ -343,14 +343,14 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import Download from 'lucide-vue-next/dist/esm/icons/download.js';
 import Check from 'lucide-vue-next/dist/esm/icons/check.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import AlertTriangle from 'lucide-vue-next/dist/esm/icons/triangle-alert.js';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui';
+import { Card, CardHeader, CardTitle, CardContent } from '@/shared/components/ui';
 
 interface User {
     id: number;
@@ -465,8 +465,8 @@ const fetchUsers = async () : Promise<void> => {
 
 const clearLogs = async () : Promise<void> => {
     const confirmed = await confirm({
-        title: t('features.system.logs.actions.clear'),
-        message: t('features.system.logs.confirm.clear') || 'Are you sure you want to clear all logs?',
+        title: t('modules.core.system.logs.actions.clear'),
+        message: t('modules.core.system.logs.confirm.clear') || 'Are you sure you want to clear all logs?',
         variant: 'danger',
         confirmText: t('common.actions.clear'),
     });
@@ -477,7 +477,7 @@ const clearLogs = async () : Promise<void> => {
         await api.post('/admin/core/access-journal/clear');
         await fetchHistory();
         await fetchStatistics();
-        toast.success.action(t('features.system.logs.messages.cleared') || 'Logs cleared successfully');
+        toast.success.action(t('modules.core.system.logs.messages.cleared') || 'Logs cleared successfully');
     } catch (error: unknown) {
         logger.error('Failed to clear logs:', (error as Error).message);
         toast.error.fromResponse(error);
@@ -505,7 +505,7 @@ const exportHistory = async () : Promise<void> => {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-        toast.success.action(t('features.analytics.export.success') || 'Export started');
+        toast.success.action(t('modules.core.analytics.export.success') || 'Export started');
     } catch (error: unknown) {
         logger.error('Failed to export:', (error as Error).message);
         toast.error.fromResponse(error);

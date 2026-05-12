@@ -10,8 +10,8 @@
         "license_type": "Paket layanan yang aktif saat ini (Free/Community/Pro/Pro+).",
         "app_name": "Nama aplikasi yang akan muncul di dashboard, footer, dan judul tab admin.",
         "school_name": "Nama resmi sekolah atau lembaga yang ditampilkan di portal publik.",
-        "brand_logo": "Logo yang ditampilkan di sidebar dan header dashboard admin",
-        "brand_favicon": "Ikon yang ditampilkan di tab browser saat membuka dashboard admin",
+        "app_logo": "Logo yang ditampilkan di sidebar dan header dashboard admin",
+        "app_favicon": "Ikon yang ditampilkan di tab browser saat membuka dashboard admin",
         "branding_display": "Pilih tampilan branding di sidebar: logo saja, teks saja, atau keduanya",
         "timezone": "Zona waktu default yang digunakan untuk semua tanggal dan waktu",
         "date_format": "Format yang digunakan untuk menampilkan tanggal di seluruh aplikasi",
@@ -58,6 +58,9 @@
         "enable_cache": "Simpan data komputasi sementara untuk mempercepat situs",
         "cache_driver": "Sistem penyimpanan untuk data cache",
         "cache_ttl": "Durasi default untuk item cache tetap valid",
+        "cache_status": "Kelola driver dan status cache aplikasi",
+        "cdn_status": "Konfigurasi Content Delivery Network",
+        "performance_status": "Optimasi gambar, lazy loading, dan lainnya",
         "enable_image_optimization": "Optimalkan gambar secara otomatis saat diunggah untuk performa lebih baik",
         "enable_lazy_loading": "Muat gambar hanya saat masuk ke area tampilan (viewport)",
         "enable_cdn": "Sajikan aset statis dari Content Delivery Network (CDN)",
@@ -108,15 +111,12 @@
             "autosave_enabled": "Jika aktif, perubahan draft akan tersimpan otomatis saat mengedit konten.",
             "autosave_interval_seconds": "Seberapa sering autosave berjalan saat mengedit. Rekomendasi: 15 (editing aktif), 30 (seimbang), atau 60 detik (beban server lebih ringan)."
         },
-        "comments": {
-            "security": {
-                "enable_reply": "Izinkan pengguna untuk membalas komentar lain",
-                "allow_guests": "Izinkan pengguna berkomentar tanpa login",
-                "moderation_enabled": "Komentar baru memerlukan persetujuan admin sebelum muncul",
-                "guest_captcha": "Wajibkan tamu menyelesaikan captcha untuk memposting",
-                "max_links": "Jumlah maksimum tautan yang diperbolehkan dalam satu komentar (0 untuk tidak terbatas)",
-                "banned_words": "Daftar kata yang akan menyebabkan komentar ditandai sebagai spam (array JSON)"
-            }
-        }
+        "school_address": "The physical address of the institution",
+        "school_phone": "Main contact phone number for the institution",
+        "two_factor_method": "Method used for 2FA verification",
+        "two_factor_enforced_roles": "Enforce 2FA for specific user roles",
+        "maintenance_end_time": "When the maintenance is scheduled to end. The site will automatically become live after this time.",
+        "scanner_auto_block_threshold": "Number of malicious scanner hits within 1 hour before an IP is automatically blocked.",
+        "security_learned_scanner_paths": "JSON array of scanner paths learned by the automated tuning engine. Manually modify if needed."
     }
 }

@@ -1,4 +1,4 @@
-import type { Theme } from '@/composables/useTheme'
+import type { Theme } from '@/shared/composables/useTheme'
 
 export type ThemeViewModules = Record<string, () => Promise<unknown>>
 

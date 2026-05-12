@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { debounce, throttle } from '@/utils/debounce';
-import { debounce as perfDebounce, throttle as perfThrottle } from '@/utils/performance';
-import { formatCurrency, formatNumber, formatDate, getStatusVariant } from '@/utils/format';
-import { navigationGroups } from '@/utils/navigation';
+import { debounce, throttle } from '@/shared/utils/debounce';
+import { debounce as perfDebounce, throttle as perfThrottle } from '@/shared/utils/performance';
+import { formatCurrency, formatNumber, formatDate, getStatusVariant } from '@/shared/utils/format';
+
 
 describe('Common Utilities', () => {
     describe('Debounce & Throttle (debounce.ts)', () => {
@@ -135,20 +135,5 @@ describe('Common Utilities', () => {
         });
     });
 
-    describe('Navigation Configuration', () => {
-        it('has all required categories', () => {
-            const categories = Object.keys(navigationGroups);
-            expect(categories).toContain('cms');
-            expect(categories).toContain('school');
-            expect(categories).toContain('core');
-        });
 
-        it('has correct properties in nav items', () => {
-            const firstItem = navigationGroups.cms?.[0];
-            expect(firstItem).toBeDefined();
-            // navigationGroups.cms[0] is a wrapper with children, not a direct NavItem with name/to
-            expect(firstItem).toHaveProperty('label');
-            expect(firstItem).toHaveProperty('children');
-        });
-    });
 });

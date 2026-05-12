@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { logger } from '@/utils/logger';
-import { parseSingleResponse, type PaginationData } from '@/utils/responseParser';
+import { logger } from '@/shared/utils/logger';
+import { parseSingleResponse, type PaginationData } from '@/shared/utils/responseParser';
 import InstitutionService from '../services/InstitutionService';
-import type { School } from '@/types';
+import type { School } from '@/modules/School/types';
 
 interface SchoolState {
     schools: School[];
@@ -40,7 +40,7 @@ export const useSchoolStore = defineStore('school', {
                     
                     // Persist for API interceptor
                     if (this.currentSchool.id) {
-                        localStorage.setItem('active_school_id', String(this.currentSchool.id));
+                        sessionStorage.setItem('active_school_id', String(this.currentSchool.id));
                     }
                 }
             } catch (e: unknown) {
@@ -59,7 +59,7 @@ export const useSchoolStore = defineStore('school', {
                 if (this.currentSchool) {
                     this.schools = [this.currentSchool];
                     if (this.currentSchool.id) {
-                        localStorage.setItem('active_school_id', String(this.currentSchool.id));
+                        sessionStorage.setItem('active_school_id', String(this.currentSchool.id));
                     }
                 }
                 return this.currentSchool;
@@ -82,7 +82,7 @@ export const useSchoolStore = defineStore('school', {
                 if (this.currentSchool?.id === id) {
                     this.currentSchool = null;
                     this.schools = [];
-                    localStorage.removeItem('active_school_id');
+                    sessionStorage.removeItem('active_school_id');
                 }
             } catch (e: unknown) {
                 logger.error('Failed to delete institution:', e);
@@ -100,7 +100,7 @@ export const useSchoolStore = defineStore('school', {
                 if (this.currentSchool) {
                     this.schools = [this.currentSchool];
                     if (this.currentSchool.id) {
-                        localStorage.setItem('active_school_id', String(this.currentSchool.id));
+                        sessionStorage.setItem('active_school_id', String(this.currentSchool.id));
                     }
                 }
                 return this.currentSchool;

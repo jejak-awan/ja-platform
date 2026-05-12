@@ -96,12 +96,12 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useCoreStore } from '@/modules/Core/stores/core';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 
-const cmsStore = useCmsStore();
-const siteName = computed(() => cmsStore.siteSettings?.site_name || 'Janari CMS');
+const coreStore = useCoreStore();
+const siteName = computed(() => coreStore.siteSettings?.site_name || 'Janari App');
 const lastUpdated = computed(() => {
     const today = new Date();
     return today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });

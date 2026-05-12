@@ -2,17 +2,17 @@
   <Dialog :open="open" @update:open="$emit('update:open', $event)">
     <DialogContent class="sm:max-w-[600px]">
       <DialogHeader>
-        <DialogTitle>{{ $t('features.school.admission.actions.manualRegister') }}</DialogTitle>
+        <DialogTitle>{{ $t('modules.school.admission.actions.manualRegister') }}</DialogTitle>
       </DialogHeader>
 
       <form @submit.prevent="save" class="space-y-6 py-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Tahun Ajaran -->
           <div class="space-y-2 col-span-2 md:col-span-1">
-            <Label>{{ $t('features.school.admission.labels.academicYear') }} <span class="text-destructive">*</span></Label>
+            <Label>{{ $t('modules.school.admission.labels.academicYear') }} <span class="text-destructive">*</span></Label>
             <Select v-model="form.academic_year_id" required>
               <SelectTrigger class="h-11 rounded-xl">
-                <SelectValue :placeholder="$t('features.school.admission.placeholders.selectYear')" />
+                <SelectValue :placeholder="$t('modules.school.admission.placeholders.selectYear')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem v-for="year in academicYears" :key="year.id" :value="String(year.id)">
@@ -24,10 +24,10 @@
 
           <!-- Jenjang -->
           <div class="space-y-2 col-span-2 md:col-span-1">
-            <Label>{{ $t('features.school.admission.labels.level') }} <span class="text-destructive">*</span></Label>
+            <Label>{{ $t('modules.school.admission.labels.level') }} <span class="text-destructive">*</span></Label>
             <Select v-model="form.school_unit_id" required>
               <SelectTrigger class="h-11 rounded-xl">
-                <SelectValue :placeholder="$t('features.school.admission.placeholders.selectLevel')" />
+                <SelectValue :placeholder="$t('modules.school.admission.placeholders.selectLevel')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem v-for="level in schoolUnits" :key="level.id" :value="String(level.id)">
@@ -39,10 +39,10 @@
 
           <!-- Nama Lengkap -->
           <div class="space-y-2 col-span-2">
-            <Label>{{ $t('features.school.admission.labels.full_name') }} <span class="text-destructive">*</span></Label>
+            <Label>{{ $t('modules.school.admission.labels.full_name') }} <span class="text-destructive">*</span></Label>
             <Input
               v-model="form.full_name"
-              :placeholder="$t('features.school.admission.placeholders.full_name')"
+              :placeholder="$t('modules.school.admission.placeholders.full_name')"
               required
               class="rounded-xl h-11"
             />
@@ -50,10 +50,10 @@
 
           <!-- NISN -->
           <div class="space-y-2">
-            <Label>{{ $t('features.school.admission.labels.nisn') }}</Label>
+            <Label>{{ $t('modules.school.admission.labels.nisn') }}</Label>
             <Input
               v-model="form.nisn"
-              :placeholder="$t('features.school.admission.placeholders.nisnHint')"
+              :placeholder="$t('modules.school.admission.placeholders.nisnHint')"
               class="rounded-xl h-11"
             />
           </div>
@@ -63,7 +63,7 @@
             <Label>{{ $t('common.labels.gender') }} <span class="text-destructive">*</span></Label>
             <Select v-model="form.gender" required>
               <SelectTrigger class="h-11 rounded-xl">
-                <SelectValue :placeholder="$t('features.school.admission.placeholders.selectGender')" />
+                <SelectValue :placeholder="$t('modules.school.admission.placeholders.selectGender')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="male">{{ $t('common.genders.male') }}</SelectItem>
@@ -107,12 +107,12 @@ import LoaderCircle from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { AdmissionService } from '@/modules/School/services/AdmissionService';
 import { AcademicService } from '@/modules/School/services/AcademicService';
 import { InstitutionService } from '@/modules/School/services/InstitutionService';
-import { parseResponse } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
 
 const props = defineProps<{ open: boolean }>();
 const emits = defineEmits(['update:open', 'save']);

@@ -21,15 +21,15 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Language extends Model
 {
-    /** @use HasFactory<\Modules\Cms\Database\Factories\LanguageFactory> */
+    /** @use HasFactory<\Modules\Core\Database\Factories\LanguageFactory> */
     use HasFactory;
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Cms\Database\Factories\LanguageFactory
+    protected static function newFactory(): \Modules\Core\Database\Factories\LanguageFactory
     {
-        return \Modules\Cms\Database\Factories\LanguageFactory::new();
+        return \Modules\Core\Database\Factories\LanguageFactory::new();
     }
 
     protected $fillable = [

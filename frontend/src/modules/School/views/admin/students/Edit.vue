@@ -9,13 +9,13 @@
           <LucideIcon
             name="ArrowLeft"
             class="w-3 h-3"
-          /> {{ $t('common.actions.backTo') }} {{ $t('features.school.students.labels.studentData') }}
+          /> {{ $t('common.actions.backTo') }} {{ $t('modules.school.students.labels.studentData') }}
         </router-link>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('common.actions.edit') }} {{ $t('features.school.students.labels.studentData') }}
+          {{ $t('common.actions.edit') }} {{ $t('modules.school.students.labels.studentData') }}
         </h1>
         <p class="text-sm text-muted-foreground">
-          {{ $t('features.school.students.subtitle') }}
+          {{ $t('modules.school.students.subtitle') }}
         </p>
       </div>
     </div>
@@ -44,10 +44,10 @@ import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { StudentService } from '@/modules/School/services/StudentService';
-import { LucideIcon } from '@/components/ui';
-import { useToast } from '@/composables/useToast';
+import { LucideIcon } from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
 import StudentForm from './components/StudentForm.vue';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -74,7 +74,7 @@ const handleSubmit = async (formData: any) => {
   saving.value = true;
   try {
     await StudentService.updateStudent(Number(route.params.id), formData);
-    toast.success.action(t('features.school.academic.messages.updateSuccess'));
+    toast.success.action(t('modules.school.academic.messages.updateSuccess'));
     router.push({ name: 'students.index' });
   } catch (e) {
     toast.error.fromResponse(e);

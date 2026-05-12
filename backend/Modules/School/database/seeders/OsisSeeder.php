@@ -12,7 +12,9 @@ class OsisSeeder extends Seeder
 {
     public function run(): void
     {
-        $schoolId = 15;
+        $school = \Illuminate\Support\Facades\DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        if (!$school) { return; }
+        $schoolId = $school->id;
         $students = Student::where('school_id', $schoolId)->get();
 
         if ($students->isEmpty()) {

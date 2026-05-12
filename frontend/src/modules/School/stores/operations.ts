@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { logger } from '@/utils/logger';
-import { parseResponse, type PaginationData } from '@/utils/responseParser';
+import { logger } from '@/shared/utils/logger';
+import { parseResponse, type PaginationData } from '@/shared/utils/responseParser';
 import OperationsService from '../services/OperationsService';
-import type { Visitor, AuditLog } from '@/types';
+import type { Visitor, OperationAuditLog as AuditLog } from '@/modules/School/types';
 
 interface OperationsState {
     visitors: Visitor[];

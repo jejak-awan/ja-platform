@@ -57,7 +57,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import type { Content } from '@/types/cms/cms'
+import type { Content } from '@/modules/Cms/types/cms'
 import Calendar from 'lucide-vue-next/dist/esm/icons/calendar.js'
 
 interface Props {

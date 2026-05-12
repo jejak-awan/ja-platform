@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Modules\Core\Helpers\UploadSettingsHelper;
-use Modules\Cms\Services\MediaService;
+use Modules\Core\Services\MediaService;
 use Modules\Core\Models\ActivityLog;
 use Modules\Core\Models\DeletedFile;
 use Modules\Core\Models\User;

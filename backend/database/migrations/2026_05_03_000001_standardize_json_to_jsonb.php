@@ -12,6 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Only run for Postgres
+        if (DB::getDriverName() !== 'pgsql') {
+            return;
+        }
+
         // 1. Convert JSON to JSONB for better Postgres performance
         $tablesToConvert = [
             'users' => ['preferences'],

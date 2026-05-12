@@ -2,10 +2,10 @@
   <div>
     <div class="mb-6">
       <h1 class="text-2xl font-bold text-foreground">
-        {{ $t('features.settings.title') }}
+        {{ $t('modules.cms.settings.title') }}
       </h1>
       <p class="mt-1 text-sm text-muted-foreground">
-        {{ $t('features.settings.description') }}
+        {{ $t('modules.cms.settings.description') }}
       </p>
     </div>
 
@@ -14,7 +14,7 @@
       class="bg-card border border-border rounded-lg p-12 text-center"
     >
       <p class="text-muted-foreground">
-        {{ $t('features.settings.loading') }}
+        {{ $t('modules.cms.settings.loading') }}
       </p>
     </div>
 
@@ -39,7 +39,7 @@
                 :is="getTabIcon(tab.id)"
                 class="w-4 h-4 mr-2"
               />
-              {{ $t('features.settings.tabs.' + tab.id) }}
+              {{ $t('modules.cms.settings.tabs.' + tab.id) }}
             </TabsTrigger>
           </TabsList>
         </div>
@@ -54,7 +54,7 @@
             class="text-center py-8"
           >
             <p class="text-muted-foreground">
-              {{ $t('features.settings.noSettings') }}
+              {{ $t('modules.cms.settings.noSettings') }}
             </p>
           </div>
 
@@ -99,13 +99,13 @@
               variant="outline"
               @click="resetForm"
             >
-              {{ $t('features.settings.reset') }}
+              {{ $t('modules.cms.settings.reset') }}
             </Button>
             <Button
               type="submit"
               :disabled="saving || !isDirty"
             >
-              {{ saving ? $t('features.settings.saving') : $t('features.settings.save') }}
+              {{ saving ? $t('modules.cms.settings.saving') : $t('modules.cms.settings.save') }}
             </Button>
           </div>
         </form>
@@ -116,21 +116,21 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, watch, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import api from '@/services/api';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
+import api from '@/core/api/client';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import {
     Tabs,
     TabsList,
     TabsTrigger,
     TabsContent,
     Button
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
-import type { SettingValue } from '@/types/core/settings';
+import type { SettingValue } from '@/core/types/settings';
 // Async Tab Components
 const IdentityTab = defineAsyncComponent(() => import('./tabs/IdentityTab.vue'));
 const SeoTab = defineAsyncComponent(() => import('./tabs/SeoTab.vue'));
@@ -194,10 +194,10 @@ import { useAuthStore } from '@/modules/Core/stores/auth';
 const authStore = useAuthStore();
 const tabs = computed<Tab[]>(() => {
     const allTabs: Tab[] = [
-        { id: 'identity', label: t('features.settings.tabs.identity') },
-        { id: 'comments', label: t('features.settings.tabs.comments') },
-        { id: 'seo', label: t('features.settings.tabs.seo') },
-        { id: 'analytics', label: t('features.settings.tabs.analytics') },
+        { id: 'identity', label: t('modules.cms.settings.tabs.identity') },
+        { id: 'comments', label: t('modules.cms.settings.tabs.comments') },
+        { id: 'seo', label: t('modules.cms.settings.tabs.seo') },
+        { id: 'analytics', label: t('modules.cms.settings.tabs.analytics') },
     ];
 
     if (authStore.isAtLeastRole('super')) {

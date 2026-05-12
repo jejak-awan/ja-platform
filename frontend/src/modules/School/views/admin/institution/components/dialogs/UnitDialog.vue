@@ -15,7 +15,7 @@
           </div>
           <div class="text-left">
             <DialogTitle class="text-xl font-bold">
-              {{ editingId ? $t('features.school.units.edit') : (isMultiLevel ? $t('features.school.units.form.addTitle') : $t('features.school.units.form.addTitleLevel')) }}
+              {{ editingId ? $t('modules.school.units.edit') : (isMultiLevel ? $t('modules.school.units.form.addTitle') : $t('modules.school.units.form.addTitleLevel')) }}
             </DialogTitle>
             <DialogDescription class="text-xs font-bold text-muted-foreground/60 mt-0.5">
               {{ editingId ? $t('common.actions.edit') : $t('common.actions.create') }}
@@ -44,7 +44,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <!-- Level Type -->
           <div class="space-y-2">
-            <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('features.school.units.form.type') }}</Label>
+            <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('modules.school.units.form.type') }}</Label>
             <Select
               v-model="localForm.level"
               :disabled="isSingleLevel"
@@ -53,24 +53,24 @@
                 class="h-11 rounded-xl border-border/50 focus:ring-primary/20 bg-muted/5"
                 :class="{ 'opacity-70 cursor-not-allowed': isSingleLevel }"
               >
-                <SelectValue :placeholder="$t('features.school.units.form.typePlaceholder')" />
+                <SelectValue :placeholder="$t('modules.school.units.form.typePlaceholder')" />
               </SelectTrigger>
               <SelectContent class="rounded-xl border-border/40 shadow-xl">
-                <SelectItem value="sd">{{ $t('features.school.wizard.options.sd') }}</SelectItem>
-                <SelectItem value="smp">{{ $t('features.school.wizard.options.smp') }}</SelectItem>
-                <SelectItem value="sma">{{ $t('features.school.wizard.options.sma') }}</SelectItem>
-                <SelectItem value="smk">{{ $t('features.school.wizard.options.smk') }}</SelectItem>
+                <SelectItem value="sd">{{ $t('modules.school.wizard.options.sd') }}</SelectItem>
+                <SelectItem value="smp">{{ $t('modules.school.wizard.options.smp') }}</SelectItem>
+                <SelectItem value="sma">{{ $t('modules.school.wizard.options.sma') }}</SelectItem>
+                <SelectItem value="smk">{{ $t('modules.school.wizard.options.smk') }}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <!-- Level NPSN -->
           <div class="space-y-2">
-            <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('features.school.units.form.npsn') }}</Label>
+            <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('modules.school.units.form.npsn') }}</Label>
             <Input 
               v-model="localForm.npsn" 
               maxlength="8" 
-              :placeholder="$t('features.school.units.form.npsnPlaceholder')" 
+              :placeholder="$t('modules.school.units.form.npsnPlaceholder')" 
               class="h-11 rounded-xl border-border/50 focus:ring-primary/20 bg-muted/5 font-mono tracking-widest"
             />
           </div>
@@ -80,28 +80,28 @@
             v-if="!isSingleLevel"
             class="space-y-2 md:col-span-2"
           >
-            <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('features.school.units.form.name') }}</Label>
+            <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('modules.school.units.form.name') }}</Label>
             <Input 
               v-model="localForm.name" 
-              :placeholder="$t('features.school.units.form.namePlaceholder')" 
+              :placeholder="$t('modules.school.units.form.namePlaceholder')" 
               class="h-11 rounded-xl border-border/50 focus:ring-primary/20 bg-muted/5 font-medium placeholder:font-normal"
             />
             <p class="text-[10px] text-muted-foreground italic flex items-center gap-1 opacity-70">
               <LucideIcon name="Info" class="w-3 h-3" />
-              {{ $t('features.school.hints.levelNameFormat') }}
+              {{ $t('modules.school.hints.levelNameFormat') }}
             </p>
           </div>
 
           <!-- Level Accreditation -->
           <div class="space-y-2 md:col-span-2">
-            <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('common.labels.accreditation') }}</Label>
+            <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('modules.school.labels.accreditation') }}</Label>
             <Select v-model="localForm.accreditation">
               <SelectTrigger class="h-11 rounded-xl border-border/50 focus:ring-primary/20 bg-muted/5 font-bold">
                 <SelectValue :placeholder="$t('common.placeholders.selectAccreditation')" />
               </SelectTrigger>
               <SelectContent class="rounded-xl border-border/40 shadow-xl">
                 <SelectItem
-                  v-for="(label, key) in $tm('common.labels.accreditationOptions')"
+                  v-for="(label, key) in $tm('modules.school.labels.accreditationOptions')"
                   :key="key"
                   :value="String(key)"
                 >
@@ -139,7 +139,7 @@ import {
   Button, LucideIcon, Input, Label,
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 // Props passed from the parent component (InstitutionTabs)
 const props = defineProps<{

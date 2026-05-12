@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Modules\Cms\Services\ThemeCacheService;
 use Modules\Cms\Support\ThemeViews;
-use Modules\School\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByUnit;
 
 /**
  * @property int $id

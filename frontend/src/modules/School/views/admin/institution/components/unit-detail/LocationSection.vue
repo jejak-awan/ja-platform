@@ -12,9 +12,9 @@
           />
         </div>
         <div class="text-left">
-          <span class="font-bold text-foreground text-sm tracking-tight">{{ $t('features.school.units.sections.location') }}</span>
+          <span class="font-bold text-foreground text-sm tracking-tight">{{ $t('modules.school.units.sections.location') }}</span>
           <p class="text-[10px] text-muted-foreground font-medium mt-0.5 opacity-70">
-            {{ $t('features.school.units.sections.locationDesc') }}
+            {{ $t('modules.school.units.sections.locationDesc') }}
           </p>
         </div>
       </div>
@@ -188,7 +188,7 @@
                 class="w-8 h-8 opacity-20"
               />
               <p class="text-xs">
-                {{ $t('common.messages.noMapLocation') }}
+                {{ $t('modules.school.messages.noMapLocation') }}
               </p>
             </div>
           </div>
@@ -197,7 +197,7 @@
         <!-- Other Details -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
           <div class="space-y-2">
-            <Label class="text-xs font-bold text-muted-foreground/80">{{ $t('common.labels.rt') }}</Label>
+            <Label class="text-xs font-bold text-muted-foreground/80">{{ $t('modules.school.labels.rt') }}</Label>
             <Input
               v-model="localSettings.rt"
               class="rounded-xl h-11 border-border bg-muted/10 focus:ring-foreground/5 text-sm font-medium"
@@ -205,7 +205,7 @@
             />
           </div>
           <div class="space-y-2">
-            <Label class="text-xs font-bold text-muted-foreground/80">{{ $t('common.labels.rw') }}</Label>
+            <Label class="text-xs font-bold text-muted-foreground/80">{{ $t('modules.school.labels.rw') }}</Label>
             <Input
               v-model="localSettings.rw"
               class="rounded-xl h-11 border-border bg-muted/10 focus:ring-foreground/5 text-sm font-medium"
@@ -260,8 +260,8 @@ import {
   AccordionItem, AccordionTrigger, AccordionContent, 
   Label, Input, Switch, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
   Badge, Textarea
-} from '@/components/ui';
-import type { LocationItem } from '@/services/IndonesianLocation';
+} from '@/shared/components/ui';
+import type { LocationItem } from '@/shared/services/IndonesianLocation';
 
 const props = defineProps<{
   settings: any;

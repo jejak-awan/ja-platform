@@ -463,16 +463,16 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted, watch, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import { debounce } from '@/utils/debounce';
+import { debounce } from '@/shared/utils/debounce';
 
 import axios from 'axios';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 
 // UI Components
@@ -495,7 +495,7 @@ import {
     Pagination,
     Checkbox,
     DataTable
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 
 import { 

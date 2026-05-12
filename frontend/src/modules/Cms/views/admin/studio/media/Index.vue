@@ -4,10 +4,10 @@
     <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
         <h1 class="text-2xl font-bold tracking-tight text-foreground">
-          {{ $t('features.media.title') }}
+          {{ $t('modules.core.media.title') }}
         </h1>
         <p class="text-muted-foreground">
-          {{ $t('features.media.description') }}
+          {{ $t('modules.core.media.description') }}
         </p>
       </div>
       <div class="flex items-center space-x-3">
@@ -16,14 +16,14 @@
           @click="showFolderModal = true"
         >
           <FolderPlus class="w-4 h-4 mr-2" />
-          {{ $t('features.media.newFolder') }}
+          {{ $t('modules.core.media.newFolder') }}
         </Button>
         <Button
           type="button"
           @click="showUploadModal = true"
         >
           <Plus class="w-4 h-4 mr-2" />
-          {{ $t('features.media.upload') }}
+          {{ $t('modules.core.media.upload') }}
         </Button>
       </div>
     </div>
@@ -89,7 +89,7 @@
               >
                 <Loader2 class="w-8 h-8 animate-spin text-primary mb-4" />
                 <p class="text-muted-foreground">
-                  {{ $t('features.media.loading') }}
+                  {{ $t('modules.core.media.loading') }}
                 </p>
               </div>
         
@@ -106,10 +106,10 @@
                       />
                     </div>
                     <h3 class="text-lg font-bold text-foreground/90">
-                      {{ $t('features.media.empty') }}
+                      {{ $t('modules.core.media.empty') }}
                     </h3>
                     <p class="text-xs text-muted-foreground max-w-[240px] mt-2 italic">
-                      {{ $t('features.file_manager.help.sections.navigation.content') }}
+                      {{ $t('modules.core.file_manager.help.sections.navigation.content') }}
                     </p>
                   </div>
                 </ContextMenuTrigger>
@@ -117,22 +117,22 @@
                   <template v-if="!isTrashMode">
                     <ContextMenuItem @click="showFolderModal = true">
                       <FolderPlus class="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                      {{ $t('features.media.newFolder') }}
+                      {{ $t('modules.core.media.newFolder') }}
                     </ContextMenuItem>
                     <ContextMenuItem @click="showUploadModal = true">
                       <Plus class="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                      {{ $t('features.media.upload') }}
+                      {{ $t('modules.core.media.upload') }}
                     </ContextMenuItem>
                     <ContextMenuSeparator />
                     <ContextMenuItem @click="fetchMedia(); fetchFolders();">
                       <RefreshCw class="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                      {{ $t('features.media.actions.refresh') }}
+                      {{ $t('modules.core.media.actions.refresh') }}
                     </ContextMenuItem>
                   </template>
                   <template v-else>
                     <ContextMenuItem @click="emptyTrash">
                       <Trash2 class="w-4 h-4 text-destructive/70 transition-colors" />
-                      {{ $t('features.media.emptyTrash') }}
+                      {{ $t('modules.core.media.emptyTrash') }}
                     </ContextMenuItem>
                   </template>
                 </ContextMenuContent>
@@ -206,7 +206,7 @@
       class="fixed bottom-4 right-4 bg-card border border-border/40 rounded-xl p-4 w-80 z-50 shadow-none"
     >
       <div class="flex items-center justify-between mb-2">
-        <span class="text-sm font-medium text-foreground">{{ $t('features.media.modals.bulk.processing') }}</span>
+        <span class="text-sm font-medium text-foreground">{{ $t('modules.core.media.modals.bulk.processing') }}</span>
         <span class="text-sm text-muted-foreground">{{ bulkProgress }}%</span>
       </div>
       <div class="w-full bg-muted rounded-full h-2">
@@ -236,23 +236,23 @@ import {
     ContextMenuContent,
     ContextMenuItem,
     ContextMenuSeparator
-} from '@/components/ui';
-import MediaUploadModal from '@/components/shared/media/MediaUploadModal.vue';
-import MediaViewModal from '@/components/shared/media/MediaViewModal.vue';
-import FolderModal from '@/components/shared/media/FolderModal.vue';
-import MoveToFolderModal from '@/components/shared/media/MoveToFolderModal.vue';
-import BulkUpdateAltModal from '@/components/shared/media/BulkUpdateAltModal.vue';
+} from '@/shared/components/ui';
+import MediaUploadModal from '@/shared/components/media/MediaUploadModal.vue';
+import MediaViewModal from '@/shared/components/media/MediaViewModal.vue';
+import FolderModal from '@/shared/components/media/FolderModal.vue';
+import MoveToFolderModal from '@/shared/components/media/MoveToFolderModal.vue';
+import BulkUpdateAltModal from '@/shared/components/media/BulkUpdateAltModal.vue';
 
 // Composables & Sub-components
-import { useMediaManager } from '@/composables/useMediaManager';
-import MediaStats from '@/components/shared/media/MediaStats.vue';
-import MediaSidebar from '@/components/shared/media/MediaSidebar.vue';
-import MediaToolbar from '@/components/shared/media/MediaToolbar.vue';
-import MediaPropertiesPanel from '@/components/shared/media/MediaPropertiesPanel.vue';
-import MediaGridView from '@/components/shared/media/MediaGridView.vue';
-import MediaListView from '@/components/shared/media/MediaListView.vue';
+import { useMediaManager } from '@/modules/Cms/composables/useMediaManager';
+import MediaStats from '@/shared/components/media/MediaStats.vue';
+import MediaSidebar from '@/shared/components/media/MediaSidebar.vue';
+import MediaToolbar from '@/shared/components/media/MediaToolbar.vue';
+import MediaPropertiesPanel from '@/shared/components/media/MediaPropertiesPanel.vue';
+import MediaGridView from '@/shared/components/media/MediaGridView.vue';
+import MediaListView from '@/shared/components/media/MediaListView.vue';
 
-import { MediaManagerKey } from '@/keys';
+import { MediaManagerKey } from '@/core/keys';
 
 const mediaManager = useMediaManager();
 const {

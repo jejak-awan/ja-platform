@@ -12,8 +12,11 @@ class SubjectSeeder extends Seeder
      */
     public function run(): void
     {
-        $schoolId = 15;
-        $unitId = 15;
+        $school = \Illuminate\Support\Facades\DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        $unit = $school ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
+        if (!$school || !$unit) { $this->command->warn('No school/unit found. Skipping SubjectSeeder.'); return; }
+        $schoolId = $school->id;
+        $unitId = $unit->id;
 
         $subjects = [
             ['code' => 'PAI', 'name' => 'Pendidikan Agama Islam', 'group' => 'A', 'kkm' => 75],

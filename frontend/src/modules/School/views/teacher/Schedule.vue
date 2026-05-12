@@ -165,10 +165,10 @@ import {
   Card, CardContent, Button, LucideIcon, SkeletonLoader,
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
   Input, Label, Textarea
-} from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
 import { useSchoolStore } from '@/modules/School/stores/school';
 import { useUnitStore } from '@/modules/School/stores/unit';
 

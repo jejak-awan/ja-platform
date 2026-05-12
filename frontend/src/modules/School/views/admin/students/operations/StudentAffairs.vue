@@ -3,10 +3,10 @@
     <div class="flex justify-between items-center mb-8">
       <div>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.operations.affairs.title') }}
+          {{ $t('modules.school.operations.affairs.title') }}
         </h1>
         <p class="text-sm text-muted-foreground">
-          {{ $t('features.school.operations.affairs.subtitle') }}
+          {{ $t('modules.school.operations.affairs.subtitle') }}
         </p>
       </div>
       <Button @click="handleAdd">
@@ -14,7 +14,7 @@
           name="Plus"
           class="w-4 h-4 mr-2"
         />
-        {{ $t('features.school.operations.affairs.btnAdd') }}
+        {{ $t('modules.school.operations.affairs.btnAdd') }}
       </Button>
     </div>
 
@@ -31,7 +31,7 @@
             name="AlertTriangle"
             class="w-4 h-4 mr-2 text-destructive"
           />
-          {{ $t('features.school.operations.affairs.tabs.violation') }}
+          {{ $t('modules.school.operations.affairs.tabs.violation') }}
         </TabsTrigger>
         <TabsTrigger 
           value="achievement" 
@@ -41,7 +41,7 @@
             name="Trophy"
             class="w-4 h-4 mr-2 text-yellow-500"
           />
-          {{ $t('features.school.operations.affairs.tabs.achievement') }}
+          {{ $t('modules.school.operations.affairs.tabs.achievement') }}
         </TabsTrigger>
         <TabsTrigger 
           value="counseling" 
@@ -51,7 +51,7 @@
             name="MessagesSquare"
             class="w-4 h-4 mr-2 text-primary"
           />
-          {{ $t('features.school.operations.affairs.tabs.counseling') }}
+          {{ $t('modules.school.operations.affairs.tabs.counseling') }}
         </TabsTrigger>
       </TabsList>
 
@@ -98,14 +98,14 @@ import { useI18n } from 'vue-i18n';
 import { OperationsService } from '@/modules/School/services/OperationsService';
 import {
   Tabs, TabsList, TabsTrigger, Card, CardContent, Button, LucideIcon, DataTable, Pagination, ConfirmModal
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { 
   useVueTable, 
   getCoreRowModel, 
   createColumnHelper,
 } from '@tanstack/vue-table';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 import StudentAffairDialog from './components/StudentAffairDialog.vue';
 
 const { t } = useI18n();
@@ -147,26 +147,26 @@ const actionColumn = columnHelper.display({
 });
 
 const violationColumns = [
-  columnHelper.accessor('student.full_name', { header: t('features.school.operations.affairs.labels.studentName') }),
-  columnHelper.accessor('description', { header: t('features.school.operations.affairs.labels.description.violation') }),
-  columnHelper.accessor('points', { header: t('features.school.operations.affairs.labels.points') }),
-  columnHelper.accessor('date', { header: t('features.school.operations.affairs.labels.date'), cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US') }),
+  columnHelper.accessor('student.full_name', { header: t('modules.school.operations.affairs.labels.studentName') }),
+  columnHelper.accessor('description', { header: t('modules.school.operations.affairs.labels.description.violation') }),
+  columnHelper.accessor('points', { header: t('modules.school.operations.affairs.labels.points') }),
+  columnHelper.accessor('date', { header: t('modules.school.operations.affairs.labels.date'), cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US') }),
   actionColumn
 ];
 
 const achievementColumns = [
-  columnHelper.accessor('student.full_name', { header: t('features.school.operations.affairs.labels.studentName') }),
-  columnHelper.accessor('title', { header: t('features.school.operations.affairs.labels.description.achievement') }),
-  columnHelper.accessor('level', { header: t('features.school.operations.affairs.labels.level') }),
-  columnHelper.accessor('date', { header: t('features.school.operations.affairs.labels.date'), cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US') }),
+  columnHelper.accessor('student.full_name', { header: t('modules.school.operations.affairs.labels.studentName') }),
+  columnHelper.accessor('title', { header: t('modules.school.operations.affairs.labels.description.achievement') }),
+  columnHelper.accessor('level', { header: t('modules.school.operations.affairs.labels.level') }),
+  columnHelper.accessor('date', { header: t('modules.school.operations.affairs.labels.date'), cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US') }),
   actionColumn
 ];
 
 const counselingColumns = [
-  columnHelper.accessor('student.full_name', { header: t('features.school.operations.affairs.labels.studentName') }),
-  columnHelper.accessor('type', { header: t('features.school.operations.affairs.labels.type') }),
+  columnHelper.accessor('student.full_name', { header: t('modules.school.operations.affairs.labels.studentName') }),
+  columnHelper.accessor('type', { header: t('modules.school.operations.affairs.labels.type') }),
   columnHelper.accessor('status', { 
-    header: t('features.school.operations.affairs.labels.status'),
+    header: t('modules.school.operations.affairs.labels.status'),
     cell: info => h('span', { 
         class: `px-2 py-1 rounded-full text-xs font-medium ${
             info.getValue() === 'Resolved' ? 'bg-success/10 text-success' : 
@@ -174,7 +174,7 @@ const counselingColumns = [
         }` 
     }, info.getValue())
   }),
-  columnHelper.accessor('date', { header: t('features.school.operations.affairs.labels.date'), cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US') }),
+  columnHelper.accessor('date', { header: t('modules.school.operations.affairs.labels.date'), cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US') }),
   actionColumn
 ];
 
@@ -244,10 +244,10 @@ const handleSave = async (formData: any) => {
         const endpoint = (endpointMap as any)[activeTab.value];
         if (selectedItem.value) {
             await OperationsService.updateStudentAffair(endpoint, selectedItem.value.id, formData);
-            toast.success.action(t('features.school.operations.affairs.messages.updateSuccess'));
+            toast.success.action(t('modules.school.operations.affairs.messages.updateSuccess'));
         } else {
             await OperationsService.storeStudentAffair(endpoint, formData);
-            toast.success.action(t('features.school.operations.affairs.messages.saveSuccess'));
+            toast.success.action(t('modules.school.operations.affairs.messages.saveSuccess'));
         }
         dialogOpen.value = false;
         fetchData(pagination.value.current_page);
@@ -260,8 +260,8 @@ const handleSave = async (formData: any) => {
 
 const handleDelete = async (item: any) => {
     const confirmed = await confirmModal.value.confirm({
-        title: t('features.school.operations.affairs.messages.deleteConfirmTitle'),
-        message: t('features.school.operations.affairs.messages.deleteConfirmMessage'),
+        title: t('modules.school.operations.affairs.messages.deleteConfirmTitle'),
+        message: t('modules.school.operations.affairs.messages.deleteConfirmMessage'),
         variant: 'destructive'
     });
 
@@ -274,7 +274,7 @@ const handleDelete = async (item: any) => {
             };
             const endpoint = (endpointMap as any)[activeTab.value];
             await OperationsService.deleteStudentAffair(endpoint, item.id);
-            toast.success.action(t('features.school.operations.affairs.messages.deleteSuccess'));
+            toast.success.action(t('modules.school.operations.affairs.messages.deleteSuccess'));
             fetchData(pagination.value.current_page);
         } catch (e) {
             toast.error.fromResponse(e);

@@ -86,15 +86,15 @@
           </div>
           <div>
             <h4 class="font-bold text-base text-foreground tracking-tight">
-                {{ unitStore.activeUnitId === 0 ? $t('common.labels.unitMainIdentity') : $t('common.labels.unitEduIdentity') }}
+                {{ unitStore.activeUnitId === 0 ? $t('common.labels.unitMainIdentity') : $t('modules.school.labels.unitEduIdentity') }}
             </h4>
             <p class="text-xs text-muted-foreground mt-0.5 font-medium">
-                {{ unitStore.activeUnitId === 0 ? $t('common.labels.unitMainIdentityDesc') : $t('common.labels.unitActiveIdentityDesc') }}
+                {{ unitStore.activeUnitId === 0 ? $t('common.labels.unitMainIdentityDesc') : $t('modules.school.labels.unitActiveIdentityDesc') }}
             </p>
           </div>
         </div>
         <Badge v-if="currentUnit" variant="outline" class="rounded-lg bg-success/5 text-success border-success/20 font-black px-3">
-            {{ $t('common.messages.activeStatus', { name: currentUnit.name }) }}
+            {{ $t('modules.school.messages.activeStatus', { name: currentUnit.name }) }}
         </Badge>
       </div>
 
@@ -118,7 +118,7 @@
         </div>
 
         <div class="space-y-2">
-          <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">{{ $t('common.labels.npsnFull') }}</Label>
+          <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">{{ $t('modules.school.labels.npsnFull') }}</Label>
           <div class="flex items-center gap-3 p-3 rounded-xl bg-muted/30 border border-border/40">
             <div class="p-1.5 rounded-lg bg-background border border-border">
                 <LucideIcon name="Fingerprint" class="w-4 h-4 text-primary" />
@@ -128,7 +128,7 @@
         </div>
 
         <div class="space-y-2">
-          <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">{{ $t('common.labels.ownershipStatus') }}</Label>
+          <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">{{ $t('modules.school.labels.ownershipStatus') }}</Label>
           <div class="flex items-center gap-3 p-3 rounded-xl bg-muted/30 border border-border/40">
             <div class="p-1.5 rounded-lg bg-background border border-border">
                 <LucideIcon name="UserCheck" class="w-4 h-4 text-primary" />
@@ -138,7 +138,7 @@
         </div>
 
         <div class="space-y-2">
-          <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">{{ $t('common.labels.accreditation') }}</Label>
+          <Label class="text-xs font-bold text-muted-foreground/80 uppercase tracking-tight">{{ $t('modules.school.labels.accreditation') }}</Label>
           <div class="flex items-center gap-3 p-3 rounded-xl bg-muted/30 border border-border/40">
             <div class="p-1.5 rounded-lg bg-background border border-border">
                 <LucideIcon name="Award" class="w-4 h-4 text-primary" />
@@ -154,7 +154,7 @@
                 <LucideIcon name="MapPin" class="w-5 h-5 text-muted-foreground/40 shrink-0" />
                 <div>
                     <p class="text-sm font-medium text-foreground/70 leading-relaxed">
-                        {{ displayUnit?.settings?.address || localForm.address || $t('common.messages.unitAddressNotSet') }}
+                        {{ displayUnit?.settings?.address || localForm.address || $t('modules.school.messages.unitAddressNotSet') }}
                     </p>
                 </div>
             </div>
@@ -168,7 +168,7 @@
 import { reactive, watch, computed } from 'vue';
 import { 
   Label, Badge, LucideIcon, Button
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { useUnitStore } from '@/modules/School/stores/unit';
 
 const props = defineProps<{

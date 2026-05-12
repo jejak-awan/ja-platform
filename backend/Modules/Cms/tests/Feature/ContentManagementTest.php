@@ -452,17 +452,88 @@ class ContentManagementTest extends TestCase
     }
 
     /**
-     * Test user without permission cannot delete content.
+     * Test admin can filter contents by various parameters.
      */
-    public function test_user_without_permission_cannot_delete_content(): void
+    public function test_admin_can_filter_contents_by_various_params(): void
     {
-        $user = $this->createUser();
-        $this->actingAs($user, 'sanctum');
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $category = Category::factory()->create();
+        Content::factory()->create(['title' => 'Searchable Article', 'type' => 'article', 'category_id' => $category->id]);
+        Content::factory()->create(['title' => 'Other Post', 'type' => 'post']);
+
+        // Filter by type
+        $response = $this->getJson('/api/v1/admin/cms/contents?type=article');
+        $response->assertJsonCount(1, 'data.data');
+
+        // Filter by category
+        $response = $this->getJson("/api/v1/admin/cms/contents?category_id={$category->id}");
+        $response->assertJsonCount(1, 'data.data');
+
+        // Filter by search
+        $response = $this->getJson('/api/v1/admin/cms/contents?search=Searchable');
+        $response->assertJsonCount(1, 'data.data');
+    }
+
+    /**
+     * Test admin can manage trashed contents.
+     */
+    public function test_admin_can_manage_trashed_contents(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
 
         $content = Content::factory()->create();
+        $content->delete();
 
-        $response = $this->deleteJson("/api/v1/admin/cms/contents/{$content->id}");
+        // List trashed
+        $response = $this->getJson('/api/v1/admin/cms/contents?status=trashed');
+        TestHelpers::assertApiPaginated($response);
+        $this->assertGreaterThanOrEqual(1, count($response->json('data.data')));
 
-        $response->assertStatus(403);
+        // Restore
+        $response = $this->putJson("/api/v1/admin/cms/contents/{$content->id}/restore");
+        TestHelpers::assertApiSuccess($response);
+        $this->assertDatabaseHas('contents', ['id' => $content->id, 'deleted_at' => null]);
+
+        // Force Delete
+        $content->delete();
+        $response = $this->deleteJson("/api/v1/admin/cms/contents/{$content->id}/force-delete");
+        TestHelpers::assertApiSuccess($response);
+        $this->assertDatabaseMissing('contents', ['id' => $content->id]);
+    }
+
+    /**
+     * Test admin can perform bulk restore and force delete.
+     */
+    public function test_admin_can_perform_bulk_trashed_actions(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $contents = Content::factory()->count(2)->create();
+        foreach ($contents as $c) $c->delete();
+
+        // Bulk Restore
+        $response = $this->postJson('/api/v1/admin/cms/contents/bulk-action', [
+            'action' => 'restore',
+            'content_ids' => $contents->pluck('id')->toArray(),
+        ]);
+        TestHelpers::assertApiSuccess($response);
+        foreach ($contents as $c) {
+            $this->assertDatabaseHas('contents', ['id' => $c->id, 'deleted_at' => null]);
+        }
+
+        // Bulk Force Delete
+        foreach ($contents as $c) $c->delete();
+        $response = $this->postJson('/api/v1/admin/cms/contents/bulk-action', [
+            'action' => 'force_delete',
+            'content_ids' => $contents->pluck('id')->toArray(),
+        ]);
+        TestHelpers::assertApiSuccess($response);
+        foreach ($contents as $c) {
+            $this->assertDatabaseMissing('contents', ['id' => $c->id]);
+        }
     }
 }

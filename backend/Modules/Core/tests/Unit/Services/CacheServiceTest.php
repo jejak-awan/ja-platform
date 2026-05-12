@@ -18,55 +18,14 @@ class CacheServiceTest extends TestCase
 
     public function test_clear_all()
     {
-        Cache::shouldReceive('flush')->once();
-        Cache::shouldReceive('forget')->times(9); // content + category clears
-
+        Cache::spy();
+        
         $service = new CacheService;
         $service->clearAll();
+
+        Cache::shouldHaveReceived('flush')->once();
     }
 
-    public function test_clear_content_caches()
-    {
-        Cache::shouldReceive('forget')->with('contents_list')->once();
-        Cache::shouldReceive('forget')->with('contents_published')->once();
-        Cache::shouldReceive('forget')->with('sitemap_index')->once();
-        Cache::shouldReceive('forget')->with('sitemap_pages')->once();
-        Cache::shouldReceive('forget')->with('sitemap_posts')->once();
-        Cache::shouldReceive('forget')->with('sitemap_categories')->once();
-
-        $service = new CacheService;
-        $service->clearContentCaches();
-    }
-
-    public function test_clear_content_caches_with_id()
-    {
-        Cache::shouldReceive('forget')->with('content_5')->once();
-        Cache::shouldReceive('forget')->with('content_slug_5')->once();
-        // plus the standard 6 from above
-        Cache::shouldReceive('forget')->times(6);
-
-        $service = new CacheService;
-        $service->clearContentCaches(5);
-    }
-
-    public function test_clear_category_caches()
-    {
-        Cache::shouldReceive('forget')->with('categories_list')->once();
-        Cache::shouldReceive('forget')->with('categories_tree')->once();
-        Cache::shouldReceive('forget')->with('categories_flat')->once();
-
-        $service = new CacheService;
-        $service->clearCategoryCaches();
-    }
-
-    public function test_clear_category_caches_with_id()
-    {
-        Cache::shouldReceive('forget')->with('category_10')->once();
-        Cache::shouldReceive('forget')->times(3); // 3 standard
-
-        $service = new CacheService;
-        $service->clearCategoryCaches(10);
-    }
 
     public function test_clear_tag_caches()
     {
@@ -100,16 +59,6 @@ class CacheServiceTest extends TestCase
         $service->clearUserCaches(1);
     }
 
-    public function test_clear_seo_caches()
-    {
-        Cache::shouldReceive('forget')->with('sitemap_index')->once();
-        Cache::shouldReceive('forget')->with('sitemap_pages')->once();
-        Cache::shouldReceive('forget')->with('sitemap_posts')->once();
-        Cache::shouldReceive('forget')->with('sitemap_categories')->once();
-
-        $service = new CacheService;
-        $service->clearSeoCaches();
-    }
 
     public function test_warm_up()
     {

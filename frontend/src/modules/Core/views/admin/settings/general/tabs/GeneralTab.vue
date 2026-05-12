@@ -18,11 +18,11 @@
           v-show="isMaintenanceSettingVisible(setting.key)"
           :model-value="(formData[setting.key] as any)"
           :field-key="setting.key"
-          :label="$t('features.settings.labels.' + setting.key)"
-          :description="$t('features.settings.descriptions.' + setting.key)"
+          :label="$t('modules.core.settings.labels.' + setting.key)"
+          :description="$t('modules.core.settings.descriptions.' + setting.key)"
           :type="setting.type"
-          :enabled-text="$t('features.settings.enabled')"
-          :disabled-text="$t('features.settings.disabled')"
+          :enabled-text="$t('modules.core.settings.enabled')"
+          :disabled-text="$t('modules.core.settings.disabled')"
           :error="errors?.[setting.key]"
           :readonly="isFieldProtected(setting.key)"
           @update:model-value="(value) => updateField(setting.key, value)"
@@ -33,10 +33,10 @@
           class="space-y-2"
         >
           <label class="block text-sm font-medium text-foreground">
-            {{ $t('features.settings.labels.content.autosave_interval_seconds') }}
+            {{ $t('modules.core.settings.labels.content.autosave_interval_seconds') }}
           </label>
           <p class="text-xs text-muted-foreground">
-            {{ $t('features.settings.descriptions.content.autosave_interval_seconds') }}
+            {{ $t('modules.core.settings.descriptions.content.autosave_interval_seconds') }}
           </p>
 
           <Select
@@ -83,7 +83,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingGroup from '@/modules/Core/components/settings/SettingGroup.vue'
 import SettingField from '@/modules/Core/components/settings/SettingField.vue'
-import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui'
+import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui'
 
 interface Setting {
     id: number | string;
@@ -99,7 +99,9 @@ interface Props {
     errors?: Record<string, string[]>;
 }
 
+import { useCoreStore } from '@/modules/Core/stores/core'
 const { t } = useI18n()
+const coreStore = useCoreStore()
 
 const props = defineProps<Props>()
 
@@ -191,15 +193,14 @@ const BrandIcon = {
 }
 
 const isFieldProtected = (key: string) => {
-    // Branding fields are protected if not Pro+ license
-    const brandingKeys = ['app_name', 'brand_logo', 'brand_favicon', 'branding_display'];
+    // Branding fields are protected if no White Label license
+    const brandingKeys = ['app_name', 'app_logo', 'app_favicon', 'branding_display'];
     if (brandingKeys.includes(key)) {
-        return props.formData.license_type !== 'Pro+';
+        return !coreStore.appIdentity.has_white_label;
     }
     
-    // License Type is readonly (managed by system/validation)
-    // License Key is now editable manually as requested
-    if (key === 'license_type') {
+    // License Type is readonly
+    if (key === 'app_license_tier' || key === 'license_type') {
         return true;
     }
     
@@ -213,8 +214,8 @@ const generalSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'license',
-            title: t('features.settings.groups.license.title'),
-            description: t('features.settings.groups.license.description'),
+            title: t('modules.core.settings.groups.license.title'),
+            description: t('modules.core.settings.groups.license.description'),
             icon: ToolIcon,
             color: 'purple',
             keys: ['license_key', 'license_type'],
@@ -223,28 +224,18 @@ const generalSettingsGrouped = computed(() => {
         },
         {
             id: 'brand',
-            title: t('features.settings.groups.brand.title'),
-            description: t('features.settings.groups.brand.description'),
+            title: t('modules.core.settings.groups.brand.title'),
+            description: t('modules.core.settings.groups.brand.description'),
             icon: BrandIcon,
             color: 'indigo',
-            keys: ['app_name', 'brand_logo', 'brand_favicon', 'branding_display'],
-            settings: [],
-            defaultExpanded: true,
-        },
-        {
-            id: 'school',
-            title: t('features.settings.groups.school.title'),
-            description: t('features.settings.groups.school.description'),
-            icon: BrandIcon,
-            color: 'emerald',
-            keys: ['school_name', 'admin_email', 'school_address', 'school_phone'],
+            keys: ['app_name', 'app_logo', 'app_favicon', 'branding_display'],
             settings: [],
             defaultExpanded: true,
         },
         {
             id: 'localization',
-            title: t('features.settings.groups.localization.title'),
-            description: t('features.settings.groups.localization.description'),
+            title: t('modules.core.settings.groups.localization.title'),
+            description: t('modules.core.settings.groups.localization.description'),
             icon: ClockIcon,
             color: 'amber',
             keys: ['timezone', 'date_format', 'time_format', 'items_per_page'],
@@ -253,8 +244,8 @@ const generalSettingsGrouped = computed(() => {
         },
         {
             id: 'maintenance',
-            title: t('features.settings.groups.maintenance.title'),
-            description: t('features.settings.groups.maintenance.description'),
+            title: t('modules.core.settings.groups.maintenance.title'),
+            description: t('modules.core.settings.groups.maintenance.description'),
             icon: ToolIcon,
             color: 'orange',
             keys: ['maintenance_mode', 'maintenance_title', 'maintenance_message', 'maintenance_countdown_enabled', 'maintenance_end_time'],

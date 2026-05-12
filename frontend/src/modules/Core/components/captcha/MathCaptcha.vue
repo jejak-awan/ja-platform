@@ -16,7 +16,7 @@
         type="tel"
         class="flex h-full w-full px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 font-mono text-center bg-secondary/20 dark:bg-secondary/20 shadow-inner"
         :class="{ 'text-green-500 font-bold': verified }"
-        :placeholder="t('features.auth.captcha.answer')"
+        :placeholder="t('modules.core.auth.captcha.answer')"
         :disabled="verified"
         @keyup.enter="verify"
       >
@@ -59,7 +59,7 @@
           variant="ghost"
           size="icon"
           class="h-7 w-7 text-muted-foreground hover:text-foreground"
-          :title="t('features.auth.captcha.refresh')"
+          :title="t('modules.core.auth.captcha.refresh')"
           @click="refresh"
         >
           <RefreshCw class="w-3.5 h-3.5" />
@@ -78,15 +78,15 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import CheckCircle from 'lucide-vue-next/dist/esm/icons/circle-check.js';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 import Check from 'lucide-vue-next/dist/esm/icons/check.js';
-import api from '@/services/api'
+import api from '@/core/api/client'
 import type { AxiosError } from 'axios'
-import { Button } from '@/components/ui'
+import { Button } from '@/shared/components/ui'
 
 const { t } = useI18n()
 
@@ -133,7 +133,7 @@ const verify = async () => {
         const err = e as AxiosError<{ message?: string }>;
         // 422 is a validation error (wrong answer or expired token), not a system crash
         if (err.response && err.response.status === 422) {
-            error.value = t('features.auth.captcha.error') || 'Incorrect answer'
+            error.value = t('modules.core.auth.captcha.error') || 'Incorrect answer'
             // We just log a warning instead of error to avoid alarming developers
             logger.warning('Captcha verification failed:', err.response.data?.message || 'Invalid answer')
         } else {

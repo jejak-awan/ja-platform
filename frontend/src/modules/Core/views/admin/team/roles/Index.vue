@@ -3,10 +3,10 @@
     <!-- Header -->
     <div class="mb-4 shrink-0">
       <h1 class="text-2xl font-bold text-foreground">
-        {{ $t('features.roles.title') }}
+        {{ $t('modules.core.roles.title') }}
       </h1>
       <p class="mt-1 text-sm text-muted-foreground">
-        {{ $t('features.roles.subtitle') }}
+        {{ $t('modules.core.roles.subtitle') }}
       </p>
     </div>
 
@@ -40,7 +40,7 @@
             v-else-if="filteredRoles.length === 0"
             class="p-8 text-center text-muted-foreground text-sm italic"
           >
-            {{ $t('features.roles.list.empty') }}
+            {{ $t('modules.core.roles.list.empty') }}
           </div>
           <div
             v-for="role in filteredRoles"
@@ -81,7 +81,7 @@
                 class="text-[10px] text-muted-foreground flex items-center gap-1.5 mt-0.5"
               >
                 <Users class="w-3 h-3" />
-                {{ $t('features.roles.list.usersCount', { count: role.users_count || 0 }) }}
+                {{ $t('modules.core.roles.list.usersCount', { count: role.users_count || 0 }) }}
               </div>
             </div>
 
@@ -100,7 +100,7 @@
                 variant="ghost"
                 size="icon"
                 class="h-7 w-7 text-muted-foreground hover:text-primary hover:bg-primary/10"
-                :title="$t('features.roles.workspace.duplicate')"
+                :title="$t('modules.core.roles.workspace.duplicate')"
                 @click.stop="duplicateRole(role)"
               >
                 <Copy class="w-3.5 h-3.5" />
@@ -115,8 +115,8 @@
           class="p-4 border-t border-border bg-transparent"
         >
           <div class="flex items-center justify-between mb-3 px-1">
-            <span class="text-[10px] font-bold text-muted-foreground">{{ $t('features.roles.workspace.comparison.mode') }}</span>
-            <span class="text-[10px] font-bold text-primary">{{ $t('features.roles.workspace.comparison.syncing', { count: selectedRoleIds.length }) }}</span>
+            <span class="text-[10px] font-bold text-muted-foreground">{{ $t('modules.core.roles.workspace.comparison.mode') }}</span>
+            <span class="text-[10px] font-bold text-primary">{{ $t('modules.core.roles.workspace.comparison.syncing', { count: selectedRoleIds.length }) }}</span>
           </div>
           <Button
             variant="outline"
@@ -124,7 +124,7 @@
             class="w-full h-8 text-[10px] font-bold border-primary/20 text-primary hover:bg-muted"
             @click="selectedRoleIds = []"
           >
-            {{ $t('features.roles.workspace.clearSelection') }}
+            {{ $t('modules.core.roles.workspace.clearSelection') }}
           </Button>
         </div>
       </div>
@@ -142,7 +142,7 @@
                 <Columns class="w-4 h-4 text-primary" />
               </div>
               <h2 class="font-bold text-sm">
-                {{ $t('features.roles.workspace.comparison.title') }}
+                {{ $t('modules.core.roles.workspace.comparison.title') }}
               </h2>
             </div>
             <div
@@ -159,7 +159,7 @@
                 variant="outline"
                 class="text-[10px] border-primary/30 text-primary bg-primary/5"
               >
-                {{ $t('features.roles.workspace.edit.mode') }}
+                {{ $t('modules.core.roles.workspace.edit.mode') }}
               </Badge>
             </div>
             <div
@@ -170,7 +170,7 @@
                 <Plus class="w-4 h-4 text-success" />
               </div>
               <h2 class="font-bold text-sm">
-                {{ $t('features.roles.workspace.create.title') }}
+                {{ $t('modules.core.roles.workspace.create.title') }}
               </h2>
             </div>
             <div
@@ -194,7 +194,7 @@
                 @click="createNewRole"
               >
                 <Plus class="w-3.5 h-3.5 mr-2" />
-                {{ $t('features.roles.create') }}
+                {{ $t('modules.core.roles.create') }}
               </Button>
             </div>
           </div>
@@ -209,7 +209,7 @@
               class="h-8 text-xs"
               @click="cancelAction"
             >
-              {{ isDirty ? $t('features.roles.workspace.reset') : $t('common.actions.cancel') }}
+              {{ isDirty ? $t('modules.core.roles.workspace.reset') : $t('common.actions.cancel') }}
             </Button>
             <Button
               variant="default"
@@ -222,7 +222,7 @@
                 v-if="saving"
                 class="w-3 h-3 mr-2"
               />
-              {{ $t('features.roles.workspace.save') }}
+              {{ $t('modules.core.roles.workspace.save') }}
             </Button>
           </div>
         </div>
@@ -238,10 +238,10 @@
               <Shield class="w-12 h-12 text-primary/30" />
             </div>
             <h3 class="text-lg font-bold mb-2">
-              {{ $t('features.roles.workspace.welcome.title') }}
+              {{ $t('modules.core.roles.workspace.welcome.title') }}
             </h3>
             <p class="text-muted-foreground text-sm max-w-md mx-auto leading-relaxed">
-              {{ $t('features.roles.workspace.welcome.description') }}
+              {{ $t('modules.core.roles.workspace.welcome.description') }}
             </p>
           </div>
 
@@ -252,10 +252,10 @@
           >
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-transparent rounded-xl">
               <div>
-                <label class="text-[10px] font-bold text-muted-foreground mb-1.5 block">{{ $t('features.roles.workspace.identity') }}</label>
+                <label class="text-[10px] font-bold text-muted-foreground mb-1.5 block">{{ $t('modules.core.roles.workspace.identity') }}</label>
                 <Input
                   v-model="form.name"
-                  :placeholder="$t('features.roles.form.namePlaceholder')"
+                  :placeholder="$t('modules.core.roles.form.namePlaceholder')"
                   :disabled="isProtectedRole(activeRole?.name || '')"
                   class="h-10 font-medium"
                 />
@@ -270,7 +270,7 @@
                 <div class="flex items-center gap-4 text-xs text-muted-foreground opacity-70">
                   <div class="flex items-center gap-1.5">
                     <div class="w-1.5 h-1.5 rounded-full bg-primary" />
-                    {{ $t('features.roles.workspace.liveEditing') }}
+                    {{ $t('modules.core.roles.workspace.liveEditing') }}
                   </div>
                   <div class="flex items-center gap-1.5">
                     <CheckCircle2
@@ -281,7 +281,7 @@
                       v-else
                       class="w-3.5 h-3.5"
                     />
-                    {{ isDirty ? $t('features.roles.workspace.unsavedChanges') : $t('features.roles.workspace.synced') }}
+                    {{ isDirty ? $t('modules.core.roles.workspace.unsavedChanges') : $t('modules.core.roles.workspace.synced') }}
                   </div>
                 </div>
               </div>
@@ -290,7 +290,7 @@
             <div class="space-y-4">
               <div class="flex items-center justify-between pb-2 border-b">
                 <h4 class="text-sm font-bold border-l-2 border-primary pl-3">
-                  {{ $t('features.roles.workspace.matrix.title') }}
+                  {{ $t('modules.core.roles.workspace.matrix.title') }}
                 </h4>
                 <div class="flex items-center gap-2">
                   <Button
@@ -299,7 +299,7 @@
                     class="h-7 text-[10px] border-primary/20 text-primary hover:bg-primary/5 font-bold"
                     @click="expandAll"
                   >
-                    {{ $t('features.roles.workspace.matrix.expandAll') }}
+                    {{ $t('modules.core.roles.workspace.matrix.expandAll') }}
                   </Button>
                   <Button
                     variant="outline"
@@ -307,7 +307,7 @@
                     class="h-7 text-[10px] border-primary/20 text-primary hover:bg-primary/5 font-bold"
                     @click="collapseAll"
                   >
-                    {{ $t('features.roles.workspace.matrix.collapseAll') }}
+                    {{ $t('modules.core.roles.workspace.matrix.collapseAll') }}
                   </Button>
                 </div>
               </div>
@@ -334,7 +334,7 @@
                             {{ category }}
                           </h5>
                           <p class="text-[10px] text-muted-foreground mt-0.5">
-                            {{ $t('features.roles.workspace.matrix.available', { count: perms.length }) }}
+                            {{ $t('modules.core.roles.workspace.matrix.available', { count: perms.length }) }}
                           </p>
                         </div>
                       </div>
@@ -345,7 +345,7 @@
                         class="h-7 text-[9px] font-bold border-primary/20 text-primary hover:bg-primary hover:text-primary-foreground"
                         @click.stop="toggleCategory(String(category))"
                       >
-                        {{ isCategorySelected(String(category)) ? $t('features.roles.workspace.matrix.deselectCategory') : $t('features.roles.workspace.matrix.selectCategory') }}
+                        {{ isCategorySelected(String(category)) ? $t('modules.core.roles.workspace.matrix.deselectCategory') : $t('modules.core.roles.workspace.matrix.selectCategory') }}
                       </Button>
                     </div>
                   </AccordionTrigger>
@@ -396,10 +396,10 @@
                 </div>
                 <div>
                   <h4 class="text-sm font-bold">
-                    {{ $t('features.roles.workspace.comparison.syncing', { count: selectedRoleIds.length }) }}
+                    {{ $t('modules.core.roles.workspace.comparison.syncing', { count: selectedRoleIds.length }) }}
                   </h4>
                   <p class="text-[10px] text-muted-foreground font-bold mt-0.5">
-                    {{ $t('features.roles.workspace.comparison.subtitle') }}
+                    {{ $t('modules.core.roles.workspace.comparison.subtitle') }}
                   </p>
                 </div>
               </div>
@@ -409,7 +409,7 @@
                 class="h-8 text-xs"
                 @click="selectedRoleIds = []"
               >
-                {{ $t('features.roles.workspace.comparison.exit') }}
+                {{ $t('modules.core.roles.workspace.comparison.exit') }}
               </Button>
             </div>
 
@@ -441,7 +441,7 @@
                         <TableHeader>
                           <TableRow class="bg-transparent hover:bg-transparent border-b border-border">
                             <TableHead class="min-w-[200px] sticky left-0 bg-background z-20 border-r px-4 py-3 text-[10px] font-bold h-12">
-                              {{ $t('features.roles.permissions') }}
+                              {{ $t('modules.core.roles.permissions') }}
                             </TableHead>
                             <TableHead 
                               v-for="rId in selectedRoleIds" 
@@ -459,7 +459,7 @@
                                   variant="ghost" 
                                   size="icon" 
                                   class="h-5 w-5 hover:bg-primary/20 hover:text-primary rounded-md"
-                                  :title="$t('features.roles.form.selectAll') + ': ' + getRole(rId)?.name"
+                                  :title="$t('modules.core.roles.form.selectAll') + ': ' + getRole(rId)?.name"
                                   :disabled="isProtectedRole(getRole(rId)?.name || '')"
                                   @click.stop="toggleCategoryForRole(String(category), rId)"
                                 >
@@ -513,10 +513,10 @@
             </div>
             <div class="text-center">
               <h4 class="font-bold text-sm">
-                {{ $t('features.roles.workspace.saving.title') }}
+                {{ $t('modules.core.roles.workspace.saving.title') }}
               </h4>
               <p class="text-[10px] text-muted-foreground mt-1">
-                {{ $t('features.roles.workspace.saving.subtitle') }}
+                {{ $t('modules.core.roles.workspace.saving.subtitle') }}
               </p>
             </div>
           </div>
@@ -527,17 +527,18 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+import { useI18n } from 'vue-i18n';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import { useAuthStore, ROLE_RANKS } from '@/modules/Core/stores/auth';
-import { getResponseList } from '@/utils/responseParser';
-import { cn } from '@/lib/utils';
-import { roleSchema } from '@/schemas';
-import { useFormValidation } from '@/composables/useFormValidation';
+import { getResponseList } from '@/shared/utils/responseParser';
+import { cn } from '@/shared/utils/lib-utils';
+import { roleSchema } from '@/shared/schemas';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
 
 // UI Components
 // UI Components
@@ -557,7 +558,7 @@ import {
     AccordionItem,
     AccordionTrigger,
     AccordionContent
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
@@ -575,10 +576,11 @@ import FolderOpen from 'lucide-vue-next/dist/esm/icons/folder-open.js';
 import CheckSquare from 'lucide-vue-next/dist/esm/icons/square-check.js';
 import Copy from 'lucide-vue-next/dist/esm/icons/copy.js';
 
-import type { Role, Permission } from '@/types/core/auth';
+import type { Role, Permission } from '@/core/types/auth';
 
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18n();
 const toast = useToast();
 const { confirm } = useConfirm();
 const authStore = useAuthStore();
@@ -875,7 +877,11 @@ const resetForm = () => {
 };
 
 const deleteRole = async (role: Role) => {
-    const confirmed = await confirm({ title: 'Delete Role', message: `Delete "${role.name}"?`, variant: 'danger' });
+    const confirmed = await confirm({ 
+        title: t('modules.core.roles.actions.delete'), 
+        message: t('modules.core.roles.messages.deleteConfirm', { name: role.name }), 
+        variant: 'danger' 
+    });
     if (!confirmed) return;
     try {
         await api.delete(`/admin/core/roles/${role.id}`);

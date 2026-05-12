@@ -23,9 +23,9 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, watch, toRaw } from 'vue';
-import type { Theme } from '@/types/cms/theme';
+import type { Theme } from '@/modules/Cms/types/theme';
 import { themeUsesJanariCanvas } from '@/modules/Cms/utils/themeManifest';
 
 const props = defineProps<{

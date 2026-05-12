@@ -26,10 +26,10 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue'
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import api from '@/services/api'
+import api from '@/core/api/client'
 import SliderCaptcha from './SliderCaptcha.vue'
 import MathCaptcha from './MathCaptcha.vue'
 import ImageCaptcha from './ImageCaptcha.vue'

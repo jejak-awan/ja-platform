@@ -121,7 +121,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useSocialShare } from '@/composables/useSocialShare';
+import { useSocialShare } from '@/shared/composables/useSocialShare';
 import Copy from 'lucide-vue-next/dist/esm/icons/copy.js';
 import Check from 'lucide-vue-next/dist/esm/icons/check.js';
 

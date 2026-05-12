@@ -21,8 +21,8 @@ return new class extends Migration
 
         foreach ($tables as $tableName) {
             Schema::table($tableName, function (Blueprint $table) {
-                $table->foreignId('school_unit_id')->nullable()->after('id')->constrained('sch_ins_levels')->onDelete('cascade');
-                $table->index('school_unit_id');
+                // Keep CMS independent from School module schema: no FK constraint here.
+                $table->unsignedBigInteger('school_unit_id')->nullable()->after('id')->index();
             });
         }
     }
@@ -42,7 +42,6 @@ return new class extends Migration
 
         foreach ($tables as $tableName) {
             Schema::table($tableName, function (Blueprint $table) {
-                $table->dropForeign([$tableName . '_school_unit_id_foreign']);
                 $table->dropColumn('school_unit_id');
             });
         }

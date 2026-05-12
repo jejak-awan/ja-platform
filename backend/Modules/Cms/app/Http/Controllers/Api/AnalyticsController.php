@@ -16,6 +16,12 @@ use Modules\Core\Models\AnalyticsVisit;
 
 class AnalyticsController extends BaseApiController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['trackVisit', 'trackEvent', 'trackBatch']);
+        $this->middleware('permission:view analytics')->except(['trackVisit', 'trackEvent', 'trackBatch']);
+        $this->middleware('permission:manage settings')->only(['cleanup', 'purgeAll']);
+    }
     /**
      * Get properly formatted date range for queries
      * Ensures end date includes the entire day (23:59:59)

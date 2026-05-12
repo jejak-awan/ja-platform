@@ -161,7 +161,7 @@ import { ref, reactive, computed } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Textarea, Field, LucideIcon, Label
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 defineProps<{
   open: boolean;

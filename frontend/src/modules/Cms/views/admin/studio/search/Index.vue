@@ -118,16 +118,16 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
 import ChevronRight from 'lucide-vue-next/dist/esm/icons/chevron-right.js';
-import api from '@/services/api';
+import api from '@/core/api/client';
 
 const { t } = useI18n();
-import { parseResponse, ensureArray } from '@/utils/responseParser';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 
 const route = useRoute();
 const router = useRouter();

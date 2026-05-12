@@ -112,19 +112,13 @@ class SystemService
                 // Visits tracking not available
             }
 
+            $registry = app(\Modules\Core\Services\DashboardRegistry::class);
+            
             $stats = [
-                // Flat keys for frontend compatibility
-                'total_contents' => \Modules\Cms\Models\Content::count(),
+                // Base Core Stats
                 'total_users' => \Modules\Core\Models\User::count(),
                 'total_media' => \Modules\Core\Models\Media::count(),
                 'total_visits' => $totalVisits,
-                // Detailed nested data (for extended use)
-                'contents' => [
-                    'total' => \Modules\Cms\Models\Content::count(),
-                    'published' => \Modules\Cms\Models\Content::where('status', 'published')->count(),
-                    'draft' => \Modules\Cms\Models\Content::where('status', 'draft')->count(),
-                    'archived' => \Modules\Cms\Models\Content::where('status', 'archived')->count(),
-                ],
                 'users' => [
                     'total' => \Modules\Core\Models\User::count(),
                     'verified' => \Modules\Core\Models\User::whereNotNull('email_verified_at')->count(),
@@ -133,19 +127,20 @@ class SystemService
                     'total' => \Modules\Core\Models\Media::count(),
                     'total_size' => \Modules\Core\Models\Media::sum('size'),
                 ],
-                'categories' => \Modules\Cms\Models\Category::count(),
                 'tags' => \Modules\Core\Models\Tag::count(),
-                'comments' => \Modules\Cms\Models\Comment::count(),
-                'forms' => \Modules\Cms\Models\Form::count(),
-                'form_submissions' => \Modules\Cms\Models\FormSubmission::count(),
-                'total_email_templates' => \Modules\Cms\Models\EmailTemplate::count(),
-                'newsletter_subscribers' => \Modules\Cms\Models\NewsletterSubscriber::count(),
-                'email' => [
-                    'templates' => \Modules\Cms\Models\EmailTemplate::count(),
-                    'subscribers' => \Modules\Cms\Models\NewsletterSubscriber::count(),
-                    'smtp_status' => Cache::get('email_smtp_status', 'unknown'),
-                ],
             ];
+
+            // Merge module stats (Flattened)
+            foreach ($registry->getAllStats() as $moduleStat) {
+                if (is_array($moduleStat)) {
+                    $stats = array_replace_recursive($stats, $moduleStat);
+                }
+            }
+
+            // Backward compatibility for common flat keys if not provided by modules
+            if (!isset($stats['total_contents']) && isset($stats['contents']['total'])) {
+                $stats['total_contents'] = $stats['contents']['total'];
+            }
 
             Cache::put('system_statistics', $stats, 300);
 

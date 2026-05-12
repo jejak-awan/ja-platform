@@ -1,4 +1,6 @@
 {
+    "title": "Content Studio",
+    "description": "Manage your content, media, and taxonomy",
     "actions": {
         "approve": "Approve",
         "duplicate": "Duplicate",
@@ -175,6 +177,9 @@
     "tabs": {
         "content": "Content",
         "seo": "SEO",
-        "settings": "Settings"
+        "settings": "Settings",
+        "contents": "Contents",
+        "categories": "Categories",
+        "tags": "Tags"
     }
 }

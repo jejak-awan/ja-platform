@@ -83,7 +83,7 @@
                 </div>
                 <div>
                   <MediaPicker
-                    :label="$t('features.users.form.selectAvatar')"
+                    :label="$t('modules.core.users.form.selectAvatar')"
                     @selected="(media: { url: string }) => profileForm.avatar = media.url"
                   />
                   <p class="mt-2 text-xs text-muted-foreground">
@@ -306,18 +306,18 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, defineAsyncComponent, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import toast from '@/services/toast';
+import api from '@/core/api/client';
+import toast from '@/shared/services/legacy-toast';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { isAxiosError } from 'axios';
 
 // Standardized Async Components
 const LoginHistory = defineAsyncComponent(() => import('@/modules/Core/components/admin/LoginHistory.vue'));
 const TwoFactorSettings = defineAsyncComponent(() => import('@/modules/Core/components/admin/TwoFactorSettings.vue'));
-const MediaPicker = defineAsyncComponent(() => import('@/components/shared/media/MediaPicker.vue'));
+const MediaPicker = defineAsyncComponent(() => import('@/shared/components/media/MediaPicker.vue'));
 
 // Shadcn Components
 // Shadcn Components
@@ -339,7 +339,7 @@ import {
     AvatarImage,
     AvatarFallback,
     Separator
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';

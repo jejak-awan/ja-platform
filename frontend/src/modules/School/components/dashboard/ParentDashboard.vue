@@ -150,7 +150,7 @@
 import {
   Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter,
   Button, LucideIcon, Badge
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const monitorTiles = [
   { label: 'Rata-rata Nilai', value: '88.5', trend: '+1.2', trendClass: 'text-emerald-600', icon: 'Calculator', iconClass: 'text-emerald-500' },

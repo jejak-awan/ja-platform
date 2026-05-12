@@ -114,10 +114,10 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
-import api from '@/services/api';
-import { Spinner, Pagination } from '@/components/ui';
+import api from '@/core/api/client';
+import { Spinner, Pagination } from '@/shared/components/ui';
 
 interface LoginEntry {
     id: number;

@@ -420,13 +420,27 @@
                       {{ setting.description }}
                     </p>
 
-                    <Input
-                      v-if="setting.type === 'string' || setting.type === 'integer'"
-                      :id="setting.key"
-                      v-model="(settingsForm[setting.key] as any)"
-                      :type="setting.type === 'integer' ? 'number' : (setting.is_encrypted ? 'password' : 'text')"
-                      :class="{ 'border-destructive focus-visible:ring-destructive': errors[setting.key] }"
-                    />
+                    <div class="relative">
+                      <Input
+                        v-if="setting.type === 'string' || setting.type === 'integer'"
+                        :id="setting.key"
+                        v-model="(settingsForm[setting.key] as any)"
+                        :type="setting.type === 'integer' ? 'number' : (setting.is_encrypted ? (showPassword ? 'text' : 'password') : 'text')"
+                        :class="[
+                          { 'border-destructive focus-visible:ring-destructive': errors[setting.key] },
+                          setting.is_encrypted ? 'pr-10' : ''
+                        ]"
+                      />
+                      <button
+                        v-if="setting.is_encrypted"
+                        type="button"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                        @click="showPassword = !showPassword"
+                      >
+                        <Eye v-if="!showPassword" class="w-4 h-4" />
+                        <EyeOff v-else class="w-4 h-4" />
+                      </button>
+                    </div>
                     <p
                       v-if="errors && errors[setting.key]"
                       class="text-sm text-destructive mt-1"
@@ -713,16 +727,16 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted, onUnmounted, type Component } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/modules/Core/stores/auth'
 
 import axios from 'axios'
-import api from '@/services/api'
-import { useToast } from '@/composables/useToast'
-import { useConfirm } from '@/composables/useConfirm'
-import { cn } from '@/lib/utils'
+import api from '@/core/api/client'
+import { useToast } from '@/shared/composables/useToast'
+import { useConfirm } from '@/shared/composables/useConfirm'
+import { cn } from '@/shared/utils/lib-utils'
 import {
     Tabs,
     TabsList,
@@ -750,7 +764,7 @@ import {
     TableHead,
     TableRow,
     TableCell
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
 import Database from 'lucide-vue-next/dist/esm/icons/database.js';
@@ -766,6 +780,7 @@ import Flame from 'lucide-vue-next/dist/esm/icons/flame.js';
 import Settings from 'lucide-vue-next/dist/esm/icons/settings.js';
 import Route from 'lucide-vue-next/dist/esm/icons/route.js';
 import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
+import EyeOff from 'lucide-vue-next/dist/esm/icons/eye-off.js';
 import ArrowRight from 'lucide-vue-next/dist/esm/icons/arrow-right.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import AlertTriangle from 'lucide-vue-next/dist/esm/icons/triangle-alert.js';
@@ -834,6 +849,7 @@ const authStore = useAuthStore()
 const { confirm } = useConfirm()
 const toast = useToast()
 const activeTab = ref('statistics')
+const showPassword = ref(false)
 
 // Settings
 const settings = ref<Record<string, SettingItem[]>>({})
@@ -1011,7 +1027,13 @@ const testConnection = async () : Promise<void> => {
   connectionStatus.value = null
 
   try {
-    const response = await api.get('/admin/core/redis/test-connection')
+    // Send current form data to test connection on-the-fly
+    const response = await api.post('/admin/core/redis/test-connection', {
+      host: settingsForm.value.redis_host,
+      port: settingsForm.value.redis_port,
+      password: settingsForm.value.redis_password,
+      database: settingsForm.value.redis_database
+    })
     const payload = response?.data as { message?: string; response_time?: string } | undefined
     connectionStatus.value = {
       type: 'success',
@@ -1024,12 +1046,17 @@ const testConnection = async () : Promise<void> => {
 
   } catch (error: unknown) {
     let msg = t('features.redis.messages.testFailed');
+    let hint = '';
+    
     if (axios.isAxiosError(error)) {
-        msg = (error.response?.data as { message?: string })?.message || msg;
+        const data = error.response?.data as { message?: string; hint?: string } | undefined;
+        msg = data?.message || msg;
+        hint = data?.hint || '';
     }
+    
     connectionStatus.value = {
       type: 'error',
-      message: `❌ ${msg}`
+      message: `❌ ${msg}${hint ? ' - ' + hint : ''}`
     }
   } finally {
     testing.value = false

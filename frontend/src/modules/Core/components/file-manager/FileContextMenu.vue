@@ -6,7 +6,7 @@
       @click="navigateToPath(item.path)"
     >
       <FolderOpen class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.actions.open') }}
+      {{ t('modules.core.file_manager.actions.open') }}
     </ContextMenuItem>
     <!-- Files Open -->
     <ContextMenuItem
@@ -14,7 +14,7 @@
       @click="$emit('preview', item)"
     >
       <Eye class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.actions.open') }}
+      {{ t('modules.core.file_manager.actions.open') }}
     </ContextMenuItem>
 
     <ContextMenuItem
@@ -22,14 +22,14 @@
       @click="downloadFile(item)"
     >
       <Download class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.actions.download') }}
+      {{ t('modules.core.file_manager.actions.download') }}
     </ContextMenuItem>
 
     <ContextMenuSeparator />
 
     <ContextMenuItem @click="copyPath(item)">
       <Link class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.actions.copyPath') }}
+      {{ t('modules.core.file_manager.actions.copyPath') }}
     </ContextMenuItem>
         
     <ContextMenuItem
@@ -37,7 +37,7 @@
       @click="copyUrl(item)"
     >
       <Copy class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.actions.copyUrl') }}
+      {{ t('modules.core.file_manager.actions.copyUrl') }}
     </ContextMenuItem>
 
     <ContextMenuSeparator />
@@ -47,19 +47,19 @@
       @click="extractFile(item)"
     >
       <PackageOpen class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.actions.extract') }}
+      {{ t('modules.core.file_manager.actions.extract') }}
     </ContextMenuItem>
 
     <ContextMenuItem @click="compressItems([item.path])">
       <Archive class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.actions.compress') }}
+      {{ t('modules.core.file_manager.actions.compress') }}
     </ContextMenuItem>
 
     <ContextMenuSeparator />
 
     <ContextMenuItem @click="copyToClipboard([item], 'copy')">
       <CopyIcon class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.actions.copy') }}
+      {{ t('modules.core.file_manager.actions.copy') }}
     </ContextMenuItem>
 
     <ContextMenuItem
@@ -67,7 +67,7 @@
       @click="pasteFromClipboard(item.path)"
     >
       <ClipboardPaste class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.actions.paste') }}
+      {{ t('modules.core.file_manager.actions.paste') }}
     </ContextMenuItem>
 
     <ContextMenuSeparator />
@@ -77,7 +77,7 @@
       @click="deleteItem(item)"
     >
       <Trash2 class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.actions.delete') }}
+      {{ t('modules.core.file_manager.actions.delete') }}
     </ContextMenuItem>
 
     <ContextMenuSeparator />
@@ -85,7 +85,7 @@
     <!-- Properties -->
     <ContextMenuItem @click="togglePropertiesSidebar">
       <Info class="w-4 h-4 mr-2" />
-      {{ t('features.file_manager.properties.title', 'Properties') }}
+      {{ t('modules.core.file_manager.properties.title', 'Properties') }}
     </ContextMenuItem>
   </ContextMenuContent>
 </template>
@@ -108,11 +108,11 @@ import {
     ContextMenuContent, 
     ContextMenuItem, 
     ContextMenuSeparator 
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
-import api from '@/services/api';
-import { FileManagerKey } from '@/keys';
-import type { FileItem, FolderItem } from '@/types/cms/file-manager';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
+import api from '@/core/api/client';
+import { FileManagerKey } from '@/core/keys';
+import type { FileItem, FolderItem } from '@/modules/Cms/types/file-manager';
 
 defineProps<{
     item: FileItem | FolderItem;
@@ -140,9 +140,9 @@ const clipboardCount = computed(() => clipboard.value.items.length);
 const copyPath = async (item: FileItem | FolderItem) => {
     try {
         await navigator.clipboard.writeText(item.path);
-        toast.success.action(t('features.file_manager.messages.path_copied', 'Path copied'));
+        toast.success.action(t('modules.core.file_manager.messages.path_copied', 'Path copied'));
     } catch {
-        toast.error.default(t('features.file_manager.messages.copy_failed', 'Failed to copy'));
+        toast.error.default(t('modules.core.file_manager.messages.copy_failed', 'Failed to copy'));
     }
 };
 
@@ -150,9 +150,9 @@ const copyUrl = async (file: FileItem) => {
     if (file.url) {
         try {
             await navigator.clipboard.writeText(file.url);
-            toast.success.action(t('features.file_manager.messages.url_copied', 'URL copied'));
+            toast.success.action(t('modules.core.file_manager.messages.url_copied', 'URL copied'));
         } catch {
-            toast.error.default(t('features.file_manager.messages.copy_failed', 'Failed to copy'));
+            toast.error.default(t('modules.core.file_manager.messages.copy_failed', 'Failed to copy'));
         }
     }
 };
@@ -169,20 +169,20 @@ const downloadFile = (file: FileItem) => {
 const extractFile = async (file: FileItem) => {
     try {
         await api.post('/admin/core/file-manager/extract', { path: file.path.replace(/^\//, '') });
-        toast.success.action(t('features.file_manager.messages.extracted', 'Extracted'));
+        toast.success.action(t('modules.core.file_manager.messages.extracted', 'Extracted'));
         await fetchCurrentPath();
     } catch {
-        toast.error.default(t('features.file_manager.messages.extract_failed', 'Extraction failed'));
+        toast.error.default(t('modules.core.file_manager.messages.extract_failed', 'Extraction failed'));
     }
 };
 
 const compressItems = async (paths: string[]) => {
     try {
         await api.post('/admin/core/file-manager/compress', { paths: paths.map(p => p.replace(/^\//, '')) });
-        toast.success.action(t('features.file_manager.messages.compressed', 'Compressed'));
+        toast.success.action(t('modules.core.file_manager.messages.compressed', 'Compressed'));
         await fetchCurrentPath();
     } catch {
-        toast.error.default(t('features.file_manager.messages.compress_failed', 'Compression failed'));
+        toast.error.default(t('modules.core.file_manager.messages.compress_failed', 'Compression failed'));
     }
 };
 </script>

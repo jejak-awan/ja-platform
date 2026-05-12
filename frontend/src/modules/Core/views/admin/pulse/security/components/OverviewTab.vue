@@ -539,7 +539,7 @@ import {
     Card, CardHeader, CardTitle, CardContent,
     Button, Input, Label, Badge, Checkbox, DataTable, Pagination,
     Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import ShieldAlert from 'lucide-vue-next/dist/esm/icons/shield-alert.js';
 import ShieldX from 'lucide-vue-next/dist/esm/icons/shield-x.js';

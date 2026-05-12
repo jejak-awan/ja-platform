@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::table('themes', function (Blueprint $table) {
             // Add school_unit_id column
-            $table->foreignId('school_unit_id')->nullable()->after('id')->constrained('sch_ins_levels')->onDelete('cascade');
+            // Keep CMS independent from School module schema: no FK constraint here.
+            $table->unsignedBigInteger('school_unit_id')->nullable()->after('id')->index();
             
             // Drop old unique constraint on slug
             $table->dropUnique(['slug']);
@@ -31,7 +32,6 @@ return new class extends Migration
     {
         Schema::table('themes', function (Blueprint $table) {
             $table->dropUnique(['slug', 'school_unit_id']);
-            $table->dropForeign(['school_unit_id']);
             $table->dropColumn('school_unit_id');
             
             // Re-add original unique constraint

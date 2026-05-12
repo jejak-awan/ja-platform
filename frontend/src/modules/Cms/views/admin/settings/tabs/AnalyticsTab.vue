@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import api from '@/services/api'
-import { parseSingleResponse } from '@/utils/responseParser'
+import api from '@/core/api/client'
+import { parseSingleResponse } from '@/shared/utils/responseParser'
 import SettingGroup from '@/modules/Core/components/settings/SettingGroup.vue'
 import SettingField from '@/modules/Core/components/settings/SettingField.vue'
-import { Button } from '@/components/ui';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
-import type { SettingValue } from '@/types/core/settings'
+import { Button } from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import type { SettingValue } from '@/core/types/settings'
 
 interface Setting {
     id: number | string;
@@ -64,8 +64,8 @@ const analyticsSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'retention',
-            title: t('features.settings.groups.analytics.retentionTitle'),
-            description: t('features.settings.groups.analytics.description'),
+            title: t('modules.cms.settings.groups.analytics.retentionTitle'),
+            description: t('modules.cms.settings.groups.analytics.description'),
             icon: LineChartIcon,
             color: 'indigo',
             keys: ['analytics_retention_days', 'analytics_event_retention_days', 'analytics_visitor_retention_days'],
@@ -86,10 +86,10 @@ const purging = ref(false)
 
 const handleCleanup = async () => {
     const isConfirmed = await confirm({
-        title: t('features.settings.groups.analytics.cleanupTitle', 'Manual Data Cleanup'),
-        message: t('features.settings.groups.analytics.cleanupConfirm', 'Are you sure you want to delete old analytics data now?'),
+        title: t('modules.cms.settings.groups.analytics.cleanupTitle', 'Manual Data Cleanup'),
+        message: t('modules.cms.settings.groups.analytics.cleanupConfirm', 'Are you sure you want to delete old analytics data now?'),
         variant: 'destructive',
-        confirmText: t('features.settings.groups.analytics.cleanupButton', 'Run Cleanup Now'),
+        confirmText: t('modules.cms.settings.groups.analytics.cleanupButton', 'Run Cleanup Now'),
     });
 
     if (!isConfirmed) {
@@ -101,7 +101,7 @@ const handleCleanup = async () => {
         const response = await api.post('/admin/cms/analytics/cleanup')
         const payload = parseSingleResponse<{ total_deleted?: number }>(response)
         const count = typeof payload?.total_deleted === 'number' ? payload.total_deleted : 0
-        toast.success.action(t('features.settings.groups.analytics.cleanupSuccess', { count }))
+        toast.success.action(t('modules.cms.settings.groups.analytics.cleanupSuccess', { count }))
     } catch (error) {
         toast.error.fromResponse(error)
     } finally {
@@ -111,10 +111,10 @@ const handleCleanup = async () => {
 
 const handlePurgeAll = async () => {
     const isConfirmed = await confirm({
-        title: t('features.settings.groups.analytics.purgeTitle'),
-        message: t('features.settings.groups.analytics.purgeConfirm'),
+        title: t('modules.cms.settings.groups.analytics.purgeTitle'),
+        message: t('modules.cms.settings.groups.analytics.purgeConfirm'),
         variant: 'destructive',
-        confirmText: t('features.settings.groups.analytics.purgeButton'),
+        confirmText: t('modules.cms.settings.groups.analytics.purgeButton'),
     })
 
     if (!isConfirmed) {
@@ -128,7 +128,7 @@ const handlePurgeAll = async () => {
         })
         const payload = parseSingleResponse<{ total_deleted?: number }>(response)
         const count = typeof payload?.total_deleted === 'number' ? payload.total_deleted : 0
-        toast.success.action(t('features.settings.groups.analytics.purgeSuccess', { count }))
+        toast.success.action(t('modules.cms.settings.groups.analytics.purgeSuccess', { count }))
     } catch (error) {
         toast.error.fromResponse(error)
     } finally {
@@ -153,11 +153,11 @@ const handlePurgeAll = async () => {
         :key="setting.id"
         :model-value="(formData[setting.key] as any)"
         :field-key="setting.key"
-        :label="$t('features.settings.labels.' + setting.key)"
-        :description="$t('features.settings.descriptions.' + setting.key)"
+        :label="$t('modules.cms.settings.labels.' + setting.key)"
+        :description="$t('modules.cms.settings.descriptions.' + setting.key)"
         :type="setting.type"
-        :enabled-text="$t('features.settings.enabled')"
-        :disabled-text="$t('features.settings.disabled')"
+        :enabled-text="$t('modules.cms.settings.enabled')"
+        :disabled-text="$t('modules.cms.settings.disabled')"
         :error="errors?.[setting.key]"
         @update:model-value="(value) => updateField(setting.key, value)"
       />
@@ -171,10 +171,10 @@ const handlePurgeAll = async () => {
         </div>
         <div>
           <h3 class="text-lg font-medium text-destructive">
-            {{ $t('features.settings.groups.analytics.cleanupTitle') }}
+            {{ $t('modules.cms.settings.groups.analytics.cleanupTitle') }}
           </h3>
           <p class="text-sm text-muted-foreground mt-1">
-            {{ $t('features.settings.groups.analytics.cleanupDescription') }}
+            {{ $t('modules.cms.settings.groups.analytics.cleanupDescription') }}
           </p>
         </div>
       </div>
@@ -211,7 +211,7 @@ const handlePurgeAll = async () => {
             v-else
             class="w-4 h-4 mr-2"
           />
-          {{ cleaning ? $t('features.settings.groups.analytics.cleaningNow') : $t('features.settings.groups.analytics.cleanupButton') }}
+          {{ cleaning ? $t('modules.cms.settings.groups.analytics.cleaningNow') : $t('modules.cms.settings.groups.analytics.cleanupButton') }}
         </Button>
         <Button
           type="button"
@@ -245,7 +245,7 @@ const handlePurgeAll = async () => {
             v-else
             class="w-4 h-4 mr-2"
           />
-          {{ purging ? $t('features.settings.groups.analytics.purgingNow') : $t('features.settings.groups.analytics.purgeButton') }}
+          {{ purging ? $t('modules.cms.settings.groups.analytics.purgingNow') : $t('modules.cms.settings.groups.analytics.purgeButton') }}
         </Button>
       </div>
     </div>

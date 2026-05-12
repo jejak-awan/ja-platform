@@ -15,7 +15,7 @@
           <h1 class="text-lg font-bold tracking-tight">
             {{ t('features.theme_customizer.title') }}
           </h1>
-          <p class="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">
+          <p class="text-[10px] text-muted-foreground font-bold tracking-wider">
             {{ theme?.name || t('common.labels.loading') }}
           </p>
         </div>
@@ -233,7 +233,7 @@
               v-if="selectedItem.manifestSections?.length && workspaceMode === 'design'"
               class="space-y-4"
             >
-              <h4 class="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2 px-1">
+              <h4 class="text-[11px] font-bold tracking-wider text-muted-foreground/80 flex items-center gap-2 px-1">
                 <Settings2 class="w-3 h-3" />
                 {{ t('features.theme_customizer.editor.sections.visual') }}
               </h4>
@@ -260,7 +260,7 @@
               v-if="selectedItem.id === 'identity-menus' && workspaceMode === 'design'"
               class="space-y-4"
             >
-              <h4 class="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2 px-1">
+              <h4 class="text-[11px] font-bold tracking-wider text-muted-foreground/80 flex items-center gap-2 px-1">
                 <MenuIcon class="w-3 h-3" />
                 {{ t('features.theme_customizer.editor.sections.menus') }}
               </h4>
@@ -382,11 +382,11 @@ import {
     Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
     Dialog, DialogContent
-} from '@/components/ui'
+} from '@/shared/components/ui'
 import SettingControl from '@/modules/Cms/components/themes/customizer/sidebar/SettingControl.vue'
 import CustomizerSidebar from '@/modules/Cms/components/themes/customizer/sidebar/Sidebar.vue'
 import BindingsSection from '@/modules/Cms/components/themes/customizer/editor/BindingsSection.vue'
-import MediaPicker from '@/components/shared/media/MediaPicker.vue'
+import MediaPicker from '@/shared/components/media/MediaPicker.vue'
 
 // Icons
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
@@ -420,16 +420,16 @@ import Sparkles from 'lucide-vue-next/dist/esm/icons/sparkles.js';
 import Award from 'lucide-vue-next/dist/esm/icons/award.js';
 import Briefcase from 'lucide-vue-next/dist/esm/icons/briefcase.js';
 
-import api from '@/services/api'
-import toast from '@/services/toast'
-import type { ThemeSection } from '@/types/cms/theme'
-import type { Theme } from '@/types/cms/theme'
+import api from '@/core/api/client'
+import toast from '@/shared/services/legacy-toast'
+import type { ThemeSection } from '@/modules/Cms/types/theme'
+import type { Theme } from '@/modules/Cms/types/theme'
 import type { SlotBinding } from '@/modules/Cms/composables/useThemeDataBindings'
 import { THEME_BINDING_REGISTRY } from '@/modules/Cms/config/themeBindingsRegistry'
 import { useThemeCustomizer } from '@/modules/Cms/composables/useThemeCustomizer'
 import { themeUsesJanariCanvas } from '@/modules/Cms/utils/themeManifest'
 import PreviewArea from '@/modules/Cms/components/themes/customizer/preview/PreviewArea.vue'
-import { parseResponse, ensureArray } from '@/utils/responseParser'
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser'
 
 const { t, te } = useI18n()
 const route = useRoute()

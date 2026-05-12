@@ -5,9 +5,9 @@
   >
     <DialogContent class="sm:max-w-[500px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('features.school.extensions.messages.saveSuccess') : $t('features.school.extensions.tabs.tracer') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('modules.school.extensions.messages.saveSuccess') : $t('modules.school.extensions.tabs.tracer') }}</DialogTitle>
         <DialogDescription>
-          {{ $t('features.school.extensions.subtitle') }}
+          {{ $t('modules.school.extensions.subtitle') }}
         </DialogDescription>
       </DialogHeader>
 
@@ -16,12 +16,12 @@
           v-if="!isEdit"
           class="grid gap-2"
         >
-          <Label>{{ $t('features.school.extensions.tabs.alumni') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.extensions.tabs.alumni') }} <span class="text-destructive">*</span></Label>
           <Select
             v-model="form.alumni_id"
             required
           >
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.extensions.placeholders.selectAlumni')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.extensions.placeholders.selectAlumni')" /></SelectTrigger>
             <SelectContent>
               <SelectItem
                 v-for="a in graduates"
@@ -35,12 +35,12 @@
         </div>
 
         <div class="grid gap-2">
-          <Label>{{ $t('features.school.extensions.labels.employmentStatus') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.extensions.labels.employmentStatus') }} <span class="text-destructive">*</span></Label>
           <Select
             v-model="form.employment_status"
             required
           >
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.extensions.placeholders.selectStatus')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.extensions.placeholders.selectStatus')" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="Working">
                 {{ $t('common.labels.working') || 'Working' }}
@@ -61,7 +61,7 @@
         <!-- Career Details -->
         <template v-if="form.employment_status === 'Working' || form.employment_status === 'Entrepreneur'">
           <div class="grid gap-2">
-            <Label for="company">{{ form.employment_status === 'Working' ? $t('features.school.extensions.labels.companyName') : $t('features.school.extensions.labels.companyName') }}</Label>
+            <Label for="company">{{ form.employment_status === 'Working' ? $t('modules.school.extensions.labels.companyName') : $t('modules.school.extensions.labels.companyName') }}</Label>
             <Input
               id="company"
               v-model="form.company_name"
@@ -75,7 +75,7 @@
             />
           </div>
           <div class="grid gap-2">
-            <Label>{{ $t('features.school.extensions.labels.salaryRange') }}</Label>
+            <Label>{{ $t('modules.school.extensions.labels.salaryRange') }}</Label>
             <Select v-model="form.salary_range">
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -96,14 +96,14 @@
         <!-- Education Details -->
         <template v-if="form.employment_status === 'Studying'">
           <div class="grid gap-2">
-            <Label for="uni">{{ $t('features.school.extensions.labels.universityName') }}</Label>
+            <Label for="uni">{{ $t('modules.school.extensions.labels.universityName') }}</Label>
             <Input
               id="uni"
               v-model="form.university_name"
             />
           </div>
           <div class="grid gap-2">
-            <Label for="major">{{ $t('features.school.extensions.labels.major') }}</Label>
+            <Label for="major">{{ $t('modules.school.extensions.labels.major') }}</Label>
             <Input
               id="major"
               v-model="form.major"
@@ -130,7 +130,7 @@
           <Label
             for="relevant"
             class="cursor-pointer"
-          >{{ $t('features.school.extensions.labels.relevantToMajor') }}</Label>
+          >{{ $t('modules.school.extensions.labels.relevantToMajor') }}</Label>
         </div>
       </div>
 
@@ -163,9 +163,9 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Label, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, 
   LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { OperationsService } from '@/modules/School/services/OperationsService';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 interface Graduate {
   id: number | string;

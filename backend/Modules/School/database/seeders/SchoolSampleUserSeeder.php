@@ -13,7 +13,7 @@ class SchoolSampleUserSeeder extends Seeder
      */
     public function run(): void
     {
-        $password = Hash::make('password123');
+        $password = Hash::make(env('DEFAULT_USER_PASSWORD', 'password'));
 
         $users = [
             [

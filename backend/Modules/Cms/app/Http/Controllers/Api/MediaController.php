@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Modules\Core\Models\Media;
 use Modules\Core\Models\Tag;
-use Modules\Cms\Services\MediaService;
+use Modules\Core\Services\MediaService;
 use Modules\Core\Helpers\UploadSettingsHelper;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 use Modules\Core\Models\ActivityLog;

@@ -10,7 +10,7 @@
         </div>
         <div>
           <h2 class="text-lg font-bold tracking-tight">
-            {{ $t('features.file_manager.trash.title') }}
+            {{ $t('modules.core.file_manager.trash.title') }}
           </h2>
           <p class="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
             {{ trashItems.length }} items
@@ -30,7 +30,7 @@
             class="w-4 h-4 mr-2"
             :class="{ 'animate-spin': trashLoading }"
           />
-          {{ $t('features.file_manager.trash.refresh') || 'Refresh' }}
+          {{ $t('modules.core.file_manager.trash.refresh') || 'Refresh' }}
         </Button>
         <Button
           variant="destructive"
@@ -52,7 +52,7 @@
     >
       <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mb-4" />
       <p class="text-sm font-medium animate-pulse">
-        {{ $t('features.file_manager.trash.scanning') || 'Scanning recycle bin...' }}
+        {{ $t('modules.core.file_manager.trash.scanning') || 'Scanning recycle bin...' }}
       </p>
     </div>
         
@@ -67,10 +67,10 @@
         />
       </div>
       <h3 class="text-lg font-bold text-foreground/90">
-        {{ $t('features.file_manager.trash.emptyTitle') || 'Your trash is empty' }}
+        {{ $t('modules.core.file_manager.trash.emptyTitle') || 'Your trash is empty' }}
       </h3>
       <p class="text-sm text-muted-foreground max-w-[280px] mt-2">
-        {{ $t('features.file_manager.trash.emptyDescription') || 'Any files or folders you delete will appear here for a limited time before being cleared for good.' }}
+        {{ $t('modules.core.file_manager.trash.emptyDescription') || 'Any files or folders you delete will appear here for a limited time before being cleared for good.' }}
       </p>
     </div>
         
@@ -136,8 +136,8 @@ import Folder from 'lucide-vue-next/dist/esm/icons/folder.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import { 
     Button,
-} from '@/components/ui';
-import { FileManagerKey } from '@/keys';
+} from '@/shared/components/ui';
+import { FileManagerKey } from '@/core/keys';
 
 const {
     trashItems,

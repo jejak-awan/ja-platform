@@ -6,7 +6,7 @@
     <DialogContent class="max-w-md">
       <DialogHeader>
         <DialogTitle>
-          {{ t('features.categories.move.title') }}
+          {{ t('modules.cms.categories.move.title') }}
         </DialogTitle>
       </DialogHeader>
 
@@ -17,22 +17,22 @@
       >
         <div>
           <p class="text-sm text-muted-foreground mb-4">
-            {{ t('features.categories.move.description', { name: category.name }) }}
+            {{ t('modules.cms.categories.move.description', { name: category.name }) }}
           </p>
           <div class="grid gap-2">
             <Label>
-              {{ t('features.categories.move.newParent') }}
+              {{ t('modules.cms.categories.move.newParent') }}
             </Label>
             <Select 
               :model-value="selectedParentId === null ? 'null' : String(selectedParentId)"
               @update:model-value="(val) => selectedParentId = (val === 'null' ? null : val)"
             >
               <SelectTrigger>
-                <SelectValue :placeholder="t('features.categories.form.noParent')" />
+                <SelectValue :placeholder="t('modules.cms.categories.form.noParent')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="null">
-                  {{ t('features.categories.form.noParent') }}
+                  {{ t('modules.cms.categories.form.noParent') }}
                 </SelectItem>
                 <SelectItem
                   v-for="cat in availableParents"
@@ -52,13 +52,13 @@
           variant="outline"
           @click="$emit('close')"
         >
-          {{ t('features.categories.move.cancel') }}
+          {{ t('modules.cms.categories.move.cancel') }}
         </Button>
         <Button
           :disabled="saving"
           @click="handleSubmit"
         >
-          {{ saving ? t('features.categories.move.moving') : t('features.categories.move.submit') }}
+          {{ saving ? t('modules.cms.categories.move.moving') : t('modules.cms.categories.move.submit') }}
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -81,11 +81,11 @@ import {
     SelectValue,
     SelectContent,
     SelectItem
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { moveCategorySchema } from '@/schemas';
-import api from '@/services/api';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { moveCategorySchema } from '@/shared/schemas';
+import api from '@/core/api/client';
 
 interface Category {
     id: number | string;
@@ -153,7 +153,7 @@ const handleSubmit = async () => {
         await api.post(`/admin/cms/categories/${props.category.id}/move`, {
             parent_id: selectedParentId.value,
         });
-        toast.success.action(t('features.categories.messages.moveSuccess'));
+        toast.success.action(t('modules.cms.categories.messages.moveSuccess'));
         emit('moved');
     } catch (error: unknown) {
         const err = error as import('axios').AxiosError<{ errors: Record<string, string[]> }>;

@@ -5,7 +5,7 @@
       <div class="flex items-center gap-4">
         <div class="space-y-1">
           <h1 class="text-2xl font-bold tracking-tight text-foreground">
-            {{ $t('features.content.list.createNew') }}
+            {{ $t('modules.cms.content.list.createNew') }}
           </h1>
           <AutoSaveIndicator
             :status="autoSaveStatus"
@@ -66,7 +66,7 @@
         <DialogHeader>
           <DialogTitle>{{ $t('common.messages.confirm.title') }}</DialogTitle>
           <DialogDescription>
-            {{ $t('features.content.messages.unsavedChanges') }}
+            {{ $t('modules.cms.content.messages.unsavedChanges') }}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -74,7 +74,7 @@
             variant="outline"
             @click="showConfirmDialog = false"
           >
-            {{ $t('features.content.form.cancel') }}
+            {{ $t('modules.cms.content.form.cancel') }}
           </Button>
           <Button @click="confirmCancel">
             {{ $t('common.actions.confirm') }}
@@ -131,14 +131,14 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import type { Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useHead } from '@unhead/vue';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
-import api from '@/services/api';
+import api from '@/core/api/client';
 
 
 
@@ -151,19 +151,19 @@ import {
     DialogTitle,
     DialogDescription,
     DialogFooter
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import ActionToolbar from '@/modules/Cms/components/content/ActionToolbar.vue';
-import AutoSaveIndicator from '@/modules/Core/components/layout/AutoSaveIndicator.vue';
+import AutoSaveIndicator from '@/shared/components/AutoSaveIndicator.vue';
 import ContentMain from '@/modules/Cms/components/content/ContentMain.vue';
 import ContentSidebar from '@/modules/Cms/components/content/ContentSidebar.vue';
 
 // Composables & Utils
-import { parseResponse, ensureArray } from '@/utils/responseParser';
-import { useAutoSave } from '@/composables/useAutoSave';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { contentSchema } from '@/schemas';
-import type { Category, Tag, ContentForm, Menu } from '@/types/cms/cms';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
+import { useAutoSave } from '@/shared/composables/useAutoSave';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { contentSchema } from '@/shared/schemas';
+import type { Category, Tag, ContentForm, Menu } from '@/modules/Cms/types/cms';
 
 interface ConflictDetails {
     id: number;
@@ -233,7 +233,7 @@ watch(() => form.value.title, (newTitle) => {
 });
 
 useHead({
-    title: computed(() => `${t('features.content.list.createNew')} | ${cmsStore.siteSettings?.site_name || 'JA CMS'}`)
+    title: computed(() => `${t('modules.cms.content.list.createNew')} | ${cmsStore.siteSettings?.site_name || 'JA CMS'}`)
 });
 
 watch(() => form.value.excerpt, (newExcerpt) => {
@@ -449,7 +449,7 @@ const handleSubmit = async (status: string | null = null) => {
             lastSaved.value = new Date(response.data.updated_at);
         }
         
-        toast.success.create(t('features.content.title_singular'));
+        toast.success.create(t('modules.cms.content.title_singular'));
         
         // Only redirect if not saving from within an embedded view
         if (status === null) {
@@ -521,12 +521,12 @@ const resolveConflict = async (action: 'unique' | 'force_delete') => {
             loading.value = true;
             await api.delete(`/admin/cms/contents/${conflictId}/force-delete`);
             slugConflict.value = null;
-            toast.success.action(t('features.content.messages.conflictResolved'));
+            toast.success.action(t('modules.cms.content.messages.conflictResolved'));
             // Retry submission
             await handleSubmit(form.value.status);
         } catch (error: unknown) {
             logger.error('Failed to force delete conflicting item:', error);
-            toast.error.action({ message: t('features.content.messages.conflictResolveFailed') });
+            toast.error.action({ message: t('modules.cms.content.messages.conflictResolveFailed') });
         } finally {
             loading.value = false;
         }

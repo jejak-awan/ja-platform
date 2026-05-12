@@ -5,18 +5,18 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('features.school.logistics.sarpras.actions.editLand') : $t('features.school.logistics.sarpras.actions.addLand') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('modules.school.logistics.sarpras.actions.editLand') : $t('modules.school.logistics.sarpras.actions.addLand') }}</DialogTitle>
       </DialogHeader>
       <form
         class="space-y-4 py-4"
         @submit.prevent="handleSubmit"
       >
         <div class="space-y-2">
-          <Label for="name">{{ $t('features.school.logistics.sarpras.labels.landName') }} <span class="text-destructive">*</span></Label>
+          <Label for="name">{{ $t('modules.school.logistics.sarpras.labels.landName') }} <span class="text-destructive">*</span></Label>
           <Input
             id="name"
             v-model="form.name"
-            :placeholder="$t('features.school.logistics.sarpras.placeholders.landNameHint')"
+            :placeholder="$t('modules.school.logistics.sarpras.placeholders.landNameHint')"
             required
           />
         </div>
@@ -29,14 +29,14 @@
           />
         </div>
         <div class="space-y-2">
-          <Label for="certificate_number">{{ $t('features.school.logistics.sarpras.labels.certificateNumber') }}</Label>
+          <Label for="certificate_number">{{ $t('modules.school.logistics.sarpras.labels.certificateNumber') }}</Label>
           <Input
             id="certificate_number"
             v-model="form.certificate_number"
           />
         </div>
         <div class="space-y-2">
-          <Label for="area">{{ $t('features.school.logistics.sarpras.labels.area') }} (m2)</Label>
+          <Label for="area">{{ $t('modules.school.logistics.sarpras.labels.area') }} (m2)</Label>
           <Input
             id="area"
             v-model="form.area"
@@ -66,7 +66,7 @@ import { ref, watch } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, Textarea, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const props = defineProps<{
   open: boolean;

@@ -4,10 +4,10 @@
     <div class="mb-6 flex justify-between items-center">
       <div>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.comments.list.title') }}
+          {{ $t('modules.cms.comments.list.title') }}
         </h1>
         <p class="mt-1 text-sm text-muted-foreground">
-          {{ $t('features.comments.list.subtitle') }}
+          {{ $t('modules.cms.comments.list.subtitle') }}
         </p>
       </div>
     </div>
@@ -26,7 +26,7 @@
           {{ statistics.total }}
         </p>
         <p class="text-xs text-muted-foreground">
-          {{ $t('features.comments.stats.total') }}
+          {{ $t('modules.cms.comments.stats.total') }}
         </p>
       </Card>
       <Card 
@@ -38,7 +38,7 @@
           {{ statistics.pending }}
         </p>
         <p class="text-xs text-yellow-500/70 dark:text-yellow-400/70">
-          {{ $t('features.comments.stats.pending') }}
+          {{ $t('modules.cms.comments.stats.pending') }}
         </p>
       </Card>
       <Card 
@@ -50,7 +50,7 @@
           {{ statistics.approved }}
         </p>
         <p class="text-xs text-green-500/70 dark:text-green-400/70">
-          {{ $t('features.comments.stats.approved') }}
+          {{ $t('modules.cms.comments.stats.approved') }}
         </p>
       </Card>
       <Card 
@@ -62,7 +62,7 @@
           {{ statistics.rejected }}
         </p>
         <p class="text-xs text-red-500/70 dark:text-red-400/70">
-          {{ $t('features.comments.stats.rejected') }}
+          {{ $t('modules.cms.comments.stats.rejected') }}
         </p>
       </Card>
       <Card 
@@ -74,7 +74,7 @@
           {{ statistics.spam }}
         </p>
         <p class="text-xs text-muted-foreground">
-          {{ $t('features.comments.stats.spam') }}
+          {{ $t('modules.cms.comments.stats.spam') }}
         </p>
       </Card>
     </div>
@@ -86,29 +86,29 @@
           <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             v-model="search"
-            :placeholder="$t('features.comments.filter.searchPlaceholder')"
+            :placeholder="$t('modules.cms.comments.filter.searchPlaceholder')"
             class="pl-9"
           />
         </div>
         <Select v-model="statusFilter">
           <SelectTrigger class="w-full md:w-[200px]">
-            <SelectValue :placeholder="$t('features.comments.filter.allStatus')" />
+            <SelectValue :placeholder="$t('modules.cms.comments.filter.allStatus')" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
-              {{ $t('features.comments.filter.allStatus') }}
+              {{ $t('modules.cms.comments.filter.allStatus') }}
             </SelectItem>
             <SelectItem value="pending">
-              {{ $t('features.comments.status.pending') }}
+              {{ $t('modules.cms.comments.status.pending') }}
             </SelectItem>
             <SelectItem value="approved">
-              {{ $t('features.comments.status.approved') }}
+              {{ $t('modules.cms.comments.status.approved') }}
             </SelectItem>
             <SelectItem value="rejected">
-              {{ $t('features.comments.status.rejected') }}
+              {{ $t('modules.cms.comments.status.rejected') }}
             </SelectItem>
             <SelectItem value="spam">
-              {{ $t('features.comments.status.spam') }}
+              {{ $t('modules.cms.comments.status.spam') }}
             </SelectItem>
           </SelectContent>
         </Select>
@@ -119,7 +119,7 @@
           class="flex items-center gap-3 p-1.5 px-3 rounded-lg bg-primary/5 border border-primary/10 animate-in fade-in slide-in-from-top-1 ml-auto"
         >
           <span class="text-sm font-medium text-primary">
-            {{ t('features.comments.list.selected', { count: selectedIds.length }) }}
+            {{ t('modules.cms.comments.list.selected', { count: selectedIds.length }) }}
           </span>
           <div class="h-4 w-px bg-primary/20" />
           <Select
@@ -127,17 +127,17 @@
             @update:model-value="handleBulkAction"
           >
             <SelectTrigger class="w-[160px] h-8 border-primary/20">
-              <SelectValue :placeholder="$t('features.content.list.bulkActions')" />
+              <SelectValue :placeholder="$t('modules.cms.content.list.bulkActions')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="approve">
-                {{ $t('features.comments.actions.approveAll') }}
+                {{ $t('modules.cms.comments.actions.approveAll') }}
               </SelectItem>
               <SelectItem value="reject">
-                {{ $t('features.comments.actions.rejectAll') }}
+                {{ $t('modules.cms.comments.actions.rejectAll') }}
               </SelectItem>
               <SelectItem value="spam">
-                {{ $t('features.comments.actions.markSpam') }}
+                {{ $t('modules.cms.comments.actions.markSpam') }}
               </SelectItem>
               <SelectItem
                 value="delete"
@@ -183,7 +183,7 @@
     >
       <MessageSquare class="mx-auto h-12 w-12 text-muted-foreground opacity-20" />
       <p class="mt-4 text-muted-foreground">
-        {{ $t('features.comments.list.empty') }}
+        {{ $t('modules.cms.comments.list.empty') }}
       </p>
     </Card>
 
@@ -217,7 +217,7 @@
               <div class="flex-1 min-w-0">
                 <div class="flex items-center space-x-2">
                   <p class="text-sm font-semibold text-foreground">
-                    {{ comment.user?.name || comment.name || t('features.comments.detail.anonymous') }}
+                    {{ comment.user?.name || comment.name || t('modules.cms.comments.detail.anonymous') }}
                   </p>
                   <Badge
                     variant="outline"
@@ -228,11 +228,11 @@
                       statusFilter === 'spam' ? 'bg-muted text-muted-foreground' : ''
                     "
                   >
-                    {{ $t('features.comments.status.' + comment.status) }}
+                    {{ $t('modules.cms.comments.status.' + comment.status) }}
                   </Badge>
                 </div>
                 <div class="flex items-center gap-x-3 mt-1 text-xs text-muted-foreground">
-                  <span>{{ comment.user?.email || comment.email || t('features.comments.detail.no_email') }}</span>
+                  <span>{{ comment.user?.email || comment.email || t('modules.cms.comments.detail.no_email') }}</span>
                   <span class="flex items-center">
                     <clock class="w-3 h-3 mr-1" />
                     {{ formatDate(comment.created_at) }}
@@ -249,7 +249,7 @@
                 @click="approveComment(comment)"
               >
                 <Check class="w-4 h-4 mr-1" />
-                {{ $t('features.comments.actions.approve') }}
+                {{ $t('modules.cms.comments.actions.approve') }}
               </Button>
               <Button
                 v-if="comment.status === 'pending' || comment.status === 'approved'"
@@ -259,7 +259,7 @@
                 @click="rejectComment(comment)"
               >
                 <X class="w-4 h-4 mr-1" />
-                {{ $t('features.comments.actions.reject') }}
+                {{ $t('modules.cms.comments.actions.reject') }}
               </Button>
               <Button
                 v-if="comment.status !== 'spam'"
@@ -269,7 +269,7 @@
                 @click="markAsSpam(comment)"
               >
                 <AlertTriangle class="w-4 h-4 mr-1" />
-                {{ $t('features.comments.actions.markSpam') }}
+                {{ $t('modules.cms.comments.actions.markSpam') }}
               </Button>
               <Button
                 variant="ghost"
@@ -298,7 +298,7 @@
                 class="flex items-center"
               >
                 <ArrowUpRight class="w-3 h-3 mr-1" />
-                {{ $t('features.comments.list.on') }}: 
+                {{ $t('modules.cms.comments.list.on') }}: 
                 <router-link
                   :to="{ name: 'contents.edit', params: { id: comment.content.id } }"
                   class="text-primary hover:underline ml-1 font-medium"
@@ -311,12 +311,12 @@
                 class="flex items-center"
               >
                 <Reply class="w-3 h-3 mr-1" />
-                {{ $t('features.comments.list.replyTo') }}: <b>{{ comment.parent.user?.name || comment.parent.name || t('features.comments.detail.anonymous') }}</b>
+                {{ $t('modules.cms.comments.list.replyTo') }}: <b>{{ comment.parent.user?.name || comment.parent.name || t('modules.cms.comments.detail.anonymous') }}</b>
               </span>
             </div>
             <div class="font-medium">
               <span v-if="(comment.replies_count || 0) > 0">
-                {{ comment.replies_count }} {{ comment.replies_count === 1 ? t('features.comments.detail.reply') : t('features.comments.detail.replies') }}
+                {{ comment.replies_count }} {{ comment.replies_count === 1 ? t('modules.cms.comments.detail.reply') : t('modules.cms.comments.detail.replies') }}
               </span>
             </div>
           </div>
@@ -343,7 +343,7 @@
               <div class="flex-1 min-w-0">
                 <div class="flex items-center space-x-2 mb-1">
                   <p class="text-xs font-semibold text-foreground">
-                    {{ reply.user?.name || reply.name || t('features.comments.detail.anonymous') }}
+                    {{ reply.user?.name || reply.name || t('modules.cms.comments.detail.anonymous') }}
                   </p>
                   <Badge
                     variant="outline"
@@ -354,7 +354,7 @@
                       reply.status === 'rejected' ? 'bg-red-500/10 text-red-500 border-red-500/20' : ''
                     "
                   >
-                    {{ $t('features.comments.status.' + reply.status) }}
+                    {{ $t('modules.cms.comments.status.' + reply.status) }}
                   </Badge>
                 </div>
                 <p class="text-xs text-foreground/80 leading-relaxed">
@@ -413,15 +413,15 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useConfirm } from '@/composables/useConfirm';
-import { useToast } from '@/composables/useToast';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
-import { Badge, Button, Card, Checkbox, Input, Pagination, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui';
-import type { PaginationData } from '@/utils/responseParser';
+import api from '@/core/api/client';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
+import { Badge, Button, Card, Checkbox, Input, Pagination, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui';
+import type { PaginationData } from '@/shared/utils/responseParser';
 
 import MessageSquare from 'lucide-vue-next/dist/esm/icons/message-square.js';
 import Check from 'lucide-vue-next/dist/esm/icons/check.js';
@@ -433,7 +433,7 @@ import ArrowUpRight from 'lucide-vue-next/dist/esm/icons/arrow-up-right.js';
 import Reply from 'lucide-vue-next/dist/esm/icons/reply.js';
 import Clock from 'lucide-vue-next/dist/esm/icons/clock.js';
 
-import type { Comment, CommentStatus, CommentStatistics } from '@/types/cms/comments';
+import type { Comment, CommentStatus, CommentStatistics } from '@/modules/Cms/types/comments';
 
 const { t } = useI18n();
 const { confirm } = useConfirm();
@@ -475,18 +475,18 @@ const bulkAction = async (action: string) => {
             confirmMsg = t('common.messages.confirm.bulkDelete', { count });
             break;
         case 'approve':
-            confirmMsg = t('features.comments.messages.bulkApproveConfirm', { count });
+            confirmMsg = t('modules.cms.comments.messages.bulkApproveConfirm', { count });
             break;
         case 'reject':
-            confirmMsg = t('features.comments.messages.bulkRejectConfirm', { count });
+            confirmMsg = t('modules.cms.comments.messages.bulkRejectConfirm', { count });
             break;
         case 'spam':
-            confirmMsg = t('features.comments.messages.bulkSpamConfirm', { count });
+            confirmMsg = t('modules.cms.comments.messages.bulkSpamConfirm', { count });
             break;
     }
     
     const confirmed = await confirm({
-        title: t('features.comments.actions.bulkAction'),
+        title: t('modules.cms.comments.actions.bulkAction'),
         message: confirmMsg,
         variant: action === 'delete' ? 'danger' : 'warning',
         confirmText: t('common.actions.confirm'),
@@ -548,10 +548,10 @@ const approveComment = async (comment: Comment) => {
     try {
         await api.put(`/admin/cms/comments/${comment.id}/approve`);
         await fetchComments();
-        toast.success.approve(t('features.comments.title_singular'));
+        toast.success.approve(t('modules.cms.comments.title_singular'));
     } catch (error: unknown) {
         logger.error('Failed to approve comment:', error);
-        toast.error.update(error as Record<string, unknown>, t('features.comments.title_singular'));
+        toast.error.update(error as Record<string, unknown>, t('modules.cms.comments.title_singular'));
     }
 };
 
@@ -560,10 +560,10 @@ const rejectComment = async (comment: Comment) => {
         await api.put(`/admin/cms/comments/${comment.id}/reject`);
         await fetchComments();
         await fetchStatistics();
-        toast.success.reject(t('features.comments.title_singular'));
+        toast.success.reject(t('modules.cms.comments.title_singular'));
     } catch (error: unknown) {
         logger.error('Failed to reject comment:', error);
-        toast.error.update(error as Record<string, unknown>, t('features.comments.title_singular'));
+        toast.error.update(error as Record<string, unknown>, t('modules.cms.comments.title_singular'));
     }
 };
 
@@ -572,10 +572,10 @@ const markAsSpam = async (comment: Comment) => {
         await api.put(`/admin/cms/comments/${comment.id}/spam`);
         await fetchComments();
         await fetchStatistics();
-        toast.success.markSpam(t('features.comments.title_singular'));
+        toast.success.markSpam(t('modules.cms.comments.title_singular'));
     } catch (error: unknown) {
         logger.error('Failed to mark as spam:', error);
-        toast.error.update(error as Record<string, unknown>, t('features.comments.title_singular'));
+        toast.error.update(error as Record<string, unknown>, t('modules.cms.comments.title_singular'));
     }
 };
 
@@ -590,8 +590,8 @@ const toggleSelection = (commentId: number) => {
 
 const deleteComment = async (comment: Comment) => {
     const confirmed = await confirm({
-        title: t('features.comments.actions.delete'),
-        message: t('features.comments.messages.deleteConfirm'),
+        title: t('modules.cms.comments.actions.delete'),
+        message: t('modules.cms.comments.messages.deleteConfirm'),
         variant: 'danger',
         confirmText: t('common.actions.delete'),
     });
@@ -601,10 +601,10 @@ const deleteComment = async (comment: Comment) => {
     try {
         await api.delete(`/admin/cms/comments/${comment.id}`);
         await fetchComments();
-        toast.success.delete(t('features.comments.title_singular'));
+        toast.success.delete(t('modules.cms.comments.title_singular'));
     } catch (error: unknown) {
         logger.error('Failed to delete comment:', error);
-        toast.error.delete(error as Record<string, unknown>, t('features.comments.title_singular'));
+        toast.error.delete(error as Record<string, unknown>, t('modules.cms.comments.title_singular'));
     }
 };
 

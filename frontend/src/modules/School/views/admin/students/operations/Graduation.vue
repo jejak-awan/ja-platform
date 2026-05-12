@@ -10,11 +10,11 @@
             />
           </div>
           <h2 class="text-3xl font-black tracking-tight text-foreground uppercase">
-            {{ $t('graduation.title') }}
+            {{ $t('modules.school.graduation.title') }}
           </h2>
         </div>
         <p class="text-sm text-muted-foreground italic font-medium">
-          {{ $t('graduation.subtitle') }}
+          {{ $t('modules.school.graduation.subtitle') }}
         </p>
       </div>
       <div class="flex gap-2">
@@ -27,7 +27,7 @@
               name="FileText"
               class="w-4 h-4 mr-2"
             />
-            {{ $t('graduation.labels.manageTemplates') }}
+            {{ $t('modules.school.graduation.labels.manageTemplates') }}
           </Button>
         </router-link>
       </div>
@@ -39,13 +39,13 @@
     >
       <TabsList class="grid w-full grid-cols-3 lg:w-[600px] h-12 bg-muted/50 p-1 rounded-xl">
         <TabsTrigger value="eligible" class="rounded-lg font-bold">
-          {{ $t('graduation.tabs.eligible') }}
+          {{ $t('modules.school.graduation.tabs.eligible') }}
         </TabsTrigger>
         <TabsTrigger value="history" class="rounded-lg font-bold">
-          {{ $t('graduation.tabs.history') }}
+          {{ $t('modules.school.graduation.tabs.history') }}
         </TabsTrigger>
         <TabsTrigger value="settings" class="rounded-lg font-bold">
-          {{ $t('graduation.tabs.settings') }}
+          {{ $t('modules.school.graduation.tabs.settings') }}
         </TabsTrigger>
       </TabsList>
 
@@ -57,7 +57,7 @@
           <CardContent class="p-6 space-y-6">
             <div class="flex flex-wrap gap-4 items-end bg-muted/10 p-4 rounded-xl border border-border/30">
               <div class="space-y-2">
-                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.batchYear') }}</label>
+                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.graduation.labels.batchYear') }}</label>
                 <Select v-model="batchYear">
                   <SelectTrigger class="w-[140px] rounded-xl h-11 bg-background">
                     <SelectValue :placeholder="String(new Date().getFullYear())" />
@@ -74,7 +74,7 @@
                 </Select>
               </div>
               <div class="space-y-2">
-                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.targetStatus') }}</label>
+                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.graduation.labels.targetStatus') }}</label>
                 <Select v-model="batchStatus">
                   <SelectTrigger class="w-[200px] rounded-xl h-11 bg-background">
                     <SelectValue />
@@ -97,7 +97,7 @@
                   name="CircleCheck"
                   class="w-5 h-5 mr-2"
                 />
-                {{ $t('graduation.labels.processSelected', { count: selectedRows.length }) }}
+                {{ $t('modules.school.graduation.labels.processSelected', { count: selectedRows.length }) }}
               </Button>
             </div>
 
@@ -106,7 +106,7 @@
                 name="Info"
                 class="w-4 h-4"
               />
-              {{ $t('graduation.labels.eligibleHint') }}
+              {{ $t('modules.school.graduation.labels.eligibleHint') }}
             </div>
 
             <DataTable
@@ -125,7 +125,7 @@
           <CardContent class="p-0">
             <div class="p-6 flex flex-wrap justify-between items-center bg-muted/10 border-b border-border/40 gap-4">
               <div class="flex items-center gap-3">
-                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.graduationYear') }}</label>
+                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.graduation.labels.graduationYear') }}</label>
                 <Select v-model="filterYear">
                   <SelectTrigger class="w-[140px] rounded-xl h-10 bg-background">
                     <SelectValue />
@@ -152,7 +152,7 @@
                     name="Upload"
                     class="w-4 h-4 mr-2 text-primary"
                   />
-                  {{ $t('graduation.labels.importGrades') }}
+                  {{ $t('modules.school.graduation.labels.importGrades') }}
                 </Button>
                 <Button
                   variant="outline"
@@ -190,7 +190,7 @@
     <Dialog v-model:open="gradeModalOpen">
       <DialogContent class="sm:max-w-[600px] rounded-2xl max-h-[90vh] overflow-hidden flex flex-col p-0">
         <DialogHeader class="p-6 border-b border-border/40">
-          <DialogTitle>{{ $t('graduation.labels.editGrades') }}</DialogTitle>
+          <DialogTitle>{{ $t('modules.school.graduation.labels.editGrades') }}</DialogTitle>
           <DialogDescription v-if="editingResult" class="font-bold text-primary">
             {{ editingResult.student?.full_name }} ({{ editingResult.student?.nisn }})
           </DialogDescription>
@@ -215,10 +215,10 @@
               </Select>
             </div>
             <div class="space-y-2">
-              <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.certificateNumber') }}</label>
+              <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.graduation.labels.certificateNumber') }}</label>
               <Input
                 v-model="editingResult.certificate_number"
-                :placeholder="$t('graduation.labels.certificateNumberPlaceholder')"
+                :placeholder="$t('modules.school.graduation.labels.certificateNumberPlaceholder')"
                 class="rounded-xl h-11"
               />
             </div>
@@ -226,7 +226,7 @@
 
           <div class="space-y-3">
             <div class="flex justify-between items-center">
-              <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.gradeDetails') }}</label>
+              <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.graduation.labels.gradeDetails') }}</label>
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -234,7 +234,7 @@
                 @click="addGradeField"
               >
                 <LucideIcon name="Plus" class="w-3.5 h-3.5 mr-1" />
-                {{ $t('graduation.labels.addSubject') }}
+                {{ $t('modules.school.graduation.labels.addSubject') }}
               </Button>
             </div>
             <div class="max-h-[300px] overflow-y-auto space-y-3 pr-2 custom-scrollbar">
@@ -265,7 +265,7 @@
                 </Button>
               </div>
               <div v-if="Object.keys(editingResult.grades || {}).length === 0" class="text-center py-10 bg-muted/20 rounded-2xl border-2 border-dashed border-border/50 text-muted-foreground text-xs italic font-medium">
-                {{ $t('graduation.labels.noGrades') }}
+                {{ $t('modules.school.graduation.labels.noGrades') }}
               </div>
             </div>
           </div>
@@ -296,9 +296,9 @@
     <Dialog v-model:open="importModalOpen">
       <DialogContent class="sm:max-w-[500px] rounded-2xl p-0 overflow-hidden">
         <DialogHeader class="p-6 border-b border-border/40">
-          <DialogTitle>{{ $t('graduation.labels.importTitle') }}</DialogTitle>
+          <DialogTitle>{{ $t('modules.school.graduation.labels.importTitle') }}</DialogTitle>
           <DialogDescription>
-            {{ $t('graduation.labels.importDescription') }}
+            {{ $t('modules.school.graduation.labels.importDescription') }}
           </DialogDescription>
         </DialogHeader>
 
@@ -315,13 +315,13 @@
               @change="onImportFileSelected"
             />
             <div class="space-y-1">
-              <p class="text-sm font-bold">{{ importFile ? importFile.name : $t('graduation.labels.chooseFile') }}</p>
+              <p class="text-sm font-bold">{{ importFile ? importFile.name : $t('modules.school.graduation.labels.chooseFile') }}</p>
               <p class="text-[10px] text-muted-foreground uppercase font-black tracking-widest">CSV (.csv) / Excel (.xlsx)</p>
             </div>
           </div>
 
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('graduation.labels.graduationYear') }}</label>
+            <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.graduation.labels.graduationYear') }}</label>
             <Select v-model="importYear">
               <SelectTrigger class="rounded-xl h-11">
                 <SelectValue />
@@ -333,7 +333,7 @@
           </div>
 
           <div class="p-4 bg-primary/5 rounded-2xl border border-primary/10">
-            <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-2">{{ $t('graduation.labels.formatHint') }}</p>
+            <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-2">{{ $t('modules.school.graduation.labels.formatHint') }}</p>
             <div class="font-mono text-[10px] text-muted-foreground space-y-1 bg-background/50 p-3 rounded-lg border border-border/30">
               <p>NISN, Matematika, B. Indonesia, B. Inggris, ...</p>
               <p class="text-primary/70">0012345678, 85, 90, 88, ...</p>
@@ -362,7 +362,7 @@
             @click="handleImport"
           >
             <LucideIcon name="Upload" class="w-4 h-4 mr-2" />
-            {{ $t('graduation.labels.importGrades') }}
+            {{ $t('modules.school.graduation.labels.importGrades') }}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -384,10 +384,10 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Input
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { OperationsService } from '@/modules/School/services/OperationsService';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 import GraduationSettings from '@/modules/School/components/operations/GraduationSettings.vue';
 
 const { t } = useI18n();
@@ -465,7 +465,7 @@ const columns = [
     }
   }),
   columnHelper.accessor('level.name', { 
-    header: t('common.labels.single_level'),
+    header: t('modules.school.labels.single_level'),
     cell: info => h('span', { class: 'text-xs font-bold text-muted-foreground' }, info.getValue())
   }),
   columnHelper.accessor('status', { 
@@ -492,12 +492,12 @@ const historyColumns = [
     }
   }),
   columnHelper.accessor('certificate_number', { 
-    header: t('graduation.labels.certificateNumber'),
+    header: t('modules.school.graduation.labels.certificateNumber'),
     cell: info => h('span', { class: 'text-xs font-mono font-bold text-muted-foreground' }, info.getValue() || '-')
   }),
   columnHelper.display({
     id: 'actions',
-    header: t('common.labels.actions'),
+    header: t('common.actions.title'),
     cell: ({ row }) => h('div', { class: 'flex gap-2' }, [
         h(Button, {
             variant: 'ghost',
@@ -555,8 +555,8 @@ const fetchEligible = async () => {
 const handleProcess = async () => {
   const count = selectedRows.value.length;
   const confirmed = await confirmModal.value.confirm({
-    title: t('graduation.messages.processConfirmTitle'),
-    message: t('graduation.messages.processConfirmMessage', { count, status: batchStatus.value, year: batchYear.value }),
+    title: t('modules.school.graduation.messages.processConfirmTitle'),
+    message: t('modules.school.graduation.messages.processConfirmMessage', { count, status: batchStatus.value, year: batchYear.value }),
     variant: 'default'
   });
 
@@ -627,7 +627,7 @@ const saveResult = async () => {
     savingResult.value = true;
     try {
         await OperationsService.updateGraduationResult(editingResult.value);
-        toast.success.action(t('graduation.messages.gradeSaveSuccess'));
+        toast.success.action(t('modules.school.graduation.messages.gradeSaveSuccess'));
         gradeModalOpen.value = false;
         fetchHistory();
     } catch (e) {
@@ -661,7 +661,7 @@ const handleImport = async () => {
         const response = await OperationsService.importGrades(importFile.value, parseInt(importYear.value));
         const parsed = parseResponse(response) as any;
         const data = parsed.data;
-        toast.success.action(t('graduation.messages.importSuccess', { count: data.imported }));
+        toast.success.action(t('modules.school.graduation.messages.importSuccess', { count: data.imported }));
         if (data.errors && data.errors.length > 0) {
             importErrors.value = data.errors;
         } else {

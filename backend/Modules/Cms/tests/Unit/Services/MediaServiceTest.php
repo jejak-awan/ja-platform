@@ -7,7 +7,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Modules\Core\Models\Media;
 use Modules\Core\Models\MediaFolder;
-use Modules\Cms\Services\MediaService;
+use Modules\Core\Services\MediaService;
 use Tests\TestCase;
 
 class MediaServiceTest extends TestCase

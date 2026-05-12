@@ -12,7 +12,7 @@
       class="h-14 flex items-center px-2 shrink-0"
     >
       <h2 class="text-sm font-bold text-foreground whitespace-nowrap px-4">
-        {{ $t('features.file_manager.title') }}
+        {{ $t('modules.core.file_manager.title') }}
       </h2>
     </div>
     <div
@@ -28,7 +28,7 @@
     >
       <h2 class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 flex items-center">
         <Folder class="w-3 h-3 mr-2" />
-        {{ $t('features.file_manager.labels.folders') }}
+        {{ $t('modules.core.file_manager.labels.folders') }}
       </h2>
     </div>
         
@@ -68,7 +68,7 @@
                 v-else
                 class="w-4 h-4 shrink-0 opacity-70 group-hover/root:opacity-100 transition-shadow group-hover/root:scale-110"
               />
-              <span class="truncate font-medium">{{ $t('features.file_manager.nav.root') }}</span>
+              <span class="truncate font-medium">{{ $t('modules.core.file_manager.nav.root') }}</span>
             </button>
           </ContextMenuTrigger>
           <FileContextMenu :item="{ path: '/', name: 'Root', updated_at: '' }" />
@@ -110,7 +110,7 @@
             showTrashView ? 'scale-110' : 'group-hover:rotate-12'
           ]" 
         />
-        <span class="truncate font-semibold tracking-tight">{{ $t('features.file_manager.trash.title') || 'Trash' }}</span>
+        <span class="truncate font-semibold tracking-tight">{{ $t('modules.core.file_manager.trash.title') || 'Trash' }}</span>
                 
         <div 
           v-if="trashCount && trashCount > 0" 
@@ -129,7 +129,7 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { inject } from 'vue';
 import Folder from 'lucide-vue-next/dist/esm/icons/folder.js';
 import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js';
@@ -138,11 +138,11 @@ import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import { 
     ContextMenu,
     ContextMenuTrigger
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import FileContextMenu from './FileContextMenu.vue';
-import type { FolderItem } from '@/types/cms/file-manager';
+import type { FolderItem } from '@/modules/Cms/types/file-manager';
 import FolderTreeItem from './FolderTreeItem.vue';
-import { FileManagerKey } from '@/keys';
+import { FileManagerKey } from '@/core/keys';
 
 const {
     currentPath,

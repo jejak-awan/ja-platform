@@ -34,8 +34,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useBreadcrumbs } from '@/composables/useBreadcrumbs'
-import { logger } from '@/utils/logger'
+import { useBreadcrumbs } from '@/shared/composables/useBreadcrumbs'
+import { logger } from '@/shared/utils/logger'
 
 const route = useRoute()
 const { getBreadcrumbs } = useBreadcrumbs()

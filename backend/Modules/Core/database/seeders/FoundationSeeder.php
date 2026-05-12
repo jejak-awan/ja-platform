@@ -82,6 +82,10 @@ class FoundationSeeder extends Seeder
             'view logs', 'delete logs',
             'view analytics', 'view activity logs', 'view security logs',
 
+            // Module access governance (scoped RBAC)
+            'manage cms access',
+            'manage school access',
+
         ];
 
         foreach ($permissions as $permission) {
@@ -92,12 +96,63 @@ class FoundationSeeder extends Seeder
         $superAdmin = Role::firstOrCreate(['name' => 'super', 'guard_name' => 'web']);
         $superAdmin->syncPermissions(Permission::all());
 
+        // System Admin (Core governance, but not necessarily super)
+        $systemAdmin = Role::firstOrCreate(['name' => 'system-admin', 'guard_name' => 'web']);
+        $systemAdmin->syncPermissions(Permission::whereIn('name', [
+            'view users', 'create users', 'edit users', 'delete users', 'verify users', 'manage users',
+            'view roles', 'create roles', 'edit roles', 'delete roles',
+            'view settings', 'manage settings',
+            'view system', 'manage system',
+            'view logs', 'delete logs',
+            'view backups', 'create backups', 'download backups', 'delete backups', 'manage backups',
+            'view scheduled tasks', 'manage scheduled tasks',
+            'view plugins', 'install plugins', 'edit plugins', 'delete plugins', 'manage plugins',
+            'manage security operations',
+            'manage security logs',
+            'manage security ip-lists',
+            'manage security integrity',
+            'manage security maintenance',
+            'view security logs',
+            'manage cms access',
+            'manage school access',
+        ])->get());
+
         $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $adminPermissions = Permission::whereNotIn('name', [
             'manage system', 'view security logs', 'manage backups', 'manage scheduled tasks', 'delete users',
             'manage security operations', 'manage security logs', 'manage security ip-lists', 'manage security integrity', 'manage security maintenance',
         ])->get();
         $admin->syncPermissions($adminPermissions);
+
+        // CMS scoped roles (phase 1: prefix strategy)
+        $cmsAdmin = Role::firstOrCreate(['name' => 'cms:admin', 'guard_name' => 'web']);
+        $cmsAdmin->syncPermissions(Permission::whereIn('name', [
+            // CMS domain
+            'view content', 'manage content', 'create content', 'edit content', 'delete content', 'publish content', 'approve content', 'view pending content',
+            'view content templates', 'create content templates', 'edit content templates', 'delete content templates',
+            'view categories', 'create categories', 'edit categories', 'delete categories',
+            'view tags', 'create tags', 'edit tags', 'delete tags',
+            'view media', 'upload media', 'edit media', 'delete media', 'manage media',
+            'view themes', 'upload themes', 'edit themes', 'delete themes', 'manage themes',
+            'view menus', 'create menus', 'edit menus', 'delete menus', 'manage menus',
+            'view widgets', 'create widgets', 'edit widgets', 'delete widgets', 'manage widgets',
+            'view forms', 'create forms', 'edit forms', 'delete forms', 'manage forms', 'view submissions',
+            'view comments', 'create comments', 'edit comments', 'delete comments', 'approve comments', 'manage comments',
+            'view newsletter', 'create newsletter', 'edit newsletter', 'delete newsletter',
+            'view redirects', 'create redirects', 'edit redirects', 'delete redirects',
+            'view analytics',
+
+            // Allow CMS admins to manage CMS access only
+            'manage cms access',
+        ])->get());
+
+        $cmsEditor = Role::firstOrCreate(['name' => 'cms:editor', 'guard_name' => 'web']);
+        $cmsEditor->syncPermissions(Permission::whereIn('name', [
+            'view content', 'create content', 'edit content', 'delete content', 'publish content', 'approve content', 'view pending content',
+            'view categories', 'view tags', 'view media', 'upload media',
+            'view comments', 'approve comments',
+            'view analytics',
+        ])->get());
 
         $editor = Role::firstOrCreate(['name' => 'editor', 'guard_name' => 'web']);
         $editor->syncPermissions([
@@ -172,6 +227,32 @@ class FoundationSeeder extends Seeder
             ['key' => 'date_format', 'value' => 'Y-m-d', 'group' => 'general', 'type' => 'string'],
             ['key' => 'time_format', 'value' => 'H:i:s', 'group' => 'general', 'type' => 'string'],
 
+            // License & Identity (Core System - grup 'system')
+            ['key' => 'license_type', 'value' => 'pro_plus', 'group' => 'system', 'type' => 'string'],
+            ['key' => 'app_license_tier', 'value' => 'pro_plus', 'group' => 'system', 'type' => 'string'],
+            ['key' => 'app_name', 'value' => 'JA-Platform', 'group' => 'system', 'type' => 'string'],
+            ['key' => 'app_logo', 'value' => '', 'group' => 'system', 'type' => 'string'],
+            ['key' => 'app_favicon', 'value' => '', 'group' => 'system', 'type' => 'string'],
+            ['key' => 'branding_display', 'value' => 'logo_text', 'group' => 'system', 'type' => 'string'],
+
+            // Maintenance (Core System)
+            ['key' => 'maintenance_mode', 'value' => '0', 'group' => 'system', 'type' => 'boolean'],
+            ['key' => 'maintenance_title', 'value' => 'Sedang Dalam Perbaikan', 'group' => 'system', 'type' => 'string'],
+            ['key' => 'maintenance_message', 'value' => 'Kami sedang melakukan pemeliharaan terjadwal. Silakan kembali nanti.', 'group' => 'system', 'type' => 'text'],
+            ['key' => 'maintenance_countdown_enabled', 'value' => '0', 'group' => 'system', 'type' => 'boolean'],
+            ['key' => 'maintenance_end_time', 'value' => '', 'group' => 'system', 'type' => 'datetime'],
+
+            // Contact Info (Public)
+            ['key' => 'contact_email', 'value' => 'admin@jejakawan.com', 'group' => 'general', 'type' => 'string'],
+            ['key' => 'contact_phone', 'value' => '', 'group' => 'general', 'type' => 'string'],
+            ['key' => 'contact_address', 'value' => '', 'group' => 'general', 'type' => 'string'],
+
+            // Social Links
+            ['key' => 'social_twitter', 'value' => '', 'group' => 'general', 'type' => 'string'],
+            ['key' => 'social_github', 'value' => '', 'group' => 'general', 'type' => 'string'],
+            ['key' => 'social_linkedin', 'value' => '', 'group' => 'general', 'type' => 'string'],
+            ['key' => 'social_instagram', 'value' => '', 'group' => 'general', 'type' => 'string'],
+
             // Email (SMTP)
             ['key' => 'mail_driver', 'value' => 'smtp', 'group' => 'email', 'type' => 'string'],
             ['key' => 'mail_host', 'value' => 'smtp.mailtrap.io', 'group' => 'email', 'type' => 'string'],
@@ -204,7 +285,7 @@ class FoundationSeeder extends Seeder
             ['key' => 'require_email_verification', 'value' => '1', 'group' => 'security', 'type' => 'boolean'],
             ['key' => 'enable_2fa', 'value' => '0', 'group' => 'security', 'type' => 'boolean'],
             ['key' => 'two_factor_method', 'value' => 'authenticator', 'group' => 'security', 'type' => 'string'],
-            ['key' => 'two_factor_enforced_roles', 'value' => '["admin", "super"]', 'group' => 'security', 'type' => 'json'],
+            ['key' => 'two_factor_enforced_roles', 'value' => '["admin", "system-admin", "super"]', 'group' => 'security', 'type' => 'json'],
             ['key' => 'password_min_length', 'value' => '8', 'group' => 'security', 'type' => 'integer'],
             ['key' => 'password_require_uppercase', 'value' => '1', 'group' => 'security', 'type' => 'boolean'],
             ['key' => 'password_require_lowercase', 'value' => '1', 'group' => 'security', 'type' => 'boolean'],
@@ -270,7 +351,10 @@ class FoundationSeeder extends Seeder
         ];
 
         foreach ($settings as $setting) {
-            Setting::updateOrCreate(['key' => $setting['key']], $setting);
+            Setting::updateOrCreate(
+                ['key' => $setting['key'], 'school_unit_id' => null],
+                $setting
+            );
         }
     }
 

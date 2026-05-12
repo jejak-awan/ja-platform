@@ -4,7 +4,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
       <div>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.forms.submissions.analytics.title') }}
+          {{ $t('modules.cms.forms.submissions.analytics.title') }}
         </h1>
         <p class="text-sm text-muted-foreground">
           {{ form?.name || '-' }}
@@ -23,7 +23,7 @@
           @click="printReport"
         >
           <Printer class="w-4 h-4 mr-2" />
-          {{ $t('features.forms.submissions.analytics.print') }}
+          {{ $t('modules.cms.forms.submissions.analytics.print') }}
         </Button>
         <div class="flex items-center bg-muted/50 rounded-md p-1">
           <Button
@@ -32,7 +32,7 @@
             @click="exportData('xlsx')"
           >
             <Download class="w-4 h-4 mr-2" />
-            {{ $t('features.forms.submissions.analytics.excel') }}
+            {{ $t('modules.cms.forms.submissions.analytics.excel') }}
           </Button>
           <Button
             variant="ghost"
@@ -40,7 +40,7 @@
             @click="exportData('csv')"
           >
             <Download class="w-4 h-4 mr-2" />
-            {{ $t('features.forms.submissions.analytics.csv') }}
+            {{ $t('modules.cms.forms.submissions.analytics.csv') }}
           </Button>
         </div>
       </div>
@@ -49,7 +49,7 @@
     <!-- Print Header (Visible only when printing) -->
     <div class="hidden print:block text-center border-b pb-6 mb-8">
       <h1 class="text-3xl font-bold mb-2">
-        {{ $t('features.forms.submissions.analytics.title') }}
+        {{ $t('modules.cms.forms.submissions.analytics.title') }}
       </h1>
       <p class="text-lg text-muted-foreground">
         {{ form?.name || '-' }}
@@ -74,16 +74,16 @@
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="7">
-                  {{ $t('features.forms.submissions.analytics.last7Days') }}
+                  {{ $t('modules.cms.forms.submissions.analytics.last7Days') }}
                 </SelectItem>
                 <SelectItem value="30">
-                  {{ $t('features.forms.submissions.analytics.last30Days') }}
+                  {{ $t('modules.cms.forms.submissions.analytics.last30Days') }}
                 </SelectItem>
                 <SelectItem value="90">
-                  {{ $t('features.forms.submissions.analytics.last90Days') }}
+                  {{ $t('modules.cms.forms.submissions.analytics.last90Days') }}
                 </SelectItem>
                 <SelectItem value="custom">
-                  {{ $t('features.forms.submissions.analytics.customRange') }}
+                  {{ $t('modules.cms.forms.submissions.analytics.customRange') }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -119,7 +119,7 @@
 
         <div class="flex flex-wrap items-center gap-4">
           <div class="flex items-center gap-2">
-            <span class="text-sm font-medium">{{ $t('features.forms.submissions.analytics.chartType') }}:</span>
+            <span class="text-sm font-medium">{{ $t('modules.cms.forms.submissions.analytics.chartType') }}:</span>
             <div class="flex items-center bg-muted/50 rounded-md p-1">
               <Button 
                 variant="ghost" 
@@ -128,7 +128,7 @@
                 @click="chartType = 'line'"
               >
                 <LineChartIcon class="w-4 h-4 mr-2" />
-                {{ $t('features.forms.submissions.analytics.line') }}
+                {{ $t('modules.cms.forms.submissions.analytics.line') }}
               </Button>
               <Button 
                 variant="ghost" 
@@ -137,7 +137,7 @@
                 @click="chartType = 'bar'"
               >
                 <BarChart3 class="w-4 h-4 mr-2" />
-                {{ $t('features.forms.submissions.analytics.bar') }}
+                {{ $t('modules.cms.forms.submissions.analytics.bar') }}
               </Button>
             </div>
           </div>
@@ -152,7 +152,7 @@
     >
       <Card class="p-6">
         <p class="text-sm font-medium text-muted-foreground mb-1">
-          {{ $t('features.forms.stats.total') }}
+          {{ $t('modules.cms.forms.stats.total') }}
         </p>
         <div class="flex items-end gap-2">
           <h3 class="text-3xl font-bold text-primary">
@@ -175,40 +175,40 @@
           </div>
         </div>
         <p class="text-[10px] text-muted-foreground mt-1">
-          {{ $t('features.forms.submissions.analytics.vsPrevious') }} ({{ statistics.previous_total || 0 }})
+          {{ $t('modules.cms.forms.submissions.analytics.vsPrevious') }} ({{ statistics.previous_total || 0 }})
         </p>
       </Card>
       <Card class="p-6">
         <p class="text-sm font-medium text-muted-foreground mb-1">
-          {{ $t('features.forms.stats.new') }}
+          {{ $t('modules.cms.forms.stats.new') }}
         </p>
         <h3 class="text-3xl font-bold text-green-500">
           {{ statistics.new || 0 }}
         </h3>
         <p class="text-[10px] text-muted-foreground mt-1">
-          {{ $t('features.forms.submissions.analytics.unreadSubmissions') }}
+          {{ $t('modules.cms.forms.submissions.analytics.unreadSubmissions') }}
         </p>
       </Card>
       <Card class="p-6">
         <p class="text-sm font-medium text-muted-foreground mb-1">
-          {{ $t('features.forms.stats.read') }}
+          {{ $t('modules.cms.forms.stats.read') }}
         </p>
         <h3 class="text-3xl font-bold text-yellow-500">
           {{ statistics.read || 0 }}
         </h3>
         <p class="text-[10px] text-muted-foreground mt-1">
-          {{ $t('features.forms.submissions.analytics.reviewedByTeam') }}
+          {{ $t('modules.cms.forms.submissions.analytics.reviewedByTeam') }}
         </p>
       </Card>
       <Card class="p-6">
         <p class="text-sm font-medium text-muted-foreground mb-1">
-          {{ $t('features.forms.submissions.analytics.lifetimeData') || 'Total Submission (All-time)' }}
+          {{ $t('modules.cms.forms.submissions.analytics.lifetimeData') || 'Total Submission (All-time)' }}
         </p>
         <h3 class="text-3xl font-bold text-muted-foreground">
           {{ statistics.all_time_total || 0 }}
         </h3>
         <p class="text-[10px] text-muted-foreground mt-1">
-          {{ $t('features.forms.submissions.analytics.lifetimeData') || 'Lifetime form data' }}
+          {{ $t('modules.cms.forms.submissions.analytics.lifetimeData') || 'Lifetime form data' }}
         </p>
       </Card>
     </div>
@@ -220,25 +220,25 @@
           <div class="flex items-center justify-between">
             <h3 class="font-semibold flex items-center gap-2">
               <TrendingUp class="w-5 h-5 text-primary" />
-              {{ $t('features.forms.submissions.analytics.trend') }}
+              {{ $t('modules.cms.forms.submissions.analytics.trend') }}
             </h3>
           </div>
           <p
             v-if="statistics?.daily_views_stats?.length"
             class="text-xs text-muted-foreground leading-relaxed max-w-3xl"
           >
-            {{ $t('features.forms.submissions.analytics.funnelSummary') }}
+            {{ $t('modules.cms.forms.submissions.analytics.funnelSummary') }}
           </p>
           <div
             v-if="statistics && (statistics.range_views_total !== undefined || statistics.range_starts_total !== undefined)"
             class="flex flex-wrap gap-x-6 gap-y-1 text-xs text-muted-foreground"
           >
             <span>
-              {{ $t('features.forms.submissions.analytics.rangeViews') }}:
+              {{ $t('modules.cms.forms.submissions.analytics.rangeViews') }}:
               <strong class="text-foreground tabular-nums">{{ statistics.range_views_total ?? 0 }}</strong>
             </span>
             <span>
-              {{ $t('features.forms.submissions.analytics.rangeStarts') }}:
+              {{ $t('modules.cms.forms.submissions.analytics.rangeStarts') }}:
               <strong class="text-foreground tabular-nums">{{ statistics.range_starts_total ?? 0 }}</strong>
             </span>
           </div>
@@ -247,11 +247,11 @@
           <LineChart
             v-if="chartType === 'line' && statistics?.daily_stats?.length"
             :data="(statistics.daily_stats as any)"
-            :label="$t('features.forms.submissions.analytics.chartSubmissions')"
+            :label="$t('modules.cms.forms.submissions.analytics.chartSubmissions')"
             label-key="period"
             value-key="visits"
             :compare-data="(statistics.daily_views_stats as any) || []"
-            :compare-label="$t('features.forms.submissions.analytics.chartPageViews')"
+            :compare-label="$t('modules.cms.forms.submissions.analytics.chartPageViews')"
           />
           <BarChart
             v-else-if="chartType === 'bar' && statistics?.daily_stats?.length"
@@ -264,7 +264,7 @@
             v-else
             class="h-full flex items-center justify-center text-muted-foreground italic border border-dashed rounded-lg bg-muted/5"
           >
-            {{ $t('features.forms.messages.empty') }}
+            {{ $t('modules.cms.forms.messages.empty') }}
           </div>
         </div>
       </Card>
@@ -274,7 +274,7 @@
         <div class="flex items-center justify-between mb-6 print:hidden">
           <h3 class="font-semibold flex items-center gap-2">
             <PieChart class="w-5 h-5 text-primary" />
-            {{ $t('features.forms.submissions.analytics.dataBreakdown') }}
+            {{ $t('modules.cms.forms.submissions.analytics.dataBreakdown') }}
           </h3>
           <Select
             v-model="selectedAggregateField"
@@ -297,7 +297,7 @@
         <!-- Print Title for Breakdown -->
         <div class="hidden print:block mb-4 text-center">
           <h3 class="font-bold underline">
-            {{ $t('features.forms.submissions.analytics.dataBreakdown') }}: {{ getSelectedFieldLabel }}
+            {{ $t('modules.cms.forms.submissions.analytics.dataBreakdown') }}: {{ getSelectedFieldLabel }}
           </h3>
         </div>
 
@@ -314,7 +314,7 @@
           >
             <PieChart class="w-10 h-10 mx-auto opacity-20" />
             <p class="text-sm italic px-4">
-              {{ statistics?.chartable_fields?.length ? $t('features.forms.submissions.analytics.selectField') : $t('features.forms.submissions.analytics.noChartableFields') }}
+              {{ statistics?.chartable_fields?.length ? $t('modules.cms.forms.submissions.analytics.selectField') : $t('modules.cms.forms.submissions.analytics.noChartableFields') }}
             </p>
           </div>
         </div>
@@ -329,14 +329,14 @@
       <Card class="p-6 h-[350px] flex flex-col">
         <h3 class="font-semibold mb-6 flex items-center gap-2">
           <Clock class="w-5 h-5 text-primary" />
-          {{ $t('features.forms.submissions.analytics.peakHours') }}
+          {{ $t('modules.cms.forms.submissions.analytics.peakHours') }}
         </h3>
         <div class="flex-1 relative">
           <LineChart 
             :data="(statistics?.hourly_stats as any) || []" 
             label-key="hour" 
             value-key="count" 
-            :label="$t('features.forms.submissions.analytics.submissionsPerHour')"
+            :label="$t('modules.cms.forms.submissions.analytics.submissionsPerHour')"
           />
         </div>
       </Card>
@@ -344,7 +344,7 @@
       <Card class="p-6 h-[350px] flex flex-col">
         <h3 class="font-semibold mb-6 flex items-center gap-2">
           <CalendarDays class="w-5 h-5 text-primary" />
-          {{ $t('features.forms.submissions.analytics.peakDays') }}
+          {{ $t('modules.cms.forms.submissions.analytics.peakDays') }}
         </h3>
         <div class="flex-1 relative">
           <BarChart 
@@ -361,7 +361,7 @@
     <Card class="p-6 overflow-hidden print:shadow-none print:border-none">
       <h3 class="font-semibold mb-4 text-foreground flex items-center gap-2">
         <FileText class="w-5 h-5 text-primary" />
-        {{ $t('features.forms.submissions.formData') }} ({{ $t('features.forms.submissions.analytics.samples') }})
+        {{ $t('modules.cms.forms.submissions.formData') }} ({{ $t('modules.cms.forms.submissions.analytics.samples') }})
       </h3>
             
       <div class="relative overflow-x-auto border rounded-lg">
@@ -407,7 +407,7 @@
                 :colspan="columns.length"
                 class="h-32 text-center text-muted-foreground italic"
               >
-                {{ $t('features.forms.submissions.empty') }}
+                {{ $t('modules.cms.forms.submissions.empty') }}
               </TableCell>
             </TableRow>
           </TableBody>
@@ -418,7 +418,7 @@
         v-if="statistics && statistics.total > 20"
         class="mt-4 text-xs italic text-muted-foreground text-center print:hidden"
       >
-        {{ $t('features.forms.submissions.analytics.exportForFull', { count: statistics.total - 20 }) }}
+        {{ $t('modules.cms.forms.submissions.analytics.exportForFull', { count: statistics.total - 20 }) }}
       </p>
     </Card>
   </div>
@@ -427,10 +427,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, h } from 'vue';
 import { useRoute } from 'vue-router';
-import { logger } from '@/utils/logger';
-import api from '@/services/api';
+import { logger } from '@/shared/utils/logger';
+import api from '@/core/api/client';
 import { apiConfig } from '@/config';
-import { parseSingleResponse } from '@/utils/responseParser';
+import { parseSingleResponse } from '@/shared/utils/responseParser';
 import { 
     useVueTable, 
     getCoreRowModel, 
@@ -455,7 +455,7 @@ import {
     TableRow,
     TableHead,
     TableCell
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import TrendingUp from 'lucide-vue-next/dist/esm/icons/trending-up.js';
 import PieChart from 'lucide-vue-next/dist/esm/icons/chart-pie.js';

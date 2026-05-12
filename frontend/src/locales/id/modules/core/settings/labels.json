@@ -12,8 +12,8 @@
         "site_description": "Deskripsi Situs",
         "site_url": "URL Situs",
         "admin_email": "Email Admin",
-        "brand_logo": "Logo Aplikasi",
-        "brand_favicon": "Favicon Aplikasi",
+        "app_logo": "Logo Aplikasi",
+        "app_favicon": "Favicon Aplikasi",
         "branding_display": "Tampilan Branding",
         "timezone": "Zona Waktu",
         "date_format": "Format Tanggal",
@@ -114,15 +114,6 @@
             "autosave_enabled": "Aktifkan Autosave di Editor Konten",
             "autosave_interval_seconds": "Interval Autosave (detik)"
         },
-        "comments": {
-            "security": {
-                "enable_reply": "Aktifkan Balasan",
-                "allow_guests": "Izinkan Komentar Tamu",
-                "moderation_enabled": "Aktifkan Moderasi",
-                "guest_captcha": "Captcha Tamu",
-                "max_links": "Maksimal Tautan",
-                "banned_words": "Kata-kata Terlarang"
-            }
-        }
+        "maintenance_end_time": "Maintenance End Time"
     }
 }

@@ -98,13 +98,13 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
 import PluginSettingsModal from '@/modules/Core/components/plugins/PluginSettingsModal.vue';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 
 const { t } = useI18n();
 const toast = useToast();

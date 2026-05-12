@@ -4,10 +4,10 @@
     <div class="mb-6 flex items-center justify-between">
       <div>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ t('features.menus.title') }}
+          {{ t('modules.cms.menus.title') }}
         </h1>
         <p class="text-sm text-muted-foreground">
-          {{ t('features.menus.subtitle') }}
+          {{ t('modules.cms.menus.subtitle') }}
         </p>
       </div>
             
@@ -20,7 +20,7 @@
           @click="viewMode = 'list'"
         >
           <List class="w-3.5 h-3.5 mr-1.5" />
-          {{ t('features.menus.actions.listView') }}
+          {{ t('modules.cms.menus.actions.listView') }}
         </Button>
         <Button 
           variant="ghost" 
@@ -31,7 +31,7 @@
           @click="viewMode = 'builder'"
         >
           <Edit3 class="w-3.5 h-3.5 mr-1.5" />
-          {{ t('features.menus.actions.builderView') }}
+          {{ t('modules.cms.menus.actions.builderView') }}
         </Button>
       </div>
     </div>
@@ -83,22 +83,22 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import MenuBuilder from '@/modules/Cms/components/menus/MenuBuilder.vue';
 import MenuList from '@/modules/Cms/components/menus/MenuList.vue';
 import MenuModal from '@/modules/Cms/components/menus/MenuModal.vue';
 import { 
     Button
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import List from 'lucide-vue-next/dist/esm/icons/list.js';
 import Edit3 from 'lucide-vue-next/dist/esm/icons/pencil.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 
 const { t } = useI18n();
 const toast = useToast();
@@ -142,7 +142,7 @@ const fetchMenus = async () => {
         
     } catch (error: unknown) {
         logger.error('Failed to fetch menus:', error);
-        toast.error.action(t('features.menus.messages.loadingFailed') || 'Failed to load menus');
+        toast.error.action(t('modules.cms.menus.messages.loadingFailed') || 'Failed to load menus');
     } finally {
         isLoading.value = false;
     }
@@ -177,10 +177,10 @@ const deleteCurrentMenu = async () => {
     const isTrashed = !!selectedMenu.value.deleted_at;
 
     const confirmed = await confirm({
-        title: isTrashed ? t('common.actions.forceDelete') : t('features.menus.actions.delete'),
+        title: isTrashed ? t('common.actions.forceDelete') : t('modules.cms.menus.actions.delete'),
         message: isTrashed 
-            ? t('features.menus.messages.forceDeleteConfirm', { name: selectedMenu.value.name })
-            : t('features.menus.messages.deleteConfirm', { name: selectedMenu.value.name }),
+            ? t('modules.cms.menus.messages.forceDeleteConfirm', { name: selectedMenu.value.name })
+            : t('modules.cms.menus.messages.deleteConfirm', { name: selectedMenu.value.name }),
         variant: 'danger',
         confirmText: isTrashed ? t('common.actions.forceDelete') : t('common.actions.delete'),
     });
@@ -190,16 +190,16 @@ const deleteCurrentMenu = async () => {
     try {
         if (isTrashed) {
              await api.delete(`/admin/cms/menus/${selectedMenuId.value}/force-delete`);
-             toast.success.action(t('common.messages.success.deleted', { item: t('features.menus.title') }));
+             toast.success.action(t('common.messages.success.deleted', { item: t('modules.cms.menus.title') }));
         } else {
             await api.delete(`/admin/cms/menus/${selectedMenuId.value}`);
-            toast.success.delete(t('features.menus.title'));
+            toast.success.delete(t('modules.cms.menus.title'));
         }
         selectedMenuId.value = null;
         await fetchMenus();
     } catch (error: unknown) {
         logger.error('Error deleting menu:', error);
-        toast.error.delete(error, t('features.menus.title'));
+        toast.error.delete(error, t('modules.cms.menus.title'));
     }
 };
 
@@ -208,7 +208,7 @@ const restoreCurrentMenu = async () => {
 
      const confirmed = await confirm({
         title: t('common.actions.restore'),
-        message: t('features.menus.messages.restoreConfirm', { name: selectedMenu.value.name }),
+        message: t('modules.cms.menus.messages.restoreConfirm', { name: selectedMenu.value.name }),
         variant: 'info',
         confirmText: t('common.actions.restore'),
     });
@@ -217,7 +217,7 @@ const restoreCurrentMenu = async () => {
 
     try {
         await api.post(`/admin/cms/menus/${selectedMenuId.value}/restore`);
-        toast.success.restore(t('features.menus.title'));
+        toast.success.restore(t('modules.cms.menus.title'));
         await fetchMenus();
     } catch (error: unknown) {
          logger.error('Error restoring menu:', error);

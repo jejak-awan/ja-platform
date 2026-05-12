@@ -174,7 +174,7 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { inject } from 'vue';
 import Video from 'lucide-vue-next/dist/esm/icons/video.js';
 import PlayCircle from 'lucide-vue-next/dist/esm/icons/circle-play.js';
@@ -184,13 +184,13 @@ import {
     ContextMenu, 
     ContextMenuTrigger,
     Button
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import FileContextMenu from './FileContextMenu.vue';
 import FileActionDropdown from './FileActionDropdown.vue';
 import MoreVertical from 'lucide-vue-next/dist/esm/icons/ellipsis-vertical.js';
-import type { FileItem, FolderItem } from '@/types/cms/file-manager';
+import type { FileItem, FolderItem } from '@/modules/Cms/types/file-manager';
 import Folder from 'lucide-vue-next/dist/esm/icons/folder.js';
-import { FileManagerKey } from '@/keys';
+import { FileManagerKey } from '@/core/keys';
 
 const {
     paginatedFolders,

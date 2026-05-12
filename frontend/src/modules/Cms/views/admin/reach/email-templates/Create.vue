@@ -184,14 +184,14 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { emailTemplateSchema } from '@/schemas';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { emailTemplateSchema } from '@/shared/schemas';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
@@ -209,7 +209,7 @@ import {
     CardHeader,
     CardTitle,
     CardContent
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const { t } = useI18n();
 const router = useRouter();

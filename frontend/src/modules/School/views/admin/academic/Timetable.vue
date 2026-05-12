@@ -3,10 +3,10 @@
     <div class="flex justify-between items-center bg-card p-4 rounded-xl border border-border/50">
       <div class="flex gap-4 items-center">
         <div class="space-y-1">
-          <Label class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{{ $t('features.school.academic.tabs.studyGroups') }}</Label>
+          <Label class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{{ $t('modules.school.academic.tabs.studyGroups') }}</Label>
           <Select v-model="selectedGroup">
             <SelectTrigger class="w-[200px] h-9 bg-background/50">
-              <SelectValue :placeholder="$t('features.school.academic.placeholders.selectGroup')" />
+              <SelectValue :placeholder="$t('modules.school.academic.placeholders.selectGroup')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem
@@ -43,7 +43,7 @@
           name="Plus"
           class="w-4 h-4 mr-2"
         />
-        {{ $t('features.school.academic.actions.setSchedule') }}
+        {{ $t('modules.school.academic.actions.setSchedule') }}
       </Button>
     </div>
 
@@ -54,7 +54,7 @@
           <!-- Day Headers -->
           <div class="grid grid-cols-8 border-b bg-muted/30">
             <div class="p-3 border-r text-xs font-bold text-muted-foreground text-center bg-muted/50">
-              {{ $t('features.school.academic.labels.time') }}
+              {{ $t('modules.school.academic.labels.time') }}
             </div>
             <div
               v-for="day in days"
@@ -83,7 +83,7 @@
               name="Calendar"
               class="w-12 h-12 opacity-20"
             />
-            <p>{{ $t('features.school.academic.messages.selectGroupToView') }}</p>
+            <p>{{ $t('modules.school.academic.messages.selectGroupToView') }}</p>
           </div>
           <div
             v-else
@@ -120,7 +120,7 @@
                         v-if="item.room && item.study_group?.students_count > item.room.capacity"
                         name="AlertTriangle"
                         class="w-2.5 h-2.5 text-warning animate-pulse"
-                        :title="$t('features.school.academic.tooltips.overCapacity')"
+                        :title="$t('modules.school.academic.tooltips.overCapacity')"
                       />
                       <LucideIcon
                         v-if="item.room"
@@ -155,9 +155,9 @@ import { useI18n } from 'vue-i18n';
 import { AcademicService } from '@/modules/School/services/AcademicService';
 import {
   Button, LucideIcon, Label, Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 import ScheduleDialog from './components/ScheduleDialog.vue';
 
 const { t } = useI18n();
@@ -267,7 +267,7 @@ const handleSave = async (formData: any) => {
   try {
     if (selectedItem.value?.id) {
       await AcademicService.updateSchedule(selectedItem.value.id, formData);
-      toast.success.action(t('features.school.academic.messages.scheduleUpdateSuccess'));
+      toast.success.action(t('modules.school.academic.messages.scheduleUpdateSuccess'));
     } else {
       await AcademicService.storeSchedule({
           ...formData,
@@ -276,7 +276,7 @@ const handleSave = async (formData: any) => {
           academic_year_id: 1, // Should be dynamic
           semester_id: 1, // Should be dynamic
       });
-      toast.success.action(t('features.school.academic.messages.scheduleAddSuccess'));
+      toast.success.action(t('modules.school.academic.messages.scheduleAddSuccess'));
     }
     dialogOpen.value = false;
     fetchSchedules();
@@ -290,7 +290,7 @@ const handleSave = async (formData: any) => {
 const handleDelete = async (id: number) => {
     try {
         await AcademicService.deleteSchedule(id);
-        toast.success.action(t('features.school.academic.messages.scheduleDeleteSuccess'));
+        toast.success.action(t('modules.school.academic.messages.scheduleDeleteSuccess'));
         dialogOpen.value = false;
         fetchSchedules();
     } catch (e) {

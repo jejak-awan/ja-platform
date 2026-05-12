@@ -180,7 +180,7 @@ import {
     Card, CardHeader, CardTitle, CardDescription, CardContent,
     Button, Badge, Input, Label, Checkbox, DataTable, Pagination,
     Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 

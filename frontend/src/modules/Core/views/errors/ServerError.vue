@@ -11,11 +11,11 @@
     </template>
 
     <template #message>
-      {{ t('features.errors.500.title') }}
+      {{ t('common.errors.500.title') }}
     </template>
 
     <template #description>
-      {{ t('features.errors.500.message') }}
+      {{ t('common.errors.500.message') }}
     </template>
 
     <template #actions>
@@ -28,7 +28,7 @@
           class="w-4 h-4 mr-2"
           :class="{ 'animate-spin': retrying }"
         />
-        {{ retrying ? t('features.errors.500.retrying') : t('features.errors.500.retry') }}
+        {{ retrying ? t('common.errors.500.retrying') : t('common.errors.500.retry') }}
       </button>
             
       <router-link
@@ -36,7 +36,7 @@
         class="flex-1 inline-flex items-center justify-center px-4 py-3 border border-border text-sm font-medium rounded-2xl text-foreground bg-muted hover:bg-muted/80 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-destructive transition-[background-color,transform] active:scale-95"
       >
         <Home class="w-4 h-4 mr-2 text-muted-foreground" />
-        {{ t('features.errors.404.home') }}
+        {{ t('common.errors.404.home') }}
       </router-link>
     </template>
 
@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import ErrorLayout from '@/layouts/core/ErrorLayout.vue';
+import ErrorLayout from '@/modules/Core/layouts/ErrorLayout.vue';
 import ServerCrash from 'lucide-vue-next/dist/esm/icons/server-crash.js';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 import Home from 'lucide-vue-next/dist/esm/icons/house.js';

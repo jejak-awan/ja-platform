@@ -7,218 +7,218 @@ export interface SettingsOption {
 }
 
 export const timezoneOptions: SettingsOption[] = [
-    { value: 'UTC', labelKey: 'features.settings.options.timezone.utc' },
-    { value: 'Asia/Jakarta', labelKey: 'features.settings.options.timezone.jakarta' },
-    { value: 'Asia/Makassar', labelKey: 'features.settings.options.timezone.makassar' },
-    { value: 'Asia/Jayapura', labelKey: 'features.settings.options.timezone.jayapura' },
-    { value: 'America/New_York', labelKey: 'features.settings.options.timezone.newyork' },
-    { value: 'America/Chicago', labelKey: 'features.settings.options.timezone.chicago' },
-    { value: 'America/Los_Angeles', labelKey: 'features.settings.options.timezone.losangeles' },
-    { value: 'Europe/London', labelKey: 'features.settings.options.timezone.london' },
-    { value: 'Europe/Paris', labelKey: 'features.settings.options.timezone.paris' },
-    { value: 'Australia/Sydney', labelKey: 'features.settings.options.timezone.sydney' },
-    { value: 'Asia/Tokyo', labelKey: 'features.settings.options.timezone.tokyo' },
-    { value: 'Asia/Singapore', labelKey: 'features.settings.options.timezone.singapore' },
+    { value: 'UTC', labelKey: 'modules.core.settings.options.timezone.utc' },
+    { value: 'Asia/Jakarta', labelKey: 'modules.core.settings.options.timezone.jakarta' },
+    { value: 'Asia/Makassar', labelKey: 'modules.core.settings.options.timezone.makassar' },
+    { value: 'Asia/Jayapura', labelKey: 'modules.core.settings.options.timezone.jayapura' },
+    { value: 'America/New_York', labelKey: 'modules.core.settings.options.timezone.newyork' },
+    { value: 'America/Chicago', labelKey: 'modules.core.settings.options.timezone.chicago' },
+    { value: 'America/Los_Angeles', labelKey: 'modules.core.settings.options.timezone.losangeles' },
+    { value: 'Europe/London', labelKey: 'modules.core.settings.options.timezone.london' },
+    { value: 'Europe/Paris', labelKey: 'modules.core.settings.options.timezone.paris' },
+    { value: 'Australia/Sydney', labelKey: 'modules.core.settings.options.timezone.sydney' },
+    { value: 'Asia/Tokyo', labelKey: 'modules.core.settings.options.timezone.tokyo' },
+    { value: 'Asia/Singapore', labelKey: 'modules.core.settings.options.timezone.singapore' },
 ]
 
 export const dateFormatOptions: SettingsOption[] = [
-    { value: 'Y-m-d', labelKey: 'features.settings.options.dateFormat.ymd' },
-    { value: 'd/m/Y', labelKey: 'features.settings.options.dateFormat.dmy' },
-    { value: 'm/d/Y', labelKey: 'features.settings.options.dateFormat.mdy' },
-    { value: 'd-m-Y', labelKey: 'features.settings.options.dateFormat.dmyDash' },
-    { value: 'F j, Y', labelKey: 'features.settings.options.dateFormat.full' },
-    { value: 'j F Y', labelKey: 'features.settings.options.dateFormat.fullReverse' },
+    { value: 'Y-m-d', labelKey: 'modules.core.settings.options.dateFormat.ymd' },
+    { value: 'd/m/Y', labelKey: 'modules.core.settings.options.dateFormat.dmy' },
+    { value: 'm/d/Y', labelKey: 'modules.core.settings.options.dateFormat.mdy' },
+    { value: 'd-m-Y', labelKey: 'modules.core.settings.options.dateFormat.dmyDash' },
+    { value: 'F j, Y', labelKey: 'modules.core.settings.options.dateFormat.full' },
+    { value: 'j F Y', labelKey: 'modules.core.settings.options.dateFormat.fullReverse' },
 ]
 
 export const timeFormatOptions: SettingsOption[] = [
-    { value: 'H:i:s', labelKey: 'features.settings.options.timeFormat.24hSeconds' },
-    { value: 'H:i', labelKey: 'features.settings.options.timeFormat.24h' },
-    { value: 'h:i A', labelKey: 'features.settings.options.timeFormat.12h' },
-    { value: 'h:i:s A', labelKey: 'features.settings.options.timeFormat.12hSeconds' },
+    { value: 'H:i:s', labelKey: 'modules.core.settings.options.timeFormat.24hSeconds' },
+    { value: 'H:i', labelKey: 'modules.core.settings.options.timeFormat.24h' },
+    { value: 'h:i A', labelKey: 'modules.core.settings.options.timeFormat.12h' },
+    { value: 'h:i:s A', labelKey: 'modules.core.settings.options.timeFormat.12hSeconds' },
 ]
 
 export const itemsPerPageOptions: SettingsOption[] = [
-    { value: 10, labelKey: 'features.settings.options.itemsPerPage.10' },
-    { value: 15, labelKey: 'features.settings.options.itemsPerPage.15' },
-    { value: 20, labelKey: 'features.settings.options.itemsPerPage.20' },
-    { value: 25, labelKey: 'features.settings.options.itemsPerPage.25' },
-    { value: 50, labelKey: 'features.settings.options.itemsPerPage.50' },
-    { value: 100, labelKey: 'features.settings.options.itemsPerPage.100' },
+    { value: 10, labelKey: 'modules.core.settings.options.itemsPerPage.10' },
+    { value: 15, labelKey: 'modules.core.settings.options.itemsPerPage.15' },
+    { value: 20, labelKey: 'modules.core.settings.options.itemsPerPage.20' },
+    { value: 25, labelKey: 'modules.core.settings.options.itemsPerPage.25' },
+    { value: 50, labelKey: 'modules.core.settings.options.itemsPerPage.50' },
+    { value: 100, labelKey: 'modules.core.settings.options.itemsPerPage.100' },
 ]
 
 export const mailDriverOptions: SettingsOption[] = [
-    { value: 'smtp', labelKey: 'features.settings.options.mailDriver.smtp' },
-    { value: 'sendmail', labelKey: 'features.settings.options.mailDriver.sendmail' },
-    { value: 'mailgun', labelKey: 'features.settings.options.mailDriver.mailgun' },
-    { value: 'ses', labelKey: 'features.settings.options.mailDriver.ses' },
-    { value: 'postmark', labelKey: 'features.settings.options.mailDriver.postmark' },
-    { value: 'log', labelKey: 'features.settings.options.mailDriver.log' },
+    { value: 'smtp', labelKey: 'modules.core.settings.options.mailDriver.smtp' },
+    { value: 'sendmail', labelKey: 'modules.core.settings.options.mailDriver.sendmail' },
+    { value: 'mailgun', labelKey: 'modules.core.settings.options.mailDriver.mailgun' },
+    { value: 'ses', labelKey: 'modules.core.settings.options.mailDriver.ses' },
+    { value: 'postmark', labelKey: 'modules.core.settings.options.mailDriver.postmark' },
+    { value: 'log', labelKey: 'modules.core.settings.options.mailDriver.log' },
 ]
 
 export const mailEncryptionOptions: SettingsOption[] = [
-    { value: 'tls', labelKey: 'features.settings.options.mailEncryption.tls' },
-    { value: 'ssl', labelKey: 'features.settings.options.mailEncryption.ssl' },
-    { value: 'null', labelKey: 'features.settings.options.mailEncryption.none' },
+    { value: 'tls', labelKey: 'modules.core.settings.options.mailEncryption.tls' },
+    { value: 'ssl', labelKey: 'modules.core.settings.options.mailEncryption.ssl' },
+    { value: 'null', labelKey: 'modules.core.settings.options.mailEncryption.none' },
 ]
 
 export const mailPortOptions: Record<string, SettingsOption[]> = {
     tls: [
-        { value: 587, labelKey: 'features.settings.options.mailPort.587tls' },
-        { value: 2525, labelKey: 'features.settings.options.mailPort.2525' },
-        { value: 25, labelKey: 'features.settings.options.mailPort.25tls' },
-        { value: 465, labelKey: 'features.settings.options.mailPort.465tls' },
+        { value: 587, labelKey: 'modules.core.settings.options.mailPort.587tls' },
+        { value: 2525, labelKey: 'modules.core.settings.options.mailPort.2525' },
+        { value: 25, labelKey: 'modules.core.settings.options.mailPort.25tls' },
+        { value: 465, labelKey: 'modules.core.settings.options.mailPort.465tls' },
     ],
     ssl: [
-        { value: 465, labelKey: 'features.settings.options.mailPort.465ssl' },
-        { value: 587, labelKey: 'features.settings.options.mailPort.587ssl' },
-        { value: 25, labelKey: 'features.settings.options.mailPort.25ssl' },
+        { value: 465, labelKey: 'modules.core.settings.options.mailPort.465ssl' },
+        { value: 587, labelKey: 'modules.core.settings.options.mailPort.587ssl' },
+        { value: 25, labelKey: 'modules.core.settings.options.mailPort.25ssl' },
     ],
     null: [
-        { value: 25, labelKey: 'features.settings.options.mailPort.25' },
-        { value: 587, labelKey: 'features.settings.options.mailPort.587' },
-        { value: 465, labelKey: 'features.settings.options.mailPort.465' },
-        { value: 2525, labelKey: 'features.settings.options.mailPort.2525plain' },
+        { value: 25, labelKey: 'modules.core.settings.options.mailPort.25' },
+        { value: 587, labelKey: 'modules.core.settings.options.mailPort.587' },
+        { value: 465, labelKey: 'modules.core.settings.options.mailPort.465' },
+        { value: 2525, labelKey: 'modules.core.settings.options.mailPort.2525plain' },
     ],
 }
 
 export const storageDriverOptions: SettingsOption[] = [
-    { value: 'local', labelKey: 'features.settings.options.storageDriver.local' },
-    { value: 's3', labelKey: 'features.settings.options.storageDriver.s3' },
-    { value: 'google', labelKey: 'features.settings.options.storageDriver.google' },
-    { value: 'ftp', labelKey: 'features.settings.options.storageDriver.ftp' },
-    { value: 'dropbox', labelKey: 'features.settings.options.storageDriver.dropbox' },
+    { value: 'local', labelKey: 'modules.core.settings.options.storageDriver.local' },
+    { value: 's3', labelKey: 'modules.core.settings.options.storageDriver.s3' },
+    { value: 'google', labelKey: 'modules.core.settings.options.storageDriver.google' },
+    { value: 'ftp', labelKey: 'modules.core.settings.options.storageDriver.ftp' },
+    { value: 'dropbox', labelKey: 'modules.core.settings.options.storageDriver.dropbox' },
 ]
 
 export const thumbnailSizeOptions: SettingsOption[] = [
-    { value: 150, labelKey: 'features.settings.options.thumbnailSize.150' },
-    { value: 200, labelKey: 'features.settings.options.thumbnailSize.200' },
-    { value: 250, labelKey: 'features.settings.options.thumbnailSize.250' },
-    { value: 300, labelKey: 'features.settings.options.thumbnailSize.300' },
-    { value: 400, labelKey: 'features.settings.options.thumbnailSize.400' },
-    { value: 500, labelKey: 'features.settings.options.thumbnailSize.500' },
+    { value: 150, labelKey: 'modules.core.settings.options.thumbnailSize.150' },
+    { value: 200, labelKey: 'modules.core.settings.options.thumbnailSize.200' },
+    { value: 250, labelKey: 'modules.core.settings.options.thumbnailSize.250' },
+    { value: 300, labelKey: 'modules.core.settings.options.thumbnailSize.300' },
+    { value: 400, labelKey: 'modules.core.settings.options.thumbnailSize.400' },
+    { value: 500, labelKey: 'modules.core.settings.options.thumbnailSize.500' },
 ]
 
 // Security field options
 export const passwordMinLengthOptions: SettingsOption[] = [
-    { value: 6, labelKey: 'features.settings.options.passwordMinLength.6' },
-    { value: 8, labelKey: 'features.settings.options.passwordMinLength.8' },
-    { value: 10, labelKey: 'features.settings.options.passwordMinLength.10' },
-    { value: 12, labelKey: 'features.settings.options.passwordMinLength.12' },
-    { value: 16, labelKey: 'features.settings.options.passwordMinLength.16' },
+    { value: 6, labelKey: 'modules.core.settings.options.passwordMinLength.6' },
+    { value: 8, labelKey: 'modules.core.settings.options.passwordMinLength.8' },
+    { value: 10, labelKey: 'modules.core.settings.options.passwordMinLength.10' },
+    { value: 12, labelKey: 'modules.core.settings.options.passwordMinLength.12' },
+    { value: 16, labelKey: 'modules.core.settings.options.passwordMinLength.16' },
 ]
 
 export const loginAttemptsOptions: SettingsOption[] = [
-    { value: 3, labelKey: 'features.settings.options.loginAttempts.3' },
-    { value: 5, labelKey: 'features.settings.options.loginAttempts.5' },
-    { value: 10, labelKey: 'features.settings.options.loginAttempts.10' },
-    { value: 0, labelKey: 'features.settings.options.loginAttempts.unlimited' },
+    { value: 3, labelKey: 'modules.core.settings.options.loginAttempts.3' },
+    { value: 5, labelKey: 'modules.core.settings.options.loginAttempts.5' },
+    { value: 10, labelKey: 'modules.core.settings.options.loginAttempts.10' },
+    { value: 0, labelKey: 'modules.core.settings.options.loginAttempts.unlimited' },
 ]
 
 export const blockDurationOptions: SettingsOption[] = [
-    { value: 5, labelKey: 'features.settings.options.blockDuration.5' },
-    { value: 15, labelKey: 'features.settings.options.blockDuration.15' },
-    { value: 30, labelKey: 'features.settings.options.blockDuration.30' },
-    { value: 60, labelKey: 'features.settings.options.blockDuration.60' },
-    { value: 1440, labelKey: 'features.settings.options.blockDuration.1440' },
+    { value: 5, labelKey: 'modules.core.settings.options.blockDuration.5' },
+    { value: 15, labelKey: 'modules.core.settings.options.blockDuration.15' },
+    { value: 30, labelKey: 'modules.core.settings.options.blockDuration.30' },
+    { value: 60, labelKey: 'modules.core.settings.options.blockDuration.60' },
+    { value: 1440, labelKey: 'modules.core.settings.options.blockDuration.1440' },
 ]
 
 export const sessionLifetimeOptions: SettingsOption[] = [
-    { value: 30, labelKey: 'features.settings.options.sessionLifetime.30' },
-    { value: 60, labelKey: 'features.settings.options.sessionLifetime.60' },
-    { value: 120, labelKey: 'features.settings.options.sessionLifetime.120' },
-    { value: 480, labelKey: 'features.settings.options.sessionLifetime.480' },
-    { value: 1440, labelKey: 'features.settings.options.sessionLifetime.1440' },
-    { value: 10080, labelKey: 'features.settings.options.sessionLifetime.10080' },
+    { value: 30, labelKey: 'modules.core.settings.options.sessionLifetime.30' },
+    { value: 60, labelKey: 'modules.core.settings.options.sessionLifetime.60' },
+    { value: 120, labelKey: 'modules.core.settings.options.sessionLifetime.120' },
+    { value: 480, labelKey: 'modules.core.settings.options.sessionLifetime.480' },
+    { value: 1440, labelKey: 'modules.core.settings.options.sessionLifetime.1440' },
+    { value: 10080, labelKey: 'modules.core.settings.options.sessionLifetime.10080' },
 ]
 
 export const maxConcurrentSessionsOptions: SettingsOption[] = [
-    { value: 0, labelKey: 'features.settings.options.maxSessions.unlimited' },
-    { value: 1, labelKey: 'features.settings.options.maxSessions.1' },
-    { value: 2, labelKey: 'features.settings.options.maxSessions.2' },
-    { value: 3, labelKey: 'features.settings.options.maxSessions.3' },
-    { value: 5, labelKey: 'features.settings.options.maxSessions.5' },
+    { value: 0, labelKey: 'modules.core.settings.options.maxSessions.unlimited' },
+    { value: 1, labelKey: 'modules.core.settings.options.maxSessions.1' },
+    { value: 2, labelKey: 'modules.core.settings.options.maxSessions.2' },
+    { value: 3, labelKey: 'modules.core.settings.options.maxSessions.3' },
+    { value: 5, labelKey: 'modules.core.settings.options.maxSessions.5' },
 ]
 
 export const logRetentionOptions: SettingsOption[] = [
-    { value: 0, labelKey: 'features.settings.options.logRetention.forever' },
-    { value: 7, labelKey: 'features.settings.options.logRetention.7' },
-    { value: 14, labelKey: 'features.settings.options.logRetention.14' },
-    { value: 30, labelKey: 'features.settings.options.logRetention.30' },
-    { value: 60, labelKey: 'features.settings.options.logRetention.60' },
-    { value: 90, labelKey: 'features.settings.options.logRetention.90' },
-    { value: 365, labelKey: 'features.settings.options.logRetention.365' },
+    { value: 0, labelKey: 'modules.core.settings.options.logRetention.forever' },
+    { value: 7, labelKey: 'modules.core.settings.options.logRetention.7' },
+    { value: 14, labelKey: 'modules.core.settings.options.logRetention.14' },
+    { value: 30, labelKey: 'modules.core.settings.options.logRetention.30' },
+    { value: 60, labelKey: 'modules.core.settings.options.logRetention.60' },
+    { value: 90, labelKey: 'modules.core.settings.options.logRetention.90' },
+    { value: 365, labelKey: 'modules.core.settings.options.logRetention.365' },
 ]
 
 export const cacheTtlOptions: SettingsOption[] = [
-    { value: 300, labelKey: 'features.settings.options.cacheTtl.300' },
-    { value: 600, labelKey: 'features.settings.options.cacheTtl.600' },
-    { value: 1800, labelKey: 'features.settings.options.cacheTtl.1800' },
-    { value: 3600, labelKey: 'features.settings.options.cacheTtl.3600' },
-    { value: 7200, labelKey: 'features.settings.options.cacheTtl.7200' },
-    { value: 86400, labelKey: 'features.settings.options.cacheTtl.86400' },
+    { value: 300, labelKey: 'modules.core.settings.options.cacheTtl.300' },
+    { value: 600, labelKey: 'modules.core.settings.options.cacheTtl.600' },
+    { value: 1800, labelKey: 'modules.core.settings.options.cacheTtl.1800' },
+    { value: 3600, labelKey: 'modules.core.settings.options.cacheTtl.3600' },
+    { value: 7200, labelKey: 'modules.core.settings.options.cacheTtl.7200' },
+    { value: 86400, labelKey: 'modules.core.settings.options.cacheTtl.86400' },
 ]
 
 export const maxUploadSizeOptions: SettingsOption[] = [
-    { value: 1024, labelKey: 'features.settings.options.maxUploadSize.1024' },
-    { value: 2048, labelKey: 'features.settings.options.maxUploadSize.2048' },
-    { value: 5120, labelKey: 'features.settings.options.maxUploadSize.5120' },
-    { value: 10240, labelKey: 'features.settings.options.maxUploadSize.10240' },
-    { value: 20480, labelKey: 'features.settings.options.maxUploadSize.20480' },
-    { value: 51200, labelKey: 'features.settings.options.maxUploadSize.51200' },
-    { value: 102400, labelKey: 'features.settings.options.maxUploadSize.102400' },
+    { value: 1024, labelKey: 'modules.core.settings.options.maxUploadSize.1024' },
+    { value: 2048, labelKey: 'modules.core.settings.options.maxUploadSize.2048' },
+    { value: 5120, labelKey: 'modules.core.settings.options.maxUploadSize.5120' },
+    { value: 10240, labelKey: 'modules.core.settings.options.maxUploadSize.10240' },
+    { value: 20480, labelKey: 'modules.core.settings.options.maxUploadSize.20480' },
+    { value: 51200, labelKey: 'modules.core.settings.options.maxUploadSize.51200' },
+    { value: 102400, labelKey: 'modules.core.settings.options.maxUploadSize.102400' },
 ]
 
 export const cacheDriverOptions: SettingsOption[] = [
-    { value: 'file', labelKey: 'features.settings.cache.drivers.file' },
-    { value: 'redis', labelKey: 'features.settings.cache.drivers.redis' },
-    { value: 'database', labelKey: 'features.settings.cache.drivers.database' },
-    { value: 'array', labelKey: 'features.settings.cache.drivers.array' },
+    { value: 'file', labelKey: 'modules.core.settings.cache.drivers.file' },
+    { value: 'redis', labelKey: 'modules.core.settings.cache.drivers.redis' },
+    { value: 'database', labelKey: 'modules.core.settings.cache.drivers.database' },
+    { value: 'array', labelKey: 'modules.core.settings.cache.drivers.array' },
 ]
 
 export const twoFactorMethodOptions: SettingsOption[] = [
-    { value: 'app', labelKey: 'features.settings.options.twoFactorMethod.app' },
-    { value: 'email', labelKey: 'features.settings.options.twoFactorMethod.email' },
+    { value: 'app', labelKey: 'modules.core.settings.options.twoFactorMethod.app' },
+    { value: 'email', labelKey: 'modules.core.settings.options.twoFactorMethod.email' },
 ]
 
 export const twoFactorEnforcedOptions: SettingsOption[] = [
-    { value: 'no', labelKey: 'features.settings.options.twoFactorEnforced.no' },
-    { value: 'admin', labelKey: 'features.settings.options.twoFactorEnforced.admin' },
-    { value: 'all', labelKey: 'features.settings.options.twoFactorEnforced.all' },
+    { value: 'no', labelKey: 'modules.core.settings.options.twoFactorEnforced.no' },
+    { value: 'admin', labelKey: 'modules.core.settings.options.twoFactorEnforced.admin' },
+    { value: 'all', labelKey: 'modules.core.settings.options.twoFactorEnforced.all' },
 ]
 
 export const captchaMethodOptions: SettingsOption[] = [
-    { value: 'slider', labelKey: 'features.settings.options.captchaMethod.slider' },
-    { value: 'math', labelKey: 'features.settings.options.captchaMethod.math' },
-    { value: 'image', labelKey: 'features.settings.options.captchaMethod.image' },
+    { value: 'slider', labelKey: 'modules.core.settings.options.captchaMethod.slider' },
+    { value: 'math', labelKey: 'modules.core.settings.options.captchaMethod.math' },
+    { value: 'image', labelKey: 'modules.core.settings.options.captchaMethod.image' },
 ]
 
 export const shieldProtectionModeOptions: SettingsOption[] = [
-    { value: 'off', labelKey: 'features.settings.options.shieldProtectionMode.off' },
-    { value: 'suspicious', labelKey: 'features.settings.options.shieldProtectionMode.suspicious' },
-    { value: 'always', labelKey: 'features.settings.options.shieldProtectionMode.always' },
+    { value: 'off', labelKey: 'modules.core.settings.options.shieldProtectionMode.off' },
+    { value: 'suspicious', labelKey: 'modules.core.settings.options.shieldProtectionMode.suspicious' },
+    { value: 'always', labelKey: 'modules.core.settings.options.shieldProtectionMode.always' },
 ]
 
 export const shieldProtectionDifficultyOptions: SettingsOption[] = [
-    { value: 3, labelKey: 'features.settings.options.shieldProtectionDifficulty.3' },
-    { value: 4, labelKey: 'features.settings.options.shieldProtectionDifficulty.4' },
-    { value: 5, labelKey: 'features.settings.options.shieldProtectionDifficulty.5' },
-    { value: 6, labelKey: 'features.settings.options.shieldProtectionDifficulty.6' },
-    { value: 7, labelKey: 'features.settings.options.shieldProtectionDifficulty.7' },
+    { value: 3, labelKey: 'modules.core.settings.options.shieldProtectionDifficulty.3' },
+    { value: 4, labelKey: 'modules.core.settings.options.shieldProtectionDifficulty.4' },
+    { value: 5, labelKey: 'modules.core.settings.options.shieldProtectionDifficulty.5' },
+    { value: 6, labelKey: 'modules.core.settings.options.shieldProtectionDifficulty.6' },
+    { value: 7, labelKey: 'modules.core.settings.options.shieldProtectionDifficulty.7' },
 ]
 
 // Maintenance presets options
 export const maintenanceTitlePresets: SettingsOption[] = [
-    { value: 'Coming Soon', labelKey: 'features.settings.options.maintenanceTitlePresets.coming_soon' },
-    { value: 'Under Maintenance', labelKey: 'features.settings.options.maintenanceTitlePresets.under_maintenance' },
-    { value: 'Launch Day!', labelKey: 'features.settings.options.maintenanceTitlePresets.launch_day' },
-    { value: 'System Update', labelKey: 'features.settings.options.maintenanceTitlePresets.system_update' },
+    { value: 'Coming Soon', labelKey: 'modules.core.settings.options.maintenanceTitlePresets.coming_soon' },
+    { value: 'Under Maintenance', labelKey: 'modules.core.settings.options.maintenanceTitlePresets.under_maintenance' },
+    { value: 'Launch Day!', labelKey: 'modules.core.settings.options.maintenanceTitlePresets.launch_day' },
+    { value: 'System Update', labelKey: 'modules.core.settings.options.maintenanceTitlePresets.system_update' },
 ]
 
 export const maintenanceMessagePresets: SettingsOption[] = [
-    { value: 'We are currently working on something awesome. Please check back later.', labelKey: 'features.settings.options.maintenanceMessagePresets.awesome' },
-    { value: "Sorry for the inconvenience. We're performing some maintenance and will be back shortly.", labelKey: 'features.settings.options.maintenanceMessagePresets.inconvenience' },
-    { value: 'Something exciting is coming! Stay tuned for our launch.', labelKey: 'features.settings.options.maintenanceMessagePresets.exciting' },
-    { value: "We are updating our system to provide you a better experience. We'll be back online soon.", labelKey: 'features.settings.options.maintenanceMessagePresets.better_exp' },
+    { value: 'We are currently working on something awesome. Please check back later.', labelKey: 'modules.core.settings.options.maintenanceMessagePresets.awesome' },
+    { value: "Sorry for the inconvenience. We're performing some maintenance and will be back shortly.", labelKey: 'modules.core.settings.options.maintenanceMessagePresets.inconvenience' },
+    { value: 'Something exciting is coming! Stay tuned for our launch.', labelKey: 'modules.core.settings.options.maintenanceMessagePresets.exciting' },
+    { value: "We are updating our system to provide you a better experience. We'll be back online soon.", labelKey: 'modules.core.settings.options.maintenanceMessagePresets.better_exp' },
 ]
 
 // Helper function to get options for a specific field

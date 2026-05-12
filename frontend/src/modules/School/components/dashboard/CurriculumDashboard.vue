@@ -9,23 +9,23 @@
               name="BookOpen"
               class="w-4 h-4 text-primary"
             />
-            <span class="text-[10px] font-bold text-primary/80 tracking-wide">{{ $t('features.school.dashboard.v2.academic.hero_badge') }}</span>
+            <span class="text-[10px] font-bold text-primary/80 tracking-wide">{{ $t('modules.school.dashboard.v2.academic.hero_badge') }}</span>
           </div>
           <h1 class="text-4xl font-bold tracking-tight leading-tight text-foreground">
-            {{ $t('features.school.dashboard.v2.academic.hero_title') }}
+            {{ $t('modules.school.dashboard.v2.academic.hero_title') }}
           </h1>
           <p class="text-muted-foreground max-w-xl text-lg leading-relaxed">
-            {{ $t('features.school.dashboard.v2.academic.hero_subtitle') }}
+            {{ $t('modules.school.dashboard.v2.academic.hero_subtitle') }}
           </p>
           <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
             <Button class="rounded-xl h-12 px-8 shadow-sm">
-              {{ $t('features.school.dashboard.v2.academic.actions.schedule') }}
+              {{ $t('modules.school.dashboard.v2.academic.actions.schedule') }}
             </Button>
             <Button
               variant="outline"
               class="rounded-xl h-12 px-6"
             >
-              {{ $t('features.school.dashboard.v2.academic.actions.bank') }}
+              {{ $t('modules.school.dashboard.v2.academic.actions.bank') }}
             </Button>
           </div>
         </div>
@@ -56,10 +56,10 @@
         <CardHeader class="flex flex-row items-center justify-between p-8 pb-4">
           <div>
             <CardTitle class="text-xl font-bold tracking-tight text-foreground/90">
-              {{ $t('features.school.dashboard.v2.academic.popular_subjects') }}
+              {{ $t('modules.school.dashboard.v2.academic.popular_subjects') }}
             </CardTitle>
             <CardDescription>
-              {{ $t('features.school.dashboard.v2.academic.popular_desc') }}
+              {{ $t('modules.school.dashboard.v2.academic.popular_desc') }}
             </CardDescription>
           </div>
         </CardHeader>
@@ -99,7 +99,7 @@
       <Card class="border-border/40 bg-card text-foreground rounded-xl shadow-none overflow-hidden relative group">
         <CardHeader class="p-8 pb-4 relative z-10">
           <CardTitle class="text-[11px] font-bold text-primary">
-            {{ $t('features.school.dashboard.v2.academic.agenda') }}
+            {{ $t('modules.school.dashboard.v2.academic.agenda') }}
           </CardTitle>
         </CardHeader>
         <CardContent class="p-8 pt-4 relative z-10">
@@ -129,7 +129,7 @@
             variant="outline"
             class="w-full text-[10px] font-bold uppercase tracking-wide h-12 rounded-xl bg-muted/30 hover:bg-muted/50 border-border/40"
           >
-            {{ $t('features.school.dashboard.v2.academic.actions.calendar') }}
+            {{ $t('modules.school.dashboard.v2.academic.actions.calendar') }}
             <LucideIcon
               name="ArrowRight"
               class="w-4 h-4 ml-2"
@@ -145,7 +145,7 @@
 import {
   Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter,
   Button, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 interface CurriculumStat {
   label: string;

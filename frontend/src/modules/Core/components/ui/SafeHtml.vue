@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, useAttrs } from 'vue';
 import DOMPurify from 'dompurify';
-import { DEFAULT_SANITIZE_CONFIG, CMS_SANITIZE_CONFIG } from '@/utils/sanitizer';
+import { DEFAULT_SANITIZE_CONFIG, CMS_SANITIZE_CONFIG } from '@/shared/utils/sanitizer';
 
 defineOptions({
   inheritAttrs: false

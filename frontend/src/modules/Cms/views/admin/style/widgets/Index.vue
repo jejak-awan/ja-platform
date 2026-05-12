@@ -104,13 +104,13 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
-import { Badge, Button, Card, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { Badge, Button, Card, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Pencil from 'lucide-vue-next/dist/esm/icons/pencil.js';
@@ -118,7 +118,7 @@ import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Layout from 'lucide-vue-next/dist/esm/icons/layout-dashboard.js';
 import WidgetModal from '@/modules/Cms/components/widgets/WidgetModal.vue';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 
 const { t } = useI18n();
 const { confirm } = useConfirm();

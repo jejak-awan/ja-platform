@@ -40,7 +40,7 @@
             class="text-muted-foreground hover:text-foreground h-8"
             @click="$emit('cancel')"
           >
-            {{ $t('features.content.form.cancel') }}
+            {{ $t('modules.cms.content.form.cancel') }}
           </Button>
           <Button
             :disabled="loading || disabled"
@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Button } from '@/components/ui';
+import { Button } from '@/shared/components/ui';
 import PanelRightClose from 'lucide-vue-next/dist/esm/icons/panel-right-close.js';
 import PanelRightOpen from 'lucide-vue-next/dist/esm/icons/panel-right-open.js';
 import Save from 'lucide-vue-next/dist/esm/icons/save.js';

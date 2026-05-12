@@ -12,9 +12,9 @@
           />
         </div>
         <div class="text-left">
-          <span class="font-bold text-foreground text-sm tracking-tight">{{ $t('features.school.units.sections.legality') }}</span>
+          <span class="font-bold text-foreground text-sm tracking-tight">{{ $t('modules.school.units.sections.legality') }}</span>
           <p class="text-[10px] text-muted-foreground font-medium mt-0.5 opacity-70">
-            {{ $t('features.school.units.sections.legalityDesc') }}
+            {{ $t('modules.school.units.sections.legalityDesc') }}
           </p>
         </div>
       </div>
@@ -58,16 +58,16 @@
           />
         </div>
         <div class="space-y-2">
-          <Label class="text-xs font-bold text-muted-foreground/80">{{ $t('common.labels.accreditation') }}</Label>
+          <Label class="text-xs font-bold text-muted-foreground/80">{{ $t('modules.school.labels.accreditation') }}</Label>
           <Select 
             v-model="localSettings.accreditation"
           >
             <SelectTrigger class="rounded-xl h-11 border-border bg-muted/10 focus:ring-foreground/5 text-sm font-bold">
-              <SelectValue :placeholder="$t('common.labels.accreditation')" />
+              <SelectValue :placeholder="$t('modules.school.labels.accreditation')" />
             </SelectTrigger>
             <SelectContent class="rounded-xl shadow-xl border-border">
               <SelectItem
-                v-for="(label, key) in $tm('common.labels.accreditationOptions')"
+                v-for="(label, key) in $tm('modules.school.labels.accreditationOptions')"
                 :key="key"
                 :value="String(key)"
               >
@@ -147,7 +147,7 @@ import { reactive, watch } from 'vue';
 import { 
   AccordionItem, AccordionTrigger, AccordionContent, 
   Label, Input, Separator, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const props = defineProps<{
   settings: any;

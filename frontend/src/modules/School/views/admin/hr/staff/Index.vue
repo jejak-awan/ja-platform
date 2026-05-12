@@ -1,19 +1,19 @@
 <template>
   <div class="p-6 space-y-8 animate-in fade-in duration-700">
-    <Breadcrumbs />
+    <BreadcrumbTrail />
     
     <!-- Premium Header Section -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
       <div class="space-y-1">
         <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
-          {{ $t('features.school.hr.staff.title') }}
+          {{ $t('modules.school.hr.staff.title') }}
         </h1>
         <div class="flex items-center gap-2">
           <Badge variant="secondary" class="bg-primary/10 text-primary border-primary/20 shrink-0 font-bold">
-            {{ pagination?.total || 0 }} {{ $t('features.school.hr.staff.tabs.staff') }}
+            {{ pagination?.total || 0 }} {{ $t('modules.school.hr.staff.tabs.staff') }}
           </Badge>
           <p class="text-sm text-muted-foreground italic font-medium">
-            {{ $t('features.school.hr.staff.subtitle') }}
+            {{ $t('modules.school.hr.staff.subtitle') }}
           </p>
         </div>
       </div>
@@ -29,13 +29,13 @@
           @click="handleExport"
         >
           <LucideIcon name="Download" class="w-5 h-5 mr-2" />
-          {{ $t('features.school.students.actions.export') }}
+          {{ $t('modules.school.students.actions.export') }}
         </Button>
 
         <router-link :to="{ name: 'staff.create' }">
           <Button size="lg" class="rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95 font-bold h-11 px-8">
             <LucideIcon name="UserPlus" class="w-5 h-5 mr-2" />
-            {{ $t('features.school.hr.staff.btnAdd') }}
+            {{ $t('modules.school.hr.staff.btnAdd') }}
           </Button>
         </router-link>
       </div>
@@ -50,7 +50,7 @@
             class="rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm px-6 py-2.5 transition-all font-bold"
           >
             <LucideIcon name="Users" class="w-4 h-4 mr-2" />
-            {{ $t('features.school.hr.staff.tabs.staff') }}
+            {{ $t('modules.school.hr.staff.tabs.staff') }}
           </TabsTrigger>
           <!-- Salary and Payroll tabs removed for BOS compliance -->
         </TabsList>
@@ -81,7 +81,7 @@
             <div class="flex items-center gap-3">
               <div class="h-8 w-1 bg-primary rounded-full"></div>
               <p class="text-xs font-black text-muted-foreground uppercase tracking-widest">
-                {{ $t('features.school.hr.staff.labels.total', { total: pagination?.total || 0 }) }}
+                {{ $t('modules.school.hr.staff.labels.total', { total: pagination?.total || 0 }) }}
               </p>
               <span class="text-xs text-muted-foreground opacity-30">|</span>
               <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">{{ $t('common.labels.showing_page', { current: pagination?.current_page || 1 }) }}</span>
@@ -109,18 +109,18 @@ import { useI18n } from 'vue-i18n';
 import { HRService } from '@/modules/School/services/HRService';
 import {
   Card, CardContent, Button, LucideIcon, DataTable, Pagination, Badge, Input, Tabs, TabsList, TabsTrigger
-} from '@/components/ui';
-import Breadcrumbs from '@/modules/Core/components/layout/Breadcrumbs.vue';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+} from '@/shared/components/ui';
+import BreadcrumbTrail from '@/shared/components/BreadcrumbTrail.vue';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import { 
   useVueTable, 
   getCoreRowModel, 
   createColumnHelper,
 } from '@tanstack/vue-table';
 import { useRouter } from 'vue-router';
-import { exportToCSV } from '@/utils/exportUtils';
-import { parseResponse } from '@/utils/responseParser';
+import { exportToCSV } from '@/shared/utils/exportUtils';
+import { parseResponse } from '@/shared/utils/responseParser';
 import _ from 'lodash';
 
 const { t } = useI18n();
@@ -136,14 +136,14 @@ const pagination = ref({ total: 0, per_page: 20, current_page: 1 });
 
 const handleExport = () => {
   exportToCSV(staff.value, `data-staff-export-${new Date().toISOString().split('T')[0]}`);
-  toast.success.action(t('features.school.hr.staff.messages.exportSuccess'));
+  toast.success.action(t('modules.school.hr.staff.messages.exportSuccess'));
 };
 
 const columnHelper = createColumnHelper<any>();
 
 const staffColumns = [
   columnHelper.accessor('full_name', { 
-    header: t('features.school.hr.staff.labels.fullName'),
+    header: t('modules.school.hr.staff.labels.fullName'),
     cell: ({ row }) => h('div', { class: 'flex items-center gap-3' }, [
       h('div', { class: 'w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20' }, 
         row.original.full_name.charAt(0)
@@ -155,15 +155,15 @@ const staffColumns = [
     ])
   }),
   columnHelper.accessor('ptk_type', { 
-    header: t('features.school.hr.staff.labels.ptkType'),
+    header: t('modules.school.hr.staff.labels.ptkType'),
     cell: info => h(Badge, { variant: 'outline', class: 'bg-accent/30 font-normal border-border/50 transition-colors' }, () => info.getValue())
   }),
   columnHelper.accessor('employment_status', { 
-    header: t('features.school.hr.staff.labels.employmentStatus'),
+    header: t('modules.school.hr.staff.labels.employmentStatus'),
     cell: info => h('span', { class: 'text-sm text-foreground/80' }, info.getValue())
   }),
   columnHelper.accessor('certification_status', { 
-    header: t('features.school.hr.staff.labels.certificationStatus'),
+    header: t('modules.school.hr.staff.labels.certificationStatus'),
     cell: ({ row }) => h('div', { class: 'flex items-center justify-center' }, [
       row.original.certification_status 
         ? h(LucideIcon, { name: 'BadgeCheck', class: 'w-5 h-5 text-success' })
@@ -232,15 +232,15 @@ const handlePageChange = (page: number) => {
 
 const handleDelete = async (id: number) => {
   const isConfirmed = await confirm({
-    title: t('features.school.hr.staff.messages.deleteConfirmTitle'),
-    message: t('features.school.hr.staff.messages.deleteConfirmMessage'),
+    title: t('modules.school.hr.staff.messages.deleteConfirmTitle'),
+    message: t('modules.school.hr.staff.messages.deleteConfirmMessage'),
     variant: 'destructive',
   });
 
   if (isConfirmed) {
     try {
       await HRService.deleteStaff(id);
-      toast.success.action(t('features.school.hr.staff.messages.deleteSuccess'));
+      toast.success.action(t('modules.school.hr.staff.messages.deleteSuccess'));
       fetchStaff(pagination.value.current_page);
     } catch (e) {
       toast.error.fromResponse(e);

@@ -4,7 +4,7 @@ import { useSecurityStore } from '@/modules/Core/stores/security';
 import axios from 'axios';
 
 vi.mock('axios');
-vi.mock('@/services/api', () => ({
+vi.mock('@/core/api/client', () => ({
     default: {
         interceptors: {
             request: { use: vi.fn() },
@@ -16,7 +16,7 @@ vi.mock('@/services/api', () => ({
     getCsrfCookie: vi.fn(),
 }));
 
-vi.mock('@/utils/logger', () => ({
+vi.mock('@/shared/utils/logger', () => ({
     logger: {
         error: vi.fn(),
         debug: vi.fn(),

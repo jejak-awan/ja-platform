@@ -77,7 +77,7 @@
                 name="Printer"
                 class="w-4 h-4 mr-2"
               />
-              {{ $t('features.school.students.actions.printProfile') }}
+              {{ $t('modules.school.students.actions.printProfile') }}
             </Button>
             <Button
               class="flex-1 md:flex-none rounded-xl shadow-sm"
@@ -87,7 +87,7 @@
                 name="Pencil"
                 class="w-4 h-4 mr-2"
               />
-              {{ $t('features.school.students.actions.editProfile') }}
+              {{ $t('modules.school.students.actions.editProfile') }}
             </Button>
           </div>
         </div>
@@ -99,7 +99,7 @@
         <div class="lg:col-span-1 space-y-4">
           <div class="bg-card border border-border/50 rounded-xl p-4 sticky top-8 shadow-sm">
             <h3 class="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em] mb-4 px-4 pt-2">
-              {{ $t('features.school.students.labels.studentMenu') }}
+              {{ $t('modules.school.students.labels.studentMenu') }}
             </h3>
             <div class="space-y-1">
               <button 
@@ -132,7 +132,7 @@
               <div class="p-4 rounded-xl bg-muted/30 border border-border/40 relative overflow-hidden group">
                 <div class="z-10 relative">
                   <p class="text-[9px] font-black text-primary uppercase tracking-widest mb-1">
-                    {{ $t('features.school.students.labels.financialStatus') }}
+                    {{ $t('modules.school.students.labels.financialStatus') }}
                   </p>
                   <p class="text-xs font-bold text-foreground">
                     Lunas / SPP Okt
@@ -169,7 +169,7 @@
                       />
                     </div>
                     <h3 class="text-xl font-black tracking-tight text-foreground">
-                      {{ $t('features.school.students.labels.personalInfo') }}
+                      {{ $t('modules.school.students.labels.personalInfo') }}
                     </h3>
                   </div>
                   
@@ -199,7 +199,7 @@
                       />
                     </div>
                     <h3 class="text-xl font-black tracking-tight text-foreground">
-                      {{ $t('features.school.students.labels.parentInfo') }}
+                      {{ $t('modules.school.students.labels.parentInfo') }}
                     </h3>
                   </div>
                   
@@ -236,7 +236,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div class="md:col-span-1">
                     <p class="text-[9px] font-black text-muted-foreground/60 uppercase tracking-widest mb-1">
-                      {{ $t('features.school.students.labels.domicileAddress') }}
+                      {{ $t('modules.school.students.labels.domicileAddress') }}
                     </p>
                     <p class="text-sm font-bold leading-relaxed text-foreground">
                       {{ student.address || '-' }}
@@ -285,10 +285,10 @@
               </div>
               <div>
                 <h4 class="text-lg font-black text-foreground uppercase tracking-tight">
-                  {{ $t('features.school.students.messages.dataNotAvailable') }}
+                  {{ $t('modules.school.students.messages.dataNotAvailable') }}
                 </h4>
                 <p class="text-muted-foreground text-xs font-medium max-w-xs mx-auto">
-                  {{ $t('features.school.students.messages.syncingData') }}
+                  {{ $t('modules.school.students.messages.syncingData') }}
                 </p>
               </div>
                 <Button
@@ -296,7 +296,7 @@
                 class="mt-4 rounded-xl"
                 @click="activeTab = 'profile'"
               >
-                {{ $t('features.school.students.actions.backToProfile') }}
+                {{ $t('modules.school.students.actions.backToProfile') }}
               </Button>
             </div>
           </transition>
@@ -314,8 +314,8 @@ import { useStudentStore } from '@/modules/School/stores/student';
 import {
   Avatar, AvatarFallback,
   Button, LucideIcon
-} from '@/components/ui';
-import api from '@/services/api';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -324,29 +324,29 @@ const { currentStudent: student, loading } = toRefs(studentStore);
 const activeTab = ref('profile');
 
 const tabs = computed(() => [
-  { id: 'profile', name: t('features.school.students.tabs.profile'), icon: 'UserCircle' },
-  { id: 'academic', name: t('features.school.students.tabs.academic'), icon: 'GraduationCap' },
-  { id: 'attendance', name: t('features.school.students.tabs.attendance'), icon: 'CalendarCheck' },
-  { id: 'disciplinary', name: t('features.school.students.tabs.disciplinary'), icon: 'ShieldAlert' },
-  { id: 'payment', name: t('features.school.students.tabs.payment'), icon: 'CreditCard' },
+  { id: 'profile', name: t('modules.school.students.tabs.profile'), icon: 'UserCircle' },
+  { id: 'academic', name: t('modules.school.students.tabs.academic'), icon: 'GraduationCap' },
+  { id: 'attendance', name: t('modules.school.students.tabs.attendance'), icon: 'CalendarCheck' },
+  { id: 'disciplinary', name: t('modules.school.students.tabs.disciplinary'), icon: 'ShieldAlert' },
+  { id: 'payment', name: t('modules.school.students.tabs.payment'), icon: 'CreditCard' },
 ]);
 
 const personalFields = computed(() => [
-  { label: t('features.school.students.labels.fullName'), key: 'full_name' },
+  { label: t('modules.school.students.labels.fullName'), key: 'full_name' },
   { label: t('common.labels.placeOfBirth'), key: 'place_of_birth' },
   { label: t('common.labels.dateOfBirth'), key: 'date_of_birth' },
-  { label: t('features.school.students.labels.gender'), key: 'gender' },
+  { label: t('modules.school.students.labels.gender'), key: 'gender' },
   { label: t('common.labels.religion'), key: 'religion' },
   { label: t('common.labels.email'), key: 'email' },
   { label: t('common.labels.phone'), key: 'phone' },
 ]);
 
 const parentFields = computed(() => [
-  { label: t('features.school.students.labels.fatherName'), key: 'father_name' },
-  { label: t('features.school.students.labels.fatherOccupation'), key: 'father_occupation' },
-  { label: t('features.school.students.labels.motherName'), key: 'mother_name' },
-  { label: t('features.school.students.labels.motherOccupation'), key: 'mother_occupation' },
-  { label: t('features.school.students.labels.guardianName'), key: 'guardian_name' },
+  { label: t('modules.school.students.labels.fatherName'), key: 'father_name' },
+  { label: t('modules.school.students.labels.fatherOccupation'), key: 'father_occupation' },
+  { label: t('modules.school.students.labels.motherName'), key: 'mother_name' },
+  { label: t('modules.school.students.labels.motherOccupation'), key: 'mother_occupation' },
+  { label: t('modules.school.students.labels.guardianName'), key: 'guardian_name' },
 ]);
 
 const fetchData = async () => {

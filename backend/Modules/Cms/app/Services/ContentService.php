@@ -13,15 +13,15 @@ use Modules\Core\Models\MediaUsage;
 use Modules\Core\Models\Tag;
 use Modules\Core\Models\SearchIndex;
 use Modules\Core\Models\Webhook;
-use Modules\Core\Services\CacheService;
+use Modules\Cms\Services\CmsCacheService;
 
 class ContentService
 {
-    protected CacheService $cacheService;
+    protected CmsCacheService $cacheService;
 
     public function __construct()
     {
-        $this->cacheService = new CacheService;
+        $this->cacheService = new CmsCacheService;
     }
 
     /**

@@ -12,8 +12,8 @@
         "site_description": "A brief description of your site for SEO and meta tags",
         "site_url": "The base URL of your website",
         "admin_email": "The primary administrator email address for system notifications",
-        "brand_logo": "Logo displayed in the admin dashboard sidebar and header",
-        "brand_favicon": "Icon displayed in the browser tab when viewing the admin dashboard",
+        "app_logo": "Logo displayed in the admin dashboard sidebar and header",
+        "app_favicon": "Icon displayed in the browser tab when viewing the admin dashboard",
         "branding_display": "Choose how branding appears in the sidebar: logo only, text only, or both",
         "timezone": "The default timezone used for all dates and times",
         "date_format": "The format used to display dates throughout the application",
@@ -62,10 +62,16 @@
         "enable_cache": "Store computed data temporarily to speed up the site",
         "cache_driver": "The storage system for cached data",
         "cache_ttl": "Default duration for cached items to remain valid",
+        "cache_status": "Manage cache drivers and application cache status",
+        "cdn_status": "Configure Content Delivery Network settings",
+        "performance_status": "Image optimization, lazy loading, and more",
         "enable_image_optimization": "Automatically optimize images on upload for better performance",
         "enable_lazy_loading": "Load images only when they enter the viewport",
         "enable_cdn": "Serve static assets from a Content Delivery Network",
+        "cdn_preset": "Select your CDN provider for optimized configuration",
         "cdn_url": "The base URL provided by your CDN",
+        "cdn_included_dirs": "Comma-separated list of directories to serve via CDN",
+        "cdn_excluded_extensions": "File extensions to exclude from CDN",
         "max_upload_size": "The maximum file size allowed for uploads",
         "allowed_image_types": "Comma-separated list of allowed image extensions",
         "allowed_file_types": "Comma-separated list of allowed file extensions",
@@ -114,16 +120,6 @@
         "content": {
             "autosave_enabled": "When enabled, draft changes are saved automatically while editing content.",
             "autosave_interval_seconds": "How often autosave runs while editing. Recommended options: 15 (active editing), 30 (balanced), or 60 (lighter server load)."
-        },
-        "comments": {
-            "security": {
-                "enable_reply": "Allow users to reply to other comments",
-                "allow_guests": "Allow users to comment without logging in",
-                "moderation_enabled": "New comments require admin approval before appearing",
-                "guest_captcha": "Require guests to solve a captcha to post",
-                "max_links": "Maximum number of links allowed in a comment (0 for unlimited)",
-                "banned_words": "List of words that will cause a comment to be marked as spam (JSON array)"
-            }
         }
     }
 }

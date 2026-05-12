@@ -136,20 +136,20 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted, nextTick, watch } from 'vue';
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
 import BlogSidebar from './components/BlogSidebar.vue';
 import { useRoute } from 'vue-router';
 // import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity';
 
-import { useIconHydration } from '@/composables/useIconHydration';
+import { useIconHydration } from '@/shared/composables/useIconHydration';
 import Calendar from 'lucide-vue-next/dist/esm/icons/calendar.js';
 import User from 'lucide-vue-next/dist/esm/icons/user.js';
 
-import type { Content } from '@/types/cms/cms'
+import type { Content } from '@/modules/Cms/types/cms'
 
 const route = useRoute();
 // const { t } = useI18n();

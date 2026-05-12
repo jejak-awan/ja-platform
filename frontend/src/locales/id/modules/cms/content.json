@@ -1,4 +1,6 @@
 {
+    "title": "Studio Konten",
+    "description": "Kelola konten, media, dan taksonomi Anda",
     "actions": {
         "approve": "Setujui",
         "duplicate": "Duplikat",
@@ -173,6 +175,11 @@
     "tabs": {
         "content": "Konten",
         "seo": "SEO",
-        "settings": "Pengaturan"
-    }
+        "settings": "Pengaturan",
+        "contents": "Konten",
+        "categories": "Kategori",
+        "tags": "Tag"
+    },
+    "title_singular": "Konten",
+    "title_plural": "Konten"
 }

@@ -64,7 +64,8 @@ class AnalyticsVisit extends Model
      */
     public static function trackVisit(\Illuminate\Http\Request $request): self
     {
-        $sessionId = (string) session()->getId();
+        $sessInput = $request->input('session_id') ?? session()->getId();
+        $sessionId = is_scalar($sessInput) ? (string) $sessInput : '';
 
         // Ensure session exists and sync basic info
         $analyticsSession = AnalyticsSession::start($request, $sessionId);

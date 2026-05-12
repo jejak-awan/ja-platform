@@ -3,7 +3,7 @@
     <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="space-y-1">
         <h1 class="text-3xl font-bold tracking-tight text-foreground">
-          {{ $t('features.content.list.revisions') }}
+          {{ $t('modules.cms.content.list.revisions') }}
         </h1>
         <p class="text-sm text-muted-foreground flex items-center gap-2">
           <FileText class="w-4 h-4" />
@@ -17,7 +17,7 @@
       >
         <router-link :to="{ name: 'contents.edit', params: { id: contentId } }">
           <ArrowLeft class="w-4 h-4 mr-2" />
-          {{ $t('features.content.form.back') }}
+          {{ $t('modules.cms.content.form.back') }}
         </router-link>
       </Button>
     </div>
@@ -28,7 +28,7 @@
     >
       <Loader2 class="w-10 h-10 animate-spin opacity-20" />
       <p class="text-sm font-medium animate-pulse text-muted-foreground">
-        {{ $t('features.content.revisions.loading') }}
+        {{ $t('modules.cms.content.revisions.loading') }}
       </p>
     </div>
 
@@ -41,10 +41,10 @@
       </div>
       <div class="space-y-1">
         <p class="text-lg font-semibold text-foreground">
-          {{ $t('features.content.revisions.empty.title') }}
+          {{ $t('modules.cms.content.revisions.empty.title') }}
         </p>
         <p class="text-sm text-muted-foreground">
-          {{ $t('features.content.revisions.empty.description') }}
+          {{ $t('modules.cms.content.revisions.empty.description') }}
         </p>
       </div>
     </div>
@@ -57,19 +57,19 @@
         <TableHeader>
           <TableRow class="bg-muted/30 hover:bg-muted/30 border-b border-border/40">
             <TableHead class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {{ $t('features.content.revisions.table.version') }}
+              {{ $t('modules.cms.content.revisions.table.version') }}
             </TableHead>
             <TableHead class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {{ $t('features.content.revisions.table.author') }}
+              {{ $t('modules.cms.content.revisions.table.author') }}
             </TableHead>
             <TableHead class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {{ $t('features.content.revisions.table.date') }}
+              {{ $t('modules.cms.content.revisions.table.date') }}
             </TableHead>
             <TableHead class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {{ $t('features.content.revisions.table.changes') }}
+              {{ $t('modules.cms.content.revisions.table.changes') }}
             </TableHead>
             <TableHead class="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {{ $t('features.content.revisions.table.actions') }}
+              {{ $t('modules.cms.content.revisions.table.actions') }}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -86,7 +86,7 @@
                   variant="outline"
                   class="bg-success/10 text-success border-none px-2 py-0.5"
                 >
-                  {{ $t('features.content.revisions.badge.current') }}
+                  {{ $t('modules.cms.content.revisions.badge.current') }}
                 </Badge>
                 <span class="text-sm font-mono font-bold text-foreground">v{{ revision.version }}</span>
               </div>
@@ -104,7 +104,7 @@
             </TableCell>
             <TableCell class="px-6 py-4">
               <p class="text-sm text-muted-foreground line-clamp-1 italic">
-                {{ revision.changes_summary || $t('features.content.revisions.messages.noChanges') }}
+                {{ revision.changes_summary || $t('modules.cms.content.revisions.messages.noChanges') }}
               </p>
             </TableCell>
             <TableCell class="px-6 py-4 text-right">
@@ -116,7 +116,7 @@
                   @click="viewRevision(revision)"
                 >
                   <Eye class="w-4 h-4 mr-2" />
-                  {{ $t('features.content.revisions.actions.view') }}
+                  {{ $t('modules.cms.content.revisions.actions.view') }}
                 </Button>
                 <Button
                   v-if="!revision.is_current"
@@ -126,7 +126,7 @@
                   @click="restoreRevision(revision)"
                 >
                   <RotateCcw class="w-4 h-4 mr-2" />
-                  {{ $t('features.content.revisions.actions.restore') }}
+                  {{ $t('modules.cms.content.revisions.actions.restore') }}
                 </Button>
               </div>
             </TableCell>
@@ -147,7 +147,7 @@
             <div class="space-y-1">
               <CardTitle class="text-xl font-bold flex items-center gap-2">
                 <History class="w-5 h-5 text-primary" />
-                {{ $t('features.content.revisions.modal.title', { version: viewingRevision.version }) }}
+                {{ $t('modules.cms.content.revisions.modal.title', { version: viewingRevision.version }) }}
               </CardTitle>
               <p class="text-xs text-muted-foreground">
                 {{ formatDate(viewingRevision.created_at) }} at {{ formatTime(viewingRevision.created_at) }}
@@ -165,14 +165,14 @@
         <CardContent class="p-0 overflow-y-auto max-h-[calc(90vh-140px)]">
           <div class="p-8 space-y-8">
             <div class="space-y-2">
-              <Label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">{{ $t('features.content.revisions.modal.fields.title') }}</Label>
+              <Label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">{{ $t('modules.cms.content.revisions.modal.fields.title') }}</Label>
               <div class="text-2xl font-bold text-foreground">
                 {{ viewingRevision.data?.title || '-' }}
               </div>
             </div>
                         
             <div class="space-y-2">
-              <Label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">{{ $t('features.content.revisions.modal.fields.body') }}</Label>
+              <Label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">{{ $t('modules.cms.content.revisions.modal.fields.body') }}</Label>
               <SafeHtml
                 class="p-6 rounded-xl bg-muted/30 border border-border/40 text-sm prose dark:prose-invert max-w-none"
                 :html="viewingRevision.data?.content || '-'"
@@ -182,7 +182,7 @@
 
             <div class="grid grid-cols-2 gap-8">
               <div class="space-y-2">
-                <Label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">{{ $t('features.content.revisions.modal.fields.status') }}</Label>
+                <Label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">{{ $t('modules.cms.content.revisions.modal.fields.status') }}</Label>
                 <div>
                   <Badge
                     variant="outline"
@@ -193,7 +193,7 @@
                 </div>
               </div>
               <div class="space-y-2">
-                <Label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">{{ $t('features.content.revisions.modal.fields.type') }}</Label>
+                <Label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">{{ $t('modules.cms.content.revisions.modal.fields.type') }}</Label>
                 <div class="text-sm font-medium capitalize">
                   {{ viewingRevision.data?.type || '-' }}
                 </div>
@@ -206,7 +206,7 @@
             variant="ghost"
             @click="viewingRevision = null"
           >
-            {{ $t('features.content.revisions.modal.close') }}
+            {{ $t('modules.cms.content.revisions.modal.close') }}
           </Button>
           <Button
             v-if="!viewingRevision.is_current"
@@ -215,7 +215,7 @@
             @click="restoreRevision(viewingRevision)"
           >
             <RotateCcw class="w-4 h-4 mr-2" />
-            {{ $t('features.content.revisions.modal.restore') }}
+            {{ $t('modules.cms.content.revisions.modal.restore') }}
           </Button>
         </div>
       </Card>
@@ -224,12 +224,12 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import {
     Card,
     CardHeader,
@@ -244,7 +244,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import History from 'lucide-vue-next/dist/esm/icons/history.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
@@ -252,8 +252,8 @@ import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
 import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
-import { useConfirm } from '@/composables/useConfirm';
-import toast from '@/services/toast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import toast from '@/shared/services/legacy-toast';
 
 interface Revision {
     id: number;
@@ -300,9 +300,9 @@ const fetchRevisions = async () => {
             } else {
                 try {
                     const contentResponse = await api.get(`/admin/cms/contents/${contentId}`);
-                    contentTitle.value = contentResponse.data.data?.title || contentResponse.data.title || t('features.content.title_singular');
+                    contentTitle.value = contentResponse.data.data?.title || contentResponse.data.title || t('modules.cms.content.title_singular');
                 } catch {
-                    contentTitle.value = t('features.content.title_singular');
+                    contentTitle.value = t('modules.cms.content.title_singular');
                 }
             }
         }
@@ -325,9 +325,9 @@ const viewRevision = async (revision: Revision) => {
 
 const restoreRevision = async (revision: Revision) => {
     const confirmed = await confirm({
-        title: t('features.content.revisions.messages.restoreTitle'),
-        message: t('features.content.revisions.messages.restoreConfirm', { version: revision.version }),
-        confirmText: t('features.content.revisions.actions.restore'),
+        title: t('modules.cms.content.revisions.messages.restoreTitle'),
+        message: t('modules.cms.content.revisions.messages.restoreConfirm', { version: revision.version }),
+        confirmText: t('modules.cms.content.revisions.actions.restore'),
         variant: 'warning',
     });
 
@@ -341,7 +341,7 @@ const restoreRevision = async (revision: Revision) => {
         router.push({ name: 'contents.edit', params: { id: contentId } });
     } catch (error: unknown) {
         logger.error('Failed to restore revision:', error);
-        toast.error(t('common.messages.toast.error'), (error as { response?: { data?: { message?: string } } })?.response?.data?.message || t('features.content.messages.restoreFailed'));
+        toast.error(t('common.messages.toast.error'), (error as { response?: { data?: { message?: string } } })?.response?.data?.message || t('modules.cms.content.messages.restoreFailed'));
     }
 };
 

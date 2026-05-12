@@ -20,20 +20,20 @@ class StudioSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::where('email', 'admin@kdua.net')->first();
+        $admin = User::where('email', env('SUPER_ADMIN_EMAIL', 'super@jejakawan.com'))->first();
         if (! $admin) {
             return;
         }
 
+        // Always seed Global (null unit) data first for public landing page
+        $this->command->info('Seeding global studio data (public landing)...');
+        $this->seedUnitData($admin, null);
+
+        // Then seed per-unit data
         $units = \Modules\School\Models\Institution\SchoolUnit::all();
-        if ($units->isEmpty()) {
-            $this->command->warn('No school units found. Seeding with null unit ID.');
-            $this->seedUnitData($admin, null);
-        } else {
-            foreach ($units as $unit) {
-                $this->command->info("Seeding data for unit: {$unit->name}");
-                $this->seedUnitData($admin, $unit->id);
-            }
+        foreach ($units as $unit) {
+            $this->command->info("Seeding data for unit: {$unit->name}");
+            $this->seedUnitData($admin, $unit->id);
         }
 
         $this->command->info('Studio structure seeded successfully!');

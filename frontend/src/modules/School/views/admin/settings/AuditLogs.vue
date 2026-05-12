@@ -10,11 +10,11 @@
             />
           </div>
           <h1 class="text-3xl font-bold tracking-tight text-foreground">
-            {{ $t('features.school.audit.title') }}
+            {{ $t('modules.school.audit.title') }}
           </h1>
         </div>
         <p class="text-muted-foreground text-sm">
-          {{ $t('features.school.audit.subtitle') }}
+          {{ $t('modules.school.audit.subtitle') }}
         </p>
       </div>
     </div>
@@ -30,7 +30,7 @@
               />
               <Input
                 v-model="filters.search"
-                :placeholder="$t('features.school.audit.placeholders.search')"
+                :placeholder="$t('modules.school.audit.placeholders.search')"
                 class="pl-10 h-11 rounded-xl bg-background border-border/40 focus:ring-primary/20 transition-all"
               />
             </div>
@@ -78,7 +78,7 @@
     <Dialog v-model:open="dialogs.detail">
       <DialogContent class="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>{{ $t('features.school.audit.labels.details') }}</DialogTitle>
+          <DialogTitle>{{ $t('modules.school.audit.labels.details') }}</DialogTitle>
         </DialogHeader>
         <div
           v-if="selectedLog"
@@ -87,7 +87,7 @@
           <div class="grid grid-cols-2 gap-4 text-sm">
             <div>
               <p class="text-muted-foreground">
-                {{ $t('features.school.audit.labels.causer') }}
+                {{ $t('modules.school.audit.labels.causer') }}
               </p>
               <p class="font-medium">
                 {{ selectedLog.causer?.name || 'System' }}
@@ -95,7 +95,7 @@
             </div>
             <div>
               <p class="text-muted-foreground">
-                {{ $t('features.school.audit.labels.time') }}
+                {{ $t('modules.school.audit.labels.time') }}
               </p>
               <p class="font-medium">
                 {{ new Date(selectedLog.created_at).toLocaleString($t('common.language') === 'id' ? 'id-ID' : 'en-US') }}
@@ -103,7 +103,7 @@
             </div>
             <div class="col-span-2">
               <p class="text-muted-foreground">
-                {{ $t('features.school.audit.labels.description') }}
+                {{ $t('modules.school.audit.labels.description') }}
               </p>
               <p class="font-medium">
                 {{ selectedLog.description }}
@@ -116,7 +116,7 @@
             class="space-y-2"
           >
             <p class="text-sm text-muted-foreground">
-              {{ $t('features.school.audit.labels.properties') }}:
+              {{ $t('modules.school.audit.labels.properties') }}:
             </p>
             <pre class="bg-muted p-4 rounded-lg text-xs overflow-auto max-h-60">{{ JSON.stringify(selectedLog.properties, null, 2) }}</pre>
           </div>
@@ -132,9 +132,9 @@ import { useI18n } from 'vue-i18n';
 import {
   Card, CardContent, Button, LucideIcon, DataTable, Input,
   Dialog, DialogContent, DialogHeader, DialogTitle, Pagination
-} from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
 import { createColumnHelper, useVueTable, getCoreRowModel } from '@tanstack/vue-table';
 
 const { t } = useI18n();
@@ -152,16 +152,16 @@ const columnHelper = createColumnHelper<any>();
 
 const columns = [
   columnHelper.accessor('created_at', { 
-    header: t('features.school.audit.labels.time'), 
+    header: t('modules.school.audit.labels.time'), 
     cell: info => new Date(info.getValue()).toLocaleString(t('common.language') === 'id' ? 'id-ID' : 'en-US') 
   }),
   columnHelper.accessor('causer.name', { 
-    header: t('features.school.audit.labels.admin'), 
+    header: t('modules.school.audit.labels.admin'), 
     cell: info => info.getValue() || 'System' 
   }),
-  columnHelper.accessor('description', { header: t('features.school.audit.labels.activity') }),
+  columnHelper.accessor('description', { header: t('modules.school.audit.labels.activity') }),
   columnHelper.accessor('subject_type', { 
-    header: t('features.school.audit.labels.module'), 
+    header: t('modules.school.audit.labels.module'), 
     cell: info => info.getValue()?.split('\\').pop() || '-'
   }),
   columnHelper.display({

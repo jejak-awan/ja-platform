@@ -39,6 +39,9 @@
         "profileDesc": "Vision, mission, history, and leadership information."
     },
     "selectPrompt": "Select a unit on the left to manage its identity.",
+    "singleLevelInfo": {
+        "description": "Your institution is set as Single-Level. If you are a Foundation with multiple levels (e.g. SD, SMP, SMA), please activate Multi-Level mode in settings."
+    },
     "singleUnitInfo": {
         "addTitle": "Add Unit Unit",
         "description": "Your institution is set as <b>Single-Unit</b>. The primary unit unit has been created and is ready to be managed. If you are a Foundation with multiple units, please activate Multi-Unit mode in settings.",

@@ -9,6 +9,8 @@
     "deleteStrictPlaceholder": "Ketik nama lembaga tepat sesuai di atas",
     "deleteStrictTitle": "Hapus Lembaga & Seluruh Data",
     "deleteStrictWarning": "Tindakan ini PERMANEN dan akan menghapus SELURUH data di modul sekolah (Siswa, Guru, Akademik, Sarpras, LMS, dll) yang terkait dengan lembaga ini.",
+    "saveStrictWarning": "Apakah Anda yakin ingin menyimpan perubahan pada identitas lembaga ini? Perubahan akan langsung diterapkan ke seluruh sistem.",
+    "saveStrictConfirmPrompt": "Silakan ketik nama lembaga di bawah untuk mengonfirmasi penyimpanan perubahan:",
     "empty": "Belum ada lembaga terdaftar.",
     "emptyDescription": "Mulai pendaftaran lembaga pendidikan Anda (Sekolah, Yayasan, atau Group) untuk mengelola data akademik.",
     "manageLevels": "Manajemen Jenjang",
@@ -23,5 +25,34 @@
         "undefined": "Status Belum Ditentukan"
     },
     "subtitle": "Informasi dasar terkait legalitas utama lembaga.",
-    "title": "Manajemen Lembaga"
+    "title": "Manajemen Lembaga",
+    "settings": {
+        "institution": {
+            "title": "Pengaturan Institusi",
+            "description": "Kelola identitas sekolah, informasi kontak, dan aset branding Anda.",
+            "identity_section": "Identitas Sekolah",
+            "identity_description": "Nama resmi dan email administratif institusi Anda.",
+            "branding_section": "Logo & Branding",
+            "branding_description": "Unggah logo resmi sekolah untuk laporan dan sertifikat.",
+            "contact_section": "Kontak & Alamat",
+            "logo_hint": "Rekomendasi: SVG atau PNG transparan. Maks 2MB.",
+            "save_success": "Pengaturan institusi berhasil diperbarui.",
+            "fields": {
+                "name": {
+                    "label": "Nama Resmi Sekolah",
+                    "placeholder": "misal: SMA Negeri 1 Janari"
+                },
+                "email": {
+                    "label": "Email Administratif",
+                    "placeholder": "admin{'@'}school.sch.id"
+                },
+                "phone": {
+                    "label": "Nomor Telepon"
+                },
+                "address": {
+                    "label": "Alamat Resmi"
+                }
+            }
+        }
+    }
 }

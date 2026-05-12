@@ -1,7 +1,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { useTheme } from '@/composables/useTheme'
-import api from '@/services/api'
-import { logger } from '@/utils/logger'
+import { useTheme } from '@/shared/composables/useTheme'
+import api from '@/core/api/client'
+import { logger } from '@/shared/utils/logger'
 import { THEME_DATA_BINDINGS_KEY, isPlainSettingsObject } from '@/modules/Cms/constants/themeBindings'
 
 export interface SlotBinding {

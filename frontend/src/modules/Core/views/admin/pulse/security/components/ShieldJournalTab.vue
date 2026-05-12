@@ -81,20 +81,20 @@
 <script setup lang="ts">
 import { ref, h } from 'vue';
 import { useI18n } from 'vue-i18n';
-// import api from '@/services/api';
-// import { useToast } from '@/composables/useToast';
+// import api from '@/core/api/client';
+// import { useToast } from '@/shared/composables/useToast';
 import { useVueTable, getCoreRowModel, getSortedRowModel, createColumnHelper, type SortingState } from '@tanstack/vue-table';
 import {
     Card, CardContent,
     Button, DataTable, Pagination
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import ShieldIcon from 'lucide-vue-next/dist/esm/icons/shield.js';
 import ShieldAlertIcon from 'lucide-vue-next/dist/esm/icons/shield-alert.js';
 import ShieldBanIcon from 'lucide-vue-next/dist/esm/icons/shield-ban.js';
 import BotIcon from 'lucide-vue-next/dist/esm/icons/bot.js';
 
-import type { ShieldLog, ShieldStats, PaginationInfo } from '@/types';
+import type { ShieldLog, ShieldStats, PaginationInfo } from '@/core/types';
 
 
 const props = defineProps<{

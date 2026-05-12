@@ -14,11 +14,11 @@
         :key="setting.id"
         :model-value="(formData[setting.key] as any)"
         :field-key="setting.key"
-        :label="$t('features.settings.labels.' + setting.key)"
-        :description="$t('features.settings.descriptions.' + setting.key)"
+        :label="$t('modules.core.settings.labels.' + setting.key)"
+        :description="$t('modules.core.settings.descriptions.' + setting.key)"
         :type="setting.type"
-        :enabled-text="$t('features.settings.enabled')"
-        :disabled-text="$t('features.settings.disabled')"
+        :enabled-text="$t('modules.core.settings.enabled')"
+        :disabled-text="$t('modules.core.settings.disabled')"
         :error="errors?.[setting.key]"
         @update:model-value="(value) => updateField(setting.key, value)"
       />
@@ -84,8 +84,8 @@ const monitoringSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'logs',
-            title: t('features.settings.groups.logs.title'),
-            description: t('features.settings.groups.logs.description'),
+            title: t('modules.core.settings.groups.logs.title'),
+            description: t('modules.core.settings.groups.logs.description'),
             icon: ActivityIcon,
             color: 'indigo',
             keys: ['log_retention_days', 'activity_log_retention_days', 'security_log_retention_days', 'login_history_retention_days', 'security_alert_failed_login_threshold'],
@@ -94,8 +94,8 @@ const monitoringSettingsGrouped = computed(() => {
         },
         {
             id: 'backup-monitoring',
-            title: t('features.settings.groups.backupMonitoring.title'),
-            description: t('features.settings.groups.backupMonitoring.description'),
+            title: t('modules.core.settings.groups.backupMonitoring.title'),
+            description: t('modules.core.settings.groups.backupMonitoring.description'),
             icon: ShieldIcon,
             color: 'blue',
             keys: ['backup_retention_days'],

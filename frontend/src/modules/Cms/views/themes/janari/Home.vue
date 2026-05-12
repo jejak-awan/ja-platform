@@ -91,23 +91,23 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, nextTick, onBeforeUnmount, defineAsyncComponent } from 'vue'
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue'
-import api from '@/services/api'
+import api from '@/core/api/client'
 
 // Above-the-fold (LCP): static import
 import Hero from './components/Hero.vue'
 
-const PrincipalProfile = defineAsyncComponent(() => import('./components/PrincipalProfile.vue'))
+const PrincipalProfile = defineAsyncComponent(() => import('@/modules/School/components/public/PrincipalProfile.vue'))
 const Testimonials = defineAsyncComponent(() => import('./components/Testimonials.vue'))
 const UpdateInformation = defineAsyncComponent(() => import('./components/UpdateInformation.vue'))
-const MajorsSection = defineAsyncComponent(() => import('./components/MajorsSection.vue'))
-const StatsSection = defineAsyncComponent(() => import('./components/StatsSection.vue'))
+const MajorsSection = defineAsyncComponent(() => import('@/modules/School/components/public/MajorsSection.vue'))
+const StatsSection = defineAsyncComponent(() => import('@/modules/School/components/public/StatsSection.vue'))
 const PartnersSection = defineAsyncComponent(() => import('./components/PartnersSection.vue'))
 const CtaSection = defineAsyncComponent(() => import('./components/CtaSection.vue'))
 
 // Helpers
-import { useThemeMotion } from '@/composables/useThemeMotion'
+import { useThemeMotion } from '@/shared/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
-import { useTheme } from '@/composables/useTheme';
+import { useTheme } from '@/shared/composables/useTheme';
 
 const { getSetting } = useTheme();
 const { ScrollTrigger } = useThemeMotion()
@@ -207,7 +207,8 @@ onMounted(() => {
                 pageData.value = res.data;
             }
         })
-        .catch((err) => {
+        .catch((err: any) => {
+            if (err.name === 'CanceledError' || err.code === 'ERR_CANCELED' || err.message?.includes('aborted')) return;
             console.error('[Janari] Home Load Error:', err);
         })
         .finally(() => {

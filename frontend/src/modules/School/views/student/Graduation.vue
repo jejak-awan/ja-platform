@@ -89,10 +89,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { Card, CardContent, CardHeader, CardTitle, Button, LucideIcon } from '@/components/ui';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { Card, CardContent, CardHeader, CardTitle, Button, LucideIcon } from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const toast = useToast();
 const loading = ref(true);

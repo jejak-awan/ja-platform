@@ -3,10 +3,10 @@
     <div class="flex justify-between items-center mb-8">
       <div>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.logistics.sarpras.title') }}
+          {{ $t('modules.school.logistics.sarpras.title') }}
         </h1>
         <p class="text-sm text-muted-foreground">
-          {{ $t('features.school.logistics.sarpras.subtitle') }}
+          {{ $t('modules.school.logistics.sarpras.subtitle') }}
         </p>
       </div>
       <div class="flex gap-2">
@@ -40,7 +40,7 @@
             name="Map"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.sarpras.tabs.land') }}
+          {{ $t('modules.school.logistics.sarpras.tabs.land') }}
         </TabsTrigger>
         <TabsTrigger 
           value="building" 
@@ -50,7 +50,7 @@
             name="Building2"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.sarpras.tabs.building') }}
+          {{ $t('modules.school.logistics.sarpras.tabs.building') }}
         </TabsTrigger>
         <TabsTrigger 
           value="room" 
@@ -60,7 +60,7 @@
             name="DoorOpen"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.sarpras.tabs.room') }}
+          {{ $t('modules.school.logistics.sarpras.tabs.room') }}
         </TabsTrigger>
         <TabsTrigger 
           value="asset" 
@@ -70,7 +70,7 @@
             name="Package"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.sarpras.tabs.asset') }}
+          {{ $t('modules.school.logistics.sarpras.tabs.asset') }}
         </TabsTrigger>
         <TabsTrigger 
           value="tickets" 
@@ -80,7 +80,7 @@
             name="Tool"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.sarpras.tabs.maintenance') }}
+          {{ $t('modules.school.logistics.sarpras.tabs.maintenance') }}
         </TabsTrigger>
       </TabsList>
 
@@ -155,14 +155,14 @@ import { useI18n } from 'vue-i18n';
 import { LogisticsService } from '@/modules/School/services/LogisticsService';
 import {
   Tabs, TabsList, TabsTrigger, Card, CardContent, Button, LucideIcon, DataTable, Pagination, ConfirmModal
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { 
   useVueTable, 
   getCoreRowModel, 
   createColumnHelper,
 } from '@tanstack/vue-table';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 // Components
 import LandDialog from './components/LandDialog.vue';
@@ -217,38 +217,38 @@ const actionColumn = columnHelper.display({
 });
 
 const landColumns = [
-  columnHelper.accessor('name', { header: t('features.school.logistics.sarpras.labels.landName') }),
-  columnHelper.accessor('area', { header: `${t('features.school.logistics.sarpras.labels.area')} (m2)`, cell: info => `${info.getValue()} m²` }),
-  columnHelper.accessor('certificate_number', { header: t('features.school.logistics.sarpras.labels.certificateNumber'), cell: info => info.getValue() || '-' }),
+  columnHelper.accessor('name', { header: t('modules.school.logistics.sarpras.labels.landName') }),
+  columnHelper.accessor('area', { header: `${t('modules.school.logistics.sarpras.labels.area')} (m2)`, cell: info => `${info.getValue()} m²` }),
+  columnHelper.accessor('certificate_number', { header: t('modules.school.logistics.sarpras.labels.certificateNumber'), cell: info => info.getValue() || '-' }),
   actionColumn
 ];
 
 const buildingColumns = [
-  columnHelper.accessor('name', { header: t('features.school.logistics.sarpras.labels.buildingName') }),
-  columnHelper.accessor('land_asset.name', { header: t('features.school.logistics.sarpras.labels.location') }),
-  columnHelper.accessor('condition', { header: t('features.school.logistics.sarpras.labels.condition') }),
+  columnHelper.accessor('name', { header: t('modules.school.logistics.sarpras.labels.buildingName') }),
+  columnHelper.accessor('land_asset.name', { header: t('modules.school.logistics.sarpras.labels.location') }),
+  columnHelper.accessor('condition', { header: t('modules.school.logistics.sarpras.labels.condition') }),
   actionColumn
 ];
 
 const roomColumns = [
-  columnHelper.accessor('name', { header: t('features.school.logistics.sarpras.labels.roomName') }),
-  columnHelper.accessor('building.name', { header: t('features.school.logistics.sarpras.tabs.building') }),
-  columnHelper.accessor('type', { header: t('features.school.logistics.sarpras.labels.roomType') }),
+  columnHelper.accessor('name', { header: t('modules.school.logistics.sarpras.labels.roomName') }),
+  columnHelper.accessor('building.name', { header: t('modules.school.logistics.sarpras.tabs.building') }),
+  columnHelper.accessor('type', { header: t('modules.school.logistics.sarpras.labels.roomType') }),
   actionColumn
 ];
 
 const assetColumns = [
-  columnHelper.accessor('name', { header: t('features.school.logistics.sarpras.labels.assetName') }),
-  columnHelper.accessor('code', { header: t('features.school.logistics.sarpras.labels.assetCode') }),
-  columnHelper.accessor('room.name', { header: t('features.school.logistics.sarpras.labels.location') }),
-  columnHelper.accessor('condition', { header: t('features.school.logistics.sarpras.labels.condition') }),
+  columnHelper.accessor('name', { header: t('modules.school.logistics.sarpras.labels.assetName') }),
+  columnHelper.accessor('code', { header: t('modules.school.logistics.sarpras.labels.assetCode') }),
+  columnHelper.accessor('room.name', { header: t('modules.school.logistics.sarpras.labels.location') }),
+  columnHelper.accessor('condition', { header: t('modules.school.logistics.sarpras.labels.condition') }),
   actionColumn
 ];
 
 const ticketColumns = [
-    columnHelper.accessor('asset.name', { header: t('features.school.logistics.sarpras.tabs.asset') }),
-    columnHelper.accessor('reporter.full_name', { header: t('features.school.logistics.sarpras.labels.reporter') }),
-    columnHelper.accessor('priority', { header: t('features.school.logistics.sarpras.labels.priority') }),
+    columnHelper.accessor('asset.name', { header: t('modules.school.logistics.sarpras.tabs.asset') }),
+    columnHelper.accessor('reporter.full_name', { header: t('modules.school.logistics.sarpras.labels.reporter') }),
+    columnHelper.accessor('priority', { header: t('modules.school.logistics.sarpras.labels.priority') }),
     columnHelper.accessor('status', { header: t('common.labels.status') }),
     columnHelper.accessor('date_reported', { 
         header: t('common.labels.date'), 
@@ -327,7 +327,7 @@ const handleSave = async (formData: any) => {
         const type = activeTab.value;
         if (selectedItem.value) {
             await LogisticsService.updateSarprasData(type, selectedItem.value.id, formData);
-            toast.success.action(t('features.school.academic.messages.updateSuccess'));
+            toast.success.action(t('modules.school.academic.messages.updateSuccess'));
         } else {
             const data = { ...formData };
             if (type === 'tickets') {
@@ -335,7 +335,7 @@ const handleSave = async (formData: any) => {
                 data.school_unit_id = 1;
             }
             await LogisticsService.storeSarprasData(type, data);
-            toast.success.action(t('features.school.academic.messages.addSuccess'));
+            toast.success.action(t('modules.school.academic.messages.addSuccess'));
         }
         
         Object.keys(dialogs.value).forEach(k => (dialogs.value as any)[k] = false);
@@ -357,7 +357,7 @@ const handleDelete = async (item: any) => {
     if (confirmed) {
         try {
             await LogisticsService.deleteSarprasData(activeTab.value, item.id);
-            toast.success.action(t('features.school.academic.messages.deleteSuccess'));
+            toast.success.action(t('modules.school.academic.messages.deleteSuccess'));
             fetchData(pagination.value.current_page);
         } catch (e) {
             toast.error.fromResponse(e);

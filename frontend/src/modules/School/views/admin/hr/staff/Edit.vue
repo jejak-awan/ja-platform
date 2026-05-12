@@ -41,10 +41,10 @@
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { HRService } from '@/modules/School/services/HRService';
-import { LucideIcon } from '@/components/ui';
-import { useToast } from '@/composables/useToast';
+import { LucideIcon } from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
 import StaffForm from './components/StaffForm.vue';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const router = useRouter();
 const route = useRoute();

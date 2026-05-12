@@ -1,6 +1,6 @@
-import api from '@/services/api';
+import api from '@/core/api/client';
 import type { AxiosResponse } from 'axios';
-import type { School, SchoolUnit } from '@/types';
+import type { School, SchoolUnit } from '@/modules/School/types';
 
 export const InstitutionService = {
     async getInstitution(): Promise<AxiosResponse<School>> {
@@ -58,8 +58,8 @@ export const InstitutionService = {
         return api.delete(`admin/institution/levels/${id}`);
     },
 
-    async switchUnit(id: number): Promise<AxiosResponse<SchoolUnit>> {
-        return api.post(`admin/institution/levels/${id}/switch`);
+    async selectUnit(id: number): Promise<AxiosResponse<SchoolUnit>> {
+        return api.post(`admin/institution/levels/${id}/select`);
     },
 
     async deleteInstitution(id: number): Promise<AxiosResponse<void>> {

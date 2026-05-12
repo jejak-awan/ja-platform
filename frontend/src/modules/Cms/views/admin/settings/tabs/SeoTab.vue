@@ -14,11 +14,11 @@
         :key="setting.id"
         :model-value="(formData[setting.key] as any)"
         :field-key="setting.key"
-        :label="$t('features.settings.labels.' + setting.key)"
-        :description="$t('features.settings.descriptions.' + setting.key)"
+        :label="$t('modules.cms.settings.labels.' + setting.key)"
+        :description="$t('modules.cms.settings.descriptions.' + setting.key)"
         :type="setting.type"
-        :enabled-text="$t('features.settings.enabled')"
-        :disabled-text="$t('features.settings.disabled')"
+        :enabled-text="$t('modules.cms.settings.enabled')"
+        :disabled-text="$t('modules.cms.settings.disabled')"
         :error="errors?.[setting.key]"
         @update:model-value="(value) => updateField(setting.key, value)"
       />
@@ -83,8 +83,8 @@ const seoSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'meta',
-            title: t('features.settings.groups.meta.title'),
-            description: t('features.settings.groups.meta.description'),
+            title: t('modules.cms.settings.groups.meta.title'),
+            description: t('modules.cms.settings.groups.meta.description'),
             icon: TagIcon,
             color: 'orange',
             keys: ['meta_title', 'meta_description', 'meta_keywords'],
@@ -93,8 +93,8 @@ const seoSettingsGrouped = computed(() => {
         },
         {
             id: 'search_engines',
-            title: t('features.settings.groups.searchEngines.title'),
-            description: t('features.settings.groups.searchEngines.description'),
+            title: t('modules.cms.settings.groups.searchEngines.title'),
+            description: t('modules.cms.settings.groups.searchEngines.description'),
             icon: SearchIcon,
             color: 'emerald',
             keys: ['google_analytics_id', 'google_search_console', 'enable_sitemap', 'enable_robots_txt'],

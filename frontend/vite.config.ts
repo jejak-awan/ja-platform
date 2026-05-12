@@ -2,7 +2,10 @@ import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
+import { resolve, dirname } from 'node:path'
 import { visualizer } from 'rollup-plugin-visualizer'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -39,12 +42,11 @@ export default defineConfig({
     // Use esbuild CSS minifier to keep Tailwind v4 directives in scoped blocks
     // from being reported as unknown by lightningcss during production builds.
     cssMinify: 'esbuild',
-    rolldownOptions: {
-      checks: {
-        pluginTimings: false,
-      },
-    },
     rollupOptions: {
+      input: {
+        public: resolve(__dirname, 'index.html'),
+        admin: resolve(__dirname, 'admin.html'),
+      },
       output: {
         chunkFileNames: 'assets/[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',

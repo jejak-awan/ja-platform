@@ -11,11 +11,11 @@
             />
           </div>
           <h1 class="text-3xl font-bold tracking-tight text-foreground uppercase">
-            {{ t('features.school.osis.dashboard.title') }}
+            {{ t('modules.school.osis.dashboard.title') }}
           </h1>
         </div>
         <p class="text-muted-foreground text-sm font-medium">
-          {{ t('features.school.osis.dashboard.subtitle') }}
+          {{ t('modules.school.osis.dashboard.subtitle') }}
         </p>
       </div>
     </div>
@@ -31,7 +31,7 @@
           <div class="flex items-start justify-between">
             <div class="space-y-1">
               <p class="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                {{ t('features.school.osis.stats.' + stat.key) }}
+                {{ t('modules.school.osis.stats.' + stat.key) }}
               </p>
               <p class="text-3xl font-black text-foreground">
                 {{ stat.value }}
@@ -51,7 +51,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <Card class="lg:col-span-2 bg-card border-border/40 shadow-none rounded-xl">
         <CardHeader class="flex flex-row items-center justify-between">
-          <CardTitle>{{ t('features.school.osis.tabs.programs') }}</CardTitle>
+          <CardTitle>{{ t('modules.school.osis.tabs.programs') }}</CardTitle>
           <Button
             variant="outline"
             size="sm"
@@ -90,7 +90,7 @@
               v-if="upcomingPrograms.length === 0"
               class="py-10 text-center text-muted-foreground italic"
             >
-              {{ t('features.school.osis.programs.emptyTitle') }}
+              {{ t('modules.school.osis.programs.emptyTitle') }}
             </div>
           </div>
         </CardContent>
@@ -100,7 +100,7 @@
         <Card class="border-border/40 bg-card text-foreground rounded-xl shadow-none overflow-hidden relative group">
           <CardHeader>
             <CardTitle class="text-[11px] font-bold text-primary">
-              {{ t('features.school.osis.finances.title') }}
+              {{ t('modules.school.osis.finances.title') }}
             </CardTitle>
             <CardDescription class="text-muted-foreground italic mt-1 text-[10px]">
               Sisa saldo kas organisasi periode ini.
@@ -130,7 +130,7 @@
               name="MessageSquare"
               class="w-4 h-4 text-pink-500"
             />
-            {{ t('features.school.osis.tabs.suggestions') }}
+            {{ t('modules.school.osis.tabs.suggestions') }}
           </h4>
           <div class="space-y-3">
             <div
@@ -147,7 +147,7 @@
               v-if="recentSuggestions.length === 0"
               class="text-[10px] text-muted-foreground italic text-center py-4"
             >
-              {{ t('features.school.osis.suggestions.empty') }}
+              {{ t('modules.school.osis.suggestions.empty') }}
             </div>
           </div>
         </div>
@@ -162,9 +162,9 @@ import { useI18n } from 'vue-i18n';
 import {
   Card, CardContent, CardHeader, CardTitle, CardDescription,
   Button, LucideIcon, Badge
-} from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
 import dayjs from 'dayjs';
 
 const { t } = useI18n();

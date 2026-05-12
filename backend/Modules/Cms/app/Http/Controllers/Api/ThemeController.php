@@ -15,6 +15,9 @@ class ThemeController extends BaseApiController
     public function __construct(ThemeService $themeService)
     {
         $this->themeService = $themeService;
+
+        $this->middleware('auth:sanctum')->except(['getActive']);
+        $this->middleware('permission:manage themes')->except(['getActive']);
     }
 
     public function index(Request $request): \Illuminate\Http\JsonResponse
@@ -211,13 +214,8 @@ class ThemeController extends BaseApiController
 
             $theme->update(['settings' => $newSettings]);
 
-            // Sync brand_logo to global site_logo
-            if (isset($settingsInput['brand_logo'])) {
-                \Modules\Core\Models\Setting::set('site_logo', $settingsInput['brand_logo'], 'image', 'general');
-            }
-            if (isset($settingsInput['brand_favicon'])) {
-                \Modules\Core\Models\Setting::set('site_favicon', $settingsInput['brand_favicon'], 'image', 'general');
-            }
+            // Branding is now separate. CMS brand_logo does not overwrite Core site_logo.
+            // Favicon is now separate.
 
             $this->themeService->clearThemeCache($theme);
 
@@ -260,18 +258,14 @@ class ThemeController extends BaseApiController
             $newSettings = array_merge($existingSettings, $settingsInput);
             $newSettings = $this->themeService->normalizeThemeDataBindingsInSettings($newSettings);
 
-            \DB::transaction(function () use ($theme, $newSettings, $customCss, $settingsInput): void {
+            \DB::transaction(function () use ($theme, $newSettings, $customCss): void {
                 $theme->update([
                     'settings' => $newSettings,
                     'custom_css' => $customCss,
                 ]);
 
-                if (isset($settingsInput['brand_logo'])) {
-                    \Modules\Core\Models\Setting::set('site_logo', $settingsInput['brand_logo'], 'image', 'general');
-                }
-                if (isset($settingsInput['brand_favicon'])) {
-                    \Modules\Core\Models\Setting::set('site_favicon', $settingsInput['brand_favicon'], 'image', 'general');
-                }
+                    // Branding is now separate.
+                    // Favicon is now separate.
             });
 
             $this->themeService->clearThemeCache($theme);

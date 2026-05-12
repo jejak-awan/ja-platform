@@ -94,7 +94,9 @@ return [
         'failover' => [
             'driver' => 'failover',
             'stores' => [
+                'redis',
                 'database',
+                'file',
                 'array',
             ],
         ],

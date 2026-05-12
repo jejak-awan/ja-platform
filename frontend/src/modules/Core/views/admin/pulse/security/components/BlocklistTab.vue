@@ -50,7 +50,7 @@ import { useVueTable, getCoreRowModel, getSortedRowModel, createColumnHelper, ty
 import {
     Card, CardHeader, CardTitle, CardDescription, CardContent,
     Button, Badge, Checkbox, DataTable, Pagination
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import ShieldCheck from 'lucide-vue-next/dist/esm/icons/shield-check.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';

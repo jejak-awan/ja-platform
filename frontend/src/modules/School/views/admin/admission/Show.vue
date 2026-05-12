@@ -17,7 +17,7 @@
         </Button>
         <div>
           <h1 class="text-2xl font-bold text-foreground">
-            {{ $t('features.school.admission.labels.applicantDetail') }}
+            {{ $t('modules.school.admission.labels.applicantDetail') }}
           </h1>
           <p class="text-sm font-mono text-primary">
             {{ enrollment.registration_number }}
@@ -42,14 +42,14 @@
             name="UserCheck"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.admission.actions.admitAsStudent') }}
+          {{ $t('modules.school.admission.actions.admitAsStudent') }}
         </Button>
         <Button
           v-if="['applied', 'exam'].includes(enrollment.status)"
           variant="secondary"
           @click="handleUpdateStatus('verified')"
         >
-          {{ $t('features.school.admission.actions.verificationComplete') }}
+          {{ $t('modules.school.admission.actions.verificationComplete') }}
         </Button>
       </div>
     </div>
@@ -58,12 +58,12 @@
       <!-- Info Utama -->
       <Card class="lg:col-span-2">
         <CardHeader>
-          <CardTitle>{{ $t('features.school.admission.labels.personalData') }}</CardTitle>
+          <CardTitle>{{ $t('modules.school.admission.labels.personalData') }}</CardTitle>
         </CardHeader>
         <CardContent class="grid grid-cols-2 gap-y-4 gap-x-8">
           <div class="space-y-1">
             <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
-              {{ $t('features.school.admission.labels.full_name') }}
+              {{ $t('modules.school.admission.labels.full_name') }}
             </p>
             <p class="font-medium">
               {{ enrollment.full_name }}
@@ -71,7 +71,7 @@
           </div>
           <div class="space-y-1">
             <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
-              {{ $t('features.school.admission.labels.nisn') }}
+              {{ $t('modules.school.admission.labels.nisn') }}
             </p>
             <p class="font-medium">
               {{ enrollment.nisn || '-' }}
@@ -103,7 +103,7 @@
           </div>
           <div class="space-y-1">
             <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
-              {{ $t('features.school.admission.labels.previousSchool') }}
+              {{ $t('modules.school.admission.labels.previousSchool') }}
             </p>
             <p class="font-medium">
               {{ enrollment.previous_school }}
@@ -115,7 +115,7 @@
       <!-- Status & Timeline -->
       <Card>
         <CardHeader>
-          <CardTitle>{{ $t('features.school.admission.labels.registrationStatus') }}</CardTitle>
+          <CardTitle>{{ $t('modules.school.admission.labels.registrationStatus') }}</CardTitle>
         </CardHeader>
         <CardContent class="space-y-4">
           <div class="flex items-center gap-3 p-3 rounded-lg border bg-muted/20">
@@ -125,13 +125,13 @@
            
           <div class="space-y-3 pt-4">
             <p class="text-sm font-bold">
-              {{ $t('features.school.admission.labels.supportingDocuments') }}:
+              {{ $t('modules.school.admission.labels.supportingDocuments') }}:
             </p>
             <div
               v-if="enrollment.documents.length === 0"
               class="text-sm text-muted-foreground italic"
             >
-              {{ $t('features.school.admission.placeholders.noDocuments') }}
+              {{ $t('modules.school.admission.placeholders.noDocuments') }}
             </div>
             <div
               v-for="doc in enrollment.documents"
@@ -140,7 +140,7 @@
             >
               <span>{{ doc.name }}</span>
               <span :class="`text-xs px-2 py-0.5 rounded-full ${doc.status === 'verified' ? 'bg-success/10 text-success' : 'bg-muted text-muted-foreground'}`">
-                {{ doc.status === 'verified' ? $t('features.school.admission.labels.verified') : doc.status }}
+                {{ doc.status === 'verified' ? $t('modules.school.admission.labels.verified') : doc.status }}
               </span>
             </div>
           </div>
@@ -156,11 +156,11 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import {
   Card, CardHeader, CardTitle, CardContent, Button, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { AdmissionService } from '@/modules/School/services/AdmissionService';
-import { parseResponse } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+import { parseResponse } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -186,7 +186,7 @@ const fetchEnrollment = async () => {
 const handleUpdateStatus = async (status: string) => {
   try {
     await AdmissionService.updateEnrollmentStatus(enrollment.value.id, status);
-    toast.success.action(t('features.school.academic.messages.updateSuccess'));
+    toast.success.action(t('modules.school.academic.messages.updateSuccess'));
     fetchEnrollment();
   } catch (e) {
     toast.error.fromResponse(e);
@@ -195,13 +195,13 @@ const handleUpdateStatus = async (status: string) => {
 
 const handleAdmit = async () => {
   if (await confirm({ 
-    title: t('features.school.admission.actions.admitAsStudent'), 
-    description: t('features.school.admission.messages.admitConfirmation'), 
+    title: t('modules.school.admission.actions.admitAsStudent'), 
+    description: t('modules.school.admission.messages.admitConfirmation'), 
     variant: 'success' 
   })) {
     try {
       await AdmissionService.admitEnrollment(enrollment.value.id);
-      toast.success.action(t('features.school.academic.messages.addSuccess'));
+      toast.success.action(t('modules.school.academic.messages.addSuccess'));
       fetchEnrollment();
     } catch (e) {
       toast.error.fromResponse(e);
@@ -213,11 +213,11 @@ const formatDate = (date: any) => date ? new Date(date).toLocaleDateString(t('co
 
 const getStatusLabel = (status: string) => {
   const labels: Record<string, string> = {
-    applied: t('features.school.admission.labels.new'),
-    verified: t('features.school.admission.labels.verified'),
-    exam: t('features.school.admission.labels.selection'),
-    admitted: t('features.school.admission.labels.admitted'),
-    rejected: t('features.school.admission.labels.rejected'),
+    applied: t('modules.school.admission.labels.new'),
+    verified: t('modules.school.admission.labels.verified'),
+    exam: t('modules.school.admission.labels.selection'),
+    admitted: t('modules.school.admission.labels.admitted'),
+    rejected: t('modules.school.admission.labels.rejected'),
     draft: 'Draft'
   };
   return labels[status] || status;

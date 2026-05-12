@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
@@ -17,12 +17,12 @@ import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import Calendar from 'lucide-vue-next/dist/esm/icons/calendar.js';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
-import { useConfirm } from '@/composables/useConfirm';
-import { useToast } from '@/composables/useToast';
-import api from '@/services/api';
-import { parseResponse, parseSingleResponse, ensureArray, type PaginationData } from '@/utils/responseParser';
-import { cn } from '@/lib/utils';
-import type { Content } from '@/types/cms/cms';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { useToast } from '@/shared/composables/useToast';
+import api from '@/core/api/client';
+import { parseResponse, parseSingleResponse, ensureArray, type PaginationData } from '@/shared/utils/responseParser';
+import { cn } from '@/shared/utils/lib-utils';
+import type { Content } from '@/modules/Cms/types/cms';
 
 // UI Components
 import {
@@ -40,7 +40,7 @@ import {
     SelectTrigger,
     SelectValue,
     DataTable
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { h } from 'vue';
 import { 
     useVueTable, 
@@ -91,7 +91,7 @@ const props = defineProps<{
 
 if (!props.isEmbedded) {
     useHead({
-        title: computed(() => `${cmsStore.siteSettings?.site_name || t('app.name')} | ${t('features.content.list.title')}`)
+        title: computed(() => `${cmsStore.siteSettings?.site_name || t('app.name')} | ${t('modules.cms.content.list.title')}`)
     });
 }
 
@@ -126,7 +126,7 @@ const columns = [
             return h('div', { class: 'flex flex-col gap-0.5' }, [
                 h('div', { class: 'flex items-center gap-2' }, [
                     h('span', { class: 'text-sm font-semibold text-foreground group-hover:text-primary transition-colors' }, content.title),
-                    content.deleted_at ? h(Badge, { variant: 'destructive', class: 'h-4.5 text-[9px] px-1.5 font-bold tracking-wider' }, t('features.content.status.trashed')) : null
+                    content.deleted_at ? h(Badge, { variant: 'destructive', class: 'h-4.5 text-[9px] px-1.5 font-bold tracking-wider' }, t('modules.cms.content.status.trashed')) : null
                 ]),
                 h('span', { class: 'text-xs text-muted-foreground/70 font-mono' }, content.slug)
             ]);
@@ -149,11 +149,11 @@ const columns = [
             return h(Badge, {
                 variant: 'outline',
                 class: cn('capitalize border-none px-2 py-0.5', getStatusBadgeClass(status))
-            }, t(`features.content.status.${status}`));
+            }, t(`modules.cms.content.status.${status}`));
         }
     }),
     columnHelper.accessor('is_featured', {
-        header: t('features.content.form.featured'),
+        header: t('modules.cms.content.form.featured'),
         cell: ({ row }) => h(Switch, {
             checked: !!row.original.is_featured,
             'onUpdate:checked': () => toggleFeatured(row.original)
@@ -324,7 +324,7 @@ const handleBulkAction = async (action: string) => {
     if (!action) return;
     
     const confirmConfig: ConfirmOptions = {
-        title: t('features.content.list.bulkActions'),
+        title: t('modules.cms.content.list.bulkActions'),
         message: t('common.messages.confirm.bulkAction', { action: action, count: selectedContents.value.length }),
     };
     
@@ -333,10 +333,10 @@ const handleBulkAction = async (action: string) => {
         confirmConfig.confirmText = t('common.actions.delete');
     } else if (action === 'approve') {
         confirmConfig.variant = 'success';
-        confirmConfig.confirmText = t('features.content.actions.approve');
+        confirmConfig.confirmText = t('modules.cms.content.actions.approve');
     } else if (action === 'reject') {
         confirmConfig.variant = 'danger';
-        confirmConfig.confirmText = t('features.content.actions.reject');
+        confirmConfig.confirmText = t('modules.cms.content.actions.reject');
     } else if (action === 'restore') {
         confirmConfig.variant = 'info';
         confirmConfig.confirmText = t('common.actions.restore');
@@ -372,7 +372,7 @@ const handleBulkAction = async (action: string) => {
 
 const handleEmptyTrash = async () => {
     const confirmed = await confirm({
-        title: t('features.content.actions.emptyTrash'),
+        title: t('modules.cms.content.actions.emptyTrash'),
         message: t('common.messages.confirm.emptyTrash'),
         confirmText: t('common.actions.deletePermanently'),
         variant: 'danger'
@@ -517,7 +517,7 @@ onMounted(() => {
           <div class="flex items-center justify-between">
             <div class="space-y-0.5">
               <p class="text-[10px] font-bold text-muted-foreground">
-                {{ $t('features.content.status.published') }}
+                {{ $t('modules.cms.content.status.published') }}
               </p>
               <p class="text-xl font-black text-success">
                 {{ stats.published || 0 }}
@@ -540,7 +540,7 @@ onMounted(() => {
           <div class="flex items-center justify-between">
             <div class="space-y-0.5">
               <p class="text-[10px] font-bold text-muted-foreground">
-                {{ $t('features.content.status.draft') }}
+                {{ $t('modules.cms.content.status.draft') }}
               </p>
               <p class="text-xl font-black text-primary">
                 {{ stats.draft || 0 }}
@@ -563,7 +563,7 @@ onMounted(() => {
           <div class="flex items-center justify-between">
             <div class="space-y-0.5">
               <p class="text-[10px] font-bold text-muted-foreground">
-                {{ $t('features.content.status.pending') }}
+                {{ $t('modules.cms.content.status.pending') }}
               </p>
               <p class="text-xl font-black text-warning">
                 {{ stats.pending || 0 }}
@@ -586,7 +586,7 @@ onMounted(() => {
           <div class="flex items-center justify-between">
             <div class="space-y-0.5">
               <p class="text-[10px] font-bold text-muted-foreground">
-                {{ $t('features.content.status.archived') }}
+                {{ $t('modules.cms.content.status.archived') }}
               </p>
               <p class="text-xl font-black text-primary">
                 {{ stats.archived || 0 }}
@@ -609,7 +609,7 @@ onMounted(() => {
           <div class="flex items-center justify-between">
             <div class="space-y-0.5">
               <p class="text-[10px] font-bold text-muted-foreground">
-                {{ $t('features.content.status.trashed') }}
+                {{ $t('modules.cms.content.status.trashed') }}
               </p>
               <p class="text-xl font-black text-destructive">
                 {{ stats.trashed || 0 }}
@@ -641,26 +641,26 @@ onMounted(() => {
             </div>
             <Select v-model="statusFilter">
               <SelectTrigger class="w-[180px]">
-                <SelectValue :placeholder="t('features.content.list.filterByStatus')" />
+                <SelectValue :placeholder="t('modules.cms.content.list.filterByStatus')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">
                   {{ $t('common.labels.all') }} {{ $t('common.labels.status') }}
                 </SelectItem>
                 <SelectItem value="published">
-                  {{ $t('features.content.status.published') }}
+                  {{ $t('modules.cms.content.status.published') }}
                 </SelectItem>
                 <SelectItem value="draft">
-                  {{ $t('features.content.status.draft') }}
+                  {{ $t('modules.cms.content.status.draft') }}
                 </SelectItem>
                 <SelectItem value="pending">
-                  {{ $t('features.content.status.pending') }}
+                  {{ $t('modules.cms.content.status.pending') }}
                 </SelectItem>
                 <SelectItem value="archived">
-                  {{ $t('features.content.status.archived') }}
+                  {{ $t('modules.cms.content.status.archived') }}
                 </SelectItem>
                 <SelectItem value="trashed">
-                  {{ $t('features.content.status.trashed') }}
+                  {{ $t('modules.cms.content.status.trashed') }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -676,7 +676,7 @@ onMounted(() => {
               @click="handleEmptyTrash" 
             >
               <Trash2 class="w-4 h-4 mr-2" />
-              {{ t('features.content.actions.emptyTrash') || 'Empty Trash' }}
+              {{ t('modules.cms.content.actions.emptyTrash') || 'Empty Trash' }}
             </Button>
 
             <!-- Bulk Actions -->
@@ -686,7 +686,7 @@ onMounted(() => {
             >
               <div class="flex items-center gap-3 p-1.5 px-3 rounded-lg bg-primary/5 border border-primary/10">
                 <span class="text-sm font-medium text-primary whitespace-nowrap">
-                  {{ t('features.content.list.selected', { count: selectedContents.length }) }}
+                  {{ t('modules.cms.content.list.selected', { count: selectedContents.length }) }}
                 </span>
                 <div class="h-4 w-px bg-primary/20" />
                 <Select
@@ -694,7 +694,7 @@ onMounted(() => {
                   @update:model-value="(val: string) => handleBulkAction(val)"
                 >
                   <SelectTrigger class="w-[140px] h-8 border-primary/20">
-                    <SelectValue :placeholder="t('features.content.list.bulkActions')" />
+                    <SelectValue :placeholder="t('modules.cms.content.list.bulkActions')" />
                   </SelectTrigger>
                   <SelectContent>
                     <template v-if="statusFilter !== 'trashed'">
@@ -703,14 +703,14 @@ onMounted(() => {
                         value="approve"
                         class="text-success focus:text-success"
                       >
-                        {{ $t('features.content.actions.approve') }}
+                        {{ $t('modules.cms.content.actions.approve') }}
                       </SelectItem>
                       <SelectItem
                         v-if="authStore.hasPermission('approve content')"
                         value="reject"
                         class="text-destructive focus:text-destructive"
                       >
-                        {{ $t('features.content.actions.reject') }}
+                        {{ $t('modules.cms.content.actions.reject') }}
                       </SelectItem>
                       <SelectItem
                         v-if="authStore.hasPermission('delete content')"
@@ -748,7 +748,7 @@ onMounted(() => {
               @click="router.push({ name: 'contents.create' })"
             >
               <Plus class="w-4 h-4 mr-1" />
-              {{ $t('features.content.list.createNew') }}
+              {{ $t('modules.cms.content.list.createNew') }}
             </Button>
           </div>
         </div>

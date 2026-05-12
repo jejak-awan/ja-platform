@@ -198,12 +198,12 @@
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import api from '@/services/api';
-import { parseSingleResponse } from '@/utils/responseParser';
+import api from '@/core/api/client';
+import { parseSingleResponse } from '@/shared/utils/responseParser';
 import {
   Card, CardContent, CardHeader, CardTitle, CardDescription,
   Button, LucideIcon, Badge
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const { t } = useI18n();
 const authStore = useAuthStore();

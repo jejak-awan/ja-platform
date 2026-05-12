@@ -11,15 +11,15 @@
               />
             </div>
             <h1 class="text-3xl font-bold tracking-tight text-foreground">
-              {{ $t('features.school.students.title') }}
+              {{ $t('modules.school.students.title') }}
             </h1>
           </div>
           <div class="flex items-center gap-2">
             <Badge variant="secondary" class="bg-primary/10 text-primary border-primary/20 shrink-0 font-bold">
-              {{ pagination?.total || 0 }} {{ $t('features.school.students.title') }}
+              {{ pagination?.total || 0 }} {{ $t('modules.school.students.title') }}
             </Badge>
             <p class="text-sm text-muted-foreground italic font-medium">
-              {{ $t('features.school.students.subtitle') }}
+              {{ $t('modules.school.students.subtitle') }}
             </p>
           </div>
         </div>
@@ -33,7 +33,7 @@
             @click="handleExport"
           >
             <LucideIcon name="Download" class="w-5 h-5 mr-2" />
-            {{ $t('features.school.students.actions.export') }}
+            {{ $t('modules.school.students.actions.export') }}
           </Button>
 
           <Button
@@ -43,7 +43,7 @@
             @click="handleImport"
           >
             <LucideIcon name="Upload" class="w-5 h-5 mr-2" />
-            {{ $t('features.school.students.actions.import') }}
+            {{ $t('modules.school.students.actions.import') }}
           </Button>
 
           <Button 
@@ -52,7 +52,7 @@
             @click="handleAdd"
           >
             <LucideIcon name="UserPlus" class="w-5 h-5 mr-2" />
-            {{ $t('features.school.students.actions.add') }}
+            {{ $t('modules.school.students.actions.add') }}
           </Button>
         </div>
       </div>
@@ -72,7 +72,7 @@
                 <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('common.labels.search') }}</Label>
                 <Input 
                   v-model="filters.search" 
-                  :placeholder="$t('common.labels.search_name_nisn')" 
+                  :placeholder="$t('modules.school.labels.search_name_nisn')" 
                   class="bg-background/50 border-border/50 rounded-xl h-11"
                   @input="handleFilter"
                 >
@@ -83,10 +83,10 @@
               </div>
 
               <div class="space-y-2">
-                <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('common.labels.level') }}</Label>
+                <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.labels.level') }}</Label>
                 <Select v-model="filters.level_id" @update:model-value="handleFilter">
                   <SelectTrigger class="bg-background/50 border-border/50 rounded-xl h-11">
-                    <SelectValue :placeholder="$t('features.school.academic.placeholders.selectLevel')" />
+                    <SelectValue :placeholder="$t('modules.school.academic.placeholders.selectLevel')" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem v-for="l in levels" :key="l.id" :value="l.id.toString()">{{ l.name }}</SelectItem>
@@ -95,10 +95,10 @@
               </div>
 
               <div class="space-y-2">
-                <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('common.labels.class_group') }}</Label>
+                <Label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{{ $t('modules.school.labels.class_group') }}</Label>
                 <Select v-model="filters.study_group_id" @update:model-value="handleFilter">
                   <SelectTrigger class="bg-background/50 border-border/50 rounded-xl h-11">
-                    <SelectValue :placeholder="$t('features.school.academic.placeholders.selectGroup')" />
+                    <SelectValue :placeholder="$t('modules.school.academic.placeholders.selectGroup')" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem v-for="g in groups" :key="g.id" :value="g.id.toString()">{{ g.name }}</SelectItem>
@@ -128,7 +128,7 @@
               <div class="flex items-center gap-3">
                 <div class="h-8 w-1 bg-primary rounded-full"></div>
                 <p class="text-xs font-black text-muted-foreground uppercase tracking-widest">
-                  {{ $t('features.school.hr.staff.labels.total', { total: pagination?.total || 0 }) }}
+                  {{ $t('modules.school.hr.staff.labels.total', { total: pagination?.total || 0 }) }}
                 </p>
               </div>
               
@@ -167,16 +167,16 @@ import { InstitutionService } from '@/modules/School/services/InstitutionService
 import { useAcademicStore } from '@/modules/School/stores/academic';
 import {
   Card, CardContent, CardHeader, CardTitle, Button, LucideIcon, DataTable, Pagination, Badge, Label, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Input, ConfirmModal
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
 import { 
   useVueTable, 
   getCoreRowModel, 
   createColumnHelper,
 } from '@tanstack/vue-table';
-import { exportToCSV } from '@/utils/exportUtils';
+import { exportToCSV } from '@/shared/utils/exportUtils';
 import StudentDialog from './components/StudentForm.vue';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 import _ from 'lodash';
 
 const { t } = useI18n();
@@ -204,7 +204,7 @@ const columnHelper = createColumnHelper<any>();
 
 const columns = [
   columnHelper.accessor('full_name', { 
-    header: t('features.school.students.labels.fullName'),
+    header: t('modules.school.students.labels.fullName'),
     cell: ({ row }) => h('div', { class: 'flex items-center gap-3' }, [
       h('div', { class: 'w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20' }, 
         row.original.full_name.charAt(0)
@@ -216,11 +216,11 @@ const columns = [
     ])
   }),
   columnHelper.accessor('study_group.name', { 
-    header: t('features.school.students.labels.class'),
+    header: t('modules.school.students.labels.class'),
     cell: info => h(Badge, { variant: 'outline', class: 'bg-accent/30 font-bold border-border/50 text-[10px] uppercase tracking-widest' }, () => info.getValue() || '-')
   }),
   columnHelper.accessor('gender', { 
-    header: t('features.school.students.labels.gender'),
+    header: t('modules.school.students.labels.gender'),
     cell: info => {
       const val = info.getValue()?.toLowerCase();
       const label = val === 'p' ? t('common.genders.female') : t('common.genders.male');
@@ -309,7 +309,7 @@ const handleSave = async (formData: any) => {
         } else {
             await StudentService.createStudent(formData);
         }
-        toast.success.action(t('features.school.students.messages.saveSuccess'));
+        toast.success.action(t('modules.school.students.messages.saveSuccess'));
         dialogs.value.student = false;
         fetchData(pagination.value.current_page);
     } catch (e) {
@@ -322,14 +322,14 @@ const handleSave = async (formData: any) => {
 const handleDelete = async (item: any) => {
     const confirmed = await confirmModal.value.confirm({
         title: t('common.actions.delete'),
-        message: t('features.school.students.messages.deleteConfirm', { name: item.full_name }),
+        message: t('modules.school.students.messages.deleteConfirm', { name: item.full_name }),
         variant: 'destructive'
     });
 
     if (confirmed) {
         try {
             await StudentService.deleteStudent(item.id);
-            toast.success.action(t('features.school.students.messages.deleteSuccess'));
+            toast.success.action(t('modules.school.students.messages.deleteSuccess'));
             fetchData(pagination.value.current_page);
         } catch (e) {
             toast.error.fromResponse(e);

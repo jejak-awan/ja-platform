@@ -321,7 +321,7 @@ import { ref } from 'vue';
 import {
   Card, CardContent, CardFooter, Button, LucideIcon, Label, Input, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Textarea,
   Tabs, TabsList, TabsTrigger, TabsContent, Switch
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const props = defineProps<{
   initialData?: any;

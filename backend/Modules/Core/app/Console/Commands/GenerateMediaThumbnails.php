@@ -4,7 +4,7 @@ namespace Modules\Core\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
-use Modules\Cms\Http\Controllers\Api\MediaController;
+use Modules\Core\Http\Controllers\Api\MediaController;
 use Modules\Core\Models\Media;
 
 class GenerateMediaThumbnails extends Command
@@ -30,7 +30,7 @@ class GenerateMediaThumbnails extends Command
     {
         $this->info('Generating thumbnails for media images...');
 
-        $mediaController = new MediaController;
+        $mediaService = new \Modules\Core\Services\MediaService;
         $force = (bool) $this->option('force');
 
         // Get all image media
@@ -47,8 +47,8 @@ class GenerateMediaThumbnails extends Command
             try {
                 // Check if thumbnail already exists
                 if (! $force) {
-                    $fileName = pathinfo($media->path, PATHINFO_FILENAME);
-                    $extension = pathinfo($media->path, PATHINFO_EXTENSION);
+                    $fileName = pathinfo((string) $media->path, PATHINFO_FILENAME);
+                    $extension = pathinfo((string) $media->path, PATHINFO_EXTENSION);
                     $thumbnailPath = 'media/thumbnails/'.$fileName.'_thumb.'.$extension;
 
                     if (Storage::disk($media->disk)->exists($thumbnailPath)) {
@@ -59,12 +59,7 @@ class GenerateMediaThumbnails extends Command
                     }
                 }
 
-                // Use reflection to call protected method
-                $reflection = new \ReflectionClass($mediaController);
-                $method = $reflection->getMethod('generateThumbnailForMedia');
-                $method->setAccessible(true);
-
-                $result = $method->invoke($mediaController, $media);
+                $result = $mediaService->generateThumbnail($media);
 
                 if ($result) {
                     $successCount++;

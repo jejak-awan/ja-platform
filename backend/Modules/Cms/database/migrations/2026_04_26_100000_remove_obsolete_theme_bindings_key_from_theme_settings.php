@@ -1,7 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
-use Modules\Cms\Models\Theme;
 
 return new class extends Migration
 {
@@ -11,9 +11,9 @@ return new class extends Migration
 
     public function up(): void
     {
-        Theme::query()->chunkById(50, function ($themes): void {
+        DB::table('themes')->orderBy('id')->chunk(50, function ($themes): void {
             foreach ($themes as $theme) {
-                $settings = $theme->settings;
+                $settings = json_decode($theme->settings, true);
                 if (! is_array($settings) || ! array_key_exists(self::OBSOLETE_KEY, $settings)) {
                     continue;
                 }
@@ -25,8 +25,10 @@ return new class extends Migration
                 }
 
                 unset($settings[self::OBSOLETE_KEY]);
-                $theme->settings = $settings;
-                $theme->saveQuietly();
+                
+                DB::table('themes')->where('id', $theme->id)->update([
+                    'settings' => json_encode($settings)
+                ]);
             }
         });
     }

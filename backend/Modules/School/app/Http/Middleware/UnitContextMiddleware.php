@@ -38,6 +38,7 @@ class UnitContextMiddleware
             Context::add('school_unit_id', $levelId);
         } elseif (! $isGlobalAdmin) {
             // Default to first assigned level if no header provided for restricted users
+            /** @var \Modules\School\Models\Institution\SchoolUnit|null $firstLevel */
             $firstLevel = $user->levels()->first();
             if ($firstLevel) {
                 Context::add('school_unit_id', $firstLevel->id);

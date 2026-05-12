@@ -1,4 +1,3 @@
-# JA-Platform PHP-FPM Pool Template
 [www]
 user = {{USER}}
 group = {{GROUP}}

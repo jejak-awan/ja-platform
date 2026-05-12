@@ -2,7 +2,7 @@
   <div>
     <div class="mb-6">
       <h1 class="text-2xl font-bold text-foreground">
-        {{ $t('features.seo.title') }}
+        {{ $t('modules.cms.seo.title') }}
       </h1>
     </div>
 
@@ -19,28 +19,28 @@
               class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
             >
               <Globe class="w-4 h-4 mr-2" />
-              {{ $t('features.seo.tabs.sitemap') }}
+              {{ $t('modules.cms.seo.tabs.sitemap') }}
             </TabsTrigger>
             <TabsTrigger
               value="robots"
               class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
             >
               <FileText class="w-4 h-4 mr-2" />
-              {{ $t('features.seo.tabs.robots') }}
+              {{ $t('modules.cms.seo.tabs.robots') }}
             </TabsTrigger>
             <TabsTrigger
               value="analysis"
               class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
             >
               <Search class="w-4 h-4 mr-2" />
-              {{ $t('features.seo.tabs.analysis') }}
+              {{ $t('modules.cms.seo.tabs.analysis') }}
             </TabsTrigger>
             <TabsTrigger
               value="schema"
               class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none transition-colors"
             >
               <FileJson class="w-4 h-4 mr-2" />
-              {{ $t('features.seo.tabs.schema') }}
+              {{ $t('modules.cms.seo.tabs.schema') }}
             </TabsTrigger>
           </TabsList>
         </div>
@@ -54,14 +54,14 @@
             <CardContent class="p-6 space-y-6">
               <div>
                 <h3 class="text-lg font-semibold text-foreground mb-4">
-                  {{ $t('features.seo.sitemap.title') }}
+                  {{ $t('modules.cms.seo.sitemap.title') }}
                 </h3>
                 <Card class="bg-muted/50 border-none">
                   <CardContent class="p-4">
                     <div class="flex items-center justify-between gap-4">
                       <div class="flex-1 min-w-0">
                         <p class="text-[10px] uppercase tracking-wider text-muted-foreground mb-1 font-bold">
-                          {{ $t('features.seo.sitemap.urlLabel') }}
+                          {{ $t('modules.cms.seo.sitemap.urlLabel') }}
                         </p>
                         <code class="text-sm font-mono text-indigo-500 truncate block">
                           {{ windowLocationOrigin }}{{ sitemapUrl }}
@@ -73,7 +73,7 @@
                         @click="copySitemapUrl"
                       >
                         <Copy class="w-4 h-4 mr-2" />
-                        {{ $t('features.seo.sitemap.copyUrl') }}
+                        {{ $t('modules.cms.seo.sitemap.copyUrl') }}
                       </Button>
                     </div>
                   </CardContent>
@@ -92,7 +92,7 @@
                   v-else
                   class="w-4 h-4 mr-2"
                 />
-                {{ generatingSitemap ? $t('features.seo.sitemap.generating') : $t('features.seo.sitemap.generate') }}
+                {{ generatingSitemap ? $t('modules.cms.seo.sitemap.generating') : $t('modules.cms.seo.sitemap.generate') }}
               </Button>
             </CardContent>
           </Card>
@@ -107,17 +107,17 @@
             <CardContent class="p-6">
               <div>
                 <h3 class="text-lg font-semibold text-foreground mb-4">
-                  {{ $t('features.seo.robots.title') }}
+                  {{ $t('modules.cms.seo.robots.title') }}
                 </h3>
                 <div class="space-y-2 mb-4">
                   <Label class="text-sm font-medium">
-                    {{ $t('features.seo.robots.contentLabel') }}
+                    {{ $t('modules.cms.seo.robots.contentLabel') }}
                   </Label>
                   <Textarea
                     v-model="robotsContent"
                     :rows="15"
                     class="font-mono text-sm resize-none"
-                    :placeholder="$t('features.seo.robots.placeholder')"
+                    :placeholder="$t('modules.cms.seo.robots.placeholder')"
                   />
                 </div>
                 <div class="flex gap-3">
@@ -133,7 +133,7 @@
                       v-else
                       class="mr-2 h-4 w-4"
                     />
-                    {{ savingRobots ? $t('features.seo.robots.saving') : $t('features.seo.robots.save') }}
+                    {{ savingRobots ? $t('modules.cms.seo.robots.saving') : $t('modules.cms.seo.robots.save') }}
                   </Button>
                   <Button
                     variant="outline"
@@ -141,7 +141,7 @@
                     @click="fetchRobotsTxt"
                   >
                     <RotateCcw class="w-4 h-4 mr-2" />
-                    {{ $t('features.seo.robots.reload') }}
+                    {{ $t('modules.cms.seo.robots.reload') }}
                   </Button>
                 </div>
               </div>
@@ -158,16 +158,16 @@
             <CardContent class="p-6 space-y-6">
               <div>
                 <h3 class="text-lg font-semibold text-foreground mb-4">
-                  {{ $t('features.seo.analysis.title') }}
+                  {{ $t('modules.cms.seo.analysis.title') }}
                 </h3>
                 <div class="space-y-2 mb-4">
-                  <Label>{{ $t('features.seo.analysis.selectContent') }}</Label>
+                  <Label>{{ $t('modules.cms.seo.analysis.selectContent') }}</Label>
                   <Select
                     :model-value="String(selectedContentId || '')"
                     @update:model-value="(val) => selectedContentId = val"
                   >
                     <SelectTrigger>
-                      <SelectValue :placeholder="$t('features.seo.analysis.placeholder')" />
+                      <SelectValue :placeholder="$t('modules.cms.seo.analysis.placeholder')" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem 
@@ -192,7 +192,7 @@
                     v-else
                     class="w-4 h-4 mr-2"
                   />
-                  {{ analyzing ? $t('features.seo.analysis.analyzing') : $t('features.seo.analysis.run') }}
+                  {{ analyzing ? $t('modules.cms.seo.analysis.analyzing') : $t('modules.cms.seo.analysis.run') }}
                 </Button>
               </div>
 
@@ -202,7 +202,7 @@
                 class="space-y-4"
               >
                 <h4 class="text-md font-semibold text-foreground">
-                  {{ $t('features.seo.analysis.results') }}
+                  {{ $t('modules.cms.seo.analysis.results') }}
                 </h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Card
@@ -222,7 +222,7 @@
                             'bg-destructive/10 text-destructive border-destructive/20'
                           ]"
                         >
-                          {{ $t('features.seo.analysis.score', { score: result.score }) }}
+                          {{ $t('modules.cms.seo.analysis.score', { score: result.score }) }}
                         </Badge>
                       </div>
                       <p class="text-sm text-muted-foreground mb-3">
@@ -258,16 +258,16 @@
             <CardContent class="p-6 space-y-6">
               <div>
                 <h3 class="text-lg font-semibold text-foreground mb-4">
-                  {{ $t('features.seo.schema.title') }}
+                  {{ $t('modules.cms.seo.schema.title') }}
                 </h3>
                 <div class="space-y-2 mb-4">
-                  <Label>{{ $t('features.seo.schema.selectContent') }}</Label>
+                  <Label>{{ $t('modules.cms.seo.schema.selectContent') }}</Label>
                   <Select
                     :model-value="String(selectedContentForSchema || '')"
                     @update:model-value="(val) => selectedContentForSchema = val"
                   >
                     <SelectTrigger>
-                      <SelectValue :placeholder="$t('features.seo.analysis.placeholder')" />
+                      <SelectValue :placeholder="$t('modules.cms.seo.analysis.placeholder')" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem 
@@ -292,7 +292,7 @@
                     v-else
                     class="w-4 h-4 mr-2"
                   />
-                  {{ generatingSchema ? $t('features.seo.schema.generating') : $t('features.seo.schema.generate') }}
+                  {{ generatingSchema ? $t('modules.cms.seo.schema.generating') : $t('modules.cms.seo.schema.generate') }}
                 </Button>
               </div>
 
@@ -303,7 +303,7 @@
               >
                 <CardHeader class="flex flex-row items-center justify-between py-3 px-6 bg-muted/50 border-b">
                   <CardTitle class="text-sm font-medium">
-                    {{ $t('features.seo.schema.jsonTitle') }}
+                    {{ $t('modules.cms.seo.schema.jsonTitle') }}
                   </CardTitle>
                   <Button
                     size="sm"
@@ -311,7 +311,7 @@
                     @click="copySchema"
                   >
                     <Copy class="w-3.5 h-3.5 mr-2" />
-                    {{ $t('features.seo.schema.copy') }}
+                    {{ $t('modules.cms.seo.schema.copy') }}
                   </Button>
                 </CardHeader>
                 <CardContent class="p-0">
@@ -327,12 +327,12 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
 import { 
     Card, 
     CardHeader, 
@@ -351,7 +351,7 @@ import {
     TabsList,
     TabsTrigger,
     TabsContent
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import Globe from 'lucide-vue-next/dist/esm/icons/globe.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
@@ -363,7 +363,7 @@ import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
 import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
 import Code2 from 'lucide-vue-next/dist/esm/icons/code-xml.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import { parseResponse, ensureArray, parseSingleResponse } from '@/utils/responseParser';
+import { parseResponse, ensureArray, parseSingleResponse } from '@/shared/utils/responseParser';
 
 interface AnalysisResult {
     score: number;
@@ -427,7 +427,7 @@ const generateSitemap = async () => {
     generatingSitemap.value = true;
     try {
         await api.get('/admin/cms/seo/sitemap');
-        toast.success.action(t('features.seo.sitemap.generated'));
+        toast.success.action(t('modules.cms.seo.sitemap.generated'));
     } catch (error: unknown) {
         logger.error('Failed to generate sitemap:', error);
         toast.error.fromResponse(error);
@@ -438,7 +438,7 @@ const generateSitemap = async () => {
 
 const copySitemapUrl = () => {
     navigator.clipboard.writeText(window.location.origin + sitemapUrl.value);
-    toast.success.default(t('features.seo.sitemap.copySuccess'));
+    toast.success.default(t('modules.cms.seo.sitemap.copySuccess'));
 };
 
 const fetchContents = async () => {
@@ -486,7 +486,7 @@ const generateSchema = async () => {
 const copySchema = () => {
     if (schemaJson.value) {
         navigator.clipboard.writeText(schemaJson.value);
-        toast.success.default(t('features.seo.schema.copySuccess'));
+        toast.success.default(t('modules.cms.seo.schema.copySuccess'));
     }
 };
 

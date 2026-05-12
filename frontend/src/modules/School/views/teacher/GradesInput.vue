@@ -259,10 +259,10 @@ import {
   Card, CardContent, Button, LucideIcon,
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
   Input, Label
-} from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
 
 const toast = useToast();
 

@@ -290,7 +290,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { Button, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui'
+import { Button, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui'
 import ArrowRight from 'lucide-vue-next/dist/esm/icons/arrow-right.js'
 import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js'
 import Database from 'lucide-vue-next/dist/esm/icons/database.js'

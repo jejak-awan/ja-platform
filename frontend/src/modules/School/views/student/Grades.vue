@@ -97,9 +97,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { SkeletonLoader, LucideIcon, Badge } from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
+import { SkeletonLoader, LucideIcon, Badge } from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const loading = ref(true);
 const grades = ref<any[]>([]);

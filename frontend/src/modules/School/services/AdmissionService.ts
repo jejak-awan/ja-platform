@@ -1,6 +1,6 @@
-import api from '@/services/api';
+import api from '@/core/api/client';
 import type { AxiosResponse } from 'axios';
-import type { Enrollment, AdmissionSettings } from '@/types';
+import type { Enrollment, AdmissionSettings } from '@/modules/School/types';
 
 export const AdmissionService = {
     async getSettings(): Promise<AxiosResponse<AdmissionSettings>> {

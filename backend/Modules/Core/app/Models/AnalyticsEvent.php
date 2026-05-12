@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
-use Modules\Cms\Models\Content;
+
 
 /**
  * @property int $id
@@ -23,7 +23,8 @@ use Modules\Cms\Models\Content;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Modules\Core\Models\User|null $user
- * @property-read \Modules\Cms\Models\Content|null $content
+ * @property-read \Illuminate\Database\Eloquent\Model|null $content
+ * @method \Illuminate\Database\Eloquent\Relations\BelongsTo<\Illuminate\Database\Eloquent\Model, $this> content()
  */
 class AnalyticsEvent extends Model
 {
@@ -66,13 +67,7 @@ class AnalyticsEvent extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * @return BelongsTo<Content, $this>
-     */
-    public function content(): BelongsTo
-    {
-        return $this->belongsTo(Content::class);
-    }
+
 
     /**
      * @param  array<string, mixed>  $data

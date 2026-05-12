@@ -11,11 +11,11 @@
     </template>
 
     <template #message>
-      {{ t('features.errors.429.title') }}
+      {{ t('common.errors.429.title') }}
     </template>
 
     <template #description>
-      {{ t('features.errors.429.message') }}
+      {{ t('common.errors.429.message') }}
     </template>
 
     <template #actions>
@@ -24,7 +24,7 @@
         @click="goBack"
       >
         <ArrowLeft class="w-4 h-4 mr-2 text-muted-foreground" />
-        {{ t('features.errors.404.back') }}
+        {{ t('common.errors.404.back') }}
       </button>
             
       <router-link
@@ -32,7 +32,7 @@
         class="flex-1 inline-flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-2xl text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-yellow-500 shadow-sm transition-[background-color,transform] active:scale-95"
       >
         <Home class="w-4 h-4 mr-2" />
-        {{ t('features.errors.404.home') }}
+        {{ t('common.errors.404.home') }}
       </router-link>
     </template>
 
@@ -52,7 +52,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { SECURITY_ROUTES } from '@/config/security';
-import ErrorLayout from '@/layouts/core/ErrorLayout.vue';
+import ErrorLayout from '@/modules/Core/layouts/ErrorLayout.vue';
 import AlertTriangle from 'lucide-vue-next/dist/esm/icons/triangle-alert.js';
 import Home from 'lucide-vue-next/dist/esm/icons/house.js';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';

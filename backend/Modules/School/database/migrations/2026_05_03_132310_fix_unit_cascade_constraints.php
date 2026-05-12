@@ -12,6 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Only run for Postgres
+        if (DB::getDriverName() !== 'pgsql') {
+            return;
+        }
+
         $tables = [
             // School Module
             'sch_ins_levels',

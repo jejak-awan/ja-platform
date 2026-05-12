@@ -375,12 +375,6 @@ class TagController extends BaseApiController
             }
 
             $tags = (clone $query)->withCount(['contents' => function ($q) use ($user) {
-                // Also scope content count if author?
-                // Currently tags are shared but have author_id?
-                // Phase 10 says: "Add author_id to ... tags".
-                // If tags are personal, then we only show personal tags.
-
-                // Add explicit User type hint for $user in closure usage if analyzed again inside, but usually fine.
                 if ($user && ! $user->can('manage content')) {
                     $q->where('author_id', $user->id);
                 }

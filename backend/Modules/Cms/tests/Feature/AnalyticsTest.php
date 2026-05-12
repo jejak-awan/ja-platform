@@ -415,4 +415,66 @@ class AnalyticsTest extends TestCase
         $response->assertStatus(403);
         $this->assertSame(1, AnalyticsVisit::count());
     }
+
+    public function test_public_can_track_visit(): void
+    {
+        $response = $this->postJson('/api/v1/analytics/track-visit', [
+            'url' => 'https://example.com/test-page',
+            'referer' => 'https://google.com',
+            'session_id' => 'test-session-123',
+        ]);
+
+        TestHelpers::assertApiSuccess($response);
+        $this->assertDatabaseHas('analytics_visits', [
+            'url' => 'https://example.com/test-page',
+            'session_id' => 'test-session-123',
+        ]);
+    }
+
+    public function test_public_can_track_event(): void
+    {
+        $response = $this->postJson('/api/v1/analytics/track', [
+            'event_type' => 'click',
+            'event_name' => 'Join Newsletter',
+            'url' => 'https://example.com/home',
+            'session_id' => 'test-session-123',
+            'metadata' => ['button_color' => 'blue'],
+        ]);
+
+        TestHelpers::assertApiSuccess($response, 201);
+        $this->assertDatabaseHas('analytics_events', [
+            'event_type' => 'click',
+            'event_name' => 'Join Newsletter',
+        ]);
+    }
+
+    public function test_admin_can_cleanup_old_analytics(): void
+    {
+        // Create old data
+        AnalyticsVisit::factory()->create(['visited_at' => now()->subDays(100)]);
+        AnalyticsVisit::factory()->create(['visited_at' => now()->subDays(5)]);
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->postJson('/api/v1/admin/cms/analytics/cleanup', [
+                'days' => 30,
+            ]);
+
+        TestHelpers::assertApiSuccess($response);
+        $this->assertSame(1, AnalyticsVisit::count());
+    }
+
+    public function test_admin_can_get_visits_grouped_by_week_and_month(): void
+    {
+        AnalyticsVisit::factory()->count(2)->create(['visited_at' => now()->subWeeks(1)]);
+        AnalyticsVisit::factory()->count(2)->create(['visited_at' => now()]);
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->getJson('/api/v1/admin/cms/analytics/visits?group_by=week');
+        TestHelpers::assertApiSuccess($response);
+        $this->assertGreaterThanOrEqual(2, count($response->json('data')));
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->getJson('/api/v1/admin/cms/analytics/visits?group_by=month');
+        TestHelpers::assertApiSuccess($response);
+    }
 }

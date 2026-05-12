@@ -94,11 +94,11 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
 import { 
     Card, 
     CardHeader, 
@@ -107,7 +107,7 @@ import {
     Badge, 
     Avatar, 
     AvatarFallback 
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import History from 'lucide-vue-next/dist/esm/icons/history.js';
 import Clock from 'lucide-vue-next/dist/esm/icons/clock.js';
 import ArrowRight from 'lucide-vue-next/dist/esm/icons/arrow-right.js';

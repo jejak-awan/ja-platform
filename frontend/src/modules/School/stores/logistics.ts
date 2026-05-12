@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { logger } from '@/utils/logger';
-import { parseResponse, type PaginationData } from '@/utils/responseParser';
+import { logger } from '@/shared/utils/logger';
+import { parseResponse, type PaginationData } from '@/shared/utils/responseParser';
 import LogisticsService from '../services/LogisticsService';
-import type { Asset, InventoryItem, HostelRoom, TransportRoute } from '@/types';
+import type { Asset, InventoryItem, HostelRoom, TransportRoute } from '@/modules/School/types';
 
 interface LogisticsState {
     assets: Asset[];

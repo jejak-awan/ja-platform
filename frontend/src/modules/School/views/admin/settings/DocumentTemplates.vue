@@ -1,14 +1,14 @@
 <template>
   <div class="p-6 space-y-8 animate-in fade-in duration-700">
-    <Breadcrumbs />
+    <BreadcrumbTrail />
 
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
       <div class="space-y-1">
         <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
-          {{ $t('features.school.ops.templates.title') }}
+          {{ $t('modules.school.ops.templates.title') }}
         </h1>
         <p class="text-sm text-muted-foreground italic font-medium">
-          {{ $t('features.school.ops.templates.subtitle') }}
+          {{ $t('modules.school.ops.templates.subtitle') }}
         </p>
       </div>
       <Button
@@ -21,7 +21,7 @@
           name="Plus"
           class="w-4 h-4 mr-2"
         />
-        {{ $t('features.school.ops.templates.btnAdd') }}
+        {{ $t('modules.school.ops.templates.btnAdd') }}
       </Button>
     </div>
 
@@ -31,8 +31,8 @@
 
     <div v-else-if="templates.length === 0" class="text-center py-12 bg-muted/20 rounded-2xl border border-dashed border-border">
         <LucideIcon name="FileText" class="w-12 h-12 mx-auto mb-4 text-muted-foreground/40" />
-        <h3 class="font-bold text-lg">{{ $t('features.school.ops.templates.emptyTitle') }}</h3>
-        <p class="text-muted-foreground text-sm max-w-md mx-auto">{{ $t('features.school.ops.templates.emptySubtitle') }}</p>
+        <h3 class="font-bold text-lg">{{ $t('modules.school.ops.templates.emptyTitle') }}</h3>
+        <p class="text-muted-foreground text-sm max-w-md mx-auto">{{ $t('modules.school.ops.templates.emptySubtitle') }}</p>
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -58,23 +58,23 @@
 
                 <div>
                     <h3 class="font-bold text-lg leading-tight">{{ template.name }}</h3>
-                    <p class="text-xs text-muted-foreground">{{ $t('features.school.ops.templates.lastUpdated') }}: {{ formatDate(template.updated_at) }}</p>
+                    <p class="text-xs text-muted-foreground">{{ $t('modules.school.ops.templates.lastUpdated') }}: {{ formatDate(template.updated_at) }}</p>
                 </div>
 
                 <div class="flex items-center gap-4 text-xs">
                     <div class="flex items-center gap-1.5" :class="template.is_active ? 'text-success' : 'text-muted-foreground'">
                         <div :class="['w-1.5 h-1.5 rounded-full', template.is_active ? 'bg-success' : 'bg-muted-foreground']"></div>
-                        {{ template.is_active ? $t('features.school.ops.templates.labels.active') : $t('features.school.ops.templates.labels.inactive') }}
+                        {{ template.is_active ? $t('modules.school.ops.templates.labels.active') : $t('modules.school.ops.templates.labels.inactive') }}
                     </div>
                     <div v-if="template.is_default" class="flex items-center gap-1.5 text-primary">
                         <LucideIcon name="Star" class="w-3 h-3 fill-primary" />
-                        {{ $t('features.school.ops.templates.labels.default') }}
+                        {{ $t('modules.school.ops.templates.labels.default') }}
                     </div>
                 </div>
             </CardContent>
             <div class="p-3 bg-muted/30 border-t border-border/40 flex justify-end">
                 <Button variant="outline" size="sm" class="h-8 rounded-lg text-xs" @click="previewTemplate(template)">
-                    {{ $t('features.school.ops.templates.previewHtml') }}
+                    {{ $t('modules.school.ops.templates.previewHtml') }}
                 </Button>
             </div>
         </Card>
@@ -94,23 +94,23 @@
           <!-- Always Visible Fields -->
           <div class="grid grid-cols-2 gap-4 py-4 border-b border-border/50">
             <div class="space-y-2">
-              <label class="text-xs font-bold uppercase">{{ $t('features.school.ops.templates.modal.labelName') }}</label>
+              <label class="text-xs font-bold uppercase">{{ $t('modules.school.ops.templates.modal.labelName') }}</label>
               <Input
                 v-model="editingTemplate.name"
-                :placeholder="$t('features.school.ops.templates.modal.placeholderName')"
+                :placeholder="$t('modules.school.ops.templates.modal.placeholderName')"
                 class="rounded-xl"
               />
             </div>
             <div class="space-y-2">
-              <label class="text-xs font-bold uppercase">{{ $t('features.school.ops.templates.modal.labelType') }}</label>
+              <label class="text-xs font-bold uppercase">{{ $t('modules.school.ops.templates.modal.labelType') }}</label>
               <Select v-model="editingTemplate.type">
                 <SelectTrigger class="rounded-xl">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="skl">{{ $t('features.school.ops.templates.modal.types.skl') }}</SelectItem>
-                  <SelectItem value="certificate">{{ $t('features.school.ops.templates.modal.types.certificate') }}</SelectItem>
-                  <SelectItem value="letter">{{ $t('features.school.ops.templates.modal.types.letter') }}</SelectItem>
+                  <SelectItem value="skl">{{ $t('modules.school.ops.templates.modal.types.skl') }}</SelectItem>
+                  <SelectItem value="certificate">{{ $t('modules.school.ops.templates.modal.types.certificate') }}</SelectItem>
+                  <SelectItem value="letter">{{ $t('modules.school.ops.templates.modal.types.letter') }}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -119,13 +119,13 @@
           <Tabs default-value="editor" class="flex-1 flex flex-col overflow-hidden mt-4">
             <TabsList class="grid w-full grid-cols-2 lg:w-[300px]">
               <TabsTrigger value="editor">Editor</TabsTrigger>
-              <TabsTrigger value="preview">{{ $t('features.school.ops.templates.previewHtml') }}</TabsTrigger>
+              <TabsTrigger value="preview">{{ $t('modules.school.ops.templates.previewHtml') }}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="editor" class="flex-1 overflow-y-auto space-y-4 py-4 pr-2">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="space-y-2">
-                  <label class="text-xs font-bold uppercase">{{ $t('features.school.ops.templates.modal.labelHtml') }}</label>
+                  <label class="text-xs font-bold uppercase">{{ $t('modules.school.ops.templates.modal.labelHtml') }}</label>
                   <Textarea
                     v-model="editingTemplate.content"
                     placeholder="<div class='certificate'>...</div>"
@@ -133,7 +133,7 @@
                   />
                 </div>
                 <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase">{{ $t('features.school.ops.templates.modal.labelCss') }}</label>
+                    <label class="text-xs font-bold uppercase">{{ $t('modules.school.ops.templates.modal.labelCss') }}</label>
                     <Textarea
                       v-model="editingTemplate.styles"
                       placeholder=".certificate { padding: 20px; }"
@@ -146,19 +146,19 @@
                   <div class="flex items-center space-x-2">
                     <Checkbox id="is_active" v-model:checked="editingTemplate.is_active" />
                     <label for="is_active" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      {{ $t('features.school.ops.templates.modal.labelActive') }}
+                      {{ $t('modules.school.ops.templates.modal.labelActive') }}
                     </label>
                   </div>
                   <div class="flex items-center space-x-2">
                     <Checkbox id="is_default" v-model:checked="editingTemplate.is_default" />
                     <label for="is_default" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      {{ $t('features.school.ops.templates.modal.labelDefault') }}
+                      {{ $t('modules.school.ops.templates.modal.labelDefault') }}
                     </label>
                   </div>
               </div>
               
               <div class="p-3 bg-primary/5 rounded-xl border border-primary/10">
-                  <p class="text-[10px] font-bold uppercase tracking-wider text-primary mb-2">{{ $t('features.school.ops.templates.modal.placeholdersTitle') }}</p>
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-primary mb-2">{{ $t('modules.school.ops.templates.modal.placeholdersTitle') }}</p>
                   <div class="flex flex-wrap gap-2">
                       <span v-for="p in availablePlaceholders" :key="p" class="px-2 py-0.5 bg-white border border-border rounded text-[10px] font-mono">
                           {{ p }}
@@ -208,10 +208,10 @@ import {
     Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
     Input, Textarea, Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
     Checkbox, ConfirmModal, Tabs, TabsList, TabsTrigger, TabsContent
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { OperationsService } from '@/modules/School/services/OperationsService';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 import dayjs from 'dayjs';
 
 const toast = useToast();

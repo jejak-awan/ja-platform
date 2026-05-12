@@ -196,9 +196,9 @@ import { ref, onMounted, computed } from 'vue';
 import {
   Card, CardHeader, CardTitle, CardContent, CardDescription,
   Button, LucideIcon, SkeletonLoader
-} from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const loading = ref(true);
 const dashboardData = ref<any>(null);

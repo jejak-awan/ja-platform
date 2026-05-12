@@ -73,7 +73,7 @@ import { useVueTable, getCoreRowModel, getSortedRowModel, createColumnHelper, ty
 import {
     Card, CardHeader, CardTitle, CardDescription, CardContent,
     Button, Badge, Input, Label, Checkbox, DataTable, Pagination
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';

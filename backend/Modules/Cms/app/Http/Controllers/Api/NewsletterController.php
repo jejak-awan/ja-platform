@@ -10,6 +10,11 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class NewsletterController extends BaseApiController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['subscribe']);
+        $this->middleware('permission:manage newsletter')->except(['subscribe']);
+    }
     public function subscribe(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -63,7 +68,7 @@ class NewsletterController extends BaseApiController
             ]);
 
             // Send welcome email
-            \Illuminate\Support\Facades\Mail::to($email)->send(new \Modules\Core\Mail\NewsletterWelcome($subscriber));
+            \Illuminate\Support\Facades\Mail::to($email)->send(new \Modules\Cms\Mail\NewsletterWelcome($subscriber));
 
             return $this->success([
                 'subscriber' => $subscriber,

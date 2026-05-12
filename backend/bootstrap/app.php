@@ -36,7 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Modules\Core\Http\Middleware\WafMiddleware::class,
             \Modules\Core\Http\Middleware\HoneypotMiddleware::class,
         ], append: [
-            \Modules\Core\Http\Middleware\HandleRedirects::class,
+            \Modules\Cms\Http\Middleware\HandleRedirects::class,
             \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Modules\Core\Http\Middleware\SecurityHeaders::class,
             \Modules\Cms\Http\Middleware\TrackAnalytics::class,

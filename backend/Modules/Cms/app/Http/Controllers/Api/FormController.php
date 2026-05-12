@@ -15,6 +15,12 @@ use Modules\Core\Rules\SafeUrl;
 
 class FormController extends BaseApiController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['publicShow', 'submit', 'track']);
+        $this->middleware('permission:view forms')->only(['index', 'show', 'stats']);
+        $this->middleware('permission:manage forms')->except(['publicShow', 'submit', 'track', 'index', 'show', 'stats']);
+    }
     /**
      * Public embed: active form definition without sensitive builder metadata.
      */

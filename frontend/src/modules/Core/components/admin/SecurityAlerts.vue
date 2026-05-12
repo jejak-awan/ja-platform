@@ -58,8 +58,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { getResponseObject } from '@/utils/responseParser';
+import api from '@/core/api/client';
+import { getResponseObject } from '@/shared/utils/responseParser';
 import AlertTriangle from 'lucide-vue-next/dist/esm/icons/triangle-alert.js';
 
 interface Alert {

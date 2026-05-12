@@ -5,7 +5,7 @@
       <input
         :value="modelValue.title"
         type="text"
-        :placeholder="$t('features.content.form.titlePlaceholder')"
+        :placeholder="$t('modules.cms.content.form.titlePlaceholder')"
         class="w-full bg-transparent text-4xl font-bold tracking-tight border-none outline-none placeholder:text-muted-foreground/40"
         autofocus
         @input="updateTitle(($event.target as HTMLInputElement).value)"
@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import TiptapEditor from '@/components/shared/editor/TiptapEditor.vue';
-import type { ContentForm } from '@/types/cms/cms';
+import TiptapEditor from '@/shared/components/editor/TiptapEditor.vue';
+import type { ContentForm } from '@/modules/Cms/types/cms';
 
 const props = defineProps<{
     modelValue: ContentForm;

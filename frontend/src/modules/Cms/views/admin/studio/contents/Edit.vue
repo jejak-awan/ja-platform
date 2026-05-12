@@ -5,7 +5,7 @@
       <div class="flex items-center gap-4">
         <div class="space-y-1">
           <h1 class="text-2xl font-bold tracking-tight text-foreground">
-            {{ $t('features.content.form.editTitle') }}
+            {{ $t('modules.cms.content.form.editTitle') }}
           </h1>
                     
           <!-- Lock Status -->
@@ -26,14 +26,14 @@
                 v-else
                 class="w-3 h-3"
               />
-              {{ lockStatus.is_locked ? $t('features.content.form.locked') : $t('features.content.form.unlocked') }}
+              {{ lockStatus.is_locked ? $t('modules.cms.content.form.locked') : $t('modules.cms.content.form.unlocked') }}
             </Badge>
             <span
               v-if="lockStatus.is_locked && lockStatus.locked_by"
               class="text-xs text-muted-foreground flex items-center gap-1.5"
             >
               <div class="w-1 h-1 rounded-full bg-muted-foreground/30" />
-              {{ $t('features.content.form.lockedBy', { name: lockStatus.locked_by.name }) }}
+              {{ $t('modules.cms.content.form.lockedBy', { name: lockStatus.locked_by.name }) }}
             </span>
             <Button
               v-if="lockStatus.is_locked && lockStatus.can_unlock"
@@ -42,7 +42,7 @@
               class="h-auto p-0 text-xs text-primary hover:text-primary/80"
               @click="handleUnlock"
             >
-              {{ $t('features.content.form.unlock') }}
+              {{ $t('modules.cms.content.form.unlock') }}
             </Button>
             <AutoSaveIndicator
               :status="autoSaveStatus"
@@ -59,9 +59,9 @@
       class="mb-6 bg-warning/10 border-warning/20 text-warning"
     >
       <Clock3 class="w-4 h-4" />
-      <AlertTitle>{{ $t('features.content.status.pending') }}</AlertTitle>
+      <AlertTitle>{{ $t('modules.cms.content.status.pending') }}</AlertTitle>
       <AlertDescription>
-        {{ $t('features.content.messages.pendingNotice') }}
+        {{ $t('modules.cms.content.messages.pendingNotice') }}
       </AlertDescription>
     </Alert>
 
@@ -71,7 +71,7 @@
     >
       <Loader2 class="w-10 h-10 animate-spin opacity-20" />
       <p class="text-sm font-medium animate-pulse">
-        {{ $t('features.content.form.loading') }}
+        {{ $t('modules.cms.content.form.loading') }}
       </p>
     </div>
 
@@ -126,7 +126,7 @@
                 class="w-full"
                 @click="handlePreview"
               >
-                {{ $t('features.content.form.preview') }}
+                {{ $t('modules.cms.content.form.preview') }}
               </Button>
             </template>
           </ContentSidebar>
@@ -152,7 +152,7 @@
         <DialogHeader>
           <DialogTitle>{{ $t('common.messages.confirm.title') }}</DialogTitle>
           <DialogDescription>
-            {{ $t('features.content.messages.unsavedChanges') }}
+            {{ $t('modules.cms.content.messages.unsavedChanges') }}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -160,7 +160,7 @@
             variant="outline"
             @click="showConfirmDialog = false"
           >
-            {{ $t('features.content.form.cancel') }}
+            {{ $t('modules.cms.content.form.cancel') }}
           </Button>
           <Button @click="confirmCancel">
             {{ $t('common.actions.confirm') }}
@@ -172,14 +172,14 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 import type { Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useHead } from '@unhead/vue';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
@@ -201,20 +201,20 @@ import {
     Alert,
     AlertTitle,
     AlertDescription
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import ActionToolbar from '@/modules/Cms/components/content/ActionToolbar.vue';
-import AutoSaveIndicator from '@/modules/Core/components/layout/AutoSaveIndicator.vue';
+import AutoSaveIndicator from '@/shared/components/AutoSaveIndicator.vue';
 import ContentPreviewModal from '@/modules/Core/components/admin/ContentPreviewModal.vue';
 import ContentMain from '@/modules/Cms/components/content/ContentMain.vue';
 import ContentSidebar from '@/modules/Cms/components/content/ContentSidebar.vue';
 
 // Composables & Utils
-import { parseSingleResponse, parseResponse, ensureArray, getResponseList } from '@/utils/responseParser';
-import { useAutoSave } from '@/composables/useAutoSave';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { contentSchema } from '@/schemas';
-import type { Content, Category, Tag, ContentForm, Menu } from '@/types/cms/cms';
+import { parseSingleResponse, parseResponse, ensureArray, getResponseList } from '@/shared/utils/responseParser';
+import { useAutoSave } from '@/shared/composables/useAutoSave';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { contentSchema } from '@/shared/schemas';
+import type { Content, Category, Tag, ContentForm, Menu } from '@/modules/Cms/types/cms';
 
 interface LockStatus {
     is_locked: boolean;
@@ -273,7 +273,7 @@ const form = ref<ContentForm>({
 });
 
 useHead({
-    title: computed(() => `${form.value.title || t('features.content.form.editTitle')} | ${cmsStore.siteSettings?.site_name || 'JA CMS'}`)
+    title: computed(() => `${form.value.title || t('modules.cms.content.form.editTitle')} | ${cmsStore.siteSettings?.site_name || 'JA CMS'}`)
 });
 
 const isDirty = computed(() => {
@@ -585,7 +585,7 @@ const handleSubmit = async (status: string | null = null) => {
     
     // Optimistic UI update for lock status check
     if (lockStatus.value?.is_locked && lockStatus.value.locked_by?.id !== authStore.user?.id) {
-        toast.error.action(t('features.content.form.locked'));
+        toast.error.action(t('modules.cms.content.form.locked'));
         loading.value = false;
         return;
     }
@@ -635,7 +635,7 @@ const handleSubmit = async (status: string | null = null) => {
             tags: selectedPersistedTagIds(),
         });
         
-        toast.success.update(t('features.content.title_singular'));
+        toast.success.update(t('modules.cms.content.title_singular'));
         
         // Only redirect if not saving from within an embedded view
         if (status === null) {

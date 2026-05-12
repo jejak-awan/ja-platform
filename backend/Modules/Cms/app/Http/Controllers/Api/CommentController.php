@@ -14,6 +14,9 @@ class CommentController extends BaseApiController
     public function __construct(\Modules\Cms\Services\CommentSecurityService $securityService)
     {
         $this->securityService = $securityService;
+
+        $this->middleware('auth:sanctum')->except(['index', 'store']);
+        $this->middleware('permission:view comments')->only(['adminIndex', 'statistics']);
     }
 
     /**

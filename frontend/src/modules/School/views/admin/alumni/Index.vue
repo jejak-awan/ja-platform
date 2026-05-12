@@ -5,10 +5,10 @@ import {
     Card, CardContent,
     Tabs, TabsList, TabsTrigger, TabsContent,
     Button, Badge, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { useToast } from '@/composables/useToast';
+import { useToast } from '@/shared/composables/useToast';
 
 const { t } = useI18n();
 const toast = useToast();
@@ -69,10 +69,10 @@ const stats = computed(() => {
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h1 class="text-3xl font-black tracking-tight text-foreground/90">
-          {{ t('features.school.extensions.labels.alumniDatabase') }}
+          {{ t('modules.school.extensions.labels.alumniDatabase') }}
         </h1>
         <p class="text-muted-foreground">
-          {{ t('features.school.extensions.subtitle') }}
+          {{ t('modules.school.extensions.subtitle') }}
         </p>
       </div>
       <div class="flex gap-2">
@@ -85,14 +85,14 @@ const stats = computed(() => {
             :class="{ 'animate-spin': loading }"
             class="w-4 h-4 mr-2"
           />
-          {{ t('features.school.osis.actions.reload') }}
+          {{ t('modules.school.osis.actions.reload') }}
         </Button>
         <Button class="rounded-xl shadow-lg shadow-primary/20 bg-indigo-600 hover:bg-indigo-700">
           <LucideIcon
             name="user-plus"
             class="w-4 h-4 mr-2"
           />
-          {{ t('features.school.extensions.labels.addAlumni') }}
+          {{ t('modules.school.extensions.labels.addAlumni') }}
         </Button>
       </div>
     </div>
@@ -117,7 +117,7 @@ const stats = computed(() => {
           </div>
           <div>
             <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
-              {{ t('features.school.extensions.labels.' + stat.key) }}
+              {{ t('modules.school.extensions.labels.' + stat.key) }}
             </p>
             <p class="text-2xl font-black text-foreground">
               {{ stat.value }}
@@ -136,19 +136,19 @@ const stats = computed(() => {
           value="list"
           class="rounded-xl px-8"
         >
-          {{ t('features.school.extensions.labels.alumniList') }}
+          {{ t('modules.school.extensions.labels.alumniList') }}
         </TabsTrigger>
         <TabsTrigger
           value="tracer"
           class="rounded-xl px-8"
         >
-          {{ t('features.school.extensions.labels.tracerStudy') }}
+          {{ t('modules.school.extensions.labels.tracerStudy') }}
         </TabsTrigger>
         <TabsTrigger
           value="analytics"
           class="rounded-xl px-8"
         >
-          {{ t('features.school.extensions.labels.analytics') }}
+          {{ t('modules.school.extensions.labels.analytics') }}
         </TabsTrigger>
       </TabsList>
 
@@ -160,16 +160,16 @@ const stats = computed(() => {
               <thead>
                 <tr class="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 border-b">
                   <th class="p-6">
-                    {{ t('features.school.extensions.labels.graduateName') }}
+                    {{ t('modules.school.extensions.labels.graduateName') }}
                   </th>
                   <th class="p-6">
-                    {{ t('features.school.extensions.labels.gradYear') }}
+                    {{ t('modules.school.extensions.labels.gradYear') }}
                   </th>
                   <th class="p-6">
-                    {{ t('features.school.extensions.labels.currentActivity') }}
+                    {{ t('modules.school.extensions.labels.currentActivity') }}
                   </th>
                   <th class="p-6 text-right">
-                    {{ t('common.labels.actions') }}
+                    {{ t('common.actions.title') }}
                   </th>
                 </tr>
               </thead>
@@ -235,7 +235,7 @@ const stats = computed(() => {
                 class="w-16 h-16 text-muted-foreground/20 mb-4"
               />
               <p class="text-muted-foreground italic">
-                {{ t('features.school.extensions.labels.noAlumniFound') }}
+                {{ t('modules.school.extensions.labels.noAlumniFound') }}
               </p>
             </div>
           </CardContent>
@@ -278,18 +278,18 @@ const stats = computed(() => {
                 v-if="tracer.company_name"
                 class="flex items-center justify-between text-sm"
               >
-                <span class="text-muted-foreground">{{ t('features.school.extensions.labels.employer') }}:</span>
+                <span class="text-muted-foreground">{{ t('modules.school.extensions.labels.employer') }}:</span>
                 <span class="font-bold">{{ tracer.company_name }}</span>
               </div>
               <div
                 v-if="tracer.university_name"
                 class="flex items-center justify-between text-sm"
               >
-                <span class="text-muted-foreground">{{ t('features.school.extensions.labels.university') }}:</span>
+                <span class="text-muted-foreground">{{ t('modules.school.extensions.labels.university') }}:</span>
                 <span class="font-bold">{{ tracer.university_name }}</span>
               </div>
               <div class="flex items-center justify-between text-sm">
-                <span class="text-muted-foreground">{{ t('features.school.extensions.labels.majorRelevance') }}:</span>
+                <span class="text-muted-foreground">{{ t('modules.school.extensions.labels.majorRelevance') }}:</span>
                 <LucideIcon
                   :name="tracer.is_relevant_to_major ? 'check-circle' : 'x-circle'" 
                   :class="tracer.is_relevant_to_major ? 'text-emerald-500' : 'text-rose-500'"
@@ -307,10 +307,10 @@ const stats = computed(() => {
               class="w-16 h-16 text-muted-foreground/20 mb-4"
             />
             <h3 class="text-xl font-bold">
-              {{ t('features.school.extensions.labels.noTracerData') }}
+              {{ t('modules.school.extensions.labels.noTracerData') }}
             </h3>
             <p class="text-muted-foreground">
-              {{ t('features.school.extensions.labels.startCollecting') }}
+              {{ t('modules.school.extensions.labels.startCollecting') }}
             </p>
           </div>
         </div>
@@ -324,10 +324,10 @@ const stats = computed(() => {
             class="w-20 h-20 text-muted-foreground/20 mx-auto mb-6"
           />
           <h2 class="text-2xl font-black">
-            {{ t('features.school.extensions.labels.analyticsComingSoon') }}
+            {{ t('modules.school.extensions.labels.analyticsComingSoon') }}
           </h2>
           <p class="text-muted-foreground max-w-sm mx-auto mt-2">
-            {{ t('features.school.extensions.labels.analyticsDesc') }}
+            {{ t('modules.school.extensions.labels.analyticsDesc') }}
           </p>
         </Card>
       </TabsContent>

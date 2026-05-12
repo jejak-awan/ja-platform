@@ -29,6 +29,45 @@ class SchoolServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->registerPolicies();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+
+        $this->registerUserModuleIntegrations();
+    }
+
+    /**
+     * Register School-specific integrations to Core User model.
+     */
+    protected function registerUserModuleIntegrations(): void
+    {
+        // 1. Register School-specific role ranks
+        \Modules\Core\Models\User::registerRoleRanks([
+            'admin-yayasan' => 90,
+            'operator-yayasan' => 85,
+            'admin-unit' => 80,
+            'operator-unit' => 70,
+            'staff' => 50,
+            'guru' => 50,
+            'wali-kelas' => 55,
+            'siswa' => 10,
+            'student' => 10,
+            'orang-tua' => 5,
+            'parent' => 5,
+        ]);
+
+        // 2. Register dynamic relationships
+        \Modules\Core\Models\User::resolveRelationUsing('staff', function ($userModel) {
+            return $userModel->hasMany(\Modules\School\Models\HR\Staff::class);
+        });
+
+        \Modules\Core\Models\User::resolveRelationUsing('levels', function ($userModel) {
+            return $userModel->hasManyThrough(
+                \Modules\School\Models\Institution\SchoolUnit::class,
+                \Modules\School\Models\HR\Staff::class,
+                'user_id',
+                'id',
+                'id',
+                'school_unit_id'
+            );
+        });
     }
 
     /**

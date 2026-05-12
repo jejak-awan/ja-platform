@@ -5,9 +5,9 @@
   >
     <DialogContent class="sm:max-w-md">
       <DialogHeader>
-        <DialogTitle>{{ $t('features.file_manager.modals.createFolder.title') }}</DialogTitle>
+        <DialogTitle>{{ $t('modules.core.file_manager.modals.createFolder.title') }}</DialogTitle>
         <DialogDescription>
-          {{ $t('features.file_manager.modals.createFolder.placeholder') || 'Create a new folder to organize your digital assets.' }}
+          {{ $t('modules.core.file_manager.modals.createFolder.placeholder') || 'Create a new folder to organize your digital assets.' }}
         </DialogDescription>
       </DialogHeader>
 
@@ -17,13 +17,13 @@
       >
         <div class="grid gap-2">
           <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            {{ $t('features.file_manager.modals.createFolder.name') || 'Folder Name' }} <span class="text-destructive">*</span>
+            {{ $t('modules.core.file_manager.modals.createFolder.name') || 'Folder Name' }} <span class="text-destructive">*</span>
           </label>
           <Input
             v-model="folderName"
             type="text"
             required
-            :placeholder="$t('features.file_manager.modals.createFolder.placeholder')"
+            :placeholder="$t('modules.core.file_manager.modals.createFolder.placeholder')"
             class="col-span-3"
           />
         </div>
@@ -36,7 +36,7 @@
           class="rounded-xl h-10 px-5 border-border/60 hover:bg-accent/10 text-foreground font-bold transition-colors"
           @click="$emit('close')"
         >
-          {{ $t('features.file_manager.modals.createFolder.cancel') || 'Cancel' }}
+          {{ $t('modules.core.file_manager.modals.createFolder.cancel') || 'Cancel' }}
         </Button>
         <Button
           :disabled="creating || !isValid"
@@ -48,7 +48,7 @@
             v-if="creating"
             class="w-4 h-4 mr-2 animate-spin"
           />
-          {{ creating ? $t('features.file_manager.modals.createFolder.creating') : $t('features.file_manager.modals.createFolder.create') }}
+          {{ creating ? $t('modules.core.file_manager.modals.createFolder.creating') : $t('modules.core.file_manager.modals.createFolder.create') }}
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import {
     Button,
     Input,
@@ -68,10 +68,10 @@ import {
     DialogTitle,
     DialogDescription,
     DialogFooter
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { folderSchema } from '@/schemas';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { folderSchema } from '@/shared/schemas';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
 useI18n();

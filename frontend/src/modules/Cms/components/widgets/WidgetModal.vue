@@ -117,7 +117,7 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import { 
     Dialog, 
     DialogContent, 
@@ -134,11 +134,11 @@ import {
     SelectValue, 
     SelectContent, 
     SelectItem 
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { widgetSchema } from '@/schemas/common';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { widgetSchema } from '@/shared/schemas/common';
 
 type WidgetType = 'html' | 'text' | 'recent_posts' | 'categories' | 'custom';
 

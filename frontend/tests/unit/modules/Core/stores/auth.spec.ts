@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 import { useAuthStore, ROLE_RANKS } from '@/modules/Core/stores/auth';
-import api, { getCsrfCookie } from '@/services/api';
+import api, { getCsrfCookie } from '@/core/api/client';
 
-vi.mock('@/services/api', () => ({
+vi.mock('@/core/api/client', () => ({
     default: {
         post: vi.fn(),
         get: vi.fn(),
@@ -11,7 +11,7 @@ vi.mock('@/services/api', () => ({
     getCsrfCookie: vi.fn(),
 }));
 
-vi.mock('@/utils/logger');
+vi.mock('@/shared/utils/logger');
 
 vi.mock('axios', async () => {
     const actual = await vi.importActual('axios');

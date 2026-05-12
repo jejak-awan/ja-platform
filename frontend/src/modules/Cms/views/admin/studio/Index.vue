@@ -2,10 +2,10 @@
   <div class="space-y-6">
     <div class="mb-6">
       <h1 class="text-2xl font-bold text-foreground">
-        {{ $t('features.content_studio.title') }}
+        {{ $t('modules.cms.content.title') }}
       </h1>
       <p class="mt-1 text-sm text-muted-foreground">
-        {{ $t('features.content_studio.description') }}
+        {{ $t('modules.cms.content.description') }}
       </p>
     </div>
 
@@ -21,28 +21,28 @@
               class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <FileText class="w-4 h-4 mr-2" />
-              {{ $t('features.content_studio.tabs.contents') }}
+              {{ $t('modules.cms.content.tabs.contents') }}
             </TabsTrigger>
             <TabsTrigger
               value="categories"
               class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <Layers class="w-4 h-4 mr-2" />
-              {{ $t('features.content_studio.tabs.categories') }}
+              {{ $t('modules.cms.content.tabs.categories') }}
             </TabsTrigger>
             <TabsTrigger
               value="tags"
               class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <Tag class="w-4 h-4 mr-2" />
-              {{ $t('features.content_studio.tabs.tags') }}
+              {{ $t('modules.cms.content.tabs.tags') }}
             </TabsTrigger>
             <TabsTrigger
               value="templates"
               class="relative px-6 py-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <LayoutTemplate class="w-4 h-4 mr-2" />
-              {{ $t('features.content.list.templates') }}
+              {{ $t('modules.cms.content.list.templates') }}
             </TabsTrigger>
           </TabsList>
 
@@ -76,7 +76,7 @@ import {
     TabsList,
     TabsTrigger,
     TabsContent
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import Layers from 'lucide-vue-next/dist/esm/icons/layers.js';
 import Tag from 'lucide-vue-next/dist/esm/icons/tag.js';
@@ -99,7 +99,7 @@ const router = useRouter();
 const cmsStore = useCmsStore();
 
 useHead({
-    title: computed(() => `${cmsStore.siteSettings?.site_name || 'JA CMS'} | ${t('features.content_studio.title')}`)
+    title: computed(() => `${cmsStore.siteSettings?.site_name || 'JA CMS'} | ${t('modules.cms.content.title')}`)
 });
 
 const activeTab = ref((route.query.tab as string) || 'contents');

@@ -282,7 +282,7 @@ import {
     Card, CardHeader, CardTitle, CardDescription, CardContent,
     Badge, Button,
     Table, TableHeader, TableRow, TableHead, TableBody, TableCell 
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 interface HighRiskIp {
     ip: string;

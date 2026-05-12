@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import MediaPicker from "@/modules/Cms/components/media/MediaPicker.vue";
-import api from '@/services/api';
+import api from '@/core/api/client';
 
-vi.mock('@/services/api', () => ({
+vi.mock('@/core/api/client', () => ({
     default: {
         get: vi.fn()
     }
 }))
 
-vi.mock('@/composables/useToast', () => ({
+vi.mock('@/shared/composables/useToast', () => ({
     useToast: () => ({
         success: { action: vi.fn() },
         error: { validation: vi.fn(), action: vi.fn() }

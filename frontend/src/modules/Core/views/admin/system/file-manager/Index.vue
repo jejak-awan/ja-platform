@@ -5,7 +5,7 @@
       <div class="flex items-center gap-2">
         <div>
           <h1 class="text-2xl font-bold tracking-tight text-foreground">
-            {{ $t('features.file_manager.title') }} (Global)
+            {{ $t('modules.core.file_manager.title') }} (Global)
           </h1>
           <p class="text-muted-foreground">
             Manage system-wide files and infrastructure storage.
@@ -18,14 +18,14 @@
           @click="showCreateFolderModal = true"
         >
           <FolderPlus class="w-4 h-4 mr-2" />
-          {{ $t('features.file_manager.actions.newFolder') }}
+          {{ $t('modules.core.file_manager.actions.newFolder') }}
         </Button>
         <Button
           type="button"
           @click="showUploadModal = true"
         >
           <Upload class="w-4 h-4 mr-2" />
-          {{ $t('features.file_manager.actions.upload') }}
+          {{ $t('modules.core.file_manager.actions.upload') }}
         </Button>
       </div>
     </div>
@@ -90,7 +90,7 @@
                   <div v-else-if="fm.loading.value" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-background/60 backdrop-blur-[2px]">
                     <Spinner class="w-10 h-10 text-primary" />
                     <p class="mt-4 text-xs font-bold text-primary animate-pulse uppercase tracking-widest leading-none">
-                      {{ $t('features.file_manager.messages.loading') }}
+                      {{ $t('modules.core.file_manager.messages.loading') }}
                     </p>
                   </div>
 
@@ -99,7 +99,7 @@
                       <FolderPlus class="w-8 h-8 text-muted-foreground/30" stroke-width="1.5" />
                     </div>
                     <h3 class="text-lg font-bold text-foreground/90">
-                      {{ $t('features.file_manager.messages.noFiles') }}
+                      {{ $t('modules.core.file_manager.messages.noFiles') }}
                     </h3>
                   </div>
 
@@ -112,16 +112,16 @@
               <ContextMenuContent class="w-56">
                 <ContextMenuItem @click="showCreateFolderModal = true">
                   <FolderPlus class="w-4 h-4 mr-2" />
-                  {{ $t('features.file_manager.actions.newFolder') }}
+                  {{ $t('modules.core.file_manager.actions.newFolder') }}
                 </ContextMenuItem>
                 <ContextMenuItem @click="showUploadModal = true">
                   <Upload class="w-4 h-4 mr-2" />
-                  {{ $t('features.file_manager.actions.upload') }}
+                  {{ $t('modules.core.file_manager.actions.upload') }}
                 </ContextMenuItem>
                 <ContextMenuSeparator v-if="fm.clipboard.value.items.length > 0" />
                 <ContextMenuItem v-if="fm.clipboard.value.items.length > 0" @click="fm.pasteFromClipboard(fm.currentPath.value)">
                   <ClipboardPaste class="w-4 h-4 mr-2" />
-                  {{ $t('features.file_manager.actions.paste') }}
+                  {{ $t('modules.core.file_manager.actions.paste') }}
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem @click="fm.fetchCurrentPath()">
@@ -173,9 +173,9 @@ import {
     ContextMenuItem,
     ContextMenuSeparator,
     Spinner
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
-import { useFileManager } from '@/composables/useFileManager';
+import { useFileManager } from '@/modules/Cms/composables/useFileManager';
 import FileSidebar from '@/modules/Core/components/file-manager/FileSidebar.vue';
 import FileToolbar from '@/modules/Core/components/file-manager/FileToolbar.vue';
 import FilePropertiesSidebar from '@/modules/Core/components/file-manager/FilePropertiesSidebar.vue';
@@ -185,8 +185,8 @@ import FileTrashView from '@/modules/Core/components/file-manager/FileTrashView.
 import FilePreviewModal from '@/modules/Core/components/file-manager/FilePreviewModal.vue';
 import FileUploadModal from '@/modules/Core/components/file-manager/FileUploadModal.vue';
 import CreateFolderModal from '@/modules/Core/components/file-manager/CreateFolderModal.vue';
-import type { FileItem } from '@/types/cms/file-manager';
-import { FileManagerKey } from '@/keys';
+import type { FileItem } from '@/modules/Cms/types/file-manager';
+import { FileManagerKey } from '@/core/keys';
 
 // Global File Manager (Super Admin) - no rootPath restriction
 const fm = useFileManager(); 

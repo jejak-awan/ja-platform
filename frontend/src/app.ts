@@ -1,15 +1,14 @@
-import './bootstrap';
+import '@/core/legacy-bootstrap';
 import '../css/base.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { createHead } from '@unhead/vue/client';
-import lazyLoad from '@/utils/directives/lazyLoad';
-import i18n from './i18n';
-import { useAuthStore } from '@/modules/Core/stores/auth';
-import { resolveIsAdminEntrypoint } from '@/modules/Core/router/entrypoint';
-import { attemptChunkRecoveryReload, isChunkLoadError } from '@/utils/chunkRecovery';
+import lazyLoad from '@/shared/utils/directives/lazyLoad';
+import i18n from '@/core/i18n';
+import { resolveIsAdminEntrypoint } from '@/core/router/entrypoint';
+import { attemptChunkRecoveryReload, isChunkLoadError } from '@/shared/utils/chunkRecovery';
 
 // Keep admin/dashboard and public theme styles isolated.
 const isAdminRoute = resolveIsAdminEntrypoint(window.location.pathname);
@@ -23,6 +22,11 @@ if (isAdminRoute) {
 
 // Initialization Fail-Safe Logger
 window.onerror = function(message, source, lineno, colno, error) {
+    // Check for chunk load errors during initialization
+    if (isChunkLoadError(error || message) && attemptChunkRecoveryReload()) {
+        return true; // prevent default handling
+    }
+
     const safeUrl = (() => {
         try {
             const parsed = new URL(window.location.href);
@@ -90,33 +94,20 @@ if (document.readyState === 'loading') {
 // @ts-expect-error: JANARI_VERSION is a global set for audit purposes
 window.JANARI_VERSION = '2026.04.22.fix.v1';
 
+import { bootstrapApp } from '@/core/bootstrap';
+
 async function bootstrap() {
-    const [{ default: Logger, logger }, { default: RootComponent }, { default: router }] = await Promise.all([
-        import('@/utils/logger'),
+    const [{ default: Logger, logger }, { default: RootComponent }] = await Promise.all([
+        import('@/shared/utils/logger'),
         isAdminRoute ? import('./AdminApp.vue') : import('./PublicApp.vue'),
-        isAdminRoute ? import('@/modules/Core/router/admin') : import('@/modules/Core/router/public'),
     ]);
 
     const app = createApp(RootComponent);
 
-    // 0. SET ERROR HANDLER IMMEDIATELY (Before any plugins are installed)
-    app.config.errorHandler = (err, _vm, info) => {
-        const error = err as { message?: string } | null;
-        const message = error?.message || String(err);
-
-        if (isChunkLoadError(err) && attemptChunkRecoveryReload()) {
-            return;
-        }
-
-        if (import.meta.env.DEV) {
-            console.error('[VUE_ERROR_DETECTED]', message);
-            console.error('[RAW_ERROR_OBJECT]', err);
-            console.log('[ERROR_INFO]', info);
-
-            if (message.includes('Failed to fetch dynamically imported module')) {
-                console.warn('Chunk loading failed. Likely cache mismatch or missing chunk.');
-            }
-        }
+    // 0. Set Global Error Handler
+    app.config.errorHandler = (err) => {
+        if (isChunkLoadError(err) && attemptChunkRecoveryReload()) return;
+        if (import.meta.env.DEV) console.error('[VUE_ERROR]', err);
     };
 
     const pinia = createPinia();
@@ -124,25 +115,38 @@ async function bootstrap() {
     const head = createHead();
 
     app.use(pinia);
-    app.use(router);
     app.use(head);
     app.use(i18n);
     app.directive('lazy', lazyLoad);
     app.use(Logger);
 
-    const authStore = useAuthStore();
-    if (isAdminRoute) {
-        authStore.initAuth();
-    } else if (typeof requestIdleCallback === 'function') {
-        requestIdleCallback(() => authStore.initAuth(), { timeout: 2000 });
-    } else {
-        setTimeout(() => authStore.initAuth(), 0);
-    }
+    // 1. RUN DETERMINISTIC BOOTSTRAP (Kernel, Modules, Auth)
+    const { registry } = await bootstrapApp();
 
-    logger.info(`Mounting ${isAdminRoute ? 'Admin' : 'Public'} App...`);
+    // 2. Import Router (Registry is now full)
+    const { default: router } = await (isAdminRoute ? import('@/core/router/admin') : import('@/core/router/public'));
+    app.use(router);
+
+    // 3. Sync Navigation & Dashboards from Registry to Global Stores
+    const { useNavigationStore } = await import('@/shared/stores/navigation');
+    const { useDashboardStore } = await import('@/shared/stores/dashboard');
+    
+    const navStore = useNavigationStore();
+    const dbStore = useDashboardStore();
+
+    // Sync Navigation
+    Object.entries(registry.getNavigation()).forEach(([id, navs]) => {
+        navStore.registerModuleNavigation(id, navs);
+    });
+
+    // Sync Dashboards
+    registry.getDashboards().forEach(db => {
+        dbStore.registerDashboard(db);
+    });
+
+    logger.info(`[App] Mounting ${isAdminRoute ? 'Admin' : 'Public'} Workspace...`);
     app.mount('#app');
     logger.info('App Mounted successfully!');
-
 }
 
 void bootstrap();

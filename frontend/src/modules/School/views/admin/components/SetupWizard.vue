@@ -3,13 +3,13 @@
     <CardHeader>
       <div class="flex items-center justify-between">
         <div>
-          <CardTitle>{{ $t('features.school.dashboard.setup.title') }}</CardTitle>
-          <CardDescription>{{ $t('features.school.dashboard.setup.subtitle') }}</CardDescription>
+          <CardTitle>{{ $t('modules.school.dashboard.setup.title') }}</CardTitle>
+          <CardDescription>{{ $t('modules.school.dashboard.setup.subtitle') }}</CardDescription>
         </div>
         <div class="text-right">
           <span class="text-2xl font-bold text-primary">{{ Math.round(progress) }}%</span>
           <p class="text-xs text-muted-foreground font-medium uppercase tracking-wider">
-            {{ $t('features.school.dashboard.setup.completed') }}
+            {{ $t('modules.school.dashboard.setup.completed') }}
           </p>
         </div>
       </div>
@@ -54,8 +54,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, LucideIcon } from '@/components/ui';
-import api from '@/services/api';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, LucideIcon } from '@/shared/components/ui';
+import api from '@/core/api/client';
 
 const { t } = useI18n();
 
@@ -65,12 +65,12 @@ const progress = ref(0);
 const isCompleted = ref(true);
 
 const labels: Record<string, { label: string, desc: string }> = {
-  school_profile: { label: t('features.school.dashboard.setup.steps.school_profile.label'), desc: t('features.school.dashboard.setup.steps.school_profile.desc') },
-  school_units: { label: t('features.school.dashboard.setup.steps.school_units.label'), desc: t('features.school.dashboard.setup.steps.school_units.desc') },
-  academic_year: { label: t('features.school.dashboard.setup.steps.academic_year.label'), desc: t('features.school.dashboard.setup.steps.academic_year.desc') },
-  semesters: { label: t('features.school.dashboard.setup.steps.semesters.label'), desc: t('features.school.dashboard.setup.steps.semesters.desc') },
-  departments: { label: t('features.school.dashboard.setup.steps.departments.label'), desc: t('features.school.dashboard.setup.steps.departments.desc') },
-  study_groups: { label: t('features.school.dashboard.setup.steps.study_groups.label'), desc: t('features.school.dashboard.setup.steps.study_groups.desc') },
+  school_profile: { label: t('modules.school.dashboard.setup.steps.school_profile.label'), desc: t('modules.school.dashboard.setup.steps.school_profile.desc') },
+  school_units: { label: t('modules.school.dashboard.setup.steps.school_units.label'), desc: t('modules.school.dashboard.setup.steps.school_units.desc') },
+  academic_year: { label: t('modules.school.dashboard.setup.steps.academic_year.label'), desc: t('modules.school.dashboard.setup.steps.academic_year.desc') },
+  semesters: { label: t('modules.school.dashboard.setup.steps.semesters.label'), desc: t('modules.school.dashboard.setup.steps.semesters.desc') },
+  departments: { label: t('modules.school.dashboard.setup.steps.departments.label'), desc: t('modules.school.dashboard.setup.steps.departments.desc') },
+  study_groups: { label: t('modules.school.dashboard.setup.steps.study_groups.label'), desc: t('modules.school.dashboard.setup.steps.study_groups.desc') },
 };
 
 const steps = computed(() => {

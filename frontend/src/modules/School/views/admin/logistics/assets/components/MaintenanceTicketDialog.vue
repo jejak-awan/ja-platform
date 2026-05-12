@@ -5,9 +5,9 @@
   >
     <DialogContent class="sm:max-w-[500px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('features.school.logistics.sarpras.actions.updateMaintenance') : $t('features.school.logistics.sarpras.actions.createMaintenance') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('modules.school.logistics.sarpras.actions.updateMaintenance') : $t('modules.school.logistics.sarpras.actions.createMaintenance') }}</DialogTitle>
         <DialogDescription>
-          {{ $t('features.school.logistics.sarpras.descriptions.maintenance') }}
+          {{ $t('modules.school.logistics.sarpras.descriptions.maintenance') }}
         </DialogDescription>
       </DialogHeader>
 
@@ -16,12 +16,12 @@
           v-if="!isEdit"
           class="grid gap-2"
         >
-          <Label>{{ $t('features.school.logistics.sarpras.tabs.asset') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.logistics.sarpras.tabs.asset') }} <span class="text-destructive">*</span></Label>
           <Select
             v-model="form.school_asset_id"
             required
           >
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.logistics.sarpras.placeholders.selectAsset')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.logistics.sarpras.placeholders.selectAsset')" /></SelectTrigger>
             <SelectContent>
               <SelectItem
                 v-for="asset in assets"
@@ -38,12 +38,12 @@
           v-if="!isEdit"
           class="grid gap-2"
         >
-          <Label>{{ $t('features.school.logistics.sarpras.labels.reporter') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.logistics.sarpras.labels.reporter') }} <span class="text-destructive">*</span></Label>
           <Select
             v-model="form.reported_by"
             required
           >
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.logistics.sarpras.placeholders.selectStaff')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.logistics.sarpras.placeholders.selectStaff')" /></SelectTrigger>
             <SelectContent>
               <SelectItem
                 v-for="s in staff"
@@ -73,22 +73,22 @@
           v-if="!isEdit"
           class="grid gap-2"
         >
-          <Label for="desc">{{ $t('features.school.logistics.sarpras.labels.issueDescription') }} <span class="text-destructive">*</span></Label>
+          <Label for="desc">{{ $t('modules.school.logistics.sarpras.labels.issueDescription') }} <span class="text-destructive">*</span></Label>
           <Textarea
             id="desc"
             v-model="form.issue_description"
             required
-            :placeholder="$t('features.school.logistics.sarpras.placeholders.issueDescriptionHint')"
+            :placeholder="$t('modules.school.logistics.sarpras.placeholders.issueDescriptionHint')"
           />
         </div>
 
         <div class="grid gap-2">
-          <Label>{{ $t('features.school.logistics.sarpras.labels.priority') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.logistics.sarpras.labels.priority') }} <span class="text-destructive">*</span></Label>
           <Select
             v-model="form.priority"
             required
           >
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.logistics.sarpras.placeholders.selectPriority')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.logistics.sarpras.placeholders.selectPriority')" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="low">
                 {{ $t('common.labels.priorities.low') }}
@@ -115,7 +115,7 @@
             v-model="form.status"
             required
           >
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.logistics.sarpras.placeholders.selectStatus')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.logistics.sarpras.placeholders.selectStatus')" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="open">
                 {{ $t('common.labels.maintenanceStatus.open') }}
@@ -134,11 +134,11 @@
           v-if="isEdit"
           class="grid gap-2"
         >
-          <Label for="notes">{{ $t('features.school.logistics.sarpras.labels.resolutionNotes') }}</Label>
+          <Label for="notes">{{ $t('modules.school.logistics.sarpras.labels.resolutionNotes') }}</Label>
           <Textarea
             id="notes"
             v-model="form.resolution_notes"
-            :placeholder="$t('features.school.logistics.sarpras.placeholders.resolutionNotesHint')"
+            :placeholder="$t('modules.school.logistics.sarpras.placeholders.resolutionNotesHint')"
           />
         </div>
       </div>
@@ -159,7 +159,7 @@
             name="Loader2"
             class="w-4 h-4 mr-2 animate-spin"
           />
-          {{ isEdit ? $t('common.labels.save') : $t('features.school.logistics.sarpras.actions.sendReport') }}
+          {{ isEdit ? $t('common.labels.save') : $t('modules.school.logistics.sarpras.actions.sendReport') }}
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -172,10 +172,10 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Label, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, 
   LucideIcon, Textarea
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { LogisticsService } from '@/modules/School/services/LogisticsService';
 import { HRService } from '@/modules/School/services/HRService';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 interface SchoolAsset {
   id: number | string;

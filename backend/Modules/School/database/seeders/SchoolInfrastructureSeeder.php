@@ -11,7 +11,7 @@ class SchoolInfrastructureSeeder extends Seeder
     {
         // 1. Create Default School (Foundation)
         DB::table('sch_ins_schools')->updateOrInsert(
-            ['id' => 15],
+            ['npsn' => '10000001'],
             [
                 'name' => 'JA-Platform Edu Unit',
                 'npsn' => '10000001',
@@ -30,27 +30,42 @@ class SchoolInfrastructureSeeder extends Seeder
                 'updated_at' => now(),
             ]
         );
- 
-        // 2. Create Units (Levels) - Only 1 unit for Negeri
-        $units = [
-            ['id' => 15, 'name' => 'JA-Platform Edu Unit', 'type' => 'smk', 'level' => 'SMK'],
-        ];
- 
-        foreach ($units as $unit) {
-            DB::table('sch_ins_levels')->updateOrInsert(
-                ['id' => $unit['id']],
-                array_merge($unit, [
-                    'school_id' => 15,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ])
-            );
+
+        // Get the actual school ID (don't assume 15)
+        $school = DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        if (! $school) {
+            $this->command->error('Failed to create default school!');
+            return;
+        }
+        $schoolId = $school->id;
+
+        // 2. Create Unit (Level)
+        DB::table('sch_ins_levels')->updateOrInsert(
+            ['school_id' => $schoolId, 'level' => 'SMK'],
+            [
+                'name' => 'JA-Platform Edu Unit',
+                'type' => 'smk',
+                'level' => 'SMK',
+                'school_id' => $schoolId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+
+        // Get the actual unit ID
+        $unit = DB::table('sch_ins_levels')
+            ->where('school_id', $schoolId)
+            ->where('level', 'SMK')
+            ->first();
+
+        if ($unit) {
+            $this->command->info("School seeded: ID={$schoolId}, Unit ID={$unit->id}");
         }
 
-        // 3. Cleanup existing extra units if any
-        DB::table('sch_ins_levels')
-            ->where('school_id', 15)
-            ->whereNotIn('id', [15])
-            ->delete();
+        // 3. Fix PostgreSQL sequences after explicit ID inserts
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("SELECT setval(pg_get_serial_sequence('sch_ins_schools', 'id'), COALESCE((SELECT MAX(id) FROM sch_ins_schools), 1))");
+            DB::statement("SELECT setval(pg_get_serial_sequence('sch_ins_levels', 'id'), COALESCE((SELECT MAX(id) FROM sch_ins_levels), 1))");
+        }
     }
 }

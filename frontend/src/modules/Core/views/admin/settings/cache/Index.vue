@@ -148,11 +148,11 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
-import api from '@/services/api';
-import { parseSingleResponse } from '@/utils/responseParser';
-import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
+import api from '@/core/api/client';
+import { parseSingleResponse } from '@/shared/utils/responseParser';
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui';
 
 import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
 import Target from 'lucide-vue-next/dist/esm/icons/target.js';
@@ -160,8 +160,8 @@ import XCircle from 'lucide-vue-next/dist/esm/icons/circle-x.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import Zap from 'lucide-vue-next/dist/esm/icons/zap.js';
-import toast from '@/services/toast';
-import { useConfirm } from '@/composables/useConfirm';
+import toast from '@/shared/services/legacy-toast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 
 interface CacheStats {
     status: string;

@@ -42,10 +42,6 @@
             "title": "Identitas Aplikasi",
             "description": "Logo, favicon, dan email admin untuk dashboard aplikasi"
         },
-        "siteInfo": {
-            "title": "Informasi Situs",
-            "description": "Informasi dasar tentang situs web Anda"
-        },
         "editor": {
             "title": "Preferensi Editor",
             "description": "Kontrol perilaku editor konten"
@@ -133,10 +129,6 @@
             "testing": "Mengetes...",
             "failed": "Koneksi gagal. Silakan periksa kredensial Anda."
         },
-        "discussion": {
-            "title": "Pengaturan Diskusi",
-            "description": "Konfigurasi sistem komentar"
-        },
         "moderation": {
             "title": "Moderasi",
             "description": "Keamanan konten dan perlindungan spam"
@@ -161,21 +153,6 @@
             "title": "Notifikasi Keamanan",
             "description": "Peringatan via Telegram, Email, dan Webhook"
         },
-        "analytics": {
-            "retentionTitle": "Retensi Data",
-            "description": "Konfigurasi berapa lama data analitik harus disimpan di database.",
-            "cleanupTitle": "Pembersihan Data Manual",
-            "cleanupDescription": "Jalankan pembersihan manual data analitik lama berdasarkan pengaturan retensi. Proses ini akan menghapus data yang lebih tua dari periode retensi yang ditentukan secara permanen.",
-            "cleanupButton": "Jalankan Pembersihan Sekarang",
-            "cleaningNow": "Membersihkan...",
-            "cleanupConfirm": "Apakah Anda yakin ingin menghapus data analitik lama sekarang?",
-            "cleanupSuccess": "Berhasil membersihkan {count} data.",
-            "purgeTitle": "Hapus semua data analitik",
-            "purgeConfirm": "Ini akan menghapus permanen semua kunjungan, event, dan sesi analitik (termasuk hari ini). Penghitung tayang di konten CMS tidak ikut direset. Lanjutkan?",
-            "purgeButton": "Hapus semua analitik",
-            "purgingNow": "Menghapus...",
-            "purgeSuccess": "{count} rekaman analitik dihapus. Dashboard akan menampilkan data kosong."
-        },
         "logs": {
             "title": "Retensi Log Sistem",
             "description": "Konfigurasi berapa lama log aktivitas dan sistem disimpan sebelum dihapus otomatis."
@@ -183,6 +160,14 @@
         "backupMonitoring": {
             "title": "Monitoring Cadangan",
             "description": "Pengaturan pemantauan dan retensi file cadangan sistem."
+        },
+        "license": {
+            "title": "License & Service",
+            "description": "Status of platform license and service integration."
+        },
+        "school": {
+            "title": "Institution Identity (Public)",
+            "description": "Institution identity for public portal and landing page."
         }
     },
     "enabled": "Aktif",

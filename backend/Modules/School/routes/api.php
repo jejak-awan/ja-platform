@@ -50,7 +50,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('stats', [SchoolController::class, 'stats']);
                 Route::get('setup-status', [SchoolController::class, 'checkSetupStatus']);
                 Route::post('logo', [SchoolController::class, 'updateLogo']);
-                Route::post('levels/{level}/switch', [SchoolUnitController::class, 'switch']);
+                Route::post('levels/{level}/select', [SchoolUnitController::class, 'select']);
                 Route::apiResource('levels', SchoolUnitController::class);
             });
         });

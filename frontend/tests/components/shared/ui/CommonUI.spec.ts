@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import Input from "@/components/ui/Input.vue";
-import Label from "@/components/ui/Label.vue";
-import Switch from "@/components/ui/Switch.vue";
-import Separator from "@/components/ui/Separator.vue";
-import SkeletonLoader from "@/components/ui/SkeletonLoader.vue";
-import Spinner from "@/components/ui/Spinner.vue";
+import Input from "@/shared/components/ui/Input.vue";
+import Label from "@/shared/components/ui/Label.vue";
+import Switch from "@/shared/components/ui/Switch.vue";
+import Separator from "@/shared/components/ui/Separator.vue";
+import SkeletonLoader from "@/shared/components/ui/SkeletonLoader.vue";
+import Spinner from "@/shared/components/ui/Spinner.vue";
 
 describe('Common UI Components', () => {
     it('Input renders and handles modelValue', async () => {

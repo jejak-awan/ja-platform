@@ -11,11 +11,11 @@
               />
             </div>
             <h1 class="text-3xl font-bold tracking-tight text-foreground">
-              {{ $t('features.school.hr.labels.advancedHR') }}
+              {{ $t('modules.school.hr.labels.advancedHR') }}
             </h1>
           </div>
           <p class="text-muted-foreground text-sm">
-            {{ $t('features.school.hr.subtitle') }}
+            {{ $t('modules.school.hr.subtitle') }}
           </p>
         </div>
       </div>
@@ -32,13 +32,13 @@
                   value="leaves"
                   class="rounded-xl px-6 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold transition-all"
                 >
-                  {{ $t('features.school.hr.labels.leaveApplications') }}
+                  {{ $t('modules.school.hr.labels.leaveApplications') }}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="shifts"
                   class="rounded-xl px-6 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm border border-transparent data-[state=active]:border-border/40 font-bold transition-all"
                 >
-                  {{ $t('features.school.hr.labels.shiftSettings') }}
+                  {{ $t('modules.school.hr.labels.shiftSettings') }}
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -78,7 +78,7 @@
                     name="Plus"
                     class="w-4 h-4 mr-2"
                   />
-                  {{ $t('features.school.hr.actions.inputLeave') }}
+                  {{ $t('modules.school.hr.actions.inputLeave') }}
                 </Button>
               </div>
               <DataTable
@@ -100,7 +100,7 @@
                     name="Plus"
                     class="w-4 h-4 mr-2"
                   />
-                  {{ $t('features.school.hr.actions.addShift') }}
+                  {{ $t('modules.school.hr.actions.addShift') }}
                 </Button>
               </div>
               <DataTable
@@ -134,10 +134,10 @@ import { storeToRefs } from 'pinia';
 import {
   Card, CardContent, Button, LucideIcon, DataTable, Tabs, TabsList, TabsTrigger, TabsContent,
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { useHRStore } from '../../../stores/hr';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import { createColumnHelper, useVueTable, getCoreRowModel } from '@tanstack/vue-table';
 
 import ShiftFormDialog from './components/ShiftFormDialog.vue';
@@ -169,19 +169,19 @@ const columnHelper = createColumnHelper<any>();
 
 const leaveColumns = [
   columnHelper.accessor('staff.full_name', { 
-    header: t('features.school.hr.labels.staffName'),
+    header: t('modules.school.hr.labels.staffName'),
     cell: info => h('span', { class: 'font-bold' }, info.getValue())
   }),
   columnHelper.accessor('type', { 
-    header: t('features.school.hr.labels.type'),
+    header: t('modules.school.hr.labels.type'),
     cell: info => h('span', { class: 'text-xs font-medium' }, info.getValue())
   }),
   columnHelper.accessor('start_date', { 
-    header: t('features.school.hr.labels.from'), 
+    header: t('modules.school.hr.labels.from'), 
     cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US') 
   }),
   columnHelper.accessor('end_date', { 
-    header: t('features.school.hr.labels.to'), 
+    header: t('modules.school.hr.labels.to'), 
     cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US') 
   }),
   columnHelper.accessor('status', {
@@ -225,7 +225,7 @@ const leaveColumns = [
 
 const shiftColumns = [
   columnHelper.accessor('name', { 
-    header: t('features.school.hr.labels.shiftSettings'),
+    header: t('modules.school.hr.labels.shiftSettings'),
     cell: info => h('span', { class: 'font-bold' }, info.getValue())
   }),
   columnHelper.accessor('start_time', { header: t('common.labels.start') }),
@@ -278,7 +278,7 @@ const fetchShifts = async () => {
 const handleUpdateLeave = async (id: number, status: string) => {
   try {
     await hrStore.updateLeaveStatus(id, status);
-    toast.success.action(t('features.school.academic.messages.updateSuccess'));
+    toast.success.action(t('modules.school.academic.messages.updateSuccess'));
     fetchLeaves();
   } catch (e) {
     toast.error.fromResponse(e);
@@ -293,12 +293,12 @@ const handleAddShift = () => {
 const handleDeleteShift = async (id: number) => {
   if (await confirm({ 
       title: t('common.actions.delete'), 
-      description: t('features.school.academic.messages.deleteConfirm'), 
+      description: t('modules.school.academic.messages.deleteConfirm'), 
       variant: 'destructive' 
   })) {
     try {
       await hrStore.deleteShift(id);
-      toast.success.action(t('features.school.academic.messages.deleteSuccess'));
+      toast.success.action(t('modules.school.academic.messages.deleteSuccess'));
       fetchShifts();
     } catch (e) {
       toast.error.fromResponse(e);

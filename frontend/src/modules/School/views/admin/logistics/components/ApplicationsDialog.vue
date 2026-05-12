@@ -33,10 +33,10 @@ import { ref, watch, h } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, DataTable, Badge
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { LogisticsService } from '@/modules/School/services/LogisticsService';
 import { createColumnHelper, useVueTable, getCoreRowModel } from '@tanstack/vue-table';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const props = defineProps<{ open: boolean }>();
 defineEmits(['update:open']);

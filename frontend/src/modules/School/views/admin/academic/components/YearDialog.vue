@@ -5,14 +5,14 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('common.actions.edit') + ' ' + $t('features.school.academic.tabs.years') : $t('common.actions.add') + ' ' + $t('features.school.academic.tabs.years') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('common.actions.edit') + ' ' + $t('modules.school.academic.tabs.years') : $t('common.actions.add') + ' ' + $t('modules.school.academic.tabs.years') }}</DialogTitle>
       </DialogHeader>
       <form
         class="space-y-4 py-4"
         @submit.prevent="handleSubmit"
       >
         <div class="space-y-2">
-          <Label for="year">{{ $t('features.school.academic.tabs.years') }} <span class="text-destructive">*</span></Label>
+          <Label for="year">{{ $t('modules.school.academic.tabs.years') }} <span class="text-destructive">*</span></Label>
           <Input
             id="year"
             v-model="form.year"
@@ -26,7 +26,7 @@
             :checked="form.is_active"
             @update:checked="v => form.is_active = v"
           />
-          <Label for="active">{{ $t('features.school.academic.labels.setActiveYear') }}</Label>
+          <Label for="active">{{ $t('modules.school.academic.labels.setActiveYear') }}</Label>
         </div>
         <DialogFooter>
           <Button
@@ -51,7 +51,7 @@ import { ref, watch } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, Switch, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const props = defineProps<{
   open: boolean;

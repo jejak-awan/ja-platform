@@ -2,36 +2,36 @@
   <div class="max-w-6xl mx-auto pb-10">
     <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
       <h1 class="text-3xl font-bold tracking-tight text-foreground">
-        {{ $t('features.content.list.calendar') }}
+        {{ $t('modules.cms.content.list.calendar') }}
       </h1>
       <div class="flex flex-wrap items-center gap-3">
         <Select v-model="statusFilter">
           <SelectTrigger class="w-[140px] bg-background/50">
-            <SelectValue :placeholder="$t('features.comments.filter.allStatus')" />
+            <SelectValue :placeholder="$t('modules.cms.comments.filter.allStatus')" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
-              {{ $t('features.comments.filter.allStatus') }}
+              {{ $t('modules.cms.comments.filter.allStatus') }}
             </SelectItem>
             <SelectItem value="draft">
-              {{ $t('features.content.status.draft') }}
+              {{ $t('modules.cms.content.status.draft') }}
             </SelectItem>
             <SelectItem value="published">
-              {{ $t('features.content.status.published') }}
+              {{ $t('modules.cms.content.status.published') }}
             </SelectItem>
             <SelectItem value="scheduled">
-              {{ $t('features.content.status.scheduled') }}
+              {{ $t('modules.cms.content.status.scheduled') }}
             </SelectItem>
           </SelectContent>
         </Select>
 
         <Select v-model="categoryFilter">
           <SelectTrigger class="w-[180px] bg-background/50">
-            <SelectValue :placeholder="$t('features.content.form.selectCategory')" />
+            <SelectValue :placeholder="$t('modules.cms.content.form.selectCategory')" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
-              {{ $t('features.content.form.selectCategory') }}
+              {{ $t('modules.cms.content.form.selectCategory') }}
             </SelectItem>
             <SelectItem
               v-for="cat in categories"
@@ -49,7 +49,7 @@
         >
           <router-link :to="{ name: 'contents.create' }">
             <Plus class="w-4 h-4 mr-2" />
-            {{ $t('features.content.list.createNew') }}
+            {{ $t('modules.cms.content.list.createNew') }}
           </router-link>
         </Button>
       </div>
@@ -67,18 +67,18 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import api from '@/services/api';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
-import toast from '@/services/toast';
+import api from '@/core/api/client';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
+import toast from '@/shared/services/legacy-toast';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
-import type { Content, Category } from '@/types/cms/cms';
+import type { Content, Category } from '@/modules/Cms/types/cms';
 import type { EventClickArg, EventContentArg, EventDropArg } from '@fullcalendar/core';
 import type { DateClickArg } from '@fullcalendar/interaction';
 import {
@@ -89,7 +89,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -188,7 +188,7 @@ const handleEventDrop = async (info: EventDropArg) => {
         await fetchContents();
     } catch (_error: unknown) {
         logger.error('Failed to reschedule content:', _error);
-        toast.error(t('features.content.messages.rescheduleFailed'));
+        toast.error(t('modules.cms.content.messages.rescheduleFailed'));
         info.revert();
     }
 };

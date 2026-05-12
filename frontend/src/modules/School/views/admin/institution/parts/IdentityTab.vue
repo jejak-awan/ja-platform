@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { CardContent } from '@/components/ui';
+import { CardContent } from '@/shared/components/ui';
 import IdentitySummary from '../components/identity/IdentitySummary.vue';
 import FoundationDialog from '../components/dialogs/FoundationDialog.vue';
 

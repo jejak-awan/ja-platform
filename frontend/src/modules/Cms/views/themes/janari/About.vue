@@ -167,11 +167,11 @@ import JanariSplitText from './components/JanariSplitText.vue'
 import { ref, onMounted, nextTick, computed } from 'vue'
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue'
 import { useRouter } from 'vue-router'
-import { logger } from '@/utils/logger'
-import { useTheme } from '@/composables/useTheme'
+import { logger } from '@/shared/utils/logger'
+import { useTheme } from '@/shared/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
-import api from '@/services/api'
-import { useThemeMotion } from '@/composables/useThemeMotion'
+import api from '@/core/api/client'
+import { useThemeMotion } from '@/shared/composables/useThemeMotion'
 
 interface TeamMember {
     name: string;
@@ -179,7 +179,7 @@ interface TeamMember {
     image: string;
 }
 
-import type { Content } from '@/types/cms/cms'
+import type { Content } from '@/modules/Cms/types/cms'
 
 interface PageData extends Content {
     title: string;

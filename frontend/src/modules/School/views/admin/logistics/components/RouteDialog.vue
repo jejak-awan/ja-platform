@@ -77,9 +77,9 @@ import { ref } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Label, Textarea
-} from '@/components/ui';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
 
 defineProps<{ open: boolean }>();
 const emit = defineEmits(['update:open', 'save']);

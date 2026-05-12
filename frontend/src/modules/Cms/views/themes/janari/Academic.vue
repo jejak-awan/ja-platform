@@ -145,9 +145,9 @@
 import { ref, onMounted, computed, markRaw } from 'vue';
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
 import { useRouter } from 'vue-router';
-import { useTheme } from '@/composables/useTheme';
+import { useTheme } from '@/shared/composables/useTheme';
 import PageDisabled from './components/PageDisabled.vue';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings';
 import BookOpen from 'lucide-vue-next/dist/esm/icons/book-open.js';
 import GraduationCap from 'lucide-vue-next/dist/esm/icons/graduation-cap.js';

@@ -12,10 +12,10 @@
             </div>
             <div>
               <h1 class="text-2xl font-bold tracking-tight text-foreground">
-                {{ $t('features.school.title') }}
+                {{ $t('modules.school.title') }}
               </h1>
               <p class="text-muted-foreground text-xs font-medium">
-                {{ $t('features.school.subtitle') }}
+                {{ $t('modules.school.subtitle') }}
               </p>
             </div>
           </div>
@@ -44,10 +44,10 @@
         </div>
         <div class="space-y-2">
           <h3 class="text-xl font-bold text-foreground tracking-tight">
-            {{ $t('features.school.institution.empty') }}
+            {{ $t('modules.school.institution.empty') }}
           </h3>
           <p class="text-muted-foreground text-sm max-w-sm mx-auto leading-relaxed">
-            {{ $t('features.school.institution.emptyDescription') }}
+            {{ $t('modules.school.institution.emptyDescription') }}
           </p>
         </div>
         <Button
@@ -60,7 +60,7 @@
               name="Plus"
               class="w-4 h-4 mr-2"
             />
-            {{ $t('features.school.institution.setupNow') }}
+            {{ $t('modules.school.institution.setupNow') }}
           </router-link>
         </Button>
       </div>
@@ -96,19 +96,19 @@
                     variant="outline"
                     class="bg-muted/50 text-foreground border-border font-bold text-[10px] px-3 py-0.5 rounded-lg"
                   >
-                    {{ $t(`features.school.institution.status.${school.type?.toLowerCase() || 'undefined'}`) }}
+                    {{ $t(`modules.school.institution.status.${school.type?.toLowerCase() || 'undefined'}`) }}
                   </Badge>
                   <Badge
                     variant="outline"
                     class="bg-muted/30 text-muted-foreground border-border/60 font-medium text-[10px] px-3 py-0.5 rounded-lg"
                   >
-                    {{ isMultiLevel ? $t('common.labels.multi_level') : $t('common.labels.single_level') }}
+                    {{ isMultiLevel ? $t('common.labels.multi_level') : $t('modules.school.labels.single_level') }}
                   </Badge>
                   <Badge
                     variant="outline"
                     class="bg-muted/30 text-muted-foreground border-border/60 font-medium text-[10px] px-3 py-0.5 rounded-lg"
                   >
-                    {{ school.is_multi_branch ? $t('features.school.wizard.options.multiLocation') : $t('features.school.wizard.options.singleLocation') }}
+                    {{ school.is_multi_branch ? $t('modules.school.wizard.options.multiLocation') : $t('modules.school.wizard.options.singleLocation') }}
                   </Badge>
                 </div>
               </div>
@@ -162,10 +162,10 @@
                   class="w-3.5 h-3.5 mr-2"
                 />
                 <template v-if="!isMultiLevel">
-                  {{ $t('common.labels.schoolProfile') }}
+                  {{ $t('modules.school.labels.schoolProfile') }}
                 </template>
                 <template v-else>
-                  {{ unitStore.activeUnitId === 0 ? $t('common.labels.identity') : 'Profil Unit' }}
+                  {{ unitStore.activeUnitId === 0 ? $t('common.labels.identity') : $t('common.labels.unitProfile') }}
                 </template>
               </TabsTrigger>
               <TabsTrigger
@@ -177,7 +177,7 @@
                   name="Settings2"
                   class="w-3.5 h-3.5 mr-2"
                 />
-                {{ isMultiLevel ? $t('features.school.units.title') : $t('common.labels.unitTechnicalDetail') }}
+                {{ isMultiLevel ? $t('modules.school.units.title') : $t('modules.school.labels.unitTechnicalDetail') }}
                 <Badge
                   v-if="isMultiLevel"
                   variant="secondary"
@@ -340,14 +340,14 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useSchoolStore } from '../../../stores/school';
 import { useUnitStore } from '../../../stores/unit';
-import type { SchoolUnit } from '@/types';
+import type { SchoolUnit } from '@/modules/School/types';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import { useToast } from '@/composables/useToast';
+import { useToast } from '@/shared/composables/useToast';
 import {
   Input, Label, Tabs, TabsList, TabsTrigger, TabsContent,
   Card, Badge, Button, LucideIcon,
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import IdentityTab from './parts/IdentityTab.vue';
 import UnitTab from './parts/UnitTab.vue';
@@ -429,14 +429,27 @@ const unitForm = ref<any>({
 onMounted(async () => {
   loading.value = true;
   try {
-    await schoolStore.fetchSchools();
-    if (school.value && school.value.id) {
+    // Initial data should already be loaded by AdminLayout.
+    // We just need to ensure the local form is populated.
+    if (school.value) {
       Object.assign(identityForm.value, school.value);
-      await unitStore.fetchUnits(school.value.id);
       const firstLevel = levels.value[0];
       if (firstLevel?.id != null) {
         selectedUnitId.value = firstLevel.id;
       }
+    } else {
+        // Fallback for direct deep links if AdminLayout hasn't finished
+        await schoolStore.fetchSchools();
+        // Re-read from the store directly to avoid TS narrowing from the outer `if`
+        const freshSchool = schoolStore.schools.length > 0 ? schoolStore.schools[0] : null;
+        if (freshSchool) {
+            Object.assign(identityForm.value, freshSchool);
+            await unitStore.fetchUnits(freshSchool.id);
+            const firstLevel = levels.value[0];
+            if (firstLevel?.id != null) {
+                selectedUnitId.value = firstLevel.id;
+            }
+        }
     }
   } finally {
     loading.value = false;
@@ -499,7 +512,7 @@ const closeUnitDialog = () => {
 
 const handleSaveLevel = async () => {
   if (!unitForm.value.name) {
-    toast.error.action(t('features.school.units.errors.nameRequired'));
+    toast.error.action(t('modules.school.units.errors.nameRequired'));
     return;
   }
   try {
@@ -562,7 +575,7 @@ const saveLevelData = async () => {
   savingUnit.value = true;
   try {
     await unitStore.updateUnit(selectedUnitId.value, { ...selectedUnit.value, school_id: school.value?.id });
-    toast.success.action(t('features.school.units.updateSuccess'));
+    toast.success.action(t('modules.school.units.updateSuccess'));
   } catch (e: any) {
     toast.error.fromResponse(e);
   } finally {
@@ -592,7 +605,7 @@ const executeDelete = async () => {
   isDeleting.value = true;
   try {
     await schoolStore.deleteSchool(school.value.id);
-    toast.success.action(t('features.school.institution.deleteSuccess'));
+    toast.success.action(t('modules.school.institution.deleteSuccess'));
     showDeleteConfirm.value = false;
     await schoolStore.fetchSchools();
   } catch (e: any) {

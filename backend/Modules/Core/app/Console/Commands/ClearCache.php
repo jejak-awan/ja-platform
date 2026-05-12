@@ -7,9 +7,9 @@ use Modules\Core\Services\CacheService;
 
 class ClearCache extends Command
 {
-    protected $signature = 'cms:clear-cache {--type=all : Type of cache to clear (all, content, category, media, seo)}';
+    protected $signature = 'core:clear-cache {--type=all : Type of cache to clear (all, media, tag, user)}';
 
-    protected $description = 'Clear CMS caches';
+    protected $description = 'Clear system caches';
 
     public function handle(): int
     {
@@ -18,26 +18,22 @@ class ClearCache extends Command
         $type = $this->option('type') ?? 'all';
 
         switch ($type) {
-            case 'content':
-                $cacheService->clearContentCaches();
-                $this->info('Content caches cleared');
-                break;
-            case 'category':
-                $cacheService->clearCategoryCaches();
-                $this->info('Category caches cleared');
-                break;
             case 'media':
                 $cacheService->clearMediaCaches();
                 $this->info('Media caches cleared');
                 break;
-            case 'seo':
-                $cacheService->clearSeoCaches();
-                $this->info('SEO caches cleared');
+            case 'tag':
+                $cacheService->clearTagCaches();
+                $this->info('Tag caches cleared');
+                break;
+            case 'user':
+                $cacheService->clearUserCaches();
+                $this->info('User caches cleared');
                 break;
             case 'all':
             default:
                 $cacheService->clearAll();
-                $this->info('All caches cleared');
+                $this->info('All system and module caches cleared');
                 break;
         }
 

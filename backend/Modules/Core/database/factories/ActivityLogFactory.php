@@ -23,7 +23,7 @@ class ActivityLogFactory extends Factory
         return [
             'user_id' => User::factory(),
             'action' => fake()->randomElement(['created', 'updated', 'deleted', 'viewed', 'login', 'logout']),
-            'model_type' => fake()->randomElement(['Modules\\Cms\\Models\\Content', 'Modules\\Core\\Models\\User', 'Modules\\Cms\\Models\\Category']),
+            'model_type' => fake()->randomElement(['Modules\\Core\\Models\\User', 'Modules\\Core\\Models\\Setting', 'Modules\\Core\\Models\\Media']),
             'model_id' => fake()->numberBetween(1, 100),
             'description' => fake()->sentence(),
             'changes' => [],

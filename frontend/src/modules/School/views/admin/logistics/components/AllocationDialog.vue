@@ -5,19 +5,19 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ $t('features.school.logistics.hostel.labels.allocateStudentTitle') }}</DialogTitle>
+        <DialogTitle>{{ $t('modules.school.logistics.hostel.labels.allocateStudentTitle') }}</DialogTitle>
         <DialogDescription>
-          {{ $t('features.school.logistics.hostel.placeholders.searchStudent') }} <strong>{{ bed?.bed_number }}</strong>.
+          {{ $t('modules.school.logistics.hostel.placeholders.searchStudent') }} <strong>{{ bed?.bed_number }}</strong>.
         </DialogDescription>
       </DialogHeader>
 
       <div class="grid gap-4 py-4">
         <div class="grid gap-2">
-          <Label for="student">{{ $t('features.school.logistics.hostel.actions.allocateStudent') }}</Label>
+          <Label for="student">{{ $t('modules.school.logistics.hostel.actions.allocateStudent') }}</Label>
           <div class="relative">
             <Input
               v-model="search"
-              :placeholder="$t('features.school.logistics.hostel.placeholders.searchStudent')"
+              :placeholder="$t('modules.school.logistics.hostel.placeholders.searchStudent')"
               @input="fetchStudents"
             />
             <div
@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="grid gap-2">
-          <Label for="start">{{ $t('features.school.logistics.hostel.labels.occupancyStartDate') }}</Label>
+          <Label for="start">{{ $t('modules.school.logistics.hostel.labels.occupancyStartDate') }}</Label>
           <Input
             id="start"
             v-model="form.start_date"
@@ -68,7 +68,7 @@
           :disabled="!form.student_id"
           @click="handleSubmit"
         >
-          {{ $t('features.school.logistics.hostel.actions.confirmAllocation') }}
+          {{ $t('modules.school.logistics.hostel.actions.confirmAllocation') }}
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -80,11 +80,11 @@ import { ref } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Label, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { LogisticsService } from '@/modules/School/services/LogisticsService';
 import { StudentService } from '@/modules/School/services/StudentService';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const props = defineProps<{
   open: boolean;

@@ -34,6 +34,7 @@ class SecurityHeaders
                 $csp = $configuredPolicy;
             }
         }
+
         $reportOnlyRaw = config('security.headers.csp_report_only');
         if (is_bool($reportOnlyRaw)) {
             $reportOnly = $reportOnlyRaw;
@@ -145,14 +146,12 @@ class SecurityHeaders
         // Keep unsafe-inline for compatibility, but phase out unsafe-eval by default in production.
         $scriptSrc = [
             "'self'",
-            "'nonce-{$nonce}'",
             "'unsafe-inline'",
+            "'unsafe-eval'",
             'https:',
             'data:',
+            'blob:',
         ];
-        if ($allowUnsafeEval) {
-            $scriptSrc[] = "'unsafe-eval'";
-        }
 
         // Allow localhost only in local/dev for Vite HMR.
         if ($allowViteDevServer) {
@@ -181,7 +180,7 @@ class SecurityHeaders
         $directives[] = 'script-src '.implode(' ', array_unique($scriptSrc));
 
         // Style sources
-        $styleSrc = ["'self'", "'nonce-{$nonce}'", "'unsafe-inline'"];
+        $styleSrc = ["'self'", "'unsafe-inline'"];
 
         if ($allowViteDevServer) {
             $styleSrc[] = 'http://localhost:5173';
@@ -226,6 +225,11 @@ class SecurityHeaders
             $connectSrc[] = "wss://{$host}";
             $connectSrc[] = "ws://{$host}";
         }
+        
+        // Add current origin explicitly
+        $connectSrc[] = 'https://dev.smkn1cijulang.sch.id';
+        $connectSrc[] = 'https://*.smkn1cijulang.sch.id';
+        $connectSrc[] = 'https://smkn1cijulang.sch.id';
         
         $portalUrl = config('app.url');
         if (is_string($portalUrl) && $portalUrl !== '') {
@@ -321,23 +325,28 @@ class SecurityHeaders
     {
         $normalizedPolicy = strtolower($policy);
 
-        // Known broken policy pattern seen in old overrides.
-        if (str_contains($normalizedPolicy, "connect-src 'none'")) {
+        // 1. Critical Failure: connect-src 'none' or script-src 'none' 
+        // This completely breaks an SPA's ability to load or communicate.
+        if (str_contains($normalizedPolicy, "connect-src 'none'") || 
+            str_contains($normalizedPolicy, "script-src 'none'")) {
             return false;
         }
 
-        if (preg_match('/(?:^|;)\s*script-src\s+([^;]+)/i', $policy, $scriptMatch) === 1) {
-            $scriptSources = strtolower($scriptMatch[1]);
-            if (! str_contains($scriptSources, "'self'")) {
-                return false;
-            }
+        // 2. Critical Failure: Missing 'self' in script-src
+        // If script-src exists but doesn't have 'self', the main app chunk will be blocked.
+        if (str_contains($normalizedPolicy, 'script-src') && ! str_contains($normalizedPolicy, "'self'")) {
+            return false;
         }
 
-        if (preg_match('/(?:^|;)\s*connect-src\s+([^;]+)/i', $policy, $connectMatch) === 1) {
-            $connectSources = strtolower($connectMatch[1]);
-            if (! str_contains($connectSources, "'self'")) {
-                return false;
-            }
+        // 3. Critical Failure: Missing 'self' in connect-src
+        // If connect-src exists but doesn't have 'self', API calls to the origin will be blocked.
+        if (str_contains($normalizedPolicy, 'connect-src') && ! str_contains($normalizedPolicy, "'self'")) {
+            return false;
+        }
+
+        // 4. Critical Failure: Policy is too short or missing key directives
+        if (strlen($policy) < 20 || ! str_contains($normalizedPolicy, 'default-src')) {
+            return false;
         }
 
         return true;

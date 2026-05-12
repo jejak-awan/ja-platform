@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-6">
     <SettingGroup
-      :title="$t('features.settings.ai.title', 'AI Assistance')"
-      :description="$t('features.settings.ai.description', 'Configure AI features for content generation.')"
+      :title="$t('modules.core.settings.ai.title', 'AI Assistance')"
+      :description="$t('modules.core.settings.ai.description', 'Configure AI features for content generation.')"
       :icon="Sparkles"
       color="indigo"
     >
@@ -12,8 +12,8 @@
           v-model="(localFormData.ai_enabled as any)"
           field-key="ai_enabled"
           type="boolean"
-          :label="$t('features.settings.ai.enable_ai', 'Enable AI Features')"
-          :description="$t('features.settings.ai.enable_ai_desc', 'Enable or disable AI assistance in the editor.')"
+          :label="$t('modules.core.settings.ai.enable_ai', 'Enable AI Features')"
+          :description="$t('modules.core.settings.ai.enable_ai_desc', 'Enable or disable AI assistance in the editor.')"
           :error="errors?.ai_enabled"
           @update:model-value="v => updateField('ai_enabled', v)"
         />
@@ -21,10 +21,10 @@
         <!-- Default Provider -->
         <div>
           <label class="block text-sm font-medium text-foreground mb-1">
-            {{ $t('features.settings.ai.default_provider', 'Default Provider') }}
+            {{ $t('modules.core.settings.ai.default_provider', 'Default Provider') }}
           </label>
           <p class="text-xs text-muted-foreground mb-2">
-            {{ $t('features.settings.ai.default_provider_desc', 'Select which AI provider to use by default.') }}
+            {{ $t('modules.core.settings.ai.default_provider_desc', 'Select which AI provider to use by default.') }}
           </p>
           <Select 
             :model-value="(localFormData.ai_default_provider as string)" 
@@ -32,7 +32,7 @@
             @update:model-value="v => updateField('ai_default_provider', v)"
           >
             <SelectTrigger>
-              <SelectValue :placeholder="$t('features.settings.ai.default_provider')" />
+              <SelectValue :placeholder="$t('modules.core.settings.ai.default_provider')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem
@@ -61,7 +61,7 @@
       :class="{ 'opacity-50 pointer-events-none': !formData.ai_enabled }"
     >
       <h3 class="text-lg font-medium">
-        {{ $t('features.settings.ai.providers', 'AI Providers') }}
+        {{ $t('modules.core.settings.ai.providers', 'AI Providers') }}
       </h3>
             
       <div
@@ -92,7 +92,7 @@
                 v-if="formData[`${provider.id}_model`]"
                 class="text-xs text-muted-foreground"
               >
-                {{ $t('features.settings.groups.ai.using_model', { model: formData[`${provider.id}_model`] }) }}
+                {{ $t('modules.core.settings.groups.ai.using_model', { model: formData[`${provider.id}_model`] }) }}
               </span>
             </div>
           </div>
@@ -110,12 +110,12 @@
             <!-- Left Col: API Key -->
             <div class="space-y-1">
               <label class="block text-sm font-medium text-foreground">
-                {{ $t('features.settings.ai.api_key', 'API Key') }}
+                {{ $t('modules.core.settings.ai.api_key', 'API Key') }}
               </label>
               <div class="relative">
                 <Input 
                   :type="showKey[provider.id] ? 'text' : 'password'"
-                  :placeholder="$t('features.settings.ai.api_key_placeholder', 'Enter API Key')"
+                  :placeholder="$t('modules.core.settings.ai.api_key_placeholder', 'Enter API Key')"
                   :model-value="(localFormData[`${provider.id}_api_key`] as string)"
                   class="pr-10"
                   @update:model-value="v => updateField(`${provider.id}_api_key`, v)"
@@ -146,7 +146,7 @@
             <!-- Right Col: Model Selection & Actions -->
             <div class="space-y-1">
               <label class="block text-sm font-medium text-foreground">
-                {{ $t('features.settings.ai.model_select', 'Default Model') }}
+                {{ $t('modules.core.settings.ai.model_select', 'Default Model') }}
               </label>
               <div class="flex gap-2">
                 <Select 
@@ -156,7 +156,7 @@
                   @update:open="(open) => { if(open) fetchModels(provider.id) }"
                 >
                   <SelectTrigger class="w-full">
-                    <SelectValue :placeholder="loadingModels[provider.id] ? $t('features.settings.groups.ai.loading_models') : ((formData[`${provider.id}_model`] as string) || $t('features.settings.groups.ai.select_model'))" />
+                    <SelectValue :placeholder="loadingModels[provider.id] ? $t('modules.core.settings.groups.ai.loading_models') : ((formData[`${provider.id}_model`] as string) || $t('modules.core.settings.groups.ai.select_model'))" />
                   </SelectTrigger>
                   <SelectContent class="max-h-[300px]">
                     <SelectItem
@@ -174,7 +174,7 @@
                   size="icon" 
                   variant="outline" 
                   type="button" 
-                  :title="$t('features.settings.ai.test_connection')"
+                  :title="$t('modules.core.settings.ai.test_connection')"
                   :disabled="!formData[`${provider.id}_api_key`] || testing[provider.id]"
                   @click="testConnection(provider.id)"
                 >
@@ -194,7 +194,7 @@
                   size="icon" 
                   variant="ghost" 
                   type="button" 
-                  :title="$t('features.settings.ai.fetch_models')"
+                  :title="$t('modules.core.settings.ai.fetch_models')"
                   :disabled="!formData[`${provider.id}_api_key`] || loadingModels[provider.id]"
                   @click="fetchModels(provider.id, true)"
                 >
@@ -208,7 +208,7 @@
                 v-if="!formData[`${provider.id}_api_key`]"
                 class="text-xs text-muted-foreground mt-1"
               >
-                {{ $t('features.settings.groups.ai.enter_api_key_to_select') }}
+                {{ $t('modules.core.settings.groups.ai.enter_api_key_to_select') }}
               </p>
             </div>
           </div>
@@ -219,7 +219,7 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch } from 'vue';
 import Sparkles from 'lucide-vue-next/dist/esm/icons/sparkles.js';
 import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js';
@@ -239,9 +239,9 @@ import {
     SelectValue,
     Button,
     Input
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
-import api from '@/services/api';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
+import api from '@/core/api/client';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -339,7 +339,7 @@ const fetchModels = async (providerId: string, force = false) => {
         availableModels.value = { ...availableModels.value, [providerId]: response.data };
         
         if (force) {
-            toast.success.action(t('features.settings.groups.ai.fetch_success') || 'Models fetched successfully');
+            toast.success.action(t('modules.core.settings.groups.ai.fetch_success') || 'Models fetched successfully');
         }
     } catch {
         // If 401/403, might be invalid key
@@ -358,7 +358,7 @@ const testConnection = async (providerId: string) => {
             provider: providerId,
             api_key: props.formData[`${providerId}_api_key`]
         });
-        toast.success.action(t('features.settings.groups.ai.connection_success') || 'Connection successful');
+        toast.success.action(t('modules.core.settings.groups.ai.connection_success') || 'Connection successful');
         testSuccess.value = { ...testSuccess.value, [providerId]: true };
         fetchModels(providerId, true); // Auto fetch models on success
     } catch (error: unknown) {

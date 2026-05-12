@@ -7,9 +7,10 @@
   },
   "scripts": {
     "build": "npm --prefix frontend run build",
-    "deploy:assets": "SYNC_ONLY=1 bash scripts/sync-frontend-assets-to-backend.sh",
-    "deploy:assets:full": "bash scripts/sync-frontend-assets-to-backend.sh",
-    "deploy:assets:sync": "SYNC_ONLY=1 bash scripts/sync-frontend-assets-to-backend.sh",
+    "sync": "SYNC_ONLY=1 bash scripts/sync-frontend-assets-to-backend.sh",
+    "deploy": "bash scripts/sync-frontend-assets-to-backend.sh",
+    "deploy:assets": "npm run sync",
+    "deploy:assets:full": "npm run deploy",
     "agent:verify": "npm run quality:frontend && npm run quality:backend",
     "agent:verify:quick": "npm run quality:frontend",
     "quality:frontend": "npm --prefix frontend run quality:frontend",

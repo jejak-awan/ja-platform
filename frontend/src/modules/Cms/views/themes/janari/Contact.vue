@@ -553,15 +553,15 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, nextTick, defineAsyncComponent, watchEffect } from 'vue'
 import { useHead } from '@unhead/vue'
 import axios from 'axios'
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue'
 import { useRouter } from 'vue-router'
-import { useTheme } from '@/composables/useTheme'
+import { useTheme } from '@/shared/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
-import api, { getCsrfCookie } from '@/services/api'
+import api, { getCsrfCookie } from '@/core/api/client'
 import { useCmsStore } from '@/modules/Cms/stores/cms'
 import {
     Card,
@@ -581,19 +581,19 @@ import {
     SelectValue,
     SelectContent,
     SelectItem,
-} from '@/components/ui'
+} from '@/shared/components/ui'
 import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
 import Phone from 'lucide-vue-next/dist/esm/icons/phone.js';
 import MapPin from 'lucide-vue-next/dist/esm/icons/map-pin.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import { useToast } from '@/composables/useToast'
-import { useThemeMotion } from '@/composables/useThemeMotion'
+import { useToast } from '@/shared/composables/useToast'
+import { useThemeMotion } from '@/shared/composables/useThemeMotion'
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity'
 import type { CaptchaPayload } from '@/modules/Core/components/captcha/CaptchaWrapper.vue'
 
 const CaptchaWrapper = defineAsyncComponent(() => import('@/modules/Core/components/captcha/CaptchaWrapper.vue'))
 
-import type { Content } from '@/types/cms/cms'
+import type { Content } from '@/modules/Cms/types/cms'
 
 interface PageData extends Content {
     title: string;

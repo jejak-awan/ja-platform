@@ -3,7 +3,7 @@
     <CardHeader class="pb-4">
       <CardTitle class="text-xl font-bold flex items-center gap-2">
         <Image class="w-5 h-5 text-primary" />
-        {{ $t('features.content.form.featuredImage') }}
+        {{ $t('modules.cms.content.form.featuredImage') }}
       </CardTitle>
     </CardHeader>
     <CardContent>
@@ -24,7 +24,7 @@
               @click="$emit('update:modelValue', null)"
             >
               <Trash2 class="w-4 h-4 mr-2" />
-              {{ $t('features.content.form.remove') }}
+              {{ $t('modules.cms.content.form.remove') }}
             </Button>
           </div>
         </div>
@@ -33,7 +33,7 @@
           class="flex flex-col items-center justify-center p-8 border-2 border-dashed border-border/40 rounded-lg bg-background/30 hover:bg-background/50 transition-colors"
         >
           <MediaPicker
-            :label="$t('features.content.form.selectImage')"
+            :label="$t('modules.cms.content.form.selectImage')"
             :constraints="{
               allowedExtensions: settings.allowed_image_types ? String(settings.allowed_image_types).split(',').map(s => s.trim()) : ['jpg', 'jpeg', 'png', 'webp'],
               minWidth: 600,
@@ -49,13 +49,13 @@
                 @click="open"
               >
                 <Plus class="w-4 h-4" />
-                {{ $t('features.content.form.selectImage') }}
+                {{ $t('modules.cms.content.form.selectImage') }}
               </Button>
             </template>
           </MediaPicker>
           <div class="mt-4 text-[10px] text-muted-foreground/60 text-center italic leading-relaxed">
-            <p>{{ $t('features.content.form.recommendedHint', { dimensions: '1200x630px' }) }} {{ $t('features.content.form.minHint', { dimensions: '600x400px' }) }}</p>
-            <p>{{ $t('features.content.form.maxSizeHint', { size: Math.round(maxUploadSizeMB), extensions: String(settings.allowed_image_types || 'JPG, PNG, WEBP').toUpperCase() }) }}</p>
+            <p>{{ $t('modules.cms.content.form.recommendedHint', { dimensions: '1200x630px' }) }} {{ $t('modules.cms.content.form.minHint', { dimensions: '600x400px' }) }}</p>
+            <p>{{ $t('modules.cms.content.form.maxSizeHint', { size: Math.round(maxUploadSizeMB), extensions: String(settings.allowed_image_types || 'JPG, PNG, WEBP').toUpperCase() }) }}</p>
           </div>
         </div>
       </div>
@@ -66,14 +66,14 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
-import MediaPicker from '@/components/shared/media/MediaPicker.vue';
+import MediaPicker from '@/shared/components/media/MediaPicker.vue';
 import {
     Card,
     CardHeader,
     CardTitle,
     CardContent,
     Button
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import Image from 'lucide-vue-next/dist/esm/icons/image.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';

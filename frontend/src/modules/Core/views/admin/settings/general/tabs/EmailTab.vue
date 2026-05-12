@@ -13,11 +13,11 @@
         :key="setting.id"
         :model-value="(formData[setting.key] as any)"
         :field-key="setting.key"
-        :label="$t('features.settings.labels.' + setting.key)"
-        :description="$t('features.settings.descriptions.' + setting.key)"
+        :label="$t('modules.core.settings.labels.' + setting.key)"
+        :description="$t('modules.core.settings.descriptions.' + setting.key)"
         :type="setting.type"
-        :enabled-text="$t('features.settings.enabled')"
-        :disabled-text="$t('features.settings.disabled')"
+        :enabled-text="$t('modules.core.settings.enabled')"
+        :disabled-text="$t('modules.core.settings.disabled')"
         :error="errors?.[setting.key]"
         @update:model-value="(value) => updateField(setting.key, value)"
       />
@@ -38,7 +38,7 @@
                 :disabled="validatingConfig"
                 @click="$emit('validate-config')"
               >
-                {{ validatingConfig ? $t('features.settings.emailTest.validating') : $t('features.settings.emailTest.validate') }}
+                {{ validatingConfig ? $t('modules.core.settings.emailTest.validating') : $t('modules.core.settings.emailTest.validate') }}
               </Button>
               <div
                 v-if="configValidation"
@@ -47,11 +47,11 @@
                 <span
                   v-if="configValidation.valid"
                   class="text-success"
-                >✓ {{ $t('features.settings.emailTest.valid') }}</span>
+                >✓ {{ $t('modules.core.settings.emailTest.valid') }}</span>
                 <span
                   v-else
                   class="text-destructive"
-                >✗ {{ $t('features.settings.emailTest.invalid') }}</span>
+                >✗ {{ $t('modules.core.settings.emailTest.invalid') }}</span>
               </div>
             </div>
                         
@@ -64,7 +64,7 @@
                 :disabled="testingConnection"
                 @click="$emit('test-connection')"
               >
-                {{ testingConnection ? $t('features.settings.emailTest.testing') : $t('features.settings.emailTest.testConnection') }}
+                {{ testingConnection ? $t('modules.core.settings.emailTest.testing') : $t('modules.core.settings.emailTest.testConnection') }}
               </Button>
               <div
                 v-if="connectionResult"
@@ -73,11 +73,11 @@
                 <span
                   v-if="connectionResult.connected"
                   class="text-success"
-                >✓ {{ $t('features.settings.emailTest.connected', { host: connectionResult.host, port: connectionResult.port }) }}</span>
+                >✓ {{ $t('modules.core.settings.emailTest.connected', { host: connectionResult.host, port: connectionResult.port }) }}</span>
                 <span
                   v-else
                   class="text-destructive"
-                >✗ {{ $t('features.settings.emailTest.failed') }}</span>
+                >✗ {{ $t('modules.core.settings.emailTest.failed') }}</span>
               </div>
             </div>
           </div>
@@ -92,7 +92,7 @@
               class="mb-2"
             >
               <p class="text-xs font-medium text-destructive mb-1">
-                {{ $t('features.settings.emailTest.errors') }}
+                {{ $t('modules.core.settings.emailTest.errors') }}
               </p>
               <ul class="text-xs text-destructive list-disc list-inside">
                 <li
@@ -105,7 +105,7 @@
             </div>
             <div v-if="configValidation.warnings && configValidation.warnings.length > 0">
               <p class="text-xs font-medium text-warning mb-1">
-                {{ $t('features.settings.emailTest.warnings') }}
+                {{ $t('modules.core.settings.emailTest.warnings') }}
               </p>
               <ul class="text-xs text-warning list-disc list-inside">
                 <li
@@ -128,7 +128,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MailIcon from 'lucide-vue-next/dist/esm/icons/mail.js';import SettingGroup from '@/modules/Core/components/settings/SettingGroup.vue'
 import SettingField from '@/modules/Core/components/settings/SettingField.vue'
-import { Button } from '@/components/ui';
+import { Button } from '@/shared/components/ui';
 
 interface Setting {
     id: number | string;
@@ -190,8 +190,8 @@ const emailSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'smtp',
-            title: t('features.settings.groups.smtp.title'),
-            description: t('features.settings.groups.smtp.description'),
+            title: t('modules.core.settings.groups.smtp.title'),
+            description: t('modules.core.settings.groups.smtp.description'),
             icon: MailIcon,
             color: 'indigo',
             keys: [

@@ -3,10 +3,10 @@
     <div class="flex justify-between items-center">
       <div>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.operations.visitors.title') }}
+          {{ $t('modules.school.operations.visitors.title') }}
         </h1>
         <p class="text-sm text-muted-foreground">
-          {{ $t('features.school.operations.visitors.subtitle') }}
+          {{ $t('modules.school.operations.visitors.subtitle') }}
         </p>
       </div>
       <Button @click="dialogs.checkIn = true">
@@ -14,7 +14,7 @@
           name="UserPlus"
           class="w-4 h-4 mr-2"
         />
-        {{ $t('features.school.operations.visitors.btnAdd') }}
+        {{ $t('modules.school.operations.visitors.btnAdd') }}
       </Button>
     </div>
 
@@ -26,16 +26,16 @@
               v-model="filters.status"
               class="w-40"
             >
-              <SelectTrigger><SelectValue :placeholder="$t('features.school.operations.visitors.labels.status')" /></SelectTrigger>
+              <SelectTrigger><SelectValue :placeholder="$t('modules.school.operations.visitors.labels.status')" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">
-                  {{ $t('features.school.operations.visitors.filters.all') }}
+                  {{ $t('modules.school.operations.visitors.filters.all') }}
                 </SelectItem>
                 <SelectItem value="checked_in">
-                  {{ $t('features.school.operations.visitors.filters.checked_in') }}
+                  {{ $t('modules.school.operations.visitors.filters.checked_in') }}
                 </SelectItem>
                 <SelectItem value="checked_out">
-                  {{ $t('features.school.operations.visitors.filters.checked_out') }}
+                  {{ $t('modules.school.operations.visitors.filters.checked_out') }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -62,10 +62,10 @@ import { useI18n } from 'vue-i18n';
 import {
   Card, CardContent, Button, LucideIcon, DataTable, Badge,
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { OperationsService } from '@/modules/School/services/OperationsService';
-import { parseResponse } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
 import { createColumnHelper, useVueTable, getCoreRowModel } from '@tanstack/vue-table';
 import VisitorCheckInDialog from './components/VisitorCheckInDialog.vue';
 
@@ -80,7 +80,7 @@ const columnHelper = createColumnHelper<any>();
 
 const visitorColumns = [
   columnHelper.accessor('name', { 
-    header: t('features.school.operations.visitors.labels.visitorName'),
+    header: t('modules.school.operations.visitors.labels.visitorName'),
     cell: info => h('div', { class: 'flex items-center gap-3' }, [
       info.row.original.photo_path ? h('img', { 
         src: `/storage/${info.row.original.photo_path}`, 
@@ -94,18 +94,18 @@ const visitorColumns = [
       ])
     ])
   }),
-  columnHelper.accessor('purpose', { header: t('features.school.operations.visitors.labels.purpose') }),
-  columnHelper.accessor('target_person', { header: t('features.school.operations.visitors.labels.targetPerson') }),
+  columnHelper.accessor('purpose', { header: t('modules.school.operations.visitors.labels.purpose') }),
+  columnHelper.accessor('target_person', { header: t('modules.school.operations.visitors.labels.targetPerson') }),
   columnHelper.accessor('check_in', { 
-    header: t('features.school.operations.visitors.labels.checkIn'),
+    header: t('modules.school.operations.visitors.labels.checkIn'),
     cell: info => new Date(info.getValue() as string).toLocaleString(t('common.language') === 'id' ? 'id-ID' : 'en-US', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' })
   }),
   columnHelper.accessor('status', {
-    header: t('features.school.operations.visitors.labels.status'),
+    header: t('modules.school.operations.visitors.labels.status'),
     cell: info => {
       const status = info.getValue() as string;
       return h(Badge, { variant: status === 'checked_in' ? 'warning' : 'success' }, 
-        status === 'checked_in' ? t('features.school.operations.visitors.status.checked_in') : t('features.school.operations.visitors.status.checked_out')
+        status === 'checked_in' ? t('modules.school.operations.visitors.status.checked_in') : t('modules.school.operations.visitors.status.checked_out')
       );
     }
   }),
@@ -118,7 +118,7 @@ const visitorColumns = [
         variant: 'outline',
         class: 'text-xs',
         onClick: () => handleCheckOut(row.original.id)
-      }, t('features.school.operations.visitors.actions.checkOut')) : h('p', { class: 'text-[10px] text-muted-foreground italic' }, 
+      }, t('modules.school.operations.visitors.actions.checkOut')) : h('p', { class: 'text-[10px] text-muted-foreground italic' }, 
         `Out: ${new Date(row.original.check_out).toLocaleTimeString(t('common.language') === 'id' ? 'id-ID' : 'en-US', {hour:'2-digit', minute:'2-digit'})}`
       )
     ])
@@ -152,7 +152,7 @@ const handleCheckIn = async (formData: FormData) => {
         formData.append('school_id', '1');
         formData.append('school_unit_id', '1');
         await OperationsService.checkInVisitor(formData);
-        toast.success.action(t('features.school.operations.visitors.messages.registerSuccess'));
+        toast.success.action(t('modules.school.operations.visitors.messages.registerSuccess'));
         dialogs.value.checkIn = false;
         fetchVisitors();
     } catch (e) {
@@ -163,11 +163,11 @@ const handleCheckIn = async (formData: FormData) => {
 }
 
 const handleCheckOut = async (id: number) => {
-    if (confirm(t('features.school.operations.visitors.actions.checkOutConfirm'))) {
+    if (confirm(t('modules.school.operations.visitors.actions.checkOutConfirm'))) {
         loading.value = true;
         try {
             await OperationsService.checkOutVisitor(id);
-            toast.success.action(t('features.school.operations.visitors.messages.checkOutSuccess'));
+            toast.success.action(t('modules.school.operations.visitors.messages.checkOutSuccess'));
             fetchVisitors();
         } catch (e) {
             toast.error.fromResponse(e);

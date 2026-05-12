@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
-import api from '@/services/api';
+import api from '@/core/api/client';
 
-vi.mock('@/services/api', () => ({
+vi.mock('@/core/api/client', () => ({
     default: {
         get: vi.fn(),
         put: vi.fn(),
@@ -11,7 +11,7 @@ vi.mock('@/services/api', () => ({
 }));
 
 // Mock logger to avoid console spam
-vi.mock('@/utils/logger', () => ({
+vi.mock('@/shared/utils/logger', () => ({
     logger: {
         error: vi.fn(),
         debug: vi.fn(),

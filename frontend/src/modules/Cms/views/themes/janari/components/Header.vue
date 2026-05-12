@@ -478,13 +478,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
-import { useTheme } from '@/composables/useTheme';
-import { useMenu } from '@/composables/useMenu';
+import { useTheme } from '@/shared/composables/useTheme';
+import { useMenu } from '@/shared/composables/useMenu';
 import { useCoreStore } from '@/modules/Core/stores/core';
-import { useResponsiveDevice } from '@/composables/useResponsiveDevice';
-import { useThemeMotion } from '@/composables/useThemeMotion';
+import { useResponsiveDevice } from '@/shared/composables/useResponsiveDevice';
+import { useThemeMotion } from '@/shared/composables/useThemeMotion';
 import { useRoute } from 'vue-router';
-import { useDarkMode } from '@/composables/useDarkMode';
+import { useDarkMode } from '@/shared/composables/useDarkMode';
 import { SECURITY_ROUTES } from '@/config/security';
 import { useJanariIdentity, trimStr, toWhatsAppDialDigits } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity';
 import JanariBreadcrumbs from '@/modules/Cms/views/themes/janari/components/JanariBreadcrumbs.vue';
@@ -505,7 +505,7 @@ import MenuIcon from 'lucide-vue-next/dist/esm/icons/menu.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import Sun from 'lucide-vue-next/dist/esm/icons/sun.js';
 import Moon from 'lucide-vue-next/dist/esm/icons/moon.js';
-import type { MenuItem } from '@/types/cms/menu';
+import type { MenuItem } from '@/modules/Cms/types/menu';
 
 const { getSetting } = useTheme();
 const { menus, fetchMenuByIdentifier } = useMenu();

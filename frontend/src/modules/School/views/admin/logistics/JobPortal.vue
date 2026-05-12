@@ -12,7 +12,7 @@
             name="Users"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.career.actions.viewApplicants') }}
+          {{ $t('modules.school.logistics.career.actions.viewApplicants') }}
         </Button>
       </div>
       <Button
@@ -24,7 +24,7 @@
           name="PlusCircle"
           class="w-4 h-4 mr-2"
         />
-        {{ $t('features.school.logistics.career.actions.postVacancy') }}
+        {{ $t('modules.school.logistics.career.actions.postVacancy') }}
       </Button>
     </div>
 
@@ -65,7 +65,7 @@
             D/L: {{ v.deadline ? new Date(v.deadline).toLocaleDateString() : 'N/A' }}
           </div>
           <div class="text-[10px] font-bold">
-            {{ v.applications_count }} {{ $t('features.school.logistics.career.labels.applicants') }}
+            {{ v.applications_count }} {{ $t('modules.school.logistics.career.labels.applicants') }}
           </div>
         </CardFooter>
       </Card>
@@ -89,9 +89,9 @@ import { LogisticsService } from '@/modules/School/services/LogisticsService';
 import {
   Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter,
   Button, LucideIcon, Badge
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 // Components
 import VacancyDialog from './components/VacancyDialog.vue';

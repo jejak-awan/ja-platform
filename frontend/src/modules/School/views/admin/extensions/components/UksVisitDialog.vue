@@ -5,14 +5,14 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('common.labels.edit') || 'Edit' : $t('features.school.extensions.tabs.uks') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('common.labels.edit') || 'Edit' : $t('modules.school.extensions.tabs.uks') }}</DialogTitle>
       </DialogHeader>
       <form
         class="space-y-4 py-4"
         @submit.prevent="handleSubmit"
       >
         <div class="space-y-2">
-          <Label>{{ $t('features.school.extensions.labels.patientName') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.extensions.labels.patientName') }} <span class="text-destructive">*</span></Label>
           <Select
             v-model="form.patient_id"
             required
@@ -30,7 +30,7 @@
           </Select>
         </div>
         <div class="space-y-2">
-          <Label for="complaint">{{ $t('features.school.extensions.labels.complaint') }} <span class="text-destructive">*</span></Label>
+          <Label for="complaint">{{ $t('modules.school.extensions.labels.complaint') }} <span class="text-destructive">*</span></Label>
           <Textarea
             id="complaint"
             v-model="form.complaint"
@@ -75,9 +75,9 @@ import { ref, watch, onMounted } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, Textarea, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const props = defineProps<{
   open: boolean;

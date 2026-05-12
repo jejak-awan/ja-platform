@@ -9,7 +9,7 @@
           />
           <Input
             v-model="filters.search"
-            :placeholder="$t('features.school.logistics.inventory.placeholders.searchSKU')"
+            :placeholder="$t('modules.school.logistics.inventory.placeholders.searchSKU')"
             class="pl-9"
             @input="fetchItems"
           />
@@ -46,7 +46,7 @@
             name="ArrowDownUp"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.inventory.actions.updateStock') }}
+          {{ $t('modules.school.logistics.inventory.actions.updateStock') }}
         </Button>
         <Button
           size="sm"
@@ -57,7 +57,7 @@
             name="Plus"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.inventory.actions.newItem') }}
+          {{ $t('modules.school.logistics.inventory.actions.newItem') }}
         </Button>
       </div>
     </div>
@@ -77,7 +77,7 @@
             variant="destructive"
             class="text-[8px] animate-pulse"
           >
-            {{ $t('features.school.logistics.inventory.labels.lowStock') }}
+            {{ $t('modules.school.logistics.inventory.labels.lowStock') }}
           </Badge>
         </div>
         <CardHeader class="pb-2">
@@ -94,7 +94,7 @@
               {{ item.quantity_on_hand }} <span class="text-xs text-muted-foreground font-normal">{{ item.unit }}</span>
             </div>
             <div class="text-[10px] text-muted-foreground">
-              {{ $t('features.school.logistics.inventory.labels.minimumStock') }}: {{ item.minimum_stock }}
+              {{ $t('modules.school.logistics.inventory.labels.minimumStock') }}: {{ item.minimum_stock }}
             </div>
           </div>
         </CardContent>
@@ -105,7 +105,7 @@
     <Card class="border-border/50 text-left">
       <CardHeader>
         <CardTitle class="text-lg">
-          {{ $t('features.school.logistics.inventory.labels.lastLogisticsTransaction') }}
+          {{ $t('modules.school.logistics.inventory.labels.lastLogisticsTransaction') }}
         </CardTitle>
       </CardHeader>
       <CardContent class="p-0">
@@ -137,10 +137,10 @@ import { LogisticsService } from '@/modules/School/services/LogisticsService';
 import {
   Card, CardHeader, CardTitle, CardDescription, CardContent,
   Button, LucideIcon, Badge, DataTable, Input, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { createColumnHelper, useVueTable, getCoreRowModel } from '@tanstack/vue-table';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 // Components
 import ItemDialog from './components/ItemDialog.vue';
@@ -162,10 +162,10 @@ const dialogs = ref({
 const columnHelper = createColumnHelper<any>();
 const columns = [
    columnHelper.accessor('created_at', { 
-      header: t('features.school.logistics.inventory.labels.time'), 
+      header: t('modules.school.logistics.inventory.labels.time'), 
       cell: info => new Date(info.getValue()).toLocaleString(locale.value === 'id' ? 'id-ID' : 'en-US')
    }),
-   columnHelper.accessor('item.name', { header: t('features.school.logistics.inventory.labels.item') }),
+   columnHelper.accessor('item.name', { header: t('modules.school.logistics.inventory.labels.item') }),
    columnHelper.accessor('type', { 
       header: t('common.labels.type'),
       cell: info => h(Badge, { 
@@ -173,8 +173,8 @@ const columns = [
          class: 'text-[10px] font-semibold'
       }, info.getValue())
    }),
-   columnHelper.accessor('quantity', { header: t('features.school.logistics.inventory.labels.quantity') }),
-   columnHelper.accessor('reference_number', { header: t('features.school.logistics.inventory.labels.reference') }),
+   columnHelper.accessor('quantity', { header: t('modules.school.logistics.inventory.labels.quantity') }),
+   columnHelper.accessor('reference_number', { header: t('modules.school.logistics.inventory.labels.reference') }),
    columnHelper.accessor('notes', { header: t('common.labels.comment'), cell: info => h('span', { class: 'text-xs' }, info.getValue() || '-') })
 ];
 

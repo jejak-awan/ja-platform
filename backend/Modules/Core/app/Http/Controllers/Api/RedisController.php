@@ -37,7 +37,7 @@ class RedisController extends BaseApiController
     private function presentSettingValue(RedisSetting $item): mixed
     {
         if ($item->is_encrypted || $this->isSensitiveKey($item->key)) {
-            return '';
+            return $item->value;
         }
 
         return $item->value;
@@ -84,40 +84,83 @@ class RedisController extends BaseApiController
     /**
      * Test Redis connection.
      */
-    public function testConnection(): \Illuminate\Http\JsonResponse
+    public function testConnection(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             $start = microtime(true);
-            $redis = Redis::connection();
+            
+            $host = $request->input('host', '127.0.0.1');
+            $portRaw = $request->input('port', 6379);
+            $port = is_numeric($portRaw) ? (int) $portRaw : 6379;
+            $password = $request->input('password');
+            $databaseRaw = $request->input('database', 0);
+            $database = is_numeric($databaseRaw) ? (int) $databaseRaw : 0;
+            $client = config('database.redis.client', 'phpredis');
 
-            // Check if Redis requires authentication
+            $config = [
+                'host' => $host,
+                'port' => $port,
+                'password' => $password,
+                'database' => $database,
+                'timeout' => 2.0,
+                'persistent' => false,
+            ];
+
+            // Use direct connector to bypass Laravel's connection manager constraints for testing
+            $connector = ($client === 'phpredis') 
+                ? new \Illuminate\Redis\Connectors\PhpRedisConnector()
+                : new \Illuminate\Redis\Connectors\PredisConnector();
+
             try {
+                // For phpredis, we might need to handle options differently, but empty array is usually fine
+                $redis = $connector->connect($config, []);
+                
+                // Explicitly check connection by sending a PING
                 $pong = $redis->ping();
-            } catch (\Exception $e) {
-                if (str_contains($e->getMessage(), 'NOAUTH') || str_contains($e->getMessage(), 'Authentication required')) {
-                    return $this->error('Redis authentication required. Please configure REDIS_PASSWORD in your .env file.', 401, [], 'REDIS_AUTH_REQUIRED');
+                
+                // If ping() doesn't throw but returns something else
+                if (!$pong && $client === 'phpredis') {
+                    return $this->error('Redis server reachable but did not respond to PING. Check server status.', 500, [], 'REDIS_NO_PONG');
                 }
-                throw $e;
+            } catch (\Exception $e) {
+                $msg = $e->getMessage();
+                
+                // Specific error mapping for better UX
+                if (str_contains($msg, 'NOAUTH') || str_contains($msg, 'Authentication required') || str_contains($msg, 'invalid password')) {
+                    return $this->error('Redis Authentication Failed: The password provided is incorrect.', 401, [
+                        'field' => 'password',
+                        'hint' => 'Check your Redis password setting.'
+                    ], 'REDIS_AUTH_FAILED');
+                }
+                
+                if (str_contains($msg, 'Connection refused') || str_contains($msg, 'getaddrinfo failed')) {
+                    $sHost = is_scalar($host) ? (string) $host : '127.0.0.1';
+                    $sPort = (string) $port;
+                    return $this->error('Redis Connection Refused: Could not reach the server at '.$sHost.':'.$sPort.'.', 500, [
+                        'field' => 'host',
+                        'hint' => 'Verify the host address and port. Ensure Redis is running and firewall allows connections.'
+                    ], 'REDIS_CONN_REFUSED');
+                }
+
+                if (str_contains($msg, 'timed out')) {
+                    return $this->error('Redis Connection Timeout: The server took too long to respond.', 500, [
+                        'hint' => 'Check network latency or if the Redis server is overloaded.'
+                    ], 'REDIS_TIMEOUT');
+                }
+                
+                return $this->error('Redis connection failed: ' . $msg, 500, [], 'REDIS_CONN_FAILED');
             }
 
             $duration = round((microtime(true) - $start) * 1000, 2);
 
-            if ($pong) {
-                return $this->success([
-                    'connected' => true,
-                    'response_time' => $duration.'ms',
-                    'message' => 'Redis connection successful',
-                ], 'Connection test passed');
-            }
+            return $this->success([
+                'connected' => true,
+                'response_time' => $duration.'ms',
+                'message' => 'Redis connection successful',
+            ], 'Connection test passed');
 
-            return $this->error('Redis connection failed', 500);
         } catch (\Exception $e) {
-            $message = $e->getMessage();
-            if (str_contains($message, 'NOAUTH') || str_contains($message, 'Authentication required')) {
-                return $this->error('Redis authentication required. Please configure REDIS_PASSWORD in your .env file.', 401, [], 'REDIS_AUTH_REQUIRED');
-            }
-
-            return $this->error('Redis connection error: '.$message, 500);
+            return $this->error('Redis test utility error: ' . $e->getMessage(), 500, [], 'REDIS_TEST_UTILITY_ERROR');
         }
     }
 

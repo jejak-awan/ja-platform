@@ -12,7 +12,7 @@
             name="Bus"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.transport.actions.busFleet') }}
+          {{ $t('modules.school.logistics.transport.actions.busFleet') }}
         </Button>
         <Button
           variant="outline"
@@ -24,7 +24,7 @@
             name="Map"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.logistics.transport.actions.routeData') }}
+          {{ $t('modules.school.logistics.transport.actions.routeData') }}
         </Button>
       </div>
       <Button
@@ -36,7 +36,7 @@
           name="UserPlus"
           class="w-4 h-4 mr-2"
         />
-        {{ $t('features.school.logistics.transport.actions.registerTransport') }}
+        {{ $t('modules.school.logistics.transport.actions.registerTransport') }}
       </Button>
     </div>
 
@@ -68,12 +68,12 @@
         <CardContent>
           <div class="flex flex-col gap-2">
             <div class="flex justify-between items-center text-xs">
-              <span class="text-muted-foreground">{{ $t('features.school.logistics.transport.labels.driver') }}:</span>
+              <span class="text-muted-foreground">{{ $t('modules.school.logistics.transport.labels.driver') }}:</span>
               <span class="font-medium">{{ vehicle.driver_name || '-' }}</span>
             </div>
             <div class="space-y-1">
               <div class="flex justify-between text-[10px] mb-1">
-                <span>{{ $t('features.school.logistics.transport.labels.seatCapacity') }}</span>
+                <span>{{ $t('modules.school.logistics.transport.labels.seatCapacity') }}</span>
                 <span>{{ vehicle.registrations_count }} / {{ vehicle.capacity }}</span>
               </div>
               <div class="w-full bg-muted rounded-full h-1.5 overflow-hidden">
@@ -92,9 +92,9 @@
     <Card class="border-border/50 text-left">
       <CardHeader>
         <CardTitle class="text-lg">
-          {{ $t('features.school.logistics.transport.labels.studentList') }}
+          {{ $t('modules.school.logistics.transport.labels.studentList') }}
         </CardTitle>
-        <CardDescription>{{ $t('features.school.logistics.transport.labels.studentListDesc') }}</CardDescription>
+        <CardDescription>{{ $t('modules.school.logistics.transport.labels.studentListDesc') }}</CardDescription>
       </CardHeader>
       <CardContent class="p-0">
         <DataTable
@@ -129,10 +129,10 @@ import { LogisticsService } from '@/modules/School/services/LogisticsService';
 import {
   Card, CardHeader, CardTitle, CardDescription, CardContent,
   Button, LucideIcon, Badge, DataTable
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { createColumnHelper, useVueTable, getCoreRowModel } from '@tanstack/vue-table';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 // Components
 import VehicleDialog from './components/VehicleDialog.vue';
@@ -155,9 +155,9 @@ const dialogs = ref({
 const columnHelper = createColumnHelper<any>();
 const columns = [
    columnHelper.accessor('student.full_name', { header: t('common.labels.user') }),
-   columnHelper.accessor('route.name', { header: t('features.school.logistics.transport.actions.routeData') }),
-   columnHelper.accessor('pickup_point', { header: t('features.school.logistics.transport.labels.pickupPoint') }),
-   columnHelper.accessor('vehicle.plate_number', { header: t('features.school.logistics.transport.labels.vehicle') }),
+   columnHelper.accessor('route.name', { header: t('modules.school.logistics.transport.actions.routeData') }),
+   columnHelper.accessor('pickup_point', { header: t('modules.school.logistics.transport.labels.pickupPoint') }),
+   columnHelper.accessor('vehicle.plate_number', { header: t('modules.school.logistics.transport.labels.vehicle') }),
    columnHelper.accessor('status', {
       header: t('common.labels.status'),
       cell: info => h(Badge, { variant: info.getValue() === 'active' ? 'outline' : 'secondary', class: 'text-[10px] font-semibold' }, info.getValue())

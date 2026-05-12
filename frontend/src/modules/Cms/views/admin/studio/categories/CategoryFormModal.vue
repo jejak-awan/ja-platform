@@ -8,9 +8,9 @@
       @pointer-down-outside="handlePointerDownOutside"
     >
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('features.categories.form.editTitle') : $t('features.categories.form.createTitle') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('modules.cms.categories.form.editTitle') : $t('modules.cms.categories.form.createTitle') }}</DialogTitle>
         <DialogDescription>
-          {{ isEdit ? $t('features.categories.form.editDescription') : $t('features.categories.form.createDescription') }}
+          {{ isEdit ? $t('modules.cms.categories.form.editDescription') : $t('modules.cms.categories.form.createDescription') }}
         </DialogDescription>
       </DialogHeader>
 
@@ -22,13 +22,13 @@
           <!-- Name -->
           <div class="space-y-2">
             <Label>
-              {{ $t('features.categories.form.name') }} <span class="text-destructive">*</span>
+              {{ $t('modules.cms.categories.form.name') }} <span class="text-destructive">*</span>
             </Label>
             <Input
               v-model="form.name"
               required
               :class="errors.name ? 'border-destructive focus-visible:ring-destructive' : ''"
-              :placeholder="$t('features.categories.form.namePlaceholder')"
+              :placeholder="$t('modules.cms.categories.form.namePlaceholder')"
               @input="generateSlug"
             />
             <p
@@ -42,16 +42,16 @@
           <!-- Slug -->
           <div class="space-y-2">
             <Label>
-              {{ $t('features.categories.form.slug') }} <span class="text-destructive">*</span>
+              {{ $t('modules.cms.categories.form.slug') }} <span class="text-destructive">*</span>
             </Label>
             <Input
               v-model="form.slug"
               required
               :class="errors.slug ? 'border-destructive focus-visible:ring-destructive' : ''"
-              :placeholder="$t('features.categories.form.slugPlaceholder')"
+              :placeholder="$t('modules.cms.categories.form.slugPlaceholder')"
             />
             <p class="text-xs text-muted-foreground">
-              {{ $t('features.categories.form.slugHelp') }}
+              {{ $t('modules.cms.categories.form.slugHelp') }}
             </p>
             <p
               v-if="errors.slug"
@@ -65,12 +65,12 @@
         <!-- Description -->
         <div class="space-y-2">
           <Label>
-            {{ $t('features.categories.form.description') }}
+            {{ $t('modules.cms.categories.form.description') }}
           </Label>
           <Textarea
             v-model="form.description"
             rows="3"
-            :placeholder="$t('features.categories.form.descriptionPlaceholder')"
+            :placeholder="$t('modules.cms.categories.form.descriptionPlaceholder')"
           />
         </div>
 
@@ -78,18 +78,18 @@
           <!-- Parent Category -->
           <div class="space-y-2">
             <Label>
-              {{ $t('features.categories.form.parent') }}
+              {{ $t('modules.cms.categories.form.parent') }}
             </Label>
             <Select
               :model-value="String(form.parent_id ?? 'null_value')"
               @update:model-value="(val) => form.parent_id = val === 'null_value' ? null : val"
             >
               <SelectTrigger>
-                <SelectValue :placeholder="$t('features.categories.form.noParent')" />
+                <SelectValue :placeholder="$t('modules.cms.categories.form.noParent')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="null_value">
-                  {{ $t('features.categories.form.noParent') }}
+                  {{ $t('modules.cms.categories.form.noParent') }}
                 </SelectItem>
                 <SelectItem
                   v-for="cat in availableParents"
@@ -105,7 +105,7 @@
           <!-- Sort Order -->
           <div class="space-y-2">
             <Label>
-              {{ $t('features.categories.form.sortOrder') }}
+              {{ $t('modules.cms.categories.form.sortOrder') }}
             </Label>
             <Input
               v-model.number="form.sort_order"
@@ -119,7 +119,7 @@
         <!-- Image -->
         <div class="space-y-2">
           <Label>
-            {{ $t('features.categories.form.image') }}
+            {{ $t('modules.cms.categories.form.image') }}
           </Label>
           <div
             v-if="form.image"
@@ -143,7 +143,7 @@
           <MediaPicker
             v-else
             v-model:open="isMediaPickerOpen"
-            :label="$t('features.categories.form.selectImage')"
+            :label="$t('modules.cms.categories.form.selectImage')"
             @selected="(media) => form.image = media.url"
           />
         </div>
@@ -159,7 +159,7 @@
             for="is_active"
             class="cursor-pointer"
           >
-            {{ $t('features.categories.form.active') }}
+            {{ $t('modules.cms.categories.form.active') }}
           </Label>
         </div>
 
@@ -189,15 +189,15 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { categorySchema } from '@/schemas';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { categorySchema } from '@/shared/schemas';
 import type { z } from 'zod';
-import MediaPicker from '@/components/shared/media/MediaPicker.vue';
+import MediaPicker from '@/shared/components/media/MediaPicker.vue';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
-import type { Category } from '@/types/cms/cms';
+import type { Category } from '@/modules/Cms/types/cms';
 
 // Shadcn UI
 import {
@@ -217,7 +217,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 interface CategoryForm {
     name: string;

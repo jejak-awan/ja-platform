@@ -28,9 +28,9 @@
 
 <script setup lang="ts">
 import draggable from 'vuedraggable';
-import { useMenuContext } from '@/composables/useMenu';
+import { useMenuContext } from '@/shared/composables/useMenu';
 import MenuItemWrapper from './MenuItemWrapper.vue';
-import type { MenuItem } from '@/types/cms/menu';
+import type { MenuItem } from '@/modules/Cms/types/menu';
 
 const menuContext = useMenuContext();
 

@@ -8,6 +8,11 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class RedirectController extends BaseApiController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+        $this->middleware('permission:manage redirects');
+    }
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $query = Redirect::query();

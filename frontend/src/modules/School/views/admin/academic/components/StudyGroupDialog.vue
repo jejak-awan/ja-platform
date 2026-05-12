@@ -5,18 +5,18 @@
   >
     <DialogContent class="sm:max-w-[500px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('common.actions.edit') + ' ' + $t('features.school.academic.labels.group') : $t('common.actions.add') + ' ' + $t('features.school.academic.labels.group') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('common.actions.edit') + ' ' + $t('modules.school.academic.labels.group') : $t('common.actions.add') + ' ' + $t('modules.school.academic.labels.group') }}</DialogTitle>
       </DialogHeader>
       <form
         class="space-y-4 py-4"
         @submit.prevent="handleSubmit"
       >
         <div class="space-y-2">
-          <Label for="name">{{ $t('features.school.academic.labels.groupName') }} <span class="text-destructive">*</span></Label>
+          <Label for="name">{{ $t('modules.school.academic.labels.groupName') }} <span class="text-destructive">*</span></Label>
           <Input
             id="name"
             v-model="form.name"
-            :placeholder="$t('features.school.units.form.namePlaceholder')"
+            :placeholder="$t('modules.school.units.form.namePlaceholder')"
             required
           />
         </div>
@@ -27,7 +27,7 @@
               v-model="form.school_unit_id"
               required
             >
-              <SelectTrigger><SelectValue :placeholder="$t('features.school.academic.placeholders.selectLevel')" /></SelectTrigger>
+              <SelectTrigger><SelectValue :placeholder="$t('modules.school.academic.placeholders.selectLevel')" /></SelectTrigger>
               <SelectContent>
                 <SelectItem
                   v-for="l in levels"
@@ -40,12 +40,12 @@
             </Select>
           </div>
           <div class="space-y-2">
-            <Label>{{ $t('features.school.academic.tabs.years') }} <span class="text-destructive">*</span></Label>
+            <Label>{{ $t('modules.school.academic.tabs.years') }} <span class="text-destructive">*</span></Label>
             <Select
               v-model="form.academic_year_id"
               required
             >
-              <SelectTrigger><SelectValue :placeholder="$t('features.school.academic.placeholders.selectYear')" /></SelectTrigger>
+              <SelectTrigger><SelectValue :placeholder="$t('modules.school.academic.placeholders.selectYear')" /></SelectTrigger>
               <SelectContent>
                 <SelectItem
                   v-for="y in years"
@@ -59,9 +59,9 @@
           </div>
         </div>
         <div class="space-y-2">
-          <Label>{{ $t('features.school.academic.labels.homeroomTeacher') }}</Label>
+          <Label>{{ $t('modules.school.academic.labels.homeroomTeacher') }}</Label>
           <Select v-model="form.homeroom_teacher_id">
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.academic.placeholders.selectTeacher')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.academic.placeholders.selectTeacher')" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="none">
                 {{ $t('common.labels.none') }}
@@ -99,11 +99,11 @@ import { ref, watch, onMounted } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { InstitutionService } from '@/modules/School/services/InstitutionService';
 import { AcademicService } from '@/modules/School/services/AcademicService';
 import { HRService } from '@/modules/School/services/HRService';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const props = defineProps<{
   open: boolean;

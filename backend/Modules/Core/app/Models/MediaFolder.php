@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\School\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByUnit;
 use Modules\Core\Models\User;
 
 /**
@@ -31,6 +31,12 @@ class MediaFolder extends Model
 {
     /** @use HasFactory<\Modules\Core\Database\Factories\MediaFolderFactory> */
     use HasFactory, SoftDeletes, ScopedByUnit;
+    
+    /**
+     * Enable shared record visibility in unit scoping.
+     */
+    public bool $isSharedScoped = true;
+
 
     /**
      * Create a new factory instance for the model.

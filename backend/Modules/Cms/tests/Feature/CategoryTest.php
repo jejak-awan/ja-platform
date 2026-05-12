@@ -284,4 +284,43 @@ class CategoryTest extends TestCase
 
         $response->assertStatus(403);
     }
+    /**
+     * Test admin can filter categories by search.
+     */
+    public function test_admin_can_search_categories(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $uniqueName = 'UNIQUE_CAT_' . bin2hex(random_bytes(8));
+        Category::factory()->create(['name' => $uniqueName]);
+        Category::factory()->create(['name' => 'NON_MATCHING_' . bin2hex(random_bytes(8))]);
+
+        $response = $this->getJson('/api/v1/admin/cms/categories?search=' . $uniqueName);
+        TestHelpers::assertApiSuccess($response);
+        $this->assertCount(1, $response->json('data'));
+    }
+
+    /**
+     * Test admin can manage trashed categories.
+     */
+    public function test_admin_can_manage_trashed_categories(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $category = Category::factory()->create();
+        $category->delete();
+
+        // Restore
+        $response = $this->putJson("/api/v1/admin/cms/categories/{$category->id}/restore");
+        TestHelpers::assertApiSuccess($response);
+        $this->assertDatabaseHas('categories', ['id' => $category->id, 'deleted_at' => null]);
+
+        // Force Delete
+        $category->delete();
+        $response = $this->deleteJson("/api/v1/admin/cms/categories/{$category->id}/force-delete");
+        TestHelpers::assertApiSuccess($response);
+        $this->assertDatabaseMissing('categories', ['id' => $category->id]);
+    }
 }

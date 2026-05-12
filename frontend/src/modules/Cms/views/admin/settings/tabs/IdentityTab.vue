@@ -16,11 +16,11 @@
         <SettingField
           :model-value="(formData[setting.key] as any)"
           :field-key="setting.key"
-          :label="$t('features.settings.labels.' + setting.key)"
-          :description="$t('features.settings.descriptions.' + setting.key)"
+          :label="$t('modules.cms.settings.labels.' + setting.key)"
+          :description="$t('modules.cms.settings.descriptions.' + setting.key)"
           :type="setting.type"
-          :enabled-text="$t('features.settings.enabled')"
-          :disabled-text="$t('features.settings.disabled')"
+          :enabled-text="$t('modules.cms.settings.enabled')"
+          :disabled-text="$t('modules.cms.settings.disabled')"
           :error="errors?.[setting.key]"
           @update:model-value="(value) => updateField(setting.key, value)"
         />
@@ -83,8 +83,8 @@ const generalSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'site',
-            title: t('features.settings.groups.siteInfo.title'),
-            description: t('features.settings.groups.siteInfo.description'),
+            title: t('modules.cms.settings.groups.siteInfo.title'),
+            description: t('modules.cms.settings.groups.siteInfo.description'),
             icon: GlobeIcon,
             color: 'blue',
             keys: ['site_name', 'site_logo', 'site_favicon', 'site_description', 'site_url', 'admin_email'],

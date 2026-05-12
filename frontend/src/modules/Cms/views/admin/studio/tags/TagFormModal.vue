@@ -5,9 +5,9 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('features.tags.form.editTitle') : $t('features.tags.form.createTitle') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('modules.cms.tags.form.editTitle') : $t('modules.cms.tags.form.createTitle') }}</DialogTitle>
         <DialogDescription>
-          {{ isEdit ? $t('features.tags.form.editDescription') : $t('features.tags.form.createDescription') }}
+          {{ isEdit ? $t('modules.cms.tags.form.editDescription') : $t('modules.cms.tags.form.createDescription') }}
         </DialogDescription>
       </DialogHeader>
 
@@ -18,13 +18,13 @@
         <!-- Name -->
         <div class="space-y-2">
           <Label>
-            {{ $t('features.tags.form.name') }} <span class="text-destructive">*</span>
+            {{ $t('modules.cms.tags.form.name') }} <span class="text-destructive">*</span>
           </Label>
           <Input
             v-model="form.name"
             required
             :class="errors.name ? 'border-destructive focus-visible:ring-destructive' : ''"
-            :placeholder="$t('features.tags.form.namePlaceholder')"
+            :placeholder="$t('modules.cms.tags.form.namePlaceholder')"
             @input="generateSlug"
           />
           <p
@@ -38,16 +38,16 @@
         <!-- Slug -->
         <div class="space-y-2">
           <Label>
-            {{ $t('features.tags.form.slug') }} <span class="text-destructive">*</span>
+            {{ $t('modules.cms.tags.form.slug') }} <span class="text-destructive">*</span>
           </Label>
           <Input
             v-model="form.slug"
             required
             :class="errors.slug ? 'border-destructive focus-visible:ring-destructive' : ''"
-            :placeholder="$t('features.tags.form.slugPlaceholder')"
+            :placeholder="$t('modules.cms.tags.form.slugPlaceholder')"
           />
           <p class="text-xs text-muted-foreground">
-            {{ $t('features.tags.form.slugHelp') }}
+            {{ $t('modules.cms.tags.form.slugHelp') }}
           </p>
           <p
             v-if="errors.slug"
@@ -60,12 +60,12 @@
         <!-- Description -->
         <div class="space-y-2">
           <Label>
-            {{ $t('features.tags.form.description') }}
+            {{ $t('modules.cms.tags.form.description') }}
           </Label>
           <Textarea
             v-model="form.description"
             rows="3"
-            :placeholder="$t('features.tags.form.descriptionPlaceholder')"
+            :placeholder="$t('modules.cms.tags.form.descriptionPlaceholder')"
           />
         </div>
 
@@ -95,12 +95,12 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useFormValidation } from '@/composables/useFormValidation';
-import { tagSchema } from '@/schemas';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useFormValidation } from '@/shared/composables/useFormValidation';
+import { tagSchema } from '@/shared/schemas';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import type { Tag } from '@/types/cms/cms';
+import type { Tag } from '@/modules/Cms/types/cms';
 
 // Shadcn UI
 import {
@@ -114,7 +114,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 interface TagForm {
     name: string;

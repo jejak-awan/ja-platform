@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Modules\Cms\Console\Commands\BackfillThemeJanariParentCommand;
 use Modules\Cms\Console\Commands\CleanupAnalytics;
+use Modules\Cms\Console\Commands\ThemeMake;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -29,6 +30,101 @@ class CmsServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+
+        $this->registerUserModuleIntegrations();
+        $this->registerDashboardStats();
+        $this->registerModelRelations();
+        $this->registerCacheIntegrations();
+    }
+
+    /**
+     * Register CMS cache clearers and warmers into Core.
+     */
+    protected function registerCacheIntegrations(): void
+    {
+        \Modules\Core\Services\CacheService::registerClearer('cms', function () {
+            app(\Modules\Cms\Services\CmsCacheService::class)->clearAll();
+        });
+
+        \Modules\Core\Services\CacheWarmingService::registerWarmer('cms', function () {
+            return app(\Modules\Cms\Services\CmsCacheService::class)->warmUp();
+        });
+    }
+
+    /**
+     * Register relationships for Core models that point to CMS models.
+     */
+    protected function registerModelRelations(): void
+    {
+        \Modules\Core\Models\Tag::resolveRelationUsing('contents', function ($tagModel) {
+            return $tagModel->belongsToMany(\Modules\Cms\Models\Content::class, 'content_tag');
+        });
+
+        \Modules\Core\Models\AnalyticsEvent::resolveRelationUsing('content', function ($analyticsModel) {
+            return $analyticsModel->belongsTo(\Modules\Cms\Models\Content::class, 'content_id');
+        });
+    }
+
+    /**
+     * Register CMS-specific stats to Core Dashboard Registry.
+     */
+    protected function registerDashboardStats(): void
+    {
+        $this->app->booted(function () {
+            $registry = $this->app->make(\Modules\Core\Services\DashboardRegistry::class);
+
+            $registry->registerStatsProvider('contents', function () {
+                return [
+                    'total' => \Modules\Cms\Models\Content::count(),
+                    'published' => \Modules\Cms\Models\Content::where('status', 'published')->count(),
+                    'draft' => \Modules\Cms\Models\Content::where('status', 'draft')->count(),
+                    'pending' => \Modules\Cms\Models\Content::where('status', 'pending')->count(),
+                    'archived' => \Modules\Cms\Models\Content::where('status', 'archived')->count(),
+                ];
+            });
+
+            $registry->registerStatsProvider('cms_info', function () {
+                return [
+                    'categories' => \Modules\Cms\Models\Category::count(),
+                    'comments' => \Modules\Cms\Models\Comment::count(),
+                    'forms' => \Modules\Cms\Models\Form::count(),
+                    'form_submissions' => \Modules\Cms\Models\FormSubmission::count(),
+                    'total_email_templates' => \Modules\Cms\Models\EmailTemplate::count(),
+                    'newsletter_subscribers' => \Modules\Cms\Models\NewsletterSubscriber::count(),
+                    'email' => [
+                        'templates' => \Modules\Cms\Models\EmailTemplate::count(),
+                        'subscribers' => \Modules\Cms\Models\NewsletterSubscriber::count(),
+                        'smtp_status' => \Illuminate\Support\Facades\Cache::get('email_smtp_status', 'unknown'),
+                    ],
+                ];
+            });
+
+            $registry->registerChartProvider('contentByStatus', function () {
+                return \Modules\Cms\Models\Content::select('status', \Illuminate\Support\Facades\DB::raw('count(*) as count'))
+                    ->groupBy('status')
+                    ->get();
+            });
+
+            $registry->registerStatsProvider('viewer', function () {
+                return \Modules\Cms\Models\Content::where('status', 'published')
+                    ->latest()
+                    ->take(5)
+                    ->select('id', 'title', 'slug', 'created_at')
+                    ->get();
+            });
+        });
+    }
+
+    /**
+     * Register CMS-specific integrations to Core User model.
+     */
+    protected function registerUserModuleIntegrations(): void
+    {
+        // Register CMS-specific role ranks
+        \Modules\Core\Models\User::registerRoleRanks([
+            'editor' => 60,
+            'author' => 40,
+        ]);
     }
 
     /**
@@ -48,6 +144,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->commands([
             BackfillThemeJanariParentCommand::class,
             CleanupAnalytics::class,
+            ThemeMake::class,
         ]);
     }
 

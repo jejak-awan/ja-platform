@@ -3,10 +3,10 @@
     <div class="flex justify-between items-center mb-8">
       <div>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.operations.attendance.title') }}
+          {{ $t('modules.school.operations.attendance.title') }}
         </h1>
         <p class="text-sm text-muted-foreground">
-          {{ $t('features.school.operations.attendance.subtitle') }}
+          {{ $t('modules.school.operations.attendance.subtitle') }}
         </p>
       </div>
     </div>
@@ -14,9 +14,9 @@
     <Card class="mb-8">
       <CardContent class="p-6 flex flex-wrap gap-4 items-end">
         <div class="space-y-2 w-full md:w-64">
-          <Label>{{ $t('features.school.operations.attendance.pilihRombel') }}</Label>
+          <Label>{{ $t('modules.school.operations.attendance.pilihRombel') }}</Label>
           <Select v-model="selectedGroup">
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.operations.attendance.pilihRombelPlaceholder')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.operations.attendance.pilihRombelPlaceholder')" /></SelectTrigger>
             <SelectContent>
               <SelectItem
                 v-for="group in groups"
@@ -29,7 +29,7 @@
           </Select>
         </div>
         <div class="space-y-2 w-full md:w-48">
-          <Label>{{ $t('features.school.operations.attendance.tanggal') }}</Label>
+          <Label>{{ $t('modules.school.operations.attendance.tanggal') }}</Label>
           <Input
             v-model="selectedDate"
             type="date"
@@ -44,7 +44,7 @@
             name="Loader2"
             class="w-4 h-4 mr-2 animate-spin"
           />
-          {{ $t('features.school.operations.attendance.btnShow') }}
+          {{ $t('modules.school.operations.attendance.btnShow') }}
         </Button>
       </CardContent>
     </Card>
@@ -65,7 +65,7 @@
               name="Loader2"
               class="w-4 h-4 mr-2 animate-spin"
             />
-            {{ $t('features.school.operations.attendance.btnSaveAll') }}
+            {{ $t('modules.school.operations.attendance.btnSaveAll') }}
           </Button>
         </div>
       </CardContent>
@@ -79,7 +79,7 @@
         class="w-12 h-12 mx-auto text-muted-foreground mb-4 opacity-20"
       />
       <p class="text-muted-foreground font-medium">
-        {{ $t('features.school.operations.attendance.emptyHint') }}
+        {{ $t('modules.school.operations.attendance.emptyHint') }}
       </p>
     </div>
   </div>
@@ -93,14 +93,14 @@ import { StudentService } from '@/modules/School/services/StudentService';
 import { OperationsService } from '@/modules/School/services/OperationsService';
 import {
   Card, CardContent, Button, LucideIcon, Label, Input, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, DataTable
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { 
   useVueTable, 
   getCoreRowModel, 
   createColumnHelper,
 } from '@tanstack/vue-table';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 interface AttendanceRecord {
   id?: number;
@@ -122,9 +122,9 @@ const attendance = ref<AttendanceRecord[]>([]);
 const columnHelper = createColumnHelper<AttendanceRecord>();
 
 const columns = [
-  columnHelper.accessor('student_name', { header: t('features.school.operations.attendance.labels.studentName') }),
+  columnHelper.accessor('student_name', { header: t('modules.school.operations.attendance.labels.studentName') }),
   columnHelper.accessor('status', { 
-    header: t('features.school.operations.attendance.labels.status'),
+    header: t('modules.school.operations.attendance.labels.status'),
     cell: ({ row }) => h('div', { class: 'w-32' }, [
       h(Select, {
         modelValue: row.original.status,
@@ -132,16 +132,16 @@ const columns = [
       }, () => [
         h(SelectTrigger, { class: 'w-full h-8 text-xs' }, () => h(SelectValue)),
         h(SelectContent, () => [
-          h(SelectItem, { value: 'H' }, () => t('features.school.operations.attendance.status.H')),
-          h(SelectItem, { value: 'S' }, () => t('features.school.operations.attendance.status.S')),
-          h(SelectItem, { value: 'I' }, () => t('features.school.operations.attendance.status.I')),
-          h(SelectItem, { value: 'A' }, () => t('features.school.operations.attendance.status.A')),
+          h(SelectItem, { value: 'H' }, () => t('modules.school.operations.attendance.status.H')),
+          h(SelectItem, { value: 'S' }, () => t('modules.school.operations.attendance.status.S')),
+          h(SelectItem, { value: 'I' }, () => t('modules.school.operations.attendance.status.I')),
+          h(SelectItem, { value: 'A' }, () => t('modules.school.operations.attendance.status.A')),
         ])
       ])
     ])
   }),
   columnHelper.accessor('notes', { 
-    header: t('features.school.operations.attendance.labels.notes'),
+    header: t('modules.school.operations.attendance.labels.notes'),
     cell: ({ row }) => h(Input, {
       modelValue: row.original.notes,
       placeholder: t('common.placeholders.notesHint'),
@@ -231,7 +231,7 @@ const handleSave = async () => {
         });
         
         await Promise.all(promises);
-        toast.success.action(t('features.school.operations.attendance.messages.saveSuccess'));
+        toast.success.action(t('modules.school.operations.attendance.messages.saveSuccess'));
         fetchAttendance();
     } catch (e) {
         toast.error.fromResponse(e);

@@ -174,13 +174,13 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import LmsService from '../../../services/LmsService';
-import { Button } from '@/components/ui';
-import { Input } from '@/components/ui';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui';
-import { Spinner, SkeletonLoader } from '@/components/ui';
+import { Button } from '@/shared/components/ui';
+import { Input } from '@/shared/components/ui';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/shared/components/ui';
+import { Card, CardHeader, CardTitle, CardContent } from '@/shared/components/ui';
+import { Spinner, SkeletonLoader } from '@/shared/components/ui';
 import { ChevronLeft, Plus, Pencil, Trash2, FileText, PlayCircle, FileDown, FileCheck } from 'lucide-vue-next';
-import TiptapEditor from '@/components/shared/editor/TiptapEditor.vue';
+import TiptapEditor from '@/shared/components/editor/TiptapEditor.vue';
 
 const route = useRoute();
 const courseId = Number(route.params.id);

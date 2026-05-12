@@ -5,9 +5,9 @@
   >
     <DialogContent class="sm:max-w-[500px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('common.labels.edit') || 'Update' : $t('features.school.extensions.tabs.circulations') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('common.labels.edit') || 'Update' : $t('modules.school.extensions.tabs.circulations') }}</DialogTitle>
         <DialogDescription>
-          {{ $t('features.school.extensions.subtitle') }}
+          {{ $t('modules.school.extensions.subtitle') }}
         </DialogDescription>
       </DialogHeader>
 
@@ -16,7 +16,7 @@
           v-if="!isEdit"
           class="grid gap-2"
         >
-          <Label>{{ $t('features.school.extensions.tabs.library') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.extensions.tabs.library') }} <span class="text-destructive">*</span></Label>
           <Select
             v-model="form.library_book_id"
             required
@@ -38,7 +38,7 @@
           v-if="!isEdit"
           class="grid gap-2"
         >
-          <Label>{{ $t('features.school.extensions.labels.borrower') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.extensions.labels.borrower') }} <span class="text-destructive">*</span></Label>
           <div class="flex gap-2">
             <Select v-model="form.borrower_type">
               <SelectTrigger class="w-[120px]">
@@ -46,7 +46,7 @@
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Modules\School\Models\Student">
-                  {{ $t('common.labels.student') }}
+                  {{ $t('modules.school.labels.student') }}
                 </SelectItem>
                 <SelectItem value="Modules\School\Models\Staff">
                   {{ $t('common.navigation.menu.staffIndex') }}
@@ -87,7 +87,7 @@
             />
           </div>
           <div class="grid gap-2">
-            <Label for="due_date">{{ $t('features.school.extensions.labels.dueDate') }} <span class="text-destructive">*</span></Label>
+            <Label for="due_date">{{ $t('modules.school.extensions.labels.dueDate') }} <span class="text-destructive">*</span></Label>
             <Input
               id="due_date"
               v-model="form.due_date"
@@ -106,7 +106,7 @@
             v-model="form.status"
             required
           >
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.extensions.placeholders.selectStatus')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.extensions.placeholders.selectStatus')" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="borrowed">
                 {{ $t('common.labels.borrowed') || 'Borrowed' }}
@@ -137,7 +137,7 @@
             />
           </div>
           <div class="grid gap-2">
-            <Label for="fine">{{ $t('features.school.finance.labels.paidAmount') }} (Rp)</Label>
+            <Label for="fine">{{ $t('modules.school.finance.labels.paidAmount') }} (Rp)</Label>
             <Input
               id="fine"
               v-model="form.fine_amount"
@@ -177,9 +177,9 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Label, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, 
   LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { OperationsService } from '@/modules/School/services/OperationsService';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 interface LibraryBook {
   id: number | string;

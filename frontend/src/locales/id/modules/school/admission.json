@@ -38,7 +38,7 @@
         "selectYear": "Pilih Tahun",
         "nisnHint": "10 Digit NISN",
         "nisHint": "Nomor Induk Sekolah",
-        "emailHint": "contoh@email.com",
+        "emailHint": "contoh{'@'}email.com",
         "previousSchoolHint": "Nama sekolah sebelumnya"
     },
     "subtitle": "Kelola pendaftaran, verifikasi dokumen, dan proses seleksi calon siswa.",

@@ -180,7 +180,7 @@ import {
     CardHeader, 
     CardTitle, 
     CardContent 
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import Zap from 'lucide-vue-next/dist/esm/icons/zap.js';
 import FileEdit from 'lucide-vue-next/dist/esm/icons/file-pen.js';
 import PlusSquare from 'lucide-vue-next/dist/esm/icons/square-plus.js';

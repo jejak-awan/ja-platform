@@ -8,11 +8,11 @@ import Pencil from 'lucide-vue-next/dist/esm/icons/pencil.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import CheckCircle2 from 'lucide-vue-next/dist/esm/icons/circle-check-big.js';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
-import { parseResponse, ensureArray, type PaginationData } from '@/utils/responseParser';
-import { cn } from '@/lib/utils';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { parseResponse, ensureArray, type PaginationData } from '@/shared/utils/responseParser';
+import { cn } from '@/shared/utils/lib-utils';
 
 // UI Components
 import {
@@ -29,7 +29,7 @@ import {
     SelectTrigger,
     SelectValue,
     DataTable
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import { 
     useVueTable, 
@@ -86,7 +86,7 @@ const columns = [
         size: 50,
     }),
     columnHelper.accessor('name', {
-        header: t('features.menus.form.name'),
+        header: t('modules.cms.menus.form.name'),
         cell: ({ row }) => {
             const menu = row.original;
             return h('div', { class: 'flex flex-col gap-0.5' }, [
@@ -99,16 +99,16 @@ const columns = [
         }
     }),
     columnHelper.accessor('location', {
-        header: t('features.menus.form.location'),
+        header: t('modules.cms.menus.form.location'),
         cell: ({ row }) => {
             const loc = row.original.location;
-            if (!loc || loc === 'none') return h('span', { class: 'text-muted-foreground italic' }, t('features.menus.form.placeholders.none'));
+            if (!loc || loc === 'none') return h('span', { class: 'text-muted-foreground italic' }, t('modules.cms.menus.form.placeholders.none'));
             return h(Badge, { variant: 'secondary', class: 'capitalize' }, loc.replace(/_/g, ' '));
         }
     }),
     columnHelper.accessor('all_items_count', {
-        header: t('features.menus.headers.items'),
-        cell: ({ row }) => h(Badge, { variant: 'outline' }, `${row.original.all_items_count || 0} ${t('features.menus.headers.items').toLowerCase()}`)
+        header: t('modules.cms.menus.headers.items'),
+        cell: ({ row }) => h(Badge, { variant: 'outline' }, `${row.original.all_items_count || 0} ${t('modules.cms.menus.headers.items').toLowerCase()}`)
     }),
     columnHelper.accessor('is_active', {
         header: t('common.labels.status'),
@@ -200,13 +200,13 @@ const fetchMenus = async (page: number = 1) => {
 const handleDelete = async (menu: Menu) => {
     const confirmed = await confirm({
         title: t('common.actions.delete'),
-        message: t('features.menus.messages.deleteConfirm', { name: menu.name }),
+        message: t('modules.cms.menus.messages.deleteConfirm', { name: menu.name }),
         variant: 'danger'
     });
     if (confirmed) {
         try {
             await api.delete(`/admin/cms/menus/${menu.id}`);
-            toast.success.delete(t('features.menus.title'));
+            toast.success.delete(t('modules.cms.menus.title'));
             fetchMenus();
         } catch (error) { toast.error.action(error); }
     }
@@ -215,13 +215,13 @@ const handleDelete = async (menu: Menu) => {
 const handleRestore = async (menu: Menu) => {
     const confirmed = await confirm({
         title: t('common.actions.restore'),
-        message: t('features.menus.messages.restoreConfirm', { name: menu.name }),
+        message: t('modules.cms.menus.messages.restoreConfirm', { name: menu.name }),
         variant: 'info'
     });
     if (confirmed) {
         try {
             await api.post(`/admin/cms/menus/${menu.id}/restore`);
-            toast.success.restore(t('features.menus.title'));
+            toast.success.restore(t('modules.cms.menus.title'));
             fetchMenus();
         } catch (error) { toast.error.action(error); }
     }
@@ -230,13 +230,13 @@ const handleRestore = async (menu: Menu) => {
 const handleForceDelete = async (menu: Menu) => {
     const confirmed = await confirm({
         title: t('common.actions.deletePermanently'),
-        message: t('features.menus.messages.forceDeleteConfirm', { name: menu.name }),
+        message: t('modules.cms.menus.messages.forceDeleteConfirm', { name: menu.name }),
         variant: 'danger'
     });
     if (confirmed) {
         try {
             await api.delete(`/admin/cms/menus/${menu.id}/force-delete`);
-            toast.success.delete(t('features.menus.title'));
+            toast.success.delete(t('modules.cms.menus.title'));
             fetchMenus();
         } catch (error) { toast.error.action(error); }
     }
@@ -279,7 +279,7 @@ onMounted(() => fetchMenus());
         <CardContent class="p-4 flex items-center justify-between">
           <div>
             <p class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">
-              {{ t('features.menus.headers.totalMenus') }}
+              {{ t('modules.cms.menus.headers.totalMenus') }}
             </p>
             <h3 class="text-2xl font-black text-primary">
               {{ pagination?.total || 0 }}
@@ -294,7 +294,7 @@ onMounted(() => fetchMenus());
         <CardContent class="p-4 flex items-center justify-between">
           <div>
             <p class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">
-              {{ t('features.menus.headers.activeLocations') }}
+              {{ t('modules.cms.menus.headers.activeLocations') }}
             </p>
             <h3 class="text-2xl font-black text-success">
               {{ menus.filter(m => m.location && m.location !== 'none').length }}
@@ -401,7 +401,7 @@ onMounted(() => fetchMenus());
             @click="emit('create-menu')"
           >
             <Plus class="w-4 h-4 mr-2" />
-            {{ t('features.menus.actions.create') }}
+            {{ t('modules.cms.menus.actions.create') }}
           </Button>
         </div>
       </div>

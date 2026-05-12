@@ -1,6 +1,6 @@
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { shallowRef, type Component } from 'vue';
-import type { MenuItemDefinition, MenuItem, MenuItemSetting } from '@/types/cms/menu';
+import type { MenuItemDefinition, MenuItem, MenuItemSetting } from '@/modules/Cms/types/menu';
 
 /**
  * MenuItemRegistry * Registry for menu item types.

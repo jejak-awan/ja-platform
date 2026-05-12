@@ -1,9 +1,9 @@
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
-import type { MenuItemDefinition } from '@/types/cms/menu';
+import type { MenuItemDefinition } from '@/modules/Cms/types/menu';
 
 const definition: MenuItemDefinition = {
     name: 'page',
-    label: 'features.menus.form.types.page',
+    label: 'modules.cms.menus.form.types.page',
     category: 'content',
     icon: FileText,
     color: 'blue',
@@ -21,14 +21,14 @@ const definition: MenuItemDefinition = {
         {
             key: 'title',
             type: 'text',
-            label: 'features.menus.form.label',
+            label: 'modules.cms.menus.form.label',
             required: true,
-            placeholder: 'features.menus.form.labelPlaceholder'
+            placeholder: 'modules.cms.menus.form.labelPlaceholder'
         },
         {
             key: 'target_id',
             type: 'data_select',
-            label: 'features.menus.form.selectPage',
+            label: 'modules.cms.menus.form.selectPage',
             required: true,
             source: '/admin/cms/contents?type=page&status=published',
             labelField: 'title',
@@ -37,31 +37,31 @@ const definition: MenuItemDefinition = {
         {
             key: 'open_in_new_tab',
             type: 'boolean',
-            label: 'features.menus.form.openInNewTab',
+            label: 'modules.cms.menus.form.openInNewTab',
             default: false
         },
         {
             key: 'icon',
             type: 'icon_picker',
-            label: 'features.menus.form.icon',
+            label: 'modules.cms.menus.form.icon',
             default: null
         },
         {
             key: 'css_class',
             type: 'text',
-            label: 'features.menus.form.cssClasses',
-            placeholder: 'features.menus.form.placeholders.cssClasses'
+            label: 'modules.cms.menus.form.cssClasses',
+            placeholder: 'modules.cms.menus.form.placeholders.cssClasses'
         },
         // Mega menu settings
         {
             key: 'mega_menu_layout',
             type: 'select',
-            label: 'features.menus.form.megaMenuLayout',
+            label: 'modules.cms.menus.form.megaMenuLayout',
             options: [
-                { label: 'features.menus.form.options.default', value: 'default' },
-                { label: 'features.menus.form.options.grid2', value: 'grid-2' },
-                { label: 'features.menus.form.options.grid3', value: 'grid-3' },
-                { label: 'features.menus.form.options.full', value: 'full' }
+                { label: 'modules.cms.menus.form.options.default', value: 'default' },
+                { label: 'modules.cms.menus.form.options.grid2', value: 'grid-2' },
+                { label: 'modules.cms.menus.form.options.grid3', value: 'grid-3' },
+                { label: 'modules.cms.menus.form.options.full', value: 'full' }
             ],
             default: 'default',
             group: 'mega_menu'
@@ -69,14 +69,14 @@ const definition: MenuItemDefinition = {
         {
             key: 'mega_menu_show_dividers',
             type: 'boolean',
-            label: 'features.menus.form.showDividers',
+            label: 'modules.cms.menus.form.showDividers',
             default: false,
             group: 'mega_menu'
         },
         {
             key: 'mega_menu_column',
             type: 'number',
-            label: 'features.menus.form.columnNumber',
+            label: 'modules.cms.menus.form.columnNumber',
             default: 0,
             min: 0,
             max: 6,
@@ -85,14 +85,14 @@ const definition: MenuItemDefinition = {
         {
             key: 'heading',
             type: 'text',
-            label: 'features.menus.form.columnHeading',
+            label: 'modules.cms.menus.form.columnHeading',
             placeholder: 'Optional heading text',
             group: 'mega_menu'
         },
         {
             key: 'hide_label',
             type: 'boolean',
-            label: 'features.menus.form.hideLabel',
+            label: 'modules.cms.menus.form.hideLabel',
             default: false,
             group: 'mega_menu'
         },
@@ -100,20 +100,20 @@ const definition: MenuItemDefinition = {
         {
             key: 'badge',
             type: 'text',
-            label: 'features.menus.form.badgeText',
+            label: 'modules.cms.menus.form.badgeText',
             placeholder: 'New',
             group: 'badge'
         },
         {
             key: 'badge_color',
             type: 'select',
-            label: 'features.menus.form.badgeColor',
+            label: 'modules.cms.menus.form.badgeColor',
             options: [
-                { label: 'features.menus.form.options.primary', value: 'primary' },
-                { label: 'features.menus.form.options.secondary', value: 'secondary' },
-                { label: 'features.menus.form.options.success', value: 'success' },
-                { label: 'features.menus.form.options.warning', value: 'warning' },
-                { label: 'features.menus.form.options.danger', value: 'danger' }
+                { label: 'modules.cms.menus.form.options.primary', value: 'primary' },
+                { label: 'modules.cms.menus.form.options.secondary', value: 'secondary' },
+                { label: 'modules.cms.menus.form.options.success', value: 'success' },
+                { label: 'modules.cms.menus.form.options.warning', value: 'warning' },
+                { label: 'modules.cms.menus.form.options.danger', value: 'danger' }
             ],
             default: 'primary',
             group: 'badge'
@@ -122,21 +122,21 @@ const definition: MenuItemDefinition = {
         {
             key: 'image',
             type: 'media',
-            label: 'features.menus.form.image',
+            label: 'modules.cms.menus.form.image',
             group: 'appearance'
         },
         {
             key: 'image_size',
             type: 'select',
-            label: 'features.menus.form.imageSize',
+            label: 'modules.cms.menus.form.imageSize',
             options: [
-                { label: 'features.menus.form.options.auto169', value: 'auto' },
-                { label: 'features.menus.form.options.landscape_sm', value: 'landscape_sm' },
-                { label: 'features.menus.form.options.landscape_md', value: 'landscape_md' },
-                { label: 'features.menus.form.options.landscape_lg', value: 'landscape_lg' },
-                { label: 'features.menus.form.options.portrait_sm', value: 'portrait_sm' },
-                { label: 'features.menus.form.options.portrait_md', value: 'portrait_md' },
-                { label: 'features.menus.form.options.full169', value: 'full' }
+                { label: 'modules.cms.menus.form.options.auto169', value: 'auto' },
+                { label: 'modules.cms.menus.form.options.landscape_sm', value: 'landscape_sm' },
+                { label: 'modules.cms.menus.form.options.landscape_md', value: 'landscape_md' },
+                { label: 'modules.cms.menus.form.options.landscape_lg', value: 'landscape_lg' },
+                { label: 'modules.cms.menus.form.options.portrait_sm', value: 'portrait_sm' },
+                { label: 'modules.cms.menus.form.options.portrait_md', value: 'portrait_md' },
+                { label: 'modules.cms.menus.form.options.full169', value: 'full' }
             ],
             default: 'auto',
             group: 'appearance'
@@ -144,7 +144,7 @@ const definition: MenuItemDefinition = {
         {
             key: 'description',
             type: 'textarea',
-            label: 'features.menus.form.promotionDescription',
+            label: 'modules.cms.menus.form.promotionDescription',
             placeholder: 'Add a quote or short description over the image',
             group: 'appearance'
         }

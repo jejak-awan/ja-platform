@@ -5,19 +5,19 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('features.school.logistics.sarpras.actions.editBuilding') : $t('features.school.logistics.sarpras.actions.addBuilding') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('modules.school.logistics.sarpras.actions.editBuilding') : $t('modules.school.logistics.sarpras.actions.addBuilding') }}</DialogTitle>
       </DialogHeader>
       <form
         class="space-y-4 py-4"
         @submit.prevent="handleSubmit"
       >
         <div class="space-y-2">
-          <Label>{{ $t('features.school.logistics.sarpras.labels.location') }} <span class="text-destructive">*</span></Label>
+          <Label>{{ $t('modules.school.logistics.sarpras.labels.location') }} <span class="text-destructive">*</span></Label>
           <Select
             v-model="form.land_asset_id"
             required
           >
-            <SelectTrigger><SelectValue :placeholder="$t('features.school.logistics.sarpras.placeholders.selectLand')" /></SelectTrigger>
+            <SelectTrigger><SelectValue :placeholder="$t('modules.school.logistics.sarpras.placeholders.selectLand')" /></SelectTrigger>
             <SelectContent>
               <SelectItem
                 v-for="l in lands"
@@ -30,7 +30,7 @@
           </Select>
         </div>
         <div class="space-y-2">
-          <Label for="name">{{ $t('features.school.logistics.sarpras.labels.buildingName') }} <span class="text-destructive">*</span></Label>
+          <Label for="name">{{ $t('modules.school.logistics.sarpras.labels.buildingName') }} <span class="text-destructive">*</span></Label>
           <Input
             id="name"
             v-model="form.name"
@@ -39,7 +39,7 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
-            <Label for="area">{{ $t('features.school.logistics.sarpras.labels.area') }} (m2)</Label>
+            <Label for="area">{{ $t('modules.school.logistics.sarpras.labels.area') }} (m2)</Label>
             <Input
               id="area"
               v-model="form.area"
@@ -47,7 +47,7 @@
             />
           </div>
           <div class="space-y-2">
-            <Label for="floor_count">{{ $t('features.school.logistics.sarpras.labels.floorCount') }}</Label>
+            <Label for="floor_count">{{ $t('modules.school.logistics.sarpras.labels.floorCount') }}</Label>
             <Input
               id="floor_count"
               v-model="form.floor_count"
@@ -57,7 +57,7 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
-            <Label for="year_built">{{ $t('features.school.logistics.sarpras.labels.yearBuilt') }}</Label>
+            <Label for="year_built">{{ $t('modules.school.logistics.sarpras.labels.yearBuilt') }}</Label>
             <Input
               id="year_built"
               v-model="form.year_built"
@@ -65,9 +65,9 @@
             />
           </div>
           <div class="space-y-2">
-            <Label>{{ $t('features.school.logistics.sarpras.labels.condition') }}</Label>
+            <Label>{{ $t('modules.school.logistics.sarpras.labels.condition') }}</Label>
             <Select v-model="form.condition">
-              <SelectTrigger><SelectValue :placeholder="$t('features.school.logistics.sarpras.placeholders.selectCondition')" /></SelectTrigger>
+              <SelectTrigger><SelectValue :placeholder="$t('modules.school.logistics.sarpras.placeholders.selectCondition')" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="good">
                   {{ $t('common.labels.conditions.good') }}
@@ -105,9 +105,9 @@ import { ref, watch, onMounted } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { LogisticsService } from '@/modules/School/services/LogisticsService';
-import { parseResponse } from '@/utils/responseParser';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 const props = defineProps<{
   open: boolean;

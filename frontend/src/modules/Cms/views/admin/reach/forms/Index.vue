@@ -4,12 +4,12 @@
       <!-- Header -->
       <div class="mb-6 flex justify-between items-center">
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.forms.title') }}
+          {{ $t('modules.cms.forms.title') }}
         </h1>
         <router-link :to="{ name: 'forms.create' }">
           <Button>
             <Plus class="w-5 h-5 mr-2" />
-            {{ $t('features.forms.actions.create') }}
+            {{ $t('modules.cms.forms.actions.create') }}
           </Button>
         </router-link>
       </div>
@@ -22,23 +22,23 @@
             <Input
               v-model="search"
               type="text"
-              :placeholder="$t('features.forms.filters.search')"
+              :placeholder="$t('modules.cms.forms.filters.search')"
               class="pl-9"
             />
           </div>
           <Select v-model="statusFilter">
             <SelectTrigger class="w-[180px]">
-              <SelectValue :placeholder="$t('features.forms.filters.status')" />
+              <SelectValue :placeholder="$t('modules.cms.forms.filters.status')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">
-                {{ $t('features.forms.filters.status') }}
+                {{ $t('modules.cms.forms.filters.status') }}
               </SelectItem>
               <SelectItem value="active">
-                {{ $t('features.forms.filters.active') }}
+                {{ $t('modules.cms.forms.filters.active') }}
               </SelectItem>
               <SelectItem value="inactive">
-                {{ $t('features.forms.filters.inactive') }}
+                {{ $t('modules.cms.forms.filters.inactive') }}
               </SelectItem>
             </SelectContent>
           </Select>
@@ -88,7 +88,7 @@
             class="flex items-center gap-3 p-1.5 px-3 rounded-lg bg-primary/5 border border-primary/10 transition-opacity animate-in fade-in slide-in-from-top-1 ml-auto"
           >
             <span class="text-sm font-medium text-foreground whitespace-nowrap">
-              {{ selectedIds.length }} {{ $t('features.forms.bulk.selected') }}
+              {{ selectedIds.length }} {{ $t('modules.cms.forms.bulk.selected') }}
             </span>
             <div class="h-4 w-px bg-border mx-2" />
             <Button
@@ -98,7 +98,7 @@
               @click="handleBulkDelete"
             >
               <Trash2 class="w-4 h-4 mr-2" />
-              {{ $t('features.forms.actions.delete') }}
+              {{ $t('modules.cms.forms.actions.delete') }}
             </Button>
           </div>
         </div>
@@ -111,7 +111,7 @@
       >
         <Loader2 class="w-8 h-8 mx-auto animate-spin text-muted-foreground" />
         <p class="text-muted-foreground mt-2">
-          {{ $t('features.forms.messages.loading') }}
+          {{ $t('modules.cms.forms.messages.loading') }}
         </p>
       </div>
 
@@ -122,11 +122,11 @@
       >
         <FileText class="mx-auto h-12 w-12 text-muted-foreground opacity-50" />
         <p class="mt-4 text-muted-foreground">
-          {{ $t('features.forms.messages.empty') }}
+          {{ $t('modules.cms.forms.messages.empty') }}
         </p>
         <router-link :to="{ name: 'forms.create' }">
           <Button class="mt-4">
-            {{ $t('features.forms.actions.createFirst') }}
+            {{ $t('modules.cms.forms.actions.createFirst') }}
           </Button>
         </router-link>
       </Card>
@@ -167,7 +167,7 @@
               <Badge
                 :variant="form.is_active ? 'success' : 'secondary'"
               >
-                {{ form.is_active ? $t('features.forms.filters.active') : $t('features.forms.filters.inactive') }}
+                {{ form.is_active ? $t('modules.cms.forms.filters.active') : $t('modules.cms.forms.filters.inactive') }}
               </Badge>
             </div>
 
@@ -185,32 +185,32 @@
               </div>
               <div
                 class="flex items-center"
-                :title="$t('features.forms.stats.views', { count: form.view_count || 0 })"
+                :title="$t('modules.cms.forms.stats.views', { count: form.view_count || 0 })"
               >
                 <Eye class="w-4 h-4 mr-2 opacity-70" />
-                <span>{{ $t('features.forms.stats.views', { count: form.view_count || 0 }) }}</span>
+                <span>{{ $t('modules.cms.forms.stats.views', { count: form.view_count || 0 }) }}</span>
               </div>
               <div
                 class="flex items-center"
-                :title="$t('features.forms.stats.starts', { count: form.start_count || 0 })"
+                :title="$t('modules.cms.forms.stats.starts', { count: form.start_count || 0 })"
               >
                 <MousePointer2 class="w-4 h-4 mr-2 opacity-70" />
-                <span>{{ $t('features.forms.stats.starts', { count: form.start_count || 0 }) }}</span>
+                <span>{{ $t('modules.cms.forms.stats.starts', { count: form.start_count || 0 }) }}</span>
               </div>
               <div
                 class="flex items-center font-medium text-foreground"
-                :title="$t('features.forms.stats.submissions', { count: form.submission_count || 0 })"
+                :title="$t('modules.cms.forms.stats.submissions', { count: form.submission_count || 0 })"
               >
                 <MessageSquare class="w-4 h-4 mr-2 opacity-70" />
-                <span>{{ $t('features.forms.stats.submissions', { count: form.submission_count || 0 }) }}</span>
+                <span>{{ $t('modules.cms.forms.stats.submissions', { count: form.submission_count || 0 }) }}</span>
               </div>
               <div
                 class="col-span-2 flex items-center pt-1"
-                :title="$t('features.forms.stats.conversion', { rate: calculateConversion(form) })"
+                :title="$t('modules.cms.forms.stats.conversion', { rate: calculateConversion(form) })"
               >
                 <TrendingUp class="w-4 h-4 mr-2 opacity-70 text-emerald-500" />
                 <span class="text-xs font-semibold text-emerald-600">
-                  {{ $t('features.forms.stats.conversion', { rate: calculateConversion(form) }) }}
+                  {{ $t('modules.cms.forms.stats.conversion', { rate: calculateConversion(form) }) }}
                 </span>
               </div>
             </div>
@@ -222,7 +222,7 @@
                 @click="editForm(form)"
               >
                 <Pencil class="w-4 h-4 mr-1" />
-                {{ $t('features.forms.actions.edit') }}
+                {{ $t('modules.cms.forms.actions.edit') }}
               </Button>
               <Button
                 variant="secondary"
@@ -231,7 +231,7 @@
                 @click="viewSubmissions(form)"
               >
                 <Inbox class="w-4 h-4 mr-1" />
-                {{ $t('features.forms.actions.submissions') }}
+                {{ $t('modules.cms.forms.actions.submissions') }}
               </Button>
               <Tooltip>
                 <TooltipTrigger as-child>
@@ -245,7 +245,7 @@
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{{ $t('features.forms.actions.duplicate') }}</p>
+                  <p>{{ $t('modules.cms.forms.actions.duplicate') }}</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -284,7 +284,7 @@
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{{ $t('features.forms.actions.share') }}</p>
+                  <p>{{ $t('modules.cms.forms.actions.share') }}</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -344,7 +344,7 @@
         <DataTable
           :table="table"
           :loading="loading"
-          :empty-message="$t('features.forms.messages.empty')"
+          :empty-message="$t('modules.cms.forms.messages.empty')"
         />
       </div>
 
@@ -353,11 +353,11 @@
       <Dialog v-model:open="showShareDialog">
         <DialogContent class="max-w-md">
           <DialogHeader>
-            <DialogTitle>{{ $t('features.forms.share.title') }}</DialogTitle>
+            <DialogTitle>{{ $t('modules.cms.forms.share.title') }}</DialogTitle>
           </DialogHeader>
           <div class="space-y-6 pt-4">
             <div class="space-y-2">
-              <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground">{{ $t('features.forms.share.publicUrl') }}</label>
+              <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground">{{ $t('modules.cms.forms.share.publicUrl') }}</label>
               <div class="flex gap-2">
                 <Input
                   :value="publicUrl"
@@ -381,7 +381,7 @@
               </div>
             </div>
             <div class="space-y-2">
-              <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground">{{ $t('features.forms.share.embedTag') }}</label>
+              <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground">{{ $t('modules.cms.forms.share.embedTag') }}</label>
               <div class="flex gap-2">
                 <Input
                   :value="embedCode"
@@ -397,7 +397,7 @@
                 </Button>
               </div>
               <p class="text-[11px] text-muted-foreground italic">
-                {{ $t('features.forms.share.embedDescription') }}
+                {{ $t('modules.cms.forms.share.embedDescription') }}
               </p>
             </div>
           </div>
@@ -408,11 +408,11 @@
       <Dialog v-model:open="showDuplicateDialog">
         <DialogContent class="max-w-md">
           <DialogHeader>
-            <DialogTitle>{{ $t('features.forms.duplicate.title') }}</DialogTitle>
+            <DialogTitle>{{ $t('modules.cms.forms.duplicate.title') }}</DialogTitle>
           </DialogHeader>
           <div class="p-4 space-y-4">
             <p class="text-sm text-muted-foreground">
-              {{ $t('features.forms.duplicate.description', { name: duplicatingForm?.name }) }}
+              {{ $t('modules.cms.forms.duplicate.description', { name: duplicatingForm?.name }) }}
             </p>
                     
             <div class="grid gap-3">
@@ -425,10 +425,10 @@
                 </div>
                 <div>
                   <h4 class="font-bold text-foreground">
-                    {{ $t('features.forms.duplicate.structure') }}
+                    {{ $t('modules.cms.forms.duplicate.structure') }}
                   </h4>
                   <p class="text-xs text-muted-foreground leading-relaxed">
-                    {{ $t('features.forms.duplicate.structure_desc') }}
+                    {{ $t('modules.cms.forms.duplicate.structure_desc') }}
                   </p>
                 </div>
               </button>
@@ -442,10 +442,10 @@
                 </div>
                 <div>
                   <h4 class="font-bold text-foreground">
-                    {{ $t('features.forms.duplicate.withData') }}
+                    {{ $t('modules.cms.forms.duplicate.withData') }}
                   </h4>
                   <p class="text-xs text-muted-foreground leading-relaxed">
-                    {{ $t('features.forms.duplicate.withData_desc', { count: duplicatingForm?.submission_count || 0 }) }}
+                    {{ $t('modules.cms.forms.duplicate.withData_desc', { count: duplicatingForm?.submission_count || 0 }) }}
                   </p>
                 </div>
               </button>
@@ -457,7 +457,7 @@
                 class="w-full"
                 @click="showDuplicateDialog = false"
               >
-                {{ $t('features.forms.duplicate.cancel') }}
+                {{ $t('modules.cms.forms.duplicate.cancel') }}
               </Button>
             </div>
           </div>
@@ -468,15 +468,15 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { useConfirm } from '@/composables/useConfirm';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
-import { Badge, Button, Card, Checkbox, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, DataTable } from '@/components/ui';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
+import { Badge, Button, Card, Checkbox, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, DataTable } from '@/shared/components/ui';
 import { h } from 'vue';
 import { 
     useVueTable, 
@@ -509,7 +509,7 @@ import TrendingUp from 'lucide-vue-next/dist/esm/icons/trending-up.js';
 import LayoutTemplate from 'lucide-vue-next/dist/esm/icons/layout-template.js';
 import Database from 'lucide-vue-next/dist/esm/icons/database.js';
 
-import type { Form } from '@/types/cms/forms';
+import type { Form } from '@/modules/Cms/types/forms';
 
 interface FormFilters {
     trashed?: string;
@@ -550,7 +550,7 @@ const columns = [
         size: 50,
     }),
     columnHelper.accessor('name', {
-        header: t('features.forms.modal.formName'),
+        header: t('modules.cms.forms.modal.formName'),
         cell: ({ row }) => h('div', [
             h('p', { class: 'font-medium text-foreground' }, [
                 row.original.name,
@@ -560,33 +560,33 @@ const columns = [
         ])
     }),
     columnHelper.accessor('slug', {
-        header: t('features.forms.modal.slug'),
+        header: t('modules.cms.forms.modal.slug'),
         cell: ({ row }) => h('code', { class: 'text-sm text-muted-foreground bg-muted px-2 py-1 rounded' }, row.original.slug)
     }),
     columnHelper.display({
         id: 'fields',
-        header: () => h('div', { class: 'text-right' }, t('features.forms.stats.fields', { count: '' }).replace('{count}', '').trim()),
+        header: () => h('div', { class: 'text-right' }, t('modules.cms.forms.stats.fields', { count: '' }).replace('{count}', '').trim()),
         cell: ({ row }) => h('div', { class: 'text-right' }, [
             h('span', { class: 'text-sm text-muted-foreground' }, String(row.original.fields_count || 0))
         ])
     }),
     columnHelper.accessor('view_count', {
-        header: () => h('div', { class: 'text-right' }, t('features.forms.stats.views', { count: '' }).replace(/^[0-9\s]+/, '').trim()),
+        header: () => h('div', { class: 'text-right' }, t('modules.cms.forms.stats.views', { count: '' }).replace(/^[0-9\s]+/, '').trim()),
         cell: ({ row }) => h('div', { class: 'text-right font-mono text-xs' }, String(row.original.view_count || 0))
     }),
     columnHelper.accessor('start_count', {
-        header: () => h('div', { class: 'text-right' }, t('features.forms.stats.starts', { count: '' }).replace(/^[0-9\s]+/, '').trim()),
+        header: () => h('div', { class: 'text-right' }, t('modules.cms.forms.stats.starts', { count: '' }).replace(/^[0-9\s]+/, '').trim()),
         cell: ({ row }) => h('div', { class: 'text-right font-mono text-xs' }, String(row.original.start_count || 0))
     }),
     columnHelper.accessor('submission_count', {
-        header: () => h('div', { class: 'text-right' }, t('features.forms.actions.submissions')),
+        header: () => h('div', { class: 'text-right' }, t('modules.cms.forms.actions.submissions')),
         cell: ({ row }) => h('div', { class: 'text-right' }, [
             h('span', { class: 'font-medium px-2 py-0.5 rounded-full bg-primary/5 text-primary tracking-tight' }, String(row.original.submission_count || 0))
         ])
     }),
     columnHelper.display({
         id: 'conversion',
-        header: () => h('div', { class: 'text-right' }, t('features.forms.stats.conversion', { rate: '' }).replace(/^[0-9%/\s]+/, '').trim()),
+        header: () => h('div', { class: 'text-right' }, t('modules.cms.forms.stats.conversion', { rate: '' }).replace(/^[0-9%/\s]+/, '').trim()),
         cell: ({ row }) => h('div', { class: 'text-right' }, [
             h('span', { class: 'text-xs font-bold text-emerald-600' }, `${calculateConversion(row.original)}%`)
         ])
@@ -594,7 +594,7 @@ const columns = [
     columnHelper.accessor('is_active', {
         header: () => h('div', { class: 'text-center' }, 'Status'),
         cell: ({ row }) => h('div', { class: 'text-center' }, [
-            h(Badge, { variant: row.original.is_active ? 'success' : 'secondary' }, row.original.is_active ? t('features.forms.filters.active') : t('features.forms.filters.inactive'))
+            h(Badge, { variant: row.original.is_active ? 'success' : 'secondary' }, row.original.is_active ? t('modules.cms.forms.filters.active') : t('modules.cms.forms.filters.inactive'))
         ])
     }),
     columnHelper.display({
@@ -614,7 +614,7 @@ const columns = [
                     h(TooltipTrigger, { asChild: true }, {
                         default: () => h(Button, { onClick: () => viewSubmissions(row.original), variant: 'ghost', size: 'icon', class: 'h-8 w-8 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10' }, [h(Inbox, { class: 'w-4 h-4' })])
                     }),
-                    h(TooltipContent, {}, { default: () => h('p', t('features.forms.actions.submissions')) })
+                    h(TooltipContent, {}, { default: () => h('p', t('modules.cms.forms.actions.submissions')) })
                 ]
             }),
             h(Tooltip, {}, {
@@ -622,7 +622,7 @@ const columns = [
                     h(TooltipTrigger, { asChild: true }, {
                         default: () => h(Button, { onClick: () => openDuplicateDialog(row.original), variant: 'ghost', size: 'icon', class: 'h-8 w-8 text-indigo-500 hover:text-indigo-600 hover:bg-indigo-50' }, [h(Copy, { class: 'w-4 h-4' })])
                     }),
-                    h(TooltipContent, {}, { default: () => h('p', t('features.forms.actions.duplicate')) })
+                    h(TooltipContent, {}, { default: () => h('p', t('modules.cms.forms.actions.duplicate')) })
                 ]
             }),
             h(Tooltip, {}, {
@@ -640,7 +640,7 @@ const columns = [
                     h(TooltipTrigger, { asChild: true }, {
                         default: () => h(Button, { onClick: (e: Event) => { e.stopPropagation(); openShareDialog(row.original); }, variant: 'ghost', size: 'icon', class: 'h-8 w-8 text-sky-500 hover:text-sky-600 hover:bg-sky-50' }, [h(Share2, { class: 'w-4 h-4' })])
                     }),
-                    h(TooltipContent, {}, { default: () => h('p', t('features.forms.actions.share')) })
+                    h(TooltipContent, {}, { default: () => h('p', t('modules.cms.forms.actions.share')) })
                 ]
             }),
             !row.original.deleted_at && h(Tooltip, {}, {
@@ -731,7 +731,7 @@ const embedCode = computed(() => {
 
 const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast.success.default(t('features.forms.share.copied'));
+    toast.success.default(t('modules.cms.forms.share.copied'));
 };
 
 const visitPublicPage = () => {
@@ -787,8 +787,8 @@ const toggleFormStatus = async (form: Form) => {
 
 const deleteForm = async (form: Form) => {
     const confirmed = await confirm({
-        title: t('features.forms.actions.delete'),
-        message: t('features.forms.messages.deleteConfirm', { name: form.name }),
+        title: t('modules.cms.forms.actions.delete'),
+        message: t('modules.cms.forms.messages.deleteConfirm', { name: form.name }),
         variant: 'danger',
         confirmText: t('common.actions.delete'),
     });
@@ -884,8 +884,8 @@ const toggleSelection = (id: number | string) => {
 
 const handleBulkDelete = async () => {
     const confirmed = await confirm({
-        title: t('features.forms.actions.delete'),
-        message: t('features.forms.bulk.confirmDelete', { count: selectedIds.value.length }),
+        title: t('modules.cms.forms.actions.delete'),
+        message: t('modules.cms.forms.bulk.confirmDelete', { count: selectedIds.value.length }),
         variant: 'danger',
         confirmText: t('common.actions.delete'),
     });
@@ -895,7 +895,7 @@ const handleBulkDelete = async () => {
 const performBulkAction = async () => {
     try {
         await api.delete('/admin/cms/forms/bulk-delete', { data: { ids: selectedIds.value } });
-        toast.success.default(t('features.forms.submissions.messages.bulkDeleteSuccess', { count: selectedIds.value.length }));
+        toast.success.default(t('modules.cms.forms.submissions.messages.bulkDeleteSuccess', { count: selectedIds.value.length }));
         selectedIds.value = [];
         fetchForms();
     } catch (error: unknown) {

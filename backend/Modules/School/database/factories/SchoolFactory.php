@@ -11,38 +11,29 @@ class SchoolFactory extends Factory
 
     public function definition(): array
     {
-        $types = ['negeri', 'swasta'];
-        $accreditations = ['A', 'B', 'C', 'TT'];
-        $kurikulums = ['Kurikulum Merdeka', 'Kurikulum 2013', 'KTSP'];
-
         return [
-            'name' => 'SMK ' . $this->faker->company(),
-            'type' => $this->faker->randomElement($types),
-            'npsn' => $this->faker->unique()->numerify('########'),
-            'nss' => $this->faker->numerify('####################'),
-            'accreditation' => $this->faker->randomElement($accreditations),
-            'kurikulum' => $this->faker->randomElement($kurikulums),
+            'name' => 'SMK '.$this->faker->company(),
+            'type' => $this->faker->randomElement(['negeri', 'swasta']),
+            'npsn' => $this->faker->unique()->numerify('##########'),
             'status_kepemilikan' => $this->faker->randomElement(['Yayasan', 'Pemerintah Daerah']),
-            'sk_pendirian' => $this->faker->numerify('SK-###/####'),
-            'tgl_sk_pendirian' => $this->faker->date(),
-            'sk_operasional' => $this->faker->numerify('OP-###/####'),
-            'tgl_sk_operasional' => $this->faker->date(),
+            'is_multi_unit' => $this->faker->boolean(30),
+            'is_multi_branch' => $this->faker->boolean(10),
+
+            // Contact
             'address' => $this->faker->address(),
-            'rt' => $this->faker->numerify('0##'),
-            'rw' => $this->faker->numerify('0##'),
-            'desa_kelurahan' => $this->faker->citySuffix(),
-            'kecamatan' => $this->faker->city(),
-            'kabupaten_kota' => 'Kab. ' . $this->faker->city(),
-            'provinsi' => 'Jawa Barat',
-            'kode_pos' => $this->faker->numerify('#####'),
-            'lat' => $this->faker->latitude(-8, -6),
-            'long' => $this->faker->longitude(106, 108),
             'phone' => $this->faker->phoneNumber(),
             'email' => $this->faker->companyEmail(),
             'website' => $this->faker->url(),
-            'npwp' => $this->faker->numerify('##.###.###.#-###.###'),
             'principal_name' => $this->faker->name(),
-            'foundation_name' => 'Yayasan ' . $this->faker->company(),
+            'principal_nip' => $this->faker->optional()->numerify('##################'),
+
+            // Legality
+            'sk_pendirian' => $this->faker->numerify('SK-###/####'),
+            'tgl_sk_pendirian' => $this->faker->optional()->date(),
+            'sk_operasional' => $this->faker->numerify('OP-###/####'),
+            'tgl_sk_operasional' => $this->faker->optional()->date(),
+
+            // Profile
             'vision' => 'Menjadi sekolah unggul dan berkarakter',
             'mission' => 'Menyelenggarakan pendidikan berkualitas',
         ];

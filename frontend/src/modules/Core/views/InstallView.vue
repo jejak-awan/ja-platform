@@ -11,7 +11,7 @@
           
           <!-- Language Switcher -->
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger as-child>
               <Button variant="ghost" size="icon" class="text-primary-foreground hover:bg-white/10 h-8 w-8">
                 <Languages class="h-4 w-4" />
               </Button>
@@ -226,12 +226,12 @@ import {
   SelectContent, SelectItem, SelectTrigger, SelectValue, 
   Separator, DropdownMenu, DropdownMenuContent, 
   DropdownMenuItem, DropdownMenuTrigger 
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { Loader2, CheckCircle2, XCircle, ArrowRight, Languages } from 'lucide-vue-next';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
 import { useI18n } from 'vue-i18n';
-import { getAvailableLocales, getLocale, setLocale } from '@/i18n';
+import { getAvailableLocales, getLocale, setLocale } from '@/core/i18n';
 
 const { t } = useI18n();
 const availableLocales = getAvailableLocales();

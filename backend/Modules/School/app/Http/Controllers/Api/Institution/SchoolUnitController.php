@@ -76,7 +76,7 @@ class SchoolUnitController extends BaseController
     /**
      * Switch the active unit context for the current session.
      */
-    public function switch(string $id, Request $request): \Illuminate\Http\JsonResponse
+    public function select(string $id, Request $request): \Illuminate\Http\JsonResponse
     {
         // Only allow super-admin or admin to switch context
         $user = $request->user();

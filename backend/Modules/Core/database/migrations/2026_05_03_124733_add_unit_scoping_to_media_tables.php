@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('media', function (Blueprint $table) {
-            $table->foreignId('school_unit_id')->nullable()->after('id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->unsignedBigInteger('school_unit_id')->nullable()->after('id')->index();
             $table->index(['school_unit_id', 'is_shared']);
         });
 
         Schema::table('media_folders', function (Blueprint $table) {
-            $table->foreignId('school_unit_id')->nullable()->after('id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->unsignedBigInteger('school_unit_id')->nullable()->after('id')->index();
             $table->index(['school_unit_id', 'is_shared']);
         });
     }
@@ -29,13 +29,11 @@ return new class extends Migration
     {
         Schema::table('media_folders', function (Blueprint $table) {
             $table->dropIndex(['school_unit_id', 'is_shared']);
-            $table->dropForeign(['school_unit_id']);
             $table->dropColumn(['school_unit_id']);
         });
 
         Schema::table('media', function (Blueprint $table) {
             $table->dropIndex(['school_unit_id', 'is_shared']);
-            $table->dropForeign(['school_unit_id']);
             $table->dropColumn('school_unit_id');
         });
     }

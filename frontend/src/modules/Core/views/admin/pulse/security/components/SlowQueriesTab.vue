@@ -132,7 +132,7 @@ import { useVueTable, getCoreRowModel, getSortedRowModel, createColumnHelper, ty
 import {
     Card, CardHeader, CardTitle, CardDescription, CardContent,
     Button, Badge, Input, Label, DataTable, Pagination
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 

@@ -81,9 +81,9 @@ import { ref, watch } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Input, Label, Textarea, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { HRService } from '@/modules/School/services/HRService';
-import { useToast } from '@/composables/useToast';
+import { useToast } from '@/shared/composables/useToast';
 
 const props = defineProps<{
   open: boolean;

@@ -39,16 +39,16 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, h } from 'vue';
 import { RouterLink } from 'vue-router';
-import api from '@/services/api';
-import toast from '@/services/toast';
+import api from '@/core/api/client';
+import toast from '@/shared/services/legacy-toast';
 import { useI18n } from 'vue-i18n';
-import { useConfirm } from '@/composables/useConfirm';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import { useVueTable, getCoreRowModel, getSortedRowModel, createColumnHelper, type SortingState } from '@tanstack/vue-table';
-import { Card, CardHeader, CardContent, Input, Button, Badge, DataTable } from '@/components/ui';
+import { Card, CardHeader, CardContent, Input, Button, Badge, DataTable } from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';

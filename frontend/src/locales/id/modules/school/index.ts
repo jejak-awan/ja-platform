@@ -15,6 +15,9 @@ import graduation from './graduation.json';
 import osis from './osis.json';
 import teacher_dashboard from './teacher_dashboard.json';
 import lms from './lms.json';
+import navigation from './navigation.json';
+import messages from './messages.json';
+import labels from './labels.json';
 
 export default {
     ...misc,
@@ -36,4 +39,7 @@ export default {
     teacher_dashboard,
     graduation,
     lms,
+    navigation,
+    messages,
+    labels,
 };

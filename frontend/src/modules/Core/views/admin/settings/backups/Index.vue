@@ -3,10 +3,10 @@
     <div class="mb-6 flex justify-between items-center">
       <div>
         <h1 class="text-2xl font-bold tracking-tight text-foreground">
-          {{ t('features.system.backups.title') }}
+          {{ t('modules.core.system.backups.title') }}
         </h1>
         <p class="text-sm text-muted-foreground">
-          {{ t('features.system.backups.description') }}
+          {{ t('modules.core.system.backups.description') }}
         </p>
       </div>
       <Button
@@ -22,7 +22,7 @@
           v-else
           class="w-4 h-4 mr-2"
         />
-        {{ creating ? t('features.system.backups.creating') : t('features.system.backups.create') }}
+        {{ creating ? t('modules.core.system.backups.creating') : t('modules.core.system.backups.create') }}
       </Button>
     </div>
 
@@ -39,7 +39,7 @@
             </div>
             <div>
               <p class="text-sm font-medium text-muted-foreground">
-                {{ t('features.system.backups.stats.total') }}
+                {{ t('modules.core.system.backups.stats.total') }}
               </p>
               <p class="text-2xl font-bold tracking-tight text-foreground">
                 {{ statistics.total || 0 }}
@@ -56,7 +56,7 @@
             </div>
             <div>
               <p class="text-sm font-medium text-muted-foreground">
-                {{ t('features.system.backups.stats.size') }}
+                {{ t('modules.core.system.backups.stats.size') }}
               </p>
               <p class="text-2xl font-bold tracking-tight text-foreground">
                 {{ formatFileSize(statistics.total_size || 0) }}
@@ -73,13 +73,13 @@
             </div>
             <div>
               <p class="text-sm font-medium text-muted-foreground">
-                {{ t('features.system.backups.stats.last') }}
+                {{ t('modules.core.system.backups.stats.last') }}
               </p>
               <p
                 class="text-xl font-bold tracking-tight text-foreground truncate max-w-[150px]"
                 :title="formatDate(statistics.last_backup)"
               >
-                {{ formatDate(statistics.last_backup) || t('features.system.backups.stats.never') }}
+                {{ formatDate(statistics.last_backup) || t('modules.core.system.backups.stats.never') }}
               </p>
             </div>
           </div>
@@ -93,10 +93,10 @@
             </div>
             <div>
               <p class="text-sm font-medium text-muted-foreground">
-                {{ t('features.system.backups.stats.auto') }}
+                {{ t('modules.core.system.backups.stats.auto') }}
               </p>
               <Badge :variant="statistics.schedule?.enabled ? 'success' : 'secondary'">
-                {{ statistics.schedule?.enabled ? t('features.system.backups.stats.enabled') : t('features.system.backups.stats.disabled') }}
+                {{ statistics.schedule?.enabled ? t('modules.core.system.backups.stats.enabled') : t('modules.core.system.backups.stats.disabled') }}
               </Badge>
             </div>
           </div>
@@ -108,7 +108,7 @@
     <Card class="mb-6">
       <CardHeader class="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle class="text-lg font-semibold">
-          {{ t('features.system.backups.schedule.title') }}
+          {{ t('modules.core.system.backups.schedule.title') }}
         </CardTitle>
         <Button
           variant="ghost"
@@ -117,7 +117,7 @@
           @click="openScheduleModal"
         >
           <Settings class="w-4 h-4 mr-2" />
-          {{ t('features.system.backups.schedule.configure') }}
+          {{ t('modules.core.system.backups.schedule.configure') }}
         </Button>
       </CardHeader>
       <CardContent>
@@ -127,7 +127,7 @@
         >
           <div class="space-y-1">
             <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {{ t('features.system.backups.schedule.status') }}
+              {{ t('modules.core.system.backups.schedule.status') }}
             </p>
             <div class="flex items-center gap-2">
               <span
@@ -138,21 +138,21 @@
                 class="text-sm font-medium"
                 :class="statistics.schedule.enabled ? 'text-emerald-600' : 'text-muted-foreground'"
               >
-                {{ statistics.schedule.enabled ? t('features.system.backups.stats.enabled') : t('features.system.backups.stats.disabled') }}
+                {{ statistics.schedule.enabled ? t('modules.core.system.backups.stats.enabled') : t('modules.core.system.backups.stats.disabled') }}
               </p>
             </div>
           </div>
           <div class="space-y-1">
             <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {{ t('features.system.backups.schedule.frequency') }}
+              {{ t('modules.core.system.backups.schedule.frequency') }}
             </p>
             <p class="text-sm font-medium text-foreground capitalize">
-              {{ t(`features.system.backups.schedule.frequencies.${statistics.schedule.frequency}`) || 'Daily' }}
+              {{ t(`modules.core.system.backups.schedule.frequencies.${statistics.schedule.frequency}`) || 'Daily' }}
             </p>
           </div>
           <div class="space-y-1">
             <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {{ t('features.system.backups.schedule.time') }}
+              {{ t('modules.core.system.backups.schedule.time') }}
             </p>
             <p class="text-sm font-medium text-foreground">
               {{ statistics.schedule.time || '02:00' }}
@@ -160,10 +160,10 @@
           </div>
           <div class="space-y-1">
             <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {{ t('features.system.backups.schedule.retention') }}
+              {{ t('modules.core.system.backups.schedule.retention') }}
             </p>
             <p class="text-sm font-medium text-foreground">
-              {{ statistics.schedule.retention_days || 30 }} {{ t('features.system.backups.schedule.days') }}
+              {{ statistics.schedule.retention_days || 30 }} {{ t('modules.core.system.backups.schedule.days') }}
             </p>
           </div>
         </div>
@@ -177,7 +177,7 @@
             <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               v-model="search"
-              :placeholder="t('features.system.backups.search')"
+              :placeholder="t('modules.core.system.backups.search')"
               class="pl-9"
             />
           </div>
@@ -190,7 +190,7 @@
         >
           <Loader2 class="w-8 h-8 mx-auto text-muted-foreground mb-4" />
           <p class="text-muted-foreground font-medium">
-            {{ t('features.system.backups.loading') }}
+            {{ t('modules.core.system.backups.loading') }}
           </p>
         </div>
 
@@ -200,19 +200,19 @@
         >
           <Database class="w-12 h-12 mx-auto text-muted-foreground/20 mb-4" />
           <p class="text-muted-foreground font-medium">
-            {{ t('features.system.backups.empty') }}
+            {{ t('modules.core.system.backups.empty') }}
           </p>
         </div>
 
         <Table v-else>
           <TableHeader>
             <TableRow>
-              <TableHead>{{ t('features.system.backups.table.name') }}</TableHead>
-              <TableHead>{{ t('features.system.backups.table.size') }}</TableHead>
+              <TableHead>{{ t('modules.core.system.backups.table.name') }}</TableHead>
+              <TableHead>{{ t('modules.core.system.backups.table.size') }}</TableHead>
               <TableHead>Password</TableHead>
-              <TableHead>{{ t('features.system.backups.table.created') }}</TableHead>
+              <TableHead>{{ t('modules.core.system.backups.table.created') }}</TableHead>
               <TableHead class="text-right">
-                {{ t('features.system.backups.table.actions') }}
+                {{ t('modules.core.system.backups.table.actions') }}
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -295,7 +295,7 @@
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    :title="t('features.system.backups.table.download')"
+                    :title="t('modules.core.system.backups.table.download')"
                     class="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                     @click="downloadBackup(backup)"
                   >
@@ -304,7 +304,7 @@
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    :title="t('features.system.backups.table.restore')"
+                    :title="t('modules.core.system.backups.table.restore')"
                     class="h-8 w-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
                     @click="restoreBackup(backup)"
                   >
@@ -313,7 +313,7 @@
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    :title="t('features.system.backups.table.delete')"
+                    :title="t('modules.core.system.backups.table.delete')"
                     class="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                     @click="deleteBackup(backup)"
                   >
@@ -331,7 +331,7 @@
     <Dialog v-model:open="showScheduleModal">
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{{ t('features.system.backups.schedule.modal.title') }}</DialogTitle>
+          <DialogTitle>{{ t('modules.core.system.backups.schedule.modal.title') }}</DialogTitle>
         </DialogHeader>
         <div class="grid gap-4 py-4">
           <div class="flex items-center space-x-2">
@@ -344,30 +344,30 @@
               for="scheduleEnabled"
               class="text-sm font-medium leading-none cursor-pointer"
             >
-              {{ t('features.system.backups.schedule.modal.enable') }}
+              {{ t('modules.core.system.backups.schedule.modal.enable') }}
             </Label>
           </div>
           <div class="grid gap-2">
-            <Label>{{ t('features.system.backups.schedule.frequency') }}</Label>
+            <Label>{{ t('modules.core.system.backups.schedule.frequency') }}</Label>
             <Select v-model="scheduleForm.backup_schedule_frequency">
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="daily">
-                  {{ t('features.system.backups.schedule.frequencies.daily') }}
+                  {{ t('modules.core.system.backups.schedule.frequencies.daily') }}
                 </SelectItem>
                 <SelectItem value="weekly">
-                  {{ t('features.system.backups.schedule.frequencies.weekly') }}
+                  {{ t('modules.core.system.backups.schedule.frequencies.weekly') }}
                 </SelectItem>
                 <SelectItem value="monthly">
-                  {{ t('features.system.backups.schedule.frequencies.monthly') }}
+                  {{ t('modules.core.system.backups.schedule.frequencies.monthly') }}
                 </SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div class="grid gap-2">
-            <Label>{{ t('features.system.backups.schedule.time') }}</Label>
+            <Label>{{ t('modules.core.system.backups.schedule.time') }}</Label>
             <Input
               v-model="scheduleForm.backup_schedule_time"
               type="time"
@@ -375,7 +375,7 @@
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div class="grid gap-2">
-              <Label>{{ t('features.system.backups.schedule.retention') }} ({{ t('features.system.backups.schedule.days') }})</Label>
+              <Label>{{ t('modules.core.system.backups.schedule.retention') }} ({{ t('modules.core.system.backups.schedule.days') }})</Label>
               <Input
                 v-model.number="scheduleForm.backup_retention_days"
                 type="number"
@@ -384,7 +384,7 @@
               />
             </div>
             <div class="grid gap-2">
-              <Label>{{ t('features.system.backups.schedule.modal.max') }}</Label>
+              <Label>{{ t('modules.core.system.backups.schedule.modal.max') }}</Label>
               <Input
                 v-model.number="scheduleForm.backup_max_count"
                 type="number"
@@ -399,7 +399,7 @@
             variant="outline"
             @click="showScheduleModal = false"
           >
-            {{ t('features.system.backups.schedule.modal.cancel') }}
+            {{ t('modules.core.system.backups.schedule.modal.cancel') }}
           </Button>
           <Button
             :disabled="savingSchedule || !isScheduleDirty"
@@ -409,7 +409,7 @@
               v-if="savingSchedule"
               class="w-4 h-4 mr-2"
             />
-            {{ savingSchedule ? t('features.system.backups.schedule.modal.saving') : t('features.system.backups.schedule.modal.save') }}
+            {{ savingSchedule ? t('modules.core.system.backups.schedule.modal.saving') : t('modules.core.system.backups.schedule.modal.save') }}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -418,14 +418,14 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
-import { parseResponse, ensureArray, parseSingleResponse } from '@/utils/responseParser';
-import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Checkbox, Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { parseResponse, ensureArray, parseSingleResponse } from '@/shared/utils/responseParser';
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Checkbox, Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
@@ -559,7 +559,7 @@ const createBackup = async () => {
     creating.value = true;
     try {
         await api.post('/admin/core/backups');
-        toast.success.action(t('features.system.backups.messages.created'));
+        toast.success.action(t('modules.core.system.backups.messages.created'));
         await fetchBackups();
     } catch (error: unknown) {
         logger.error('Failed to create backup:', error);
@@ -589,17 +589,17 @@ const downloadBackup = async (backup: Backup) => {
 
 const restoreBackup = async (backup: Backup) => {
     const confirmed = await confirm({
-        title: t('features.system.backups.actions.restore'),
-        message: t('features.system.backups.confirm.restore', { name: backup.name }),
+        title: t('modules.core.system.backups.actions.restore'),
+        message: t('modules.core.system.backups.confirm.restore', { name: backup.name }),
         variant: 'warning',
-        confirmText: t('features.system.backups.actions.restore'),
+        confirmText: t('modules.core.system.backups.actions.restore'),
     });
 
     if (!confirmed) return;
 
     const doubleConfirmed = await confirm({
-        title: t('features.system.backups.actions.restore'),
-        message: t('features.system.backups.confirm.restore_warning'),
+        title: t('modules.core.system.backups.actions.restore'),
+        message: t('modules.core.system.backups.confirm.restore_warning'),
         variant: 'danger',
         confirmText: t('common.actions.confirm'),
     });
@@ -608,7 +608,7 @@ const restoreBackup = async (backup: Backup) => {
 
     try {
         await api.post(`/admin/core/backups/${backup.id}/restore`);
-        toast.success.action(t('features.system.backups.messages.restored'));
+        toast.success.action(t('modules.core.system.backups.messages.restored'));
         setTimeout(() => {
             window.location.reload();
         }, 1500);
@@ -620,8 +620,8 @@ const restoreBackup = async (backup: Backup) => {
 
 const deleteBackup = async (backup: Backup) => {
     const confirmed = await confirm({
-        title: t('features.system.backups.actions.delete'),
-        message: t('features.system.backups.confirm.delete', { name: backup.name }),
+        title: t('modules.core.system.backups.actions.delete'),
+        message: t('modules.core.system.backups.confirm.delete', { name: backup.name }),
         variant: 'danger',
         confirmText: t('common.actions.delete'),
     });

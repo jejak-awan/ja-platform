@@ -205,16 +205,16 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useTheme } from '@/composables/useTheme'
-import { useMenu } from '@/composables/useMenu'
+import { useTheme } from '@/shared/composables/useTheme'
+import { useMenu } from '@/shared/composables/useMenu'
 import { useCoreStore } from '@/modules/Core/stores/core'
-import { useToast } from '@/composables/useToast'
-import { useFormValidation } from '@/composables/useFormValidation'
-import { useResponsiveDevice } from '@/composables/useResponsiveDevice';
-import { useThemeMotion } from '@/composables/useThemeMotion';
+import { useToast } from '@/shared/composables/useToast'
+import { useFormValidation } from '@/shared/composables/useFormValidation'
+import { useResponsiveDevice } from '@/shared/composables/useResponsiveDevice';
+import { useThemeMotion } from '@/shared/composables/useThemeMotion';
 import { useJanariIdentity, trimStr, toWhatsAppDialDigits } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity';
-import { newsletterSchema } from '@/schemas'
-import type { MenuItem } from '@/types/cms/menu';
+import { newsletterSchema } from '@/shared/schemas'
+import type { MenuItem } from '@/modules/Cms/types/menu';
 import Twitter from 'lucide-vue-next/dist/esm/icons/twitter.js';
 import Instagram from 'lucide-vue-next/dist/esm/icons/instagram.js';
 import Facebook from 'lucide-vue-next/dist/esm/icons/facebook.js';

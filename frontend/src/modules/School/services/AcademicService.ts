@@ -1,9 +1,9 @@
-import api from '@/services/api';
+import api from '@/core/api/client';
 import type { AxiosResponse } from 'axios';
 import type { 
     AcademicYear, Semester, Subject, StudyGroup, Schedule, Journal, AcademicOverview,
     Department, StudyGroupMember
-} from '@/types';
+} from '@/modules/School/types';
 
 export const AcademicService = {
     async getOverview(): Promise<AxiosResponse<AcademicOverview>> {

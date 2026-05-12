@@ -2,10 +2,10 @@
   <div>
     <div class="mb-6">
       <h1 class="text-2xl font-bold text-foreground">
-        {{ $t('features.settings.title') }}
+        {{ $t('modules.core.settings.title') }}
       </h1>
       <p class="mt-1 text-sm text-muted-foreground">
-        {{ $t('features.settings.description') }}
+        {{ $t('modules.core.settings.description') }}
       </p>
     </div>
 
@@ -14,7 +14,7 @@
       class="bg-card border border-border rounded-lg p-12 text-center"
     >
       <p class="text-muted-foreground">
-        {{ $t('features.settings.loading') }}
+        {{ $t('modules.core.settings.loading') }}
       </p>
     </div>
 
@@ -39,7 +39,7 @@
                 :is="getTabIcon(tab.id)"
                 class="w-4 h-4 mr-2"
               />
-              {{ $t('features.settings.tabs.' + tab.id) }}
+              {{ $t('modules.core.settings.tabs.' + tab.id) }}
             </TabsTrigger>
           </TabsList>
         </div>
@@ -54,7 +54,7 @@
             class="text-center py-8"
           >
             <p class="text-muted-foreground">
-              {{ $t('features.settings.noSettings') }}
+              {{ $t('modules.core.settings.noSettings') }}
             </p>
           </div>
 
@@ -152,13 +152,13 @@
               variant="outline"
               @click="resetForm"
             >
-              {{ $t('features.settings.reset') }}
+              {{ $t('modules.core.settings.reset') }}
             </Button>
             <Button
               type="submit"
               :disabled="saving || !isDirty"
             >
-              {{ saving ? $t('features.settings.saving') : $t('features.settings.save') }}
+              {{ saving ? $t('modules.core.settings.saving') : $t('modules.core.settings.save') }}
             </Button>
           </div>
         </form>
@@ -168,24 +168,24 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, watch, defineAsyncComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
-import api from '@/services/api';
-import { parseResponse, parseSingleResponse, ensureArray } from '@/utils/responseParser';
+import api from '@/core/api/client';
+import { parseResponse, parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
 import {
     Tabs,
     TabsList,
     TabsTrigger,
     TabsContent,
     Button
-} from '@/components/ui';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+} from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import { useCoreStore } from '@/modules/Core/stores/core';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import type { CacheStatus, QueueStatus, EmailLog, SettingValue } from '@/types/core/settings';
+import type { CacheStatus, QueueStatus, EmailLog, SettingValue } from '@/core/types/settings';
 import SettingsIcon from 'lucide-vue-next/dist/esm/icons/settings.js';
 import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
 import Shield from 'lucide-vue-next/dist/esm/icons/shield.js';
@@ -316,73 +316,94 @@ const currentSettings = computed(() => {
 
 
 const fetchSettings = async () => {
-    loading.value = true;
     try {
+        loading.value = true;
         const response = await api.get('/admin/core/settings');
         const { data } = parseResponse(response);
-        settings.value = ensureArray(data) as Setting[];
+        const rawSettings = ensureArray(data) as Setting[];
 
-        // Inject missing settings with defaults
-        const ensureSetting = (key: string, value: unknown, type: string, group: string, description = '') => {
-            const existing = settings.value.find(s => s.key === key);
-            if (!existing) {
+        // De-duplicate settings by key and prepare final array
+        const uniqueSettingsMap = new Map<string, Setting>();
+        
+        // Define special keys that should be forced into specific groups
+        const performanceKeys = ['enable_cache', 'cache_driver', 'cache_ttl', 'enable_cdn', 'cdn_url', 'cdn_preset', 'cdn_included_dirs', 'cdn_excluded_extensions'];
+        const mediaKeys = [
+            'storage_driver', 'max_upload_size', 'allowed_image_types', 'allowed_file_types',
+            'thumbnail_width', 'thumbnail_height', 'enable_watermark', 'watermark_text',
+            'aws_access_key_id', 'aws_secret_access_key', 'aws_default_region', 'aws_bucket', 'aws_endpoint',
+            'google_client_id', 'google_client_secret', 'google_refresh_token', 'google_folder_id',
+            'ftp_host', 'ftp_username', 'ftp_password', 'ftp_root', 'ftp_port', 'ftp_ssl',
+            'dropbox_authorization_token'
+        ];
+        const systemKeys = [
+            'maintenance_mode', 'maintenance_title', 'maintenance_message', 'maintenance_countdown_enabled', 'maintenance_end_time',
+            'timezone', 'date_format', 'time_format', 'items_per_page', 'license_key', 'license_type'
+        ];
+        const securityKeys = [
+            'abuseipdb_api_key', 'threat_intel_auto_block_threshold', 'telegram_bot_token', 'telegram_chat_id',
+            'email_to', 'webhook_url'
+        ];
+        const brandKeys = ['admin_email', 'app_name', 'brand_logo', 'brand_favicon', 'branding_display'];
+
+        rawSettings.forEach(s => {
+            if (s && s.key && !uniqueSettingsMap.has(s.key)) {
+                if (performanceKeys.includes(s.key)) {
+                    s.group = 'performance';
+                } else if (mediaKeys.includes(s.key)) {
+                    s.group = 'media';
+                } else if (systemKeys.includes(s.key)) {
+                    s.group = 'system';
+                } else if (securityKeys.includes(s.key)) {
+                    s.group = 'security';
+                } else if (brandKeys.includes(s.key)) {
+                    s.group = 'brand';
+                }
+                uniqueSettingsMap.set(s.key, s);
+            }
+        });
+
+        settings.value = Array.from(uniqueSettingsMap.values());
+
+        const ensureSetting = (key: string, defaultValue: any, type: string, group: string, description = '') => {
+            if (!uniqueSettingsMap.has(key)) {
                 settings.value.push({
                     id: 'temp_' + key,
                     key,
-                    value,
-                    type,
+                    value: defaultValue,
                     group,
-                    description,
-                    is_public: 0
+                    type,
+                    description: description || ''
                 });
-            } else {
-                // Ensure media keys are always in 'media' group regardless of DB state
-                const mediaKeys = [
-                    'storage_driver', 'max_upload_size', 'allowed_image_types', 'allowed_file_types',
-                    'thumbnail_width', 'thumbnail_height', 'enable_watermark', 'watermark_text'
-                ];
-                if (mediaKeys.includes(key)) {
-                    existing.group = 'media';
-                }
             }
         };
 
-        // Ensure critical performance cache settings always exist in UI.
+        // Ensure Performance Settings
         ensureSetting('enable_cache', true, 'boolean', 'performance');
-        ensureSetting('cache_driver', 'redis_failover', 'string', 'performance');
+        ensureSetting('cache_driver', 'file', 'string', 'performance');
         ensureSetting('cache_ttl', 3600, 'integer', 'performance');
-
         ensureSetting('cdn_preset', 'custom', 'string', 'performance');
         ensureSetting('cdn_included_dirs', 'assets, storage', 'string', 'performance');
         ensureSetting('cdn_excluded_extensions', '.php, .json', 'string', 'performance');
 
-        // Inject AWS/S3 Settings
+        // Ensure Media Settings
         ensureSetting('aws_access_key_id', '', 'string', 'media');
         ensureSetting('aws_secret_access_key', '', 'password', 'media');
         ensureSetting('aws_default_region', 'us-east-1', 'string', 'media');
         ensureSetting('aws_bucket', '', 'string', 'media');
         ensureSetting('aws_endpoint', '', 'string', 'media');
-
-        // Inject Google Drive Settings
         ensureSetting('google_client_id', '', 'string', 'media');
         ensureSetting('google_client_secret', '', 'password', 'media');
         ensureSetting('google_refresh_token', '', 'password', 'media');
         ensureSetting('google_folder_id', '', 'string', 'media');
-
-        // Inject FTP Settings
         ensureSetting('ftp_host', '', 'string', 'media');
         ensureSetting('ftp_username', '', 'string', 'media');
         ensureSetting('ftp_password', '', 'password', 'media');
         ensureSetting('ftp_root', '', 'string', 'media');
-        ensureSetting('ftp_port', '21', 'number', 'media');
+        ensureSetting('ftp_port', 21, 'integer', 'media');
         ensureSetting('ftp_ssl', false, 'boolean', 'media');
-
-        // Inject Dropbox Settings
         ensureSetting('dropbox_authorization_token', '', 'password', 'media');
-
-        // Ensure Core Media Settings exist and are in 'media' group
         ensureSetting('storage_driver', 'local', 'string', 'media');
-        ensureSetting('max_upload_size', 2048, 'integer', 'media');
+        ensureSetting('max_upload_size', 10240, 'integer', 'media');
         ensureSetting('allowed_image_types', 'jpg,jpeg,png,webp,gif', 'string', 'media');
         ensureSetting('allowed_file_types', 'pdf,doc,docx,xls,xlsx,zip,rar', 'string', 'media');
         ensureSetting('thumbnail_width', 300, 'integer', 'media');
@@ -390,45 +411,37 @@ const fetchSettings = async () => {
         ensureSetting('enable_watermark', false, 'boolean', 'media');
         ensureSetting('watermark_text', 'JA-Platform', 'string', 'media');
 
-        // Inject WhatsApp Settings
-        ensureSetting('whatsapp_driver', 'log', 'string', 'whatsapp');
-        ensureSetting('whatsapp_api_url', '', 'string', 'whatsapp');
-        ensureSetting('whatsapp_api_key', '', 'password', 'whatsapp');
-
-        // Inject AI Settings
-        ensureSetting('ai_enabled', true, 'boolean', 'ai');
-        ensureSetting('gemini_api_key', '', 'password', 'ai');
-
-        // Inject Maintenance Settings
-        ensureSetting('maintenance_mode', false, 'boolean', 'system');
-        ensureSetting('maintenance_title', 'Coming Soon', 'string', 'system');
-        ensureSetting('maintenance_message', 'We are currently working on something awesome. Please check back later.', 'text', 'system');
-        ensureSetting('maintenance_countdown_enabled', false, 'boolean', 'system');
-        ensureSetting('maintenance_end_time', '', 'datetime', 'system');
-
-        // Inject Localization Settings
-        ensureSetting('timezone', 'Asia/Jakarta', 'string', 'system');
-        ensureSetting('date_format', 'Y-m-d', 'string', 'system');
-        ensureSetting('time_format', 'H:i:s', 'string', 'system');
-        ensureSetting('items_per_page', 20, 'integer', 'system');
-        
-        // Inject Security Pulse Settings (AbuseIPDB & Notifications)
+        // Ensure Security Settings
         ensureSetting('abuseipdb_api_key', '', 'password', 'security');
-        ensureSetting('threat_intel_auto_block_threshold', 75, 'number', 'security');
+        ensureSetting('threat_intel_auto_block_threshold', 75, 'integer', 'security');
         ensureSetting('telegram_bot_token', '', 'password', 'security');
         ensureSetting('telegram_chat_id', '', 'string', 'security');
         ensureSetting('email_to', '', 'string', 'security');
         ensureSetting('webhook_url', '', 'string', 'security');
 
-        // Inject Brand / App Identity Settings (Core domain)
-        ensureSetting('admin_email', '', 'string', 'brand');
-        ensureSetting('app_name', 'JA-Platform', 'string', 'brand');
-        ensureSetting('school_name', 'sekolahk2.id', 'string', 'general');
+        // Ensure System Settings
+        ensureSetting('maintenance_mode', false, 'boolean', 'system');
+        ensureSetting('maintenance_title', 'Coming Soon', 'string', 'system');
+        ensureSetting('maintenance_message', 'We are currently working on something awesome.', 'text', 'system');
+        ensureSetting('maintenance_countdown_enabled', false, 'boolean', 'system');
+        ensureSetting('maintenance_end_time', '', 'string', 'system');
+        ensureSetting('timezone', 'Asia/Jakarta', 'string', 'system');
+        ensureSetting('date_format', 'Y-m-d', 'string', 'system');
+        ensureSetting('time_format', 'H:i:s', 'string', 'system');
+        ensureSetting('items_per_page', 20, 'integer', 'system');
         ensureSetting('license_key', 'senja@jejakawan', 'string', 'system');
         ensureSetting('license_type', 'Pro+', 'string', 'system');
+
+        // Ensure Brand Settings
+        ensureSetting('admin_email', '', 'string', 'brand');
+        ensureSetting('app_name', 'JA-Platform', 'string', 'brand');
         ensureSetting('brand_logo', '', 'image', 'brand');
         ensureSetting('brand_favicon', '', 'image', 'brand');
         ensureSetting('branding_display', 'logo', 'string', 'brand');
+
+        // Ensure AI Settings
+        ensureSetting('ai_enabled', true, 'boolean', 'ai');
+        ensureSetting('gemini_api_key', '', 'password', 'ai');
 
         initializeFormData();
     } catch (error: unknown) {
@@ -533,7 +546,7 @@ const validateEmailConfig = async () => {
         const response = await api.get('/admin/core/email-test/validate-config');
         configValidation.value = parseSingleResponse<{ valid: boolean; errors: string[]; warnings: string[] }>(response);
     } catch (error: unknown) {
-        let errorMsg = t('features.settings.emailTest.failed');
+        let errorMsg = t('modules.core.settings.emailTest.failed');
         if (typeof error === 'object' && error !== null && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
             errorMsg = err.response?.data?.message || errorMsg;
@@ -555,7 +568,7 @@ const testSmtpConnection = async () => {
         const response = await api.post('/admin/core/email-test/test-connection');
         connectionResult.value = parseSingleResponse<{ connected: boolean; host: string; port: string; error?: string }>(response);
     } catch (error: unknown) {
-        let errorMsg = t('features.settings.emailTest.failed');
+        let errorMsg = t('modules.core.settings.emailTest.failed');
         if (typeof error === 'object' && error !== null && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
             errorMsg = err.response?.data?.message || errorMsg;
@@ -575,7 +588,7 @@ const sendTestEmail = async () => {
     if (!testEmail.value.to) {
         testEmailResult.value = {
             success: false,
-            message: t('features.settings.emailTest.recipientRequired'),
+            message: t('modules.core.settings.emailTest.recipientRequired'),
         };
         return;
     }
@@ -591,7 +604,7 @@ const sendTestEmail = async () => {
         const message = response.data?.message;
         testEmailResult.value = {
             success: true,
-            message: message || t('features.settings.emailTest.sentSuccess'),
+            message: message || t('modules.core.settings.emailTest.sentSuccess'),
         };
         // Clear form
         testEmail.value.subject = '';
@@ -599,7 +612,7 @@ const sendTestEmail = async () => {
         // Refresh logs
         await getRecentLogs();
     } catch (error: unknown) {
-        let errorMsg = t('features.settings.emailTest.sendFailed');
+        let errorMsg = t('modules.core.settings.emailTest.sendFailed');
         if (typeof error === 'object' && error !== null && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
             errorMsg = err.response?.data?.message || errorMsg;
@@ -655,10 +668,10 @@ const getCacheStatus = async () => {
 
 const clearSystemCache = async () => {
     const confirmed = await confirm({
-        title: t('features.settings.cache.clearTitle', 'Clear Cache'),
+        title: t('modules.core.settings.cache.clearTitle', 'Clear Cache'),
         message: 'Are you sure you want to clear the system cache?',
         variant: 'warning',
-        confirmText: t('features.settings.cache.clearConfirm', 'Clear Cache'),
+        confirmText: t('modules.core.settings.cache.clearConfirm', 'Clear Cache'),
     });
 
     if (!confirmed) return;
@@ -666,7 +679,7 @@ const clearSystemCache = async () => {
     clearingCache.value = true;
     try {
         await api.post('/admin/core/system/cache/clear');
-        toast.success.action(t('features.settings.cache.cleared'));
+        toast.success.action(t('modules.core.settings.cache.cleared'));
         getCacheStatus();
     } catch (error: unknown) {
         toast.error.fromResponse(error);
@@ -679,7 +692,7 @@ const warmSystemCache = async () => {
     warmingCache.value = true;
     try {
         await api.post('/admin/core/system/cache/warm');
-        toast.success.action(t('features.settings.cache.warmed'));
+        toast.success.action(t('modules.core.settings.cache.warmed'));
         getCacheStatus();
     } catch (error: unknown) {
         toast.error.fromResponse(error);

@@ -116,13 +116,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useMenuContext } from '@/composables/useMenu';
+import { useMenuContext } from '@/shared/composables/useMenu';
 import { menuItemRegistry } from '../registry';
-import type { MenuItem } from '@/types/cms/menu';
+import type { MenuItem } from '@/modules/Cms/types/menu';
 
 // UI Components
-import Badge from '@/components/ui/Badge.vue';
-import Button from '@/components/ui/Button.vue';
+import Badge from '@/shared/components/ui/Badge.vue';
+import Button from '@/shared/components/ui/Button.vue';
 
 import GripVertical from 'lucide-vue-next/dist/esm/icons/grip-vertical.js';
 import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js';
@@ -176,9 +176,9 @@ const typeLabel = computed(() => {
     const type = props.item.type;
     
     // Handle known types with translations
-    if (type === 'custom') return t('features.menus.form.customLink');
-    if (type === 'column_group') return t('features.menus.form.types.column_group');
-    if (['page', 'post', 'category'].includes(type || '')) return t(`features.menus.form.types.${type}`);
+    if (type === 'custom') return t('modules.cms.menus.form.customLink');
+    if (type === 'column_group') return t('modules.cms.menus.form.types.column_group');
+    if (['page', 'post', 'category'].includes(type || '')) return t(`modules.cms.menus.form.types.${type}`);
 
     // Fallback to registry or raw type
     const definition = menuItemRegistry.get(type || '');

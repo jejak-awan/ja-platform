@@ -12,7 +12,7 @@
       class="flex flex-col items-center justify-center py-16 text-muted-foreground gap-2"
     >
       <Loader2 class="h-8 w-8 animate-spin text-primary" />
-      <span class="text-sm">{{ $t('features.forms.builder.loading') }}</span>
+      <span class="text-sm">{{ $t('modules.cms.forms.builder.loading') }}</span>
     </div>
 
     <div
@@ -23,10 +23,10 @@
       <aside class="xl:w-56 shrink-0 space-y-3">
         <div>
           <h3 class="text-sm font-semibold text-foreground">
-            {{ $t('features.forms.builder.sidebarTitle') }}
+            {{ $t('modules.cms.forms.builder.sidebarTitle') }}
           </h3>
           <p class="text-xs text-muted-foreground mt-1 leading-relaxed">
-            {{ $t('features.forms.builder.sidebarHint') }}
+            {{ $t('modules.cms.forms.builder.sidebarHint') }}
           </p>
         </div>
         <div class="grid grid-cols-2 xl:grid-cols-1 gap-2">
@@ -56,7 +56,7 @@
           class="rounded-xl border border-dashed border-border/80 bg-muted/20 px-6 py-14 text-center"
         >
           <p class="text-sm text-muted-foreground mb-4">
-            {{ $t('features.forms.builder.empty') }}
+            {{ $t('modules.cms.forms.builder.empty') }}
           </p>
           <Button
             type="button"
@@ -66,7 +66,7 @@
             @click="addField('text')"
           >
             <Plus class="h-4 w-4 mr-2" />
-            {{ $t('features.forms.builder.addFirst') }}
+            {{ $t('modules.cms.forms.builder.addFirst') }}
           </Button>
         </div>
 
@@ -85,7 +85,7 @@
               <div class="flex gap-0">
                 <div
                   class="drag-handle w-10 shrink-0 flex items-center justify-center cursor-grab active:cursor-grabbing bg-muted/40 border-r border-border/60 text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                  :title="$t('features.forms.builder.dragHint')"
+                  :title="$t('modules.cms.forms.builder.dragHint')"
                 >
                   <GripVertical class="h-5 w-5" />
                 </div>
@@ -121,7 +121,7 @@
                       variant="ghost"
                       size="icon"
                       class="text-muted-foreground hover:text-destructive shrink-0"
-                      :title="$t('features.forms.builder.remove')"
+                      :title="$t('modules.cms.forms.builder.remove')"
                       @click="removeField(field)"
                     >
                       <Trash2 class="h-4 w-4" />
@@ -130,24 +130,24 @@
 
                   <div class="space-y-1.5">
                     <label class="text-[11px] uppercase tracking-wider font-bold text-muted-foreground">
-                      {{ $t('features.forms.builder.questionLabel') }}
+                      {{ $t('modules.cms.forms.builder.questionLabel') }}
                     </label>
                     <Input
                       v-model="field.label"
                       class="text-base font-medium h-11 bg-background/80"
-                      :placeholder="$t('features.forms.builder.questionPlaceholder')"
+                      :placeholder="$t('modules.cms.forms.builder.questionPlaceholder')"
                       @blur="void flushSave(field)"
                     />
                   </div>
 
                   <div class="space-y-1.5">
                     <label class="text-[11px] uppercase tracking-wider font-bold text-muted-foreground">
-                      {{ $t('features.forms.builder.helpText') }}
+                      {{ $t('modules.cms.forms.builder.helpText') }}
                     </label>
                     <Input
                       v-model="field.help_text"
                       class="h-10 bg-background/80"
-                      :placeholder="$t('features.forms.builder.helpPlaceholder')"
+                      :placeholder="$t('modules.cms.forms.builder.helpPlaceholder')"
                       @blur="void flushSave(field)"
                     />
                   </div>
@@ -157,12 +157,12 @@
                     class="space-y-1.5"
                   >
                     <label class="text-[11px] uppercase tracking-wider font-bold text-muted-foreground">
-                      {{ $t('features.forms.builder.placeholder') }}
+                      {{ $t('modules.cms.forms.builder.placeholder') }}
                     </label>
                     <Input
                       v-model="field.placeholder"
                       class="h-10 bg-background/80"
-                      :placeholder="$t('features.forms.builder.placeholderHint')"
+                      :placeholder="$t('modules.cms.forms.builder.placeholderHint')"
                       @blur="void flushSave(field)"
                     />
                   </div>
@@ -172,17 +172,17 @@
                     class="space-y-1.5"
                   >
                     <label class="text-[11px] uppercase tracking-wider font-bold text-muted-foreground">
-                      {{ $t('features.forms.builder.options') }}
+                      {{ $t('modules.cms.forms.builder.options') }}
                     </label>
                     <Textarea
                       v-model="field._optionsLines"
                       rows="4"
                       class="font-mono text-sm bg-background/80"
-                      :placeholder="$t('features.forms.builder.optionsPlaceholder')"
+                      :placeholder="$t('modules.cms.forms.builder.optionsPlaceholder')"
                       @blur="onOptionsBlur(field)"
                     />
                     <p class="text-[11px] text-muted-foreground">
-                      {{ $t('features.forms.builder.optionsHelp') }}
+                      {{ $t('modules.cms.forms.builder.optionsHelp') }}
                     </p>
                   </div>
 
@@ -192,14 +192,14 @@
                         :checked="field.is_required"
                         @update:checked="(v: boolean | 'indeterminate') => { field.is_required = v === true; void flushSave(field); }"
                       />
-                      <span class="text-sm text-foreground">{{ $t('features.forms.builder.required') }}</span>
+                      <span class="text-sm text-foreground">{{ $t('modules.cms.forms.builder.required') }}</span>
                     </div>
                     <span
                       v-if="savingIds.has(field.id)"
                       class="text-xs text-muted-foreground flex items-center gap-1"
                     >
                       <Loader2 class="h-3 w-3 animate-spin" />
-                      {{ $t('features.forms.builder.saving') }}
+                      {{ $t('modules.cms.forms.builder.saving') }}
                     </span>
                   </div>
                 </div>
@@ -217,7 +217,7 @@
           @click="addField('text')"
         >
           <Plus class="h-4 w-4 mr-2" />
-          {{ $t('features.forms.builder.addQuestion') }}
+          {{ $t('modules.cms.forms.builder.addQuestion') }}
         </Button>
       </div>
     </div>
@@ -225,12 +225,12 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import draggable from 'vuedraggable';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
 import {
     Button,
     Badge,
@@ -243,7 +243,7 @@ import {
     SelectContent,
     SelectItem,
     Switch,
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import GripVertical from 'lucide-vue-next/dist/esm/icons/grip-vertical.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
@@ -291,20 +291,20 @@ const fields = ref<AdminFormFieldRow[]>([]);
 const savingIds = ref<Set<number>>(new Set());
 
 const fieldTypes = [
-    { type: 'text', icon: Type, labelKey: 'features.forms.builder.types.text' },
-    { type: 'textarea', icon: Pilcrow, labelKey: 'features.forms.builder.types.textarea' },
-    { type: 'email', icon: AtSign, labelKey: 'features.forms.builder.types.email' },
-    { type: 'url', icon: Link2, labelKey: 'features.forms.builder.types.url' },
-    { type: 'number', icon: Hash, labelKey: 'features.forms.builder.types.number' },
-    { type: 'date', icon: Calendar, labelKey: 'features.forms.builder.types.date' },
-    { type: 'datetime', icon: CalendarClock, labelKey: 'features.forms.builder.types.datetime' },
-    { type: 'boolean', icon: ToggleLeft, labelKey: 'features.forms.builder.types.boolean' },
-    { type: 'select', icon: List, labelKey: 'features.forms.builder.types.select' },
-    { type: 'radio', icon: CircleDot, labelKey: 'features.forms.builder.types.radio' },
-    { type: 'checkbox', icon: ListChecks, labelKey: 'features.forms.builder.types.checkbox' },
-    { type: 'multiselect', icon: ListChecks, labelKey: 'features.forms.builder.types.multiselect' },
-    { type: 'file', icon: Paperclip, labelKey: 'features.forms.builder.types.file' },
-    { type: 'image', icon: ImageIcon, labelKey: 'features.forms.builder.types.image' },
+    { type: 'text', icon: Type, labelKey: 'modules.cms.forms.builder.types.text' },
+    { type: 'textarea', icon: Pilcrow, labelKey: 'modules.cms.forms.builder.types.textarea' },
+    { type: 'email', icon: AtSign, labelKey: 'modules.cms.forms.builder.types.email' },
+    { type: 'url', icon: Link2, labelKey: 'modules.cms.forms.builder.types.url' },
+    { type: 'number', icon: Hash, labelKey: 'modules.cms.forms.builder.types.number' },
+    { type: 'date', icon: Calendar, labelKey: 'modules.cms.forms.builder.types.date' },
+    { type: 'datetime', icon: CalendarClock, labelKey: 'modules.cms.forms.builder.types.datetime' },
+    { type: 'boolean', icon: ToggleLeft, labelKey: 'modules.cms.forms.builder.types.boolean' },
+    { type: 'select', icon: List, labelKey: 'modules.cms.forms.builder.types.select' },
+    { type: 'radio', icon: CircleDot, labelKey: 'modules.cms.forms.builder.types.radio' },
+    { type: 'checkbox', icon: ListChecks, labelKey: 'modules.cms.forms.builder.types.checkbox' },
+    { type: 'multiselect', icon: ListChecks, labelKey: 'modules.cms.forms.builder.types.multiselect' },
+    { type: 'file', icon: Paperclip, labelKey: 'modules.cms.forms.builder.types.file' },
+    { type: 'image', icon: ImageIcon, labelKey: 'modules.cms.forms.builder.types.image' },
 ];
 
 function needsOptions(type: string): boolean {
@@ -351,7 +351,7 @@ async function fetchFields(): Promise<void> {
         fields.value = list.map((f) => decorateField({ ...f }));
     } catch (e: unknown) {
         logger.error('Form builder load failed', e);
-        loadError.value = t('features.forms.builder.loadError');
+        loadError.value = t('modules.cms.forms.builder.loadError');
     } finally {
         loading.value = false;
     }
@@ -408,7 +408,7 @@ async function addField(type: string): Promise<void> {
     adding.value = true;
     try {
         const res = await api.post(`/admin/cms/forms/${props.formId}/fields`, {
-            label: t('features.forms.builder.defaultQuestion'),
+            label: t('modules.cms.forms.builder.defaultQuestion'),
             type,
             is_required: false,
         });
@@ -423,13 +423,13 @@ async function addField(type: string): Promise<void> {
 }
 
 async function removeField(field: AdminFormFieldRow): Promise<void> {
-    if (!window.confirm(t('features.forms.builder.deleteConfirm'))) {
+    if (!window.confirm(t('modules.cms.forms.builder.deleteConfirm'))) {
         return;
     }
     try {
         await api.delete(`/admin/cms/forms/${props.formId}/fields/${field.id}`);
         fields.value = fields.value.filter((f) => f.id !== field.id);
-        toast.success.default(t('features.forms.builder.deleted'));
+        toast.success.default(t('modules.cms.forms.builder.deleted'));
     } catch (e: unknown) {
         logger.error('Delete field failed', e);
         toast.error.fromResponse(e);

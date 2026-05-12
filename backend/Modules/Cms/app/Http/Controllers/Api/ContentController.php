@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Services\ContentService;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
-use Modules\Core\Services\CacheService;
+use Modules\Cms\Services\CmsCacheService;
 
 /**
  * @OA\Tag(name="Content")
@@ -16,10 +16,18 @@ use Modules\Core\Services\CacheService;
 class ContentController extends BaseApiController
 {
     protected ContentService $contentService;
+    protected CmsCacheService $cacheService;
 
-    public function __construct()
+    public function __construct(ContentService $contentService, CmsCacheService $cacheService)
     {
-        $this->contentService = new ContentService;
+        $this->contentService = $contentService;
+        $this->cacheService = $cacheService;
+
+        $this->middleware('auth:sanctum')->except(['index', 'show', 'related']);
+        $this->middleware('permission:view content')->only(['stats', 'revisions']);
+        $this->middleware('permission:create content')->only(['store', 'duplicate']);
+        $this->middleware('permission:edit content')->only(['update', 'restore', 'bulkUpdate']);
+        $this->middleware('permission:delete content')->only(['destroy', 'forceDelete']);
     }
 
     /**
@@ -814,7 +822,7 @@ class ContentController extends BaseApiController
             'published_at' => $content->published_at ?? now(),
         ]);
 
-        app(CacheService::class)->clearContentCaches($content->id);
+        app(CmsCacheService::class)->clearContentCaches($content->id);
 
         return $this->success($content->load('author'), 'Content approved and published successfully');
     }

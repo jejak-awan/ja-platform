@@ -10,7 +10,7 @@
     <template v-else-if="pageData">
       <section class="border-y border-border bg-gradient-to-b from-primary/[0.09] via-primary/[0.04] to-background">
         <div class="container mx-auto px-4 py-12 md:py-16">
-          <h1 class="mt-6 text-3xl font-black uppercase tracking-tight text-foreground md:text-5xl lg:text-6xl">
+          <h1 class="mt-6 text-3xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl">
             <JanariSplitText :text="pageTitle" />
           </h1>
           <SafeHtml
@@ -101,12 +101,8 @@
         <div class="container mx-auto grid grid-cols-1 gap-8 px-4 lg:grid-cols-12">
           <aside class="lg:col-span-3">
             <div class="sticky top-24 rounded-xl border border-border bg-card/60 p-5 backdrop-blur">
-              <p class="text-[10px] font-black uppercase tracking-[0.28em] text-primary">Page Meta</p>
+              <p class="text-[10px] font-bold tracking-wider text-muted-foreground">Page Meta</p>
               <div class="mt-4 space-y-3 text-sm text-muted-foreground">
-                <div>
-                  <p class="text-[10px] uppercase tracking-[0.2em]">Slug</p>
-                  <p class="mt-1 break-all font-semibold text-foreground/80">{{ pageSlug }}</p>
-                </div>
                 <div>
                   <p class="text-[10px] uppercase tracking-[0.2em]">Type</p>
                   <p class="mt-1 font-semibold text-foreground/80">{{ pageTypeLabel }}</p>
@@ -156,7 +152,7 @@
           <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
             <Archive class="h-8 w-8 text-primary" />
           </div>
-          <h2 class="mt-4 text-2xl font-black uppercase tracking-tight text-foreground md:text-3xl">
+          <h2 class="mt-4 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             {{ pageTitle }}
           </h2>
           <p class="mt-4 text-muted-foreground">
@@ -171,7 +167,7 @@
       class="container mx-auto px-4 py-20"
     >
       <div class="mx-auto max-w-2xl rounded-2xl border border-border bg-card/40 p-10 text-center">
-        <h1 class="mt-4 text-3xl font-black uppercase tracking-tight text-foreground md:text-4xl">
+        <h1 class="mt-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
           Page Not Found
         </h1>
         <p class="mt-4 text-muted-foreground">
@@ -183,15 +179,15 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { computed, ref, onMounted, watch } from 'vue';
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
 import { useRoute } from 'vue-router';
 import JanariSplitText from './components/JanariSplitText.vue';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import Archive from 'lucide-vue-next/dist/esm/icons/archive.js';
 
-import type { Content } from '@/types/cms/cms'
+import type { Content } from '@/modules/Cms/types/cms'
 
 const route = useRoute();
 const pageData = ref<Content | null>(null);

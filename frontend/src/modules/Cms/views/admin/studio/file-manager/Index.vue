@@ -5,10 +5,10 @@
       <div class="flex items-center gap-2">
         <div>
           <h1 class="text-2xl font-bold tracking-tight text-foreground">
-            {{ $t('features.file_manager.title') }}
+            {{ $t('modules.core.file_manager.title') }}
           </h1>
           <p class="text-muted-foreground">
-            {{ $t('features.file_manager.description') }}
+            {{ $t('modules.core.file_manager.description') }}
           </p>
         </div>
         <!-- Help Button Next to Title -->
@@ -31,14 +31,14 @@
           @click="showCreateFolderModal = true"
         >
           <FolderPlus class="w-4 h-4 mr-2" />
-          {{ $t('features.file_manager.actions.newFolder') }}
+          {{ $t('modules.core.file_manager.actions.newFolder') }}
         </Button>
         <Button
           type="button"
           @click="showUploadModal = true"
         >
           <Upload class="w-4 h-4 mr-2" />
-          {{ $t('features.file_manager.actions.upload') }}
+          {{ $t('modules.core.file_manager.actions.upload') }}
         </Button>
       </div>
     </div>
@@ -111,7 +111,7 @@
                   >
                     <Spinner class="w-10 h-10 text-primary" />
                     <p class="mt-4 text-xs font-bold text-primary animate-pulse uppercase tracking-widest leading-none">
-                      {{ $t('features.file_manager.messages.loading') }}
+                      {{ $t('modules.core.file_manager.messages.loading') }}
                     </p>
                   </div>
 
@@ -126,10 +126,10 @@
                       />
                     </div>
                     <h3 class="text-lg font-bold text-foreground/90">
-                      {{ $t('features.file_manager.messages.noFiles') }}
+                      {{ $t('modules.core.file_manager.messages.noFiles') }}
                     </h3>
                     <p class="text-xs text-muted-foreground max-w-[240px] mt-2 italic">
-                      {{ $t('features.file_manager.help.sections.navigation.content') }}
+                      {{ $t('modules.core.file_manager.help.sections.navigation.content') }}
                     </p>
                   </div>
 
@@ -151,11 +151,11 @@
               <ContextMenuContent class="w-56">
                 <ContextMenuItem @click="showCreateFolderModal = true">
                   <FolderPlus class="w-4 h-4 mr-2" />
-                  {{ $t('features.file_manager.actions.newFolder') }}
+                  {{ $t('modules.core.file_manager.actions.newFolder') }}
                 </ContextMenuItem>
                 <ContextMenuItem @click="showUploadModal = true">
                   <Upload class="w-4 h-4 mr-2" />
-                  {{ $t('features.file_manager.actions.upload') }}
+                  {{ $t('modules.core.file_manager.actions.upload') }}
                 </ContextMenuItem>
                 <ContextMenuSeparator v-if="fm.clipboard.value.items.length > 0" />
                 <ContextMenuItem
@@ -163,7 +163,7 @@
                   @click="fm.pasteFromClipboard(fm.currentPath.value)"
                 >
                   <ClipboardPaste class="w-4 h-4 mr-2" />
-                  {{ $t('features.file_manager.actions.paste') }}
+                  {{ $t('modules.core.file_manager.actions.paste') }}
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem @click="fm.fetchCurrentPath()">
@@ -219,19 +219,19 @@
     <Dialog v-model:open="showHelp">
       <DialogContent class="sm:max-w-[700px] bg-background">
         <DialogHeader>
-          <DialogTitle>{{ $t('features.file_manager.help.title') }}</DialogTitle>
+          <DialogTitle>{{ $t('modules.core.file_manager.help.title') }}</DialogTitle>
           <DialogDescription>
-            {{ $t('features.file_manager.help.sections.navigation.content') }}
+            {{ $t('modules.core.file_manager.help.sections.navigation.content') }}
           </DialogDescription>
         </DialogHeader>
         <div class="grid gap-6 py-4">
           <div class="grid gap-2">
             <div class="flex items-center gap-2 font-medium">
               <Upload class="w-4 h-4" />
-              {{ $t('features.file_manager.help.sections.upload.title') }}
+              {{ $t('modules.core.file_manager.help.sections.upload.title') }}
             </div>
             <p class="text-sm text-muted-foreground">
-              {{ $t('features.file_manager.help.sections.upload.content') }}
+              {{ $t('modules.core.file_manager.help.sections.upload.content') }}
             </p>
           </div>
         </div>
@@ -263,10 +263,10 @@ import {
     ContextMenuItem,
     ContextMenuSeparator,
     Spinner
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 // Composable and Components
-import { useFileManager } from '@/composables/useFileManager';
+import { useFileManager } from '@/modules/Cms/composables/useFileManager';
 import FileSidebar from '@/modules/Core/components/file-manager/FileSidebar.vue';
 import FileToolbar from '@/modules/Core/components/file-manager/FileToolbar.vue';
 import FilePropertiesSidebar from '@/modules/Core/components/file-manager/FilePropertiesSidebar.vue';
@@ -276,8 +276,8 @@ import FileTrashView from '@/modules/Core/components/file-manager/FileTrashView.
 import FilePreviewModal from '@/modules/Core/components/file-manager/FilePreviewModal.vue';
 import FileUploadModal from '@/modules/Core/components/file-manager/FileUploadModal.vue';
 import CreateFolderModal from '@/modules/Core/components/file-manager/CreateFolderModal.vue';
-import type { FileItem } from '@/types/cms/file-manager';
-import { FileManagerKey } from '@/keys';
+import type { FileItem } from '@/modules/Cms/types/file-manager';
+import { FileManagerKey } from '@/core/keys';
 
 // Initialize File Manager Composable with CMS scope
 const fm = useFileManager({ rootPath: '/cms/media' });

@@ -7,7 +7,7 @@
     >
       <Loader2 class="w-10 h-10 animate-spin text-muted-foreground mb-4" />
       <p class="text-muted-foreground">
-        {{ t('features.menus.messages.loading') }}
+        {{ t('modules.cms.menus.messages.loading') }}
       </p>
     </div>
 
@@ -28,7 +28,7 @@
                 @click="$emit('back-to-list')"
               >
                 <ArrowLeft class="w-3.5 h-3.5 mr-1" />
-                {{ t('features.menus.title') }}
+                {{ t('modules.cms.menus.title') }}
               </Button>
 
               <Select v-model="trashedFilter">
@@ -56,7 +56,7 @@
                             
               <Select v-model="selectedMenuIdLocal">
                 <SelectTrigger class="h-9 w-[180px] lg:w-auto lg:min-w-[180px] lg:max-w-[300px] text-sm flex-1 truncate">
-                  <SelectValue :placeholder="t('features.menus.actions.selectMenu')" />
+                  <SelectValue :placeholder="t('modules.cms.menus.actions.selectMenu')" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem 
@@ -73,7 +73,7 @@
                 variant="ghost" 
                 size="icon" 
                 class="h-9 w-9"
-                :title="t('features.menus.actions.create')"
+                :title="t('modules.cms.menus.actions.create')"
                 @click="$emit('create-menu')"
               >
                 <Plus class="w-4 h-4" />
@@ -83,22 +83,22 @@
             <!-- Center: Name & Location -->
             <div class="flex items-center gap-3 border-l border-r border-border px-4 flex-1 min-w-0">
               <div class="flex items-center gap-2 flex-1 min-w-0">
-                <Label class="text-xs text-muted-foreground whitespace-nowrap">{{ t('features.menus.form.name') }}</Label>
+                <Label class="text-xs text-muted-foreground whitespace-nowrap">{{ t('modules.cms.menus.form.name') }}</Label>
                 <Input 
                   v-model="menuName" 
                   class="h-9 w-full min-w-[150px] max-w-[300px] text-sm" 
-                  :placeholder="t('features.menus.form.namePlaceholder')"
+                  :placeholder="t('modules.cms.menus.form.namePlaceholder')"
                   :disabled="isTrashed || !menuId"
                 />
               </div>
               <div class="flex items-center gap-2 flex-1 min-w-0">
-                <Label class="text-xs text-muted-foreground whitespace-nowrap">{{ t('features.menus.form.location') }}</Label>
+                <Label class="text-xs text-muted-foreground whitespace-nowrap">{{ t('modules.cms.menus.form.location') }}</Label>
                 <Select
                   v-model="menuLocation"
                   :disabled="isTrashed || !menuId"
                 >
                   <SelectTrigger class="h-9 w-full min-w-[150px] max-w-[250px] text-sm truncate">
-                    <SelectValue :placeholder="t('features.menus.form.placeholders.selectLocation')" />
+                    <SelectValue :placeholder="t('modules.cms.menus.form.placeholders.selectLocation')" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem 
@@ -142,7 +142,7 @@
                 variant="ghost" 
                 size="icon" 
                 class="h-9 w-9"
-                :title="t('features.menus.actions.preview')"
+                :title="t('modules.cms.menus.actions.preview')"
                 :disabled="items.length === 0"
                 @click="showPreview = true"
               >
@@ -165,7 +165,7 @@
                 size="icon"
                 class="h-9 w-9"
                 :class="{ 'text-primary': isDirty && !isTrashed }"
-                :title="isSaving ? t('features.menus.actions.saving') : t('features.menus.actions.save')"
+                :title="isSaving ? t('modules.cms.menus.actions.saving') : t('modules.cms.menus.actions.save')"
                 @click="handleSave"
               >
                 <Loader2
@@ -198,7 +198,7 @@
                 variant="ghost"
                 size="icon"
                 class="h-9 w-9 text-destructive hover:text-destructive hover:bg-destructive/10"
-                :title="isTrashed ? t('common.actions.forceDelete') : t('features.menus.actions.delete')"
+                :title="isTrashed ? t('common.actions.forceDelete') : t('modules.cms.menus.actions.delete')"
                 @click="$emit('delete-menu')"
               >
                 <Trash2 class="w-4 h-4" />
@@ -215,14 +215,14 @@
       >
         <MenuSquare class="w-16 h-16 text-muted-foreground/20 mb-4" />
         <h3 class="text-lg font-medium text-foreground mb-2">
-          {{ t('features.menus.messages.noMenuSelected') }}
+          {{ t('modules.cms.menus.messages.noMenuSelected') }}
         </h3>
         <p class="text-sm text-muted-foreground max-w-sm text-center mb-6">
-          {{ menus.length === 0 ? t('features.menus.messages.empty') : t('features.menus.actions.selectMenu') }}
+          {{ menus.length === 0 ? t('modules.cms.menus.messages.empty') : t('modules.cms.menus.actions.selectMenu') }}
         </p>
         <Button @click="$emit('create-menu')">
           <Plus class="w-4 h-4 mr-2" />
-          {{ t('features.menus.actions.create') }}
+          {{ t('modules.cms.menus.actions.create') }}
         </Button>
       </div>
 
@@ -258,10 +258,10 @@
             <CardHeader class="pb-3">
               <div class="flex items-center justify-between">
                 <CardTitle class="text-base">
-                  {{ t('features.menus.form.menuStructure') }}
+                  {{ t('modules.cms.menus.form.menuStructure') }}
                 </CardTitle>
                 <Badge variant="secondary">
-                  {{ items.length }} {{ t('features.menus.headers.items') }}
+                  {{ items.length }} {{ t('modules.cms.menus.headers.items') }}
                 </Badge>
               </div>
             </CardHeader>
@@ -312,14 +312,14 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 
-import { useMenu, provideMenu } from '@/composables/useMenu';
-import { useToast } from '@/composables/useToast';
-import type { Menu } from '@/types/cms/menu';
+import { useMenu, provideMenu } from '@/shared/composables/useMenu';
+import { useToast } from '@/shared/composables/useToast';
+import type { Menu } from '@/modules/Cms/types/menu';
 
 // Modular Components
 import SourcePanel from './sidebar/SourcePanel.vue';
@@ -328,19 +328,19 @@ import ItemPropertiesPanel from './properties/ItemPropertiesPanel.vue';
 import MenuPreview from './preview/MenuPreview.vue';
 
 // UI Components
-import Card from '@/components/ui/Card.vue';
-import CardHeader from '@/components/ui/CardHeader.vue';
-import CardTitle from '@/components/ui/CardTitle.vue';
-import CardContent from '@/components/ui/CardContent.vue';
-import Badge from '@/components/ui/Badge.vue';
-import Button from '@/components/ui/Button.vue';
-import Input from '@/components/ui/Input.vue';
-import Label from '@/components/ui/Label.vue';
-import Select from '@/components/ui/Select.vue';
-import SelectTrigger from '@/components/ui/SelectTrigger.vue';
-import SelectValue from '@/components/ui/SelectValue.vue';
-import SelectContent from '@/components/ui/SelectContent.vue';
-import SelectItem from '@/components/ui/SelectItem.vue';
+import Card from '@/shared/components/ui/Card.vue';
+import CardHeader from '@/shared/components/ui/CardHeader.vue';
+import CardTitle from '@/shared/components/ui/CardTitle.vue';
+import CardContent from '@/shared/components/ui/CardContent.vue';
+import Badge from '@/shared/components/ui/Badge.vue';
+import Button from '@/shared/components/ui/Button.vue';
+import Input from '@/shared/components/ui/Input.vue';
+import Label from '@/shared/components/ui/Label.vue';
+import Select from '@/shared/components/ui/Select.vue';
+import SelectTrigger from '@/shared/components/ui/SelectTrigger.vue';
+import SelectValue from '@/shared/components/ui/SelectValue.vue';
+import SelectContent from '@/shared/components/ui/SelectContent.vue';
+import SelectItem from '@/shared/components/ui/SelectItem.vue';
 
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Save from 'lucide-vue-next/dist/esm/icons/save.js';
@@ -483,7 +483,7 @@ const fetchLocations = async () => {
             value: key,
             label: label as string
         }));
-        locations.value.unshift({ value: 'none', label: t('features.menus.form.options.none') });
+        locations.value.unshift({ value: 'none', label: t('modules.cms.menus.form.options.none') });
     } catch (error) {
         logger.error('Failed to fetch locations:', error);
     }
@@ -497,10 +497,10 @@ const handleSave = async () => {
     });
     
     if (success) {
-        toast.success.update(t('features.menus.title'));
+        toast.success.update(t('modules.cms.menus.title'));
         emit('menu-updated');
     } else {
-        toast.error.action(t('features.menus.messages.saveFailed'));
+        toast.error.action(t('modules.cms.menus.messages.saveFailed'));
     }
 };
 

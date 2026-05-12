@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { inject, computed } from 'vue';
 import Folder from 'lucide-vue-next/dist/esm/icons/folder.js';
 import FolderOpen from 'lucide-vue-next/dist/esm/icons/folder-open.js';
@@ -71,10 +71,10 @@ import ChevronRight from 'lucide-vue-next/dist/esm/icons/chevron-right.js';
 import { 
     ContextMenu,
     ContextMenuTrigger
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import FileContextMenu from './FileContextMenu.vue';
-import { FileManagerKey } from '@/keys';
-import type { FolderItem } from '@/types/cms/file-manager';
+import { FileManagerKey } from '@/core/keys';
+import type { FolderItem } from '@/modules/Cms/types/file-manager';
 
 
 const props = defineProps<{

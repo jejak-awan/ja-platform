@@ -10,7 +10,7 @@
               <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 v-model="search"
-                :placeholder="t('features.content_templates.search')"
+                :placeholder="t('modules.cms.content_templates.search')"
                 class="pl-9"
                 @input="handleSearch"
               />
@@ -20,20 +20,20 @@
               @update:model-value="fetchTemplates"
             >
               <SelectTrigger class="w-[140px]">
-                <SelectValue :placeholder="t('features.content_templates.types.all')" />
+                <SelectValue :placeholder="t('modules.cms.content_templates.types.all')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">
-                  {{ t('features.content_templates.types.all') }}
+                  {{ t('modules.cms.content_templates.types.all') }}
                 </SelectItem>
                 <SelectItem value="post">
-                  {{ t('features.content_templates.types.post') }}
+                  {{ t('modules.cms.content_templates.types.post') }}
                 </SelectItem>
                 <SelectItem value="page">
-                  {{ t('features.content_templates.types.page') }}
+                  {{ t('modules.cms.content_templates.types.page') }}
                 </SelectItem>
                 <SelectItem value="custom">
-                  {{ t('features.content_templates.types.custom') }}
+                  {{ t('modules.cms.content_templates.types.custom') }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -65,7 +65,7 @@
               class="flex items-center gap-3 p-1.5 px-3 rounded-lg bg-primary/5 border border-primary/10 animate-in fade-in slide-in-from-top-1 mr-2"
             >
               <span class="text-xs font-semibold text-primary uppercase tracking-wider">
-                {{ t('features.content_templates.table.selected', { count: selectedTemplates.length }) }}
+                {{ t('modules.cms.content_templates.table.selected', { count: selectedTemplates.length }) }}
               </span>
               <div class="h-4 w-px bg-primary/20" />
               <Select
@@ -109,7 +109,7 @@
                 class="flex items-center"
               >
                 <Plus class="w-4 h-4 mr-1" />
-                {{ t('features.content_templates.create') }}
+                {{ t('modules.cms.content_templates.create') }}
               </router-link>
             </Button>
           </div>
@@ -122,7 +122,7 @@
         >
           <Loader2 class="w-8 h-8 animate-spin mx-auto text-muted-foreground mb-4" />
           <p class="text-muted-foreground font-medium">
-            {{ t('features.content_templates.loading') }}
+            {{ t('modules.cms.content_templates.loading') }}
           </p>
         </div>
 
@@ -132,7 +132,7 @@
         >
           <FileText class="w-12 h-12 mx-auto text-muted-foreground/20 mb-4" />
           <p class="text-muted-foreground font-medium">
-            {{ t('features.content_templates.empty') }}
+            {{ t('modules.cms.content_templates.empty') }}
           </p>
         </div>
 
@@ -150,19 +150,19 @@
                   />
                 </TableHead>
                 <TableHead class="text-xs text-muted-foreground/70">
-                  {{ t('features.content_templates.table.name') }}
+                  {{ t('modules.cms.content_templates.table.name') }}
                 </TableHead>
                 <TableHead class="text-xs text-muted-foreground/70">
-                  {{ t('features.content_templates.table.type') }}
+                  {{ t('modules.cms.content_templates.table.type') }}
                 </TableHead>
                 <TableHead class="text-xs text-muted-foreground/70">
-                  {{ t('features.content_templates.table.description') }}
+                  {{ t('modules.cms.content_templates.table.description') }}
                 </TableHead>
                 <TableHead class="text-xs text-muted-foreground/70">
-                  {{ t('features.content_templates.table.updated') }}
+                  {{ t('modules.cms.content_templates.table.updated') }}
                 </TableHead>
                 <TableHead class="text-center text-xs text-muted-foreground/70">
-                  {{ t('features.content_templates.table.actions') }}
+                  {{ t('modules.cms.content_templates.table.actions') }}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -195,7 +195,7 @@
                     variant="secondary"
                     class="capitalize"
                   >
-                    {{ template.type ? t(`features.content_templates.types.${template.type}`) : t('features.content_templates.types.post') }}
+                    {{ template.type ? t(`modules.cms.content_templates.types.${template.type}`) : t('modules.cms.content_templates.types.post') }}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -214,7 +214,7 @@
                     <Button
                       variant="ghost"
                       size="icon"
-                      :title="t('features.content_templates.actions.createContent')"
+                      :title="t('modules.cms.content_templates.actions.createContent')"
                       class="h-8 w-8 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-500/10"
                       @click="createFromTemplate(template)"
                     >
@@ -243,7 +243,7 @@
                     <Button
                       variant="ghost"
                       size="icon"
-                      :title="template.deleted_at ? t('common.actions.forceDelete') : t('features.content_templates.actions.delete')"
+                      :title="template.deleted_at ? t('common.actions.forceDelete') : t('modules.cms.content_templates.actions.delete')"
                       class="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                       @click="handleDelete(template)"
                     >
@@ -272,17 +272,17 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useConfirm } from '@/composables/useConfirm';
-import { useToast } from '@/composables/useToast';
-import { parseResponse, ensureArray, parseSingleResponse, type PaginationData } from '@/utils/responseParser';
-import { debounce } from '@/utils/debounce';
+import api from '@/core/api/client';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse, ensureArray, parseSingleResponse, type PaginationData } from '@/shared/utils/responseParser';
+import { debounce } from '@/shared/utils/debounce';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import { Badge, Button, Card, CardContent, Checkbox, Input, Pagination, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
+import { Badge, Button, Card, CardContent, Checkbox, Input, Pagination, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
@@ -372,10 +372,10 @@ const createFromTemplate = async (template: Template) => {
 const handleDelete = async (template: Template) => {
     const isTrashed = !!template.deleted_at;
     const confirmed = await confirm({
-        title: isTrashed ? t('common.actions.forceDelete') : t('features.content_templates.actions.delete'),
+        title: isTrashed ? t('common.actions.forceDelete') : t('modules.cms.content_templates.actions.delete'),
         message: isTrashed 
-            ? t('features.content_templates.messages.forceDeleteConfirm', { name: template.name })
-            : t('features.content_templates.messages.deleteConfirm', { name: template.name }),
+            ? t('modules.cms.content_templates.messages.forceDeleteConfirm', { name: template.name })
+            : t('modules.cms.content_templates.messages.deleteConfirm', { name: template.name }),
         variant: 'danger',
         confirmText: isTrashed ? t('common.actions.forceDelete') : t('common.actions.delete'),
     });
@@ -385,22 +385,22 @@ const handleDelete = async (template: Template) => {
     try {
         if (isTrashed) {
             await api.delete(`/admin/cms/content-templates/${template.id}/force-delete`);
-            toast.success.action(t('common.messages.success.deleted', { item: t('features.content_templates.title_singular') }));
+            toast.success.action(t('common.messages.success.deleted', { item: t('modules.cms.content_templates.title_singular') }));
         } else {
             await api.delete(`/admin/cms/content-templates/${template.id}`);
-            toast.success.delete(t('features.content_templates.title_singular'));
+            toast.success.delete(t('modules.cms.content_templates.title_singular'));
         }
         await fetchTemplates(pagination.value?.current_page || 1);
     } catch (error: unknown) {
         logger.error('Failed to delete template:', error);
-        toast.error.delete(error, t('features.content_templates.title_singular'));
+        toast.error.delete(error, t('modules.cms.content_templates.title_singular'));
     }
 };
 
 const handleRestore = async (template: Template) => {
     const confirmed = await confirm({
         title: t('common.actions.restore'),
-        message: t('features.content_templates.messages.restoreConfirm', { name: template.name }),
+        message: t('modules.cms.content_templates.messages.restoreConfirm', { name: template.name }),
         variant: 'info',
         confirmText: t('common.actions.restore'),
     });
@@ -409,7 +409,7 @@ const handleRestore = async (template: Template) => {
 
     try {
         await api.post(`/admin/cms/content-templates/${template.id}/restore`);
-        toast.success.restore(t('features.content_templates.title_singular'));
+        toast.success.restore(t('modules.cms.content_templates.title_singular'));
         await fetchTemplates(pagination.value?.current_page || 1);
     } catch (error: unknown) {
         logger.error('Failed to restore template:', error);
@@ -442,7 +442,7 @@ const handleBulkAction = async () => {
     if (action === 'delete' || action === 'force_delete') {
         const isForce = action === 'force_delete';
         const confirmed = await confirm({
-            title: isForce ? t('common.actions.forceDelete') : t('features.content_templates.actions.bulkDelete'),
+            title: isForce ? t('common.actions.forceDelete') : t('modules.cms.content_templates.actions.bulkDelete'),
             message: isForce 
                 ? t('common.messages.confirm.bulkAction', { action: t('common.actions.forceDelete'), count: count })
                 : t('common.messages.confirm.bulkAction', { action: t('common.actions.delete'), count: count }),
@@ -462,7 +462,7 @@ const handleBulkAction = async () => {
             });
             await fetchTemplates(pagination.value?.current_page || 1);
             bulkAction.value = '';
-            toast.success.delete(t('features.content_templates.title', { count: count }));
+            toast.success.delete(t('modules.cms.content_templates.title', { count: count }));
         } catch (error: unknown) {
             logger.error('Bulk action failed:', error);
             toast.error.action(error as Record<string, unknown>);
@@ -475,7 +475,7 @@ const handleBulkAction = async () => {
             });
             await fetchTemplates(pagination.value?.current_page || 1);
             bulkAction.value = '';
-            toast.success.restore(t('features.content_templates.title', { count: count }));
+            toast.success.restore(t('modules.cms.content_templates.title', { count: count }));
         } catch (error: unknown) {
             logger.error('Bulk action failed:', error);
             toast.error.action(error as Record<string, unknown>);

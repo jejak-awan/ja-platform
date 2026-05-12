@@ -11,11 +11,11 @@
               />
             </div>
             <h1 class="text-3xl font-bold tracking-tight text-foreground">
-              {{ $t('features.school.admission.title') }}
+              {{ $t('modules.school.admission.title') }}
             </h1>
           </div>
           <p class="text-muted-foreground text-sm">
-            {{ $t('features.school.admission.subtitle') }}
+            {{ $t('modules.school.admission.subtitle') }}
           </p>
         </div>
         <div class="flex gap-2">
@@ -28,7 +28,7 @@
               name="UserPlus"
               class="w-4 h-4 mr-2"
             />
-            {{ $t('features.school.admission.actions.manualRegister') }}
+            {{ $t('modules.school.admission.actions.manualRegister') }}
           </Button>
         </div>
       </div>
@@ -53,7 +53,7 @@
             <h3 class="text-2xl font-black tracking-tight text-foreground">
               {{ stat.value }}
             </h3>
-            <span class="text-[10px] font-bold text-muted-foreground uppercase">{{ $t('common.labels.student') }}</span>
+            <span class="text-[10px] font-bold text-muted-foreground uppercase">{{ $t('modules.school.labels.student') }}</span>
           </div>
         </div>
       </div>
@@ -69,7 +69,7 @@
                 />
                 <Input
                   v-model="filters.search"
-                  :placeholder="$t('features.school.admission.placeholders.search')"
+                  :placeholder="$t('modules.school.admission.placeholders.search')"
                   class="pl-10 h-10 rounded-xl bg-background border-border/50"
                 />
               </div>
@@ -82,19 +82,19 @@
                     {{ $t('common.labels.all') }}
                   </SelectItem>
                   <SelectItem value="applied">
-                    {{ $t('features.school.admission.labels.new') }}
+                    {{ $t('modules.school.admission.labels.new') }}
                   </SelectItem>
                   <SelectItem value="verified">
-                    {{ $t('features.school.admission.labels.verified') }}
+                    {{ $t('modules.school.admission.labels.verified') }}
                   </SelectItem>
                   <SelectItem value="exam">
-                    {{ $t('features.school.admission.labels.selection') }}
+                    {{ $t('modules.school.admission.labels.selection') }}
                   </SelectItem>
                   <SelectItem value="admitted">
-                    {{ $t('features.school.admission.labels.admitted') }}
+                    {{ $t('modules.school.admission.labels.admitted') }}
                   </SelectItem>
                   <SelectItem value="rejected">
-                    {{ $t('features.school.admission.labels.rejected') }}
+                    {{ $t('modules.school.admission.labels.rejected') }}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -138,10 +138,10 @@ import { useI18n } from 'vue-i18n';
 import {
   Card, CardContent, Button, LucideIcon, DataTable, Input,
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Pagination
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { AdmissionService } from '@/modules/School/services/AdmissionService';
-import { parseResponse } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
 import { createColumnHelper, useVueTable, getCoreRowModel } from '@tanstack/vue-table';
 import { useRouter } from 'vue-router';
 
@@ -164,17 +164,17 @@ const filters = ref({
 });
 
 const stats = ref({
-  total: { label: t('features.school.admission.labels.totalApplicants'), value: 0, icon: 'Users', color: 'bg-primary/10 text-primary' },
-  applied: { label: t('features.school.admission.labels.new'), value: 0, icon: 'UserPlus', color: 'bg-blue-500/10 text-blue-500' },
-  verified: { label: t('features.school.admission.labels.verified'), value: 0, icon: 'CircleCheck', color: 'bg-green-500/10 text-green-500' },
-  admitted: { label: t('features.school.admission.labels.admitted'), value: 0, icon: 'SquareCheck', color: 'bg-purple-500/10 text-purple-500' }
+  total: { label: t('modules.school.admission.labels.totalApplicants'), value: 0, icon: 'Users', color: 'bg-primary/10 text-primary' },
+  applied: { label: t('modules.school.admission.labels.new'), value: 0, icon: 'UserPlus', color: 'bg-blue-500/10 text-blue-500' },
+  verified: { label: t('modules.school.admission.labels.verified'), value: 0, icon: 'CircleCheck', color: 'bg-green-500/10 text-green-500' },
+  admitted: { label: t('modules.school.admission.labels.admitted'), value: 0, icon: 'SquareCheck', color: 'bg-purple-500/10 text-purple-500' }
 });
 
 const columnHelper = createColumnHelper<any>();
 
 const columns = [
   columnHelper.accessor('registration_number', { 
-    header: t('features.school.admission.labels.regNumber'), 
+    header: t('modules.school.admission.labels.regNumber'), 
     cell: info => h('span', { class: 'text-xs font-bold text-primary' }, String(info.getValue() || '')) 
   }),
   columnHelper.accessor('full_name', { 
@@ -190,11 +190,11 @@ const columns = [
     cell: info => {
       const status = info.getValue();
       const labels: Record<string, { text: string; class: string }> = {
-        applied: { text: t('features.school.admission.labels.new'), class: 'bg-blue-500/10 text-blue-500 border-blue-500/20' },
-        verified: { text: t('features.school.admission.labels.verified'), class: 'bg-green-500/10 text-green-500 border-green-500/20' },
-        exam: { text: t('features.school.admission.labels.selection'), class: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' },
-        admitted: { text: t('features.school.admission.labels.admitted'), class: 'bg-purple-500/10 text-purple-500 border-purple-500/20' },
-        rejected: { text: t('features.school.admission.labels.rejected'), class: 'bg-red-500/10 text-red-500 border-red-500/20' },
+        applied: { text: t('modules.school.admission.labels.new'), class: 'bg-blue-500/10 text-blue-500 border-blue-500/20' },
+        verified: { text: t('modules.school.admission.labels.verified'), class: 'bg-green-500/10 text-green-500 border-green-500/20' },
+        exam: { text: t('modules.school.admission.labels.selection'), class: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' },
+        admitted: { text: t('modules.school.admission.labels.admitted'), class: 'bg-purple-500/10 text-purple-500 border-purple-500/20' },
+        rejected: { text: t('modules.school.admission.labels.rejected'), class: 'bg-red-500/10 text-red-500 border-red-500/20' },
         draft: { text: 'Draft', class: 'bg-muted text-muted-foreground border-border/50' }
       };
       const config = labels[String(status)] || labels.draft;

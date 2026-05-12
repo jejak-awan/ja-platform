@@ -1,8 +1,8 @@
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { defineStore } from 'pinia';
-import api from '@/services/api';
-import { parseResponse, ensureArray } from '@/utils/responseParser';
-import type { CMSState, Content, SiteSettings } from '@/types/cms/cms';
+import api from '@/core/api/client';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
+import type { CMSState, Content, SiteSettings } from '@/modules/Cms/types/cms';
 
 const PUBLIC_SETTINGS_CACHE_KEY = 'public_settings_snapshot_v1';
 

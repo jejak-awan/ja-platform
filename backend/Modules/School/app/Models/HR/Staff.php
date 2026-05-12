@@ -5,7 +5,7 @@ namespace Modules\School\Models\HR;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\School\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByUnit;
 use Modules\School\Traits\ScopedBySchool;
 use Modules\School\Models\Institution\School;
 

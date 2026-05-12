@@ -22,7 +22,7 @@
           @click="handleClearLogs"
         >
           <Trash2 class="w-4 h-4 mr-2" />
-          {{ $t('features.system.logs.clear') }}
+          {{ $t('modules.core.system.logs.clear') }}
         </Button>
         <Button
           :disabled="loading"
@@ -332,18 +332,18 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
-import { parseResponse, ensureArray, parseSingleResponse, getResponseList, getResponseObject } from '@/utils/responseParser';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { parseResponse, ensureArray, parseSingleResponse, getResponseList, getResponseObject } from '@/shared/utils/responseParser';
 import {
     Tabs, TabsList, TabsTrigger, TabsContent, Button,
     Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
     Label, Textarea, Checkbox
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 // Tab Components
 import OverviewTab from './components/OverviewTab.vue';
@@ -372,7 +372,7 @@ import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
 import FileCheck from 'lucide-vue-next/dist/esm/icons/file-check.js';
 import SettingsIcon from 'lucide-vue-next/dist/esm/icons/settings.js';
 
-import type { ShieldLog, ShieldStats, PaginationInfo as SecurityPaginationInfo } from '@/types/core/security';
+import type { ShieldLog, ShieldStats, PaginationInfo as SecurityPaginationInfo } from '@/core/types/security';
 
 // Types
 interface User {
@@ -615,15 +615,15 @@ const fetchLogs = async (): Promise<void> => {
 
 const clearLogs = async (): Promise<void> => {
     const confirmed = await confirm({
-        title: t('features.system.logs.actions.clear'),
-        message: t('features.system.logs.confirm.clear'),
+        title: t('modules.core.system.logs.actions.clear'),
+        message: t('modules.core.system.logs.confirm.clear'),
         variant: 'danger',
         confirmText: t('common.actions.clear'),
     });
     if (!confirmed) return;
     try {
         await api.delete('/admin/core/security/journal');
-        toast.success.action(t('features.system.logs.messages.cleared'));
+        toast.success.action(t('modules.core.system.logs.messages.cleared'));
         fetchLogs();
     } catch (_error: unknown) {
         logger.error('Failed to clear logs:', _error);

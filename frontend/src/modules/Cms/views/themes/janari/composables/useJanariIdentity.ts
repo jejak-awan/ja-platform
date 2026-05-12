@@ -1,8 +1,8 @@
 import { computed } from 'vue'
-import { useTheme } from '@/composables/useTheme'
+import { useTheme } from '@/shared/composables/useTheme'
 import { useCoreStore } from '@/modules/Core/stores/core'
 import { config } from '@/config'
-import type { SiteSettings } from '@/types/core/settings'
+import type { SiteSettings } from '@/core/types/settings'
 
 export function trimStr(v: unknown): string {
     if (v == null) return ''

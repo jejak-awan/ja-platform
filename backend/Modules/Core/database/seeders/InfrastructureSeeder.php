@@ -14,7 +14,7 @@ class InfrastructureSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::where('email', 'admin@kdua.net')->first();
+        $admin = User::where('email', env('SUPER_ADMIN_EMAIL', 'super@jejakawan.com'))->first();
         if (! $admin) {
             return;
         }

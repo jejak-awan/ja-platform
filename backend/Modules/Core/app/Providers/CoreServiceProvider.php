@@ -21,6 +21,7 @@ use Modules\Core\Console\Commands\ClearRateLimit;
 use Modules\Core\Console\Commands\CreateAdminUser;
 use Modules\Core\Console\Commands\CreateBackup;
 use Modules\Core\Console\Commands\GenerateMediaThumbnails;
+
 use Modules\Core\Console\Commands\SecurityAuditDependencies;
 use Modules\Core\Console\Commands\SecurityCleanupLogs;
 use Modules\Core\Console\Commands\SecurityKpiReport;
@@ -29,7 +30,7 @@ use Modules\Core\Console\Commands\SecurityRecoveryDrill;
 use Modules\Core\Console\Commands\SecuritySmokeCheck;
 use Modules\Core\Console\Commands\SecuritySelfHealing;
 use Modules\Core\Console\Commands\SystemHealthCheck;
-use Modules\Core\Console\Commands\ThemeMake;
+
 use Modules\Core\Console\Commands\UpdateCloudflareIps;
 use Modules\Core\Console\Commands\WarmCache;
 use Nwidart\Modules\Traits\PathNamespace;
@@ -69,6 +70,76 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+
+        // Config Bridge: Apply DB settings to runtime config
+        $this->applyDatabaseSettings();
+    }
+
+    /**
+     * Apply database settings to Laravel configuration.
+     */
+    protected function applyDatabaseSettings(): void
+    {
+        // Avoid errors during installation or when tables don't exist
+        try {
+            $argv = request()->server('argv');
+            $argvString = is_array($argv) ? implode(' ', $argv) : (is_string($argv) ? $argv : '');
+            
+            if (! $this->app->runningInConsole() || str_contains($argvString, 'serve')) {
+                if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                    $enableCache = \Modules\Core\Models\Setting::get('enable_cache', true, null);
+                    $cacheDriver = \Modules\Core\Models\Setting::get('cache_driver', 'database', null);
+                    $cacheTtl = \Modules\Core\Models\Setting::get('cache_ttl', 3600, null);
+
+                    if (! $enableCache) {
+                        config(['cache.default' => 'array']); // Effectively disabled
+                    } else {
+                        config(['cache.default' => $cacheDriver]);
+                    }
+
+                    // Apply Redis credentials if driver is redis or failover
+                    if (in_array($cacheDriver, ['redis', 'failover']) && \Illuminate\Support\Facades\Schema::hasTable('redis_settings')) {
+                        $redisHost = \Modules\Core\Models\RedisSetting::getValue('redis_host', '127.0.0.1');
+                        $redisPort = \Modules\Core\Models\RedisSetting::getValue('redis_port', 6379);
+                        $redisPass = \Modules\Core\Models\RedisSetting::getValue('redis_password');
+                        $redisUser = \Modules\Core\Models\RedisSetting::getValue('redis_username', 'default');
+                        $redisDb = \Modules\Core\Models\RedisSetting::getValue('redis_database', 0);
+                        $redisCacheDb = \Modules\Core\Models\RedisSetting::getValue('redis_cache_database', 1);
+
+                        config([
+                            'database.redis.default.host' => $redisHost,
+                            'database.redis.default.port' => $redisPort,
+                            'database.redis.default.password' => $redisPass,
+                            'database.redis.default.username' => $redisUser,
+                            'database.redis.default.database' => $redisDb,
+                            
+                            'database.redis.cache.host' => $redisHost,
+                            'database.redis.cache.port' => $redisPort,
+                            'database.redis.cache.password' => $redisPass,
+                            'database.redis.cache.username' => $redisUser,
+                            'database.redis.cache.database' => $redisCacheDb,
+                        ]);
+                    }
+
+                    // Apply Session and Queue settings if enabled
+                    if (\Illuminate\Support\Facades\Schema::hasTable('redis_settings')) {
+                        $sessionEnabled = \Modules\Core\Models\RedisSetting::getValue('session_enabled', false);
+                        $queueEnabled = \Modules\Core\Models\RedisSetting::getValue('queue_enabled', false);
+
+                        if ($sessionEnabled) {
+                            config(['session.driver' => 'redis']);
+                            config(['session.connection' => 'cache']); // Use cache connection for sessions too
+                        }
+
+                        if ($queueEnabled) {
+                            config(['queue.default' => 'redis']);
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // Silently fail if DB is not ready
+        }
     }
 
     /**
@@ -76,6 +147,7 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singleton(\Modules\Core\Services\DashboardRegistry::class);
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }
@@ -108,7 +180,7 @@ class CoreServiceProvider extends ServiceProvider
             SecuritySmokeCheck::class,
             SecuritySelfHealing::class,
             SystemHealthCheck::class,
-            ThemeMake::class,
+
             UpdateCloudflareIps::class,
             WarmCache::class,
         ]);

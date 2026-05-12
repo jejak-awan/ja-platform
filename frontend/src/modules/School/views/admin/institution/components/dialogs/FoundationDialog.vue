@@ -194,11 +194,11 @@
             <!-- RT/RW/Postal -->
             <div class="grid grid-cols-3 gap-4 md:col-span-2">
               <div class="space-y-2">
-                <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('common.labels.rt') }}</Label>
+                <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('modules.school.labels.rt') }}</Label>
                 <Input v-model="localForm.rt" class="h-11 rounded-xl border-border/50 bg-muted/5" placeholder="000" />
               </div>
               <div class="space-y-2">
-                <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('common.labels.rw') }}</Label>
+                <Label class="text-xs font-bold uppercase tracking-wider text-muted-foreground/80">{{ $t('modules.school.labels.rw') }}</Label>
                 <Input v-model="localForm.rw" class="h-11 rounded-xl border-border/50 bg-muted/5" placeholder="000" />
               </div>
               <div class="space-y-2">
@@ -248,9 +248,9 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, LucideIcon, Input, Label, Textarea,
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
-import { IndonesianLocation, type LocationItem } from '@/services/IndonesianLocation';
-import MediaPicker from '@/components/shared/media/MediaPicker.vue';
+} from '@/shared/components/ui';
+import { IndonesianLocation, type LocationItem } from '@/shared/services/IndonesianLocation';
+import MediaPicker from '@/shared/components/media/MediaPicker.vue';
 
 const props = defineProps<{
   show: boolean;

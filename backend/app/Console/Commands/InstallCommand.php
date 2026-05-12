@@ -26,7 +26,7 @@ class InstallCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         if (File::exists(storage_path('installed')) && !$this->option('force')) {
             $this->error('❌ JA-Platform is already installed.');
@@ -53,7 +53,7 @@ class InstallCommand extends Command
         return 0;
     }
 
-    protected function finalizeInstallation()
+    protected function finalizeInstallation(): void
     {
         $this->comment('🏁 Finalizing installation...');
         
@@ -92,7 +92,7 @@ class InstallCommand extends Command
         $this->info(str_repeat('=', 40) . "\n");
     }
 
-    protected function checkRequirements()
+    protected function checkRequirements(): bool
     {
         $this->comment('🔍 Checking system requirements...');
 
@@ -120,7 +120,7 @@ class InstallCommand extends Command
         return true;
     }
 
-    protected function setupEnvironment()
+    protected function setupEnvironment(): void
     {
         $this->comment('📝 Setting up environment variables...');
 
@@ -129,9 +129,20 @@ class InstallCommand extends Command
             $this->info('✅ Created .env from .example');
         }
 
-        $appName = $this->ask('Application Name', config('app.name', 'JA-Platform'));
-        $appUrl = $this->ask('Application URL (leave as default for auto-detection)', config('app.url', 'http://localhost'));
-        $rootDomain = $this->ask('Root Domain (leave as default for auto-detection)', env('VITE_ROOT_DOMAIN', 'localhost'));
+        $appNameConfig = config('app.name', 'JA-Platform');
+        $appNameDefault = is_string($appNameConfig) ? $appNameConfig : 'JA-Platform';
+        $appNameRaw = $this->ask('Application Name', $appNameDefault);
+        $appName = is_string($appNameRaw) ? $appNameRaw : $appNameDefault;
+
+        $appUrlConfig = config('app.url', 'http://localhost');
+        $appUrlDefault = is_string($appUrlConfig) ? $appUrlConfig : 'http://localhost';
+        $appUrlRaw = $this->ask('Application URL (leave as default for auto-detection)', $appUrlDefault);
+        $appUrl = is_string($appUrlRaw) ? $appUrlRaw : $appUrlDefault;
+
+        $rootDomainConfig = config('app.root_domain', 'localhost');
+        $rootDomainDefault = is_string($rootDomainConfig) ? $rootDomainConfig : 'localhost';
+        $rootDomainRaw = $this->ask('Root Domain (leave as default for auto-detection)', $rootDomainDefault);
+        $rootDomain = is_string($rootDomainRaw) ? $rootDomainRaw : $rootDomainDefault;
 
         $this->updateEnv([
             'APP_NAME' => "\"$appName\"",
@@ -146,14 +157,22 @@ class InstallCommand extends Command
         $this->call('key:generate');
     }
 
-    protected function setupDatabase()
+    protected function setupDatabase(): void
     {
         $this->comment('🗄️ Setting up database...');
 
-        $connection = $this->choice('Database Connection', ['mysql', 'pgsql', 'sqlite'], 'pgsql');
+        $connectionRaw = $this->choice('Database Connection', ['mysql', 'pgsql', 'sqlite'], 'pgsql');
+        if (is_string($connectionRaw)) {
+            $connection = $connectionRaw;
+        } else {
+            $first = $connectionRaw[0] ?? 'pgsql';
+            $connection = is_string($first) ? $first : 'pgsql';
+        }
 
         if ($connection === 'sqlite') {
-            $path = $this->ask('Database Path (absolute)', database_path('database.sqlite'));
+            $pathDefault = database_path('database.sqlite');
+            $pathRaw = $this->ask('Database Path (absolute)', $pathDefault);
+            $path = is_string($pathRaw) ? $pathRaw : $pathDefault;
             if (!File::exists($path)) {
                 File::put($path, '');
                 $this->info("✅ Created SQLite database at $path");
@@ -163,11 +182,27 @@ class InstallCommand extends Command
                 'DB_DATABASE' => $path,
             ]);
         } else {
-            $host = $this->ask('Database Host', env('DB_HOST', '127.0.0.1'));
-            $port = $this->ask('Database Port', $connection === 'pgsql' ? '5432' : '3306');
-            $database = $this->ask('Database Name', env('DB_DATABASE', 'ja_apps'));
-            $username = $this->ask('Database Username', env('DB_USERNAME', 'root'));
-            $password = $this->secret('Database Password');
+            $hostConfig = config('database.connections.'.$connection.'.host', '127.0.0.1');
+            $hostDefault = is_string($hostConfig) ? $hostConfig : '127.0.0.1';
+            $hostRaw = $this->ask('Database Host', $hostDefault);
+            $host = is_string($hostRaw) ? $hostRaw : $hostDefault;
+
+            $portDefault = $connection === 'pgsql' ? '5432' : '3306';
+            $portRaw = $this->ask('Database Port', $portDefault);
+            $port = is_string($portRaw) ? $portRaw : $portDefault;
+
+            $dbConfig = config('database.connections.'.$connection.'.database', 'ja_apps');
+            $dbDefault = is_string($dbConfig) ? $dbConfig : 'ja_apps';
+            $databaseRaw = $this->ask('Database Name', $dbDefault);
+            $database = is_string($databaseRaw) ? $databaseRaw : $dbDefault;
+
+            $userConfig = config('database.connections.'.$connection.'.username', 'root');
+            $userDefault = is_string($userConfig) ? $userConfig : 'root';
+            $usernameRaw = $this->ask('Database Username', $userDefault);
+            $username = is_string($usernameRaw) ? $usernameRaw : $userDefault;
+
+            $passwordRaw = $this->secret('Database Password');
+            $password = is_string($passwordRaw) ? $passwordRaw : '';
 
             $this->updateEnv([
                 'DB_CONNECTION' => $connection,
@@ -191,7 +226,7 @@ class InstallCommand extends Command
         }
     }
 
-    protected function setupRedis()
+    protected function setupRedis(): void
     {
         if (!$this->confirm('Do you want to configure Redis?', false)) {
             return;
@@ -199,20 +234,29 @@ class InstallCommand extends Command
 
         $this->comment('🚀 Setting up Redis...');
 
-        $host = $this->ask('Redis Host', env('REDIS_HOST', '127.0.0.1'));
-        $password = $this->secret('Redis Password (leave null if none)');
-        $port = $this->ask('Redis Port', env('REDIS_PORT', '6379'));
+        $redisHostConfig = config('database.redis.default.host', '127.0.0.1');
+        $redisHostDefault = is_string($redisHostConfig) ? $redisHostConfig : '127.0.0.1';
+        $hostRaw = $this->ask('Redis Host', $redisHostDefault);
+        $host = is_string($hostRaw) ? $hostRaw : $redisHostDefault;
+
+        $passwordRaw = $this->secret('Redis Password (leave null if none)');
+        $password = is_string($passwordRaw) ? $passwordRaw : '';
+
+        $redisPortConfig = config('database.redis.default.port', '6379');
+        $redisPortDefault = is_string($redisPortConfig) ? $redisPortConfig : '6379';
+        $portRaw = $this->ask('Redis Port', $redisPortDefault);
+        $port = is_string($portRaw) ? $portRaw : $redisPortDefault;
 
         $this->updateEnv([
             'REDIS_HOST' => $host,
-            'REDIS_PASSWORD' => $password ?: 'null',
+            'REDIS_PASSWORD' => $password === '' ? 'null' : $password,
             'REDIS_PORT' => $port,
         ]);
         
         $this->info('✅ Redis configured.');
     }
 
-    protected function setupMail()
+    protected function setupMail(): void
     {
         if (!$this->confirm('Do you want to configure Mail settings?', false)) {
             return;
@@ -220,18 +264,41 @@ class InstallCommand extends Command
 
         $this->comment('📧 Setting up Mail...');
 
-        $mailer = $this->choice('Mail Mailer', ['smtp', 'mailgun', 'ses', 'log'], 'smtp');
+        $mailerRaw = $this->choice('Mail Mailer', ['smtp', 'mailgun', 'ses', 'log'], 'smtp');
+        if (is_string($mailerRaw)) {
+            $mailer = $mailerRaw;
+        } else {
+            $first = $mailerRaw[0] ?? 'smtp';
+            $mailer = is_string($first) ? $first : 'smtp';
+        }
         
         if ($mailer === 'log') {
             $this->updateEnv(['MAIL_MAILER' => 'log']);
             return;
         }
 
-        $host = $this->ask('Mail Host', env('MAIL_HOST', '127.0.0.1'));
-        $port = $this->ask('Mail Port', env('MAIL_PORT', '2525'));
-        $username = $this->ask('Mail Username', env('MAIL_USERNAME'));
-        $password = $this->secret('Mail Password');
-        $from = $this->ask('Mail From Address', env('MAIL_FROM_ADDRESS', 'hello@example.com'));
+        $mailHostConfig = config('mail.mailers.smtp.host', '127.0.0.1');
+        $mailHostDefault = is_string($mailHostConfig) ? $mailHostConfig : '127.0.0.1';
+        $hostRaw = $this->ask('Mail Host', $mailHostDefault);
+        $host = is_string($hostRaw) ? $hostRaw : $mailHostDefault;
+
+        $mailPortConfig = config('mail.mailers.smtp.port', '2525');
+        $mailPortDefault = is_string($mailPortConfig) ? $mailPortConfig : '2525';
+        $portRaw = $this->ask('Mail Port', $mailPortDefault);
+        $port = is_string($portRaw) ? $portRaw : $mailPortDefault;
+
+        $usernameConfig = config('mail.mailers.smtp.username');
+        $usernameDefault = is_string($usernameConfig) ? $usernameConfig : null;
+        $usernameRaw = $this->ask('Mail Username', $usernameDefault);
+        $username = is_string($usernameRaw) ? $usernameRaw : '';
+
+        $passwordRaw = $this->secret('Mail Password');
+        $password = is_string($passwordRaw) ? $passwordRaw : '';
+
+        $fromConfig = config('mail.from.address', 'hello@example.com');
+        $fromDefault = is_string($fromConfig) ? $fromConfig : 'hello@example.com';
+        $fromRaw = $this->ask('Mail From Address', $fromDefault);
+        $from = is_string($fromRaw) ? $fromRaw : $fromDefault;
 
         $this->updateEnv([
             'MAIL_MAILER' => $mailer,
@@ -245,7 +312,7 @@ class InstallCommand extends Command
         $this->info('✅ Mail configured.');
     }
 
-    protected function setupFrontend()
+    protected function setupFrontend(): void
     {
         $this->comment('🌐 Setting up frontend assets...');
 
@@ -262,33 +329,39 @@ class InstallCommand extends Command
         }
     }
 
-    protected function updateEnv(array $data)
+    /**
+     * @param array<string, string> $data
+     */
+    protected function updateEnv(array $data): void
     {
         $path = base_path('.env');
 
         if (File::exists($path)) {
+            $existing = File::get($path);
             foreach ($data as $key => $value) {
-                // Ensure the value is string
-                $value = (string) $value;
-                
-                if (strpos(File::get($path), "{$key}=") !== false) {
+                if (strpos($existing, "{$key}=") !== false) {
                     // Check if value contains spaces, if so wrap in quotes if not already
                     if (strpos($value, ' ') !== false && strpos($value, '"') === false) {
                         $value = "\"$value\"";
                     }
-                    File::put($path, preg_replace(
+                    $updated = preg_replace(
                         "/^{$key}=.*/m",
                         "{$key}={$value}",
-                        File::get($path)
-                    ));
+                        $existing
+                    );
+                    if ($updated !== null) {
+                        $existing = $updated;
+                    }
                 } else {
-                    File::append($path, "\n{$key}={$value}");
+                    $existing .= "\n{$key}={$value}";
                 }
             }
+
+            File::put($path, $existing);
         }
     }
 
-    protected function runExternalCommand($command, $cwd = null)
+    protected function runExternalCommand(string $command, ?string $cwd = null): bool
     {
         $process = Process::fromShellCommandline($command, $cwd);
         $process->setTimeout(null);

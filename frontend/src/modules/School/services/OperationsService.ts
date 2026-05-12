@@ -1,8 +1,8 @@
-import api from '@/services/api';
+import api from '@/core/api/client';
 import type { AxiosResponse } from 'axios';
-import type { Visitor, Attendance, OperationAuditLog, LibraryBook, Graduate } from '@/types';
-import type { Asset } from '@/types/school/logistics';
-import type { Staff } from '@/types/school/hr';
+import type { Visitor, Attendance, OperationAuditLog, LibraryBook, Graduate } from '@/modules/School/types';
+import type { Asset } from '@/modules/School/types/logistics';
+import type { Staff } from '@/modules/School/types/hr';
 
 export const OperationsService = {
     async getAuditLogs(params: Record<string, any> = {}): Promise<AxiosResponse<OperationAuditLog[]>> {

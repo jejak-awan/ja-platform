@@ -206,10 +206,10 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import ClipboardList from 'lucide-vue-next/dist/esm/icons/clipboard-list.js';
 import ChevronRight from 'lucide-vue-next/dist/esm/icons/chevron-right.js';
 import ShieldAlert from 'lucide-vue-next/dist/esm/icons/shield-alert.js';

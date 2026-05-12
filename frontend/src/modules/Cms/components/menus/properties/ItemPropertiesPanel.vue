@@ -3,7 +3,7 @@
     <CardHeader class="pb-3">
       <div class="flex items-center justify-between">
         <CardTitle class="text-base">
-          {{ selectedItem ? t('features.menus.form.editItemTitle') : t('features.menus.form.settings') }}
+          {{ selectedItem ? t('modules.cms.menus.form.editItemTitle') : t('modules.cms.menus.form.settings') }}
         </CardTitle>
         <div class="flex items-center gap-1">
           <Button 
@@ -36,7 +36,7 @@
       >
         <MousePointer class="w-8 h-8 text-muted-foreground mb-3" />
         <p class="text-sm text-muted-foreground">
-          {{ t('features.menus.messages.selectItemToEdit') }}
+          {{ t('modules.cms.menus.messages.selectItemToEdit') }}
         </p>
       </div>
 
@@ -75,17 +75,17 @@
                 
         <!-- Parent Selector -->
         <div class="space-y-1.5 pt-2 border-t border-border">
-          <Label class="text-xs text-muted-foreground">{{ t('features.menus.form.parentItem') }}</Label>
+          <Label class="text-xs text-muted-foreground">{{ t('modules.cms.menus.form.parentItem') }}</Label>
           <Select
             :model-value="currentParentId"
             @update:model-value="handleParentChange"
           >
             <SelectTrigger class="h-8 text-sm">
-              <SelectValue :placeholder="t('features.menus.form.placeholders.selectParent') || 'Select Parent'" />
+              <SelectValue :placeholder="t('modules.cms.menus.form.placeholders.selectParent') || 'Select Parent'" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="root">
-                {{ t('features.menus.form.rootItem') }}
+                {{ t('modules.cms.menus.form.rootItem') }}
               </SelectItem>
               <SelectItem 
                 v-for="p in validParents" 
@@ -155,9 +155,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useMenuContext } from '@/composables/useMenu';
+import { useMenuContext } from '@/shared/composables/useMenu';
 import { menuItemRegistry } from '../registry';
-import type { MenuItem, MenuItemSetting, PropertyValue } from '@/types/cms/menu';
+import type { MenuItem, MenuItemSetting, PropertyValue } from '@/modules/Cms/types/menu';
 
 // UI Components
 import {
@@ -177,7 +177,7 @@ import {
     SelectContent,
     SelectItem,
     Label
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import ItemPropertyField from './ItemPropertyField.vue';
 
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
@@ -253,7 +253,7 @@ const typeDefinition = computed(() => {
 
 const typeLabel = computed(() => {
     if (!selectedItem.value) return 'Unknown';
-    const key = `features.menus.form.types.${selectedItem.value.type}`;
+    const key = `modules.cms.menus.form.types.${selectedItem.value.type}`;
     const translated = t(key);
     if (translated !== key) return translated;
     return typeDefinition.value?.label || selectedItem.value.type || 'Unknown';
@@ -293,7 +293,7 @@ const groupedSettings = computed(() => {
 });
 
 const formatGroupName = (name: string) => {
-    const key = `features.menus.form.groups.${name}`;
+    const key = `modules.cms.menus.form.groups.${name}`;
     const translated = t(key);
     if (translated !== key) return translated;
     return name.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');

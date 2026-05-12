@@ -195,10 +195,10 @@ import { ref, onMounted, computed } from 'vue';
 import {
   Card, CardHeader, CardTitle, CardContent, CardDescription,
   Button, LucideIcon, SkeletonLoader
-} from '@/components/ui';
-import api from '@/services/api';
-import { parseResponse } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { parseResponse } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
 
 const toast = useToast();
 const loading = ref(true);

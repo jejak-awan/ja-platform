@@ -8,6 +8,12 @@ const schoolRoutes: RouteRecordRaw[] = [
         meta: { permission: 'view schools' },
     },
     {
+        path: 'foundation-dashboard',
+        name: 'foundation.dashboard',
+        component: () => import('@/modules/School/views/admin/FoundationDashboard.vue'),
+        meta: { permission: 'view schools' },
+    },
+    {
         path: 'schools',
         name: 'schools.index',
         component: () => import('@/modules/School/views/admin/institution/Institution.vue'),
@@ -160,6 +166,12 @@ const schoolRoutes: RouteRecordRaw[] = [
         name: 'hr.index',
         component: () => import('@/modules/School/views/admin/hr/Index.vue'),
         meta: { title: 'Manajemen HR', permission: 'view staff' }
+      },
+      {
+        path: 'settings/institution',
+        name: 'settings.institution',
+        component: () => import('@/modules/School/views/admin/settings/InstitutionSettings.vue'),
+        meta: { title: 'Pengaturan Institusi', permission: 'manage settings' }
       },
       {
         path: 'settings/logs',

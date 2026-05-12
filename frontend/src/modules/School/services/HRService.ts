@@ -1,6 +1,6 @@
-import api from '@/services/api';
+import api from '@/core/api/client';
 import type { AxiosResponse } from 'axios';
-import type { Staff, LeaveRequest, Shift } from '@/types';
+import type { Staff, LeaveRequest, Shift } from '@/modules/School/types';
 
 export const HRService = {
     async getStaff(params: Record<string, any> = {}): Promise<AxiosResponse<Staff[]>> {

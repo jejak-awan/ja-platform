@@ -5,14 +5,14 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ isEdit ? $t('features.school.extensions.labels.editBook') : $t('features.school.extensions.labels.addBook') }}</DialogTitle>
+        <DialogTitle>{{ isEdit ? $t('modules.school.extensions.labels.editBook') : $t('modules.school.extensions.labels.addBook') }}</DialogTitle>
       </DialogHeader>
       <form
         class="space-y-4 py-4"
         @submit.prevent="handleSubmit"
       >
         <div class="space-y-2">
-          <Label for="title">{{ $t('features.school.extensions.labels.bookTitle') }} <span class="text-destructive">*</span></Label>
+          <Label for="title">{{ $t('modules.school.extensions.labels.bookTitle') }} <span class="text-destructive">*</span></Label>
           <Input
             id="title"
             v-model="form.title"
@@ -21,14 +21,14 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
-            <Label for="isbn">{{ $t('features.school.extensions.labels.isbn') }}</Label>
+            <Label for="isbn">{{ $t('modules.school.extensions.labels.isbn') }}</Label>
             <Input
               id="isbn"
               v-model="form.isbn"
             />
           </div>
           <div class="space-y-2">
-            <Label for="author">{{ $t('features.school.extensions.labels.author') }}</Label>
+            <Label for="author">{{ $t('modules.school.extensions.labels.author') }}</Label>
             <Input
               id="author"
               v-model="form.author"
@@ -37,14 +37,14 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
-            <Label for="publisher">{{ $t('features.school.extensions.labels.publisher') }}</Label>
+            <Label for="publisher">{{ $t('modules.school.extensions.labels.publisher') }}</Label>
             <Input
               id="publisher"
               v-model="form.publisher"
             />
           </div>
           <div class="space-y-2">
-            <Label for="year">{{ $t('features.school.extensions.labels.publishYear') }}</Label>
+            <Label for="year">{{ $t('modules.school.extensions.labels.publishYear') }}</Label>
             <Input
               id="year"
               v-model="form.publish_year"
@@ -54,7 +54,7 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
-            <Label for="qty">{{ $t('features.school.extensions.labels.quantity') }} <span class="text-destructive">*</span></Label>
+            <Label for="qty">{{ $t('modules.school.extensions.labels.quantity') }} <span class="text-destructive">*</span></Label>
             <Input
               id="qty"
               v-model="form.quantity"
@@ -64,7 +64,7 @@
             />
           </div>
           <div class="space-y-2">
-            <Label for="loc">{{ $t('features.school.extensions.labels.shelfLocation') }}</Label>
+            <Label for="loc">{{ $t('modules.school.extensions.labels.shelfLocation') }}</Label>
             <Input
               id="loc"
               v-model="form.location"
@@ -95,7 +95,7 @@ import { ref, watch } from 'vue';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, LucideIcon
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 
 

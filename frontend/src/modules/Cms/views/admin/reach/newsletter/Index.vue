@@ -3,10 +3,10 @@
     <div class="mb-6 flex justify-between items-center">
       <div>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.newsletter.title') }}
+          {{ $t('modules.cms.newsletter.title') }}
         </h1>
         <p class="mt-1 text-sm text-muted-foreground">
-          {{ $t('features.newsletter.subtitle') }}
+          {{ $t('modules.cms.newsletter.subtitle') }}
         </p>
       </div>
       <div class="flex gap-2">
@@ -15,7 +15,7 @@
           @click="exportCsv"
         >
           <Download class="w-4 h-4 mr-2" />
-          {{ $t('features.newsletter.actions.export') }}
+          {{ $t('modules.cms.newsletter.actions.export') }}
         </Button>
       </div>
     </div>
@@ -27,7 +27,7 @@
           <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             v-model="filters.q"
-            :placeholder="$t('features.newsletter.filters.search')"
+            :placeholder="$t('modules.cms.newsletter.filters.search')"
             class="pl-9"
             @input="debounceSearch"
           />
@@ -37,17 +37,17 @@
           @update:model-value="fetchSubscribers"
         >
           <SelectTrigger class="w-full md:w-[200px]">
-            <SelectValue :placeholder="$t('features.newsletter.filters.allStatus')" />
+            <SelectValue :placeholder="$t('modules.cms.newsletter.filters.allStatus')" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
-              {{ $t('features.newsletter.filters.allStatus') }}
+              {{ $t('modules.cms.newsletter.filters.allStatus') }}
             </SelectItem>
             <SelectItem value="subscribed">
-              {{ $t('features.newsletter.filters.subscribed') }}
+              {{ $t('modules.cms.newsletter.filters.subscribed') }}
             </SelectItem>
             <SelectItem value="unsubscribed">
-              {{ $t('features.newsletter.filters.unsubscribed') }}
+              {{ $t('modules.cms.newsletter.filters.unsubscribed') }}
             </SelectItem>
           </SelectContent>
         </Select>
@@ -77,7 +77,7 @@
           class="flex items-center gap-3 p-1.5 px-3 rounded-lg bg-primary/5 border border-primary/10 transition-colors animate-in fade-in slide-in-from-top-1 ml-auto"
         >
           <span class="text-sm font-medium text-primary">
-            {{ $t('features.newsletter.messages.selected', { count: selectedIds.length }) }}
+            {{ $t('modules.cms.newsletter.messages.selected', { count: selectedIds.length }) }}
           </span>
           <div class="h-4 w-px bg-primary/20" />
           <Select
@@ -85,7 +85,7 @@
             @update:model-value="handleBulkAction"
           >
             <SelectTrigger class="w-[160px] h-8 border-primary/20">
-              <SelectValue :placeholder="$t('features.content.list.bulkActions')" />
+              <SelectValue :placeholder="$t('modules.cms.content.list.bulkActions')" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem
@@ -116,7 +116,7 @@
         <DataTable
           :table="table"
           :loading="loading"
-          :empty-message="$t('features.newsletter.messages.empty')"
+          :empty-message="$t('modules.cms.newsletter.messages.empty')"
         />
       </div>
 
@@ -137,14 +137,14 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
-import { parseResponse } from '@/utils/responseParser';
-import { Badge, Button, Card, Checkbox, Input, Pagination, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, DataTable } from '@/components/ui';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
+import { parseResponse } from '@/shared/utils/responseParser';
+import { Badge, Button, Card, Checkbox, Input, Pagination, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, DataTable } from '@/shared/components/ui';
 
 import { h } from 'vue';
 import { 
@@ -159,7 +159,7 @@ import Download from 'lucide-vue-next/dist/esm/icons/download.js';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
-import { debounce } from '@/utils/debounce';
+import { debounce } from '@/shared/utils/debounce';
 
 const { t } = useI18n();
 const toast = useToast();
@@ -220,7 +220,7 @@ const columns = [
         size: 50,
     }),
     columnHelper.accessor('name', {
-        header: t('features.newsletter.table.subscriber'),
+        header: t('modules.cms.newsletter.table.subscriber'),
         cell: ({ row }) => {
             const subscriber = row.original;
             const initial = (subscriber.name || subscriber.email).charAt(0).toUpperCase();
@@ -231,7 +231,7 @@ const columns = [
                 ]),
                 h('div', { class: 'ml-4' }, [
                     h('div', { class: 'text-sm font-medium text-foreground flex items-center gap-2' }, [
-                        subscriber.name || t('features.newsletter.messages.noName'),
+                        subscriber.name || t('modules.cms.newsletter.messages.noName'),
                         subscriber.deleted_at ? h(Badge, { variant: 'destructive', class: 'h-4.5 text-[10px] px-1.5 uppercase font-bold tracking-wider' }, t('common.labels.deleted')) : null
                     ]),
                     h('div', { class: 'text-xs text-muted-foreground' }, subscriber.email)
@@ -240,26 +240,26 @@ const columns = [
         }
     }),
     columnHelper.accessor('status', {
-        header: t('features.newsletter.table.status'),
+        header: t('modules.cms.newsletter.table.status'),
         cell: ({ row }) => {
             const status = row.original.status;
             return h(Badge, {
                 variant: 'outline',
                 class: status === 'subscribed' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-red-500/10 text-red-500 border-red-500/20'
-            }, t(`features.newsletter.filters.${status}`));
+            }, t(`modules.cms.newsletter.filters.${status}`));
         }
     }),
     columnHelper.accessor('created_at', {
-        header: t('features.newsletter.table.joinedAt'),
+        header: t('modules.cms.newsletter.table.joinedAt'),
         cell: ({ row }) => h('span', { class: 'text-xs text-muted-foreground' }, formatDate(row.original.created_at))
     }),
     columnHelper.accessor('source', {
-        header: t('features.newsletter.table.source'),
+        header: t('modules.cms.newsletter.table.source'),
         cell: ({ row }) => h('span', { class: 'text-xs text-muted-foreground truncated max-w-[150px]', title: row.original.source || '' }, row.original.source || '-')
     }),
     columnHelper.display({
         id: 'actions',
-        header: () => h('div', { class: 'text-center' }, t('features.newsletter.table.actions')),
+        header: () => h('div', { class: 'text-center' }, t('modules.cms.newsletter.table.actions')),
         cell: ({ row }) => {
             const subscriber = row.original;
             return h('div', { class: 'flex items-center justify-center gap-1' }, [
@@ -271,7 +271,7 @@ const columns = [
                 h(Button, {
                     variant: 'ghost', size: 'icon', onClick: () => deleteSubscriber(subscriber),
                     class: 'h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10',
-                    title: subscriber.deleted_at ? t('common.actions.forceDelete') : t('features.newsletter.actions.delete')
+                    title: subscriber.deleted_at ? t('common.actions.forceDelete') : t('modules.cms.newsletter.actions.delete')
                 }, [h(Trash2, { class: 'w-4 h-4' })])
             ]);
         }
@@ -338,10 +338,10 @@ const changePerPage = (perPage: number) => {
 const deleteSubscriber = async (subscriber: Subscriber) => {
     const isTrashed = !!subscriber.deleted_at;
     const confirmed = await confirm({
-        title: isTrashed ? t('common.actions.forceDelete') : t('features.newsletter.actions.delete'),
+        title: isTrashed ? t('common.actions.forceDelete') : t('modules.cms.newsletter.actions.delete'),
         message: isTrashed 
-            ? t('features.newsletter.confirm.forceDelete', { email: subscriber.email })
-            : t('features.newsletter.confirm.delete', { email: subscriber.email }),
+            ? t('modules.cms.newsletter.confirm.forceDelete', { email: subscriber.email })
+            : t('modules.cms.newsletter.confirm.delete', { email: subscriber.email }),
         variant: 'danger',
         confirmText: isTrashed ? t('common.actions.forceDelete') : t('common.actions.delete'),
     });
@@ -366,7 +366,7 @@ const deleteSubscriber = async (subscriber: Subscriber) => {
 const restoreSubscriber = async (subscriber: Subscriber) => {
     const confirmed = await confirm({
         title: t('common.actions.restore'),
-        message: t('features.newsletter.confirm.restore', { email: subscriber.email }),
+        message: t('modules.cms.newsletter.confirm.restore', { email: subscriber.email }),
         variant: 'info',
         confirmText: t('common.actions.restore'),
     });
@@ -422,9 +422,9 @@ const bulkAction = async (action: string) => {
     if (action === 'delete' || action === 'force_delete') {
          const isForce = action === 'force_delete';
          const confirmed = await confirm({
-             title: isForce ? t('common.actions.forceDelete') : t('features.newsletter.actions.delete'),
+             title: isForce ? t('common.actions.forceDelete') : t('modules.cms.newsletter.actions.delete'),
              message: isForce
-                ? t('features.newsletter.confirm.bulkForceDelete', { count: selectedIds.value.length })
+                ? t('modules.cms.newsletter.confirm.bulkForceDelete', { count: selectedIds.value.length })
                 : t('common.messages.confirm.bulkDelete', { count: selectedIds.value.length }),
              variant: 'danger',
              confirmText: isForce ? t('common.actions.forceDelete') : t('common.actions.delete'),

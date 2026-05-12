@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->foreignId('school_unit_id')->nullable()->after('id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->unsignedBigInteger('school_unit_id')->nullable()->after('id')->index();
             
             // Handle key unique constraint
             // We need to know the index name. Laravel usually uses 'settings_key_unique'
@@ -30,7 +30,6 @@ return new class extends Migration
     {
         Schema::table('settings', function (Blueprint $table) {
             $table->dropUnique(['key', 'school_unit_id']);
-            $table->dropForeign(['school_unit_id']);
             $table->dropColumn('school_unit_id');
             
             $table->unique('key');

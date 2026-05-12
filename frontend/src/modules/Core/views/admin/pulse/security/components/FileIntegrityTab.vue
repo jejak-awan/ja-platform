@@ -245,7 +245,7 @@ import {
     Badge, Button,
     Table, TableHeader, TableRow, TableHead, TableBody, TableCell,
     Alert, AlertTitle, AlertDescription
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 interface IntegrityFile {
     path: string;

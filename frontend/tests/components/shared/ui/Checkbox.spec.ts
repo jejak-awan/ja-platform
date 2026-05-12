@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import Checkbox from "@/components/ui/Checkbox.vue";
+import Checkbox from "@/shared/components/ui/Checkbox.vue";
 
 describe('Checkbox.vue', () => {
     it('renders correctly', () => {

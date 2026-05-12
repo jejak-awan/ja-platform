@@ -399,7 +399,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import type { ThemeSetting, ThemeOption } from '@/types/cms/theme';
+import type { ThemeSetting, ThemeOption } from '@/modules/Cms/types/theme';
 
 // Common Icons
 import Pencil from 'lucide-vue-next/dist/esm/icons/pencil.js';
@@ -431,7 +431,7 @@ import {
     SelectItem,
     Switch,
     Checkbox
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const props = defineProps<{
     setting: ThemeSetting & { key?: string };

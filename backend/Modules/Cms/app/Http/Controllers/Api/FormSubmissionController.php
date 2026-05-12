@@ -13,6 +13,11 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class FormSubmissionController extends BaseApiController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+        $this->middleware('permission:view forms');
+    }
     /**
      * Display a listing of the resource.
      */

@@ -79,7 +79,7 @@ import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
 import Wifi from 'lucide-vue-next/dist/esm/icons/wifi.js';
 import BatteryFull from 'lucide-vue-next/dist/esm/icons/battery-full.js';
 import ThemePreview from '../../ThemePreview.vue';
-import type { Theme } from '@/types/cms/theme';
+import type { Theme } from '@/modules/Cms/types/theme';
 
 defineProps<{
     previewTheme: Theme;

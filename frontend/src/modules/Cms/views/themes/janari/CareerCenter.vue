@@ -147,7 +147,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useTheme } from '@/composables/useTheme';
+import { useTheme } from '@/shared/composables/useTheme';
 import PageDisabled from './components/PageDisabled.vue';
 import Briefcase from 'lucide-vue-next/dist/esm/icons/briefcase.js';
 import Building2 from 'lucide-vue-next/dist/esm/icons/building-2.js';

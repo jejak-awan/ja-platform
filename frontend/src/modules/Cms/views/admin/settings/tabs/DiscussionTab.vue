@@ -14,11 +14,11 @@
         :key="setting.id"
         :model-value="(formData[setting.key] as any)"
         :field-key="setting.key"
-        :label="$t('features.settings.labels.' + setting.key)"
-        :description="$t('features.settings.descriptions.' + setting.key)"
+        :label="$t('modules.cms.settings.labels.' + setting.key)"
+        :description="$t('modules.cms.settings.descriptions.' + setting.key)"
         :type="setting.type"
-        :enabled-text="$t('features.settings.enabled')"
-        :disabled-text="$t('features.settings.disabled')"
+        :enabled-text="$t('modules.cms.settings.enabled')"
+        :disabled-text="$t('modules.cms.settings.disabled')"
         :error="errors?.[setting.key]"
         @update:model-value="(value) => updateField(setting.key, value)"
       />
@@ -75,8 +75,8 @@ const discussionSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'general',
-            title: t('features.settings.groups.discussion.title'),
-            description: t('features.settings.groups.discussion.description'),
+            title: t('modules.cms.settings.groups.discussion.title'),
+            description: t('modules.cms.settings.groups.discussion.description'),
             icon: MessageCircleIcon,
             color: 'blue',
             keys: ['comments.security.enable_reply', 'comments.security.allow_guests'],
@@ -85,8 +85,8 @@ const discussionSettingsGrouped = computed(() => {
         },
         {
             id: 'moderation',
-            title: t('features.settings.groups.moderation.title'),
-            description: t('features.settings.groups.moderation.description'),
+            title: t('modules.cms.settings.groups.moderation.title'),
+            description: t('modules.cms.settings.groups.moderation.description'),
             icon: ShieldCheckIcon,
             color: 'red',
             keys: ['comments.security.moderation_enabled', 'comments.security.guest_captcha', 'comments.security.max_links', 'comments.security.banned_words'],

@@ -10,11 +10,11 @@
             />
           </div>
           <h1 class="text-3xl font-black tracking-tight text-foreground uppercase">
-            {{ $t('features.school.extensions.title') }}
+            {{ $t('modules.school.extensions.title') }}
           </h1>
         </div>
         <p class="text-muted-foreground text-sm font-medium italic">
-          {{ $t('features.school.extensions.subtitle') }}
+          {{ $t('modules.school.extensions.subtitle') }}
         </p>
       </div>
       <div class="flex gap-2">
@@ -44,7 +44,7 @@
             name="Library"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.extensions.tabs.library') }}
+          {{ $t('modules.school.extensions.tabs.library') }}
         </TabsTrigger>
         <TabsTrigger 
           value="library-circulations" 
@@ -54,7 +54,7 @@
             name="ArrowRightLeft"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.extensions.tabs.circulations') }}
+          {{ $t('modules.school.extensions.tabs.circulations') }}
         </TabsTrigger>
         <TabsTrigger 
           value="uks" 
@@ -64,7 +64,7 @@
             name="Stethoscope"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.extensions.tabs.uks') }}
+          {{ $t('modules.school.extensions.tabs.uks') }}
         </TabsTrigger>
         <TabsTrigger 
           value="guest" 
@@ -74,7 +74,7 @@
             name="NotebookPen"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.extensions.tabs.guest') }}
+          {{ $t('modules.school.extensions.tabs.guest') }}
         </TabsTrigger>
         <TabsTrigger 
           value="alumni" 
@@ -84,7 +84,7 @@
             name="GraduationCap"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.extensions.tabs.alumni') }}
+          {{ $t('modules.school.extensions.tabs.alumni') }}
         </TabsTrigger>
         <TabsTrigger 
           value="tracer-studies" 
@@ -94,7 +94,7 @@
             name="Search"
             class="w-4 h-4 mr-2"
           />
-          {{ $t('features.school.extensions.tabs.tracer') }}
+          {{ $t('modules.school.extensions.tabs.tracer') }}
         </TabsTrigger>
       </TabsList>
 
@@ -161,17 +161,17 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, h } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
+import api from '@/core/api/client';
 import {
   Tabs, TabsList, TabsTrigger, Card, CardContent, Button, LucideIcon, DataTable, ConfirmModal
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { 
   useVueTable, 
   getCoreRowModel, 
   createColumnHelper,
 } from '@tanstack/vue-table';
-import { useToast } from '@/composables/useToast';
-import { parseResponse } from '@/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
 
 // Components
 import LibraryBookDialog from './components/LibraryBookDialog.vue';
@@ -227,18 +227,18 @@ const actionColumn = columnHelper.display({
 });
 
 const libraryColumns = computed(() => [
-  columnHelper.accessor('title', { header: t('features.school.extensions.labels.bookTitle') }),
-  columnHelper.accessor('author', { header: t('features.school.extensions.labels.author') }),
-  columnHelper.accessor('quantity', { header: t('features.school.extensions.labels.stock') }),
+  columnHelper.accessor('title', { header: t('modules.school.extensions.labels.bookTitle') }),
+  columnHelper.accessor('author', { header: t('modules.school.extensions.labels.author') }),
+  columnHelper.accessor('quantity', { header: t('modules.school.extensions.labels.stock') }),
   actionColumn
 ]);
 
 const circulationColumns = computed(() => [
-  columnHelper.accessor('book.title', { header: t('features.school.extensions.tabs.library') }),
-  columnHelper.accessor('borrower.full_name', { header: t('features.school.extensions.labels.borrower') }),
+  columnHelper.accessor('book.title', { header: t('modules.school.extensions.tabs.library') }),
+  columnHelper.accessor('borrower.full_name', { header: t('modules.school.extensions.labels.borrower') }),
   columnHelper.accessor('status', { header: t('common.labels.status') }),
   columnHelper.accessor('due_date', { 
-    header: t('features.school.extensions.labels.dueDate'),
+    header: t('modules.school.extensions.labels.dueDate'),
     cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US')
   }),
   actionColumn
@@ -249,8 +249,8 @@ const uksColumns = computed(() => [
     header: t('common.labels.date'),
     cell: info => new Date(info.getValue()).toLocaleDateString(t('common.language') === 'id' ? 'id-ID' : 'en-US')
   }),
-  columnHelper.accessor('patient.full_name', { header: t('features.school.extensions.labels.patientName') }),
-  columnHelper.accessor('complaint', { header: t('features.school.extensions.labels.complaint') }),
+  columnHelper.accessor('patient.full_name', { header: t('modules.school.extensions.labels.patientName') }),
+  columnHelper.accessor('complaint', { header: t('modules.school.extensions.labels.complaint') }),
   actionColumn
 ]);
 
@@ -266,17 +266,17 @@ const guestColumns = computed(() => [
 
 const alumniColumns = computed(() => [
   columnHelper.accessor('student.full_name', { header: t('common.labels.name') }),
-  columnHelper.accessor('graduation_year', { header: t('features.school.extensions.labels.graduationYear') }),
-  columnHelper.accessor('current_activity', { header: t('features.school.extensions.labels.currentActivity'), cell: info => info.getValue() || '-' }),
+  columnHelper.accessor('graduation_year', { header: t('modules.school.extensions.labels.graduationYear') }),
+  columnHelper.accessor('current_activity', { header: t('modules.school.extensions.labels.currentActivity'), cell: info => info.getValue() || '-' }),
   actionColumn
 ]);
 
 const tracerColumns = computed(() => [
   columnHelper.accessor('alumni.student.full_name', { header: t('common.labels.name') }),
   columnHelper.accessor('employment_status', { header: t('common.labels.status') }),
-  columnHelper.accessor('company_name', { header: t('features.school.extensions.labels.companyName'), cell: info => info.getValue() || info.row.original.university_name || '-' }),
+  columnHelper.accessor('company_name', { header: t('modules.school.extensions.labels.companyName'), cell: info => info.getValue() || info.row.original.university_name || '-' }),
   columnHelper.accessor('is_relevant_to_major', { 
-      header: t('features.school.extensions.labels.relevantToMajor'), 
+      header: t('modules.school.extensions.labels.relevantToMajor'), 
       cell: info => info.getValue() ? t('common.labels.yes') : t('common.labels.no') 
   }),
   actionColumn
@@ -352,10 +352,10 @@ const handleSave = async (formData: any) => {
                      activeTab.value === 'tracer-studies' ? 'tracer' : activeTab.value;
         if (selectedItem.value) {
             await api.put(`/admin/extensions/${type}/${selectedItem.value.id}`, formData);
-            toast.success.action(t('features.school.extensions.messages.saveSuccess'));
+            toast.success.action(t('modules.school.extensions.messages.saveSuccess'));
         } else {
             await api.post(`/admin/extensions/${type}`, formData);
-            toast.success.action(t('features.school.extensions.messages.saveSuccess'));
+            toast.success.action(t('modules.school.extensions.messages.saveSuccess'));
         }
         
         Object.keys(dialogs.value).forEach(k => (dialogs.value as any)[k] = false);
@@ -369,8 +369,8 @@ const handleSave = async (formData: any) => {
 
 const handleDelete = async (item: any) => {
     const confirmed = await confirmModal.value.confirm({
-        title: t('features.school.extensions.messages.deleteTitle'),
-        message: t('features.school.extensions.messages.deleteConfirm'),
+        title: t('modules.school.extensions.messages.deleteTitle'),
+        message: t('modules.school.extensions.messages.deleteConfirm'),
         variant: 'destructive'
     });
 
@@ -379,7 +379,7 @@ const handleDelete = async (item: any) => {
             const type = activeTab.value === 'library-circulations' ? 'circulations' : 
                          activeTab.value === 'tracer-studies' ? 'tracer' : activeTab.value;
             await api.delete(`/admin/extensions/${type}/${item.id}`);
-            toast.success.action(t('features.school.extensions.messages.deleteSuccess'));
+            toast.success.action(t('modules.school.extensions.messages.deleteSuccess'));
             fetchData();
         } catch (e) {
             toast.error.fromResponse(e);

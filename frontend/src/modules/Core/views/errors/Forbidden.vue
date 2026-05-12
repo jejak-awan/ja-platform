@@ -11,11 +11,11 @@
     </template>
 
     <template #message>
-      {{ t('features.errors.403.title') }}
+      {{ t('common.errors.403.title') }}
     </template>
 
     <template #description>
-      {{ t('features.errors.403.message') }}
+      {{ t('common.errors.403.message') }}
     </template>
 
     <template #actions>
@@ -25,7 +25,7 @@
         @click="goToLogin"
       >
         <LogIn class="w-4 h-4 mr-2" />
-        {{ t('features.errors.403.login') }}
+        {{ t('common.errors.403.login') }}
       </button>
 
       <button
@@ -34,7 +34,7 @@
         @click="logout"
       >
         <LogIn class="w-4 h-4 mr-2" />
-        {{ t('features.errors.403.relogin') }}
+        {{ t('common.errors.403.relogin') }}
       </button>
 
       <button
@@ -42,7 +42,7 @@
         @click="goBack"
       >
         <ArrowLeft class="w-4 h-4 mr-2 text-muted-foreground" />
-        {{ t('features.errors.404.back') }}
+        {{ t('common.errors.404.back') }}
       </button>
     </template>
 
@@ -62,7 +62,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useI18n } from 'vue-i18n';
 import { SECURITY_ROUTES } from '@/config/security';
-import ErrorLayout from '@/layouts/core/ErrorLayout.vue';
+import ErrorLayout from '@/modules/Core/layouts/ErrorLayout.vue';
 import Lock from 'lucide-vue-next/dist/esm/icons/lock.js';
 import LogIn from 'lucide-vue-next/dist/esm/icons/log-in.js';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';

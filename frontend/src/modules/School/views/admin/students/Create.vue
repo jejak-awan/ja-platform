@@ -9,13 +9,13 @@
           <LucideIcon
             name="ArrowLeft"
             class="w-3 h-3"
-          /> {{ $t('common.actions.backTo') }} {{ $t('features.school.students.labels.studentData') }}
+          /> {{ $t('common.actions.backTo') }} {{ $t('modules.school.students.labels.studentData') }}
         </router-link>
         <h1 class="text-2xl font-bold text-foreground">
-          {{ $t('features.school.students.actions.add') }}
+          {{ $t('modules.school.students.actions.add') }}
         </h1>
         <p class="text-sm text-muted-foreground">
-          {{ $t('features.school.academic.messages.fillForm') }}
+          {{ $t('modules.school.academic.messages.fillForm') }}
         </p>
       </div>
     </div>
@@ -31,9 +31,9 @@
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import api from '@/services/api';
-import { LucideIcon } from '@/components/ui';
-import { useToast } from '@/composables/useToast';
+import api from '@/core/api/client';
+import { LucideIcon } from '@/shared/components/ui';
+import { useToast } from '@/shared/composables/useToast';
 import StudentForm from './components/StudentForm.vue';
 
 const { t } = useI18n();
@@ -45,7 +45,7 @@ const handleSubmit = async (formData: any) => {
   saving.value = true;
   try {
     await api.post('/admin/students', formData);
-    toast.success.action(t('features.school.academic.messages.saveSuccess'));
+    toast.success.action(t('modules.school.academic.messages.saveSuccess'));
     router.push({ name: 'students.index' });
   } catch (e) {
     toast.error.fromResponse(e);

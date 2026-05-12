@@ -4,7 +4,7 @@ namespace Modules\Core\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\School\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByUnit;
 
 /**
  * @property int $id
@@ -20,7 +20,7 @@ use Modules\School\Traits\ScopedByUnit;
 class Setting extends Model
 {
     /** @use HasFactory<\Modules\Core\Database\Factories\SettingFactory> */
-    use HasFactory, ScopedByUnit;
+    use HasFactory;
 
     /**
      * Create a new factory instance for the model.
@@ -47,12 +47,23 @@ class Setting extends Model
     // For SQLite compatibility with 'key' as reserved keyword
     protected $table = 'settings';
 
-    public static function get(string $key, mixed $default = null): mixed
+    public static function get(string $key, mixed $default = null, ?int $unitId = null): mixed
     {
-        // Prioritize unit-specific records (non-null school_unit_id) over global ones
-        $setting = static::where('key', $key)
-            ->orderByRaw('school_unit_id IS NULL ASC')
-            ->first();
+        // Prioritize specific unit records if unitId is provided, otherwise use current context
+        $levelId = $unitId ?? \Illuminate\Support\Facades\Context::get('school_unit_id');
+
+        $query = static::where('key', $key);
+
+        if ($levelId) {
+            $query->where(function($q) use ($levelId) {
+                $q->where('school_unit_id', $levelId)
+                  ->orWhereNull('school_unit_id');
+            })->orderByRaw('school_unit_id IS NULL ASC');
+        } else {
+            $query->whereNull('school_unit_id');
+        }
+
+        $setting = $query->first();
 
         if (! $setting) {
             return $default;
@@ -61,11 +72,11 @@ class Setting extends Model
         return static::castValue($setting->value, (string) $setting->type);
     }
 
-    public static function set(string $key, mixed $value, string $type = 'string', string $group = 'general'): self
+    public static function set(string $key, mixed $value, string $type = 'string', string $group = 'general', ?int $unitId = null): self
     {
         /** @var self $setting */
         $setting = static::updateOrCreate(
-            ['key' => $key, 'school_unit_id' => \Illuminate\Support\Facades\Context::get('school_unit_id')],
+            ['key' => $key, 'school_unit_id' => $unitId],
             [
                 'value' => is_array($value) ? json_encode($value) : $value,
                 'type' => $type,

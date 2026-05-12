@@ -5,13 +5,13 @@
   >
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>{{ $t('features.school.logistics.inventory.actions.updateStock') }}</DialogTitle>
+        <DialogTitle>{{ $t('modules.school.logistics.inventory.actions.updateStock') }}</DialogTitle>
         <DialogDescription>Input mutasi stok barang (Masuk/Keluar/Penyesuaian).</DialogDescription>
       </DialogHeader>
 
       <div class="grid gap-4 py-4">
         <div class="grid gap-2">
-          <Label>{{ $t('features.school.logistics.inventory.labels.item') }}</Label>
+          <Label>{{ $t('modules.school.logistics.inventory.labels.item') }}</Label>
           <Select v-model="form.item_id">
             <SelectTrigger><SelectValue :placeholder="$t('common.actions.select')" /></SelectTrigger>
             <SelectContent>
@@ -44,7 +44,7 @@
             </Select>
           </div>
           <div class="grid gap-2">
-            <Label>{{ $t('features.school.logistics.inventory.labels.quantity') }}</Label>
+            <Label>{{ $t('modules.school.logistics.inventory.labels.quantity') }}</Label>
             <Input
               v-model="form.quantity"
               type="number"
@@ -53,11 +53,11 @@
           </div>
         </div>
         <div class="grid gap-2">
-          <Label for="notes">{{ $t('common.labels.description') }} / {{ $t('features.school.logistics.inventory.labels.reference') }}</Label>
+          <Label for="notes">{{ $t('common.labels.description') }} / {{ $t('modules.school.logistics.inventory.labels.reference') }}</Label>
           <Textarea
             id="notes"
             v-model="form.notes"
-            :placeholder="$t('features.school.academic.placeholders.notesHint')"
+            :placeholder="$t('modules.school.academic.placeholders.notesHint')"
           />
         </div>
       </div>
@@ -74,7 +74,7 @@
           :disabled="!form.item_id"
           @click="handleSubmit"
         >
-          {{ $t('features.school.logistics.inventory.actions.updateStock') }}
+          {{ $t('modules.school.logistics.inventory.actions.updateStock') }}
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -87,9 +87,9 @@ import { useI18n } from 'vue-i18n';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
   Button, Input, Label, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Textarea
-} from '@/components/ui';
-import api from '@/services/api';
-import { useToast } from '@/composables/useToast';
+} from '@/shared/components/ui';
+import api from '@/core/api/client';
+import { useToast } from '@/shared/composables/useToast';
 
 defineProps<{ 
    open: boolean;
@@ -114,7 +114,7 @@ const handleSubmit = async () => {
    loading.value = true;
    try {
       await api.post('/admin/logistics/inventory/adjust', form.value);
-      toast.success.action(t('features.school.academic.messages.updateSuccess'));
+      toast.success.action(t('modules.school.academic.messages.updateSuccess'));
       emit('save');
       emit('update:open', false);
       form.value = { item_id: '', type: 'in', quantity: 1, notes: '' };

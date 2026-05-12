@@ -34,11 +34,30 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Core\Models\Media> $media
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Core\Models\ActivityLog> $activityLogs
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Core\Models\Notification> $notifications
+ *
+ * @method \Illuminate\Database\Eloquent\Relations\HasOne<\Illuminate\Database\Eloquent\Model, $this> staff()
+ * @method \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Illuminate\Database\Eloquent\Model, $this> levels()
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Modules\Core\Database\Factories\UserFactory> */
     use CoreLogsActivity, HasApiTokens, HasFactory, HasRoles, Notifiable, SoftDeletes;
+
+    /**
+     * Role ranks contributed by other modules.
+     * @var array<string, int>
+     */
+    protected static array $moduleRoleRanks = [];
+
+    /**
+     * Register role ranks for modules.
+     *
+     * @param  array<string, int>  $ranks
+     */
+    public static function registerRoleRanks(array $ranks): void
+    {
+        static::$moduleRoleRanks = array_merge(static::$moduleRoleRanks, $ranks);
+    }
 
     /**
      * Create a new factory instance for the model.
@@ -140,28 +159,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(\Modules\Core\Models\Notification::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\HR\Staff, $this>
-     */
-    public function staff(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(\Modules\School\Models\HR\Staff::class);
-    }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough<\Modules\School\Models\Institution\SchoolUnit, \Modules\School\Models\HR\Staff, $this>
-     */
-    public function levels(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
-    {
-        return $this->hasManyThrough(
-            \Modules\School\Models\Institution\SchoolUnit::class,
-            \Modules\School\Models\HR\Staff::class,
-            'user_id',
-            'id',
-            'id',
-            'school_unit_id'
-        );
-    }
 
     /**
      * Get the two factor authentication record.
@@ -260,32 +258,20 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public static function getRoleRankMap(): array
     {
-        return [
-            // Global Roles
+        $coreRanks = [
+            // Global/System Roles
             'super' => 100,
+            'system-admin' => 98,
             'admin' => 95,
             'operator' => 85,
-
-            // School Module (Contextual)
-            'admin-yayasan' => 90,
-            'operator-yayasan' => 85,
-            'admin-unit' => 80,
-            'operator-unit' => 70,
-            
-            // Staff & Academic
-            'staff' => 50,
-            'guru' => 50,
-            'wali-kelas' => 55,
-            'editor' => 60,
-            'author' => 40,
-            
-            // Personal/Public
-            'siswa' => 10,
-            'student' => 10,
-            'orang-tua' => 5,
-            'parent' => 5,
             'member' => 20,
+
+            // CMS scoped roles (prefix strategy)
+            'cms:admin' => 60,
+            'cms:editor' => 50,
         ];
+
+        return array_merge($coreRanks, static::$moduleRoleRanks);
     }
 
     /**

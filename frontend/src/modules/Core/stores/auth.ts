@@ -1,11 +1,11 @@
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { appConfig } from '@/config';
 import { defineStore } from 'pinia';
 import type { AxiosResponse } from 'axios';
 import { isCancel, isAxiosError } from 'axios';
-import api, { getCsrfCookie, type ApiRequestConfig } from '@/services/api';
-import type { User, Role, AuthState, AuthResponse, LoginCredentials, RegisterData, ResetPasswordData } from '@/types/core/auth';
-import { userModelSchema, authResponseSchema } from '@/schemas';
+import api, { getCsrfCookie, type ApiRequestConfig } from '@/core/api/client';
+import type { User, Role, AuthState, AuthResponse, LoginCredentials, RegisterData, ResetPasswordData } from '@/core/types/auth';
+import { userModelSchema, authResponseSchema } from '@/shared/schemas';
 
 interface ApiErrorResponse {
     message?: string;

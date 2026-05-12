@@ -5,8 +5,8 @@
   >
     <DialogContent class="sm:max-w-[600px] h-[80vh] flex flex-col p-0">
       <DialogHeader class="p-6 pb-0">
-        <DialogTitle>{{ $t('features.school.academic.labels.manageGroupMembers', { name: group?.name }) }}</DialogTitle>
-        <DialogDescription>{{ $t('features.school.academic.labels.manageGroupMembersDesc') }}</DialogDescription>
+        <DialogTitle>{{ $t('modules.school.academic.labels.manageGroupMembers', { name: group?.name }) }}</DialogTitle>
+        <DialogDescription>{{ $t('modules.school.academic.labels.manageGroupMembersDesc') }}</DialogDescription>
       </DialogHeader>
       
       <div class="p-6 space-y-4 flex-1 flex flex-col min-h-0">
@@ -14,7 +14,7 @@
         <div class="flex gap-2">
           <div class="flex-1">
             <Select v-model="selectedStudentId">
-              <SelectTrigger><SelectValue :placeholder="$t('features.school.academic.placeholders.selectStudentToAdd')" /></SelectTrigger>
+              <SelectTrigger><SelectValue :placeholder="$t('modules.school.academic.placeholders.selectStudentToAdd')" /></SelectTrigger>
               <SelectContent>
                 <SelectItem 
                   v-for="s in availableStudents" 
@@ -45,7 +45,7 @@
             <thead class="bg-muted/50 sticky top-0">
               <tr>
                 <th class="p-3 text-left font-medium">
-                  {{ $t('common.labels.student') }}
+                  {{ $t('modules.school.labels.student') }}
                 </th>
                 <th class="p-3 text-left font-medium">
                   NISN
@@ -78,7 +78,7 @@
                   colspan="3"
                   class="p-8 text-muted-foreground"
                 >
-                  {{ $t('features.school.academic.labels.noMembers') }}
+                  {{ $t('modules.school.academic.labels.noMembers') }}
                 </td>
               </tr>
               <tr
@@ -120,11 +120,11 @@ import { useI18n } from 'vue-i18n';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
   Button, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
-} from '@/components/ui';
+} from '@/shared/components/ui';
 import { AcademicService } from '@/modules/School/services/AcademicService';
 import { StudentService } from '@/modules/School/services/StudentService';
-import { parseResponse } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
+import { parseResponse } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
 
 const { t } = useI18n();
 const props = defineProps<{
@@ -177,7 +177,7 @@ const handleAddMember = async () => {
     adding.value = true;
     try {
         await AcademicService.addStudyGroupMember(props.group.id, selectedStudentId.value);
-        toast.success.action(t('features.school.academic.messages.studentAddSuccess'));
+        toast.success.action(t('modules.school.academic.messages.studentAddSuccess'));
         fetchData();
         selectedStudentId.value = '';
     } catch (e) {
@@ -190,7 +190,7 @@ const handleAddMember = async () => {
 const handleRemoveMember = async (studentId: number) => {
     try {
         await AcademicService.removeStudyGroupMember(props.group.id, studentId);
-        toast.success.action(t('features.school.academic.messages.studentRemoveSuccess'));
+        toast.success.action(t('modules.school.academic.messages.studentRemoveSuccess'));
         fetchData();
     } catch (e) {
         toast.error.fromResponse(e);

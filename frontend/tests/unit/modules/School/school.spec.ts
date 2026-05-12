@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 import { useSchoolStore } from '@/modules/School/stores/school';
-import api from '@/services/api';
+import api from '@/core/api/client';
 
-vi.mock('@/services/api');
+vi.mock('@/core/api/client');
 
 describe('School Store', () => {
     beforeEach(() => {

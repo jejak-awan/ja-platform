@@ -254,17 +254,17 @@
 <script setup lang="ts">
 import JanariSplitText from './components/JanariSplitText.vue'
 import BlogSidebar from './components/BlogSidebar.vue'
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, nextTick, watch, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useTheme } from '@/composables/useTheme'
+import { useTheme } from '@/shared/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
-import api from '@/services/api'
-import { useThemeMotion } from '@/composables/useThemeMotion'
+import api from '@/core/api/client'
+import { useThemeMotion } from '@/shared/composables/useThemeMotion'
 import ArrowRight from 'lucide-vue-next/dist/esm/icons/arrow-right.js';
 import Clock from 'lucide-vue-next/dist/esm/icons/clock.js';
 
-import type { Content } from '@/types/cms/cms'
+import type { Content } from '@/modules/Cms/types/cms'
 
 interface Article extends Omit<Partial<Content>, 'category'> {
     category: string;

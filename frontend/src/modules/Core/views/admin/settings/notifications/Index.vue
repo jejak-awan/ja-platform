@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <h1 class="text-3xl font-bold tracking-tight text-foreground">
-        {{ $t('features.notifications.title') }}
+        {{ $t('modules.core.notifications.title') }}
       </h1>
       <Button
         v-if="unreadCount > 0"
@@ -10,7 +10,7 @@
         @click="markAllAsRead"
       >
         <CheckCheck class="mr-2 h-4 w-4" />
-        {{ $t('features.notifications.actions.markAllRead') }}
+        {{ $t('modules.core.notifications.actions.markAllRead') }}
       </Button>
     </div>
 
@@ -22,47 +22,47 @@
             <Input
               v-model="search"
               type="text"
-              :placeholder="$t('features.notifications.filters.search')"
+              :placeholder="$t('modules.core.notifications.filters.search')"
               class="pl-9"
             />
           </div>
           <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
             <Select v-model="typeFilter">
               <SelectTrigger class="w-full sm:w-[150px]">
-                <SelectValue :placeholder="$t('features.notifications.filters.allTypes')" />
+                <SelectValue :placeholder="$t('modules.core.notifications.filters.allTypes')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">
-                  {{ $t('features.notifications.filters.allTypes') }}
+                  {{ $t('modules.core.notifications.filters.allTypes') }}
                 </SelectItem>
                 <SelectItem value="info">
-                  {{ $t('features.notifications.filters.type.info') }}
+                  {{ $t('modules.core.notifications.filters.type.info') }}
                 </SelectItem>
                 <SelectItem value="success">
-                  {{ $t('features.notifications.filters.type.success') }}
+                  {{ $t('modules.core.notifications.filters.type.success') }}
                 </SelectItem>
                 <SelectItem value="warning">
-                  {{ $t('features.notifications.filters.type.warning') }}
+                  {{ $t('modules.core.notifications.filters.type.warning') }}
                 </SelectItem>
                 <SelectItem value="error">
-                  {{ $t('features.notifications.filters.type.error') }}
+                  {{ $t('modules.core.notifications.filters.type.error') }}
                 </SelectItem>
               </SelectContent>
             </Select>
 
             <Select v-model="readFilter">
               <SelectTrigger class="w-full sm:w-[150px]">
-                <SelectValue :placeholder="$t('features.notifications.filters.readStatus.all')" />
+                <SelectValue :placeholder="$t('modules.core.notifications.filters.readStatus.all')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">
-                  {{ $t('features.notifications.filters.readStatus.all') }}
+                  {{ $t('modules.core.notifications.filters.readStatus.all') }}
                 </SelectItem>
                 <SelectItem value="unread">
-                  {{ $t('features.notifications.filters.readStatus.unread') }}
+                  {{ $t('modules.core.notifications.filters.readStatus.unread') }}
                 </SelectItem>
                 <SelectItem value="read">
-                  {{ $t('features.notifications.filters.readStatus.read') }}
+                  {{ $t('modules.core.notifications.filters.readStatus.read') }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -82,7 +82,7 @@
           class="flex flex-col items-center justify-center py-12 text-center text-muted-foreground"
         >
           <BellOff class="h-12 w-12 mb-4 opacity-20" />
-          <p>{{ $t('features.notifications.messages.empty') }}</p>
+          <p>{{ $t('modules.core.notifications.messages.empty') }}</p>
         </div>
 
         <div
@@ -107,7 +107,7 @@
                 <div class="space-y-1">
                   <div class="flex items-center gap-2 flex-wrap">
                     <Badge :variant="getBadgeVariant(notification.type)">
-                      {{ $t(`features.notifications.filters.type.${notification.type}`) }}
+                      {{ $t(`modules.core.notifications.filters.type.${notification.type}`) }}
                     </Badge>
                     <h4 class="font-semibold leading-none tracking-tight">
                       {{ notification.title }}
@@ -129,21 +129,21 @@
                 variant="ghost"
                 size="sm"
                 class="h-8 w-8 p-0"
-                :title="$t('features.notifications.actions.markRead')"
+                :title="$t('modules.core.notifications.actions.markRead')"
                 @click="markAsRead(notification)"
               >
                 <Check class="h-4 w-4" />
-                <span class="sr-only">{{ $t('features.notifications.actions.markRead') }}</span>
+                <span class="sr-only">{{ $t('modules.core.notifications.actions.markRead') }}</span>
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
                 class="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                :title="$t('features.notifications.actions.delete')"
+                :title="$t('modules.core.notifications.actions.delete')"
                 @click="deleteNotification(notification)"
               >
                 <Trash2 class="h-4 w-4" />
-                <span class="sr-only">{{ $t('features.notifications.actions.delete') }}</span>
+                <span class="sr-only">{{ $t('modules.core.notifications.actions.delete') }}</span>
               </Button>
             </div>
           </div>
@@ -154,13 +154,13 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/services/api';
-import { getResponseList } from '@/utils/responseParser';
-import { useToast } from '@/composables/useToast';
-import { useConfirm } from '@/composables/useConfirm';
+import api from '@/core/api/client';
+import { getResponseList } from '@/shared/utils/responseParser';
+import { useToast } from '@/shared/composables/useToast';
+import { useConfirm } from '@/shared/composables/useConfirm';
 import Check from 'lucide-vue-next/dist/esm/icons/check.js';
 import CheckCheck from 'lucide-vue-next/dist/esm/icons/check-check.js';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
@@ -190,7 +190,7 @@ import {
     SelectValue, 
     SelectContent, 
     SelectItem 
-} from '@/components/ui';
+} from '@/shared/components/ui';
 
 const { t } = useI18n();
 const { confirm } = useConfirm();
@@ -263,7 +263,7 @@ const fetchNotifications = async () => {
 const markAsRead = async (notification: Notification) => {
     try {
         await api.put(`/admin/core/notifications/${notification.id}/read`);
-        toast.success.default(t('features.notifications.messages.markReadSuccess'));
+        toast.success.default(t('modules.core.notifications.messages.markReadSuccess'));
         
         // Optimistic update
         const index = notifications.value.findIndex(n => n.id === notification.id);
@@ -274,41 +274,41 @@ const markAsRead = async (notification: Notification) => {
         
     } catch (error: unknown) {
         logger.error('Failed to mark notification as read:', error);
-        toast.error.default(t('features.notifications.messages.markReadFailed'));
+        toast.error.default(t('modules.core.notifications.messages.markReadFailed'));
     }
 };
 
 const markAllAsRead = async () => {
     try {
         await api.put('/admin/core/notifications/read-all');
-        toast.success.default(t('features.notifications.messages.markAllReadSuccess'));
+        toast.success.default(t('modules.core.notifications.messages.markAllReadSuccess'));
         fetchNotifications();
     } catch (error: unknown) {
         logger.error('Failed to mark all notifications as read:', error);
-        toast.error.default(t('features.notifications.messages.markAllReadFailed'));
+        toast.error.default(t('modules.core.notifications.messages.markAllReadFailed'));
     }
 };
 
 const deleteNotification = async (notification: Notification) => {
     const confirmed = await confirm({
-        title: t('features.notifications.actions.delete'),
-        message: t('features.notifications.confirm.delete'),
+        title: t('modules.core.notifications.actions.delete'),
+        message: t('modules.core.notifications.confirm.delete'),
         variant: 'danger',
-        confirmText: t('features.notifications.actions.delete'),
+        confirmText: t('modules.core.notifications.actions.delete'),
     });
 
     if (!confirmed) return;
 
     try {
         await api.delete(`/admin/core/notifications/${notification.id}`);
-        toast.success.default(t('features.notifications.messages.deleteSuccess'));
+        toast.success.default(t('modules.core.notifications.messages.deleteSuccess'));
         
         // Optimistic update
         notifications.value = notifications.value.filter(n => n.id !== notification.id);
         
     } catch (error: unknown) {
         logger.error('Failed to delete notification:', error);
-        toast.error.default(t('features.notifications.messages.deleteFailed'));
+        toast.error.default(t('modules.core.notifications.messages.deleteFailed'));
     }
 };
 

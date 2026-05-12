@@ -7,6 +7,8 @@
     "deleteStrictPlaceholder": "Type institution name exactly as shown",
     "deleteStrictTitle": "Delete Institution & All Data",
     "deleteStrictWarning": "This action is PERMANENT and will delete ALL data in the school module (Students, Staff, Academic, Facilities, LMS, etc.) associated with this institution.",
+    "saveStrictWarning": "Are you sure you want to save changes to this institution's identity? Changes will be applied immediately across the system.",
+    "saveStrictConfirmPrompt": "Please type the institution name below to confirm saving changes:",
     "empty": "No registered institution found.",
     "emptyDescription": "Start registering your educational institution (School, Foundation, or Group) to manage academic data.",
     "manageLevels": "Manage Levels",
@@ -21,5 +23,34 @@
         "undefined": "Status Not Defined"
     },
     "subtitle": "Basic information related to the primary legality of the institution.",
-    "title": "Institution Management"
+    "title": "Institution Management",
+    "settings": {
+        "institution": {
+            "title": "Institution Settings",
+            "description": "Manage your school's identity, contact information, and branding assets.",
+            "identity_section": "School Identity",
+            "identity_description": "Official name and administrative email of your institution.",
+            "branding_section": "Logo & Branding",
+            "branding_description": "Upload your school's official logo for reports and certificates.",
+            "contact_section": "Contact & Address",
+            "logo_hint": "Recommended: Square SVG or PNG with transparent background. Max 2MB.",
+            "save_success": "Institution settings updated successfully.",
+            "fields": {
+                "name": {
+                    "label": "Official School Name",
+                    "placeholder": "e.g. SMA Negeri 1 Janari"
+                },
+                "email": {
+                    "label": "Administrative Email",
+                    "placeholder": "admin{'@'}school.sch.id"
+                },
+                "phone": {
+                    "label": "Phone Number"
+                },
+                "address": {
+                    "label": "Official Address"
+                }
+            }
+        }
+    }
 }

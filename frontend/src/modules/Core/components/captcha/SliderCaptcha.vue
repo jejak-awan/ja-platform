@@ -1,7 +1,7 @@
 <template>
   <div class="captcha-slider">
     <p class="text-sm text-muted-foreground mb-2">
-      {{ t('features.auth.captcha.slideToVerify') }}
+      {{ t('modules.core.auth.captcha.slideToVerify') }}
     </p>
         
     <div 
@@ -46,7 +46,7 @@
         v-if="!dragging && !verified" 
         class="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground pointer-events-none"
       >
-        {{ t('features.auth.captcha.dragSlider') }}
+        {{ t('modules.core.auth.captcha.dragSlider') }}
       </span>
     </div>
         
@@ -60,12 +60,12 @@
 </template>
 
 <script setup lang="ts">
-import { logger } from '@/utils/logger';
+import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GripVertical from 'lucide-vue-next/dist/esm/icons/grip-vertical.js';
 import CheckCircle from 'lucide-vue-next/dist/esm/icons/circle-check.js';
-import api from '@/services/api'
+import api from '@/core/api/client'
 import type { AxiosError } from 'axios'
 
 const { t } = useI18n()
@@ -163,7 +163,7 @@ const endDrag = async (_e?: MouseEvent | TouchEvent) => {
         emit('verified', { token: token.value, answer: String(Math.round(progress.value)) })
     } catch (e: unknown) {
         // Just like MathCaptcha, we catch 422 as expected verification failure
-        error.value = t('features.auth.captcha.tryAgain')
+        error.value = t('modules.core.auth.captcha.tryAgain')
         progress.value = 0
         
         const err = e as AxiosError;
