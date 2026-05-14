@@ -17,8 +17,10 @@
 /public/hot
 /public/storage
 /storage/*.key
+/storage/installed
 /storage/pail
 /vendor
+bootstrap/cache/*.php
 Homestead.json
 Homestead.yaml
 Thumbs.db

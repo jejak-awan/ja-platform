@@ -14,6 +14,7 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+!backend/.env.example
 *.key
 *.pem
 *.sql
@@ -39,7 +40,9 @@ frontend/eslint-current.json
 frontend/lint_report_final.json
 frontend/unused_vars.txt
 frontend/public/stats.html
+backend/.phpunit.result.cache
 backend/phpunit.coverage.xml
+backend/phpstan_errors*.log
 backend/build/
 
 # Runtime/cache artifacts
@@ -49,6 +52,7 @@ backend/storage/framework/sessions/*
 backend/storage/framework/views/*
 !backend/storage/framework/sessions/.gitignore
 !backend/storage/framework/views/.gitignore
+backend/storage/installed
 backend/phpstan-output.txt
 backend/public/assets/
 backend/public/index.html
@@ -57,3 +61,4 @@ backend/public/logo.png
 backend/public/logo-bw.png
 backend/public/site.webmanifest
 backend/public/stats.html
+backend/bootstrap/cache/*.php
