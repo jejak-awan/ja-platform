@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Activity Logs (Custom)
-        Schema::create('activity_logs', function (Blueprint $table) {
+        Schema::create('core_activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->onDelete('cascade');
             $table->string('action')->index();
             $table->nullableMorphs('model');
             $table->text('description')->nullable();
@@ -25,9 +25,9 @@ return new class extends Migration
         });
 
         // 2. Security Logs
-        Schema::create('security_logs', function (Blueprint $table) {
+        Schema::create('core_security_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->onDelete('set null');
             $table->string('event_type')->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
@@ -37,10 +37,10 @@ return new class extends Migration
         });
 
         // 3. Analytics Visits
-        Schema::create('analytics_visits', function (Blueprint $table) {
+        Schema::create('core_analytics_visits', function (Blueprint $table) {
             $table->id();
             $table->string('session_id')->index();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->onDelete('set null');
             $table->string('ip_address', 45);
             $table->string('user_agent')->nullable();
             $table->string('referer')->nullable();
@@ -53,10 +53,10 @@ return new class extends Migration
         });
 
         // 4. Analytics Events
-        Schema::create('analytics_events', function (Blueprint $table) {
+        Schema::create('core_analytics_events', function (Blueprint $table) {
             $table->id();
             $table->string('session_id')->index();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->onDelete('set null');
             $table->string('event_type');
             $table->string('event_name');
             $table->string('event_category')->nullable();
@@ -69,10 +69,10 @@ return new class extends Migration
         });
 
         // 5. Analytics Sessions
-        Schema::create('analytics_sessions', function (Blueprint $table) {
+        Schema::create('core_analytics_sessions', function (Blueprint $table) {
             $table->id();
             $table->string('session_id')->unique()->index();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->onDelete('set null');
             $table->string('ip_address', 45);
             $table->string('user_agent')->nullable();
             $table->string('device_type')->nullable();
@@ -90,9 +90,9 @@ return new class extends Migration
         });
 
         // 6. Login History
-        Schema::create('login_history', function (Blueprint $table) {
+        Schema::create('core_login_history', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('core_users')->onDelete('cascade');
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->timestamp('login_at')->index();
@@ -104,7 +104,7 @@ return new class extends Migration
         });
 
         // 7. CSP Reports
-        Schema::create('csp_reports', function (Blueprint $table) {
+        Schema::create('core_csp_reports', function (Blueprint $table) {
             $table->id();
             $table->string('document_uri')->index();
             $table->string('violated_directive')->index();
@@ -120,19 +120,19 @@ return new class extends Migration
         });
 
         // 8. Slow Queries
-        Schema::create('slow_queries', function (Blueprint $table) {
+        Schema::create('core_slow_queries', function (Blueprint $table) {
             $table->id();
             $table->text('query');
             $table->json('bindings')->nullable();
             $table->integer('duration'); // milliseconds
             $table->string('route')->nullable()->index();
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->nullOnDelete();
             $table->timestamps();
             $table->index('created_at');
         });
 
         // 9. Dependency Vulnerabilities
-        Schema::create('dependency_vulnerabilities', function (Blueprint $table) {
+        Schema::create('core_dependency_vulnerabilities', function (Blueprint $table) {
             $table->id();
             $table->string('package_name')->index();
             $table->string('version');
@@ -152,14 +152,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dependency_vulnerabilities');
-        Schema::dropIfExists('slow_queries');
-        Schema::dropIfExists('csp_reports');
-        Schema::dropIfExists('login_history');
-        Schema::dropIfExists('analytics_sessions');
-        Schema::dropIfExists('analytics_events');
-        Schema::dropIfExists('analytics_visits');
-        Schema::dropIfExists('security_logs');
-        Schema::dropIfExists('activity_logs');
+        Schema::dropIfExists('core_dependency_vulnerabilities');
+        Schema::dropIfExists('core_slow_queries');
+        Schema::dropIfExists('core_csp_reports');
+        Schema::dropIfExists('core_login_history');
+        Schema::dropIfExists('core_analytics_sessions');
+        Schema::dropIfExists('core_analytics_events');
+        Schema::dropIfExists('core_analytics_visits');
+        Schema::dropIfExists('core_security_logs');
+        Schema::dropIfExists('core_activity_logs');
     }
 };

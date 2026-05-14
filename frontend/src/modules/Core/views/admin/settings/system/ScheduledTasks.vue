@@ -470,7 +470,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { debounce } from '@/shared/utils/debounce';
 
 import axios from 'axios';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { useAuthStore } from '@/modules/Core/stores/auth';

@@ -77,7 +77,7 @@
             "@php artisan test"
         ],
         "quality": [
-            "@php ./vendor/phpstan/phpstan/phpstan analyse --level=9 --memory-limit=1G"
+            "@php ./vendor/phpstan/phpstan/phpstan analyse --level=9 --memory-limit=2G"
         ],
         "security:smoke-check": [
             "@php artisan security:smoke-check --ansi"

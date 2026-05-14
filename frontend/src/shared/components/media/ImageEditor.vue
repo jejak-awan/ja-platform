@@ -416,7 +416,7 @@ import Sun from 'lucide-vue-next/dist/esm/icons/sun.js';
 import Moon from 'lucide-vue-next/dist/esm/icons/moon.js';
 import Palette from 'lucide-vue-next/dist/esm/icons/palette.js';
 import Cropper from 'cropperjs';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { Button } from '@/shared/components/ui';
 import { useToast } from '@/shared/composables/useToast';
 import type { Media } from '@/modules/Cms/types/cms';

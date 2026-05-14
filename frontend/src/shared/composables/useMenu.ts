@@ -1,6 +1,6 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, computed, watch, provide, inject, type InjectionKey, type Ref, toRaw } from 'vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse, ensureArray, parseSingleResponse } from '@/shared/utils/responseParser';
 import type { Menu, MenuItem, MenuItemDTO } from '@/modules/Cms/types/menu';
 

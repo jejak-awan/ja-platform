@@ -97,7 +97,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
 import dayjs from 'dayjs';
 

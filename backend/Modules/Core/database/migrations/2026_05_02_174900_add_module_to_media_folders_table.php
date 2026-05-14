@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('media_folders', function (Blueprint $table) {
+        Schema::table('core_media_folders', function (Blueprint $table) {
             $table->string('module')->nullable()->default('cms')->index()->after('is_shared');
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('media_folders', function (Blueprint $table) {
+        Schema::table('core_media_folders', function (Blueprint $table) {
             $table->dropColumn('module');
         });
     }

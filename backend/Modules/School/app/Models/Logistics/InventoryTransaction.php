@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Logistics;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -20,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class InventoryTransaction extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_log_inventory_transactions';
 
     protected $fillable = [

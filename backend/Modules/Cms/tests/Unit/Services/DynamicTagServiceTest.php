@@ -4,7 +4,7 @@ namespace Modules\Cms\Tests\Unit\Services;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Services\DynamicTagService;
+use Modules\Core\Services\DynamicTagService;
 use Modules\Core\Models\Setting;
 use Modules\Core\Models\User;
 use Tests\TestCase;

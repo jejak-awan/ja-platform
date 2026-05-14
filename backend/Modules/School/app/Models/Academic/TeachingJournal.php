@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property int $schedule_id
  * @property \Illuminate\Support\Carbon $date
  * @property string $topic
@@ -30,11 +30,11 @@ class TeachingJournal extends Model
     protected $table = 'sch_acad_teaching_journals';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByUnit;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',
-        'school_unit_id',
+        'workspace_id',
         'schedule_id',
         'date',
         'topic',
@@ -62,7 +62,7 @@ class TeachingJournal extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**

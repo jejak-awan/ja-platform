@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('sch_acad_years', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
+            $table->foreignId('workspace_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
             $table->string('year'); // e.g., 2023/2024
             $table->boolean('is_active')->default(false);
             $table->timestamps();
@@ -25,7 +25,7 @@ return new class extends Migration
         Schema::create('sch_acad_semesters', function (Blueprint $table) {
             $table->id();
             $table->foreignId('academic_year_id')->constrained('sch_acad_years')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
+            $table->foreignId('workspace_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
             $table->enum('type', ['ganjil', 'genap']);
             $table->boolean('is_active')->default(false);
             $table->timestamps();
@@ -35,7 +35,7 @@ return new class extends Migration
         Schema::create('sch_acad_subjects', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
+            $table->foreignId('workspace_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
             $table->string('code')->nullable();
             $table->string('name');
             $table->string('group')->nullable(); // A, B, C
@@ -47,7 +47,7 @@ return new class extends Migration
         Schema::create('sch_acad_study_groups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('department_id')->nullable()->constrained('sch_acad_departments')->onDelete('cascade');
             $table->foreignId('academic_year_id')->constrained('sch_acad_years')->onDelete('cascade');
             $table->string('name'); // e.g., X RPL 1
@@ -59,7 +59,7 @@ return new class extends Migration
         Schema::create('sch_acad_grades', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->unsignedBigInteger('student_id'); // Will link to Students
             $table->foreignId('subject_id')->constrained('sch_acad_subjects')->onDelete('cascade');
             $table->foreignId('academic_year_id')->constrained('sch_acad_years')->onDelete('cascade');
@@ -86,7 +86,7 @@ return new class extends Migration
         Schema::create('sch_acad_schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('academic_year_id')->constrained('sch_acad_years')->onDelete('cascade');
             $table->foreignId('semester_id')->constrained('sch_acad_semesters')->onDelete('cascade');
             $table->foreignId('study_group_id')->constrained('sch_acad_study_groups')->onDelete('cascade');

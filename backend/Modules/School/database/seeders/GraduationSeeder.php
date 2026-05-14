@@ -10,7 +10,7 @@ class GraduationSeeder extends Seeder
     public function run(): void
     {
         GraduationSetting::updateOrCreate(
-            ['graduation_year' => 2026],
+            ['graduation_year' => 2026, 'workspace_id' => 1],
             [
                 'is_open' => true,
                 'announcement_date' => '2026-06-15 10:00:00',

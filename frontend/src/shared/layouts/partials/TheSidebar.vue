@@ -54,18 +54,14 @@
         </div>
       </div>
 
-
-
       <!-- Navigation -->
       <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
         <!-- Dashboard (standalone) -->
         <router-link
-          :to="activeUnitId === 0 
-            ? (unitStore.activeContextType === 'system' ? { name: 'core.dashboard' } : { name: 'schools.index' }) 
-            : { name: 'schools.dashboard' }"
+          :to="dashboardLink"
           class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl group"
-          :class="[ ($route.name === 'dashboard' || $route.name === 'core.dashboard' || $route.name === 'foundation.dashboard' || $route.name === 'schools.dashboard' || $route.name === 'schools.index') ? 'bg-accent text-foreground' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' ]"
-          :title="sidebarMinimized ? (activeUnitId === 0 ? (unitStore.activeContextType === 'system' ? t('common.navigation.menu.dashboard') : t('modules.school.navigation.menu.foundationDashboard')) : t('modules.school.navigation.menu.schoolsDashboard')) : ''"
+          :class="[ isDashboardActive ? 'bg-accent text-foreground' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' ]"
+          :title="sidebarMinimized ? dashboardLabel : ''"
           @click="$emit('close')"
         >
           <component
@@ -76,11 +72,7 @@
             v-if="!sidebarMinimized"
             class="ml-3 truncate font-semibold"
           >
-            {{ 
-              activeUnitId === 0 
-                ? (unitStore.activeContextType === 'system' ? t('common.navigation.menu.dashboard') : t('modules.school.navigation.menu.foundationDashboard'))
-                : t('modules.school.navigation.menu.schoolsDashboard')
-            }}
+            {{ dashboardLabel }}
           </span>
         </router-link>
 
@@ -303,10 +295,9 @@ import { useNavigationStore } from '@/shared/stores/navigation';
 import type { NavItem } from '@/shared/utils/navigation';
 import { getIcon } from '@/shared/utils/icons';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import { useCmsStore } from '@/modules/Cms/stores/cms';
-import { useUnitStore } from '@/modules/School/stores/unit';
+import { useCoreStore } from '@/modules/Core/stores/core';
+import { useWorkspaceStore } from '@/engine/stores/workspace';
 import TheLogo from '@/shared/layouts/partials/TheLogo.vue';
-// Inline SVG icons from icons.ts - no lucide bundle needed
 import { 
     Tooltip, 
     TooltipContent, 
@@ -318,7 +309,7 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel
 } from '@/shared/components/ui';
-import type { User } from '@/core/types/auth';
+import type { User } from '@/engine/types/auth';
 
 interface SidebarSection {
     key: string;
@@ -341,26 +332,49 @@ defineEmits<{
 const { t, te } = useI18n();
 const $route = useRoute();
 const authStore = useAuthStore();
-const unitStore = useUnitStore();
-const cmsStore = useCmsStore();
+const coreStore = useCoreStore();
+const workspaceStore = useWorkspaceStore();
 const navigationStore = useNavigationStore();
 
-const activeUnitId = computed(() => Number(unitStore.activeUnitId));
+const activeUnitId = computed(() => Number(workspaceStore.activeId));
+
+// Dynamic Dashboard logic that doesn't depend on School/Cms modules directly
+const dashboardLink = computed(() => {
+    if (activeUnitId.value === 0) {
+        return workspaceStore.activeContextType === 'system' 
+            ? { name: 'core.dashboard' } 
+            : { name: 'dashboard' }; // Let the router handle the default landing
+    }
+    // Generic approach: If there's an active ID, we assume we're in a scoped dashboard
+    return { name: 'dashboard' };
+});
+
+const dashboardLabel = computed(() => {
+    if (activeUnitId.value === 0) {
+        return workspaceStore.activeContextType === 'system' 
+            ? t('common.navigation.menu.dashboard') 
+            : t('common.navigation.menu.foundationDashboard');
+    }
+    return t('common.navigation.menu.scopedDashboard');
+});
+
+const isDashboardActive = computed(() => {
+    const names = ['dashboard', 'core.dashboard', 'foundation.dashboard', 'schools.dashboard', 'schools.index'];
+    return names.includes(String($route.name));
+});
 
 const sidebarSections = computed<SidebarSection[]>(() => {
     const isGlobal = activeUnitId.value === 0;
     const isSuperAdmin = authStore.getRoleRank() >= 100;
-    const contextType = unitStore.activeContextType;
+    const contextType = workspaceStore.activeContextType;
     
+    // Core sections available in all contexts (Engine handles filtering of items)
     const sections: SidebarSection[] = [
         { key: 'school', labelKey: 'common.navigation.sections.school', icon: getIcon('package') },
         { key: 'cms', labelKey: 'common.navigation.sections.cms', icon: getIcon('layers') },
     ];
 
-    // Only show Core if Super Admin AND explicitly in System mode
-    const isSystemMode = isGlobal && contextType === 'system';
-    
-    if (isSuperAdmin && isSystemMode) {
+    if (isSuperAdmin && isGlobal && contextType === 'system') {
         sections.push({ key: 'core', labelKey: 'common.navigation.sections.core', icon: getIcon('settings') });
     }
 
@@ -421,9 +435,7 @@ const toggleSubSection = (key: string) => {
     expandedSubSections.value[key] = !expandedSubSections.value[key];
 };
 
-const isSubSectionActive = (item: NavItem) => {
-    return isItemActive(item);
-};
+const isSubSectionActive = (item: NavItem) => isItemActive(item);
 
 const isSectionActive = (key: string) => {
     const items = filteredNavigation.value[key] || [];
@@ -436,7 +448,7 @@ const filteredNavigation = computed(() => {
 
     for (const [group, items] of Object.entries(navigationStore.navigationGroups)) {
         filtered[group] = items
-            .filter(item => {
+            .filter((item: NavItem) => {
                 const role = Array.isArray(item.role) ? item.role[0] : item.role;
                 if (role && !authStore.isAtLeastRole(role)) return false;
                 if (item.permission && !authStore.hasPermission(item.permission)) return false;
@@ -446,7 +458,7 @@ const filteredNavigation = computed(() => {
                 }
                 return true;
             })
-            .map(item => {
+            .map((item: NavItem) => {
                 const filteredChildren = item.children?.filter(child => {
                     if (child.permission && !authStore.hasPermission(child.permission)) return false;
                     if (child.context && child.context !== 'both') {
@@ -456,7 +468,6 @@ const filteredNavigation = computed(() => {
                     return true;
                 });
                 
-                // Pre-calculate label to avoid template function calls
                 const lk = item.labelKey || '';
                 const resolvedLabel = lk && te(lk) ? t(lk) : (item.label || item.name || '');
                 
@@ -470,19 +481,15 @@ const filteredNavigation = computed(() => {
     return filtered;
 });
 
-const getNavigationLabel = (item: NavItem) => {
-    return item.label || '';
-};
+const getNavigationLabel = (item: NavItem) => item.label || '';
 
 const getVisitTooltip = computed(() => {
-    const siteUrl = cmsStore.siteSettings?.site_url || 'domain.com';
+    const siteUrl = coreStore.siteSettings?.site_url || 'domain.com';
     let domain = siteUrl;
     try {
         const url = new URL(siteUrl.startsWith('http') ? siteUrl : `https://${siteUrl}`);
         domain = url.hostname;
-    } catch {
-        // fallback
-    }
+    } catch { /* fallback */ }
     return t('common.navigation.visit_site', { url: domain });
 });
 
@@ -493,21 +500,15 @@ watch(expandedSections, (newVal) => {
 onMounted(() => {
     const saved = localStorage.getItem('sidebarExpandedSections');
     if (saved) {
-        try {
-            expandedSections.value = JSON.parse(saved);
-        } catch {
-            initializeExpandedSections();
-        }
+        try { expandedSections.value = JSON.parse(saved); } 
+        catch { initializeExpandedSections(); }
     } else {
         initializeExpandedSections();
     }
     autoExpandActiveSection();
 });
 
-// Watch for route changes to expand sections
-watch(() => $route.name, () => {
-    autoExpandActiveSection();
-});
+watch(() => $route.name, () => autoExpandActiveSection());
 </script>
 
 <style scoped>
@@ -515,12 +516,10 @@ watch(() => $route.name, () => {
 .context-fade-leave-active {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .context-fade-enter-from {
   opacity: 0;
   transform: translateY(4px) scale(0.98);
 }
-
 .context-fade-leave-to {
   opacity: 0;
   transform: translateY(-4px) scale(0.98);

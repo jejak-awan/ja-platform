@@ -323,7 +323,7 @@ class ContentServiceTest extends TestCase
 
         // Update with null image should untrack
         $this->service->update($content, ['featured_image' => null], $user->id);
-        $this->assertDatabaseMissing('media_usage', [
+        $this->assertDatabaseMissing('core_media_usages', [
             'model_type' => get_class($content),
             'model_id' => $content->id,
             'field_name' => 'featured_image',

@@ -1,0 +1,49 @@
+<?php
+
+namespace Modules\Core\Traits;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Context;
+
+trait ScopedByWorkspace
+{
+    public static function bootScopedByWorkspace(): void
+    {
+        static::addGlobalScope('workspace', function (Builder $builder) {
+            // Bypass scoping for Super Admin or specific administrative tasks
+            if (Context::get('bypass_unit_scope')) {
+                return;
+            }
+            
+            $workspaceId = Context::get('workspace_id');
+            $model = $builder->getModel();
+            
+            // Check if model explicitly enables shared scoping via property
+            $hasShared = property_exists($model, 'isSharedScoped') && $model->isSharedScoped;
+
+            if ($workspaceId !== null && $workspaceId !== 0) {
+                $table = $model->getTable();
+                $builder->where(function ($query) use ($table, $workspaceId, $hasShared) {
+                    $query->where("{$table}.workspace_id", $workspaceId)
+                          ->orWhereNull("{$table}.workspace_id"); // Global records are always visible
+                    
+                    if ($hasShared) {
+                        $query->orWhere("{$table}.is_shared", true);
+                    }
+                });
+            } elseif ($workspaceId === null) {
+                // If no workspace context is set (and not bypassed), only show global records
+                $builder->whereNull($model->getTable() . '.workspace_id');
+            }
+        });
+
+        static::creating(function (Model $model) {
+            $workspaceId = Context::get('workspace_id');
+            // Only auto-assign for real unit IDs (> 0). ID 0 = Global context → keep null.
+            if (is_numeric($workspaceId) && (int)$workspaceId > 0 && ! $model->getAttribute('workspace_id')) {
+                $model->setAttribute('workspace_id', (int) $workspaceId);
+            }
+        });
+    }
+}

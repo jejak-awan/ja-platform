@@ -229,7 +229,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import draggable from 'vuedraggable';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import {
     Button,

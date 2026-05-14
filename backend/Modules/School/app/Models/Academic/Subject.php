@@ -4,7 +4,7 @@ namespace Modules\School\Models\Academic;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
@@ -22,7 +22,7 @@ class Subject extends Model
     protected $table = 'sch_acad_subjects';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByUnit;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',

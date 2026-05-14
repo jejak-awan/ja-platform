@@ -31,7 +31,7 @@ class StudentService
         }
 
         if (!empty($filters['level_id'])) {
-            $query->where('school_unit_id', $filters['level_id']);
+            $query->where('workspace_id', $filters['level_id']);
         }
 
         if (!empty($filters['department_id'])) {

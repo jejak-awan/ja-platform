@@ -184,7 +184,7 @@ import { computed, ref, onMounted, watch } from 'vue';
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
 import { useRoute } from 'vue-router';
 import JanariSplitText from './components/JanariSplitText.vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import Archive from 'lucide-vue-next/dist/esm/icons/archive.js';
 
 import type { Content } from '@/modules/Cms/types/cms'

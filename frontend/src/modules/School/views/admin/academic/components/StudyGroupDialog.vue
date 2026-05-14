@@ -24,7 +24,7 @@
           <div class="space-y-2">
             <Label>{{ $t('common.labels.institutionStatus') }} <span class="text-destructive">*</span></Label>
             <Select
-              v-model="form.school_unit_id"
+              v-model="form.workspace_id"
               required
             >
               <SelectTrigger><SelectValue :placeholder="$t('modules.school.academic.placeholders.selectLevel')" /></SelectTrigger>
@@ -120,7 +120,7 @@ const staff = ref<any[]>([]);
 
 const form = ref({
   name: '',
-  school_unit_id: undefined as string | undefined,
+  workspace_id: undefined as string | undefined,
   academic_year_id: undefined as string | undefined,
   homeroom_teacher_id: undefined as string | undefined,
 });
@@ -129,13 +129,13 @@ watch(() => props.initialData, (val) => {
   if (val) {
       form.value = { 
           name: val.name,
-          school_unit_id: val.school_unit_id ? String(val.school_unit_id) : undefined,
+          workspace_id: val.workspace_id ? String(val.workspace_id) : undefined,
           academic_year_id: val.academic_year_id ? String(val.academic_year_id) : undefined,
           homeroom_teacher_id: val.homeroom_teacher_id ? String(val.homeroom_teacher_id) : 'none',
       };
   }
   else {
-      form.value = { name: '', school_unit_id: undefined, academic_year_id: undefined, homeroom_teacher_id: 'none' };
+      form.value = { name: '', workspace_id: undefined, academic_year_id: undefined, homeroom_teacher_id: 'none' };
   }
 }, { immediate: true });
 

@@ -177,7 +177,7 @@ import {
     AccordionItem,
     AccordionTrigger
 } from '@/shared/components/ui';
-import type { QueueStatus, EmailLog } from '@/core/types/settings';
+import type { QueueStatus, EmailLog } from '@/engine/types/settings';
 
 interface TestEmail {
     to: string;

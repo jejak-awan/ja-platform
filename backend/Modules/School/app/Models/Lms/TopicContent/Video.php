@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Lms\TopicContent;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Modules\School\Models\Lms\Topic;
@@ -16,6 +18,7 @@ use Modules\School\Models\Lms\Topic;
  */
 class Video extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_lms_topic_videos';
 
     protected $fillable = [

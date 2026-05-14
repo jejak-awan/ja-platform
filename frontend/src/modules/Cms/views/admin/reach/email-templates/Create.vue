@@ -188,7 +188,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
 import { emailTemplateSchema } from '@/shared/schemas';

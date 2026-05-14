@@ -377,7 +377,7 @@
 <script setup lang="ts">
 import { logger } from '@/shared/utils/logger';
 import { ref, watch, computed } from 'vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { getResponseList } from '@/shared/utils/responseParser';
 import { useToast } from '@/shared/composables/useToast';
 import Folder from 'lucide-vue-next/dist/esm/icons/folder.js';

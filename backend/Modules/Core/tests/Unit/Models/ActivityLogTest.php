@@ -17,7 +17,7 @@ class ActivityLogTest extends TestCase
         $user->name = 'New Name';
         $user->save();
 
-        $this->assertDatabaseHas('activity_logs', [
+        $this->assertDatabaseHas('core_activity_logs', [
             'action' => 'updated',
             'model_type' => User::class,
             'model_id' => $user->id,

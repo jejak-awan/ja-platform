@@ -107,7 +107,7 @@
               </div>
               <div class="space-y-2">
                 <Label for="level">{{ $t('modules.school.students.labels.level') }}</Label>
-                <Select v-model="form.school_unit_id">
+                <Select v-model="form.workspace_id">
                   <SelectTrigger><SelectValue :placeholder="$t('modules.school.labels.level')" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem
@@ -338,7 +338,7 @@ const departments = ref<any[]>([]);
 
 const form = ref<any>({
   school_id: 1,
-  school_unit_id: '',
+  workspace_id: '',
   full_name: '',
   nisn: '',
   nis: '',

@@ -244,7 +244,7 @@ import MoveToFolderModal from '@/shared/components/media/MoveToFolderModal.vue';
 import BulkUpdateAltModal from '@/shared/components/media/BulkUpdateAltModal.vue';
 
 // Composables & Sub-components
-import { useMediaManager } from '@/modules/Cms/composables/useMediaManager';
+import { useMediaManager } from '@/engine/composables/useMediaManager';
 import MediaStats from '@/shared/components/media/MediaStats.vue';
 import MediaSidebar from '@/shared/components/media/MediaSidebar.vue';
 import MediaToolbar from '@/shared/components/media/MediaToolbar.vue';
@@ -252,7 +252,7 @@ import MediaPropertiesPanel from '@/shared/components/media/MediaPropertiesPanel
 import MediaGridView from '@/shared/components/media/MediaGridView.vue';
 import MediaListView from '@/shared/components/media/MediaListView.vue';
 
-import { MediaManagerKey } from '@/core/keys';
+import { MediaManagerKey } from '@/engine/keys';
 
 const mediaManager = useMediaManager();
 const {

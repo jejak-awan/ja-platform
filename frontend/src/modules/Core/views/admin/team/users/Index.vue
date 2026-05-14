@@ -259,7 +259,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { cn } from '@/shared/utils/lib-utils';
 import { parseResponse, ensureArray, type PaginationData } from '@/shared/utils/responseParser';
 import { useToast } from '@/shared/composables/useToast';
@@ -300,7 +300,7 @@ import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
 import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
 import { useAuthStore, ROLE_RANKS } from '@/modules/Core/stores/auth';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import type { User, Role } from '@/core/types/auth';
+import type { User, Role } from '@/engine/types/auth';
 
 const { t } = useI18n();
 const toast = useToast();

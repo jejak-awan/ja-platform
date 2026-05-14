@@ -54,10 +54,10 @@ class StudioSeeder extends Seeder
 
         foreach ($categories as $cat) {
             $category = Category::withoutGlobalScopes()->withTrashed()->updateOrCreate(
-                ['slug' => $cat['slug'], 'school_unit_id' => $unitId],
+                ['slug' => $cat['slug'], 'workspace_id' => $unitId],
                 array_merge($cat, [
                     'author_id' => $admin->id,
-                    'school_unit_id' => $unitId
+                    'workspace_id' => $unitId
                 ])
             );
             if ($category->trashed()) {
@@ -79,12 +79,12 @@ class StudioSeeder extends Seeder
         $pageMap = [];
         foreach ($pages as $p) {
             $page = Content::withoutGlobalScopes()->updateOrCreate(
-                ['slug' => $p['slug'], 'school_unit_id' => $unitId],
+                ['slug' => $p['slug'], 'workspace_id' => $unitId],
                 array_merge($p, [
                     'type' => 'page',
                     'status' => 'published',
                     'author_id' => $admin->id,
-                    'school_unit_id' => $unitId,
+                    'workspace_id' => $unitId,
                     'published_at' => now(),
                 ])
             );
@@ -94,7 +94,7 @@ class StudioSeeder extends Seeder
         // 3. Header Menu
         $mainMenu = Menu::withoutGlobalScopes()->withTrashed()
             ->where('location', 'header')
-            ->where('school_unit_id', $unitId)
+            ->where('workspace_id', $unitId)
             ->first();
 
         if (! $mainMenu) {
@@ -103,7 +103,7 @@ class StudioSeeder extends Seeder
                 'slug' => 'menu-header-primary',
                 'location' => 'header',
                 'is_active' => true,
-                'school_unit_id' => $unitId,
+                'workspace_id' => $unitId,
             ]);
         } elseif ($mainMenu->trashed()) {
             $mainMenu->restore();
@@ -171,13 +171,13 @@ class StudioSeeder extends Seeder
         $this->seedMenuItems($mainMenu, $menuItems);
 
         // 4. Default public contact form
-        $contactForm = Form::withoutGlobalScopes()->withTrashed()->updateOrCreate(['slug' => 'contact', 'school_unit_id' => $unitId], [
+        $contactForm = Form::withoutGlobalScopes()->withTrashed()->updateOrCreate(['slug' => 'contact', 'workspace_id' => $unitId], [
             'name' => 'Formulir Kontak Publik',
             'description' => 'Formulir untuk pertanyaan umum, PPDB, dan kerja sama.',
             'success_message' => 'Terima kasih! Pesan Anda telah terkirim.',
             'is_active' => true,
             'author_id' => $admin->id,
-            'school_unit_id' => $unitId,
+            'workspace_id' => $unitId,
             'settings' => [
                 'email_notifications' => true,
                 'notification_email' => $admin->email,

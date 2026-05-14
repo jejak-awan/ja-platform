@@ -261,7 +261,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
 
 import QuickActions from '@/modules/Core/components/admin/QuickActions.vue';
@@ -299,7 +299,7 @@ import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
 import Trophy from 'lucide-vue-next/dist/esm/icons/trophy.js';
 
 
-import type { CreatorDashboardData, TrafficDataPoint, StatusDataPoint, TopContentItem } from '@/core/types/dashboard';
+import type { CreatorDashboardData, TrafficDataPoint, StatusDataPoint, TopContentItem } from '@/engine/types/dashboard';
 
 const { t } = useI18n();
 const authStore = useAuthStore();

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 import { useContentStore } from '@/modules/Cms/stores/content';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { logger } from '@/shared/utils/logger';
 
-vi.mock('@/core/api/client');
+vi.mock('@/engine/api/client');
 vi.mock('@/shared/utils/logger');
 
 describe('Content Store', () => {

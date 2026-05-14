@@ -260,7 +260,7 @@ import {
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
   Input, Label
 } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse } from '@/shared/utils/responseParser';
 import { useToast } from '@/shared/composables/useToast';
 

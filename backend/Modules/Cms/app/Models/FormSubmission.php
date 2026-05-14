@@ -2,6 +2,8 @@
 
 namespace Modules\Cms\Models;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,7 +29,7 @@ use Modules\Core\Models\User;
 class FormSubmission extends Model
 {
     /** @use HasFactory<\Modules\Cms\Database\Factories\FormSubmissionFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, ScopedByWorkspace;
 
     /**
      * Create a new factory instance for the model.

@@ -1,6 +1,6 @@
 import { logger } from '@/shared/utils/logger';
 import { defineStore } from 'pinia';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
 
 export interface SiteSettings {

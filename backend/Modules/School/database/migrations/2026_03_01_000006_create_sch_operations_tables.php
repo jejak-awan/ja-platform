@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('sch_ops_visitors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->string('name');
             $table->string('phone')->nullable();
             $table->string('organization')->nullable();
@@ -69,7 +69,7 @@ return new class extends Migration
         Schema::create('sch_ops_osis_activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
             $table->date('date');

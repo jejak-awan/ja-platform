@@ -109,7 +109,7 @@ class WebhookTest extends TestCase
             'event' => 'content.created',
         ]);
 
-        $this->assertDatabaseHas('webhooks', [
+        $this->assertDatabaseHas('core_webhooks', [
             'name' => 'Content Created Webhook',
             'url' => 'https://example.com/webhook',
             'event' => 'content.created',
@@ -187,7 +187,7 @@ class WebhookTest extends TestCase
             'is_active' => false,
         ]);
 
-        $this->assertDatabaseHas('webhooks', [
+        $this->assertDatabaseHas('core_webhooks', [
             'id' => $webhook->id,
             'name' => 'Updated Webhook',
             'url' => 'https://updated.com/webhook',
@@ -206,7 +206,7 @@ class WebhookTest extends TestCase
 
         TestHelpers::assertApiSuccess($response);
 
-        $this->assertDatabaseMissing('webhooks', [
+        $this->assertDatabaseMissing('core_webhooks', [
             'id' => $webhook->id,
         ]);
     }

@@ -427,7 +427,7 @@ import {
     TooltipProvider,
     TooltipTrigger
 } from '@/shared/components/ui';
-import { MediaManagerKey } from '@/core/keys';
+import { MediaManagerKey } from '@/engine/keys';
 
 useI18n();
 const showFilters = ref(false);

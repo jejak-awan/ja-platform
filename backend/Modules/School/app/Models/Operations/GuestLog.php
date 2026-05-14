@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Operations;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,7 +24,7 @@ class GuestLog extends Model
     protected $table = 'sch_ops_guest_logs';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',

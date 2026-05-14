@@ -257,7 +257,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import FieldGroupModal from '@/modules/Cms/components/custom-fields/FieldGroupModal.vue';

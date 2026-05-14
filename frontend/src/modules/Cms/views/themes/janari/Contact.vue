@@ -561,7 +561,7 @@ import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue'
 import { useRouter } from 'vue-router'
 import { useTheme } from '@/shared/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
-import api, { getCsrfCookie } from '@/core/api/client'
+import api, { getCsrfCookie } from '@/engine/api/client'
 import { useCmsStore } from '@/modules/Cms/stores/cms'
 import {
     Card,

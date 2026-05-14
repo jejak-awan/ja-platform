@@ -9,12 +9,12 @@ use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\Academic\Department;
 use Modules\School\Models\HR\Staff;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property int|null $department_id
  * @property int $academic_year_id
  * @property int|null $homeroom_teacher_id
@@ -33,11 +33,11 @@ class StudyGroup extends Model
     protected $table = 'sch_acad_study_groups';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByUnit;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',
-        'school_unit_id',
+        'workspace_id',
         'department_id',
         'academic_year_id',
         'homeroom_teacher_id',
@@ -57,7 +57,7 @@ class StudyGroup extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**

@@ -124,7 +124,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
 import ChevronRight from 'lucide-vue-next/dist/esm/icons/chevron-right.js';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
 const { t } = useI18n();
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';

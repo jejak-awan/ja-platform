@@ -531,7 +531,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { useAuthStore, ROLE_RANKS } from '@/modules/Core/stores/auth';
@@ -576,7 +576,7 @@ import FolderOpen from 'lucide-vue-next/dist/esm/icons/folder-open.js';
 import CheckSquare from 'lucide-vue-next/dist/esm/icons/square-check.js';
 import Copy from 'lucide-vue-next/dist/esm/icons/copy.js';
 
-import type { Role, Permission } from '@/core/types/auth';
+import type { Role, Permission } from '@/engine/types/auth';
 
 const router = useRouter();
 const route = useRoute();

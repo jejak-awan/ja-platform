@@ -59,14 +59,14 @@ class SecurityNotificationServiceTest extends TestCase
     {
         Cache::flush();
         // Rename table to guarantee PDOException in fetch
-        \Illuminate\Support\Facades\Schema::rename('settings', 'settings_temp');
+        \Illuminate\Support\Facades\Schema::rename('core_settings', 'settings_temp');
 
         try {
             $service = new SecurityNotificationService;
             $service->send('test_fail', 'T', 'M');
             $this->assertTrue(true);
         } finally {
-            \Illuminate\Support\Facades\Schema::rename('settings_temp', 'settings');
+            \Illuminate\Support\Facades\Schema::rename('settings_temp', 'core_settings');
         }
     }
 

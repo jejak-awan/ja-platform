@@ -1,6 +1,6 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useTheme } from '@/shared/composables/useTheme'
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import { logger } from '@/shared/utils/logger'
 import { THEME_DATA_BINDINGS_KEY, isPlainSettingsObject } from '@/modules/Cms/constants/themeBindings'
 

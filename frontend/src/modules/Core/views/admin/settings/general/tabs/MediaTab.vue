@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import axios from 'axios'
 import SettingGroup from '@/modules/Core/components/settings/SettingGroup.vue'
 import SettingField from '@/modules/Core/components/settings/SettingField.vue'
 import { Button } from '@/shared/components/ui';
 import { useConfirm } from '@/shared/composables/useConfirm'
-import type { SettingValue } from '@/core/types/settings'
+import type { SettingValue } from '@/engine/types/settings'
 
 interface Setting {
     id: number | string;

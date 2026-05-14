@@ -74,7 +74,7 @@ import { useI18n } from 'vue-i18n';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import toast from '@/shared/services/legacy-toast';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';

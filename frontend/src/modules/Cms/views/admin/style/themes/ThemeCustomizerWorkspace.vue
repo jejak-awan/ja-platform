@@ -420,7 +420,7 @@ import Sparkles from 'lucide-vue-next/dist/esm/icons/sparkles.js';
 import Award from 'lucide-vue-next/dist/esm/icons/award.js';
 import Briefcase from 'lucide-vue-next/dist/esm/icons/briefcase.js';
 
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import toast from '@/shared/services/legacy-toast'
 import type { ThemeSection } from '@/modules/Cms/types/theme'
 import type { Theme } from '@/modules/Cms/types/theme'

@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Lms\TopicContent;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +22,7 @@ use Modules\School\Models\Lms\QuizAttempt;
  */
 class Quiz extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_lms_topic_quizzes';
 
     protected $fillable = [

@@ -473,7 +473,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import { Badge, Button, Card, Checkbox, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, DataTable } from '@/shared/components/ui';

@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import MediaUpload from '@/modules/Cms/components/media/MediaUpload.vue';
 import { createTestingPinia } from '@pinia/testing';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { createI18n } from 'vue-i18n';
 
-vi.mock('@/core/api/client', () => ({
+vi.mock('@/engine/api/client', () => ({
     default: {
         post: vi.fn()
     }

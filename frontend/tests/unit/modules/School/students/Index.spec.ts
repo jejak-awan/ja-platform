@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import Index from '@/modules/School/views/admin/students/Index.vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Mock services
-vi.mock('@/core/api/client');
+vi.mock('@/engine/api/client');
 vi.mock('@/shared/composables/useToast', () => ({
     useToast: () => ({
         success: { action: vi.fn() },

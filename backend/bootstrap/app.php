@@ -30,7 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn (Request $request) => ($request->is('api/*') || $request->expectsJson()) ? null : '/');
 
         $middleware->web(prepend: [
-            \Modules\School\app\Http\Middleware\IdentifySchoolUnit::class,
+            \Modules\Core\Http\Middleware\IdentifyWorkspace::class,
             \Modules\Core\Http\Middleware\VerifyConnection::class,
             \Modules\Core\Http\Middleware\BlockMaliciousBots::class,
             \Modules\Core\Http\Middleware\WafMiddleware::class,
@@ -44,7 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->api(prepend: [
-            \Modules\School\app\Http\Middleware\IdentifySchoolUnit::class,
+            \Modules\Core\Http\Middleware\IdentifyWorkspace::class,
             \Modules\Core\Http\Middleware\VerifyConnection::class,
             \Modules\Core\Http\Middleware\BlockMaliciousBots::class,
             \Modules\Core\Http\Middleware\WafMiddleware::class,
@@ -60,7 +60,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Modules\Core\Http\Middleware\CheckPermission::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-            'bypass_unit_scope' => \Modules\School\app\Http\Middleware\BypassUnitScopeForAdmin::class,
+            'bypass_unit_scope' => \Modules\Core\Http\Middleware\BypassWorkspaceScope::class,
         ]);
 
         // Exempt analytics and security verification from CSRF protection

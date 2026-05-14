@@ -110,8 +110,8 @@ import {
     ContextMenuSeparator 
 } from '@/shared/components/ui';
 import { useToast } from '@/shared/composables/useToast';
-import api from '@/core/api/client';
-import { FileManagerKey } from '@/core/keys';
+import api from '@/engine/api/client';
+import { FileManagerKey } from '@/engine/keys';
 import type { FileItem, FolderItem } from '@/modules/Cms/types/file-manager';
 
 defineProps<{

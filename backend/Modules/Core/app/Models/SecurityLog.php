@@ -21,6 +21,9 @@ use Modules\Core\Helpers\IpHelper;
  */
 class SecurityLog extends Model
 {
+    protected $table = 'core_security_logs';
+
+
     protected $fillable = [
         'user_id',
         'event_type',

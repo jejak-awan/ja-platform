@@ -259,7 +259,7 @@ import { ref, onMounted, computed, nextTick, watch, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useTheme } from '@/shared/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import { useThemeMotion } from '@/shared/composables/useThemeMotion'
 import ArrowRight from 'lucide-vue-next/dist/esm/icons/arrow-right.js';
 import Clock from 'lucide-vue-next/dist/esm/icons/clock.js';

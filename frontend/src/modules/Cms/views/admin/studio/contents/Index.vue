@@ -19,7 +19,7 @@ import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { useToast } from '@/shared/composables/useToast';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse, parseSingleResponse, ensureArray, type PaginationData } from '@/shared/utils/responseParser';
 import { cn } from '@/shared/utils/lib-utils';
 import type { Content } from '@/modules/Cms/types/cms';

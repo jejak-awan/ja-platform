@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class CspReport extends Model
 {
+    protected $table = 'core_csp_reports';
+
+
     protected $fillable = [
         'document_uri',
         'violated_directive',

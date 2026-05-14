@@ -170,7 +170,7 @@ import { useRouter } from 'vue-router'
 import { logger } from '@/shared/utils/logger'
 import { useTheme } from '@/shared/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import { useThemeMotion } from '@/shared/composables/useThemeMotion'
 
 interface TeamMember {

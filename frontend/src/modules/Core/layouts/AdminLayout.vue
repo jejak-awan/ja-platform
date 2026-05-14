@@ -68,19 +68,13 @@ import TheSidebar from '@/shared/layouts/partials/TheSidebar.vue';
 import TheNavbar from '@/shared/layouts/partials/TheNavbar.vue';
 import { useCoreStore } from '@/modules/Core/stores/core';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import { useUnitStore } from '@/modules/School/stores/unit';
-import { useSchoolStore } from '@/modules/School/stores/school';
 
 const router = useRouter();
 const route = useRoute();
 const coreStore = useCoreStore();
 const authStore = useAuthStore();
-const unitStore = useUnitStore();
-const schoolStore = useSchoolStore();
 const { t, te } = useI18n();
 const { sidebarMinimized, sidebarOpen, toggleSidebarMinimize, toggleSidebarOpen, closeSidebar } = useSidebar();
-
-// Use shared mounted state for synchronized transitions
 
 // Resize Throttling
 const resizing = ref(false);
@@ -100,12 +94,9 @@ const handleResize = () => {
 const pageTitle = ref('Janari App');
 
 watch([() => route?.name, () => coreStore.appIdentity?.app_name, () => route?.meta], () => {
-    // Stability guard
     if (!route) return;
-
     const appName = coreStore.appIdentity?.app_name || 'Janari App';
     
-    // 1. Route Meta Title
     if (route.meta?.title) {
         const titleKey = route.meta.title as string;
         const title = te(titleKey) ? t(titleKey) : titleKey;
@@ -113,7 +104,6 @@ watch([() => route?.name, () => coreStore.appIdentity?.app_name, () => route?.me
         return;
     }
     
-    // 2. Auto-generated from Route Name
     if (route.name) {
         const name = String(route.name);
         const segments = name.replace(/-([a-z])/g, (_, g1) => (g1 || '').toUpperCase()).split('.');
@@ -137,21 +127,8 @@ watch([() => route?.name, () => coreStore.appIdentity?.app_name, () => route?.me
 
 onMounted(async () => {
     window.addEventListener('resize', handleResize);
-    
-    // Fire all fetches in parallel for faster load
-    const promises: Promise<unknown>[] = [coreStore.fetchAppIdentity()];
-    
-    if (authStore.isAuthenticated) {
-        promises.push(
-            schoolStore.fetchSchool().then(() => {
-                if (schoolStore.currentSchool?.id) {
-                    return unitStore.fetchUnits(schoolStore.currentSchool.id, true);
-                }
-            })
-        );
-    }
-    
-    await Promise.allSettled(promises);
+    // Only fetch core identity. Module-specific data should be fetched by the modules themselves.
+    await coreStore.fetchAppIdentity();
 });
 
 onUnmounted(() => {
@@ -168,6 +145,4 @@ const handleLogout = async () => {
     await authStore.logout();
     router.push({ name: 'login' });
 };
-
 </script>
-

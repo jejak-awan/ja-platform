@@ -26,8 +26,7 @@ class LmsSeeder extends Seeder
 
         // 1. Create a Sample Course
         $course = Course::updateOrCreate(
-            ['slug' => 'dasar-pemrograman-web'],
-            [
+            ['slug' => 'dasar-pemrograman-web',
                 'school_id' => $school->id,
                 'title' => 'Dasar-Dasar Pemrograman Web',
                 'summary' => 'Belajar HTML, CSS, dan JavaScript dari nol.',

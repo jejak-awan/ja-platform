@@ -93,7 +93,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useCoreStore } from '@/modules/Core/stores/core';
 import { useToast } from '@/shared/composables/useToast';
 import type { MediaConstraints, Media } from '@/modules/Cms/types/cms';

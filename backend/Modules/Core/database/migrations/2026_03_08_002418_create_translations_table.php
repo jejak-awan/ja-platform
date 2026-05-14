@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('translations', function (Blueprint $table) {
+        Schema::create('core_translations', function (Blueprint $table) {
             $table->id();
             $table->morphs('translatable');
             $table->string('language_code', 10)->index();
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['translatable_type', 'translatable_id', 'language_code', 'field'], 'translation_unique');
-            $table->foreign('language_code')->references('code')->on('languages')->onDelete('cascade');
+            $table->foreign('language_code')->references('code')->on('core_languages')->onDelete('cascade');
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('translations');
+        Schema::dropIfExists('core_translations');
     }
 };

@@ -36,7 +36,6 @@ Route::prefix('v1')->group(function () {
         'auth:sanctum',
         'throttle:admin',
         'bypass_unit_scope',
-        \Modules\School\Http\Middleware\UnitContextMiddleware::class,
     ])->group(function () {
         Route::middleware('permission:view schools|manage schools|create schools|edit schools|delete schools')->group(function () {
             Route::get('school/stats', [SchoolController::class, 'stats']);

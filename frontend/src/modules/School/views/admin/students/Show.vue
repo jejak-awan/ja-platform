@@ -315,7 +315,7 @@ import {
   Avatar, AvatarFallback,
   Button, LucideIcon
 } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
 const { t } = useI18n();
 const route = useRoute();

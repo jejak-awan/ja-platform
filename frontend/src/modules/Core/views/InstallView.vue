@@ -228,10 +228,10 @@ import {
   DropdownMenuItem, DropdownMenuTrigger 
 } from '@/shared/components/ui';
 import { Loader2, CheckCircle2, XCircle, ArrowRight, Languages } from 'lucide-vue-next';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useI18n } from 'vue-i18n';
-import { getAvailableLocales, getLocale, setLocale } from '@/core/i18n';
+import { getAvailableLocales, getLocale, setLocale } from '@/engine/i18n';
 
 const { t } = useI18n();
 const availableLocales = getAvailableLocales();

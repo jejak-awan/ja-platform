@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Operations;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,7 +27,7 @@ class LibraryCirculation extends Model
     protected $table = 'sch_ops_library_circulations';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'library_book_id',

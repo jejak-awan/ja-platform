@@ -59,7 +59,7 @@ class StudentSampleSeeder extends Seeder
                     ['nisn' => $nisn],
                     [
                         'school_id' => $schoolId,
-                        'school_unit_id' => $levelId,
+                        'workspace_id' => $levelId,
                         'user_id' => $user->id,
                         'status' => 'active',
                         'nis' => $nis,

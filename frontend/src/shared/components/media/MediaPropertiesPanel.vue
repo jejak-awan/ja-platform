@@ -239,7 +239,7 @@ import { ref, inject, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from '@/shared/composables/useToast';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import FileIcon from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import VideoIcon from 'lucide-vue-next/dist/esm/icons/video.js';
@@ -247,7 +247,7 @@ import Download from 'lucide-vue-next/dist/esm/icons/download.js';
 import Link from 'lucide-vue-next/dist/esm/icons/link.js';
 import Info from 'lucide-vue-next/dist/esm/icons/info.js';
 import { Button, Input, Checkbox } from '@/shared/components/ui';
-import { MediaManagerKey } from '@/core/keys';
+import { MediaManagerKey } from '@/engine/keys';
 
 
 const { t } = useI18n();

@@ -204,7 +204,7 @@ import {
   Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter,
   Button, LucideIcon, Badge
 } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse } from '@/shared/utils/responseParser';
 import dayjs from 'dayjs';
 

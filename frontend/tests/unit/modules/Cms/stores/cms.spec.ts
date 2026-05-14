@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
-vi.mock('@/core/api/client', () => ({
+vi.mock('@/engine/api/client', () => ({
     default: {
         get: vi.fn(),
         put: vi.fn(),

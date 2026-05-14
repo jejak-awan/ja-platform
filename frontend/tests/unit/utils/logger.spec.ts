@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import loggerPlugin, { logger } from '@/shared/utils/logger';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
-vi.mock('@/core/api/client', () => ({
+vi.mock('@/engine/api/client', () => ({
     default: {
         post: vi.fn().mockResolvedValue({}),
     }

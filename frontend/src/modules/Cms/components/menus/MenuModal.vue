@@ -71,7 +71,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted } from 'vue';
 
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import Dialog from '@/shared/components/ui/Dialog.vue';
 import DialogContent from '@/shared/components/ui/DialogContent.vue';
 import DialogHeader from '@/shared/components/ui/DialogHeader.vue';

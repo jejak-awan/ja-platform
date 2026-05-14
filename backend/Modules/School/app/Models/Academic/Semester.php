@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Academic;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,11 +21,11 @@ class Semester extends Model
     protected $table = 'sch_acad_semesters';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'academic_year_id',
-        'school_unit_id',
+        'workspace_id',
         'type',
         'is_active',
     ];

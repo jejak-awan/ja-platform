@@ -20,11 +20,10 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Modules\Core\Models\User|null $user
  * @property-read \Illuminate\Database\Eloquent\Model|null $model
- * @property int $count
  */
 class ActivityLog extends Model
 {
-    protected $table = 'activity_logs';
+    protected $table = 'core_activity_logs';
 
     protected $fillable = [
         'user_id',
@@ -66,9 +65,6 @@ class ActivityLog extends Model
     {
         $user = $user ?? auth()->user();
 
-        /** @var string $ip */
-        $ip = \Modules\Core\Helpers\IpHelper::getClientIp(request());
-
         return self::create([
             'user_id' => $user?->id,
             'action' => $action,
@@ -76,7 +72,7 @@ class ActivityLog extends Model
             'model_id' => $model?->getKey(),
             'description' => $description ?? self::generateDescription($action, $model),
             'changes' => $changes,
-            'ip_address' => $ip,
+            'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
         ]);
     }
@@ -89,9 +85,6 @@ class ActivityLog extends Model
             'created' => "Created {$modelName}",
             'updated' => "Updated {$modelName}",
             'deleted' => "Deleted {$modelName}",
-            'viewed' => "Viewed {$modelName}",
-            'published' => "Published {$modelName}",
-            'unpublished' => "Unpublished {$modelName}",
             default => ucfirst($action)." {$modelName}",
         };
     }

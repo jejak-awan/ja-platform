@@ -21,6 +21,7 @@ use Modules\Core\Console\Commands\ClearRateLimit;
 use Modules\Core\Console\Commands\CreateAdminUser;
 use Modules\Core\Console\Commands\CreateBackup;
 use Modules\Core\Console\Commands\GenerateMediaThumbnails;
+use Modules\Core\Console\Commands\CleanupAnalytics;
 
 use Modules\Core\Console\Commands\SecurityAuditDependencies;
 use Modules\Core\Console\Commands\SecurityCleanupLogs;
@@ -86,7 +87,7 @@ class CoreServiceProvider extends ServiceProvider
             $argvString = is_array($argv) ? implode(' ', $argv) : (is_string($argv) ? $argv : '');
             
             if (! $this->app->runningInConsole() || str_contains($argvString, 'serve')) {
-                if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                if (\Illuminate\Support\Facades\Schema::hasTable('core_settings')) {
                     $enableCache = \Modules\Core\Models\Setting::get('enable_cache', true, null);
                     $cacheDriver = \Modules\Core\Models\Setting::get('cache_driver', 'database', null);
                     $cacheTtl = \Modules\Core\Models\Setting::get('cache_ttl', 3600, null);
@@ -98,7 +99,7 @@ class CoreServiceProvider extends ServiceProvider
                     }
 
                     // Apply Redis credentials if driver is redis or failover
-                    if (in_array($cacheDriver, ['redis', 'failover']) && \Illuminate\Support\Facades\Schema::hasTable('redis_settings')) {
+                    if (in_array($cacheDriver, ['redis', 'failover']) && \Illuminate\Support\Facades\Schema::hasTable('core_redis_settings')) {
                         $redisHost = \Modules\Core\Models\RedisSetting::getValue('redis_host', '127.0.0.1');
                         $redisPort = \Modules\Core\Models\RedisSetting::getValue('redis_port', 6379);
                         $redisPass = \Modules\Core\Models\RedisSetting::getValue('redis_password');
@@ -122,7 +123,7 @@ class CoreServiceProvider extends ServiceProvider
                     }
 
                     // Apply Session and Queue settings if enabled
-                    if (\Illuminate\Support\Facades\Schema::hasTable('redis_settings')) {
+                    if (\Illuminate\Support\Facades\Schema::hasTable('core_redis_settings')) {
                         $sessionEnabled = \Modules\Core\Models\RedisSetting::getValue('session_enabled', false);
                         $queueEnabled = \Modules\Core\Models\RedisSetting::getValue('queue_enabled', false);
 
@@ -183,6 +184,7 @@ class CoreServiceProvider extends ServiceProvider
 
             UpdateCloudflareIps::class,
             WarmCache::class,
+            CleanupAnalytics::class,
         ]);
     }
 

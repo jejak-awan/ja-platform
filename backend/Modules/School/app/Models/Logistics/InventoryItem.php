@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Logistics;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -24,6 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class InventoryItem extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_log_inventory_items';
 
     use SoftDeletes;

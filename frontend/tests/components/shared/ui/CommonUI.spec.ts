@@ -10,7 +10,7 @@ import Spinner from "@/shared/components/ui/Spinner.vue";
 describe('Common UI Components', () => {
     it('Input renders and handles modelValue', async () => {
         const wrapper = mount(Input, {
-            props: { modelValue: 'test', 'onUpdate:modelValue': (e: any) => wrapper.setProps({ modelValue: e }) }
+            props: { modelValue: 'test', 'onUpdate:modelValue': (e: any) => (wrapper.setProps as any)({ modelValue: e }) }
         })
         const input = wrapper.find('input')
         expect(input.element.value).toBe('test')

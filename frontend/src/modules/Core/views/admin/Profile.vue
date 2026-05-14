@@ -309,7 +309,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, defineAsyncComponent, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import toast from '@/shared/services/legacy-toast';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { isAxiosError } from 'axios';

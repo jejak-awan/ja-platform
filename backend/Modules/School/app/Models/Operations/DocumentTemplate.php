@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Operations;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Modules\School\Models\Institution\School;
 
@@ -20,6 +22,7 @@ use Modules\School\Models\Institution\School;
  */
 class DocumentTemplate extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_doc_templates';
 
     protected $fillable = [

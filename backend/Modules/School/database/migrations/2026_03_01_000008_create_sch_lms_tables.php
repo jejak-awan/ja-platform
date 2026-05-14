@@ -14,6 +14,7 @@ return new class extends Migration
         // 1. Courses
         Schema::create('sch_lms_courses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
             $table->string('title');
             $table->string('slug')->unique();
@@ -39,6 +40,7 @@ return new class extends Migration
         // 2. Sections & Lessons
         Schema::create('sch_lms_sections', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('course_id')->constrained('sch_lms_courses')->onDelete('cascade');
             $table->string('title');
             $table->integer('order')->default(0);
@@ -60,6 +62,7 @@ return new class extends Migration
         // 3. Topics (Content)
         Schema::create('sch_lms_topics', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('lesson_id')->constrained('sch_lms_lessons')->onDelete('cascade');
             $table->string('title');
             $table->integer('order')->default(0);
@@ -97,6 +100,7 @@ return new class extends Migration
         // 5. Enrollments & Progress
         Schema::create('sch_lms_enrollments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('course_id')->constrained('sch_lms_courses')->onDelete('cascade');
             $table->unsignedBigInteger('student_id'); // Student ID
             $table->timestamp('enrolled_at')->useCurrent();
@@ -117,6 +121,7 @@ return new class extends Migration
         // 5. Quizzes
         Schema::create('sch_lms_quizzes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('topic_id')->constrained('sch_lms_topics')->onDelete('cascade');
             $table->string('title');
             $table->integer('time_limit')->nullable(); // in minutes

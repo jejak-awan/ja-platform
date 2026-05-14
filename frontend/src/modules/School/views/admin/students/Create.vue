@@ -31,7 +31,7 @@
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { LucideIcon } from '@/shared/components/ui';
 import { useToast } from '@/shared/composables/useToast';
 import StudentForm from './components/StudentForm.vue';

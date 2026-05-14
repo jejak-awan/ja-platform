@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class SystemHealthCheck extends Command
 {
-    protected $signature = 'cms:health-check';
+    protected $signature = 'core:health-check';
 
     protected $description = 'Check system health status';
 

@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import CaptchaWrapper from '@/modules/Core/components/captcha/CaptchaWrapper.vue';

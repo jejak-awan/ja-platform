@@ -90,7 +90,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { Card, CardContent, CardHeader, CardTitle, Button, LucideIcon } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { parseResponse } from '@/shared/utils/responseParser';
 

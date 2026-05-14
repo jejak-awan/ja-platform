@@ -20,7 +20,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class FileIntegrityBaseline extends Model
 {
-    protected $table = 'file_integrity_baselines';
+    protected $table = 'core_file_integrity_baselines';
+
+
 
     protected $fillable = [
         'file_path',

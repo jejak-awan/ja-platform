@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Logistics;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,7 +24,7 @@ class SchoolAsset extends Model
     protected $table = 'sch_log_assets';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'room_id',

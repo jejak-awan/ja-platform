@@ -97,7 +97,7 @@ import CheckCircle from 'lucide-vue-next/dist/esm/icons/circle-check.js';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Check from 'lucide-vue-next/dist/esm/icons/check.js';
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import type { AxiosError } from 'axios'
 import { Button } from '@/shared/components/ui'
 

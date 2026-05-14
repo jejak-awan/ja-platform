@@ -24,6 +24,9 @@ use Illuminate\Support\Facades\Auth;
  */
 class AnalyticsVisit extends Model
 {
+    protected $table = 'core_analytics_visits';
+
+
     /** @use HasFactory<\Modules\Core\Database\Factories\AnalyticsVisitFactory> */
     use HasFactory;
 
@@ -35,7 +38,6 @@ class AnalyticsVisit extends Model
         return \Modules\Core\Database\Factories\AnalyticsVisitFactory::new();
     }
 
-    protected $table = 'analytics_visits';
 
     public $timestamps = true; // DB has created_at/updated_at
 

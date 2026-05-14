@@ -639,7 +639,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { ArrowRight } from 'lucide-vue-next'
-import type { CacheStatus } from '@/core/types/settings'
+import type { CacheStatus } from '@/engine/types/settings'
 
 interface Setting {
     id: number | string;

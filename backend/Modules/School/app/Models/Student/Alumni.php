@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Student;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 class Alumni extends Model
 {
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $table = 'sch_std_alumni';
 

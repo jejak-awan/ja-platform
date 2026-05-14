@@ -3,8 +3,8 @@ import { appConfig } from '@/config';
 import { defineStore } from 'pinia';
 import type { AxiosResponse } from 'axios';
 import { isCancel, isAxiosError } from 'axios';
-import api, { getCsrfCookie, type ApiRequestConfig } from '@/core/api/client';
-import type { User, Role, AuthState, AuthResponse, LoginCredentials, RegisterData, ResetPasswordData } from '@/core/types/auth';
+import api, { getCsrfCookie, type ApiRequestConfig } from '@/engine/api/client';
+import type { User, Role, AuthState, AuthResponse, LoginCredentials, RegisterData, ResetPasswordData } from '@/engine/types/auth';
 import { userModelSchema, authResponseSchema } from '@/shared/schemas';
 
 interface ApiErrorResponse {

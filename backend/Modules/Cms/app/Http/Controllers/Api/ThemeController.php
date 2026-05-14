@@ -24,11 +24,11 @@ class ThemeController extends BaseApiController
     {
         $typeRaw = $request->input('type', 'frontend');
         $type = is_string($typeRaw) ? $typeRaw : 'frontend';
-        $levelId = \Illuminate\Support\Facades\Context::get('school_unit_id');
+        $levelId = \Illuminate\Support\Facades\Context::get('workspace_id');
         $themes = Theme::withoutGlobalScope('school_unit')
             ->where(function ($query) use ($levelId) {
-                $query->where('school_unit_id', $levelId)
-                    ->orWhereNull('school_unit_id');
+                $query->where('workspace_id', $levelId)
+                    ->orWhereNull('workspace_id');
             })
             ->ofType($type)
             ->latest()

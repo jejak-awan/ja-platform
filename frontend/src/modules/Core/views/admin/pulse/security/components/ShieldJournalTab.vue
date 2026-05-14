@@ -81,7 +81,7 @@
 <script setup lang="ts">
 import { ref, h } from 'vue';
 import { useI18n } from 'vue-i18n';
-// import api from '@/core/api/client';
+// import api from '@/engine/api/client';
 // import { useToast } from '@/shared/composables/useToast';
 import { useVueTable, getCoreRowModel, getSortedRowModel, createColumnHelper, type SortingState } from '@tanstack/vue-table';
 import {
@@ -94,7 +94,7 @@ import ShieldAlertIcon from 'lucide-vue-next/dist/esm/icons/shield-alert.js';
 import ShieldBanIcon from 'lucide-vue-next/dist/esm/icons/shield-ban.js';
 import BotIcon from 'lucide-vue-next/dist/esm/icons/bot.js';
 
-import type { ShieldLog, ShieldStats, PaginationInfo } from '@/core/types';
+import type { ShieldLog, ShieldStats, PaginationInfo } from '@/engine/types';
 
 
 const props = defineProps<{

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('submission_count')->default(0);
             $table->integer('view_count')->default(0);
             $table->integer('start_count')->default(0);
-            $table->foreignId('author_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('author_id')->nullable()->constrained('core_users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -52,7 +52,7 @@ return new class extends Migration
         Schema::create('form_submissions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('form_id')->constrained('forms')->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->onDelete('set null');
             $table->json('data');
             $table->string('ip_address', 45)->nullable();
             $table->string('user_agent')->nullable();

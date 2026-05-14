@@ -197,7 +197,7 @@ import {
   Card, CardHeader, CardTitle, CardContent, CardDescription,
   Button, LucideIcon, SkeletonLoader
 } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse } from '@/shared/utils/responseParser';
 
 const loading = ref(true);

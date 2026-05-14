@@ -123,7 +123,7 @@ class AuthenticationTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('users', [
+        $this->assertDatabaseHas('core_users', [
             'email' => $userData['email'],
         ]);
     }

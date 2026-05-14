@@ -281,7 +281,7 @@
 import { ref, computed, h, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVueTable, getCoreRowModel, getSortedRowModel, createColumnHelper, type SortingState } from '@tanstack/vue-table';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { logger } from '@/shared/utils/logger';
 import {
     Card, CardHeader, CardTitle, CardDescription, CardContent,

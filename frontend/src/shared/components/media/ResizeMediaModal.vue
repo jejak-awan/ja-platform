@@ -103,7 +103,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { Button } from '@/shared/components/ui';
 import type { Media } from '@/modules/Cms/types/cms';

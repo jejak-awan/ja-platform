@@ -232,7 +232,7 @@ import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Github from 'lucide-vue-next/dist/esm/icons/github.js';
 import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
 import EyeOff from 'lucide-vue-next/dist/esm/icons/eye-off.js';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import AuthLayout from '../../components/auth/AuthLayout.vue';
 
 
@@ -245,7 +245,7 @@ import {
 } from '@/shared/components/ui';
 import CaptchaWrapper from '@/modules/Core/components/captcha/CaptchaWrapper.vue';
 import type { CaptchaPayload } from '@/modules/Core/components/captcha/CaptchaWrapper.vue';
-import type { RegisterData } from '@/core/types/auth';
+import type { RegisterData } from '@/engine/types/auth';
 
 const router = useRouter();
 const { t } = useI18n();

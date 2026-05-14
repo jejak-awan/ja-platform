@@ -180,7 +180,7 @@ import {
     SelectTrigger, 
     SelectValue 
 } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useCoreStore } from '@/modules/Core/stores/core';
 

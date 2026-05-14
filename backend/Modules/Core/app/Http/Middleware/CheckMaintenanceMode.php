@@ -28,8 +28,7 @@ class CheckMaintenanceMode
             return $next($request);
         }
 
-        // 2. Check for scheduling (End Time) - Do this BEFORE bypass checks
-        // so the system actually goes back online for everyone when time hits.
+        // 2. Check for scheduling (End Time)
         $endTimeRaw = Setting::get('maintenance_end_time');
         $endTime = is_string($endTimeRaw) ? $endTimeRaw : null;
 
@@ -43,7 +42,7 @@ class CheckMaintenanceMode
             } catch (\Exception $e) { }
         }
 
-        // 3. Allow access to specific bypass routes (Infrastructure, Auth, APIs)
+        // 3. Allow access to specific bypass routes
         if ($this->shouldBypassMaintenance($request)) {
             return $next($request);
         }
@@ -62,27 +61,17 @@ class CheckMaintenanceMode
     }
 
     /**
-     * Check if the current user is an authorized admin.
+     * Check if the current user is an authorized admin using role ranks.
      */
     protected function isAuthorizedAdmin(): bool
     {
         try {
-            // Check both guards
             foreach (['sanctum', 'web'] as $guard) {
                 $user = \Illuminate\Support\Facades\Auth::guard($guard)->user();
                 if ($user instanceof \Modules\Core\Models\User) {
-                    // Core Admin roles
-                    if ($user->hasAnyRole(['admin', 'super'])) {
+                    // Bypass maintenance if role rank is 90 or higher (System Admins)
+                    if ($user->getRoleRank() >= 90) {
                         return true;
-                    }
-                    
-                    // School Admin roles (starts with admin- or is admin-unit)
-                    /** @var iterable<string> $roles */
-                    $roles = $user->getRoleNames();
-                    foreach ($roles as $role) {
-                        if ($role === 'admin-unit' || str_starts_with($role, 'admin-')) {
-                            return true;
-                        }
                     }
                 }
             }

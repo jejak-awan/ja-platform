@@ -35,7 +35,7 @@ class SubjectSeeder extends Seeder
 
         foreach ($subjects as $subject) {
             Subject::updateOrCreate(
-                ['school_id' => $schoolId, 'school_unit_id' => $unitId, 'code' => $subject['code']],
+                ['school_id' => $schoolId, 'workspace_id' => $unitId, 'code' => $subject['code']],
                 $subject
             );
         }

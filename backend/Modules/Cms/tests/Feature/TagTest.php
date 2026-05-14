@@ -63,7 +63,7 @@ class TagTest extends TestCase
         $response = $this->postJson('/api/v1/admin/cms/tags', $tagData);
 
         TestHelpers::assertApiSuccess($response, 201);
-        $this->assertDatabaseHas('tags', [
+        $this->assertDatabaseHas('core_tags', [
             'name' => $tagData['name'],
             'slug' => $tagData['slug'],
         ]);
@@ -137,7 +137,7 @@ class TagTest extends TestCase
         ]);
 
         TestHelpers::assertApiSuccess($response);
-        $this->assertDatabaseHas('tags', [
+        $this->assertDatabaseHas('core_tags', [
             'id' => $tag->id,
             'name' => 'Updated Tag Name',
         ]);
@@ -156,7 +156,7 @@ class TagTest extends TestCase
         $response = $this->deleteJson("/api/v1/admin/cms/tags/{$tag->id}");
 
         TestHelpers::assertApiSuccess($response);
-        $this->assertSoftDeleted('tags', [
+        $this->assertSoftDeleted('core_tags', [
             'id' => $tag->id,
         ]);
     }

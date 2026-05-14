@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Student;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,7 +27,7 @@ class TracerStudy extends Model
     protected $table = 'sch_std_tracer_studies';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'alumni_id',

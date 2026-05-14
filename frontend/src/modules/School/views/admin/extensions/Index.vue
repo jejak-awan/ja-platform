@@ -161,7 +161,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, h } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import {
   Tabs, TabsList, TabsTrigger, Card, CardContent, Button, LucideIcon, DataTable, ConfirmModal
 } from '@/shared/components/ui';

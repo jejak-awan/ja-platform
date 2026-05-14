@@ -1,7 +1,7 @@
 export interface Student {
     id: number;
     school_id: number;
-    school_unit_id?: number;
+    workspace_id?: number;
     user_id?: number;
     nisn: string;
     nis: string;

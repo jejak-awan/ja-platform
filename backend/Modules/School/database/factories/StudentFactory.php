@@ -18,7 +18,7 @@ class StudentFactory extends Factory
 
         return [
             'school_id' => School::factory(),
-            'school_unit_id' => null,
+            'workspace_id' => null,
             'department_id' => null,
             'user_id' => null,
             'status' => 'active',
@@ -63,7 +63,7 @@ class StudentFactory extends Factory
     public function forLevel(SchoolUnit $level): static
     {
         return $this->state(fn() => [
-            'school_unit_id' => $level->id,
+            'workspace_id' => $level->id,
             'school_id' => $level->school_id,
         ]);
     }

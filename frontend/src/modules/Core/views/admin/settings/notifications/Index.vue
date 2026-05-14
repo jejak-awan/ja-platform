@@ -157,7 +157,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { getResponseList } from '@/shared/utils/responseParser';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';

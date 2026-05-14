@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
                 ['user_id' => $admin->id],
                 [
                     'school_id' => $primarySchool->id,
-                    'school_unit_id' => $primaryUnit->id,
+                    'workspace_id' => $primaryUnit->id,
                     'full_name' => $admin->name,
                     'ptk_type' => 'Kepala Sekolah',
                     'employment_status' => 'PNS',

@@ -428,7 +428,7 @@
 import { ref, computed, onMounted, h } from 'vue';
 import { useRoute } from 'vue-router';
 import { logger } from '@/shared/utils/logger';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { apiConfig } from '@/config';
 import { parseSingleResponse } from '@/shared/utils/responseParser';
 import { 

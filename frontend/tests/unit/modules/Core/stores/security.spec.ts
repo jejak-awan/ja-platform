@@ -4,7 +4,7 @@ import { useSecurityStore } from '@/modules/Core/stores/security';
 import axios from 'axios';
 
 vi.mock('axios');
-vi.mock('@/core/api/client', () => ({
+vi.mock('@/engine/api/client', () => ({
     default: {
         interceptors: {
             request: { use: vi.fn() },

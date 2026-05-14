@@ -142,7 +142,7 @@ import {
 import FileContextMenu from './FileContextMenu.vue';
 import type { FolderItem } from '@/modules/Cms/types/file-manager';
 import FolderTreeItem from './FolderTreeItem.vue';
-import { FileManagerKey } from '@/core/keys';
+import { FileManagerKey } from '@/engine/keys';
 
 const {
     currentPath,

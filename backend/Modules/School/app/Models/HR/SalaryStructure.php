@@ -4,12 +4,12 @@ namespace Modules\School\Models\HR;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property int $staff_id
  * @property string $base_salary
  * @property string $transport_allowance
@@ -26,11 +26,11 @@ class SalaryStructure extends Model
     protected $table = 'sch_hr_salary_structures';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByUnit;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',
-        'school_unit_id',
+        'workspace_id',
         'staff_id',
         'base_salary',
         'transport_allowance',
@@ -58,7 +58,7 @@ class SalaryStructure extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'workspace_id');
     }
 
     /**

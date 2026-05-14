@@ -166,7 +166,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
   Input, Label, Textarea
 } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse } from '@/shared/utils/responseParser';
 import { useToast } from '@/shared/composables/useToast';
 import { useSchoolStore } from '@/modules/School/stores/school';
@@ -222,7 +222,7 @@ const submitJournal = async () => {
    try {
       await api.post('/school/admin/academic/journals', {
          school_id: schoolStore.currentSchool?.id,
-         school_unit_id: unitStore.activeUnitId,
+         workspace_id: unitStore.activeUnitId,
          schedule_id: activeSchedule.value.id,
          date: journalForm.value.date,
          topic: journalForm.value.topic,

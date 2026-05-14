@@ -19,7 +19,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class MediaUsage extends Model
 {
-    protected $table = 'media_usage';
+    protected $table = 'core_media_usages';
+
+
 
     protected $fillable = [
         'media_id',

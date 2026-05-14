@@ -3,12 +3,12 @@
 namespace Modules\School\Models\Operations;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property string $name
  * @property string|null $phone
  * @property string|null $institution
@@ -29,11 +29,11 @@ class Visitor extends Model
 {
     protected $table = 'sch_ops_visitors';
 
-    use ScopedByUnit;
+    use ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',
-        'school_unit_id',
+        'workspace_id',
         'name',
         'phone',
         'institution',
@@ -65,6 +65,6 @@ class Visitor extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'workspace_id');
     }
 }

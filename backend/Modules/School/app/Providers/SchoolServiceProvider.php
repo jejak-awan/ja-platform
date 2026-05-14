@@ -65,7 +65,7 @@ class SchoolServiceProvider extends ServiceProvider
                 'user_id',
                 'id',
                 'id',
-                'school_unit_id'
+                'workspace_id'
             );
         });
     }
@@ -114,6 +114,10 @@ class SchoolServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+
+        // Bind Workspace Resolver
+        $this->app->bind(\Modules\Core\Contracts\WorkspaceResolver::class, \Modules\School\Services\SchoolWorkspaceResolver::class);
+        $this->app->alias(\Modules\Core\Contracts\WorkspaceResolver::class, 'workspace.resolver');
     }
 
     /**

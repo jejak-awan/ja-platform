@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Logistics;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class HostelAllocation extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_log_hostel_allocations';
 
     use SoftDeletes;

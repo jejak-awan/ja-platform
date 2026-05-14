@@ -400,7 +400,7 @@ import {
     createColumnHelper,
     FlexRender
 } from '@tanstack/vue-table';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { apiConfig } from '@/config';
 import { parseSingleResponse } from '@/shared/utils/responseParser';
 import { useToast } from '@/shared/composables/useToast';

@@ -1,11 +1,11 @@
 import type { Category, Tag } from './taxonomy';
 import type { Media } from './media';
 import type { Menu, MenuItem } from './menu';
-import type { SiteSettings } from '@/core/types/settings';
+import type { SiteSettings } from '@/engine/types/settings';
 
 export * from './taxonomy';
 export * from './media';
-export * from '@/core/types/settings';
+export * from '@/engine/types/settings';
 export type { Menu, MenuItem };
 
 export interface ContentForm {

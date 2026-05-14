@@ -184,7 +184,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
   Button, Label, Input, Textarea, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem
 } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse } from '@/shared/utils/responseParser';
 import type { Student } from '@/modules/School/types';
 

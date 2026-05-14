@@ -1,4 +1,4 @@
-import '@/core/legacy-bootstrap';
+import '@/engine/legacy-bootstrap';
 import '../../../css/admin.css';
 import '../../../css/editor.css';
 import '../../../css/base.css';
@@ -8,7 +8,7 @@ import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { createHead } from '@unhead/vue/client';
 import lazyLoad from '@/shared/utils/directives/lazyLoad';
-import i18n from '@/core/i18n';
+import i18n from '@/engine/i18n';
 import { attemptChunkRecoveryReload, isChunkLoadError } from '@/shared/utils/chunkRecovery';
 
 // Initialization Fail-Safe Logger
@@ -35,9 +35,9 @@ const initLayout = () => {
 };
 initLayout();
 
-import { bootstrapApp } from '@/core/bootstrap';
+import { bootstrapApp } from '@/engine/bootstrap';
 
-import { resolveIsAdminEntrypoint } from '@/core/router/entrypoint';
+import { resolveIsAdminEntrypoint } from '@/engine/router/entrypoint';
 
 async function bootstrap() {
     const pathname = window.location.pathname;
@@ -73,7 +73,7 @@ async function bootstrap() {
     const { registry } = await bootstrapApp();
 
     // 2. Import Admin Router
-    const { default: router } = await import('@/core/router/admin');
+    const { default: router } = await import('@/engine/router/admin');
     app.use(router);
 
     // 3. Sync Navigation & Dashboards

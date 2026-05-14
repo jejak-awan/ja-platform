@@ -116,7 +116,7 @@
 <script setup lang="ts">
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { Spinner, Pagination } from '@/shared/components/ui';
 
 interface LoginEntry {

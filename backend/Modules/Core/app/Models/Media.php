@@ -5,7 +5,7 @@ namespace Modules\Core\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 use Illuminate\Support\Facades\Storage;
 use Modules\Core\Helpers\CdnHelper;
 use Modules\Core\Models\User;
@@ -39,8 +39,13 @@ use Modules\Core\Models\User;
  */
 class Media extends Model
 {
+    protected $table = 'core_media';
+
+
     /** @use HasFactory<\Modules\Core\Database\Factories\MediaFactory> */
-    use HasFactory, SoftDeletes, ScopedByUnit;
+    use HasFactory, SoftDeletes, ScopedByWorkspace;
+
+
     
     /**
      * Enable shared record visibility in unit scoping.
@@ -57,7 +62,7 @@ class Media extends Model
     }
 
     protected $fillable = [
-        'school_unit_id',
+        'workspace_id',
         'module',
         'name',
         'file_name',
@@ -110,7 +115,7 @@ class Media extends Model
      */
     public function tags(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'media_tag');
+        return $this->belongsToMany(Tag::class, 'core_media_tag');
     }
 
     /**

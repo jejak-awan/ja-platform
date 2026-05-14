@@ -268,7 +268,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseSingleResponse } from '@/shared/utils/responseParser';
 import CheckCircle from 'lucide-vue-next/dist/esm/icons/circle-check.js';
 import AlertTriangle from 'lucide-vue-next/dist/esm/icons/triangle-alert.js';

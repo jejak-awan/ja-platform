@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 use Modules\Core\Models\User;
 
 /**
@@ -29,8 +29,13 @@ use Modules\Core\Models\User;
  */
 class MediaFolder extends Model
 {
+    protected $table = 'core_media_folders';
+
+
     /** @use HasFactory<\Modules\Core\Database\Factories\MediaFolderFactory> */
-    use HasFactory, SoftDeletes, ScopedByUnit;
+    use HasFactory, SoftDeletes, ScopedByWorkspace;
+
+
     
     /**
      * Enable shared record visibility in unit scoping.
@@ -47,7 +52,7 @@ class MediaFolder extends Model
     }
 
     protected $fillable = [
-        'school_unit_id',
+        'workspace_id',
         'name',
         'slug',
         'parent_id',

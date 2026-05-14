@@ -98,7 +98,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { SkeletonLoader, LucideIcon, Badge } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse } from '@/shared/utils/responseParser';
 
 const loading = ref(true);

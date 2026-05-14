@@ -229,7 +229,7 @@ import { ref, onMounted } from 'vue';
 import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import {
     Card,
     CardHeader,

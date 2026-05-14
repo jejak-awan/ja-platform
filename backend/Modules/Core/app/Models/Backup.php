@@ -18,6 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Backup extends Model
 {
+    protected $table = 'core_backups';
+
+
     protected $fillable = [
         'name',
         'type',

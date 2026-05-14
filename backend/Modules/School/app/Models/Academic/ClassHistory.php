@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Academic;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -19,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ClassHistory extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_acad_class_histories';
 
     protected $fillable = [

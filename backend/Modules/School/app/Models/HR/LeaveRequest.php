@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\HR;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,7 +29,7 @@ class LeaveRequest extends Model
     protected $table = 'sch_hr_leaves';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',

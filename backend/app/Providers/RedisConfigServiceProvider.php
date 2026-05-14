@@ -24,13 +24,13 @@ class RedisConfigServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Only load if redis_settings table exists and we're not in console during migration
+        // Only load if core_redis_settings table exists and we're not in console during migration
         if ($this->app->runningInConsole() && $this->isMigrating()) {
             return;
         }
 
         try {
-            if (! Schema::hasTable('redis_settings')) {
+            if (! Schema::hasTable('core_redis_settings')) {
                 return;
             }
 
@@ -124,7 +124,7 @@ class RedisConfigServiceProvider extends ServiceProvider
         // Sync global cache driver with Performance settings (settings table).
         // PerformanceTab writes `cache_driver` there, but runtime config reads cache.default.
         try {
-            if (Schema::hasTable('settings')) {
+            if (Schema::hasTable('core_settings')) {
                 $selectedDriver = \Modules\Core\Models\Setting::get('cache_driver');
                 if (is_string($selectedDriver) && $selectedDriver !== '') {
                     // `redis_failover` is UI alias; safest runtime fallback is Redis.

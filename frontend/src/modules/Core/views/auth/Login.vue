@@ -276,7 +276,7 @@ import { ref, reactive, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import { useRouter, useRoute, type RouteLocationRaw, type LocationQueryRaw } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import { useWorkspaceStore } from '@/core/stores/workspace';
+import { useWorkspaceStore } from '@/engine/stores/workspace';
 import { useCoreStore } from '@/modules/Core/stores/core';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
 import { loginSchema } from '@/shared/schemas/auth';
@@ -284,7 +284,7 @@ import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Github from 'lucide-vue-next/dist/esm/icons/github.js';
 import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
 import EyeOff from 'lucide-vue-next/dist/esm/icons/eye-off.js';
-import { resetLockdown } from '@/core/api/client';
+import { resetLockdown } from '@/engine/api/client';
 import AuthLayout from '../../components/auth/AuthLayout.vue';
 
 
@@ -296,7 +296,7 @@ import {
 } from '@/shared/components/ui';
 import CaptchaWrapper from '@/modules/Core/components/captcha/CaptchaWrapper.vue';
 import type { CaptchaPayload } from '@/modules/Core/components/captcha/CaptchaWrapper.vue';
-import type { LoginCredentials } from '@/core/types/auth';
+import type { LoginCredentials } from '@/engine/types/auth';
 
 const router = useRouter();
 const route = useRoute();
@@ -498,8 +498,8 @@ const completeLogin = async () => {
         workspaceStore.setSystemContext();
         logger.info('[Login] Set system context for super admin');
     } else {
-        sessionStorage.removeItem('active_level_id');
-        sessionStorage.removeItem('active_context_type');
+        sessionStorage.removeItem('active_workspace_id');
+        sessionStorage.removeItem('active_workspace_context');
     }
 
     message.value = t('modules.core.auth.messages.success');

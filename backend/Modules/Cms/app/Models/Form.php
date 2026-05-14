@@ -2,17 +2,19 @@
 
 namespace Modules\Cms\Models;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Core\Models\User;
-use Modules\Core\Traits\ScopedByUnit;
+
 
 /**
  * @property int $id
- * @property int|null $school_unit_id
+ * @property int|null $workspace_id
  * @property int|null $author_id
  * @property string $name
  * @property string $slug
@@ -35,7 +37,7 @@ use Modules\Core\Traits\ScopedByUnit;
 class Form extends Model
 {
     /** @use HasFactory<\Modules\Cms\Database\Factories\FormFactory> */
-    use HasFactory, SoftDeletes, ScopedByUnit;
+    use HasFactory, SoftDeletes, ScopedByWorkspace;
 
     /**
      * Create a new factory instance for the model.
@@ -46,7 +48,7 @@ class Form extends Model
     }
 
     protected $fillable = [
-        'school_unit_id',
+        'workspace_id',
         'author_id',
         'name',
         'slug',

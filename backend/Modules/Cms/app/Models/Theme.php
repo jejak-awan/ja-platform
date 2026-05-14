@@ -2,16 +2,18 @@
 
 namespace Modules\Cms\Models;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+ 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+use Modules\Cms\Support\ThemeViews;
 use Illuminate\Support\Facades\Cache;
 use Modules\Cms\Services\ThemeCacheService;
-use Modules\Cms\Support\ThemeViews;
-use Modules\Core\Traits\ScopedByUnit;
 
 /**
  * @property int $id
- * @property int|null $school_unit_id
+ * @property int|null $workspace_id
  * @property string $name
  * @property string $slug
  * @property string $type
@@ -41,7 +43,7 @@ use Modules\Core\Traits\ScopedByUnit;
 class Theme extends Model
 {
     /** @use HasFactory<\Modules\Cms\Database\Factories\ThemeFactory> */
-    use HasFactory, ScopedByUnit;
+    use HasFactory, ScopedByWorkspace;
 
     /**
      * Create a new factory instance for the model.
@@ -52,7 +54,7 @@ class Theme extends Model
     }
 
     protected $fillable = [
-        'school_unit_id',
+        'workspace_id',
         'name',
         'slug',
         'type',
@@ -99,12 +101,12 @@ class Theme extends Model
      */
     public static function getActiveTheme(string $type = 'frontend'): ?self
     {
-        $levelId = \Illuminate\Support\Facades\Context::get('school_unit_id');
+        $workspaceId = \Illuminate\Support\Facades\Context::get('workspace_id');
 
-        // 1. Try to find unit-specific active theme
-        if ($levelId) {
-            $activeTheme = self::withoutGlobalScope('school_unit')
-                ->where('school_unit_id', $levelId)
+        // 1. Try to find workspace-specific active theme
+        if ($workspaceId) {
+            $activeTheme = self::withoutGlobalScope('workspace')
+                ->where('workspace_id', $workspaceId)
                 ->where('is_active', true)
                 ->where('type', $type)
                 ->where('status', 'active')
@@ -116,8 +118,8 @@ class Theme extends Model
         }
 
         // 2. Fallback to global active theme
-        $activeTheme = self::withoutGlobalScope('school_unit')
-            ->whereNull('school_unit_id')
+        $activeTheme = self::withoutGlobalScope('workspace')
+            ->whereNull('workspace_id')
             ->where('is_active', true)
             ->where('type', $type)
             ->where('status', 'active')
@@ -125,15 +127,15 @@ class Theme extends Model
 
         // 3. Auto-activate default global theme if still none
         if (! $activeTheme) {
-            $defaultTheme = self::withoutGlobalScope('school_unit')
-                ->whereNull('school_unit_id')
+            $defaultTheme = self::withoutGlobalScope('workspace')
+                ->whereNull('workspace_id')
                 ->where('type', $type)
                 ->where('slug', 'default')
                 ->first();
 
             if (! $defaultTheme) {
-                $defaultTheme = self::withoutGlobalScope('school_unit')
-                    ->whereNull('school_unit_id')
+                $defaultTheme = self::withoutGlobalScope('workspace')
+                    ->whereNull('workspace_id')
                     ->where('type', $type)
                     ->orderBy('id')
                     ->first();

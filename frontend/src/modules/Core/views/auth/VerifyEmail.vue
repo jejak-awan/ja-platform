@@ -80,7 +80,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
 import CheckCircle from 'lucide-vue-next/dist/esm/icons/circle-check.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';

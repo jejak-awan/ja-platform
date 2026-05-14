@@ -36,8 +36,8 @@ return new class extends Migration
         foreach ($tables as $tableName) {
             if (!Schema::hasTable($tableName)) continue;
             
-            if (Schema::hasColumn($tableName, 'school_unit_id')) {
-                $column = 'school_unit_id';
+            if (Schema::hasColumn($tableName, 'workspace_id')) {
+                $column = 'workspace_id';
                 $parentTable = 'sch_ins_levels';
                 $constraintName = "{$tableName}_{$column}_foreign";
 

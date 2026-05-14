@@ -4,12 +4,12 @@ namespace Modules\School\Models\Admission;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property int $academic_year_id
  * @property string $registration_number
  * @property string $full_name
@@ -35,11 +35,11 @@ class Enrollment extends Model
     protected $table = 'sch_adm_enrollments';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByUnit;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',
-        'school_unit_id',
+        'workspace_id',
         'academic_year_id',
         'registration_number',
         'full_name',
@@ -71,7 +71,7 @@ class Enrollment extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'workspace_id');
     }
 
     /**

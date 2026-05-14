@@ -1,5 +1,5 @@
 import { logger } from '@/shared/utils/logger';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
 /**
  * Analytics tracking composable for frontend event tracking

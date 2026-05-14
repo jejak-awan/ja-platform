@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->foreignId('locked_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('locked_by')->nullable()->constrained('core_users')->onDelete('set null');
             $table->timestamp('locked_at')->nullable();
         });
 
         Schema::table('comments', function (Blueprint $table) {
-            $table->foreignId('locked_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('locked_by')->nullable()->constrained('core_users')->onDelete('set null');
             $table->timestamp('locked_at')->nullable();
         });
     }

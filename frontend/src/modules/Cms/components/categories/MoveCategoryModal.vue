@@ -85,7 +85,7 @@ import {
 import { useToast } from '@/shared/composables/useToast';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
 import { moveCategorySchema } from '@/shared/schemas';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
 interface Category {
     id: number | string;

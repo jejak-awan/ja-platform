@@ -189,7 +189,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { parseSingleResponse } from '@/shared/utils/responseParser';
 import { 

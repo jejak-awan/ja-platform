@@ -2,12 +2,14 @@
 
 namespace Modules\Cms\Models;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
-use Modules\Core\Traits\ScopedByUnit;
+
 
 /**
  * @property int $id
- * @property int|null $school_unit_id
+ * @property int|null $workspace_id
  * @property string $title
  * @property string $type
  * @property string $location
@@ -20,10 +22,10 @@ use Modules\Core\Traits\ScopedByUnit;
  */
 class Widget extends Model
 {
-    use ScopedByUnit;
+    use ScopedByWorkspace;
 
     protected $fillable = [
-        'school_unit_id',
+        'workspace_id',
         'title',
         'type',
         'location',

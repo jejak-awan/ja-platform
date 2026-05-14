@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Users Table
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('core_users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
@@ -32,9 +32,9 @@ return new class extends Migration
         });
 
         // 2. Two Factor Authentication
-        Schema::create('two_factor_auth', function (Blueprint $table) {
+        Schema::create('core_two_factor_auth', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unique()->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->unique()->constrained('core_users')->onDelete('cascade');
             $table->text('secret')->nullable();
             $table->json('backup_codes')->nullable();
             $table->boolean('enabled')->default(false)->index();
@@ -108,7 +108,7 @@ return new class extends Migration
         });
 
         // 7. Personal Access Tokens (Sanctum)
-        Schema::create('personal_access_tokens', function (Blueprint $table) {
+        Schema::create('core_personal_access_tokens', function (Blueprint $table) {
             $table->id();
             $table->morphs('tokenable');
             $table->text('name');
@@ -120,7 +120,7 @@ return new class extends Migration
         });
 
         // 8. Permission Tables (Spatie)
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('core_permissions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('guard_name');
@@ -128,7 +128,7 @@ return new class extends Migration
             $table->unique(['name', 'guard_name']);
         });
 
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('core_roles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('guard_name');
@@ -136,30 +136,44 @@ return new class extends Migration
             $table->unique(['name', 'guard_name']);
         });
 
-        Schema::create('model_has_permissions', function (Blueprint $table) {
+        Schema::create('core_model_has_permissions', function (Blueprint $table) {
             $table->unsignedBigInteger('permission_id');
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');
             $table->index(['model_id', 'model_type'], 'model_has_permissions_model_id_model_type_index');
-            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
+            $table->foreign('permission_id')->references('id')->on('core_permissions')->onDelete('cascade');
             $table->primary(['permission_id', 'model_id', 'model_type'], 'model_has_permissions_permission_model_type_primary');
         });
 
-        Schema::create('model_has_roles', function (Blueprint $table) {
+        Schema::create('core_model_has_roles', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');
             $table->index(['model_id', 'model_type'], 'model_has_roles_model_id_model_type_index');
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('core_roles')->onDelete('cascade');
             $table->primary(['role_id', 'model_id', 'model_type'], 'model_has_roles_role_model_type_primary');
         });
 
-        Schema::create('role_has_permissions', function (Blueprint $table) {
+        Schema::create('core_role_has_permissions', function (Blueprint $table) {
             $table->unsignedBigInteger('permission_id');
             $table->unsignedBigInteger('role_id');
-            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('permission_id')->references('id')->on('core_permissions')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('core_roles')->onDelete('cascade');
             $table->primary(['permission_id', 'role_id'], 'role_has_permissions_permission_id_role_id_primary');
+        });
+
+        // 9. Languages Table
+        Schema::create('core_languages', function (Blueprint $table) {
+            $table->id();
+            $table->string('code', 10)->unique();
+            $table->string('name');
+            $table->string('native_name')->nullable();
+            $table->string('flag')->nullable();
+            $table->boolean('is_default')->default(false)->index();
+            $table->boolean('is_active')->default(true)->index();
+            $table->integer('sort_order')->default(0);
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -168,12 +182,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('role_has_permissions');
-        Schema::dropIfExists('model_has_roles');
-        Schema::dropIfExists('model_has_permissions');
-        Schema::dropIfExists('roles');
-        Schema::dropIfExists('permissions');
-        Schema::dropIfExists('personal_access_tokens');
+        Schema::dropIfExists('core_role_has_permissions');
+        Schema::dropIfExists('core_model_has_roles');
+        Schema::dropIfExists('core_model_has_permissions');
+        Schema::dropIfExists('core_roles');
+        Schema::dropIfExists('core_permissions');
+        Schema::dropIfExists('core_personal_access_tokens');
         Schema::dropIfExists('failed_jobs');
         Schema::dropIfExists('job_batches');
         Schema::dropIfExists('jobs');
@@ -181,7 +195,8 @@ return new class extends Migration
         Schema::dropIfExists('cache');
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('two_factor_auth');
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('core_two_factor_auth');
+        Schema::dropIfExists('core_languages');
+        Schema::dropIfExists('core_users');
     }
 };

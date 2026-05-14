@@ -406,7 +406,7 @@ import {
     ContextMenuItem,
     ContextMenuSeparator
 } from '@/shared/components/ui';
-import { MediaManagerKey } from '@/core/keys';
+import { MediaManagerKey } from '@/engine/keys';
 import type { Media } from '@/modules/Cms/types/cms';
 
 const {

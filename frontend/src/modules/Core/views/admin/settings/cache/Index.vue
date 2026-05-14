@@ -150,7 +150,7 @@
 <script setup lang="ts">
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseSingleResponse } from '@/shared/utils/responseParser';
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui';
 

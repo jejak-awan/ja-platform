@@ -138,7 +138,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useHead } from '@unhead/vue';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
 
 

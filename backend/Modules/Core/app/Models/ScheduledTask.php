@@ -12,7 +12,7 @@ use Modules\Core\Traits\CoreLogsActivity;
  * @property string $command
  * @property string $schedule
  * @property string|null $description
- * @property float|int|null $school_unit_id
+ * @property float|int|null $workspace_id
  * @property bool $is_active
  * @property array<string, mixed>|null $options
  * @property \Illuminate\Support\Carbon|null $last_run_at
@@ -23,9 +23,11 @@ use Modules\Core\Traits\CoreLogsActivity;
  */
 class ScheduledTask extends Model
 {
+    protected $table = 'core_scheduled_tasks';
+
+
     use CoreLogsActivity;
 
-    protected $table = 'scheduled_tasks';
 
     protected $fillable = [
         'name',

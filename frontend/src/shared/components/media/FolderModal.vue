@@ -106,7 +106,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useToast } from '@/shared/composables/useToast';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { 
     Button, 
     Input, 

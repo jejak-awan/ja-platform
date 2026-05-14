@@ -1,4 +1,4 @@
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import type { AxiosResponse } from 'axios';
 import type { Staff, LeaveRequest, Shift } from '@/modules/School/types';
 
@@ -73,7 +73,7 @@ export const HRService = {
         return api.post('admin/hr/salary-structures', data);
     },
 
-    async generatePayroll(data: { period: string; school_id: number; school_unit_id: number }): Promise<AxiosResponse<{ message: string; generated_count: number }>> {
+    async generatePayroll(data: { period: string; school_id: number; workspace_id: number }): Promise<AxiosResponse<{ message: string; generated_count: number }>> {
         return api.post('admin/hr/payrolls/generate', data);
     }
     */

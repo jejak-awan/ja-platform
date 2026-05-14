@@ -4,12 +4,12 @@ namespace Modules\School\Models\Student;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property int $student_id
  * @property int $staff_id
  * @property \Illuminate\Support\Carbon $date
@@ -29,11 +29,11 @@ class CounselingRecord extends Model
     protected $table = 'sch_std_counseling_records';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByUnit;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',
-        'school_unit_id',
+        'workspace_id',
         'student_id',
         'staff_id',
         'date',
@@ -60,7 +60,7 @@ class CounselingRecord extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'workspace_id');
     }
 
     /**

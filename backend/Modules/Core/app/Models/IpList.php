@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class IpList extends Model
 {
+    protected $table = 'core_ip_lists';
+
+
     /** @use HasFactory<\Modules\Core\Database\Factories\IpListFactory> */
     use HasFactory;
 

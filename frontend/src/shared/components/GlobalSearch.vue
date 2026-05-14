@@ -179,7 +179,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, computed, watch, onMounted, onUnmounted, type Component } from 'vue';
 import { useRouter, type RouteLocationRaw } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { Dialog, DialogContent } from '@/shared/components/ui';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';

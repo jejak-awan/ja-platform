@@ -95,7 +95,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
 import { tagSchema } from '@/shared/schemas';

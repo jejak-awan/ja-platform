@@ -8,7 +8,7 @@ import Pencil from 'lucide-vue-next/dist/esm/icons/pencil.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import CheckCircle2 from 'lucide-vue-next/dist/esm/icons/circle-check-big.js';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { parseResponse, ensureArray, type PaginationData } from '@/shared/utils/responseParser';

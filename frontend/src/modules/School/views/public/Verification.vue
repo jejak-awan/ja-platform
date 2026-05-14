@@ -109,7 +109,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { Card, CardContent, LucideIcon, Button } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse } from '@/shared/utils/responseParser';
 
 const route = useRoute();

@@ -2,13 +2,15 @@
 
 namespace Modules\School\Models\Academic;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\School\Models\Institution\SchoolUnit;
 
 /**
  * @property int $id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property string $name
  * @property string $code
  * @property string|null $description
@@ -21,10 +23,10 @@ class Department extends Model
     protected $table = 'sch_acad_departments';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
-        'school_unit_id',
+        'workspace_id',
         'name',
         'code',
         'description',
@@ -35,6 +37,6 @@ class Department extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 }

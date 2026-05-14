@@ -2,7 +2,7 @@ import { computed } from 'vue'
 import { useTheme } from '@/shared/composables/useTheme'
 import { useCoreStore } from '@/modules/Core/stores/core'
 import { config } from '@/config'
-import type { SiteSettings } from '@/core/types/settings'
+import type { SiteSettings } from '@/engine/types/settings'
 
 export function trimStr(v: unknown): string {
     if (v == null) return ''

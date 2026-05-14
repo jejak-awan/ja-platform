@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { LucideIcon } from '@/shared/components/ui';
 import { useToast } from '@/shared/composables/useToast';
 import StaffForm from './components/StaffForm.vue';

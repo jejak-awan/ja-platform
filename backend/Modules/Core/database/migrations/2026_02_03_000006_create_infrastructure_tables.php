@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Settings Table
-        Schema::create('settings', function (Blueprint $table) {
+        Schema::create('core_settings', function (Blueprint $table) {
             $table->id();
             $table->string('key')->unique();
             $table->text('value')->nullable();
@@ -27,7 +27,7 @@ return new class extends Migration
         });
 
         // 2. Redis Settings
-        Schema::create('redis_settings', function (Blueprint $table) {
+        Schema::create('core_redis_settings', function (Blueprint $table) {
             $table->id();
             $table->string('key')->unique();
             $table->text('value')->nullable();
@@ -39,7 +39,7 @@ return new class extends Migration
         });
 
         // 3. Backups Table
-        Schema::create('backups', function (Blueprint $table) {
+        Schema::create('core_backups', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
             $table->string('type')->default('database'); // database, files, full
@@ -54,7 +54,7 @@ return new class extends Migration
         });
 
         // 4. Webhooks Table
-        Schema::create('webhooks', function (Blueprint $table) {
+        Schema::create('core_webhooks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('url');
@@ -73,7 +73,7 @@ return new class extends Migration
         });
 
         // 5. Plugins Table
-        Schema::create('plugins', function (Blueprint $table) {
+        Schema::create('core_plugins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -90,7 +90,7 @@ return new class extends Migration
         });
 
         // 6. Custom Fields Infrastructure
-        Schema::create('field_groups', function (Blueprint $table) {
+        Schema::create('core_field_groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -102,9 +102,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('custom_fields', function (Blueprint $table) {
+        Schema::create('core_custom_fields', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('field_group_id')->constrained('field_groups')->onDelete('cascade');
+            $table->foreignId('field_group_id')->constrained('core_field_groups')->onDelete('cascade');
             $table->string('name');
             $table->string('slug')->index();
             $table->string('label');
@@ -119,17 +119,17 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('content_custom_fields', function (Blueprint $table) {
+        Schema::create('core_content_custom_fields', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('content_id')->index();
-            $table->foreignId('custom_field_id')->constrained('custom_fields')->onDelete('cascade');
+            $table->foreignId('custom_field_id')->constrained('core_custom_fields')->onDelete('cascade');
             $table->text('value')->nullable();
             $table->timestamps();
             $table->index(['content_id', 'custom_field_id']);
         });
 
         // 7. Search Infrastructure
-        Schema::create('search_indexes', function (Blueprint $table) {
+        Schema::create('core_search_indexes', function (Blueprint $table) {
             $table->id();
             $table->morphs('searchable');
             $table->string('title');
@@ -147,11 +147,11 @@ return new class extends Migration
             }
         });
 
-        Schema::create('search_queries', function (Blueprint $table) {
+        Schema::create('core_search_queries', function (Blueprint $table) {
             $table->id();
             $table->string('query')->index();
             $table->integer('results_count')->default(0);
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->onDelete('set null');
             $table->string('ip_address', 45)->nullable();
             $table->string('user_agent')->nullable();
             $table->json('filters')->nullable();
@@ -160,7 +160,7 @@ return new class extends Migration
         });
 
         // 8. Communications
-        Schema::create('email_templates', function (Blueprint $table) {
+        Schema::create('core_email_templates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -173,9 +173,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('core_notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('core_users')->onDelete('cascade');
             $table->string('type');
             $table->string('title');
             $table->text('message');
@@ -189,7 +189,7 @@ return new class extends Migration
         });
 
         // 9. Content Templates
-        Schema::create('content_templates', function (Blueprint $table) {
+        Schema::create('core_content_templates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -203,14 +203,14 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->nullable()->index();
             $table->boolean('is_active')->default(true);
             $table->integer('usage_count')->default(0);
-            $table->foreignId('author_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('author_id')->nullable()->constrained('core_users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
             $table->index('type');
         });
 
         // 10. System Maintenance
-        Schema::create('scheduled_tasks', function (Blueprint $table) {
+        Schema::create('core_scheduled_tasks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('command');
@@ -225,17 +225,17 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('ip_lists', function (Blueprint $table) {
+        Schema::create('core_ip_lists', function (Blueprint $table) {
             $table->id();
             $table->string('ip_address');
             $table->enum('type', ['whitelist', 'blocklist'])->index();
             $table->string('reason')->nullable();
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('created_by')->nullable()->constrained('core_users')->nullOnDelete();
             $table->timestamps();
             $table->unique(['ip_address', 'type']);
         });
 
-        Schema::create('deleted_files', function (Blueprint $table) {
+        Schema::create('core_deleted_files', function (Blueprint $table) {
             $table->id();
             $table->string('original_path');
             $table->string('trash_path');
@@ -245,7 +245,7 @@ return new class extends Migration
             $table->bigInteger('size')->nullable();
             $table->string('extension')->nullable();
             $table->string('mime_type')->nullable();
-            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('core_users')->nullOnDelete();
             $table->timestamp('deleted_at')->nullable()->index();
             $table->timestamps();
         });
@@ -256,21 +256,21 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('deleted_files');
-        Schema::dropIfExists('ip_lists');
-        Schema::dropIfExists('scheduled_tasks');
-        Schema::dropIfExists('content_templates');
-        Schema::dropIfExists('notifications');
-        Schema::dropIfExists('email_templates');
-        Schema::dropIfExists('search_queries');
-        Schema::dropIfExists('search_indexes');
-        Schema::dropIfExists('content_custom_fields');
-        Schema::dropIfExists('custom_fields');
-        Schema::dropIfExists('field_groups');
-        Schema::dropIfExists('plugins');
-        Schema::dropIfExists('webhooks');
-        Schema::dropIfExists('backups');
-        Schema::dropIfExists('redis_settings');
-        Schema::dropIfExists('settings');
+        Schema::dropIfExists('core_deleted_files');
+        Schema::dropIfExists('core_ip_lists');
+        Schema::dropIfExists('core_scheduled_tasks');
+        Schema::dropIfExists('core_content_templates');
+        Schema::dropIfExists('core_notifications');
+        Schema::dropIfExists('core_email_templates');
+        Schema::dropIfExists('core_search_queries');
+        Schema::dropIfExists('core_search_indexes');
+        Schema::dropIfExists('core_content_custom_fields');
+        Schema::dropIfExists('core_custom_fields');
+        Schema::dropIfExists('core_field_groups');
+        Schema::dropIfExists('core_plugins');
+        Schema::dropIfExists('core_webhooks');
+        Schema::dropIfExists('core_backups');
+        Schema::dropIfExists('core_redis_settings');
+        Schema::dropIfExists('core_settings');
     }
 };

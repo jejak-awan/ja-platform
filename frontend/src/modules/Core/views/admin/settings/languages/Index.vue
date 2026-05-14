@@ -303,7 +303,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
@@ -318,7 +318,7 @@ import CheckCircle2 from 'lucide-vue-next/dist/esm/icons/circle-check-big.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import LanguagesIcon from 'lucide-vue-next/dist/esm/icons/languages.js';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
-import { getLocale, getAvailableLocales, getBrowserLocale } from '@/core/i18n';
+import { getLocale, getAvailableLocales, getBrowserLocale } from '@/engine/i18n';
 interface Language {
     id: number;
     code: string;

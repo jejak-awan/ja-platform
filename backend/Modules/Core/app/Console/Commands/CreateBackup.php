@@ -7,9 +7,9 @@ use Modules\Core\Services\BackupService;
 
 class CreateBackup extends Command
 {
-    protected $signature = 'cms:backup {--type=database : Type of backup (database, files, full)}';
+    protected $signature = 'core:backup {--type=database : Type of backup (database, files, full)}';
 
-    protected $description = 'Create a backup of the CMS';
+    protected $description = 'Create a backup of the system';
 
     public function handle(BackupService $backupService): int
     {

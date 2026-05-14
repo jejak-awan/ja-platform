@@ -3,8 +3,8 @@ import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useSystemError } from '@/shared/composables/useSystemError';
-import { triggerVaporLock } from '@/core/api/client';
-import api from '@/core/api/client';
+import { triggerVaporLock } from '@/engine/api/client';
+import api from '@/engine/api/client';
 
 import { authConfig } from '@/config';
 

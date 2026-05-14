@@ -104,7 +104,7 @@ class SearchServiceTest extends TestCase
         $counts = $this->service->reindexAll();
 
         // 1 content + 2 categories + 1 tag = 4
-        $this->assertDatabaseCount('search_indexes', 4);
+        $this->assertDatabaseCount('core_search_indexes', 4);
         $this->assertEquals(1, $counts['contents']);
         $this->assertEquals(2, $counts['categories']);
         $this->assertEquals(1, $counts['tags']);

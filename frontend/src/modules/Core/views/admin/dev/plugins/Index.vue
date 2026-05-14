@@ -101,7 +101,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import PluginSettingsModal from '@/modules/Core/components/plugins/PluginSettingsModal.vue';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';

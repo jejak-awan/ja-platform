@@ -48,13 +48,13 @@ class BackupPasswordTest extends TestCase
         ]);
 
         $this->assertEquals($password, $backup->password);
-        $this->assertDatabaseHas('backups', [
+        $this->assertDatabaseHas('core_backups', [
             'id' => $backup->id,
             // Password should be encrypted in DB, so we can't match plaintext
         ]);
 
         // Fetch raw to verify encryption
-        $raw = \Illuminate\Support\Facades\DB::table('backups')->where('id', $backup->id)->value('password');
+        $raw = \Illuminate\Support\Facades\DB::table('core_backups')->where('id', $backup->id)->value('password');
         $this->assertNotEquals($password, $raw);
         $this->assertTrue(strlen($raw) > strlen($password));
     }

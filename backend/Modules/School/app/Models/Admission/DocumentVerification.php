@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Admission;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -15,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DocumentVerification extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_adm_verifications';
 
     protected $fillable = [

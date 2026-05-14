@@ -70,7 +70,7 @@ return new class extends Migration
         // 3. Departments (Jurusan)
         Schema::create('sch_acad_departments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_unit_id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->string('code')->unique();
             $table->string('name');
             $table->text('description')->nullable();

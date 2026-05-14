@@ -62,7 +62,7 @@ class JanariThemeSeeder extends Seeder
 
         foreach ($categories as $slug => $name) {
             Category::withTrashed()->withoutGlobalScopes()->updateOrCreate(
-                ['slug' => $slug, 'school_unit_id' => null],
+                ['slug' => $slug, 'workspace_id' => null],
                 [
                     'name' => $name,
                     'author_id' => $user->id,
@@ -76,7 +76,7 @@ class JanariThemeSeeder extends Seeder
     {
         // 1. Essential Home Page Record (Global)
         Content::withTrashed()->withoutGlobalScopes()->updateOrCreate(
-            ['slug' => 'home', 'school_unit_id' => null],
+            ['slug' => 'home', 'workspace_id' => null],
             [
                 'title' => 'Home',
                 'type' => 'page',

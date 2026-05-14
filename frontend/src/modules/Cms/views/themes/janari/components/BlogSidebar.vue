@@ -194,7 +194,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import { logger } from '@/shared/utils/logger'
 import Calendar from 'lucide-vue-next/dist/esm/icons/calendar.js'
 import Clock from 'lucide-vue-next/dist/esm/icons/clock.js'

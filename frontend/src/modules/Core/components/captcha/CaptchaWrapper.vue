@@ -29,7 +29,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue'
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import SliderCaptcha from './SliderCaptcha.vue'
 import MathCaptcha from './MathCaptcha.vue'
 import ImageCaptcha from './ImageCaptcha.vue'

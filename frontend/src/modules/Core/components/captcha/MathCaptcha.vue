@@ -84,7 +84,7 @@ import { useI18n } from 'vue-i18n'
 import CheckCircle from 'lucide-vue-next/dist/esm/icons/circle-check.js';
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 import Check from 'lucide-vue-next/dist/esm/icons/check.js';
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import type { AxiosError } from 'axios'
 import { Button } from '@/shared/components/ui'
 

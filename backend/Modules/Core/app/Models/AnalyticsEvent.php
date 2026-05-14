@@ -28,6 +28,9 @@ use Illuminate\Support\Facades\Auth;
  */
 class AnalyticsEvent extends Model
 {
+    protected $table = 'core_analytics_events';
+
+
     /** @use HasFactory<\Modules\Core\Database\Factories\AnalyticsEventFactory> */
     use HasFactory;
 
@@ -39,7 +42,6 @@ class AnalyticsEvent extends Model
         return \Modules\Core\Database\Factories\AnalyticsEventFactory::new();
     }
 
-    protected $table = 'analytics_events';
 
     protected $fillable = [
         'session_id',

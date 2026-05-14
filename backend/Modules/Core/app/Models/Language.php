@@ -21,6 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Language extends Model
 {
+    protected $table = 'core_languages';
+
+
     /** @use HasFactory<\Modules\Core\Database\Factories\LanguageFactory> */
     use HasFactory;
 

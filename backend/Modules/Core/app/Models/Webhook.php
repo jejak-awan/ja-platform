@@ -22,9 +22,14 @@ use Modules\Core\Traits\CoreLogsActivity;
  * @property int $failure_count
  * @property int $retry_count
  * @property int $max_retries
+ * @property int|null $timeout
+ * @property int $success_count
  */
 class Webhook extends Model
 {
+    protected $table = 'core_webhooks';
+
+
     /** @use HasFactory<\Modules\Core\Database\Factories\WebhookFactory> */
     use CoreLogsActivity, HasFactory;
 

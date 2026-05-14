@@ -117,7 +117,7 @@ class StaffAdvancedController extends BaseController
     {
         $validated = $request->validate([
             'school_id' => 'required|exists:schools,id',
-            'school_unit_id' => 'required|exists:school_units,id',
+            'workspace_id' => 'required|exists:school_units,id',
             'staff_id' => 'required|exists:staff,id',
             'base_salary' => 'required|numeric|min:0',
             'transport_allowance' => 'nullable|numeric|min:0',
@@ -126,7 +126,7 @@ class StaffAdvancedController extends BaseController
         ]);
 
         $structure = SalaryStructure::updateOrCreate(
-            ['staff_id' => $validated['staff_id'], 'school_unit_id' => $validated['school_unit_id']],
+            ['staff_id' => $validated['staff_id'], 'workspace_id' => $validated['workspace_id']],
             $validated
         );
 
@@ -154,7 +154,7 @@ class StaffAdvancedController extends BaseController
     {
         $validated = $request->validate([
             'school_id' => 'required|exists:schools,id',
-            'school_unit_id' => 'required|exists:school_units,id',
+            'workspace_id' => 'required|exists:school_units,id',
             'period' => 'required|string', // YYYY-MM
         ]);
 
@@ -188,7 +188,7 @@ class StaffAdvancedController extends BaseController
                 $totalAllowance = (float)$structure->transport_allowance + (float)$structure->meal_allowance + (float)$structure->other_allowance;
                 Payroll::create([
                     'school_id' => $validated['school_id'],
-                    'school_unit_id' => $validated['school_unit_id'],
+                    'workspace_id' => $validated['workspace_id'],
                     'staff_id' => $staff->id,
                     'period' => $validated['period'],
                     'basic_salary' => $structure->base_salary,

@@ -2,6 +2,8 @@
 
 namespace Modules\Cms\Models;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,6 +23,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property \Illuminate\Support\Carbon|null $locked_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $name
+ * @property string|null $email
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Modules\Cms\Models\Content $content
  * @property-read \Modules\Core\Models\User|null $user
@@ -31,7 +35,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Comment extends Model
 {
     /** @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Modules\Cms\Database\Factories\CommentFactory> */
-    use \Illuminate\Database\Eloquent\Factories\HasFactory, LogsActivity, SoftDeletes;
+    use \Illuminate\Database\Eloquent\Factories\HasFactory, LogsActivity, SoftDeletes, ScopedByWorkspace;
 
     /**
      * Create a new factory instance for the model.

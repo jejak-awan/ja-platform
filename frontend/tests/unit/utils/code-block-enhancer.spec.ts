@@ -3,7 +3,7 @@ import { enhanceCodeBlocks } from '@/shared/utils/code-block-enhancer';
 import { logger } from '@/shared/utils/logger';
 
 vi.mock('@/shared/utils/logger');
-vi.mock('@/core/api/client'); // Circular dep via logger
+vi.mock('@/engine/api/client'); // Circular dep via logger
 
 describe('Code Block Enhancer', () => {
     beforeEach(() => {

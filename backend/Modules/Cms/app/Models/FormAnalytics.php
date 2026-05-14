@@ -2,6 +2,8 @@
 
 namespace Modules\Cms\Models;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -16,19 +18,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read Form $form
  */
-/**
- * @property int $id
- * @property int $form_id
- * @property \Illuminate\Support\Carbon $date
- * @property int $views
- * @property int $starts
- * @property int $submissions
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Form $form
- */
 class FormAnalytics extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'form_analytics';
 
     protected $fillable = [

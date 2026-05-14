@@ -266,7 +266,7 @@ import {
 } from '@/shared/components/ui';
 
 // Composable and Components
-import { useFileManager } from '@/modules/Cms/composables/useFileManager';
+import { useFileManager } from '@/engine/composables/useFileManager';
 import FileSidebar from '@/modules/Core/components/file-manager/FileSidebar.vue';
 import FileToolbar from '@/modules/Core/components/file-manager/FileToolbar.vue';
 import FilePropertiesSidebar from '@/modules/Core/components/file-manager/FilePropertiesSidebar.vue';
@@ -277,7 +277,7 @@ import FilePreviewModal from '@/modules/Core/components/file-manager/FilePreview
 import FileUploadModal from '@/modules/Core/components/file-manager/FileUploadModal.vue';
 import CreateFolderModal from '@/modules/Core/components/file-manager/CreateFolderModal.vue';
 import type { FileItem } from '@/modules/Cms/types/file-manager';
-import { FileManagerKey } from '@/core/keys';
+import { FileManagerKey } from '@/engine/keys';
 
 // Initialize File Manager Composable with CMS scope
 const fm = useFileManager({ rootPath: '/cms/media' });

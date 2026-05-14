@@ -1,5 +1,5 @@
 import { defineAsyncComponent } from 'vue';
-import type { JanariModule } from '@/core/types/module';
+import type { JanariModule } from '@/engine/types/module';
 import cmsRoutes from './router';
 import { cmsNavigation } from './navigation';
 

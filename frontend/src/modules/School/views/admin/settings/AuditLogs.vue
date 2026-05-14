@@ -133,7 +133,7 @@ import {
   Card, CardContent, Button, LucideIcon, DataTable, Input,
   Dialog, DialogContent, DialogHeader, DialogTitle, Pagination
 } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse } from '@/shared/utils/responseParser';
 import { createColumnHelper, useVueTable, getCoreRowModel } from '@tanstack/vue-table';
 

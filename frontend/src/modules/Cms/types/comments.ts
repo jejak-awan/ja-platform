@@ -1,4 +1,4 @@
-import type { User } from '@/core/types/auth';
+import type { User } from '@/engine/types/auth';
 
 export type CommentStatus = 'pending' | 'approved' | 'rejected' | 'spam';
 

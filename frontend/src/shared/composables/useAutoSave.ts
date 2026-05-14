@@ -1,6 +1,6 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted, onUnmounted, watch, type Ref, type ComputedRef } from 'vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
 interface AutoSaveOptions {
     interval?: number | Ref<number> | ComputedRef<number> | (() => number);

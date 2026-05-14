@@ -5,7 +5,6 @@ namespace Modules\Cms\Providers;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Modules\Cms\Console\Commands\BackfillThemeJanariParentCommand;
-use Modules\Cms\Console\Commands\CleanupAnalytics;
 use Modules\Cms\Console\Commands\ThemeMake;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -143,7 +142,6 @@ class CmsServiceProvider extends ServiceProvider
     {
         $this->commands([
             BackfillThemeJanariParentCommand::class,
-            CleanupAnalytics::class,
             ThemeMake::class,
         ]);
     }

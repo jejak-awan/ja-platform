@@ -16,13 +16,21 @@ return new class extends Migration
             'categories',
             'menus',
             'forms',
+            'form_fields',
+            'form_submissions',
+            'form_analytics',
+            'redirects',
+            'newsletter_subscribers',
             'widgets',
+            'comments',
+            'content_revisions',
+            'menu_items',
         ];
 
         foreach ($tables as $tableName) {
             Schema::table($tableName, function (Blueprint $table) {
                 // Keep CMS independent from School module schema: no FK constraint here.
-                $table->unsignedBigInteger('school_unit_id')->nullable()->after('id')->index();
+                $table->unsignedBigInteger('workspace_id')->nullable()->after('id')->index();
             });
         }
     }
@@ -37,12 +45,20 @@ return new class extends Migration
             'categories',
             'menus',
             'forms',
+            'form_fields',
+            'form_submissions',
+            'form_analytics',
+            'redirects',
+            'newsletter_subscribers',
             'widgets',
+            'comments',
+            'content_revisions',
+            'menu_items',
         ];
 
         foreach ($tables as $tableName) {
             Schema::table($tableName, function (Blueprint $table) {
-                $table->dropColumn('school_unit_id');
+                $table->dropColumn('workspace_id');
             });
         }
     }

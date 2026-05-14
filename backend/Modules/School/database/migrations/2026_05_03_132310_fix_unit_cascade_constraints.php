@@ -46,8 +46,8 @@ return new class extends Migration
             if (!Schema::hasTable($tableName)) continue;
             
             $columnsToFix = [];
-            if (Schema::hasColumn($tableName, 'school_unit_id')) {
-                $columnsToFix['school_unit_id'] = 'sch_ins_levels';
+            if (Schema::hasColumn($tableName, 'workspace_id')) {
+                $columnsToFix['workspace_id'] = 'sch_ins_levels';
             }
             // Avoid circular or incorrect school_id references for school units
             if (Schema::hasColumn($tableName, 'school_id') && $tableName !== 'sch_ins_levels') {

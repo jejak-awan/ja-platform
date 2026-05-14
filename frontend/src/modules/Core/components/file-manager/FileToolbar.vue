@@ -394,7 +394,7 @@ import {
     TooltipProvider,
     TooltipTrigger
 } from '@/shared/components/ui';
-import { FileManagerKey } from '@/core/keys';
+import { FileManagerKey } from '@/engine/keys';
 
 const showAdvancedFilters = ref(false);
 

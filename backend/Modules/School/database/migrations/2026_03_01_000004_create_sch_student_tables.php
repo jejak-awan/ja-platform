@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('sch_std_students', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('workspace_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->onDelete('set null');
             
             // Identity
             $table->string('nis', 20)->unique()->nullable();
@@ -51,6 +51,7 @@ return new class extends Migration
         // 2. Achievements
         Schema::create('sch_std_achievements', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('student_id')->constrained('sch_std_students')->onDelete('cascade');
             $table->string('title');
             $table->enum('level', ['school', 'district', 'province', 'national', 'international']);
@@ -63,6 +64,7 @@ return new class extends Migration
         // 3. Violations (Points system)
         Schema::create('sch_std_violations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('student_id')->constrained('sch_std_students')->onDelete('cascade');
             $table->string('category');
             $table->text('description');
@@ -101,7 +103,7 @@ return new class extends Migration
         Schema::create('sch_std_counseling_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('student_id')->constrained('sch_std_students')->onDelete('cascade');
             $table->unsignedBigInteger('staff_id');
             $table->date('date');

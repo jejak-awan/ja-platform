@@ -1,4 +1,4 @@
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import type { AxiosResponse } from 'axios';
 import type { Visitor, Attendance, OperationAuditLog, LibraryBook, Graduate } from '@/modules/School/types';
 import type { Asset } from '@/modules/School/types/logistics';

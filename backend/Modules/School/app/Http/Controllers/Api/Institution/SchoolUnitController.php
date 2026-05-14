@@ -87,12 +87,12 @@ class SchoolUnitController extends BaseController
         $unitId = (int)$id;
 
         if ($unitId === 0) {
-            session(['active_school_unit_id' => 0]);
+            session(['active_workspace_id' => 0]);
             return $this->sendResponse(null, 'Switched to Global/Foundation context.');
         }
 
         $level = SchoolUnit::findOrFail($unitId);
-        session(['active_school_unit_id' => $level->id]);
+        session(['active_workspace_id' => $level->id]);
 
         return $this->sendResponse($level, 'Switched to unit: ' . $level->name);
     }

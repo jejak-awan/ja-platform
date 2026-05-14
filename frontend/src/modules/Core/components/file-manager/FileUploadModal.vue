@@ -145,7 +145,7 @@
 <script setup lang="ts">
 import { logger } from '@/shared/utils/logger';
 import { ref, computed } from 'vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import {
     Button,
     Dialog,

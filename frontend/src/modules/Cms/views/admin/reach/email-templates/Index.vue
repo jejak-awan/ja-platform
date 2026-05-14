@@ -42,7 +42,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, h } from 'vue';
 import { RouterLink } from 'vue-router';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import toast from '@/shared/services/legacy-toast';
 import { useI18n } from 'vue-i18n';
 import { useConfirm } from '@/shared/composables/useConfirm';

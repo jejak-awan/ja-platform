@@ -25,6 +25,9 @@ use Modules\Core\Models\User;
  */
 class Tag extends Model
 {
+    protected $table = 'core_tags';
+
+
     /** @use HasFactory<\Modules\Core\Database\Factories\TagFactory> */
     use HasFactory, SoftDeletes;
 
@@ -58,6 +61,6 @@ class Tag extends Model
      */
     public function media(): BelongsToMany
     {
-        return $this->belongsToMany(Media::class, 'media_tag');
+        return $this->belongsToMany(Media::class, 'core_media_tag');
     }
 }

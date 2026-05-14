@@ -8,12 +8,12 @@ use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\HR\Staff;
 use Modules\School\Models\Logistics\Room;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property int $academic_year_id
  * @property int $semester_id
  * @property int $study_group_id
@@ -40,11 +40,11 @@ class Schedule extends Model
     protected $table = 'sch_acad_schedules';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByUnit;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',
-        'school_unit_id',
+        'workspace_id',
         'academic_year_id',
         'semester_id',
         'study_group_id',
@@ -74,7 +74,7 @@ class Schedule extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**

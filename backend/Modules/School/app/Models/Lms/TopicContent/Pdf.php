@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Lms\TopicContent;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Modules\School\Models\Lms\Topic;
@@ -12,6 +14,7 @@ use Modules\School\Models\Lms\Topic;
  */
 class Pdf extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_lms_topic_pdfs';
 
     protected $fillable = ['value'];

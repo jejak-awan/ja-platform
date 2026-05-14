@@ -92,7 +92,7 @@ class SchoolModuleCrudTest extends TestCase
     {
         $school = School::factory()->create();
         $level = SchoolUnit::factory()->forSchool($school)->smk()->create();
-        $dept = Department::create(['school_unit_id' => $level->id, 'name' => 'Science', 'code' => 'SCI']);
+        $dept = Department::create(['workspace_id' => $level->id, 'name' => 'Science', 'code' => 'SCI']);
 
         // Create
         $response = $this->actingAsAdmin()->postJson('/api/v1/admin/students', [

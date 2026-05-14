@@ -5,7 +5,7 @@ namespace Modules\School\Models\Student;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 use Modules\School\Traits\ScopedBySchool;
 use Modules\School\Traits\HasVerificationHash;
 use Modules\School\Models\Institution\School;
@@ -19,7 +19,7 @@ use Modules\School\Models\Operations\UksVisit;
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property int|null $user_id
  * @property string $status
  * @property int|null $department_id
@@ -75,7 +75,7 @@ class Student extends Model
     protected $table = 'sch_std_students';
 
     /** @use HasFactory<\Modules\School\Database\Factories\StudentFactory> */
-    use HasFactory, SoftDeletes, ScopedBySchool, ScopedByUnit, HasVerificationHash;
+    use HasFactory, SoftDeletes, ScopedBySchool, ScopedByWorkspace, HasVerificationHash;
 
     protected $casts = [
         'date_of_birth' => 'date',
@@ -89,7 +89,7 @@ class Student extends Model
 
     protected $fillable = [
         'school_id',
-        'school_unit_id',
+        'workspace_id',
         'user_id',
         'status',
         'department_id',
@@ -144,7 +144,7 @@ class Student extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**

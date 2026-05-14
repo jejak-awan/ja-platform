@@ -172,7 +172,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, watch, defineAsyncComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse, parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
 import {
     Tabs,
@@ -185,7 +185,7 @@ import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { useCoreStore } from '@/modules/Core/stores/core';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import type { CacheStatus, QueueStatus, EmailLog, SettingValue } from '@/core/types/settings';
+import type { CacheStatus, QueueStatus, EmailLog, SettingValue } from '@/engine/types/settings';
 import SettingsIcon from 'lucide-vue-next/dist/esm/icons/settings.js';
 import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
 import Shield from 'lucide-vue-next/dist/esm/icons/shield.js';

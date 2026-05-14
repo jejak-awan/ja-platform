@@ -25,7 +25,7 @@
           <!-- Jenjang -->
           <div class="space-y-2 col-span-2 md:col-span-1">
             <Label>{{ $t('modules.school.admission.labels.level') }} <span class="text-destructive">*</span></Label>
-            <Select v-model="form.school_unit_id" required>
+            <Select v-model="form.workspace_id" required>
               <SelectTrigger class="h-11 rounded-xl">
                 <SelectValue :placeholder="$t('modules.school.admission.placeholders.selectLevel')" />
               </SelectTrigger>
@@ -129,7 +129,7 @@ const form = ref({
   nisn: '',
   academic_year_id: '',
   school_id: 1,
-  school_unit_id: ''
+  workspace_id: ''
 });
 
 const fetchData = async () => {
@@ -143,7 +143,7 @@ const fetchData = async () => {
 
     // Auto select first level if available
     if (schoolUnits.value.length > 0) {
-      form.value.school_unit_id = String(schoolUnits.value[0].id);
+      form.value.workspace_id = String(schoolUnits.value[0].id);
     }
   } catch (e) {
     console.error('Failed to fetch dialog data', e);

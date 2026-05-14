@@ -30,6 +30,7 @@ return new class extends Migration
         // 2. OSIS Members & Structure
         Schema::create('sch_osis_members', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
             $table->foreignId('student_id')->constrained('sch_std_students')->onDelete('cascade');
             $table->string('position'); // President, Secretary, etc.

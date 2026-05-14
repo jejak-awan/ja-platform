@@ -87,9 +87,11 @@ Route::prefix('v1')->group(function () {
         Route::put('/profile/preferences', [UserController::class, 'updatePreferences']);
 
         // Dashboard
-        Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->middleware('permission:manage users|manage settings');
-        Route::get('/dashboard/creator', [DashboardController::class, 'creator'])->middleware('permission:create content|edit content');
-        Route::get('/dashboard/viewer', [DashboardController::class, 'viewer']);
+        Route::prefix((string) \Modules\Core\Models\Setting::get('admin_dashboard_slug', 'ja-dash'))->group(function () {
+            Route::get('/admin', [DashboardController::class, 'admin'])->middleware('permission:manage users|manage settings');
+            Route::get('/creator', [DashboardController::class, 'creator'])->middleware('permission:create content|edit content');
+            Route::get('/viewer', [DashboardController::class, 'viewer']);
+        });
 
         // Two-Factor
         Route::prefix('two-factor')->group(function () {

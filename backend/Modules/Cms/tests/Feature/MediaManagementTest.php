@@ -42,7 +42,7 @@ class MediaManagementTest extends TestCase
             'success',
             'message',
             'data' => [
-                'media' => [
+                'core_media' => [
                     'id',
                     'name',
                     'file_name',
@@ -53,7 +53,7 @@ class MediaManagementTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('media', [
+        $this->assertDatabaseHas('core_media', [
             'name' => 'test.webp',
             'mime_type' => 'image/webp',
         ]);
@@ -90,7 +90,7 @@ class MediaManagementTest extends TestCase
         ]);
 
         TestHelpers::assertApiSuccess($response, 201);
-        $this->assertDatabaseHas('media', [
+        $this->assertDatabaseHas('core_media', [
             'folder_id' => $folder->id,
         ]);
     }
@@ -201,7 +201,7 @@ class MediaManagementTest extends TestCase
         ]);
 
         TestHelpers::assertApiSuccess($response);
-        $this->assertDatabaseHas('media', [
+        $this->assertDatabaseHas('core_media', [
             'id' => $media->id,
             'name' => 'Updated Name',
             'alt' => 'Updated Alt Text',
@@ -221,7 +221,7 @@ class MediaManagementTest extends TestCase
         $response = $this->deleteJson("/api/v1/admin/cms/media/{$media->id}");
 
         TestHelpers::assertApiSuccess($response);
-        $this->assertSoftDeleted('media', [
+        $this->assertSoftDeleted('core_media', [
             'id' => $media->id,
         ]);
     }
@@ -247,7 +247,7 @@ class MediaManagementTest extends TestCase
         TestHelpers::assertApiSuccess($response);
 
         foreach ($media as $item) {
-            $this->assertDatabaseHas('media', [
+            $this->assertDatabaseHas('core_media', [
                 'id' => $item->id,
                 'folder_id' => $folder->id,
             ]);
@@ -435,7 +435,7 @@ class MediaManagementTest extends TestCase
         TestHelpers::assertApiSuccess($response);
 
         foreach ($tags as $tagName) {
-            $this->assertDatabaseHas('tags', ['name' => $tagName]);
+            $this->assertDatabaseHas('core_tags', ['name' => $tagName]);
         }
 
         $this->assertEquals(3, $media->fresh()->tags()->count());
@@ -456,7 +456,7 @@ class MediaManagementTest extends TestCase
         $response = $this->deleteJson("/api/v1/admin/cms/media/{$media->id}?permanent=true");
 
         TestHelpers::assertApiSuccess($response);
-        $this->assertDatabaseMissing('media', ['id' => $media->id]);
+        $this->assertDatabaseMissing('core_media', ['id' => $media->id]);
         Storage::disk($media->disk)->assertMissing($path);
     }
 
@@ -470,12 +470,12 @@ class MediaManagementTest extends TestCase
 
         $media = Media::factory()->create();
         $this->deleteJson("/api/v1/admin/cms/media/{$media->id}");
-        $this->assertSoftDeleted('media', ['id' => $media->id]);
+        $this->assertSoftDeleted('core_media', ['id' => $media->id]);
 
         $response = $this->postJson("/api/v1/admin/cms/media/{$media->id}/restore");
 
         TestHelpers::assertApiSuccess($response);
-        $this->assertDatabaseHas('media', [
+        $this->assertDatabaseHas('core_media', [
             'id' => $media->id,
             'deleted_at' => null,
         ]);

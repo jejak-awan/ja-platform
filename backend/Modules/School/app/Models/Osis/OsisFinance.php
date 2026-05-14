@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Osis;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\School\Models\Institution\School;
@@ -22,7 +24,7 @@ use Modules\School\Models\Institution\School;
 class OsisFinance extends Model
 {
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $table = 'sch_osis_finances';
 

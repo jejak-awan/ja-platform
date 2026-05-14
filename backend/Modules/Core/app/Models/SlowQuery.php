@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class SlowQuery extends Model
 {
+    protected $table = 'core_slow_queries';
+
+
     protected $fillable = [
         'query',
         'bindings',

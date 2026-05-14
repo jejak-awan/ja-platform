@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('media', function (Blueprint $table) {
-            $table->unsignedBigInteger('school_unit_id')->nullable()->after('id')->index();
-            $table->index(['school_unit_id', 'is_shared']);
+        Schema::table('core_media', function (Blueprint $table) {
+            $table->unsignedBigInteger('workspace_id')->nullable()->after('id')->index();
+            $table->index(['workspace_id', 'is_shared']);
         });
 
-        Schema::table('media_folders', function (Blueprint $table) {
-            $table->unsignedBigInteger('school_unit_id')->nullable()->after('id')->index();
-            $table->index(['school_unit_id', 'is_shared']);
+        Schema::table('core_media_folders', function (Blueprint $table) {
+            $table->unsignedBigInteger('workspace_id')->nullable()->after('id')->index();
+            $table->index(['workspace_id', 'is_shared']);
         });
     }
 
@@ -27,14 +27,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('media_folders', function (Blueprint $table) {
-            $table->dropIndex(['school_unit_id', 'is_shared']);
-            $table->dropColumn(['school_unit_id']);
+        Schema::table('core_media_folders', function (Blueprint $table) {
+            $table->dropIndex(['workspace_id', 'is_shared']);
+            $table->dropColumn(['workspace_id']);
         });
 
-        Schema::table('media', function (Blueprint $table) {
-            $table->dropIndex(['school_unit_id', 'is_shared']);
-            $table->dropColumn('school_unit_id');
+        Schema::table('core_media', function (Blueprint $table) {
+            $table->dropIndex(['workspace_id', 'is_shared']);
+            $table->dropColumn('workspace_id');
         });
     }
 };

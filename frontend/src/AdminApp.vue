@@ -37,7 +37,6 @@ import { useConfirm } from '@/shared/composables/useConfirm';
 import { useSessionTimeout } from '@/shared/composables/useSessionTimeout';
 import { syncDocumentDarkClassForRoute } from '@/shared/composables/useDarkMode';
 import { useHead } from '@unhead/vue';
-import { useCmsStore } from '@/modules/Cms/stores/cms';
 import { useCoreStore } from '@/modules/Core/stores/core';
 import { applyFavicon, resolveFavicon } from '@/shared/utils/favicon';
 
@@ -49,7 +48,6 @@ const SessionTimeoutModal = defineAsyncComponent(() => import('@/shared/componen
 const { confirmState } = useConfirm();
 const { isWarningVisible, timeRemaining, extendSession, manualLogout } = useSessionTimeout();
 const route = useRoute();
-const cmsStore = useCmsStore();
 const coreStore = useCoreStore();
 
 watch(
@@ -65,17 +63,16 @@ useHead({
 });
 
 onMounted(async () => {
-    await Promise.all([
-        cmsStore.fetchPublicSettings(),
-        coreStore.fetchPublicSettings(),
-    ]);
+    // Standard initialization: Fetch unified public settings from Core
+    await coreStore.fetchPublicSettings();
 });
 
 onUnmounted(() => {
 });
 
 const faviconHref = computed(() => resolveFavicon([
-    (cmsStore.siteSettings as any)?.site_favicon,
+    coreStore.siteSettings?.site_favicon,
+    coreStore.appIdentity?.app_favicon,
 ]));
 
 watch(

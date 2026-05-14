@@ -213,7 +213,7 @@
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getFieldOptions, getMailPortOptions, getFieldPresets } from '@/config/settingsFieldOptions'
-import type { SettingValue } from '@/core/types/settings'
+import type { SettingValue } from '@/engine/types/settings'
 import {
     Input,
     Textarea,

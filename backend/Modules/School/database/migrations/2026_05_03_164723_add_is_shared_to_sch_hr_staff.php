@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sch_hr_staff', function (Blueprint $table) {
-            $table->boolean('is_shared')->default(false)->after('school_unit_id');
+            $table->boolean('is_shared')->default(false)->after('workspace_id');
         });
     }
 

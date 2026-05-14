@@ -137,7 +137,7 @@ import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import { 
     Button,
 } from '@/shared/components/ui';
-import { FileManagerKey } from '@/core/keys';
+import { FileManagerKey } from '@/engine/keys';
 
 const {
     trashItems,

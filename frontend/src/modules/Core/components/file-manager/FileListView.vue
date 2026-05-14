@@ -165,7 +165,7 @@ import {
 import FileContextMenu from './FileContextMenu.vue';
 import FileActionDropdown from './FileActionDropdown.vue';
 import type { FileItem, FolderItem } from '@/modules/Cms/types/file-manager';
-import { FileManagerKey } from '@/core/keys';
+import { FileManagerKey } from '@/engine/keys';
 
 defineEmits<{
     (e: 'preview', item: FileItem): void;

@@ -361,7 +361,7 @@ import Move from 'lucide-vue-next/dist/esm/icons/move.js';
 import Square from 'lucide-vue-next/dist/esm/icons/square.js';
 import Maximize from 'lucide-vue-next/dist/esm/icons/maximize.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { Button } from '@/shared/components/ui';
 import ResizeMediaModal from './ResizeMediaModal.vue';
 import ImageEditor from './ImageEditor.vue';

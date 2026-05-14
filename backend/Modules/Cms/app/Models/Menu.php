@@ -2,14 +2,16 @@
 
 namespace Modules\Cms\Models;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Core\Traits\ScopedByUnit;
+
 
 /**
  * @property int $id
- * @property int|null $school_unit_id
+ * @property int|null $workspace_id
  * @property string $name
  * @property string $slug
  * @property string $location
@@ -23,10 +25,11 @@ use Modules\Core\Traits\ScopedByUnit;
  */
 class Menu extends Model
 {
-    use SoftDeletes, ScopedByUnit;
+    use ScopedByWorkspace;
+    use SoftDeletes;
 
     protected $fillable = [
-        'school_unit_id',
+        'workspace_id',
         'name',
         'slug',
         'location',

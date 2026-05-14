@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Logistics;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -16,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class HostelBed extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_log_hostel_beds';
 
     protected $fillable = [

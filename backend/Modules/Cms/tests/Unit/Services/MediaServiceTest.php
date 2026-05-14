@@ -89,7 +89,7 @@ class MediaServiceTest extends TestCase
 
         $this->service->delete($media);
 
-        $this->assertSoftDeleted('media', ['id' => $media->id]);
+        $this->assertSoftDeleted('core_media', ['id' => $media->id]);
     }
 
     public function test_force_delete_media()
@@ -100,7 +100,7 @@ class MediaServiceTest extends TestCase
 
         $this->service->forceDelete($media);
 
-        $this->assertDatabaseMissing('media', ['id' => $media->id]);
+        $this->assertDatabaseMissing('core_media', ['id' => $media->id]);
         Storage::disk('public')->assertMissing($path);
     }
 
@@ -255,7 +255,7 @@ class MediaServiceTest extends TestCase
         $folder = MediaFolder::factory()->create();
         $result = $this->service->bulkAction('delete', [], null, null, [$folder->id]);
         $this->assertEquals(1, $result['folder_count']);
-        $this->assertSoftDeleted('media_folders', ['id' => $folder->id]);
+        $this->assertSoftDeleted('core_media_folders', ['id' => $folder->id]);
 
         $this->service->bulkAction('restore', [], null, null, [$folder->id]);
         $this->assertFalse($folder->fresh()->trashed());
@@ -265,11 +265,11 @@ class MediaServiceTest extends TestCase
     {
         $media = Media::factory()->create();
         $this->service->bulkAction('delete_permanent', [$media->id]);
-        $this->assertDatabaseMissing('media', ['id' => $media->id]);
+        $this->assertDatabaseMissing('core_media', ['id' => $media->id]);
 
         $folder = MediaFolder::factory()->create();
         $this->service->bulkAction('delete_permanent', [], null, null, [$folder->id]);
-        $this->assertDatabaseMissing('media_folders', ['id' => $folder->id]);
+        $this->assertDatabaseMissing('core_media_folders', ['id' => $folder->id]);
     }
 
     public function test_move_folder()

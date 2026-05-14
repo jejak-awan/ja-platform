@@ -1,4 +1,4 @@
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
 export interface Course {
   id: number;

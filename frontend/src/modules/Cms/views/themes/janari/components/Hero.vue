@@ -320,7 +320,7 @@ import JanariSplitText from './JanariSplitText.vue'
 import { useTheme } from '@/shared/composables/useTheme'
 import { useThemeMotion } from '@/shared/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity'
 
 const { getSetting } = useTheme()

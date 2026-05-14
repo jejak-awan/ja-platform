@@ -335,7 +335,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { parseResponse, ensureArray, parseSingleResponse, getResponseList, getResponseObject } from '@/shared/utils/responseParser';
@@ -372,7 +372,7 @@ import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
 import FileCheck from 'lucide-vue-next/dist/esm/icons/file-check.js';
 import SettingsIcon from 'lucide-vue-next/dist/esm/icons/settings.js';
 
-import type { ShieldLog, ShieldStats, PaginationInfo as SecurityPaginationInfo } from '@/core/types/security';
+import type { ShieldLog, ShieldStats, PaginationInfo as SecurityPaginationInfo } from '@/engine/types/security';
 
 // Types
 interface User {

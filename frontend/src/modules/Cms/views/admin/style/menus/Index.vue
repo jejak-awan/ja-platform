@@ -86,7 +86,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import MenuBuilder from '@/modules/Cms/components/menus/MenuBuilder.vue';

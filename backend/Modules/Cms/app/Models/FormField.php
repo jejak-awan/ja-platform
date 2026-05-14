@@ -2,6 +2,8 @@
 
 namespace Modules\Cms\Models;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -23,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class FormField extends Model
 {
+    use ScopedByWorkspace;
     protected $fillable = [
         'form_id',
         'name',

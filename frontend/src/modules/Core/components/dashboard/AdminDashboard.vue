@@ -229,9 +229,9 @@
 import { logger } from '@/shared/utils/logger';
 import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
 import { useAuthStore } from '@/modules/Core/stores/auth';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
-import type { SystemStats, TrafficItem, TrafficDataPoint, DashboardData } from '@/core/types/dashboard';
+import type { SystemStats, TrafficItem, TrafficDataPoint, DashboardData } from '@/engine/types/dashboard';
 
 import {
     Card,

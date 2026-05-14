@@ -428,7 +428,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { parseResponse, parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
 import LineChart from '@/modules/Core/components/charts/LineChart.vue';

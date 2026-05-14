@@ -1,7 +1,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, computed } from 'vue';
-import i18n, { setLocale as i18nSetLocale, getLocale as i18nGetLocale } from '@/core/i18n';
-import api from '@/core/api/client';
+import i18n, { setLocale as i18nSetLocale, getLocale as i18nGetLocale } from '@/engine/i18n';
+import api from '@/engine/api/client';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 
 export interface Language {

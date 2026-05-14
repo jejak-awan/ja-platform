@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Admission;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,7 +23,7 @@ class EnrollmentDocument extends Model
     protected $table = 'sch_adm_documents';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'enrollment_id',

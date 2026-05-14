@@ -65,7 +65,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GripVertical from 'lucide-vue-next/dist/esm/icons/grip-vertical.js';
 import CheckCircle from 'lucide-vue-next/dist/esm/icons/circle-check.js';
-import api from '@/core/api/client'
+import api from '@/engine/api/client'
 import type { AxiosError } from 'axios'
 
 const { t } = useI18n()

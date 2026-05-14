@@ -293,7 +293,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useLanguage, type Language } from '@/shared/composables/useLanguage';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { getResponseList } from '@/shared/utils/responseParser';
 import BreadcrumbTrail from '@/shared/components/BreadcrumbTrail.vue';
 import DarkModeToggle from '@/shared/components/DarkModeToggle.vue';
@@ -321,7 +321,7 @@ import {
     TooltipProvider
 } from '@/shared/components/ui';
 
-import type { User } from '@/core/types/auth';
+import type { User } from '@/engine/types/auth';
 
 interface Notification {
     id: number;

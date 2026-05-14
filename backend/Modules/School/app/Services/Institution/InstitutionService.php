@@ -73,7 +73,7 @@ class InstitutionService
      */
     public function getSchoolStats(int $schoolId): array
     {
-        $rawUnitId = \Illuminate\Support\Facades\Context::get('school_unit_id');
+        $rawUnitId = \Illuminate\Support\Facades\Context::get('workspace_id');
         $unitId = is_numeric($rawUnitId) ? (int) $rawUnitId : 0;
         $cacheKey = "school_stats_{$schoolId}_unit_{$unitId}";
 
@@ -107,8 +107,8 @@ class InstitutionService
                             'unit_id' => $unit->id,
                             'name' => $unit->name,
                             'level' => $unit->level,
-                            'student_count' => Student::where('school_unit_id', $unit->id)->count(),
-                            'staff_count' => Staff::where('school_unit_id', $unit->id)->count(),
+                            'student_count' => Student::where('workspace_id', $unit->id)->count(),
+                            'staff_count' => Staff::where('workspace_id', $unit->id)->count(),
                         ];
                     })->toArray();
             }
@@ -161,7 +161,7 @@ class InstitutionService
                 'school_units' => $levelIds->count() > 0,
                 'academic_year' => $school->activeAcademicYear !== null,
                 'semesters' => $school->activeAcademicYear?->semesters->count() > 0,
-                'departments' => Department::query()->whereIn('school_unit_id', $levelIds)->count() > 0,
+                'departments' => Department::query()->whereIn('workspace_id', $levelIds)->count() > 0,
                 'study_groups' => StudyGroup::query()->where('school_id', $schoolId)->count() > 0,
             ];
 

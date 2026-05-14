@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveIsAdminEntrypoint } from '@/core/router/entrypoint';
+import { resolveIsAdminEntrypoint } from '@/engine/router/entrypoint';
 
 describe('resolveIsAdminEntrypoint', () => {
     it('returns true for dashboard route and descendants', () => {

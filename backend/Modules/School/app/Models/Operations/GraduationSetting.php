@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Operations;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -16,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class GraduationSetting extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_grad_settings';
 
     protected $fillable = [

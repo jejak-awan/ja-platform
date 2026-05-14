@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('file_integrity_baselines', function (Blueprint $table) {
+        Schema::create('core_file_integrity_baselines', function (Blueprint $table) {
             $table->id();
             $table->string('file_path')->unique();
             $table->string('hash', 64); // SHA-256
@@ -21,6 +21,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('file_integrity_baselines');
+        Schema::dropIfExists('core_file_integrity_baselines');
     }
 };

@@ -2,6 +2,8 @@
 
 namespace Modules\Cms\Models;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,7 +26,7 @@ use Modules\Core\Models\User;
 class ContentRevision extends Model
 {
     /** @use HasFactory<\Modules\Cms\Database\Factories\ContentRevisionFactory> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     /**
      * Create a new factory instance for the model.

@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Lms;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\School\Models\Student\Student;
@@ -18,6 +20,7 @@ use Modules\School\Models\Student\Student;
  */
 class TopicProgress extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_lms_topic_progress';
 
     protected $fillable = [

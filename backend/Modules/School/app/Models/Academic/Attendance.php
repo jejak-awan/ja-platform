@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\Academic;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\School\Models\Student\Student;
@@ -26,7 +28,7 @@ class Attendance extends Model
     protected $table = 'sch_acad_attendances';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'student_id',

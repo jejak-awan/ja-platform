@@ -184,7 +184,7 @@ import Edit from 'lucide-vue-next/dist/esm/icons/pen.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import SearchIcon from 'lucide-vue-next/dist/esm/icons/search.js';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { useToast } from '@/shared/composables/useToast';
 import { debounce } from '@/shared/utils/debounce';

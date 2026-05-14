@@ -10,7 +10,9 @@ use Modules\Core\Helpers\IpHelper;
 
 class SearchQuery extends Model
 {
-    protected $table = 'search_queries';
+    protected $table = 'core_search_queries';
+
+
 
     protected $fillable = [
         'query',

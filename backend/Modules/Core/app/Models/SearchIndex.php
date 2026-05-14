@@ -3,6 +3,7 @@
 namespace Modules\Core\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
@@ -15,13 +16,19 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $url
  * @property string|null $type
  * @property int $relevance_score
+ * @property int|null $workspace_id
  * @property-read \Illuminate\Database\Eloquent\Model $searchable
  */
 class SearchIndex extends Model
 {
-    protected $table = 'search_indexes';
+    protected $table = 'core_search_indexes';
+
+
+    use ScopedByWorkspace;
+
 
     protected $fillable = [
+        'workspace_id',
         'searchable_type',
         'searchable_id',
         'title',
@@ -55,6 +62,9 @@ class SearchIndex extends Model
         $searchableType = get_class($model);
         /** @var int $searchableId */
         $searchableId = $model->getAttribute('id');
+        
+        // Get workspace ID from model if available, otherwise from context
+        $workspaceId = $model->getAttribute('workspace_id') ?? $model->getAttribute('workspace_id') ?? \Illuminate\Support\Facades\Context::get('workspace_id');
 
         // Build searchable content
         /** @var string $title */
@@ -65,7 +75,7 @@ class SearchIndex extends Model
         $url = $data['url'] ?? null;
         $type = $data['type'] ?? null;
 
-        // Calculate relevance score (can be enhanced)
+        // Calculate relevance score
         $relevanceScore = self::calculateRelevance($title, (string) $content);
 
         return self::updateOrCreate(
@@ -74,6 +84,7 @@ class SearchIndex extends Model
                 'searchable_id' => $searchableId,
             ],
             [
+                'workspace_id' => $workspaceId,
                 'title' => $title,
                 'content' => $content,
                 'excerpt' => $excerpt,
@@ -99,11 +110,9 @@ class SearchIndex extends Model
 
     protected static function calculateRelevance(string $title, string $content): int
     {
-        // Simple relevance calculation
-        // Title matches are more important than content matches
         $score = 0;
-        $score += strlen($title) * 10; // Title weight
-        $score += strlen($content) * 1; // Content weight
+        $score += strlen($title) * 10;
+        $score += strlen($content) * 1;
 
         return $score;
     }

@@ -20,7 +20,9 @@ use Illuminate\Support\Facades\Crypt;
  */
 class TwoFactorAuth extends Model
 {
-    protected $table = 'two_factor_auth';
+    protected $table = 'core_two_factor_auth';
+
+
 
     protected $fillable = [
         'user_id',

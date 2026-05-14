@@ -4,7 +4,7 @@ import type { AcademicYear } from './academic';
 export interface FeeType {
     id: number;
     school_id: number;
-    school_unit_id: number;
+    workspace_id: number;
     name: string;
     code?: string;
     amount: number;
@@ -18,7 +18,7 @@ export interface FeeType {
 export interface StudentBill {
     id: number;
     school_id: number;
-    school_unit_id: number;
+    workspace_id: number;
     student_id: number;
     fee_type_id: number;
     academic_year_id: number;
@@ -58,7 +58,7 @@ export interface PaymentTransaction {
 export interface Expense {
     id: number;
     school_id: number;
-    school_unit_id: number;
+    workspace_id: number;
     category: string;
     date: string;
     amount: number;
@@ -71,7 +71,7 @@ export interface Expense {
 export interface Budget {
     id: number;
     school_id: number;
-    school_unit_id: number;
+    workspace_id: number;
     academic_year_id: number;
     category: string;
     planned_amount: number;

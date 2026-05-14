@@ -20,6 +20,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Plugin extends Model
 {
+    protected $table = 'core_plugins';
+
+
     protected $fillable = [
         'name',
         'slug',

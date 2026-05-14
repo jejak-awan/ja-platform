@@ -1,6 +1,6 @@
 import { logger } from '@/shared/utils/logger';
 import { defineStore } from 'pinia';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import type { CMSState, Content, SiteSettings } from '@/modules/Cms/types/cms';
 

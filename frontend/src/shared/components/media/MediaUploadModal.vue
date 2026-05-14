@@ -148,7 +148,7 @@ import CloudUpload from 'lucide-vue-next/dist/esm/icons/cloud-upload.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import FileIcon from 'lucide-vue-next/dist/esm/icons/file.js';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { 
     Button, 
     Dialog, 

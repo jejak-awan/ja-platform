@@ -3,7 +3,7 @@
  * Bindings persist as `settings.theme_data_bindings`.
  */
 import { computed, ref, watch } from 'vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import toast from '@/shared/services/legacy-toast';
 import { JANARI_PRESETS, type JanariPresetKey } from '@/modules/Cms/config/janariPresets';
 import type { ComponentBindings } from '@/modules/Cms/composables/useThemeDataBindings';

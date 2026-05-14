@@ -141,7 +141,7 @@ import Copy from 'lucide-vue-next/dist/esm/icons/copy.js';
 import Info from 'lucide-vue-next/dist/esm/icons/info.js';
 import { Button } from '@/shared/components/ui';
 import { useToast } from '@/shared/composables/useToast';
-import { FileManagerKey } from '@/core/keys';
+import { FileManagerKey } from '@/engine/keys';
 
 const { t } = useI18n();
 const toast = useToast();

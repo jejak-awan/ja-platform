@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('sch_hr_staff', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
-            $table->foreignId('school_unit_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('workspace_id')->nullable()->constrained('sch_ins_levels')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->onDelete('set null');
             
             // Basic Info
             $table->string('nuptk', 16)->unique()->nullable();
@@ -50,6 +50,7 @@ return new class extends Migration
         // 2. Staff Attendance
         Schema::create('sch_hr_attendances', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('staff_id')->constrained('sch_hr_staff')->onDelete('cascade');
             $table->date('date');
             $table->time('clock_in')->nullable();
@@ -64,6 +65,7 @@ return new class extends Migration
         // 3. Salary Structures
         Schema::create('sch_hr_salary_structures', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
             $table->string('name'); // e.g., Guru GTY Gol III
             $table->decimal('base_salary', 15, 2)->default(0);
@@ -75,6 +77,7 @@ return new class extends Migration
         // 4. Payrolls
         Schema::create('sch_hr_payrolls', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('staff_id')->constrained('sch_hr_staff')->onDelete('cascade');
             $table->string('month', 2);
             $table->string('year', 4);
@@ -89,6 +92,7 @@ return new class extends Migration
         // 5. Staff Shifts
         Schema::create('sch_hr_shifts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
             $table->string('name');
             $table->time('clock_in');
@@ -100,6 +104,7 @@ return new class extends Migration
         // 6. Leave Requests
         Schema::create('sch_hr_leaves', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
             $table->foreignId('staff_id')->constrained('sch_hr_staff')->onDelete('cascade');
             $table->string('type');
@@ -114,6 +119,7 @@ return new class extends Migration
         // 7. Job Vacancies
         Schema::create('sch_hr_job_vacancies', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('school_id')->constrained('sch_ins_schools')->onDelete('cascade');
             $table->string('title');
             $table->text('description');
@@ -127,6 +133,7 @@ return new class extends Migration
         // 8. Job Applications
         Schema::create('sch_hr_job_applications', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('vacancy_id')->constrained('sch_hr_job_vacancies')->onDelete('cascade');
             $table->string('applicant_name');
             $table->string('applicant_email');

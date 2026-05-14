@@ -109,7 +109,7 @@ import {
     PopoverTrigger, 
     PopoverContent 
 } from '@/shared/components/ui';
-import { FileManagerKey } from '@/core/keys';
+import { FileManagerKey } from '@/engine/keys';
 
 import type { FileItem, FolderItem } from '@/modules/Cms/types/file-manager';
 

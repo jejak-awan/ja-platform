@@ -85,7 +85,7 @@ class StaffSampleSeeder extends Seeder
                 ['user_id' => $user->id],
                 [
                     'school_id' => $schoolId,
-                    'school_unit_id' => $unitId,
+                    'workspace_id' => $unitId,
                     'full_name' => $data['name'],
                     'nuptk' => $data['nuptk'],
                     'nik' => $data['nik'],

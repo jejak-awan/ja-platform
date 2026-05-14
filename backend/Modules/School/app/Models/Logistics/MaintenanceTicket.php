@@ -4,7 +4,7 @@ namespace Modules\School\Models\Logistics;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Core\Traits\ScopedByUnit;
+use Modules\Core\Traits\ScopedByWorkspace;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\HR\Staff;
@@ -12,7 +12,7 @@ use Modules\School\Models\HR\Staff;
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property int $school_asset_id
  * @property int $reported_by
  * @property \Illuminate\Support\Carbon $date_reported
@@ -33,11 +33,11 @@ class MaintenanceTicket extends Model
     protected $table = 'sch_log_maintenance_tickets';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, ScopedByUnit;
+    use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',
-        'school_unit_id',
+        'workspace_id',
         'school_asset_id',
         'reported_by',
         'date_reported',
@@ -66,7 +66,7 @@ class MaintenanceTicket extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**

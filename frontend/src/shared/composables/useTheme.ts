@@ -1,6 +1,6 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, computed } from 'vue';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { JANARI_PRESETS, type JanariPresetKey } from '@/modules/Cms/config/janariPresets';
 import { themeUsesJanariCanvas } from '@/modules/Cms/utils/themeManifest';
 

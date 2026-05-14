@@ -1,4 +1,4 @@
-import '@/core/legacy-bootstrap';
+import '@/engine/legacy-bootstrap';
 import '../css/base.css';
 
 import { createApp } from 'vue';
@@ -6,8 +6,8 @@ import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { createHead } from '@unhead/vue/client';
 import lazyLoad from '@/shared/utils/directives/lazyLoad';
-import i18n from '@/core/i18n';
-import { resolveIsAdminEntrypoint } from '@/core/router/entrypoint';
+import i18n from '@/engine/i18n';
+import { resolveIsAdminEntrypoint } from '@/engine/router/entrypoint';
 import { attemptChunkRecoveryReload, isChunkLoadError } from '@/shared/utils/chunkRecovery';
 
 // Keep admin/dashboard and public theme styles isolated.
@@ -94,7 +94,7 @@ if (document.readyState === 'loading') {
 // @ts-expect-error: JANARI_VERSION is a global set for audit purposes
 window.JANARI_VERSION = '2026.04.22.fix.v1';
 
-import { bootstrapApp } from '@/core/bootstrap';
+import { bootstrapApp } from '@/engine/bootstrap';
 
 async function bootstrap() {
     const [{ default: Logger, logger }, { default: RootComponent }] = await Promise.all([
@@ -124,7 +124,7 @@ async function bootstrap() {
     const { registry } = await bootstrapApp();
 
     // 2. Import Router (Registry is now full)
-    const { default: router } = await (isAdminRoute ? import('@/core/router/admin') : import('@/core/router/public'));
+    const { default: router } = await (isAdminRoute ? import('@/engine/router/admin') : import('@/engine/router/public'));
     app.use(router);
 
     // 3. Sync Navigation & Dashboards from Registry to Global Stores

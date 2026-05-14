@@ -3,7 +3,7 @@
  * Refine CMS Unique Constraints for Multi-Unit Support.
  * 
  * This migration drops the standard unique index on 'slug' for CMS tables
- * and replaces it with a composite unique index that includes 'school_unit_id'.
+ * and replaces it with a composite unique index that includes 'workspace_id'.
  * This allows multiple units to have identical slugs (e.g., 'uncategorized' or 'home').
  *
  * @author Antigravity
@@ -29,7 +29,7 @@ return new class extends Migration
                 $table->dropUnique($tableName . '_slug_unique');
                 
                 // Add composite unique index
-                $table->unique(['slug', 'school_unit_id'], $tableName . '_slug_unit_unique');
+                $table->unique(['slug', 'workspace_id'], $tableName . '_slug_unit_unique');
             });
         }
     }

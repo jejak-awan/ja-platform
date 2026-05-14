@@ -102,20 +102,6 @@ return new class extends Migration
             $table->index(['location', 'sort_order']);
         });
 
-        // 5. Languages Table
-        Schema::create('languages', function (Blueprint $table) {
-            $table->id();
-            $table->string('code', 10)->unique();
-            $table->string('name');
-            $table->string('native_name')->nullable();
-            $table->string('flag')->nullable();
-            $table->boolean('is_default')->default(false)->index();
-            $table->boolean('is_active')->default(true)->index();
-            $table->integer('sort_order')->default(0);
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
     }
 
     /**
@@ -123,7 +109,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('languages');
         Schema::dropIfExists('widgets');
         Schema::dropIfExists('menu_items');
         Schema::dropIfExists('menus');

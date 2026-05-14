@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, markRaw, type Component } from 'vue';
-import type { User } from '@/core/types/auth';
+import type { User } from '@/engine/types/auth';
 
 export interface DashboardEntry {
     id: string;

@@ -29,7 +29,7 @@ export interface Subject {
 
 export interface StudyGroup {
     id: number;
-    school_unit_id: number;
+    workspace_id: number;
     name: string;
     description?: string;
     created_at?: string;

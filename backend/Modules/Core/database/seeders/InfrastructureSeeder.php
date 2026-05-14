@@ -38,9 +38,6 @@ class InfrastructureSeeder extends Seeder
         // 2. Standard Media Folders
         $folders = [
             ['name' => 'Logos', 'slug' => 'logos', 'module' => 'Core'],
-            ['name' => 'CMS Content', 'slug' => 'cms-content', 'module' => 'Cms'],
-            ['name' => 'Students', 'slug' => 'students', 'module' => 'School'],
-            ['name' => 'Staff', 'slug' => 'staff', 'module' => 'School'],
             ['name' => 'Documents', 'slug' => 'documents', 'module' => 'Core'],
         ];
 

@@ -23,6 +23,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DeletedFile extends Model
 {
+    protected $table = 'core_deleted_files';
+
+
     protected $fillable = [
         'original_path',
         'trash_path',

@@ -55,7 +55,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, LucideIcon } from '@/shared/components/ui';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 
 const { t } = useI18n();
 

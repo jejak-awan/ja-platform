@@ -29,6 +29,9 @@ use Illuminate\Support\Facades\Crypt;
  */
 class RedisSetting extends Model
 {
+    protected $table = 'core_redis_settings';
+
+
     protected $fillable = [
         'key',
         'value',

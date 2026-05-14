@@ -115,7 +115,7 @@ import {
   Input, Switch
 } from '@/shared/components/ui';
 import { useToast } from '@/shared/composables/useToast';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse } from '@/shared/utils/responseParser';
 
 const { t } = useI18n();

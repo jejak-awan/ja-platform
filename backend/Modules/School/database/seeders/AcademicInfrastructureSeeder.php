@@ -21,30 +21,30 @@ class AcademicInfrastructureSeeder extends Seeder
         // 1. Create Academic Year
         $year = AcademicYear::withoutGlobalScopes()->updateOrCreate(
             ['school_id' => $schoolId, 'year' => '2023/2024'],
-            ['is_active' => true, 'school_unit_id' => $levelId]
+            ['is_active' => true, 'workspace_id' => $levelId]
         );
 
         // 2. Create Semesters
         Semester::withoutGlobalScopes()->updateOrCreate(
-            ['academic_year_id' => $year->id, 'type' => 'ganjil', 'school_unit_id' => $levelId],
+            ['academic_year_id' => $year->id, 'type' => 'ganjil', 'workspace_id' => $levelId],
             ['is_active' => true]
         );
         Semester::withoutGlobalScopes()->updateOrCreate(
-            ['academic_year_id' => $year->id, 'type' => 'genap', 'school_unit_id' => $levelId],
+            ['academic_year_id' => $year->id, 'type' => 'genap', 'workspace_id' => $levelId],
             ['is_active' => false]
         );
 
         // 3. Create Departments (SMK Majors)
         $deptTKJ = Department::withoutGlobalScopes()->updateOrCreate(
-            ['school_unit_id' => $levelId, 'code' => 'TKJ'],
+            ['workspace_id' => $levelId, 'code' => 'TKJ'],
             ['name' => 'Teknik Komputer & Jaringan', 'description' => 'Jurusan Teknik Komputer dan Jaringan']
         );
         $deptRPL = Department::withoutGlobalScopes()->updateOrCreate(
-            ['school_unit_id' => $levelId, 'code' => 'RPL'],
+            ['workspace_id' => $levelId, 'code' => 'RPL'],
             ['name' => 'Rekayasa Perangkat Lunak', 'description' => 'Jurusan Rekayasa Perangkat Lunak']
         );
         $deptAKL = Department::withoutGlobalScopes()->updateOrCreate(
-            ['school_unit_id' => $levelId, 'code' => 'AKL'],
+            ['workspace_id' => $levelId, 'code' => 'AKL'],
             ['name' => 'Akuntansi & Keuangan Lembaga', 'description' => 'Jurusan Akuntansi']
         );
 
@@ -66,7 +66,7 @@ class AcademicInfrastructureSeeder extends Seeder
                     'name' => $class['name']
                 ],
                 [
-                    'school_unit_id' => $levelId,
+                    'workspace_id' => $levelId,
                     'department_id' => $class['dept']->id,
                     'homeroom_teacher_id' => $class['teacher_id'],
                 ]

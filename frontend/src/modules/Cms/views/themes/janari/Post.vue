@@ -142,7 +142,7 @@ import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
 import BlogSidebar from './components/BlogSidebar.vue';
 import { useRoute } from 'vue-router';
 // import { useI18n } from 'vue-i18n';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity';
 
 import { useIconHydration } from '@/shared/composables/useIconHydration';

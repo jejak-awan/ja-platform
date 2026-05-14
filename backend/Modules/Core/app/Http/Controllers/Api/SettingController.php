@@ -139,7 +139,7 @@ class SettingController extends BaseApiController
                 $sGroup = is_scalar($sGroupRaw) ? (string) $sGroupRaw : 'system';
 
                 // In Core context, we want settings to be Global by default unless explicitly specified.
-                // Since this controller manages system-wide infrastructure, we pass NULL for school_unit_id.
+                // Since this controller manages system-wide infrastructure, we pass NULL for workspace_id.
                 Setting::set($sKey, $sValue, $sType, $sGroup, null);
 
                 // Sync with Redis Settings if cache driver is changed to Redis-based

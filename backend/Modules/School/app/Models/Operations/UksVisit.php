@@ -2,13 +2,15 @@
 
 namespace Modules\School\Models\Operations;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
  * @property int $school_id
- * @property int $school_unit_id
+ * @property int $workspace_id
  * @property string $patient_type
  * @property int $patient_id
  * @property string $complaint
@@ -25,11 +27,11 @@ class UksVisit extends Model
     protected $table = 'sch_ops_uks_visits';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, \Modules\Core\Traits\ScopedByUnit;
+    use HasFactory, \Modules\Core\Traits\ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',
-        'school_unit_id',
+        'workspace_id',
         'patient_type',
         'patient_id',
         'complaint',
@@ -50,7 +52,7 @@ class UksVisit extends Model
      */
     public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'school_unit_id');
+        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'workspace_id');
     }
 
     /**

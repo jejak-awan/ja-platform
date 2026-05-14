@@ -241,7 +241,7 @@ import {
     Input
 } from '@/shared/components/ui';
 import { useToast } from '@/shared/composables/useToast';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

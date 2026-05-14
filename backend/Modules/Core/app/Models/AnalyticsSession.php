@@ -32,6 +32,9 @@ use Modules\Core\Helpers\IpHelper;
  */
 class AnalyticsSession extends Model
 {
+    protected $table = 'core_analytics_sessions';
+
+
     /** @use HasFactory<\Modules\Core\Database\Factories\AnalyticsSessionFactory> */
     use HasFactory;
 
@@ -43,7 +46,6 @@ class AnalyticsSession extends Model
         return \Modules\Core\Database\Factories\AnalyticsSessionFactory::new();
     }
 
-    protected $table = 'analytics_sessions';
 
     protected $fillable = [
         'session_id',

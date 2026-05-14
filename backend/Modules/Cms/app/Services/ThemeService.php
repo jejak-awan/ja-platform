@@ -61,13 +61,13 @@ class ThemeService
      */
     public function activateTheme(Theme $theme): bool
     {
-        $levelId = \Illuminate\Support\Facades\Context::get('school_unit_id');
+        $levelId = \Illuminate\Support\Facades\Context::get('workspace_id');
 
         // If theme is global and we have a unit context, we must ensure we activate/create a unit-specific record
-        if ($theme->school_unit_id === null && $levelId) {
+        if ($theme->workspace_id === null && $levelId) {
             $existing = Theme::withoutGlobalScope('school_unit')
                 ->where('slug', $theme->slug)
-                ->where('school_unit_id', $levelId)
+                ->where('workspace_id', $levelId)
                 ->first();
 
             if ($existing) {
@@ -75,7 +75,7 @@ class ThemeService
             } else {
                 // Clone the global theme template to this unit
                 $theme = Theme::create([
-                    'school_unit_id' => $levelId,
+                    'workspace_id' => $levelId,
                     'name' => $theme->name,
                     'slug' => $theme->slug,
                     'type' => $theme->type,

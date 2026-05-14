@@ -65,7 +65,7 @@ class AdmissionService
         /** @var Student $student */
         $student = Student::create([
             'school_id' => $enrollment->school_id,
-            'school_unit_id' => $enrollment->school_unit_id,
+            'workspace_id' => $enrollment->workspace_id,
             'full_name' => $enrollment->full_name,
             'gender' => $enrollment->gender,
             'place_of_birth' => $enrollment->place_of_birth,

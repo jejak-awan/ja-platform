@@ -154,7 +154,7 @@ class CacheWarmingService
             $stats = [
                 'total_tags' => Tag::count(),
                 'total_media' => Media::count(),
-                'total_users' => DB::table('users')->count(),
+                'total_users' => DB::table('core_users')->count(),
             ];
 
             Cache::put(self::PREFIX_STATISTICS.'overview', $stats, self::TTL_SHORT);

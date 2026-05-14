@@ -119,7 +119,7 @@ import { useI18n } from 'vue-i18n';
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, watch, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import api from '@/core/api/client';
+import api from '@/engine/api/client';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import {
     Tabs,
@@ -130,7 +130,7 @@ import {
 } from '@/shared/components/ui';
 import { useToast } from '@/shared/composables/useToast';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
-import type { SettingValue } from '@/core/types/settings';
+import type { SettingValue } from '@/engine/types/settings';
 // Async Tab Components
 const IdentityTab = defineAsyncComponent(() => import('./tabs/IdentityTab.vue'));
 const SeoTab = defineAsyncComponent(() => import('./tabs/SeoTab.vue'));

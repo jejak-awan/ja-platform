@@ -2,6 +2,8 @@
 
 namespace Modules\School\Models\HR;
 
+use Modules\Core\Traits\ScopedByWorkspace;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class JobApplication extends Model
 {
+    use ScopedByWorkspace;
     protected $table = 'sch_hr_job_applications';
 
     use SoftDeletes;

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true)->index();
             $table->integer('sort_order')->default(0);
             $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('set null');
-            $table->foreignId('author_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('author_id')->nullable()->constrained('core_users')->onDelete('set null');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -43,7 +43,7 @@ return new class extends Migration
             $table->integer('edit_count')->default(0);
 
             // Relationships
-            $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('author_id')->constrained('core_users')->onDelete('cascade');
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
 
             // Flags & Attributes
@@ -58,7 +58,7 @@ return new class extends Migration
             $table->string('featured_image')->nullable();
 
             // Locks
-            $table->foreignId('locked_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('locked_by')->nullable()->constrained('core_users')->onDelete('set null');
             $table->timestamp('locked_at')->nullable();
 
             // Timestamps
@@ -72,7 +72,7 @@ return new class extends Migration
         // 3. Content Tag Pivot (Uses tags table from Core)
         Schema::create('content_tag', function (Blueprint $table) {
             $table->foreignId('content_id')->constrained('contents')->onDelete('cascade');
-            $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade');
+            $table->foreignId('tag_id')->constrained('core_tags')->onDelete('cascade');
             $table->primary(['content_id', 'tag_id']);
         });
 
@@ -80,7 +80,7 @@ return new class extends Migration
         Schema::create('content_revisions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('content_id')->constrained('contents')->onDelete('cascade');
-            $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('author_id')->constrained('core_users')->onDelete('cascade');
             $table->string('title');
             $table->longText('body')->nullable();
             $table->json('meta')->nullable();
@@ -92,7 +92,7 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('content_id')->constrained('contents')->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('core_users')->onDelete('cascade');
             $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->string('email')->nullable();
