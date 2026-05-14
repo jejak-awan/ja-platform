@@ -4,7 +4,7 @@ namespace Modules\Cms\Models;
 
 use Modules\Core\Traits\ScopedByWorkspace;
  
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory as EloquentHasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use Modules\Cms\Support\ThemeViews;
@@ -43,7 +43,7 @@ use Modules\Cms\Services\ThemeCacheService;
 class Theme extends Model
 {
     /** @use HasFactory<\Modules\Cms\Database\Factories\ThemeFactory> */
-    use HasFactory, ScopedByWorkspace;
+    use EloquentHasFactory, ScopedByWorkspace;
 
     /**
      * Create a new factory instance for the model.

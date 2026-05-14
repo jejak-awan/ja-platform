@@ -20,14 +20,19 @@ class LmsSeeder extends Seeder
     public function run(): void
     {
         $school = School::first();
+        $unit = $school ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
         $author = User::whereHas('roles', fn($q) => $q->where('name', 'super_admin'))->first() ?? User::first();
 
-        if (!$school || !$author) return;
+        if (!$school || !$unit || !$author) return;
+
+        $workspaceId = $unit->id;
 
         // 1. Create a Sample Course
         $course = Course::updateOrCreate(
-            ['slug' => 'dasar-pemrograman-web',
+            ['slug' => 'dasar-pemrograman-web', 'workspace_id' => $workspaceId],
+            [
                 'school_id' => $school->id,
+                'workspace_id' => $workspaceId,
                 'title' => 'Dasar-Dasar Pemrograman Web',
                 'summary' => 'Belajar HTML, CSS, dan JavaScript dari nol.',
                 'description' => 'Kursus ini dirancang untuk pemula yang ingin terjun ke dunia web development.',
@@ -39,18 +44,20 @@ class LmsSeeder extends Seeder
 
         // 2. Create Section
         $section = Section::updateOrCreate(
-            ['course_id' => $course->id, 'title' => 'Bab 1: Dasar HTML'],
-            ['order' => 1]
+            ['course_id' => $course->id, 'workspace_id' => $workspaceId, 'title' => 'Bab 1: Dasar HTML'],
+            ['order' => 1, 'workspace_id' => $workspaceId]
         );
 
         // 3. Create Lessons
         $lesson1 = Lesson::updateOrCreate(
             [
+                'workspace_id' => $workspaceId,
                 'section_id' => $section->id,
                 'course_id' => $course->id,
                 'slug' => 'pengenalan-html-css',
             ],
             [
+                'workspace_id' => $workspaceId,
                 'title' => 'Pengenalan HTML & CSS',
                 'summary' => 'Dasar-dasar struktur web dan styling.',
                 'order' => 1,
@@ -58,8 +65,8 @@ class LmsSeeder extends Seeder
         );
 
         $lesson2 = Lesson::updateOrCreate(
-            ['section_id' => $section->id, 'course_id' => $course->id, 'title' => 'Styling dengan CSS'],
-            ['order' => 2, 'slug' => 'styling-dengan-css']
+            ['workspace_id' => $workspaceId, 'section_id' => $section->id, 'course_id' => $course->id, 'title' => 'Styling dengan CSS'],
+            ['order' => 2, 'slug' => 'styling-dengan-css', 'workspace_id' => $workspaceId]
         );
 
         // 4. Create Topics with Polymorphic Content
@@ -69,8 +76,9 @@ class LmsSeeder extends Seeder
             'value' => '<h1>Selamat Datang!</h1><p>HTML adalah bahasa standar untuk membuat halaman web.</p>'
         ]);
         Topic::updateOrCreate(
-            ['lesson_id' => $lesson1->id, 'title' => 'Apa itu HTML?'],
+            ['workspace_id' => $workspaceId, 'lesson_id' => $lesson1->id, 'title' => 'Apa itu HTML?'],
             [
+                'workspace_id' => $workspaceId,
                 'order' => 1,
                 'topicable_type' => RichText::class,
                 'topicable_id' => $text->id,
@@ -83,8 +91,9 @@ class LmsSeeder extends Seeder
             'duration' => 212,
         ]);
         Topic::updateOrCreate(
-            ['lesson_id' => $lesson1->id, 'title' => 'Struktur Dasar Dokumen HTML'],
+            ['workspace_id' => $workspaceId, 'lesson_id' => $lesson1->id, 'title' => 'Struktur Dasar Dokumen HTML'],
             [
+                'workspace_id' => $workspaceId,
                 'order' => 2,
                 'topicable_type' => Video::class,
                 'topicable_id' => $video->id,

@@ -81,12 +81,15 @@ return new class extends Migration
         // 5. Graduation Settings
         Schema::create('sch_grad_settings', function (Blueprint $table) {
             $table->id();
-            $table->integer('graduation_year')->unique();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
+            $table->integer('graduation_year');
             $table->boolean('is_open')->default(false);
             $table->timestamp('announcement_date')->nullable();
             $table->json('subjects')->nullable();
             $table->json('config')->nullable();
             $table->timestamps();
+
+            $table->unique(['graduation_year', 'workspace_id']);
         });
 
         // 6. Graduation Results

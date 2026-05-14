@@ -39,7 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Modules\Cms\Http\Middleware\HandleRedirects::class,
             \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Modules\Core\Http\Middleware\SecurityHeaders::class,
-            \Modules\Cms\Http\Middleware\TrackAnalytics::class,
+            \Modules\Core\Http\Middleware\TrackAnalytics::class,
             \Modules\Core\Http\Middleware\CheckMaintenanceMode::class,
         ]);
 

@@ -22,6 +22,7 @@ class GraduationSetting extends Model
     protected $table = 'sch_grad_settings';
 
     protected $fillable = [
+        'workspace_id',
         'graduation_year',
         'is_open',
         'announcement_date',

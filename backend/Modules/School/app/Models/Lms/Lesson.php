@@ -28,6 +28,7 @@ class Lesson extends Model
     protected $table = 'sch_lms_lessons';
 
     protected $fillable = [
+        'workspace_id',
         'section_id',
         'course_id',
         'title',

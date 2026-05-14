@@ -17,6 +17,7 @@ class Section extends Model
     protected $table = 'sch_lms_sections';
 
     protected $fillable = [
+        'workspace_id',
         'course_id',
         'title',
         'order',

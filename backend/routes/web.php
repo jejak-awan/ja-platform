@@ -77,3 +77,19 @@ Route::middleware('throttle:probe-paths')->any('/{path}', function (Request $req
 
     abort(404);
 })->whereIn('path', $probePaths);
+
+Route::get('/auth/{any?}', function () {
+    if (file_exists(public_path('index.html'))) {
+        return file_get_contents(public_path('index.html'));
+    }
+
+    return response()->json(['message' => 'Resource not found'], 404);
+})->where('any', '.*');
+
+Route::fallback(function () {
+    if (file_exists(public_path('index.html'))) {
+        return file_get_contents(public_path('index.html'));
+    }
+
+    return response()->json(['message' => 'Resource not found'], 404);
+});

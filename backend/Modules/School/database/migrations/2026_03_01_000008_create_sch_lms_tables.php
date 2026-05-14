@@ -50,6 +50,7 @@ return new class extends Migration
         // 5. Lessons (Materi / Pertemuan)
         Schema::create('sch_lms_lessons', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('workspace_id')->constrained('sch_ins_levels')->onDelete('cascade');
             $table->foreignId('course_id')->constrained('sch_lms_courses')->onDelete('cascade'); // Added back for easier query
             $table->foreignId('section_id')->constrained('sch_lms_sections')->onDelete('cascade');
             $table->string('title');

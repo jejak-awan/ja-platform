@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Redirect extends Model
 {
-    protected $table = 'core_redirects';
+    protected $table = 'redirects';
 
     use ScopedByWorkspace;
     protected $fillable = [

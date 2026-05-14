@@ -26,6 +26,7 @@ class Topic extends Model
     protected $table = 'sch_lms_topics';
 
     protected $fillable = [
+        'workspace_id',
         'lesson_id',
         'title',
         'order',

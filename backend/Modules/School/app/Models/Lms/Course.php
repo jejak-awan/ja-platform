@@ -42,6 +42,7 @@ class Course extends Model
     protected $table = 'sch_lms_courses';
 
     protected $fillable = [
+        'workspace_id',
         'school_id',
         'title',
         'slug',
