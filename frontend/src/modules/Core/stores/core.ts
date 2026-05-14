@@ -56,7 +56,7 @@ export const useCoreStore = defineStore('core', {
             admin_email: '',
             site_version: '',
             site_logo: '',
-            site_favicon: '/favicon.svg'
+            site_favicon: '/favicon.ico'
         },
         maintenance: {
             mode: false,

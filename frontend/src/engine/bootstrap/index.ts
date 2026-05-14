@@ -1,4 +1,4 @@
-import { useAuthStore } from '../stores/auth';
+import { useAuthStore } from '@/modules/Core/stores/auth';
 import { useWorkspaceStore } from '../stores/workspace';
 import { registry } from '../registry';
 import { logger } from '@/shared/utils/logger';

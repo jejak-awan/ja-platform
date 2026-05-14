@@ -12,7 +12,8 @@ export const CoreModule: JanariModule = {
         {
             id: 'core-admin',
             priority: 100,
-            condition: (user) => user.roles?.some((r: any) => r.name === 'super') ?? false,
+            routeName: 'core.dashboard',
+            condition: (user) => user?.roles?.some((r: any) => r.name === 'super') ?? false,
             component: defineAsyncComponent(() => import('./components/dashboard/AdminDashboard.vue'))
         }
     ]

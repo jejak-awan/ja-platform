@@ -12,19 +12,22 @@ export const SchoolModule: JanariModule = {
         {
             id: 'school-admin',
             priority: 90,
-            condition: (_user, auth) => auth.isAtLeastRole('admin-bk'),
+            routeName: 'schools.dashboard',
+            condition: (_user, auth) => auth.hasPermission('view schools'),
             component: defineAsyncComponent(() => import('./components/dashboard/SchoolAdminDashboard.vue'))
         },
         {
             id: 'school-teacher',
             priority: 80,
-            condition: (_user, auth) => auth.isAtLeastRole('guru'),
+            routeName: 'teacher.dashboard',
+            condition: (_user, auth) => auth.hasPermission('view teacher portal'),
             component: defineAsyncComponent(() => import('./components/dashboard/TeacherDashboard.vue'))
         },
         {
             id: 'school-osis',
             priority: 70,
-            condition: (_user, auth) => auth.isAtLeastRole('admin-osis'),
+            routeName: 'osis.index',
+            condition: (_user, auth) => auth.hasPermission('view osis'),
             component: defineAsyncComponent(() => import('./components/dashboard/OsisDashboard.vue'))
         },
         {
@@ -36,6 +39,7 @@ export const SchoolModule: JanariModule = {
         {
             id: 'school-student',
             priority: 50,
+            routeName: 'student.dashboard',
             condition: (_user, auth) => auth.isAtLeastRole('siswa'),
             component: defineAsyncComponent(() => import('./components/dashboard/StudentDashboard.vue'))
         }

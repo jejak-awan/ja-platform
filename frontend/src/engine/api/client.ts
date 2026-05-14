@@ -150,7 +150,10 @@ apiClient.interceptors.response.use(
             if (isRedirectingToLogin) return Promise.reject(error);
             
             const url = error.config?.url || '';
-            if (url.includes('logout')) return Promise.resolve({ data: {} });
+            // Skip redirection for logout (intended) or user profile fetch (can be guest)
+            if (url.includes('logout') || url.includes('user')) {
+                return Promise.reject(error);
+            }
 
             triggerVaporLock();
             isRedirectingToLogin = true;

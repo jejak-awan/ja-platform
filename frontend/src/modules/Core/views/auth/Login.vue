@@ -509,7 +509,7 @@ const completeLogin = async () => {
     const redirectPath = route.query.redirect;
     const target: RouteLocationRaw = (redirectPath && typeof redirectPath === 'string' && !redirectPath.includes('/login') && !redirectPath.includes('/419'))
         ? redirectPath
-        : { name: 'dashboard' };
+        : (roleRank >= 90 ? { name: 'dashboard' } : '/');
 
     await nextTick();
 

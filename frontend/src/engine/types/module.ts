@@ -7,6 +7,7 @@ export interface DashboardConfig {
     priority: number;
     condition: (user: any, authStore: any) => boolean;
     component: Component | (() => Promise<Component>);
+    routeName?: string;
 }
 
 export interface JanariModule {

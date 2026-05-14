@@ -5,7 +5,7 @@ import { SECURITY_ROUTES } from '@/config/security';
 import { handleBeforeEachGuard } from './guards';
 import { attemptChunkRecoveryReload, isChunkLoadError } from '@/shared/utils/chunkRecovery';
 import { useSystemError } from '@/shared/composables/useSystemError';
-import { useAuthStore } from '@/engine/stores/auth';
+import { useAuthStore } from '@/modules/Core/stores/auth';
 import { registry } from '@/engine/registry';
 import { useWorkspaceStore } from '@/engine/stores/workspace';
 
@@ -123,18 +123,11 @@ const dashboardRoute: RouteRecordRaw = {
                 const availableDashboard = dashboards.find(d => d.condition ? d.condition(authStore.user, authStore) : true);
 
                 if (availableDashboard) {
-                    // Note: Dashboard components are rendered in the 'dashboard' route via a wrapper component
-                    // or we can redirect to a specific module route if provided.
-                    // For now, if no specific route name is in DashboardConfig, we use the first module's dashboard route
-                    // Typically 'schools.dashboard' or 'cms.dashboard'
-                    // We'll fallback to registry discovery
-                    const target = dashboards[0]?.id === 'school-admin' ? 'schools.dashboard' : 'core.dashboard';
-                    // Improvement: Modules should provide a 'landingRoute' in their config
-                    return { name: target };
+                    return { name: availableDashboard.routeName || 'core.dashboard' };
                 }
 
-                // C. Final Fallback
-                return { name: 'core.dashboard' };
+                // C. Final Fallback: If no dashboard access, go to landing page
+                return '/';
             },
         },
         // 3. Register all module routes from Registry
