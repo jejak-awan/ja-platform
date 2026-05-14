@@ -3,7 +3,7 @@
 namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Modules\Cms\Models\Redirect;
+use Modules\Core\Models\Redirect;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class RedirectController extends BaseApiController

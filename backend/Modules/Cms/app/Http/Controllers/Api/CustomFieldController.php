@@ -3,7 +3,7 @@
 namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Modules\Cms\Models\CustomField;
+use Modules\Core\Models\CustomField;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class CustomFieldController extends BaseApiController
@@ -30,7 +30,7 @@ class CustomFieldController extends BaseApiController
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
-            'field_group_id' => 'nullable|exists:field_groups,id',
+            'field_group_id' => 'nullable|exists:core_field_groups,id',
             'name' => 'required|string|max:255',
             'slug' => 'required|string',
             'type' => 'required|in:text,textarea,number,date,datetime,select,multiselect,checkbox,radio,file,image,url,email,color',
@@ -71,7 +71,7 @@ class CustomFieldController extends BaseApiController
     public function update(Request $request, CustomField $customField): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
-            'field_group_id' => 'nullable|exists:field_groups,id',
+            'field_group_id' => 'nullable|exists:core_field_groups,id',
             'name' => 'sometimes|required|string|max:255',
             'slug' => 'sometimes|required|string',
             'type' => 'sometimes|required|in:text,textarea,number,date,datetime,select,multiselect,checkbox,radio,file,image,url,email,color',

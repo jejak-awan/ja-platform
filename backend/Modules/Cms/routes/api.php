@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Cms\Http\Controllers\Api\AnalyticsController;
+use Modules\Core\Http\Controllers\Api\AnalyticsController;
 use Modules\Cms\Http\Controllers\Api\CategoryController;
 use Modules\Cms\Http\Controllers\Api\CommentController;
 use Modules\Cms\Http\Controllers\Api\ContentController;
@@ -20,7 +20,7 @@ use Modules\Cms\Http\Controllers\Api\RedirectController;
 use Modules\Cms\Http\Controllers\Api\SearchController;
 use Modules\Cms\Http\Controllers\Api\SeoController;
 use Modules\Cms\Http\Controllers\Api\SettingController;
-use Modules\Cms\Http\Controllers\Api\TagController;
+use Modules\Core\Http\Controllers\Api\TagController;
 use Modules\Cms\Http\Controllers\Api\ThemeController;
 use Modules\Cms\Http\Controllers\Api\WidgetController;
 

@@ -1,6 +1,8 @@
 <?php
 
 namespace Modules\Core\Models;
+ 
+ use Modules\Cms\Models\Content;
 
 use Modules\Core\Traits\ScopedByWorkspace;
 

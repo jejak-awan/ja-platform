@@ -57,6 +57,14 @@ class Tag extends Model
 
 
     /**
+     * @return BelongsToMany<\Modules\Cms\Models\Content, $this>
+     */
+    public function contents(): BelongsToMany
+    {
+        return $this->belongsToMany(\Modules\Cms\Models\Content::class, 'content_tag');
+    }
+
+    /**
      * @return BelongsToMany<Media, $this>
      */
     public function media(): BelongsToMany

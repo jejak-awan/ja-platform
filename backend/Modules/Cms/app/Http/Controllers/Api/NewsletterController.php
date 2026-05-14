@@ -5,7 +5,7 @@ namespace Modules\Cms\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Modules\Cms\Models\NewsletterSubscriber;
+use Modules\Core\Models\NewsletterSubscriber;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class NewsletterController extends BaseApiController

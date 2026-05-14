@@ -76,7 +76,7 @@ class CustomField extends Model
      */
     public function getValueForContent($contentId)
     {
-        /** @var \Modules\Cms\Models\ContentCustomField|null $value */
+        /** @var \Modules\Core\Models\ContentCustomField|null $value */
         $value = $this->contentValues()->where('content_id', $contentId)->first();
 
         return $value ? $value->value : $this->default_value;

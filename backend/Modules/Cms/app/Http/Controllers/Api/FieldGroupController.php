@@ -3,7 +3,7 @@
 namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Modules\Cms\Models\FieldGroup;
+use Modules\Core\Models\FieldGroup;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class FieldGroupController extends BaseApiController
@@ -31,7 +31,7 @@ class FieldGroupController extends BaseApiController
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|unique:field_groups,slug',
+            'slug' => 'required|string|unique:core_field_groups,slug',
             'description' => 'nullable|string',
             'applies_to' => 'required|string',
             'conditions' => 'nullable|array',
@@ -52,7 +52,7 @@ class FieldGroupController extends BaseApiController
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            'slug' => 'sometimes|required|string|unique:field_groups,slug,'.$fieldGroup->id,
+            'slug' => 'sometimes|required|string|unique:core_field_groups,slug,'.$fieldGroup->id,
             'description' => 'nullable|string',
             'applies_to' => 'sometimes|required|string',
             'conditions' => 'nullable|array',

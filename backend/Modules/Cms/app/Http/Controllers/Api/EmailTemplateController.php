@@ -3,7 +3,7 @@
 namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Modules\Cms\Models\EmailTemplate;
+use Modules\Core\Models\EmailTemplate;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class EmailTemplateController extends BaseApiController

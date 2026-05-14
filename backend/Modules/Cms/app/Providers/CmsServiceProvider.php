@@ -88,11 +88,11 @@ class CmsServiceProvider extends ServiceProvider
                     'comments' => \Modules\Cms\Models\Comment::count(),
                     'forms' => \Modules\Cms\Models\Form::count(),
                     'form_submissions' => \Modules\Cms\Models\FormSubmission::count(),
-                    'total_email_templates' => \Modules\Cms\Models\EmailTemplate::count(),
-                    'newsletter_subscribers' => \Modules\Cms\Models\NewsletterSubscriber::count(),
+                    'total_email_templates' => \Modules\Core\Models\EmailTemplate::count(),
+                    'newsletter_subscribers' => \Modules\Core\Models\NewsletterSubscriber::count(),
                     'email' => [
-                        'templates' => \Modules\Cms\Models\EmailTemplate::count(),
-                        'subscribers' => \Modules\Cms\Models\NewsletterSubscriber::count(),
+                        'templates' => \Modules\Core\Models\EmailTemplate::count(),
+                        'subscribers' => \Modules\Core\Models\NewsletterSubscriber::count(),
                         'smtp_status' => \Illuminate\Support\Facades\Cache::get('email_smtp_status', 'unknown'),
                     ],
                 ];

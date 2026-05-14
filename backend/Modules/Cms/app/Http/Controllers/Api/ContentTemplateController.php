@@ -3,7 +3,7 @@
 namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Modules\Cms\Models\ContentTemplate;
+use Modules\Core\Models\ContentTemplate;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 class ContentTemplateController extends BaseApiController
@@ -116,7 +116,7 @@ class ContentTemplateController extends BaseApiController
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|unique:content_templates,slug',
+            'slug' => 'required|string|unique:core_content_templates,slug',
             'description' => 'nullable|string',
             'type' => 'required|string|in:post,page,custom',
             'title_template' => 'nullable|string',
@@ -179,7 +179,7 @@ class ContentTemplateController extends BaseApiController
 
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            'slug' => 'sometimes|required|string|unique:content_templates,slug,'.$contentTemplate->id,
+            'slug' => 'sometimes|required|string|unique:core_content_templates,slug,'.$contentTemplate->id,
             'description' => 'nullable|string',
             'type' => 'sometimes|required|string|in:post,page,custom',
             'title_template' => 'nullable|string',

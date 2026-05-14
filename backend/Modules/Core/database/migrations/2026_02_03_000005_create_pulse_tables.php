@@ -90,7 +90,7 @@ return new class extends Migration
         });
 
         // 6. Login History
-        Schema::create('core_login_history', function (Blueprint $table) {
+        Schema::create('core_login_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('core_users')->onDelete('cascade');
             $table->string('ip_address', 45)->nullable();
@@ -155,7 +155,7 @@ return new class extends Migration
         Schema::dropIfExists('core_dependency_vulnerabilities');
         Schema::dropIfExists('core_slow_queries');
         Schema::dropIfExists('core_csp_reports');
-        Schema::dropIfExists('core_login_history');
+        Schema::dropIfExists('core_login_histories');
         Schema::dropIfExists('core_analytics_sessions');
         Schema::dropIfExists('core_analytics_events');
         Schema::dropIfExists('core_analytics_visits');

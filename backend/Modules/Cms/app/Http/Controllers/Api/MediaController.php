@@ -45,8 +45,12 @@ class MediaController extends BaseApiController
      */
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
-        $module = $request->input('module', 'cms');
-        $query = Media::where('module', $module)->with(['folder', 'usages', 'tags']);
+        $module = $request->input('module');
+        $query = Media::with(['folder', 'usages', 'tags']);
+        
+        if ($module) {
+            $query->where('module', $module);
+        }
 
         $user = $request->user();
         if (! $user) {
@@ -174,7 +178,12 @@ class MediaController extends BaseApiController
      */
     public function statistics(Request $request)
     {
+        $module = $request->input('module');
         $query = Media::query();
+
+        if ($module) {
+            $query->where('module', $module);
+        }
 
         $user = $request->user();
         if (! $user) {

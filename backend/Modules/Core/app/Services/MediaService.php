@@ -187,20 +187,21 @@ class MediaService
         $height = $height ?? UploadSettingsHelper::getThumbnailHeight();
         $fullPath = Storage::disk($media->disk)->path($media->path);
 
+        $pathInfo = pathinfo((string) $media->path);
+        $fileName = $pathInfo['filename'];
+        $extension = $pathInfo['extension'] ?? '';
+        $dirname = ($pathInfo['dirname'] === '.' || $pathInfo['dirname'] === '/') ? '' : $pathInfo['dirname'].'/';
+
         // Create thumbnails directory
-        $thumbnailDir = Storage::disk($media->disk)->path( 'media/thumbnails');
+        $thumbnailDir = Storage::disk($media->disk)->path($dirname.'thumbnails');
         if (! is_dir($thumbnailDir)) {
             mkdir($thumbnailDir, 0755, true);
         }
 
-        $pathInfo = pathinfo((string) $media->path);
-        $fileName = $pathInfo['filename'];
-        $extension = $pathInfo['extension'] ?? '';
-
         // SVG files get converted to PNG for thumbnail
         $isSvg = $media->mime_type === 'image/svg+xml' || strtolower($extension) === 'svg';
         $thumbnailExtension = $isSvg ? 'png' : $extension;
-        $thumbnailPath = 'cms/media/thumbnails/'.$fileName.'_thumb.'.$thumbnailExtension;
+        $thumbnailPath = $dirname.'thumbnails/'.$fileName.'_thumb.'.$thumbnailExtension;
         $thumbnailFullPath = Storage::disk($media->disk)->path($thumbnailPath);
 
         // Handle SVG with Imagick
@@ -421,38 +422,34 @@ class MediaService
         return null;
     }
 
-    /**
-     * Delete all media variants (thumbnails, resized versions)
-     */
     public function deleteVariants(Media $media): void
     {
         $fileName = pathinfo($media->path, PATHINFO_FILENAME);
         $extension = pathinfo($media->path, PATHINFO_EXTENSION);
+        $pathInfo = pathinfo($media->path);
+        $dirname = ($pathInfo['dirname'] === '.' || $pathInfo['dirname'] === '/') ? '' : $pathInfo['dirname'].'/';
 
         // Delete thumbnail
-        $thumbnailPath = 'cms/media/thumbnails/'.$fileName.'_thumb.'.$extension;
+        $thumbnailPath = $dirname.'thumbnails/'.$fileName.'_thumb.'.$extension;
         if (Storage::disk($media->disk)->exists($thumbnailPath)) {
             Storage::disk($media->disk)->delete($thumbnailPath);
         }
 
         // Delete PNG thumbnail for SVG
-        $pngThumbnailPath = 'cms/media/thumbnails/'.$fileName.'_thumb.png';
+        $pngThumbnailPath = $dirname.'thumbnails/'.$fileName.'_thumb.png';
         if (Storage::disk($media->disk)->exists($pngThumbnailPath)) {
             Storage::disk($media->disk)->delete($pngThumbnailPath);
         }
 
         // Delete sized variants
         foreach (['small', 'medium', 'large'] as $size) {
-            $sizePath = str_replace('cms/media/', "cms/media/{$size}/", $media->path);
+            $sizePath = $dirname.$size.'/'.$fileName.'.'.$extension;
             if (Storage::disk($media->disk)->exists($sizePath)) {
                 Storage::disk($media->disk)->delete($sizePath);
             }
         }
     }
 
-    /**
-     * Move variants to trash
-     */
     public function moveVariantsToTrash(Media $media, string $trashPath): void
     {
         $oldFileName = pathinfo($media->path, PATHINFO_FILENAME);
@@ -460,17 +457,28 @@ class MediaService
         $extension = pathinfo($media->path, PATHINFO_EXTENSION);
         $disk = $media->disk ?? 'public';
 
+        $pathInfo = pathinfo($media->path);
+        $dirname = ($pathInfo['dirname'] === '.' || $pathInfo['dirname'] === '/') ? '' : $pathInfo['dirname'].'/';
+        $trashPathInfo = pathinfo($trashPath);
+        $trashDirname = ($trashPathInfo['dirname'] === '.' || $trashPathInfo['dirname'] === '/') ? '' : $trashPathInfo['dirname'].'/';
+
         // Move thumbnail
-        $oldThumb = 'cms/media/thumbnails/'.$oldFileName.'_thumb.'.$extension;
-        $newThumb = 'cms/media/thumbnails/'.$newFileName.'_thumb.'.$extension;
+        $oldThumb = $dirname.'thumbnails/'.$oldFileName.'_thumb.'.$extension;
+        $newThumb = $trashDirname.'thumbnails/'.$newFileName.'_thumb.'.$extension;
         if (Storage::disk($disk)->exists($oldThumb)) {
+            if (! Storage::disk($disk)->exists($trashDirname.'thumbnails')) {
+                Storage::disk($disk)->makeDirectory($trashDirname.'thumbnails');
+            }
             Storage::disk($disk)->move($oldThumb, $newThumb);
         }
 
         // Handle SVG PNG thumb
-        $oldPngThumb = 'cms/media/thumbnails/'.$oldFileName.'_thumb.png';
-        $newPngThumb = 'cms/media/thumbnails/'.$newFileName.'_thumb.png';
+        $oldPngThumb = $dirname.'thumbnails/'.$oldFileName.'_thumb.png';
+        $newPngThumb = $trashDirname.'thumbnails/'.$newFileName.'_thumb.png';
         if (Storage::disk($disk)->exists($oldPngThumb)) {
+            if (! Storage::disk($disk)->exists($trashDirname.'thumbnails')) {
+                Storage::disk($disk)->makeDirectory($trashDirname.'thumbnails');
+            }
             Storage::disk($disk)->move($oldPngThumb, $newPngThumb);
         }
     }
@@ -480,22 +488,33 @@ class MediaService
      */
     public function moveVariantsFromTrash(Media $media, string $trashPath, string $newPath): void
     {
-        $trashFileName = pathinfo($trashPath, PATHINFO_FILENAME);
-        $restoredFileName = pathinfo($newPath, PATHINFO_FILENAME);
-        $extension = pathinfo($newPath, PATHINFO_EXTENSION);
+        $trashPathInfo = pathinfo($trashPath);
+        $trashDirname = ($trashPathInfo['dirname'] === '.' || $trashPathInfo['dirname'] === '/') ? '' : $trashPathInfo['dirname'].'/';
+        $newPathInfo = pathinfo($newPath);
+        $newDirname = ($newPathInfo['dirname'] === '.' || $newPathInfo['dirname'] === '/') ? '' : $newPathInfo['dirname'].'/';
+
+        $trashFileName = $trashPathInfo['filename'];
+        $restoredFileName = $newPathInfo['filename'];
+        $extension = $newPathInfo['extension'] ?? '';
         $disk = $media->disk ?? 'public';
 
         // Move thumbnail back
-        $oldThumb = 'cms/media/thumbnails/'.$trashFileName.'_thumb.'.$extension;
-        $newThumb = 'cms/media/thumbnails/'.$restoredFileName.'_thumb.'.$extension;
+        $oldThumb = $trashDirname.'thumbnails/'.$trashFileName.'_thumb.'.$extension;
+        $newThumb = $newDirname.'thumbnails/'.$restoredFileName.'_thumb.'.$extension;
         if (Storage::disk($disk)->exists($oldThumb)) {
+            if (! Storage::disk($disk)->exists($newDirname.'thumbnails')) {
+                Storage::disk($disk)->makeDirectory($newDirname.'thumbnails');
+            }
             Storage::disk($disk)->move($oldThumb, $newThumb);
         }
 
         // Handle SVG PNG thumb
-        $oldPngThumb = 'cms/media/thumbnails/'.$trashFileName.'_thumb.png';
-        $newPngThumb = 'cms/media/thumbnails/'.$restoredFileName.'_thumb.png';
+        $oldPngThumb = $trashDirname.'thumbnails/'.$trashFileName.'_thumb.png';
+        $newPngThumb = $newDirname.'thumbnails/'.$restoredFileName.'_thumb.png';
         if (Storage::disk($disk)->exists($oldPngThumb)) {
+            if (! Storage::disk($disk)->exists($newDirname.'thumbnails')) {
+                Storage::disk($disk)->makeDirectory($newDirname.'thumbnails');
+            }
             Storage::disk($disk)->move($oldPngThumb, $newPngThumb);
         }
     }
