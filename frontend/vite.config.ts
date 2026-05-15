@@ -132,12 +132,12 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'http://192.168.88.54',
         changeOrigin: true,
         secure: false
       },
       '/sanctum': {
-        target: 'http://localhost:8000',
+        target: 'http://192.168.88.54',
         changeOrigin: true,
         secure: false
       }

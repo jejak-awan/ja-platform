@@ -653,11 +653,12 @@
     /* ─── Button Radius & Shadows ─── */
     .theme-janari[data-janari-button-radius] button,
     .theme-janari[data-janari-button-radius] .btn {
-        border-radius: var(--theme-button-radius, var(--janari-button-radius-fallback, 8px)) !important;
+        border-radius: var(--theme-button-radius, var(--janari-button-radius-fallback, 6px)) !important;
     }
     /* Fallback if CSS var from customizer is not set yet */
     .theme-janari[data-janari-button-radius="0px"] { --janari-button-radius-fallback: 0px; }
     .theme-janari[data-janari-button-radius="4px"] { --janari-button-radius-fallback: 4px; }
+    .theme-janari[data-janari-button-radius="6px"] { --janari-button-radius-fallback: 6px; }
     .theme-janari[data-janari-button-radius="8px"] { --janari-button-radius-fallback: 8px; }
     .theme-janari[data-janari-button-radius="12px"] { --janari-button-radius-fallback: 12px; }
     .theme-janari[data-janari-button-radius="9999px"] { --janari-button-radius-fallback: 9999px; }
@@ -670,25 +671,27 @@
         box-shadow: 0 0 20px hsl(var(--primary) / 0.4), 0 0 40px hsl(var(--primary) / 0.1) !important;
     }
 
-    /* Enhanced Button Physics & Colors */
-    .theme-janari button:not([class*="bg-transparent"]), 
+    /* Enhanced Button Physics & Colors - Builder.io style */
+    .theme-janari button:not([class*="bg-transparent"]),
     .theme-janari .btn:not([class*="btn-ghost"]) {
-        border: 1px solid hsl(var(--primary) / 0.15) !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        border: 1px solid hsl(var(--primary) / 0.2) !important;
+        transition: all 0.35s cubic-bezier(0.37, 0.01, 0, 0.98) !important;
     }
 
-    .theme-janari button.bg-primary, 
+    .theme-janari button.bg-primary,
     .theme-janari .btn-primary {
-        background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.85)) !important;
+        background: hsl(var(--primary)) !important;
         border: none !important;
         color: hsl(var(--primary-foreground)) !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.5px !important;
     }
 
-    .theme-janari button.bg-primary:hover, 
+    .theme-janari button.bg-primary:hover,
     .theme-janari .btn-primary:hover {
-        filter: brightness(1.1);
-        transform: translateY(-1px);
-        box-shadow: 0 8px 20px hsl(var(--primary) / 0.3) !important;
+        filter: brightness(1.08);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px hsl(var(--primary) / 0.35) !important;
     }
 
     /* ═══════════════════════════════════════════════════════
@@ -698,22 +701,22 @@
 
     /* ─── Section Borders: accent-tinted top & bottom lines ─── */
     .theme-janari section {
-        border-color: hsl(var(--primary) / 0.12);
+        border-color: hsl(var(--primary) / 0.1);
     }
 
     .theme-janari section .border-border,
     .theme-janari section .border-y,
     .theme-janari section .border-t,
     .theme-janari section .border-b {
-        border-color: hsl(var(--primary) / 0.12) !important;
+        border-color: hsl(var(--primary) / 0.11) !important;
     }
 
     .theme-janari section .divide-border > :not(:last-child) {
-        border-color: hsl(var(--primary) / 0.10) !important;
+        border-color: hsl(var(--primary) / 0.09) !important;
     }
 
     .theme-janari section .border-x {
-        border-color: hsl(var(--primary) / 0.08) !important;
+        border-color: hsl(var(--primary) / 0.07) !important;
     }
 
     /* ─── Horizontal Rules / Lines ─── */
@@ -781,21 +784,23 @@
     /* ─── Form Inputs: accent border on focus ─── */
     .theme-janari input:focus,
     .theme-janari textarea:focus {
-        border-color: hsl(var(--primary) / 0.5) !important;
-        box-shadow: 0 0 0 3px hsl(var(--primary) / 0.08) !important;
+        border-color: hsl(var(--primary) / 0.6) !important;
+        box-shadow: 0 0 0 4px hsl(var(--primary) / 0.1), 0 0 20px hsl(var(--primary) / 0.05) !important;
+        transition: all 0.35s cubic-bezier(0.37, 0.01, 0, 0.98);
     }
 
     /* ─── Cards & Panels ─── */
     .theme-janari .card,
     .theme-janari section .border.border-border {
-        border-color: hsl(var(--primary) / 0.10) !important;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        border-color: hsl(var(--primary) / 0.1) !important;
+        transition: border-color 0.35s cubic-bezier(0.37, 0.01, 0, 0.98), box-shadow 0.35s cubic-bezier(0.37, 0.01, 0, 0.98), transform 0.35s cubic-bezier(0.37, 0.01, 0, 0.98);
     }
 
     .theme-janari .card:hover,
     .theme-janari section .border.border-border:hover {
-        border-color: hsl(var(--primary) / 0.25) !important;
-        box-shadow: 0 8px 30px hsl(var(--primary) / 0.06);
+        border-color: hsl(var(--primary) / 0.28) !important;
+        box-shadow: 0 12px 36px hsl(var(--primary) / 0.08);
+        transform: translateY(-2px);
     }
 
     /* ─── Grid Card Hover: the major cards that flip bg ─── */
@@ -807,15 +812,16 @@
     .theme-janari a.border.border-border,
     .theme-janari a[class*="border-border"] {
         border-color: hsl(var(--primary) / 0.15) !important;
-        transition: all 0.4s ease;
+        transition: all 0.35s cubic-bezier(0.37, 0.01, 0, 0.98);
     }
 
     .theme-janari a.border.border-border:hover,
     .theme-janari a[class*="border-border"]:hover {
         border-color: hsl(var(--primary) / 0.5) !important;
         color: hsl(var(--primary)) !important;
-        background-color: hsl(var(--primary) / 0.05) !important;
-        box-shadow: 0 0 20px hsl(var(--primary) / 0.08);
+        background-color: hsl(var(--primary) / 0.06) !important;
+        box-shadow: 0 8px 24px hsl(var(--primary) / 0.1);
+        transform: translateY(-2px);
     }
 
     /* ─── CTA Section glow blob ─── */
@@ -850,23 +856,24 @@
     .theme-janari[data-janari-nav] nav a {
         position: relative;
         z-index: 10;
-        transition: all 0.3s ease;
+        transition: all 0.35s cubic-bezier(0.37, 0.01, 0, 0.98);
     }
 
     /* [data-janari-nav="glass"] */
     .theme-janari[data-janari-nav="glass"] nav a {
         border-radius: 0.5rem;
-        transition: all 0.2s ease;
+        transition: all 0.35s cubic-bezier(0.37, 0.01, 0, 0.98);
     }
     .theme-janari[data-janari-nav="glass"] nav a:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background-color: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-color: hsl(var(--primary) / 0.2);
     }
     .theme-janari[data-janari-nav="glass"] nav a.is-active {
-        background-color: hsl(var(--primary) / 0.2);
+        background-color: hsl(var(--primary) / 0.25);
         color: hsl(var(--primary));
-        border: 1px solid hsl(var(--primary) / 0.3);
+        border: 1px solid hsl(var(--primary) / 0.4);
     }
 
     /* [data-janari-nav="spotlight"] */
@@ -876,12 +883,12 @@
     .theme-janari[data-janari-nav="spotlight"] nav a::before {
         content: '';
         position: absolute;
-        inset: 0;
-        background-color: hsl(var(--primary) / 0.2);
+        inset: -6px;
+        background: radial-gradient(circle, hsl(var(--primary) / 0.25) 0%, hsl(var(--primary) / 0.1) 70%);
         border-radius: 9999px;
-        filter: blur(20px);
+        filter: blur(24px);
         opacity: 0;
-        transition: opacity 0.5s ease;
+        transition: opacity 0.35s cubic-bezier(0.37, 0.01, 0, 0.98);
         z-index: -10;
     }
     .theme-janari[data-janari-nav="spotlight"] nav a:hover::before {
@@ -890,10 +897,10 @@
 
     /* [data-janari-nav="magnetic"] */
     .theme-janari[data-janari-nav="magnetic"] nav a {
-        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transition: all 0.35s cubic-bezier(0.37, 0.01, 0, 0.98);
     }
     .theme-janari[data-janari-nav="magnetic"] nav a:hover {
-        transform: scale(1.1) translateY(-2px);
+        transform: scale(1.08) translateY(-3px);
         color: hsl(var(--primary));
     }
 
@@ -951,13 +958,13 @@
     .theme-janari[data-janari-nav="underline"] nav a::after {
         content: '';
         position: absolute;
-        bottom: 0;
+        bottom: -2px;
         left: 0;
         width: 100%;
         height: 2px;
         background-color: hsl(var(--primary));
         transform: scaleX(0);
-        transition: transform 0.3s ease;
+        transition: transform 0.35s cubic-bezier(0.37, 0.01, 0, 0.98);
         transform-origin: right;
     }
     .theme-janari[data-janari-nav="underline"] nav a:hover::after,
@@ -968,8 +975,10 @@
 
     /* [data-janari-nav="floating"] */
     .theme-janari[data-janari-nav="floating"] nav a:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px hsl(var(--primary) / 0.2);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px hsl(var(--primary) / 0.25);
+        color: hsl(var(--primary));
+        transition: all 0.35s cubic-bezier(0.37, 0.01, 0, 0.98);
     }
 
     /* ─── Sync with shared variables ─── */

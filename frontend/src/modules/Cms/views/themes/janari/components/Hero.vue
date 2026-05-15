@@ -51,9 +51,9 @@
       <!-- Badge -->
       <span
         ref="heroBadge"
-        class="inline-flex items-center px-0 text-[10px] font-bold tracking-[0.5em] uppercase text-primary mb-6"
+        class="inline-flex items-center px-4 py-2 rounded-full border border-primary/40 text-[9px] font-bold tracking-[0.5em] uppercase text-white mb-8 bg-primary/8 backdrop-blur-sm"
       >
-        <span class="w-8 h-[1px] bg-primary mr-3" />
+        <span class="w-1 h-1 bg-primary rounded-full mr-2" />
         {{ schoolUnitLabel }} {{ schoolStatus === 'negeri' ? 'Negeri' : 'Vokasi Unggulan' }}
       </span>
 
@@ -76,15 +76,15 @@
 
       <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto">
-        <router-link 
-          to="/ppdb" 
-          class="w-full sm:w-auto px-10 py-4 text-xs font-black text-center tracking-[0.3em] uppercase bg-white text-black hover:bg-primary hover:text-primary-foreground transition-all duration-500"
+        <router-link
+          to="/ppdb"
+          class="w-full sm:w-auto px-8 py-3 text-xs font-bold text-center tracking-[0.5px] uppercase bg-white text-black rounded-[6px] hover:bg-gray-100 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 cubic-bezier(0.37, 0.01, 0, 0.98)"
         >
           Gabung Sekarang
         </router-link>
-        <router-link 
+        <router-link
           :to="schoolUnit === 'smk' ? '/jurusan' : '/profil/akademik'"
-          class="w-full sm:w-auto px-10 py-4 text-xs font-black text-center tracking-[0.3em] uppercase border border-white/30 text-white/70 hover:border-primary hover:text-white transition-all duration-500"
+          class="w-full sm:w-auto px-8 py-3 text-xs font-bold text-center tracking-[0.5px] uppercase border border-white/40 text-white rounded-[6px] hover:border-white hover:bg-white/8 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 cubic-bezier(0.37, 0.01, 0, 0.98)"
         >
           {{ schoolUnit === 'smk' ? 'Eksplorasi Jurusan' : 'Lihat Keunggulan' }}
         </router-link>
