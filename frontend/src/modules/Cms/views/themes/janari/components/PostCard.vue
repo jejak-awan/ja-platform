@@ -1,6 +1,6 @@
 <template>
-  <article 
-    class="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-colors duration-300 transform hover:-translate-y-1 cursor-pointer flex flex-col h-full border border-border group"
+  <article
+    class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col h-full border border-border group hover:border-primary/30"
     @click="navigateToPost"
   >
     <!-- Featured Image -->
@@ -19,7 +19,7 @@
         v-if="post.category"
         class="absolute top-4 left-4"
       >
-        <span class="px-3 py-1 bg-background/90 backdrop-blur-sm text-primary text-xs font-bold rounded-lg shadow-sm">
+        <span class="px-3 py-1.5 bg-background/80 backdrop-blur-md border border-primary/20 text-primary text-xs font-bold rounded-full shadow-lg hover:shadow-xl transition-all">
           {{ post.category.name }}
         </span>
       </div>

@@ -57,13 +57,13 @@
             ref="socialLinksRef"
             class="flex gap-6"
           >
-            <a 
-              v-for="(link, idx) in socialLinks" 
-              :key="idx" 
+            <a
+              v-for="(link, idx) in socialLinks"
+              :key="idx"
               :href="resolveSocialHref(link)"
               :target="getSocialTarget(link)"
               :rel="getSocialRel(link)"
-              class="motion-social text-foreground/70 hover:text-primary transition-colors"
+              class="motion-social text-foreground/70 hover:text-primary transform hover:scale-110 hover:-translate-y-1 transition-all duration-300 cubic-bezier(0.37, 0.01, 0, 0.98)"
               :aria-label="getSocialAriaLabel(link)"
             >
               <component
@@ -87,9 +87,9 @@
               v-for="item in footerCol1Items"
               :key="String(item.id || item.title)"
             >
-              <router-link 
-                :to="item.url || '/'" 
-                class="text-foreground/75 hover:text-foreground text-[11px] font-black uppercase tracking-[0.2em] transition-colors group flex items-center gap-2"
+              <router-link
+                :to="item.url || '/'"
+                class="text-foreground/75 hover:text-primary text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-300 cubic-bezier(0.37, 0.01, 0, 0.98) group flex items-center gap-2"
               >
                 <span class="w-1.5 h-[1px] bg-primary/0 group-hover:w-3 group-hover:bg-primary transition-all duration-300" />
                 {{ item.title }}
@@ -111,9 +111,9 @@
               v-for="item in footerCol2Items"
               :key="String(item.id || item.title)"
             >
-              <router-link 
-                :to="item.url || '/'" 
-                class="text-foreground/75 hover:text-foreground text-[11px] font-black uppercase tracking-[0.2em] transition-colors group flex items-center gap-2"
+              <router-link
+                :to="item.url || '/'"
+                class="text-foreground/75 hover:text-primary text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-300 cubic-bezier(0.37, 0.01, 0, 0.98) group flex items-center gap-2"
               >
                 <span class="w-1.5 h-[1px] bg-primary/0 group-hover:w-3 group-hover:bg-primary transition-all duration-300" />
                 {{ item.title }}

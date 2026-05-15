@@ -6,7 +6,8 @@
         class="max-w-7xl mx-auto p-12 md:p-32 border border-border bg-card/50 backdrop-blur-3xl relative overflow-hidden"
       >
         <div class="relative z-10 flex flex-col items-center text-center">
-          <span class="inline-flex items-center px-3 py-1 bg-background/95 border border-border text-[10px] font-black tracking-[0.4em] uppercase text-foreground mb-12">
+          <span class="inline-flex items-center px-4 py-2 bg-background/80 backdrop-blur-md border border-primary/20 text-[9px] font-black tracking-[0.5em] uppercase text-primary mb-12 rounded-full">
+            <span class="w-1 h-1 bg-primary rounded-full mr-2" />
             {{ badgeText }}
           </span>
           <h2
@@ -24,7 +25,7 @@
           <div class="flex flex-col sm:flex-row items-center gap-10">
             <router-link
               to="/ppdb"
-              class="px-20 py-7 text-xs font-black tracking-[0.5em] uppercase bg-primary text-primary-foreground hover:bg-background hover:text-foreground transition-all shadow-xl"
+              class="px-10 py-4 text-xs font-bold tracking-[0.5px] uppercase bg-primary text-primary-foreground rounded-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 cubic-bezier(0.37, 0.01, 0, 0.98)"
             >
               {{ buttonText }}
             </router-link>
