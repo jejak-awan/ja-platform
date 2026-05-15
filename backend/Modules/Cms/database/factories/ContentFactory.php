@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Cms\Models\Content>

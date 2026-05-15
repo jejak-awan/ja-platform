@@ -2,13 +2,13 @@
 
 namespace Modules\Cms\Models;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 /**
  * @property int $id
@@ -24,7 +24,7 @@ use Modules\Core\Models\User;
  * @property-read int|null $count
  * @property-read string|null $label
  * @property-read \Modules\Cms\Models\Form $form
- * @property-read \Modules\Core\Models\User|null $user
+ * @property-read \Modules\System\Models\User|null $user
  */
 class FormSubmission extends Model
 {

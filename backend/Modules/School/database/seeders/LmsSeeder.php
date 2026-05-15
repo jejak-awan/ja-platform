@@ -10,7 +10,7 @@ use Modules\School\Models\Lms\Topic;
 use Modules\School\Models\Lms\TopicContent\RichText;
 use Modules\School\Models\Lms\TopicContent\Video;
 use Modules\School\Models\Institution\School;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 class LmsSeeder extends Seeder
 {

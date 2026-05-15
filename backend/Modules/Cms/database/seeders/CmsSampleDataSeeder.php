@@ -7,8 +7,8 @@ use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Comment;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\NewsletterSubscriber;
-use Modules\Core\Models\Tag;
-use Modules\Core\Models\User;
+use Modules\Cms\Models\Tag;
+use Modules\System\Models\User;
 
 class CmsSampleDataSeeder extends Seeder
 {

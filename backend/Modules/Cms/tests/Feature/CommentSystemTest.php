@@ -4,7 +4,7 @@ namespace Modules\Cms\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Cms\Models\Content;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
 
@@ -24,7 +24,7 @@ class CommentSystemTest extends TestCase
     public function test_user_can_post_comment_on_published_content(): void
     {
         // Mock CaptchaService to always return true
-        $this->mock(\Modules\Core\Services\CaptchaService::class, function ($mock) {
+        $this->mock(\Modules\System\Services\CaptchaService::class, function ($mock) {
             $mock->shouldReceive('verify')->andReturn(true);
         });
 
@@ -139,7 +139,7 @@ class CommentSystemTest extends TestCase
             'status' => 'pending',
         ]);
 
-        $response = $this->putJson("/api/v1/admin/cms/comments/{$comment->id}/approve");
+        $response = $this->putJson("/api/v1/manage/cms/comments/{$comment->id}/approve");
 
         TestHelpers::assertApiSuccess($response);
         $this->assertDatabaseHas('comments', [
@@ -164,7 +164,7 @@ class CommentSystemTest extends TestCase
             'status' => 'pending',
         ]);
 
-        $response = $this->putJson("/api/v1/admin/cms/comments/{$comment->id}/reject");
+        $response = $this->putJson("/api/v1/manage/cms/comments/{$comment->id}/reject");
 
         TestHelpers::assertApiSuccess($response);
         $this->assertDatabaseHas('comments', [
@@ -189,7 +189,7 @@ class CommentSystemTest extends TestCase
             'status' => 'approved',
         ]);
 
-        $response = $this->deleteJson("/api/v1/admin/cms/comments/{$comment->id}");
+        $response = $this->deleteJson("/api/v1/manage/cms/comments/{$comment->id}");
 
         TestHelpers::assertApiSuccess($response);
         $this->assertSoftDeleted('comments', [

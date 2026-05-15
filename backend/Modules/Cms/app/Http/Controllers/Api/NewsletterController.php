@@ -5,8 +5,8 @@ namespace Modules\Cms\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Modules\Core\Models\NewsletterSubscriber;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\Cms\Models\NewsletterSubscriber;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class NewsletterController extends BaseApiController
 {
@@ -47,7 +47,7 @@ class NewsletterController extends BaseApiController
                     'unsubscribed_at' => null,
                     'name' => $name ?? $existing->name,
                     'source' => $request->header('referer') ?? 'unknown',
-                    'ip_address' => \Modules\Core\Helpers\IpHelper::getClientIp($request),
+                    'ip_address' => \Modules\System\Helpers\IpHelper::getClientIp($request),
                     'user_agent' => $request->userAgent(),
                 ]);
 
@@ -63,7 +63,7 @@ class NewsletterController extends BaseApiController
                 'status' => 'subscribed',
                 'subscribed_at' => now(),
                 'source' => $request->header('referer') ?? 'unknown',
-                'ip_address' => \Modules\Core\Helpers\IpHelper::getClientIp($request),
+                'ip_address' => \Modules\System\Helpers\IpHelper::getClientIp($request),
                 'user_agent' => $request->userAgent(),
             ]);
 

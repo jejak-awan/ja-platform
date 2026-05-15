@@ -2,7 +2,7 @@
 
 namespace Modules\School\Models\HR;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Modules\School\Models\Institution\School $school
  * @property-read Staff $staff
- * @property-read \Modules\Core\Models\User|null $approver
+ * @property-read \Modules\System\Models\User|null $approver
  */
 class LeaveRequest extends Model
 {
@@ -64,10 +64,10 @@ class LeaveRequest extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\Core\Models\User, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\System\Models\User, $this>
      */
     public function approver(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\Modules\Core\Models\User::class, 'approved_by');
+        return $this->belongsTo(\Modules\System\Models\User::class, 'approved_by');
     }
 }

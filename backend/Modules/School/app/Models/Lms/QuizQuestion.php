@@ -2,7 +2,7 @@
 
 namespace Modules\School\Models\Lms;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

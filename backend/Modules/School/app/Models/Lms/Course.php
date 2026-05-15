@@ -2,13 +2,13 @@
 
 namespace Modules\School\Models\Lms;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Student\Student;
 

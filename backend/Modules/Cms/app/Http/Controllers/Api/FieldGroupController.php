@@ -3,8 +3,8 @@
 namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Modules\Core\Models\FieldGroup;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Models\FieldGroup;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class FieldGroupController extends BaseApiController
 {

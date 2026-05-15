@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Modules\Cms\Models\Content;
-use Modules\Core\Models\SearchIndex;
+use Modules\Cms\Models\SearchIndex;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
 

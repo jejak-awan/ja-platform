@@ -3,7 +3,7 @@
 namespace Modules\Cms\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
 
@@ -26,7 +26,7 @@ class CmsSettingsTest extends TestCase
     public function test_admin_can_get_cms_settings(): void
     {
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->getJson('/api/v1/admin/cms/settings');
+            ->getJson('/api/v1/manage/cms/settings');
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJsonStructure([
@@ -47,7 +47,7 @@ class CmsSettingsTest extends TestCase
         ];
 
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->postJson('/api/v1/admin/cms/settings/bulk-update', [
+            ->postJson('/api/v1/manage/cms/settings/bulk-update', [
                 'settings' => $settings,
             ]);
 
@@ -62,7 +62,7 @@ class CmsSettingsTest extends TestCase
         $user = $this->createUser();
 
         $response = $this->actingAs($user, 'sanctum')
-            ->getJson('/api/v1/admin/cms/settings');
+            ->getJson('/api/v1/manage/cms/settings');
 
         $response->assertStatus(403);
     }

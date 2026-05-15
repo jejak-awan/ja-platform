@@ -9,7 +9,7 @@ use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\Academic\Department;
 use Modules\School\Models\HR\Staff;
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id

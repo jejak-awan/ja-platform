@@ -9,7 +9,7 @@ use Modules\Cms\Exports\FormSubmissionsExport;
 use Modules\Cms\Models\Form;
 use Modules\Cms\Models\FormAnalytics;
 use Modules\Cms\Models\FormSubmission;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class FormSubmissionController extends BaseApiController
 {
@@ -24,7 +24,7 @@ class FormSubmissionController extends BaseApiController
     public function index(Request $request, ?Form $form = null): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }

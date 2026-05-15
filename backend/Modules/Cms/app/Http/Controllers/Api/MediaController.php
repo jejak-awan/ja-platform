@@ -5,36 +5,36 @@ namespace Modules\Cms\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Modules\Core\Models\Media;
-use Modules\Core\Models\Tag;
-use Modules\Core\Services\MediaService;
-use Modules\Core\Helpers\UploadSettingsHelper;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
-use Modules\Core\Models\ActivityLog;
-use Modules\Core\Models\User;
-use Modules\Core\Services\CacheService;
+use Modules\Media\Models\File as Media;
+use Modules\Cms\Models\Tag;
+use Modules\Media\Contracts\MediaServiceInterface;
+use Modules\System\Helpers\UploadSettingsHelper;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\ActivityLog;
+use Modules\System\Models\User;
+use Modules\System\Services\CacheService;
 
 /**
  * @OA\Tag(name="Media")
  */
 class MediaController extends BaseApiController
 {
-    protected MediaService $mediaService;
+    protected MediaServiceInterface $mediaService;
 
-    public function __construct()
+    public function __construct(MediaServiceInterface $mediaService)
     {
-        $this->mediaService = new MediaService;
+        $this->mediaService = $mediaService;
     }
 
     /**
      * @OA\Get(
-     *     path="/api/admin/ja/media",
+     *     path="/api/v1/manage/cms/media",
      *     summary="List media files",
      *     tags={"Media"},
      *
-     *     @OA\Parameter(name="page", in="query", @OA\Schema(type="integer")),
-     *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer")),
-     *     @OA\Parameter(name="folder_id", in="query", @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="page", in="query", @OA\Schema(type="string")),
+     *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="string")),
+     *     @OA\Parameter(name="folder_id", in="query", @OA\Schema(type="string")),
      *     @OA\Parameter(name="mime_type", in="query", @OA\Schema(type="string")),
      *     @OA\Parameter(name="search", in="query", @OA\Schema(type="string")),
      *     @OA\Parameter(name="trashed", in="query", @OA\Schema(type="string", enum={"only", "with"})),
@@ -46,7 +46,7 @@ class MediaController extends BaseApiController
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $module = $request->input('module');
-        $query = Media::with(['folder', 'usages', 'tags']);
+        $query = Media::with(['folder', 'usages']);
         
         if ($module) {
             $query->where('module', $module);
@@ -242,7 +242,7 @@ class MediaController extends BaseApiController
      *                 required={"file"},
      *
      *                 @OA\Property(property="file", type="string", format="binary"),
-     *                 @OA\Property(property="folder_id", type="integer"),
+     *                 @OA\Property(property="folder_id", type="string"),
      *                 @OA\Property(property="alt", type="string"),
      *                 @OA\Property(property="caption", type="string")
      *             )
@@ -275,13 +275,13 @@ class MediaController extends BaseApiController
         try {
             $rules = UploadSettingsHelper::getUploadValidationRules();
             $request->validate(array_merge($rules, [
-                'folder_id' => 'nullable|exists:media_folders,id',
+                'folder_id' => 'nullable|exists:srv_media_folders,id',
                 'optimize' => 'boolean',
                 'min_width' => 'nullable|integer|min:1',
                 'min_height' => 'nullable|integer|min:1',
                 'max_width' => 'nullable|integer|min:1',
                 'max_height' => 'nullable|integer|min:1',
-                'author_id' => 'nullable|exists:users,id',
+                'author_id' => 'nullable|exists:srv_auth_users,id',
                 'is_shared' => 'sometimes|boolean',
                 'caption' => 'nullable|string',
                 'alt' => 'nullable|string',
@@ -336,7 +336,7 @@ class MediaController extends BaseApiController
         $file = $request->file('file');
 
         // Determine author
-        $authorId = (int) $user->id;
+        $authorId = $user->id;
         if ($user->can('manage media') && $request->has('author_id')) {
             $reqAuthorId = $request->input('author_id');
             if (is_numeric($reqAuthorId)) {
@@ -345,7 +345,7 @@ class MediaController extends BaseApiController
         }
 
         $folderIdRaw = $request->input('folder_id');
-        $folderId = is_numeric($folderIdRaw) ? (int) $folderIdRaw : null;
+        $folderId = is_string($folderIdRaw) ? $folderIdRaw : null;
 
         $optimizeRaw = $request->input('optimize', config('media.optimize', true));
         $optimize = (bool) $optimizeRaw;
@@ -383,7 +383,7 @@ class MediaController extends BaseApiController
 
     /**
      * @OA\Post(
-     *     path="/api/admin/ja/media/upload-multiple",
+     *     path="/api/v1/manage/cms/media/upload-multiple",
      *     summary="Upload multiple media files",
      *     tags={"Media"},
      *
@@ -397,7 +397,7 @@ class MediaController extends BaseApiController
      *                 required={"files[]"},
      *
      *                 @OA\Property(property="files[]", type="array", @OA\Items(type="string", format="binary")),
-     *                 @OA\Property(property="folder_id", type="integer")
+     *                 @OA\Property(property="folder_id", type="string")
      *             )
      *         )
      *     ),
@@ -424,9 +424,9 @@ class MediaController extends BaseApiController
             $request->validate([
                 'files' => 'required|array',
                 'files.*' => ['required', 'file', 'max:'.$maxSize],
-                'folder_id' => 'nullable|exists:media_folders,id',
+                'folder_id' => 'nullable|exists:srv_media_folders,id',
                 'optimize' => 'boolean',
-                'author_id' => 'nullable|exists:users,id',
+                'author_id' => 'nullable|exists:srv_auth_users,id',
                 'is_shared' => 'sometimes|boolean',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -440,13 +440,13 @@ class MediaController extends BaseApiController
         }
 
         $folderIdRaw = $request->input('folder_id');
-        $folderId = is_numeric($folderIdRaw) ? (int) $folderIdRaw : null;
+        $folderId = is_string($folderIdRaw) ? $folderIdRaw : null;
 
         $optimizeRaw = $request->input('optimize', config('media.optimize', true));
         $optimize = (bool) $optimizeRaw;
 
         // Determine author
-        $authorId = (int) $user->id;
+        $authorId = $user->id;
         if ($user->can('manage media') && $request->has('author_id')) {
             $reqAuthorId = $request->input('author_id');
             if (is_numeric($reqAuthorId)) {
@@ -488,7 +488,7 @@ class MediaController extends BaseApiController
      *         in="path",
      *         required=true,
      *
-     *         @OA\Schema(type="integer")
+     *         @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
@@ -509,7 +509,7 @@ class MediaController extends BaseApiController
 
         // Scope check
         if (! $user->can('manage media')) {
-            if ($media->author_id !== (int) $user->id && ! $media->is_shared) {
+            if ($media->author_id !== $user->id && ! $media->is_shared) {
                 return $this->forbidden('You do not have permission to view this media');
             }
         }
@@ -519,11 +519,11 @@ class MediaController extends BaseApiController
 
     /**
      * @OA\Get(
-     *     path="/api/admin/ja/media/{media}/usage",
+     *     path="/api/v1/manage/cms/media/{media}/usage",
      *     summary="Get media usage information",
      *     tags={"Media"},
      *
-     *     @OA\Parameter(name="media", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="media", in="path", required=true, @OA\Schema(type="string")),
      *
      *     @OA\Response(response=200, description="Usage info retrieved"),
      *     security={{"sanctum":{}}}
@@ -538,7 +538,7 @@ class MediaController extends BaseApiController
 
         // Scope check
         if (! $user->can('manage media')) {
-            if ($media->author_id !== (int) $user->id && ! $media->is_shared) {
+            if ($media->author_id !== $user->id && ! $media->is_shared) {
                 return $this->forbidden('You do not have permission to view this media');
             }
         }
@@ -559,7 +559,7 @@ class MediaController extends BaseApiController
      *         in="path",
      *         required=true,
      *
-     *         @OA\Schema(type="integer")
+     *         @OA\Schema(type="string")
      *     ),
      *
      *     @OA\RequestBody(
@@ -589,7 +589,7 @@ class MediaController extends BaseApiController
             return $this->unauthorized();
         }
 
-        $isOwner = $media->author_id && (int) $media->author_id === (int) $user->id;
+        $isOwner = $media->author_id && $media->author_id === $user->id;
         $isManager = $user->can('manage media');
 
         // Owners can always update their own media
@@ -615,7 +615,7 @@ class MediaController extends BaseApiController
                 'alt' => 'nullable|string',
                 'description' => 'nullable|string',
                 'caption' => 'nullable|string',
-                'author_id' => 'nullable|exists:users,id',
+                'author_id' => 'nullable|exists:srv_auth_users,id',
                 'is_shared' => 'sometimes|boolean',
                 'tags' => 'nullable|array',
             ]);
@@ -656,7 +656,7 @@ class MediaController extends BaseApiController
      *         in="path",
      *         required=true,
      *
-     *         @OA\Schema(type="integer")
+     *         @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
@@ -696,7 +696,7 @@ class MediaController extends BaseApiController
             'permanent' => $request->boolean('permanent'),
         ]);
 
-        $isOwner = $media->author_id && (int) $media->author_id === (int) $user->id;
+        $isOwner = $media->author_id && $media->author_id === $user->id;
         $isManager = $user->can('manage media');
 
         // Owners can always delete their own media
@@ -742,7 +742,7 @@ class MediaController extends BaseApiController
 
     /**
      * @OA\Post(
-     *     path="/api/admin/ja/media/scan",
+     *     path="/api/v1/manage/cms/media/scan",
      *     summary="Scan storage for new media files",
      *     tags={"Media"},
      *
@@ -770,17 +770,17 @@ class MediaController extends BaseApiController
 
     /**
      * @OA\Post(
-     *     path="/api/admin/ja/media/{id}/restore",
+     *     path="/api/v1/manage/cms/media/{id}/restore",
      *     summary="Restore trashed media",
      *     tags={"Media"},
      *
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="string")),
      *
      *     @OA\Response(response=200, description="Media restored"),
      *     security={{"sanctum":{}}}
      * )
      */
-    public function restore(Request $request, int|string $id): \Illuminate\Http\JsonResponse
+    public function restore(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var User|null $user */
@@ -796,7 +796,7 @@ class MediaController extends BaseApiController
         /** @var Media $media */
         $media = Media::onlyTrashed()->findOrFail($id);
 
-        $isOwner = $media->author_id && (int) $media->author_id === (int) $user->id;
+        $isOwner = $media->author_id && $media->author_id === $user->id;
         $isManager = $user->can('manage media');
 
         // Owners can always restore their own media
@@ -825,18 +825,18 @@ class MediaController extends BaseApiController
 
     /**
      * @OA\Delete(
-     *     path="/api/admin/ja/media/{id}/force",
+     *     path="/api/v1/manage/cms/media/{id}/force",
      *     summary="Permanently delete media",
      *     tags={"Media"},
      *
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="string")),
      *     @OA\Parameter(name="force", in="query", @OA\Schema(type="boolean")),
      *
      *     @OA\Response(response=200, description="Media permanently deleted"),
      *     security={{"sanctum":{}}}
      * )
      */
-    public function forceDelete(Request $request, int|string $id): \Illuminate\Http\JsonResponse
+    public function forceDelete(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var User|null $user */
@@ -853,7 +853,7 @@ class MediaController extends BaseApiController
         /** @var Media $media */
         $media = Media::withTrashed()->findOrFail($id);
 
-        $isOwner = $media->author_id && (int) $media->author_id === (int) $user->id;
+        $isOwner = $media->author_id && $media->author_id === $user->id;
         $isManager = $user->can('manage media');
 
         // Owners can always permanently delete their own media
@@ -888,7 +888,7 @@ class MediaController extends BaseApiController
 
     /**
      * @OA\Post(
-     *     path="/api/admin/ja/media/empty-trash",
+     *     path="/api/v1/manage/cms/media/empty-trash",
      *     summary="Permanently delete all trashed media",
      *     tags={"Media"},
      *
@@ -925,7 +925,7 @@ class MediaController extends BaseApiController
         }
 
         // Also delete trashed folders
-        $folderQuery = \Modules\Core\Models\MediaFolder::onlyTrashed();
+        $folderQuery = \Modules\System\Models\MediaFolder::onlyTrashed();
         if (! $user->can('manage media')) {
             $folderQuery->where('author_id', $user->id);
         }
@@ -991,7 +991,7 @@ class MediaController extends BaseApiController
         /** @var array<int, int> $existingFolderIds */
         $existingFolderIds = [];
         if (! empty($folderIds)) {
-            $folderQuery = \Modules\Core\Models\MediaFolder::withTrashed()->whereIn('id', $folderIds);
+            $folderQuery = \Modules\System\Models\MediaFolder::withTrashed()->whereIn('id', $folderIds);
             if (! $user->can('manage media')) {
                 $folderQuery->where('author_id', $user->id);
             }
@@ -1009,8 +1009,8 @@ class MediaController extends BaseApiController
         $folderId = null;
         if ($folderIdRaw === 'null') {
             $folderId = null;
-        } elseif (is_numeric($folderIdRaw)) {
-            $folderId = (int) $folderIdRaw;
+        } elseif (is_string($folderIdRaw)) {
+            $folderId = $folderIdRaw;
         }
 
         $altTextRaw = $request->input('alt_text');
@@ -1047,7 +1047,7 @@ class MediaController extends BaseApiController
 
         // Ownership
         if (! $user->can('manage media')) {
-            if ($media->author_id && (int) $media->author_id !== (int) $user->id) {
+            if ($media->author_id && $media->author_id !== $user->id) {
                 return $this->forbidden('You do not have permission to modify this media');
             }
         }
@@ -1098,7 +1098,7 @@ class MediaController extends BaseApiController
 
         // Ownership
         if (! $user->can('manage media')) {
-            if ($media->author_id && (int) $media->author_id !== (int) $user->id) {
+            if ($media->author_id && $media->author_id !== $user->id) {
                 return $this->forbidden('You do not have permission to modify this media');
             }
         }
@@ -1258,7 +1258,7 @@ class MediaController extends BaseApiController
 
         // Ownership
         if (! $user->can('manage media')) {
-            if ($media->author_id && (int) $media->author_id !== (int) $user->id) {
+            if ($media->author_id && $media->author_id !== $user->id) {
                 return $this->forbidden('You do not have permission to edit this media');
             }
         }

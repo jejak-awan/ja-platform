@@ -28,7 +28,7 @@ class SchoolServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerPolicies();
-        $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+        // $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
 
         $this->registerUserModuleIntegrations();
     }
@@ -39,7 +39,7 @@ class SchoolServiceProvider extends ServiceProvider
     protected function registerUserModuleIntegrations(): void
     {
         // 1. Register School-specific role ranks
-        \Modules\Core\Models\User::registerRoleRanks([
+        \Modules\System\Models\User::registerRoleRanks([
             'admin-yayasan' => 90,
             'operator-yayasan' => 85,
             'admin-unit' => 80,
@@ -54,11 +54,11 @@ class SchoolServiceProvider extends ServiceProvider
         ]);
 
         // 2. Register dynamic relationships
-        \Modules\Core\Models\User::resolveRelationUsing('staff', function ($userModel) {
+        \Modules\System\Models\User::resolveRelationUsing('staff', function ($userModel) {
             return $userModel->hasMany(\Modules\School\Models\HR\Staff::class);
         });
 
-        \Modules\Core\Models\User::resolveRelationUsing('levels', function ($userModel) {
+        \Modules\System\Models\User::resolveRelationUsing('levels', function ($userModel) {
             return $userModel->hasManyThrough(
                 \Modules\School\Models\Institution\SchoolUnit::class,
                 \Modules\School\Models\HR\Staff::class,
@@ -116,8 +116,8 @@ class SchoolServiceProvider extends ServiceProvider
         $this->app->register(RouteServiceProvider::class);
 
         // Bind Workspace Resolver
-        $this->app->bind(\Modules\Core\Contracts\WorkspaceResolver::class, \Modules\School\Services\SchoolWorkspaceResolver::class);
-        $this->app->alias(\Modules\Core\Contracts\WorkspaceResolver::class, 'workspace.resolver');
+        $this->app->bind(\Modules\System\Contracts\WorkspaceResolver::class, \Modules\School\Services\SchoolWorkspaceResolver::class);
+        $this->app->alias(\Modules\System\Contracts\WorkspaceResolver::class, 'workspace.resolver');
     }
 
     /**

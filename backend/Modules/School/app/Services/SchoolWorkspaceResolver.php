@@ -4,7 +4,7 @@ namespace Modules\School\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
-use Modules\Core\Contracts\WorkspaceResolver;
+use Modules\System\Contracts\WorkspaceResolver;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
 

@@ -22,7 +22,7 @@ class StudentPortalController extends BaseController
 
     private function getStudent(): Student
     {
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         $user = auth()->user();
         if (!$user) {
             abort(401, 'Unauthenticated.');

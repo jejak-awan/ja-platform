@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/infra",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Infra\\": "app/",
+            "Modules\\Infra\\Database\\Factories\\": "database/factories/",
+            "Modules\\Infra\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Infra\\Tests\\": "tests/"
+        }
+    }
+}

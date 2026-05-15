@@ -9,10 +9,10 @@ use Illuminate\Support\Str;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\ContentCustomField;
 use Modules\Cms\Models\ContentRevision;
-use Modules\Core\Models\MediaUsage;
-use Modules\Core\Models\Tag;
-use Modules\Core\Models\SearchIndex;
-use Modules\Core\Models\Webhook;
+use Modules\System\Models\MediaUsage;
+use Modules\Cms\Models\Tag;
+use Modules\Cms\Models\SearchIndex;
+use Modules\System\Models\Webhook;
 use Modules\Cms\Services\CmsCacheService;
 
 class ContentService

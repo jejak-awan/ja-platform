@@ -2,12 +2,12 @@
 
 namespace Modules\Cms\Models;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 /**
  * @property int $id

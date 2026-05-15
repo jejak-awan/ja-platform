@@ -4,7 +4,7 @@ namespace Modules\Cms\Tests\Unit\Services;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Cms\Services\CommentSecurityService;
-use Modules\Core\Models\Setting;
+use Modules\System\Models\Setting;
 use Tests\TestCase;
 
 class CommentSecurityServiceTest extends TestCase

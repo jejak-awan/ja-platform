@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Modules\Cms\Models\Theme;
 use Modules\Cms\Services\ThemeCacheService;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Tests\TestCase;
 
 class ThemeControllerTest extends TestCase
@@ -35,7 +35,7 @@ class ThemeControllerTest extends TestCase
         $before = Theme::ofType('frontend')->count();
         Theme::factory()->count(3)->create(['type' => 'frontend']);
 
-        $response = $this->getJson('/api/v1/admin/cms/themes?type=frontend');
+        $response = $this->getJson('/api/v1/manage/cms/themes?type=frontend');
 
         $response->assertStatus(200)
             ->assertJsonCount($before + 3, 'data');
@@ -45,7 +45,7 @@ class ThemeControllerTest extends TestCase
     {
         $theme = Theme::factory()->create();
 
-        $response = $this->getJson("/api/v1/admin/cms/themes/{$theme->slug}");
+        $response = $this->getJson("/api/v1/manage/cms/themes/{$theme->slug}");
 
         $response->assertStatus(200)
             ->assertJsonPath('data.slug', $theme->slug);
@@ -55,7 +55,7 @@ class ThemeControllerTest extends TestCase
     {
         $theme = Theme::factory()->create(['name' => 'Old Name']);
 
-        $response = $this->putJson("/api/v1/admin/cms/themes/{$theme->slug}", [
+        $response = $this->putJson("/api/v1/manage/cms/themes/{$theme->slug}", [
             'name' => 'New Name',
         ]);
 
@@ -67,7 +67,7 @@ class ThemeControllerTest extends TestCase
     {
         $theme = Theme::factory()->create(['is_active' => false]);
 
-        $response = $this->deleteJson("/api/v1/admin/cms/themes/{$theme->slug}");
+        $response = $this->deleteJson("/api/v1/manage/cms/themes/{$theme->slug}");
 
         $response->assertStatus(200);
         $this->assertDatabaseMissing('themes', ['id' => $theme->id]);
@@ -77,7 +77,7 @@ class ThemeControllerTest extends TestCase
     {
         $theme = Theme::factory()->create(['is_active' => true]);
 
-        $response = $this->deleteJson("/api/v1/admin/cms/themes/{$theme->slug}");
+        $response = $this->deleteJson("/api/v1/manage/cms/themes/{$theme->slug}");
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['theme']);
@@ -87,11 +87,11 @@ class ThemeControllerTest extends TestCase
     {
         $theme = Theme::factory()->create(['is_active' => false, 'type' => 'frontend']);
 
-        $response = $this->postJson("/api/v1/admin/cms/themes/{$theme->slug}/activate");
+        $response = $this->postJson("/api/v1/manage/cms/themes/{$theme->slug}/activate");
         $response->assertStatus(200);
         $this->assertTrue($theme->fresh()->is_active);
 
-        $response = $this->postJson("/api/v1/admin/cms/themes/{$theme->slug}/deactivate");
+        $response = $this->postJson("/api/v1/manage/cms/themes/{$theme->slug}/deactivate");
         $response->assertStatus(200);
         $this->assertFalse($theme->fresh()->is_active);
     }
@@ -110,7 +110,7 @@ class ThemeControllerTest extends TestCase
     {
         $theme = Theme::factory()->create(['settings' => ['a' => 1]]);
 
-        $response = $this->putJson("/api/v1/admin/cms/themes/{$theme->slug}/settings", [
+        $response = $this->putJson("/api/v1/manage/cms/themes/{$theme->slug}/settings", [
             'settings' => ['b' => 2],
         ]);
 
@@ -123,7 +123,7 @@ class ThemeControllerTest extends TestCase
     {
         $theme = Theme::factory()->create();
 
-        $response = $this->putJson("/api/v1/admin/cms/themes/{$theme->slug}/custom-css", [
+        $response = $this->putJson("/api/v1/manage/cms/themes/{$theme->slug}/custom-css", [
             'custom_css' => 'body { color: red; }',
         ]);
 
@@ -139,7 +139,7 @@ class ThemeControllerTest extends TestCase
         $mockService->shouldReceive('validateTheme')->once()->andReturn([]);
         $this->app->instance(\Modules\Cms\Services\ThemeService::class, $mockService);
 
-        $response = $this->postJson("/api/v1/admin/cms/themes/{$theme->slug}/validate");
+        $response = $this->postJson("/api/v1/manage/cms/themes/{$theme->slug}/validate");
 
         $response->assertStatus(200)
             ->assertJsonPath('data.valid', true);
@@ -147,7 +147,7 @@ class ThemeControllerTest extends TestCase
 
     public function test_scan_themes()
     {
-        $response = $this->postJson('/api/v1/admin/cms/themes/scan');
+        $response = $this->postJson('/api/v1/manage/cms/themes/scan');
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data' => ['themes', 'count']]);
@@ -157,7 +157,7 @@ class ThemeControllerTest extends TestCase
     {
         $theme = Theme::factory()->create(['settings' => ['key' => 'value']]);
 
-        $response = $this->getJson("/api/v1/admin/cms/themes/{$theme->slug}/setting?key=key");
+        $response = $this->getJson("/api/v1/manage/cms/themes/{$theme->slug}/setting?key=key");
 
         $response->assertStatus(200)
             ->assertJsonPath('data.value', 'value');
@@ -167,7 +167,7 @@ class ThemeControllerTest extends TestCase
     {
         $theme = Theme::factory()->create(['is_active' => true, 'type' => 'frontend']);
 
-        $response = $this->getJson('/api/v1/admin/cms/themes/active/locations?type=frontend');
+        $response = $this->getJson('/api/v1/manage/cms/themes/active/locations?type=frontend');
 
         $response->assertStatus(200);
     }
@@ -176,13 +176,13 @@ class ThemeControllerTest extends TestCase
     {
         $theme = Theme::factory()->create(['slug' => 'test-theme']);
 
-        $response = $this->getJson("/api/v1/admin/cms/themes/{$theme->slug}/components");
+        $response = $this->getJson("/api/v1/manage/cms/themes/{$theme->slug}/components");
         $response->assertStatus(200);
 
-        $response = $this->getJson("/api/v1/admin/cms/themes/{$theme->slug}/config");
+        $response = $this->getJson("/api/v1/manage/cms/themes/{$theme->slug}/config");
         $response->assertStatus(200);
 
-        $response = $this->getJson("/api/v1/admin/cms/themes/{$theme->slug}/composables");
+        $response = $this->getJson("/api/v1/manage/cms/themes/{$theme->slug}/composables");
         $response->assertStatus(200);
     }
 }

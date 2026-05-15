@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\Theme;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 class JanariThemeSeeder extends Seeder
 {

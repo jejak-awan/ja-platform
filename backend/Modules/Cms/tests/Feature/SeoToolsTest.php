@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
 
@@ -30,7 +30,7 @@ class SeoToolsTest extends TestCase
     public function test_admin_can_generate_sitemap(): void
     {
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->getJson('/api/v1/admin/cms/seo/sitemap');
+            ->getJson('/api/v1/manage/cms/seo/sitemap');
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJsonStructure([
@@ -53,7 +53,7 @@ class SeoToolsTest extends TestCase
     public function test_admin_can_get_robots_txt(): void
     {
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->getJson('/api/v1/admin/cms/seo/robots-txt');
+            ->getJson('/api/v1/manage/cms/seo/robots-txt');
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJsonStructure([
@@ -78,7 +78,7 @@ class SeoToolsTest extends TestCase
         $newContent = "User-agent: *\nDisallow: /admin\n\nSitemap: ".url('/sitemap.xml');
 
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->putJson('/api/v1/admin/cms/seo/robots-txt', [
+            ->putJson('/api/v1/manage/cms/seo/robots-txt', [
                 'content' => $newContent,
             ]);
 
@@ -103,7 +103,7 @@ class SeoToolsTest extends TestCase
     public function test_robots_txt_update_requires_content(): void
     {
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->putJson('/api/v1/admin/cms/seo/robots-txt', []);
+            ->putJson('/api/v1/manage/cms/seo/robots-txt', []);
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['content']);
@@ -128,7 +128,7 @@ class SeoToolsTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->getJson("/api/v1/admin/cms/contents/{$content->id}/seo-analysis");
+            ->getJson("/api/v1/manage/cms/contents/{$content->id}/seo-analysis");
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJsonStructure([
@@ -171,7 +171,7 @@ class SeoToolsTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->getJson("/api/v1/admin/cms/contents/{$content->id}/seo-analysis");
+            ->getJson("/api/v1/manage/cms/contents/{$content->id}/seo-analysis");
 
         TestHelpers::assertApiSuccess($response);
 
@@ -203,7 +203,7 @@ class SeoToolsTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->getJson("/api/v1/admin/cms/contents/{$content->id}/schema");
+            ->getJson("/api/v1/manage/cms/contents/{$content->id}/schema");
 
         TestHelpers::assertApiSuccess($response);
 
@@ -235,7 +235,7 @@ class SeoToolsTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->getJson("/api/v1/admin/cms/contents/{$content->id}/schema");
+            ->getJson("/api/v1/manage/cms/contents/{$content->id}/schema");
 
         TestHelpers::assertApiSuccess($response);
 
@@ -251,7 +251,7 @@ class SeoToolsTest extends TestCase
         $user = $this->createUser();
 
         $response = $this->actingAs($user, 'sanctum')
-            ->putJson('/api/v1/admin/cms/seo/robots-txt', [
+            ->putJson('/api/v1/manage/cms/seo/robots-txt', [
                 'content' => 'Test content',
             ]);
 
@@ -263,13 +263,13 @@ class SeoToolsTest extends TestCase
      */
     public function test_unauthenticated_user_cannot_access_seo_tools(): void
     {
-        $response = $this->getJson('/api/v1/admin/cms/seo/sitemap');
+        $response = $this->getJson('/api/v1/manage/cms/seo/sitemap');
         $response->assertStatus(401);
 
-        $response = $this->getJson('/api/v1/admin/cms/seo/robots-txt');
+        $response = $this->getJson('/api/v1/manage/cms/seo/robots-txt');
         $response->assertStatus(401);
 
-        $response = $this->putJson('/api/v1/admin/cms/seo/robots-txt', [
+        $response = $this->putJson('/api/v1/manage/cms/seo/robots-txt', [
             'content' => 'Test',
         ]);
         $response->assertStatus(401);

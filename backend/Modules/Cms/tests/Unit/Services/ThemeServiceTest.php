@@ -257,7 +257,7 @@ class ThemeServiceTest extends TestCase
         $theme = Theme::factory()->create(['slug' => 'test-plug', 'dependencies' => ['plugins' => ['missing-plugin']]]);
         $this->assertFalse($this->service->checkDependencies($theme));
 
-        \Modules\Core\Models\Plugin::create([
+        \Modules\System\Models\Plugin::create([
             'slug' => 'active-plug',
             'name' => 'Active',
             'main_file' => 'plugin.php',

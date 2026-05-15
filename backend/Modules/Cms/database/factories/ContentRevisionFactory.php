@@ -5,7 +5,7 @@ namespace Modules\Cms\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\ContentRevision;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 class ContentRevisionFactory extends Factory
 {

@@ -5,9 +5,9 @@ namespace Modules\Cms\Tests\Unit\Services;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Modules\Core\Models\Media;
-use Modules\Core\Models\MediaFolder;
-use Modules\Core\Services\MediaService;
+use Modules\System\Models\Media;
+use Modules\System\Models\MediaFolder;
+use Modules\System\Services\MediaService;
 use Tests\TestCase;
 
 class MediaServiceTest extends TestCase
@@ -365,7 +365,7 @@ class MediaServiceTest extends TestCase
     public function test_get_usage_info_model_not_found()
     {
         $media = Media::factory()->create();
-        \Modules\Core\Models\MediaUsage::create([
+        \Modules\System\Models\MediaUsage::create([
             'media_id' => $media->id,
             'model_type' => 'App\Models\NonExistent',
             'model_id' => 999,
@@ -389,7 +389,7 @@ class MediaServiceTest extends TestCase
         $newFile = UploadedFile::fake()->image('new.jpg');
 
         // Mock Setting to enable auto conversion
-        \Modules\Core\Models\Setting::set('media_auto_convert_webp', 1);
+        \Modules\System\Models\Setting::set('media_auto_convert_webp', 1);
 
         $updated = $this->service->editImage($media, $newFile);
 

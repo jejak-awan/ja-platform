@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Modules\Cms\Models\Form;
 use Modules\Cms\Models\FormAnalytics;
 use Modules\Cms\Models\FormSubmission;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
 
@@ -29,7 +29,7 @@ class FormTest extends TestCase
 
         Form::factory()->count(3)->create();
 
-        $response = $this->getJson('/api/v1/admin/cms/forms');
+        $response = $this->getJson('/api/v1/manage/cms/forms');
 
         TestHelpers::assertApiSuccess($response);
     }
@@ -49,7 +49,7 @@ class FormTest extends TestCase
             'is_active' => true,
         ];
 
-        $response = $this->postJson('/api/v1/admin/cms/forms', $formData);
+        $response = $this->postJson('/api/v1/manage/cms/forms', $formData);
 
         TestHelpers::assertApiSuccess($response, 201);
         $this->assertDatabaseHas('forms', [
@@ -66,7 +66,7 @@ class FormTest extends TestCase
         $admin = $this->createAdminUser();
         $this->actingAs($admin, 'sanctum');
 
-        $response = $this->postJson('/api/v1/admin/cms/forms', []);
+        $response = $this->postJson('/api/v1/manage/cms/forms', []);
 
         TestHelpers::assertApiValidationError($response);
         $response->assertJsonValidationErrors(['name']);
@@ -82,7 +82,7 @@ class FormTest extends TestCase
 
         $form = Form::factory()->create();
 
-        $response = $this->getJson("/api/v1/admin/cms/forms/{$form->id}");
+        $response = $this->getJson("/api/v1/manage/cms/forms/{$form->id}");
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJson([
@@ -103,7 +103,7 @@ class FormTest extends TestCase
 
         $form = Form::factory()->create();
 
-        $response = $this->putJson("/api/v1/admin/cms/forms/{$form->id}", [
+        $response = $this->putJson("/api/v1/manage/cms/forms/{$form->id}", [
             'name' => 'Updated Form Name',
         ]);
 
@@ -124,7 +124,7 @@ class FormTest extends TestCase
 
         $form = Form::factory()->create();
 
-        $response = $this->deleteJson("/api/v1/admin/cms/forms/{$form->id}");
+        $response = $this->deleteJson("/api/v1/manage/cms/forms/{$form->id}");
 
         TestHelpers::assertApiSuccess($response);
         $this->assertSoftDeleted('forms', [
@@ -156,7 +156,7 @@ class FormTest extends TestCase
             'sort_order' => 2,
         ]);
 
-        $response = $this->postJson("/api/v1/admin/cms/forms/{$form->id}/duplicate", [
+        $response = $this->postJson("/api/v1/manage/cms/forms/{$form->id}/duplicate", [
             'title' => $form->name.' (Copy)',
             'slug' => $form->slug.'-copy',
         ]);
@@ -177,7 +177,7 @@ class FormTest extends TestCase
 
         $form = Form::factory()->create();
 
-        $a = $this->postJson("/api/v1/admin/cms/forms/{$form->id}/fields", [
+        $a = $this->postJson("/api/v1/manage/cms/forms/{$form->id}/fields", [
             'label' => 'First',
             'type' => 'text',
             'is_required' => false,
@@ -185,7 +185,7 @@ class FormTest extends TestCase
         TestHelpers::assertApiSuccess($a, 201);
         $idA = (int) $a->json('data.id');
 
-        $b = $this->postJson("/api/v1/admin/cms/forms/{$form->id}/fields", [
+        $b = $this->postJson("/api/v1/manage/cms/forms/{$form->id}/fields", [
             'label' => 'Second',
             'type' => 'textarea',
             'is_required' => true,
@@ -193,21 +193,21 @@ class FormTest extends TestCase
         TestHelpers::assertApiSuccess($b, 201);
         $idB = (int) $b->json('data.id');
 
-        $reorder = $this->postJson("/api/v1/admin/cms/forms/{$form->id}/reorder-fields", [
+        $reorder = $this->postJson("/api/v1/manage/cms/forms/{$form->id}/reorder-fields", [
             'order' => [$idB, $idA],
         ]);
         TestHelpers::assertApiSuccess($reorder);
         $this->assertSame(1, (int) $form->fields()->where('id', $idB)->value('sort_order'));
         $this->assertSame(2, (int) $form->fields()->where('id', $idA)->value('sort_order'));
 
-        $upd = $this->putJson("/api/v1/admin/cms/forms/{$form->id}/fields/{$idA}", [
+        $upd = $this->putJson("/api/v1/manage/cms/forms/{$form->id}/fields/{$idA}", [
             'label' => 'First updated',
             'is_required' => true,
         ]);
         TestHelpers::assertApiSuccess($upd);
         $this->assertSame('First updated', (string) $form->fields()->where('id', $idA)->value('label'));
 
-        $del = $this->deleteJson("/api/v1/admin/cms/forms/{$form->id}/fields/{$idB}");
+        $del = $this->deleteJson("/api/v1/manage/cms/forms/{$form->id}/fields/{$idB}");
         TestHelpers::assertApiSuccess($del);
         $this->assertSame(1, $form->fields()->count());
     }
@@ -223,7 +223,7 @@ class FormTest extends TestCase
         $form = Form::factory()->create();
         FormSubmission::factory()->count(3)->create(['form_id' => $form->id]);
 
-        $response = $this->getJson("/api/v1/admin/cms/forms/{$form->id}/submissions");
+        $response = $this->getJson("/api/v1/manage/cms/forms/{$form->id}/submissions");
 
         TestHelpers::assertApiSuccess($response);
     }
@@ -242,7 +242,7 @@ class FormTest extends TestCase
         FormSubmission::factory()->for($form)->read()->create();
         FormSubmission::factory()->for($form)->archived()->create();
 
-        $response = $this->getJson("/api/v1/admin/cms/forms/{$form->id}/submissions/statistics");
+        $response = $this->getJson("/api/v1/manage/cms/forms/{$form->id}/submissions/statistics");
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJsonPath('data.total', 4);
@@ -285,7 +285,7 @@ class FormTest extends TestCase
             'submissions' => 1,
         ]);
 
-        $response = $this->getJson("/api/v1/admin/cms/forms/{$form->id}/submissions/statistics?days=7&aggregate_field=source");
+        $response = $this->getJson("/api/v1/manage/cms/forms/{$form->id}/submissions/statistics?days=7&aggregate_field=source");
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJsonStructure([
@@ -425,7 +425,7 @@ class FormTest extends TestCase
      */
     public function test_unauthenticated_user_cannot_manage_forms(): void
     {
-        $response = $this->postJson('/api/v1/admin/cms/forms', [
+        $response = $this->postJson('/api/v1/manage/cms/forms', [
             'name' => 'Test Form',
         ]);
 
@@ -440,7 +440,7 @@ class FormTest extends TestCase
         $user = $this->createUser();
         $this->actingAs($user, 'sanctum');
 
-        $response = $this->postJson('/api/v1/admin/cms/forms', [
+        $response = $this->postJson('/api/v1/manage/cms/forms', [
             'name' => 'Test Form',
         ]);
 

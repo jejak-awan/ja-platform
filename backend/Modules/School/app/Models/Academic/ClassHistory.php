@@ -2,7 +2,7 @@
 
 namespace Modules\School\Models\Academic;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
 

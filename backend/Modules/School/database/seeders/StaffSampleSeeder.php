@@ -3,7 +3,7 @@
 namespace Modules\School\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Modules\School\Models\HR\Staff;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;

@@ -2,7 +2,7 @@
 
 namespace Modules\School\Policies;
 
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 /**
  * Attendance records under {@see OperationController} (operations/attendance/*).

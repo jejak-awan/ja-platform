@@ -51,7 +51,7 @@ class SchoolOperationTest extends TestCase
     #[Test]
     public function it_can_record_attendance()
     {
-        $response = $this->actingAsAdmin()->postJson('/api/v1/admin/operations/attendance', [
+        $response = $this->actingAsAdmin()->postJson('/api/v1/manage/school/operations/attendance', [
             'student_id' => $this->student->id,
             'academic_year_id' => $this->academicYear->id,
             'semester_id' => $this->semester->id,
@@ -73,7 +73,7 @@ class SchoolOperationTest extends TestCase
     public function it_can_record_violation_and_calculate_points()
     {
         // Record first violation
-        $this->actingAsAdmin()->postJson('/api/v1/admin/operations/violations', [
+        $this->actingAsAdmin()->postJson('/api/v1/manage/school/operations/violations', [
             'student_id' => $this->student->id,
             'category' => 'Late',
             'points' => 5,
@@ -82,7 +82,7 @@ class SchoolOperationTest extends TestCase
         ])->assertStatus(201);
 
         // Record second violation
-        $this->actingAsAdmin()->postJson('/api/v1/admin/operations/violations', [
+        $this->actingAsAdmin()->postJson('/api/v1/manage/school/operations/violations', [
             'student_id' => $this->student->id,
             'category' => 'Dress Code',
             'points' => 10,
@@ -91,7 +91,7 @@ class SchoolOperationTest extends TestCase
         ])->assertStatus(201);
 
         // Verify total points
-        $response = $this->actingAsAdmin()->getJson("/api/v1/admin/operations/violations/points/{$this->student->id}");
+        $response = $this->actingAsAdmin()->getJson("/api/v1/manage/school/operations/violations/points/{$this->student->id}");
 
         $response->assertStatus(200)
             ->assertJsonPath('data.total_points', 15);

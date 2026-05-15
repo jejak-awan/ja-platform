@@ -6,8 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\ContentRevision;
-use Modules\Core\Models\Tag;
-use Modules\Core\Models\User;
+use Modules\Cms\Models\Tag;
+use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
 
@@ -32,7 +32,7 @@ class ContentManagementTest extends TestCase
         $initialCount = Content::count();
         Content::factory()->count(5)->create();
 
-        $response = $this->getJson('/api/v1/admin/cms/contents');
+        $response = $this->getJson('/api/v1/manage/cms/contents');
 
         TestHelpers::assertApiPaginated($response);
         // If total contents exceed per_page (usually 10 or 15), this might fail if we assert count + 5
@@ -57,7 +57,7 @@ class ContentManagementTest extends TestCase
         Content::factory()->published()->count(3)->create();
         Content::factory()->draft()->count(2)->create();
 
-        $response = $this->getJson('/api/v1/admin/cms/contents?status=draft');
+        $response = $this->getJson('/api/v1/manage/cms/contents?status=draft');
 
         TestHelpers::assertApiPaginated($response);
         $response->assertJsonCount($initialCount + 2, 'data.data');
@@ -79,7 +79,7 @@ class ContentManagementTest extends TestCase
             'tags' => $tags->pluck('id')->toArray(),
         ]);
 
-        $response = $this->postJson('/api/v1/admin/cms/contents', $contentData);
+        $response = $this->postJson('/api/v1/manage/cms/contents', $contentData);
 
         TestHelpers::assertApiSuccess($response, 201);
         $response->assertJsonStructure([
@@ -108,7 +108,7 @@ class ContentManagementTest extends TestCase
         $admin = $this->createAdminUser();
         $this->actingAs($admin, 'sanctum');
 
-        $response = $this->postJson('/api/v1/admin/cms/contents', []);
+        $response = $this->postJson('/api/v1/manage/cms/contents', []);
 
         TestHelpers::assertApiValidationError($response);
         // Only title, status, and type are required by the API
@@ -125,7 +125,7 @@ class ContentManagementTest extends TestCase
 
         $content = Content::factory()->create();
 
-        $response = $this->getJson("/api/v1/admin/cms/contents/{$content->id}");
+        $response = $this->getJson("/api/v1/manage/cms/contents/{$content->id}");
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJson([
@@ -151,7 +151,7 @@ class ContentManagementTest extends TestCase
             'body' => 'Updated body content',
         ];
 
-        $response = $this->putJson("/api/v1/admin/cms/contents/{$content->id}", array_merge(
+        $response = $this->putJson("/api/v1/manage/cms/contents/{$content->id}", array_merge(
             $content->toArray(),
             $updateData
         ));
@@ -173,7 +173,7 @@ class ContentManagementTest extends TestCase
 
         $content = Content::factory()->create();
 
-        $response = $this->deleteJson("/api/v1/admin/cms/contents/{$content->id}");
+        $response = $this->deleteJson("/api/v1/manage/cms/contents/{$content->id}");
 
         TestHelpers::assertApiSuccess($response);
         $this->assertSoftDeleted('contents', [
@@ -193,7 +193,7 @@ class ContentManagementTest extends TestCase
         $tags = Tag::factory()->count(2)->create();
         $content->tags()->attach($tags);
 
-        $response = $this->postJson("/api/v1/admin/cms/contents/{$content->id}/duplicate");
+        $response = $this->postJson("/api/v1/manage/cms/contents/{$content->id}/duplicate");
 
         TestHelpers::assertApiSuccess($response, 201);
 
@@ -212,7 +212,7 @@ class ContentManagementTest extends TestCase
 
         $contents = Content::factory()->count(3)->create();
 
-        $response = $this->postJson('/api/v1/admin/cms/contents/bulk-action', [
+        $response = $this->postJson('/api/v1/manage/cms/contents/bulk-action', [
             'action' => 'delete',
             'content_ids' => $contents->pluck('id')->toArray(),
         ]);
@@ -234,7 +234,7 @@ class ContentManagementTest extends TestCase
 
         $contents = Content::factory()->count(2)->create();
 
-        $response = $this->postJson('/api/v1/admin/cms/contents/bulk-action', [
+        $response = $this->postJson('/api/v1/manage/cms/contents/bulk-action', [
             'action' => 'invalid-action',
             'ids' => $contents->pluck('id')->toArray(),
         ]);
@@ -252,7 +252,7 @@ class ContentManagementTest extends TestCase
 
         $content = Content::factory()->create();
 
-        $response = $this->postJson("/api/v1/admin/cms/contents/{$content->id}/revisions", [
+        $response = $this->postJson("/api/v1/manage/cms/contents/{$content->id}/revisions", [
             'note' => 'Test revision',
         ]);
 
@@ -277,7 +277,7 @@ class ContentManagementTest extends TestCase
             'content_id' => $content->id,
         ]);
 
-        $response = $this->getJson("/api/v1/admin/cms/contents/{$content->id}/revisions");
+        $response = $this->getJson("/api/v1/manage/cms/contents/{$content->id}/revisions");
 
         TestHelpers::assertApiPaginated($response);
         $response->assertJsonCount(3, 'data.data');
@@ -296,7 +296,7 @@ class ContentManagementTest extends TestCase
             'content_id' => $content->id,
         ]);
 
-        $response = $this->getJson("/api/v1/admin/cms/contents/{$content->id}/revisions/{$revision->id}");
+        $response = $this->getJson("/api/v1/manage/cms/contents/{$content->id}/revisions/{$revision->id}");
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJson([
@@ -326,7 +326,7 @@ class ContentManagementTest extends TestCase
             'body' => 'Revision body',
         ]);
 
-        $response = $this->postJson("/api/v1/admin/cms/contents/{$content->id}/revisions/{$revision->id}/restore");
+        $response = $this->postJson("/api/v1/manage/cms/contents/{$content->id}/revisions/{$revision->id}/restore");
 
         TestHelpers::assertApiSuccess($response);
 
@@ -348,7 +348,7 @@ class ContentManagementTest extends TestCase
             'content_id' => $content->id,
         ]);
 
-        $response = $this->deleteJson("/api/v1/admin/cms/contents/{$content->id}/revisions/{$revision->id}");
+        $response = $this->deleteJson("/api/v1/manage/cms/contents/{$content->id}/revisions/{$revision->id}");
 
         TestHelpers::assertApiSuccess($response);
         $this->assertDatabaseMissing('content_revisions', [
@@ -366,7 +366,7 @@ class ContentManagementTest extends TestCase
 
         $content = Content::factory()->create();
 
-        $response = $this->postJson("/api/v1/admin/cms/contents/{$content->id}/lock");
+        $response = $this->postJson("/api/v1/manage/cms/contents/{$content->id}/lock");
 
         TestHelpers::assertApiSuccess($response);
 
@@ -388,7 +388,7 @@ class ContentManagementTest extends TestCase
             'locked_at' => now(),
         ]);
 
-        $response = $this->postJson("/api/v1/admin/cms/contents/{$content->id}/unlock");
+        $response = $this->postJson("/api/v1/manage/cms/contents/{$content->id}/unlock");
 
         TestHelpers::assertApiSuccess($response);
 
@@ -407,7 +407,7 @@ class ContentManagementTest extends TestCase
 
         $content = Content::factory()->draft()->create();
 
-        $response = $this->getJson("/api/v1/admin/cms/contents/{$content->id}/preview");
+        $response = $this->getJson("/api/v1/manage/cms/contents/{$content->id}/preview");
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJson([
@@ -429,7 +429,7 @@ class ContentManagementTest extends TestCase
 
         $contentData = TestHelpers::getContentData();
 
-        $response = $this->postJson('/api/v1/admin/cms/contents', $contentData);
+        $response = $this->postJson('/api/v1/manage/cms/contents', $contentData);
 
         $response->assertStatus(403);
     }
@@ -444,7 +444,7 @@ class ContentManagementTest extends TestCase
 
         $content = Content::factory()->create();
 
-        $response = $this->putJson("/api/v1/admin/cms/contents/{$content->id}", [
+        $response = $this->putJson("/api/v1/manage/cms/contents/{$content->id}", [
             'title' => 'Updated Title',
         ]);
 
@@ -464,15 +464,15 @@ class ContentManagementTest extends TestCase
         Content::factory()->create(['title' => 'Other Post', 'type' => 'post']);
 
         // Filter by type
-        $response = $this->getJson('/api/v1/admin/cms/contents?type=article');
+        $response = $this->getJson('/api/v1/manage/cms/contents?type=article');
         $response->assertJsonCount(1, 'data.data');
 
         // Filter by category
-        $response = $this->getJson("/api/v1/admin/cms/contents?category_id={$category->id}");
+        $response = $this->getJson("/api/v1/manage/cms/contents?category_id={$category->id}");
         $response->assertJsonCount(1, 'data.data');
 
         // Filter by search
-        $response = $this->getJson('/api/v1/admin/cms/contents?search=Searchable');
+        $response = $this->getJson('/api/v1/manage/cms/contents?search=Searchable');
         $response->assertJsonCount(1, 'data.data');
     }
 
@@ -488,18 +488,18 @@ class ContentManagementTest extends TestCase
         $content->delete();
 
         // List trashed
-        $response = $this->getJson('/api/v1/admin/cms/contents?status=trashed');
+        $response = $this->getJson('/api/v1/manage/cms/contents?status=trashed');
         TestHelpers::assertApiPaginated($response);
         $this->assertGreaterThanOrEqual(1, count($response->json('data.data')));
 
         // Restore
-        $response = $this->putJson("/api/v1/admin/cms/contents/{$content->id}/restore");
+        $response = $this->putJson("/api/v1/manage/cms/contents/{$content->id}/restore");
         TestHelpers::assertApiSuccess($response);
         $this->assertDatabaseHas('contents', ['id' => $content->id, 'deleted_at' => null]);
 
         // Force Delete
         $content->delete();
-        $response = $this->deleteJson("/api/v1/admin/cms/contents/{$content->id}/force-delete");
+        $response = $this->deleteJson("/api/v1/manage/cms/contents/{$content->id}/force-delete");
         TestHelpers::assertApiSuccess($response);
         $this->assertDatabaseMissing('contents', ['id' => $content->id]);
     }
@@ -516,7 +516,7 @@ class ContentManagementTest extends TestCase
         foreach ($contents as $c) $c->delete();
 
         // Bulk Restore
-        $response = $this->postJson('/api/v1/admin/cms/contents/bulk-action', [
+        $response = $this->postJson('/api/v1/manage/cms/contents/bulk-action', [
             'action' => 'restore',
             'content_ids' => $contents->pluck('id')->toArray(),
         ]);
@@ -527,7 +527,7 @@ class ContentManagementTest extends TestCase
 
         // Bulk Force Delete
         foreach ($contents as $c) $c->delete();
-        $response = $this->postJson('/api/v1/admin/cms/contents/bulk-action', [
+        $response = $this->postJson('/api/v1/manage/cms/contents/bulk-action', [
             'action' => 'force_delete',
             'content_ids' => $contents->pluck('id')->toArray(),
         ]);

@@ -2,7 +2,7 @@
 
 namespace Modules\School\Policies;
 
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Modules\School\Models\Lms\Course;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

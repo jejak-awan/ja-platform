@@ -2,7 +2,7 @@
 
 namespace Modules\Cms\Services;
 
-use Modules\Core\Models\Setting;
+use Modules\System\Models\Setting;
 
 class CommentSecurityService
 {

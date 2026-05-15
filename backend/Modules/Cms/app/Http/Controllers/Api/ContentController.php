@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Services\ContentService;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\Cms\Services\CmsCacheService;
 
 /**
@@ -163,7 +163,7 @@ class ContentController extends BaseApiController
 
         // If not published, verify permissions
         if (! $isPublished) {
-            /** @var \Modules\Core\Models\User|null $user */
+            /** @var \Modules\System\Models\User|null $user */
             $user = auth('sanctum')->user();
 
             if (! $user) {
@@ -214,7 +214,7 @@ class ContentController extends BaseApiController
     public function preview(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -320,7 +320,7 @@ class ContentController extends BaseApiController
     public function adminShow(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -354,7 +354,7 @@ class ContentController extends BaseApiController
     public function stats(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -415,7 +415,7 @@ class ContentController extends BaseApiController
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -501,7 +501,7 @@ class ContentController extends BaseApiController
     public function update(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -641,7 +641,7 @@ class ContentController extends BaseApiController
     public function autosave(Request $request, ?Content $content = null): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -779,7 +779,7 @@ class ContentController extends BaseApiController
     public function duplicate(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -804,7 +804,7 @@ class ContentController extends BaseApiController
     public function approve(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -842,7 +842,7 @@ class ContentController extends BaseApiController
     public function reject(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -887,7 +887,7 @@ class ContentController extends BaseApiController
     public function bulkAction(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -947,7 +947,7 @@ class ContentController extends BaseApiController
     public function lock(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -955,7 +955,7 @@ class ContentController extends BaseApiController
         if ($this->contentService->isLockedByOther($content, (int) $user->id)) {
             // Allow Admins/Super Admins to steal the lock
             if (! $user->hasRole('super') && ! $user->hasRole('admin')) {
-                /** @var \Modules\Core\Models\User|null $lockedBy */
+                /** @var \Modules\System\Models\User|null $lockedBy */
                 $lockedBy = $content->lockedBy;
 
                 return $this->error(
@@ -989,7 +989,7 @@ class ContentController extends BaseApiController
     public function lockStatus(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -1026,7 +1026,7 @@ class ContentController extends BaseApiController
     public function unlock(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -1050,7 +1050,7 @@ class ContentController extends BaseApiController
     public function restore(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -1072,7 +1072,7 @@ class ContentController extends BaseApiController
     public function forceDelete(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -1092,7 +1092,7 @@ class ContentController extends BaseApiController
     public function emptyTrash(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }

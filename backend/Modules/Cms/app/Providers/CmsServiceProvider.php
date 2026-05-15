@@ -28,7 +28,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+        // $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
 
         $this->registerUserModuleIntegrations();
         $this->registerDashboardStats();
@@ -41,11 +41,11 @@ class CmsServiceProvider extends ServiceProvider
      */
     protected function registerCacheIntegrations(): void
     {
-        \Modules\Core\Services\CacheService::registerClearer('cms', function () {
+        \Modules\System\Services\CacheService::registerClearer('cms', function () {
             app(\Modules\Cms\Services\CmsCacheService::class)->clearAll();
         });
 
-        \Modules\Core\Services\CacheWarmingService::registerWarmer('cms', function () {
+        \Modules\System\Services\CacheWarmingService::registerWarmer('cms', function () {
             return app(\Modules\Cms\Services\CmsCacheService::class)->warmUp();
         });
     }
@@ -55,11 +55,11 @@ class CmsServiceProvider extends ServiceProvider
      */
     protected function registerModelRelations(): void
     {
-        \Modules\Core\Models\Tag::resolveRelationUsing('contents', function ($tagModel) {
+        \Modules\Cms\Models\Tag::resolveRelationUsing('contents', function ($tagModel) {
             return $tagModel->belongsToMany(\Modules\Cms\Models\Content::class, 'content_tag');
         });
 
-        \Modules\Core\Models\AnalyticsEvent::resolveRelationUsing('content', function ($analyticsModel) {
+        \Modules\Analytics\Models\AnalyticsEvent::resolveRelationUsing('content', function ($analyticsModel) {
             return $analyticsModel->belongsTo(\Modules\Cms\Models\Content::class, 'content_id');
         });
     }
@@ -70,7 +70,7 @@ class CmsServiceProvider extends ServiceProvider
     protected function registerDashboardStats(): void
     {
         $this->app->booted(function () {
-            $registry = $this->app->make(\Modules\Core\Services\DashboardRegistry::class);
+            $registry = $this->app->make(\Modules\System\Services\DashboardRegistry::class);
 
             $registry->registerStatsProvider('contents', function () {
                 return [
@@ -88,11 +88,11 @@ class CmsServiceProvider extends ServiceProvider
                     'comments' => \Modules\Cms\Models\Comment::count(),
                     'forms' => \Modules\Cms\Models\Form::count(),
                     'form_submissions' => \Modules\Cms\Models\FormSubmission::count(),
-                    'total_email_templates' => \Modules\Core\Models\EmailTemplate::count(),
-                    'newsletter_subscribers' => \Modules\Core\Models\NewsletterSubscriber::count(),
+                    'total_email_templates' => \Modules\System\Models\EmailTemplate::count(),
+                    'newsletter_subscribers' => \Modules\Cms\Models\NewsletterSubscriber::count(),
                     'email' => [
-                        'templates' => \Modules\Core\Models\EmailTemplate::count(),
-                        'subscribers' => \Modules\Core\Models\NewsletterSubscriber::count(),
+                        'templates' => \Modules\System\Models\EmailTemplate::count(),
+                        'subscribers' => \Modules\Cms\Models\NewsletterSubscriber::count(),
                         'smtp_status' => \Illuminate\Support\Facades\Cache::get('email_smtp_status', 'unknown'),
                     ],
                 ];
@@ -120,7 +120,7 @@ class CmsServiceProvider extends ServiceProvider
     protected function registerUserModuleIntegrations(): void
     {
         // Register CMS-specific role ranks
-        \Modules\Core\Models\User::registerRoleRanks([
+        \Modules\System\Models\User::registerRoleRanks([
             'editor' => 60,
             'author' => 40,
         ]);

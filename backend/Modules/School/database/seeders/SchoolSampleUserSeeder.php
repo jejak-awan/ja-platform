@@ -4,7 +4,7 @@ namespace Modules\School\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 class SchoolSampleUserSeeder extends Seeder
 {

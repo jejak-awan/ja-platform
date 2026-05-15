@@ -4,7 +4,7 @@ namespace Modules\Cms\Tests\Feature;
 
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
 
@@ -26,7 +26,7 @@ class CategoryTest extends TestCase
 
         Category::factory()->count(3)->create();
 
-        $response = $this->getJson('/api/v1/admin/cms/categories');
+        $response = $this->getJson('/api/v1/manage/cms/categories');
 
         TestHelpers::assertApiSuccess($response);
         $this->assertIsArray($response->json('data'));
@@ -43,7 +43,7 @@ class CategoryTest extends TestCase
         $parent = Category::factory()->create(['parent_id' => null]);
         Category::factory()->count(2)->create(['parent_id' => $parent->id]);
 
-        $response = $this->getJson('/api/v1/admin/cms/categories?tree=1');
+        $response = $this->getJson('/api/v1/manage/cms/categories?tree=1');
 
         TestHelpers::assertApiSuccess($response);
     }
@@ -64,7 +64,7 @@ class CategoryTest extends TestCase
             'sort_order' => 1,
         ];
 
-        $response = $this->postJson('/api/v1/admin/cms/categories', $categoryData);
+        $response = $this->postJson('/api/v1/manage/cms/categories', $categoryData);
 
         TestHelpers::assertApiSuccess($response, 201);
         $this->assertDatabaseHas('categories', [
@@ -81,7 +81,7 @@ class CategoryTest extends TestCase
         $admin = $this->createAdminUser();
         $this->actingAs($admin, 'sanctum');
 
-        $response = $this->postJson('/api/v1/admin/cms/categories', []);
+        $response = $this->postJson('/api/v1/manage/cms/categories', []);
 
         TestHelpers::assertApiValidationError($response);
         $response->assertJsonValidationErrors(['name', 'slug']);
@@ -97,7 +97,7 @@ class CategoryTest extends TestCase
 
         $existing = Category::factory()->create();
 
-        $response = $this->postJson('/api/v1/admin/cms/categories', [
+        $response = $this->postJson('/api/v1/manage/cms/categories', [
             'name' => 'New Category',
             'slug' => $existing->slug, // Duplicate slug
         ]);
@@ -116,7 +116,7 @@ class CategoryTest extends TestCase
 
         $category = Category::factory()->create();
 
-        $response = $this->getJson("/api/v1/admin/cms/categories/{$category->id}");
+        $response = $this->getJson("/api/v1/manage/cms/categories/{$category->id}");
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJson([
@@ -137,7 +137,7 @@ class CategoryTest extends TestCase
 
         $category = Category::factory()->create();
 
-        $response = $this->putJson("/api/v1/admin/cms/categories/{$category->id}", [
+        $response = $this->putJson("/api/v1/manage/cms/categories/{$category->id}", [
             'name' => 'Updated Category Name',
         ]);
 
@@ -158,7 +158,7 @@ class CategoryTest extends TestCase
 
         $category = Category::factory()->create();
 
-        $response = $this->putJson("/api/v1/admin/cms/categories/{$category->id}", [
+        $response = $this->putJson("/api/v1/manage/cms/categories/{$category->id}", [
             'parent_id' => $category->id,
         ]);
 
@@ -175,7 +175,7 @@ class CategoryTest extends TestCase
 
         $category = Category::factory()->create();
 
-        $response = $this->deleteJson("/api/v1/admin/cms/categories/{$category->id}");
+        $response = $this->deleteJson("/api/v1/manage/cms/categories/{$category->id}");
 
         TestHelpers::assertApiSuccess($response);
         $this->assertSoftDeleted('categories', [
@@ -194,7 +194,7 @@ class CategoryTest extends TestCase
         $parent = Category::factory()->create();
         Category::factory()->create(['parent_id' => $parent->id]);
 
-        $response = $this->deleteJson("/api/v1/admin/cms/categories/{$parent->id}");
+        $response = $this->deleteJson("/api/v1/manage/cms/categories/{$parent->id}");
 
         TestHelpers::assertApiValidationError($response);
     }
@@ -210,7 +210,7 @@ class CategoryTest extends TestCase
         $category = Category::factory()->create();
         Content::factory()->create(['category_id' => $category->id]);
 
-        $response = $this->deleteJson("/api/v1/admin/cms/categories/{$category->id}");
+        $response = $this->deleteJson("/api/v1/manage/cms/categories/{$category->id}");
 
         TestHelpers::assertApiValidationError($response);
     }
@@ -226,7 +226,7 @@ class CategoryTest extends TestCase
         $parent = Category::factory()->create();
         $category = Category::factory()->create();
 
-        $response = $this->postJson("/api/v1/admin/cms/categories/{$category->id}/move", [
+        $response = $this->postJson("/api/v1/manage/cms/categories/{$category->id}/move", [
             'parent_id' => $parent->id,
             'sort_order' => 5,
         ]);
@@ -249,7 +249,7 @@ class CategoryTest extends TestCase
         $categories = Category::factory()->count(3)->create();
         $ids = $categories->pluck('id')->toArray();
 
-        $response = $this->postJson('/api/v1/admin/cms/categories/bulk-destroy', [
+        $response = $this->postJson('/api/v1/manage/cms/categories/bulk-destroy', [
             'ids' => $ids,
         ]);
 
@@ -261,7 +261,7 @@ class CategoryTest extends TestCase
      */
     public function test_unauthenticated_user_cannot_manage_categories(): void
     {
-        $response = $this->postJson('/api/v1/admin/cms/categories', [
+        $response = $this->postJson('/api/v1/manage/cms/categories', [
             'name' => 'Test',
             'slug' => 'test',
         ]);
@@ -277,7 +277,7 @@ class CategoryTest extends TestCase
         $user = $this->createUser();
         $this->actingAs($user, 'sanctum');
 
-        $response = $this->postJson('/api/v1/admin/cms/categories', [
+        $response = $this->postJson('/api/v1/manage/cms/categories', [
             'name' => 'Test',
             'slug' => 'test-'.uniqid(),
         ]);
@@ -296,7 +296,7 @@ class CategoryTest extends TestCase
         Category::factory()->create(['name' => $uniqueName]);
         Category::factory()->create(['name' => 'NON_MATCHING_' . bin2hex(random_bytes(8))]);
 
-        $response = $this->getJson('/api/v1/admin/cms/categories?search=' . $uniqueName);
+        $response = $this->getJson('/api/v1/manage/cms/categories?search=' . $uniqueName);
         TestHelpers::assertApiSuccess($response);
         $this->assertCount(1, $response->json('data'));
     }
@@ -313,13 +313,13 @@ class CategoryTest extends TestCase
         $category->delete();
 
         // Restore
-        $response = $this->putJson("/api/v1/admin/cms/categories/{$category->id}/restore");
+        $response = $this->putJson("/api/v1/manage/cms/categories/{$category->id}/restore");
         TestHelpers::assertApiSuccess($response);
         $this->assertDatabaseHas('categories', ['id' => $category->id, 'deleted_at' => null]);
 
         // Force Delete
         $category->delete();
-        $response = $this->deleteJson("/api/v1/admin/cms/categories/{$category->id}/force-delete");
+        $response = $this->deleteJson("/api/v1/manage/cms/categories/{$category->id}/force-delete");
         TestHelpers::assertApiSuccess($response);
         $this->assertDatabaseMissing('categories', ['id' => $category->id]);
     }

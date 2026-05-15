@@ -5,7 +5,7 @@ namespace Modules\Cms\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Cms\Models\Comment;
 use Modules\Cms\Models\Content;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Cms\Models\Comment>

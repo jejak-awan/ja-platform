@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Core\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 
 class SitemapController extends Controller
 {

@@ -5,8 +5,8 @@ namespace Modules\Cms\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Modules\Cms\Models\Theme;
 use Modules\Cms\Services\ThemeService;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
-use Modules\Core\Models\Setting;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\Setting;
 
 class SettingController extends BaseApiController
 {

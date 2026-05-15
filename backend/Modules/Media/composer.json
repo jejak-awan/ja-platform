@@ -1,0 +1,22 @@
+{
+    "name": "jejakawan/media",
+    "description": "Media module for JA-Platform",
+    "authors": [
+        {
+            "name": "Jejakawan",
+            "email": "jejakawan007@github.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Media\\": "app/",
+            "Modules\\Media\\Database\\Factories\\": "database/factories/",
+            "Modules\\Media\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Media\\Tests\\": "tests/"
+        }
+    }
+}

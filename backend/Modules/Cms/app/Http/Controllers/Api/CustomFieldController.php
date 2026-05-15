@@ -3,8 +3,8 @@
 namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Modules\Core\Models\CustomField;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Models\CustomField;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class CustomFieldController extends BaseApiController
 {

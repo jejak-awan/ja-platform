@@ -2,7 +2,7 @@
 
 namespace Modules\Cms\Models;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -77,7 +77,7 @@ class FormField extends Model
                 $rules[] = 'email';
                 break;
             case 'url':
-                $rules[] = \Modules\Core\Rules\SafeUrl::class;
+                $rules[] = \Modules\System\Rules\SafeUrl::class;
                 break;
             case 'number':
                 $rules[] = 'numeric';

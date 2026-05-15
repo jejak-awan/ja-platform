@@ -5,7 +5,7 @@ namespace Modules\School\Models\Student;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 use Modules\School\Traits\ScopedBySchool;
 use Modules\School\Traits\HasVerificationHash;
 use Modules\School\Models\Institution\School;
@@ -68,7 +68,7 @@ use Modules\School\Models\Operations\UksVisit;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Violation> $violations
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Achievement> $achievements
  * @property-read \Illuminate\Database\Eloquent\Collection<int, UksVisit> $uksVisits
- * @property-read \Modules\Core\Models\User|null $user
+ * @property-read \Modules\System\Models\User|null $user
  */
 class Student extends Model
 {
@@ -200,11 +200,11 @@ class Student extends Model
 
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\Core\Models\User, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\System\Models\User, $this>
      */
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\Modules\Core\Models\User::class);
+        return $this->belongsTo(\Modules\System\Models\User::class);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Modules\School\Policies;
 
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 /**
  * Sarpras / facility assets (land, buildings, rooms, school assets, maintenance tickets).

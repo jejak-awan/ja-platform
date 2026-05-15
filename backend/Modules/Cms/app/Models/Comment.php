@@ -2,15 +2,15 @@
 
 namespace Modules\Cms\Models;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Modules\System\Traits\CoreLogsActivity;
 
 /**
  * @property int $id
@@ -27,10 +27,10 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property string|null $email
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Modules\Cms\Models\Content $content
- * @property-read \Modules\Core\Models\User|null $user
+ * @property-read \Modules\System\Models\User|null $user
  * @property-read Comment|null $parent
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Comment> $replies
- * @property-read \Modules\Core\Models\User|null $lockedBy
+ * @property-read \Modules\System\Models\User|null $lockedBy
  */
 class Comment extends Model
 {

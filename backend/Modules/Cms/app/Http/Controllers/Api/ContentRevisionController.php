@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\ContentRevision;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class ContentRevisionController extends BaseApiController
 {
@@ -45,7 +45,7 @@ class ContentRevisionController extends BaseApiController
     public function store(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -83,7 +83,7 @@ class ContentRevisionController extends BaseApiController
     public function restore(Request $request, Content $content, ContentRevision $revision): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }

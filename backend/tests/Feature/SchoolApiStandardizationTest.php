@@ -18,7 +18,7 @@ class SchoolApiStandardizationTest extends TestCase
     {
         $response = $this->actingAsAdmin()->getJson('/api/v1/admin/school');
 
-        $response->assertStatus(200)
+        $response->assertStatus(200)->dump()
             ->assertJsonStructure([
                 'success',
                 'data',
@@ -34,7 +34,7 @@ class SchoolApiStandardizationTest extends TestCase
      */
     public function test_academic_overview_structure(): void
     {
-        $response = $this->actingAsAdmin()->getJson('/api/v1/admin/academic/overview');
+        $response = $this->actingAsAdmin()->getJson('/api/v1/manage/school/academic/overview');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -55,7 +55,7 @@ class SchoolApiStandardizationTest extends TestCase
      */
     public function test_operations_attendance_overview_structure(): void
     {
-        $response = $this->actingAsAdmin()->getJson('/api/v1/admin/operations/attendance/overview');
+        $response = $this->actingAsAdmin()->getJson('/api/v1/manage/school/operations/attendance/overview');
 
         $response->assertStatus(200)
             ->assertJsonStructure([

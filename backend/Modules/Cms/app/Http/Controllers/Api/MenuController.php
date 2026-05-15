@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 use Modules\Cms\Models\Menu;
 use Modules\Cms\Models\MenuItem;
 use Modules\Cms\Models\Theme;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class MenuController extends BaseApiController
 {

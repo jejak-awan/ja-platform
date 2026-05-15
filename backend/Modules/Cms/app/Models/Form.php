@@ -2,14 +2,14 @@
 
 namespace Modules\Cms\Models;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 
 /**
@@ -29,7 +29,7 @@ use Modules\Core\Models\User;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Modules\Core\Models\User|null $author
+ * @property-read \Modules\System\Models\User|null $author
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\FormField> $fields
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\FormSubmission> $submissions
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\FormAnalytics> $analytics

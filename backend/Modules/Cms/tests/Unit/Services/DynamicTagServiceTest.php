@@ -4,9 +4,9 @@ namespace Modules\Cms\Tests\Unit\Services;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Cms\Models\Content;
-use Modules\Core\Services\DynamicTagService;
-use Modules\Core\Models\Setting;
-use Modules\Core\Models\User;
+use Modules\System\Services\DynamicTagService;
+use Modules\System\Models\Setting;
+use Modules\System\Models\User;
 use Tests\TestCase;
 
 class DynamicTagServiceTest extends TestCase

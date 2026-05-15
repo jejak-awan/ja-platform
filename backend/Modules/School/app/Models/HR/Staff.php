@@ -5,7 +5,7 @@ namespace Modules\School\Models\HR;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 use Modules\School\Traits\ScopedBySchool;
 use Modules\School\Models\Institution\School;
 
@@ -32,7 +32,7 @@ use Modules\School\Models\Institution\School;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Modules\School\Models\Institution\School $school
- * @property-read \Modules\Core\Models\User $user
+ * @property-read \Modules\System\Models\User $user
  */
 class Staff extends Model
 {
@@ -82,10 +82,10 @@ class Staff extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\Core\Models\User, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\System\Models\User, $this>
      */
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\Modules\Core\Models\User::class);
+        return $this->belongsTo(\Modules\System\Models\User::class);
     }
 }

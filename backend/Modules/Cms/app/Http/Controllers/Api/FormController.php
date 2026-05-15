@@ -10,8 +10,8 @@ use Illuminate\Support\Str;
 use Modules\Cms\Models\Form;
 use Modules\Cms\Models\FormField;
 use Modules\Cms\Rules\FormRedirectUrl;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
-use Modules\Core\Rules\SafeUrl;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Rules\SafeUrl;
 
 class FormController extends BaseApiController
 {
@@ -62,7 +62,7 @@ class FormController extends BaseApiController
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -100,7 +100,7 @@ class FormController extends BaseApiController
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -129,7 +129,7 @@ class FormController extends BaseApiController
     public function show(Request $request, Form $form): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -151,7 +151,7 @@ class FormController extends BaseApiController
     public function addField(Request $request, Form $form): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -225,7 +225,7 @@ class FormController extends BaseApiController
     public function updateField(Request $request, Form $form, FormField $formField): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -282,7 +282,7 @@ class FormController extends BaseApiController
     public function deleteField(Request $request, Form $form, FormField $formField): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -306,7 +306,7 @@ class FormController extends BaseApiController
     public function reorderFields(Request $request, Form $form): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -360,7 +360,7 @@ class FormController extends BaseApiController
     public function update(Request $request, Form $form): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -391,7 +391,7 @@ class FormController extends BaseApiController
     public function destroy(Request $request, Form $form): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -413,7 +413,7 @@ class FormController extends BaseApiController
     public function restore(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -441,7 +441,7 @@ class FormController extends BaseApiController
     public function forceDelete(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -508,13 +508,13 @@ class FormController extends BaseApiController
         }
 
         // Check for captcha if enabled for contact forms
-        if (\Modules\Core\Services\CaptchaService::isEnabled('contact')) {
+        if (\Modules\System\Services\CaptchaService::isEnabled('contact')) {
             $request->validate([
                 'captcha_token' => 'required|string',
                 'captcha_answer' => 'required|string',
             ]);
 
-            $captchaService = new \Modules\Core\Services\CaptchaService;
+            $captchaService = new \Modules\System\Services\CaptchaService;
             $captchaTokenRaw = $request->input('captcha_token');
             $captchaAnswerRaw = $request->input('captcha_answer');
             $captchaToken = is_string($captchaTokenRaw) ? $captchaTokenRaw : '';
@@ -554,13 +554,13 @@ class FormController extends BaseApiController
         }
 
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
 
         // Create submission
         $submissionData = [
             'user_id' => $user?->id,
             'data' => $submissionPayload,
-            'ip_address' => \Modules\Core\Helpers\IpHelper::getClientIp($request),
+            'ip_address' => \Modules\System\Helpers\IpHelper::getClientIp($request),
             'user_agent' => is_string($request->userAgent()) ? $request->userAgent() : '',
         ];
 
@@ -577,7 +577,7 @@ class FormController extends BaseApiController
         }
 
         // Trigger webhook
-        \Modules\Core\Models\Webhook::triggerForEvent('form.submitted', [
+        \Modules\System\Models\Webhook::triggerForEvent('form.submitted', [
             'form_id' => $form->id,
             'form_name' => (string) $form->name,
             'submission_id' => $submission->id,
@@ -737,7 +737,7 @@ class FormController extends BaseApiController
         $emailNotifications = $settings['email_notifications'] ?? false;
 
         return [
-            'captcha_required' => \Modules\Core\Services\CaptchaService::isEnabled('contact'),
+            'captcha_required' => \Modules\System\Services\CaptchaService::isEnabled('contact'),
             'email_notifications' => is_bool($emailNotifications) ? $emailNotifications : (bool) $emailNotifications,
         ];
     }
@@ -775,7 +775,7 @@ class FormController extends BaseApiController
     public function duplicate(Request $request, Form $form): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -852,7 +852,7 @@ class FormController extends BaseApiController
     public function bulkAction(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }

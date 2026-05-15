@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Core\Http\Controllers\Api\AnalyticsController;
+use Modules\System\Http\Controllers\Api\AnalyticsController;
 use Modules\Cms\Http\Controllers\Api\CategoryController;
 use Modules\Cms\Http\Controllers\Api\CommentController;
 use Modules\Cms\Http\Controllers\Api\ContentController;
@@ -20,7 +20,7 @@ use Modules\Cms\Http\Controllers\Api\RedirectController;
 use Modules\Cms\Http\Controllers\Api\SearchController;
 use Modules\Cms\Http\Controllers\Api\SeoController;
 use Modules\Cms\Http\Controllers\Api\SettingController;
-use Modules\Core\Http\Controllers\Api\TagController;
+use Modules\System\Http\Controllers\Console\TagController;
 use Modules\Cms\Http\Controllers\Api\ThemeController;
 use Modules\Cms\Http\Controllers\Api\WidgetController;
 
@@ -51,15 +51,13 @@ Route::prefix('v1')->group(function () {
         Route::get('/search/suggestions', [SearchController::class, 'suggestions'])->middleware('throttle:search-suggestions');
     });
 
-    // Analytics (Public)
-    Route::prefix('analytics')->group(function () {
-        Route::post('/track-visit', [AnalyticsController::class, 'trackVisit'])->middleware('throttle:analytics-visit');
-        Route::post('/track', [AnalyticsController::class, 'trackEvent'])->middleware('throttle:120,1');
-        Route::post('/track/batch', [AnalyticsController::class, 'trackBatch'])->middleware('throttle:120,1');
+    // Legacy Bridge (CMS)
+    Route::prefix('admin/cms')->middleware(['auth:sanctum'])->group(function () {
+        Route::get('contents', [ContentController::class, 'adminIndex']);
     });
 
-    // Admin CMS
-    Route::prefix('admin/cms')->middleware(['auth:sanctum', 'throttle:admin-cms', 'bypass_unit_scope'])->group(function () {
+    // Console Management (CMS)
+    Route::prefix('manage/cms')->middleware(['auth:sanctum', 'throttle:admin-cms', 'bypass_unit_scope'])->group(function () {
         // Contents
         Route::get('contents/stats', [ContentController::class, 'stats'])->middleware('permission:view content');
         Route::get('contents', [ContentController::class, 'adminIndex'])->middleware('permission:view content');
@@ -249,25 +247,6 @@ Route::prefix('v1')->group(function () {
             Route::get('', [SettingController::class, 'index'])->middleware('permission:view settings');
             Route::get('group/{group}', [SettingController::class, 'getGroup'])->middleware('permission:view settings');
             Route::post('bulk-update', [SettingController::class, 'bulkUpdate'])->middleware('permission:manage settings');
-        });
-
-        // Analytics (Admin)
-        Route::prefix('analytics')->middleware('permission:view analytics')->group(function () {
-            Route::get('overview', [AnalyticsController::class, 'overview']);
-            Route::get('visits', [AnalyticsController::class, 'visits']);
-            Route::get('top-pages', [AnalyticsController::class, 'topPages']);
-            Route::get('top-content', [AnalyticsController::class, 'topContent']);
-            Route::get('devices', [AnalyticsController::class, 'devices']);
-            Route::get('browsers', [AnalyticsController::class, 'browsers']);
-            Route::get('countries', [AnalyticsController::class, 'countries']);
-            Route::get('referrers', [AnalyticsController::class, 'referrers']);
-            Route::get('events', [AnalyticsController::class, 'events']);
-            Route::get('event-stats', [AnalyticsController::class, 'eventStats']);
-            Route::get('realtime', [AnalyticsController::class, 'realTime'])->middleware('throttle:120,1');
-            Route::get('export', [AnalyticsController::class, 'export']);
-            Route::post('cleanup', [AnalyticsController::class, 'cleanup'])->middleware('permission:manage settings');
-            Route::post('purge-all', [AnalyticsController::class, 'purgeAll'])
-                ->middleware(['permission:manage settings', 'throttle:5,60']);
         });
     });
 });

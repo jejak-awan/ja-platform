@@ -2,8 +2,8 @@
 
 namespace Modules\Cms\Tests\Feature;
 
-use Modules\Core\Models\Tag;
-use Modules\Core\Models\User;
+use Modules\Cms\Models\Tag;
+use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
 
@@ -25,7 +25,7 @@ class TagTest extends TestCase
 
         Tag::factory()->count(5)->create();
 
-        $response = $this->getJson('/api/v1/admin/cms/tags');
+        $response = $this->getJson('/api/v1/manage/cms/tags');
 
         TestHelpers::assertApiSuccess($response);
         $this->assertIsArray($response->json('data'));
@@ -41,7 +41,7 @@ class TagTest extends TestCase
 
         Tag::factory()->count(3)->create();
 
-        $response = $this->getJson('/api/v1/admin/cms/tags/statistics');
+        $response = $this->getJson('/api/v1/manage/cms/tags/statistics');
 
         TestHelpers::assertApiSuccess($response);
     }
@@ -60,7 +60,7 @@ class TagTest extends TestCase
             'description' => 'Test tag description',
         ];
 
-        $response = $this->postJson('/api/v1/admin/cms/tags', $tagData);
+        $response = $this->postJson('/api/v1/manage/cms/tags', $tagData);
 
         TestHelpers::assertApiSuccess($response, 201);
         $this->assertDatabaseHas('core_tags', [
@@ -77,7 +77,7 @@ class TagTest extends TestCase
         $admin = $this->createAdminUser();
         $this->actingAs($admin, 'sanctum');
 
-        $response = $this->postJson('/api/v1/admin/cms/tags', []);
+        $response = $this->postJson('/api/v1/manage/cms/tags', []);
 
         TestHelpers::assertApiValidationError($response);
         $response->assertJsonValidationErrors(['name']);
@@ -93,7 +93,7 @@ class TagTest extends TestCase
 
         $existing = Tag::factory()->create();
 
-        $response = $this->postJson('/api/v1/admin/cms/tags', [
+        $response = $this->postJson('/api/v1/manage/cms/tags', [
             'name' => $existing->name, // Duplicate name
         ]);
 
@@ -110,7 +110,7 @@ class TagTest extends TestCase
 
         $tag = Tag::factory()->create();
 
-        $response = $this->getJson("/api/v1/admin/cms/tags/{$tag->id}");
+        $response = $this->getJson("/api/v1/manage/cms/tags/{$tag->id}");
 
         TestHelpers::assertApiSuccess($response);
         $response->assertJson([
@@ -131,7 +131,7 @@ class TagTest extends TestCase
 
         $tag = Tag::factory()->create();
 
-        $response = $this->putJson("/api/v1/admin/cms/tags/{$tag->id}", [
+        $response = $this->putJson("/api/v1/manage/cms/tags/{$tag->id}", [
             'name' => 'Updated Tag Name',
             'slug' => 'updated-tag-name-'.uniqid(),
         ]);
@@ -153,7 +153,7 @@ class TagTest extends TestCase
 
         $tag = Tag::factory()->create();
 
-        $response = $this->deleteJson("/api/v1/admin/cms/tags/{$tag->id}");
+        $response = $this->deleteJson("/api/v1/manage/cms/tags/{$tag->id}");
 
         TestHelpers::assertApiSuccess($response);
         $this->assertSoftDeleted('core_tags', [
@@ -172,7 +172,7 @@ class TagTest extends TestCase
         $tags = Tag::factory()->count(3)->create();
         $ids = $tags->pluck('id')->toArray();
 
-        $response = $this->postJson('/api/v1/admin/cms/tags/bulk-delete', [
+        $response = $this->postJson('/api/v1/manage/cms/tags/bulk-delete', [
             'ids' => $ids,
         ]);
 
@@ -196,7 +196,7 @@ class TagTest extends TestCase
      */
     public function test_unauthenticated_user_cannot_create_tags(): void
     {
-        $response = $this->postJson('/api/v1/admin/cms/tags', [
+        $response = $this->postJson('/api/v1/manage/cms/tags', [
             'name' => 'Test Tag',
         ]);
 
@@ -211,7 +211,7 @@ class TagTest extends TestCase
         $user = $this->createUser();
         $this->actingAs($user, 'sanctum');
 
-        $response = $this->postJson('/api/v1/admin/cms/tags', [
+        $response = $this->postJson('/api/v1/manage/cms/tags', [
             'name' => 'Test Tag',
         ]);
 

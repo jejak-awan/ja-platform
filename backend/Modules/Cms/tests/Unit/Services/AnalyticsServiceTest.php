@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Session;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Services\AnalyticsService;
-use Modules\Core\Models\AnalyticsEvent;
+use Modules\Analytics\Models\AnalyticsEvent;
 use Tests\TestCase;
 
 class AnalyticsServiceTest extends TestCase
@@ -20,9 +20,9 @@ class AnalyticsServiceTest extends TestCase
         Session::start();
 
         // Mock GeoIpService
-        $geoMock = $this->createMock(\Modules\Core\Services\GeoIpService::class);
+        $geoMock = $this->createMock(\Modules\System\Services\GeoIpService::class);
         $geoMock->method('getLocation')->willReturn(['country' => 'US', 'city' => 'Sample City']);
-        $this->app->instance(\Modules\Core\Services\GeoIpService::class, $geoMock);
+        $this->app->instance(\Modules\System\Services\GeoIpService::class, $geoMock);
     }
 
     public function test_track_event()

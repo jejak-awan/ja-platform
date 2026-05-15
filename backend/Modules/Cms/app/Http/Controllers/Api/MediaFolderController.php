@@ -5,8 +5,8 @@ namespace Modules\Cms\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Modules\Core\Models\MediaFolder;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Models\MediaFolder;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class MediaFolderController extends BaseApiController
 {
@@ -14,7 +14,7 @@ class MediaFolderController extends BaseApiController
     {
         try {
             $user = $request->user();
-            /** @var \Modules\Core\Models\User|null $user */
+            /** @var \Modules\System\Models\User|null $user */
             $module = $request->input('module', 'cms');
             $query = MediaFolder::where('module', $module);
 
@@ -129,7 +129,7 @@ class MediaFolderController extends BaseApiController
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -193,7 +193,7 @@ class MediaFolderController extends BaseApiController
         /** @var MediaFolder $mediaFolder */
         $mediaFolder = MediaFolder::withTrashed()->findOrFail($id);
         $user = request()->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
 
         // Scope check
         if ($user && ! $user->can('manage media')) {
@@ -208,7 +208,7 @@ class MediaFolderController extends BaseApiController
     public function update(Request $request, MediaFolder $mediaFolder): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -266,7 +266,7 @@ class MediaFolderController extends BaseApiController
     public function destroy(Request $request, MediaFolder $mediaFolder): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -305,7 +305,7 @@ class MediaFolderController extends BaseApiController
     public function restore(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage media')) {
             return $this->forbidden('You do not have permission to restore media folders');
         }
@@ -326,7 +326,7 @@ class MediaFolderController extends BaseApiController
     public function forceDelete(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage media')) {
             return $this->forbidden('You do not have permission to permanently delete media folders');
         }
@@ -345,14 +345,14 @@ class MediaFolderController extends BaseApiController
     protected function recursiveForceDelete(MediaFolder $folder): void
     {
         // 1. Permanently delete all media files in this folder
-        $mediaItems = \Modules\Core\Models\Media::where('folder_id', $folder->id)->withTrashed()->get();
+        $mediaItems = \Modules\System\Models\Media::where('folder_id', $folder->id)->withTrashed()->get();
         foreach ($mediaItems as $media) {
-            /** @var \Modules\Core\Models\Media $media */
+            /** @var \Modules\System\Models\Media $media */
             $media->forceDelete();
         }
 
         // 2. Recurse into children folders
-        $children = \Modules\Core\Models\MediaFolder::where('parent_id', $folder->id)->withTrashed()->get();
+        $children = \Modules\System\Models\MediaFolder::where('parent_id', $folder->id)->withTrashed()->get();
         foreach ($children as $child) {
             /** @var MediaFolder $child */
             $this->recursiveForceDelete($child);
@@ -365,7 +365,7 @@ class MediaFolderController extends BaseApiController
     public function move(Request $request, MediaFolder $mediaFolder): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage media')) {
             return $this->forbidden('You do not have permission to move media folders');
         }

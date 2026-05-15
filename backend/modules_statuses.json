@@ -1,5 +1,11 @@
 {
     "Cms": true,
-    "Core": true,
-    "School": true
+    "Core": false,
+    "Media": true,
+    "School": true,
+    "System": true,
+    "Security": true,
+    "Analytics": true,
+    "Infra": true,
+    "Ai": true
 }

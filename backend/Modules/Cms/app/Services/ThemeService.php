@@ -347,7 +347,7 @@ class ThemeService
                 if (! is_string($requiredPlugin)) {
                     continue;
                 }
-                $plugin = \Modules\Core\Models\Plugin::where('slug', $requiredPlugin)->first();
+                $plugin = \Modules\System\Models\Plugin::where('slug', $requiredPlugin)->first();
                 if (! $plugin || ! $plugin->is_active) {
                     return false;
                 }

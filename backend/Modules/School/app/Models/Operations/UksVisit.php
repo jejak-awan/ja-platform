@@ -2,7 +2,7 @@
 
 namespace Modules\School\Models\Operations;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,7 +27,7 @@ class UksVisit extends Model
     protected $table = 'sch_ops_uks_visits';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, \Modules\Core\Traits\ScopedByWorkspace;
+    use HasFactory, \Modules\System\Traits\ScopedByWorkspace;
 
     protected $fillable = [
         'school_id',

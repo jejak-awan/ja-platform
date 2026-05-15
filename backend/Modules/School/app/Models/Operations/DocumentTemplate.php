@@ -2,7 +2,7 @@
 
 namespace Modules\School\Models\Operations;
 
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\School\Models\Institution\School;

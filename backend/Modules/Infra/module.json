@@ -1,0 +1,11 @@
+{
+    "name": "Infra",
+    "alias": "infra",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Infra\\Providers\\InfraServiceProvider"
+    ],
+    "files": []
+}

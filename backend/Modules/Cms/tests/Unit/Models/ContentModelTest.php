@@ -5,8 +5,8 @@ namespace Modules\Cms\Tests\Unit\Models;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Cms\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Core\Models\Tag;
-use Modules\Core\Models\User;
+use Modules\Cms\Models\Tag;
+use Modules\System\Models\User;
 use Tests\TestCase;
 
 class ContentModelTest extends TestCase

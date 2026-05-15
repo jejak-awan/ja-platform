@@ -5,7 +5,7 @@ namespace Modules\Cms\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Modules\Cms\Models\Content;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Http\Controllers\BaseApiController;
 
 use Modules\Cms\Services\SeoService;
 

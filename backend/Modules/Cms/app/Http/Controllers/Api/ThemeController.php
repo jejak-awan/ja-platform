@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Modules\Cms\Models\Theme;
 use Modules\Cms\Services\ThemeService;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class ThemeController extends BaseApiController
 {

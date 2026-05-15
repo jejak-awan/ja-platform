@@ -4,8 +4,8 @@ namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Modules\Cms\Services\SearchService;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
-use Modules\Core\Models\SearchQuery;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\Cms\Models\SearchQuery;
 
 class SearchController extends BaseApiController
 {
@@ -124,7 +124,7 @@ class SearchController extends BaseApiController
     public function reindex(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
 
         // Only allow admins to reindex
         if (! $user || ! $user->can('manage settings')) {

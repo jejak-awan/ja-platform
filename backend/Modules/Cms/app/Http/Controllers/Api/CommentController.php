@@ -5,7 +5,7 @@ namespace Modules\Cms\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Modules\Cms\Models\Comment;
 use Modules\Cms\Models\Content;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class CommentController extends BaseApiController
 {
@@ -58,7 +58,7 @@ class CommentController extends BaseApiController
         }
 
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         $authorEmail = '';
 
         // If user is authenticated, use user data
@@ -67,7 +67,7 @@ class CommentController extends BaseApiController
             $authorEmail = (string) $user->email;
         } else {
             // Check if guests are allowed
-            if (! \Modules\Core\Models\Setting::get('comments.security.allow_guests', true)) {
+            if (! \Modules\System\Models\Setting::get('comments.security.allow_guests', true)) {
                 return $this->error('Guest comments are disabled', 403);
             }
 
@@ -78,8 +78,8 @@ class CommentController extends BaseApiController
             ]);
 
             // Captcha Validation for Guests
-            if (\Modules\Core\Models\Setting::get('comments.security.guest_captcha', true)) {
-                $captchaService = app(\Modules\Core\Services\CaptchaService::class);
+            if (\Modules\System\Models\Setting::get('comments.security.guest_captcha', true)) {
+                $captchaService = app(\Modules\System\Services\CaptchaService::class);
                 $captchaTokenRaw = $request->input('captcha_token');
                 $captchaToken = is_string($captchaTokenRaw) ? $captchaTokenRaw : '';
                 $captchaInputRaw = $request->input('captcha_input');
@@ -116,7 +116,7 @@ class CommentController extends BaseApiController
     public function adminIndex(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -161,7 +161,7 @@ class CommentController extends BaseApiController
     public function statistics(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }

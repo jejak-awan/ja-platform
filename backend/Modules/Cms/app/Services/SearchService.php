@@ -2,8 +2,8 @@
 
 namespace Modules\Cms\Services;
 
-use Modules\Core\Models\SearchIndex;
-use Modules\Core\Models\SearchQuery;
+use Modules\Cms\Models\SearchIndex;
+use Modules\Cms\Models\SearchQuery;
 
 class SearchService
 {
@@ -338,7 +338,7 @@ class SearchService
         }
 
         // Reindex tags
-        $tags = \Modules\Core\Models\Tag::all();
+        $tags = \Modules\Cms\Models\Tag::all();
         foreach ($tags as $tag) {
             SearchIndex::index($tag, [
                 'title' => $tag->name,

@@ -13,14 +13,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withProviders([
-        'Modules\Core\Providers\CoreServiceProvider',
+        'Modules\System\Providers\SystemServiceProvider',
+        'Modules\Security\Providers\SecurityServiceProvider',
+        'Modules\Analytics\Providers\AnalyticsServiceProvider',
+        'Modules\Infra\Providers\InfraServiceProvider',
+        'Modules\Ai\Providers\AiServiceProvider',
+        'Modules\Media\Providers\MediaServiceProvider',
         'Modules\Cms\Providers\CmsServiceProvider',
         'Modules\School\Providers\SchoolServiceProvider',
     ])
     ->withMiddleware(function (Middleware $middleware): void {
         // Security Layer: Order matters (TrustProxies first, then Domain enforcement, then WAF, etc.)
         $middleware->prepend(\App\Http\Middleware\CheckIfInstalled::class);
-        $middleware->prepend(\Modules\Core\Http\Middleware\TrustProxies::class);
+        $middleware->prepend(\Modules\System\Http\Middleware\TrustProxies::class);
 
         // Enable Sanctum stateful API for SPA
         $middleware->statefulApi();
@@ -30,37 +35,37 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn (Request $request) => ($request->is('api/*') || $request->expectsJson()) ? null : '/');
 
         $middleware->web(prepend: [
-            \Modules\Core\Http\Middleware\IdentifyWorkspace::class,
-            \Modules\Core\Http\Middleware\VerifyConnection::class,
-            \Modules\Core\Http\Middleware\BlockMaliciousBots::class,
-            \Modules\Core\Http\Middleware\WafMiddleware::class,
-            \Modules\Core\Http\Middleware\HoneypotMiddleware::class,
+            \Modules\System\Http\Middleware\IdentifyWorkspace::class,
+            \Modules\Security\Http\Middleware\VerifyConnection::class,
+            \Modules\Security\Http\Middleware\BlockMaliciousBots::class,
+            \Modules\Security\Http\Middleware\WafMiddleware::class,
+            \Modules\Security\Http\Middleware\HoneypotMiddleware::class,
         ], append: [
             \Modules\Cms\Http\Middleware\HandleRedirects::class,
             \Illuminate\Session\Middleware\AuthenticateSession::class,
-            \Modules\Core\Http\Middleware\SecurityHeaders::class,
-            \Modules\Core\Http\Middleware\TrackAnalytics::class,
-            \Modules\Core\Http\Middleware\CheckMaintenanceMode::class,
+            \Modules\Security\Http\Middleware\SecurityHeaders::class,
+            \Modules\Analytics\Http\Middleware\TrackAnalytics::class,
+            \Modules\System\Http\Middleware\CheckMaintenanceMode::class,
         ]);
 
         $middleware->api(prepend: [
-            \Modules\Core\Http\Middleware\IdentifyWorkspace::class,
-            \Modules\Core\Http\Middleware\VerifyConnection::class,
-            \Modules\Core\Http\Middleware\BlockMaliciousBots::class,
-            \Modules\Core\Http\Middleware\WafMiddleware::class,
-            \Modules\Core\Http\Middleware\HoneypotMiddleware::class,
-            \Modules\Core\Http\Middleware\NormalizePaginationParams::class,
+            \Modules\System\Http\Middleware\IdentifyWorkspace::class,
+            \Modules\Security\Http\Middleware\VerifyConnection::class,
+            \Modules\Security\Http\Middleware\BlockMaliciousBots::class,
+            \Modules\Security\Http\Middleware\WafMiddleware::class,
+            \Modules\Security\Http\Middleware\HoneypotMiddleware::class,
+            \Modules\System\Http\Middleware\NormalizePaginationParams::class,
         ], append: [
-            \Modules\Core\Http\Middleware\SecurityHeaders::class,
-            \Modules\Core\Http\Middleware\CheckMaintenanceMode::class,
+            \Modules\Security\Http\Middleware\SecurityHeaders::class,
+            \Modules\System\Http\Middleware\CheckMaintenanceMode::class,
         ]);
 
         // Register permission middleware alias
         $middleware->alias([
-            'permission' => \Modules\Core\Http\Middleware\CheckPermission::class,
+            'permission' => \Modules\System\Http\Middleware\CheckPermission::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-            'bypass_unit_scope' => \Modules\Core\Http\Middleware\BypassWorkspaceScope::class,
+            'bypass_unit_scope' => \Modules\System\Http\Middleware\BypassWorkspaceScope::class,
         ]);
 
         // Exempt analytics and security verification from CSRF protection
@@ -70,6 +75,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'api/v1/security/crep-collect*',
             'api/v1/security/verify-connection',
             'api/v1/journal/frontend',
+            'api/v1/manage/*',
             'v1/security/csp-report*',
             'v1/security/crep-collect*',
             '*/security/crep-collect*',

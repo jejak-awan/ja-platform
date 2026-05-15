@@ -3,15 +3,15 @@
 namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Modules\Core\Models\ContentTemplate;
-use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\System\Models\ContentTemplate;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class ContentTemplateController extends BaseApiController
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         $query = ContentTemplate::with('category');
 
         // Scope logic
@@ -66,7 +66,7 @@ class ContentTemplateController extends BaseApiController
     public function bulkAction(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -109,7 +109,7 @@ class ContentTemplateController extends BaseApiController
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -144,7 +144,7 @@ class ContentTemplateController extends BaseApiController
     public function show(ContentTemplate $contentTemplate): \Illuminate\Http\JsonResponse
     {
         $user = request()->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
 
         // Permission/Ownership check?
         // Usually viewing templates is fine if they are visible in index?
@@ -161,7 +161,7 @@ class ContentTemplateController extends BaseApiController
     public function update(Request $request, ContentTemplate $contentTemplate): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -200,7 +200,7 @@ class ContentTemplateController extends BaseApiController
     public function destroy(ContentTemplate $contentTemplate): \Illuminate\Http\JsonResponse
     {
         $user = request()->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -241,7 +241,7 @@ class ContentTemplateController extends BaseApiController
     public function createContent(Request $request, ContentTemplate $contentTemplate): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\Core\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
