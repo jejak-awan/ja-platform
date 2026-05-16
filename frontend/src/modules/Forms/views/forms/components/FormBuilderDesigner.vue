@@ -229,7 +229,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import draggable from 'vuedraggable';
-import api from '@/engine/api/client';
+import { FormsService } from '@/modules/Forms/services/formsService';
 import { useToast } from '@/shared/composables/useToast';
 import {
     Button,
@@ -288,7 +288,7 @@ const loading = ref(true);
 const loadError = ref<string | null>(null);
 const adding = ref(false);
 const fields = ref<AdminFormFieldRow[]>([]);
-const savingIds = ref<Set<number>>(new Set());
+const savingIds = ref<Set<string | number>>(new Set());
 
 const fieldTypes = [
     { type: 'text', icon: Type, labelKey: 'modules.cms.forms.builder.types.text' },
@@ -343,7 +343,7 @@ async function fetchFields(): Promise<void> {
     loading.value = true;
     loadError.value = null;
     try {
-        const res = await api.get(`/manage/cms/forms/${props.formId}`);
+        const res = await FormsService.get(String(props.formId));
         const data = res.data as { fields?: AdminFormFieldRow[] };
         const raw = data.fields;
         const list = Array.isArray(raw) ? raw as AdminFormFieldRow[] : [];
@@ -363,7 +363,7 @@ async function persistField(field: AdminFormFieldRow): Promise<void> {
         const optionsPayload = needsOptions(field.type)
             ? linesToOptions(field._optionsLines ?? '')
             : null;
-        await api.put(`/manage/cms/forms/${props.formId}/fields/${field.id}`, {
+        await FormsService.updateField(String(props.formId), String(field.id), {
             label: field.label,
             type: field.type,
             placeholder: field.placeholder || null,
@@ -407,7 +407,7 @@ async function onTypeChange(field: AdminFormFieldRow, newType: string): Promise<
 async function addField(type: string): Promise<void> {
     adding.value = true;
     try {
-        const res = await api.post(`/manage/cms/forms/${props.formId}/fields`, {
+        const res = await FormsService.addField(String(props.formId), {
             label: t('modules.cms.forms.builder.defaultQuestion'),
             type,
             is_required: false,
@@ -427,7 +427,7 @@ async function removeField(field: AdminFormFieldRow): Promise<void> {
         return;
     }
     try {
-        await api.delete(`/manage/cms/forms/${props.formId}/fields/${field.id}`);
+        await FormsService.deleteField(String(props.formId), String(field.id));
         fields.value = fields.value.filter((f) => f.id !== field.id);
         toast.success.default(t('modules.cms.forms.builder.deleted'));
     } catch (e: unknown) {
@@ -436,7 +436,7 @@ async function removeField(field: AdminFormFieldRow): Promise<void> {
     }
 }
 
-let orderBeforeDrag: number[] = [];
+let orderBeforeDrag: (string | number)[] = [];
 
 function onDragStart(): void {
     orderBeforeDrag = fields.value.map((f) => f.id);
@@ -448,7 +448,7 @@ async function onDragEnd(): Promise<void> {
         return;
     }
     try {
-        await api.post(`/manage/cms/forms/${props.formId}/reorder-fields`, { order: after });
+        await FormsService.reorderFields(String(props.formId), { order: after });
     } catch (e: unknown) {
         logger.error('Reorder failed', e);
         toast.error.fromResponse(e);

@@ -26,7 +26,7 @@
         type="text"
         class="flex h-full w-full px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 text-center bg-secondary/20 dark:bg-secondary/20 shadow-inner"
         :class="{ 'text-green-500 font-bold': verified }"
-        :placeholder="t('modules.core.auth.captcha.typeCode')"
+        :placeholder="t('modules.system.auth.captcha.typeCode')"
         :disabled="verified"
         maxlength="6"
         autocomplete="off"
@@ -71,7 +71,7 @@
           variant="ghost"
           size="icon"
           class="h-7 w-7 text-muted-foreground hover:text-foreground"
-          :title="t('modules.core.auth.captcha.refresh')"
+          :title="t('modules.system.auth.captcha.refresh')"
           @click="refresh"
         >
           <RefreshCw class="w-3.5 h-3.5" />
@@ -147,7 +147,7 @@ const verify = async () => {
         const err = e as AxiosError<{ message?: string }>;
         // 422 is a validation error (wrong answer or expired token), not a system crash
         if (err.response && err.response.status === 422) {
-            error.value = t('modules.core.auth.captcha.error') || 'Incorrect answer'
+            error.value = t('modules.system.auth.captcha.error') || 'Incorrect answer'
             // We just log a warning instead of error to avoid alarming developers
             logger.warning('Captcha verification failed:', err.response.data?.message || 'Invalid answer')
             answer.value = '' // Clear incorrect answer

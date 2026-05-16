@@ -202,7 +202,7 @@
               <Select
                 :model-value="modelValue.menu_item.parent_id ? modelValue.menu_item.parent_id.toString() : 'root'"
                 :disabled="loadingParentItems"
-                @update:model-value="(val: string) => updateMenuField('parent_id', val === 'root' ? null : parseInt(val))"
+                @update:model-value="(val: string) => updateMenuField('parent_id', val === 'root' ? null : val)"
               >
                 <SelectTrigger class="w-full h-9">
                   <SelectValue :placeholder="loadingParentItems ? $t('common.messages.loading.default') : $t('modules.cms.menus.form.rootItem')" />
@@ -262,7 +262,7 @@
             <Label class="text-xs font-medium text-muted-foreground">{{ $t('modules.cms.content.form.category') }}</Label>
             <Select
               :model-value="modelValue.category_id ? modelValue.category_id.toString() : ''"
-              @update:model-value="(val: string) => updateField('category_id', val ? parseInt(val) : null)"
+              @update:model-value="(val: string) => updateField('category_id', val ? val : null)"
             >
               <SelectTrigger class="w-full h-9">
                 <SelectValue :placeholder="$t('modules.cms.content.form.selectCategory')" />
@@ -639,12 +639,15 @@ import ImageIcon from 'lucide-vue-next/dist/esm/icons/image.js';
 import MenuSquare from 'lucide-vue-next/dist/esm/icons/square-menu.js';
 import MessageSquare from 'lucide-vue-next/dist/esm/icons/message-square.js';
 import FeaturedImage from '@/modules/Cms/components/content/FeaturedImage.vue';
-import MediaPicker from '@/shared/components/media/MediaPicker.vue';
+import MediaPicker from '@/modules/Media/components/picker/MediaPicker.vue';
 import MarkdownEditor from '@/shared/components/editor/MarkdownEditor.vue';
-import type { ContentForm, Category, Tag, MenuItem, Menu } from '@/modules/Cms/types/cms';
+import type { Menu, MenuItem } from '@/modules/Layout/types/menu';
+import type { Category } from '@/modules/Cms/types/taxonomy';
+import type { Tag } from '@/modules/Library/types/taxonomy';
+import type { ContentForm } from '@/modules/Cms/types/cms';
 
-const coreStore = useSystemStore();
-const { settings } = storeToRefs(coreStore);
+const systemStore = useSystemStore();
+const { settings } = storeToRefs(systemStore);
 
 const { t } = useI18n();
 
@@ -823,7 +826,7 @@ const updateMenuField = <K extends keyof MenuItem>(field: K, value: MenuItem[K])
 };
 
 const handleMenuChange = (val: string) => {
-    const id = val ? parseInt(val) : null;
+    const id = val || null;
     updateMenuField('menu_id', id);
     fetchMenuParentItems(val);
 };
@@ -836,7 +839,7 @@ const fetchMenuParentItems = async (menuId: string | number) => {
     
     loadingParentItems.value = true;
     try {
-        const response = await api.get(`/manage/cms/menus/${menuId}/items`);
+        const response = await api.get(`/manage/layout/menus/${menuId}`);
         const data = response.data || [];
         const flatItems = Array.isArray(data) ? data : [];
         

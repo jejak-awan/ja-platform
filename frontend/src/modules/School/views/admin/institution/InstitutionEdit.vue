@@ -492,7 +492,7 @@ watch(() => form.name, (newName) => {
  * Fetch existing school data on mount.
  */
 onMounted(async () => {
-  const id = route.params.id;
+  const id = route.params.id as string;
   await schoolStore.fetchSchool(id);
   if (schoolStore.currentSchool) {
     Object.assign(form, schoolStore.currentSchool);
@@ -521,7 +521,7 @@ const executeSubmit = async () => {
   }
 
   try {
-    const id = route.params.id;
+    const id = route.params.id as string;
     await schoolStore.updateSchool(id, form as any);
     toast.success.save();
     showSaveConfirm.value = false;

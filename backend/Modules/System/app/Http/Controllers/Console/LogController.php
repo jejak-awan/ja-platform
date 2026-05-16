@@ -67,6 +67,12 @@ class LogController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->error("{$resource} not found", 404);
     }
 
+    public function destroy(Request $request, string $filename): \Illuminate\Http\JsonResponse
+    {
+        $request->merge(['filename' => $filename]);
+        return $this->clear($request);
+    }
+
     public function clear(Request $request): \Illuminate\Http\JsonResponse
     {
         $reasonRaw = $request->input('reason');

@@ -17,7 +17,7 @@ export const useNavigationStore = defineStore('navigation', () => {
         const groups: Record<string, NavItem[]> = {};
         
         // Define order if desired
-        const order = ['cms', 'school', 'core'];
+        const order = ['cms', 'school', 'system'];
         
         order.forEach(id => {
             if (registry.value[id]) {

@@ -478,11 +478,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
-import { useTheme } from '@/shared/composables/useTheme';
+import { useTheme } from '@/modules/Cms/composables/useTheme';
 import { useMenu } from '@/modules/Layout/composables/useMenu';
 import { useSystemStore } from '@/modules/System/stores/system';
 import { useResponsiveDevice } from '@/shared/composables/useResponsiveDevice';
-import { useThemeMotion } from '@/shared/composables/useThemeMotion';
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion';
 import { useRoute } from 'vue-router';
 import { useDarkMode } from '@/shared/composables/useDarkMode';
 import { SECURITY_ROUTES } from '@/config/security';
@@ -505,7 +505,7 @@ import MenuIcon from 'lucide-vue-next/dist/esm/icons/menu.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import Sun from 'lucide-vue-next/dist/esm/icons/sun.js';
 import Moon from 'lucide-vue-next/dist/esm/icons/moon.js';
-import type { MenuItem } from '@/modules/Cms/types/menu';
+import type { MenuItem } from '@/modules/Layout/types/menu';
 
 const { getSetting } = useTheme();
 const { menus, fetchMenuByIdentifier } = useMenu();
@@ -525,8 +525,8 @@ const headerSticky = computed(() => getSetting('header_sticky', true));
 const headerStyle = computed(() => getSetting('header_style', 'glass'));
 const brandingDisplay = computed(() => getSetting('branding_display', 'logo_only'));
 
-const coreStore = useSystemStore();
-const siteSettings = computed(() => coreStore.settings);
+const systemStore = useSystemStore();
+const siteSettings = computed(() => systemStore.settings);
 const { displaySiteName } = useJanariIdentity();
 const siteName = computed(() => displaySiteName.value);
 const siteLogo = computed(() => {

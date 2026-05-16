@@ -103,9 +103,9 @@ import { useSystemStore } from '@/modules/System/stores/system';
 import ShieldCheck from 'lucide-vue-next/dist/esm/icons/shield-check.js';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 
-const coreStore = useSystemStore();
-const siteName = computed(() => coreStore.siteSettings?.site_name || 'Janari App');
-const contactEmail = computed(() => coreStore.siteSettings?.admin_email || 'support@janari.io');
+const systemStore = useSystemStore();
+const siteName = computed(() => systemStore.siteSettings?.site_name || 'Janari App');
+const contactEmail = computed(() => systemStore.siteSettings?.admin_email || 'support@janari.io');
 const lastUpdated = computed(() => {
     const today = new Date();
     return today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });

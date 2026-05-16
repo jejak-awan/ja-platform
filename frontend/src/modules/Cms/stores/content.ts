@@ -1,7 +1,7 @@
 import { logger } from '@/shared/utils/logger';
 import { defineStore } from 'pinia';
-import api from '@/engine/api/client';
 import type { Content } from '@/modules/Cms/types/cms';
+import { CmsService } from '@/modules/Cms/services/cmsService';
 
 interface ContentState {
     currentContent: Content | null;
@@ -18,9 +18,7 @@ export const useContentStore = defineStore('content', {
         async fetchContent(slug: string) {
             this.loading = true;
             try {
-                // Determine endpoint based on type? 
-                // Currently code uses /public/cms/contents/{slug} generic endpoint
-                const response = await api.get(`/public/cms/contents/${slug}`);
+                const response = await CmsService.publicContent(slug);
                 this.currentContent = response.data;
             } catch (e) {
                 logger.error('Failed to fetch content:', e);

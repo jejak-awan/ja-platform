@@ -215,7 +215,7 @@ const clearAllCache = async () => {
 
     clearing.value = true;
     try {
-        await api.post('/manage/cache/clear');
+        await api.post('/manage/system/cache/clear');
         toast.success('All cache cleared successfully');
         await fetchCacheStats();
     } catch (error: unknown) {
@@ -238,7 +238,7 @@ const clearContentCache = async () => {
 
     clearing.value = true;
     try {
-        await api.post('/manage/cache/clear-content');
+        await api.post('/manage/system/cache/clear-content');
         toast.success('Content cache cleared successfully');
         await fetchCacheStats();
     } catch (error: unknown) {
@@ -252,7 +252,7 @@ const clearContentCache = async () => {
 const warmUpCache = async () => {
     warming.value = true;
     try {
-        await api.post('/manage/cache/warm-up');
+        await api.post('/manage/system/cache/warm-up');
         toast.success('Cache warmed up successfully');
         await fetchCacheStats();
     } catch (error: unknown) {

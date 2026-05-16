@@ -4,10 +4,10 @@
     <div class="mb-10 flex items-center justify-between">
       <div>
         <h1 class="text-3xl font-bold tracking-tight text-foreground">
-          {{ $t('common.actions.edit') }} {{ $t('modules.core.users.table.user') }}
+          {{ $t('common.actions.edit') }} {{ $t('modules.system.users.table.user') }}
         </h1>
         <p class="text-muted-foreground">
-          {{ $t('modules.core.users.subtitleEdit') }}
+          {{ $t('modules.system.users.subtitleEdit') }}
         </p>
       </div>
       <router-link :to="{ name: 'users.index' }">
@@ -41,7 +41,7 @@
         <!-- Avatar -->
         <div>
           <label class="block text-sm font-medium text-foreground mb-2">
-            {{ $t('modules.core.users.form.avatar') }}
+            {{ $t('modules.system.users.form.avatar') }}
           </label>
           <div class="flex items-center space-x-4">
             <div
@@ -64,7 +64,7 @@
             </div>
             <div>
               <MediaPicker
-                :label="$t('modules.core.users.form.selectAvatar')"
+                :label="$t('modules.system.users.form.selectAvatar')"
                 @selected="(media: { url: string }) => form.avatar = media.url"
               />
               <Button
@@ -75,7 +75,7 @@
                 class="mt-2"
                 @click="form.avatar = null"
               >
-                {{ $t('modules.core.users.form.removeAvatar') }}
+                {{ $t('modules.system.users.form.removeAvatar') }}
               </Button>
             </div>
           </div>
@@ -85,14 +85,14 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="space-y-2">
             <label class="block text-sm font-medium text-foreground">
-              {{ $t('modules.core.users.form.name') }} <span class="text-destructive">*</span>
+              {{ $t('modules.system.users.form.name') }} <span class="text-destructive">*</span>
             </label>
             <Input
               v-model="form.name"
               type="text"
               required
               :class="{ 'border-destructive focus-visible:ring-destructive': errors.name }"
-              :placeholder="$t('modules.core.users.form.placeholders.name')"
+              :placeholder="$t('modules.system.users.form.placeholders.name')"
             />
             <p
               v-if="errors.name"
@@ -104,14 +104,14 @@
 
           <div class="space-y-2">
             <label class="block text-sm font-medium text-foreground">
-              {{ $t('modules.core.users.form.email') }} <span class="text-destructive">*</span>
+              {{ $t('modules.system.users.form.email') }} <span class="text-destructive">*</span>
             </label>
             <Input
               v-model="form.email"
               type="email"
               required
               :class="{ 'border-destructive focus-visible:ring-destructive': errors.email }"
-              :placeholder="$t('modules.core.users.form.placeholders.email')"
+              :placeholder="$t('modules.system.users.form.placeholders.email')"
             />
             <p
               v-if="errors.email"
@@ -123,7 +123,7 @@
 
           <div class="space-y-2">
             <label class="block text-sm font-medium text-foreground">
-              {{ $t('modules.core.users.form.password') }}
+              {{ $t('modules.system.users.form.password') }}
             </label>
             <div class="relative">
               <Input
@@ -132,7 +132,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 autocomplete="new-password"
                 :class="[errors.password ? 'border-destructive focus-visible:ring-destructive' : '', 'pr-10']"
-                :placeholder="$t('modules.core.users.form.placeholders.passwordCurrent') + ' (min 8, A-Z, a-z, 0-9)'"
+                :placeholder="$t('modules.system.users.form.placeholders.passwordCurrent') + ' (min 8, A-Z, a-z, 0-9)'"
               />
               <button
                 type="button"
@@ -150,7 +150,7 @@
               </button>
             </div>
             <p class="text-xs text-muted-foreground">
-              {{ $t('modules.core.users.form.hints.passwordUpdate') }}
+              {{ $t('modules.system.users.form.hints.passwordUpdate') }}
             </p>
             <p
               v-if="errors.password"
@@ -162,7 +162,7 @@
 
           <div class="space-y-2">
             <label class="block text-sm font-medium text-foreground">
-              {{ $t('modules.core.users.form.passwordConfirmation') || 'Confirm Password' }}
+              {{ $t('modules.system.users.form.passwordConfirmation') || 'Confirm Password' }}
             </label>
             <div class="relative">
               <Input
@@ -171,7 +171,7 @@
                 :type="showConfirmPassword ? 'text' : 'password'"
                 autocomplete="new-password"
                 :class="[errors.password_confirmation ? 'border-destructive focus-visible:ring-destructive' : '', 'pr-10']"
-                :placeholder="$t('modules.core.users.form.placeholders.passwordConfirmation') || 'Repeat password'"
+                :placeholder="$t('modules.system.users.form.placeholders.passwordConfirmation') || 'Repeat password'"
               />
               <button
                 type="button"
@@ -198,12 +198,12 @@
 
           <div>
             <label class="block text-sm font-medium text-foreground mb-1">
-              {{ $t('modules.core.users.form.phone') }}
+              {{ $t('modules.system.users.form.phone') }}
             </label>
             <Input
               v-model="form.phone"
               type="tel"
-              :placeholder="$t('modules.core.users.form.placeholders.phone')"
+              :placeholder="$t('modules.system.users.form.placeholders.phone')"
             />
           </div>
         </div>
@@ -212,34 +212,34 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="md:col-span-2">
             <label class="block text-sm font-medium text-foreground mb-1">
-              {{ $t('modules.core.users.form.bio') }}
+              {{ $t('modules.system.users.form.bio') }}
             </label>
             <Textarea
               v-model="form.bio"
               :rows="3"
-              :placeholder="$t('modules.core.users.form.placeholders.bio')"
+              :placeholder="$t('modules.system.users.form.placeholders.bio')"
             />
           </div>
 
           <div>
             <label class="block text-sm font-medium text-foreground mb-1">
-              {{ $t('modules.core.users.form.website') }}
+              {{ $t('modules.system.users.form.website') }}
             </label>
             <Input
               v-model="form.website"
               type="url"
-              :placeholder="$t('modules.core.users.form.placeholders.website')"
+              :placeholder="$t('modules.system.users.form.placeholders.website')"
             />
           </div>
 
           <div>
             <label class="block text-sm font-medium text-foreground mb-1">
-              {{ $t('modules.core.users.form.location') }}
+              {{ $t('modules.system.users.form.location') }}
             </label>
             <Input
               v-model="form.location"
               type="text"
-              :placeholder="$t('modules.core.users.form.placeholders.location')"
+              :placeholder="$t('modules.system.users.form.placeholders.location')"
             />
           </div>
 
@@ -253,7 +253,7 @@
               for="is_verified"
               class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer select-none"
             >
-              {{ $t('modules.core.users.form.verified') || 'Email Verified' }}
+              {{ $t('modules.system.users.form.verified') || 'Email Verified' }}
             </label>
           </div>
         </div>
@@ -261,7 +261,7 @@
         <!-- Roles -->
         <div>
           <label class="block text-sm font-medium text-foreground mb-2">
-            {{ $t('modules.core.users.form.roles') }} <span class="text-destructive">*</span>
+            {{ $t('modules.system.users.form.roles') }} <span class="text-destructive">*</span>
           </label>
           <div
             v-if="loadingRoles"
@@ -301,7 +301,7 @@
             v-else
             class="text-sm text-destructive"
           >
-            {{ $t('modules.core.users.modals.user.noRoles') }}
+            {{ $t('modules.system.users.modals.user.noRoles') }}
           </p>
         </div>
       </div>
@@ -342,14 +342,14 @@ import api from '@/engine/api/client';
 import { parseResponse, ensureArray, parseSingleResponse } from '@/shared/utils/responseParser';
 import { useToast } from '@/shared/composables/useToast';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
-import { editUserSchema } from '@/shared/schemas';
+import { editUserSchema } from '@/modules/System/schemas/users';
 import {
     Button,
     Input,
     Textarea,
     Checkbox
 } from '@/shared/components/ui';
-import MediaPicker from '@/shared/components/media/MediaPicker.vue';
+import MediaPicker from '@/modules/Media/components/picker/MediaPicker.vue';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
@@ -374,7 +374,7 @@ interface UserForm {
     website: string;
     location: string;
     avatar: string | { url?: string; path?: string } | null;
-    roles: number[];
+    roles: string[];
     is_verified: boolean;
 }
 
@@ -427,7 +427,7 @@ const getRoleRank = (roleName: string) => ROLE_RANKS[roleName] || 0;
 const fetchRoles = async () => {
     loadingRoles.value = true;
     try {
-        const response = await api.get('/manage/roles');
+        const response = await api.get('/manage/system/roles');
         const { data } = parseResponse(response);
         availableRoles.value = ensureArray(data);
     } catch (error: unknown) {
@@ -448,7 +448,7 @@ const fetchUser = async () => {
         // Allow if self OR if super-admin (rank >= 100) OR if strictly higher rank
         const isSuperAdmin = authStore.getRoleRank() >= 100;
         if (!isSuperAdmin && !authStore.isHigherThan(data) && authStore.user?.id !== data.id) {
-            toast.error.action(new Error(t('modules.core.users.messages.hierarchy_restriction')));
+            toast.error.action(new Error(t('modules.system.users.messages.hierarchy_restriction')));
             router.push({ name: 'users.index' });
             return;
         }
@@ -488,7 +488,7 @@ const handleSubmit = async () => {
     }
 
     if (form.value.roles.length === 0) {
-        setErrors({ roles: [t('modules.core.users.messages.roleRequired')] });
+        setErrors({ roles: [t('modules.system.users.messages.roleRequired')] });
         return;
     }
 

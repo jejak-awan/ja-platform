@@ -120,7 +120,7 @@ const getIcon = (variant: string | undefined): Component => {
 };
 
 const addToast = (options: Partial<Omit<ToastOptions, 'id'>>) => {
-  const id = ++toastId;
+  const id = String(++toastId);
   const toast: ToastOptions = {
     id,
     title: options.title || '',
@@ -140,8 +140,9 @@ const addToast = (options: Partial<Omit<ToastOptions, 'id'>>) => {
   return id;
 };
 
-const removeToast = (id: string) => {
-  const index = toasts.value.findIndex(t => t.id === id);
+const removeToast = (id: string | number) => {
+  const stringId = String(id);
+  const index = toasts.value.findIndex(t => t.id === stringId);
   if (index > -1) {
     toasts.value.splice(index, 1);
   }

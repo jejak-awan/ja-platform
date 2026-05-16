@@ -428,8 +428,8 @@
 import { ref, computed, onMounted, h } from 'vue';
 import { useRoute } from 'vue-router';
 import { logger } from '@/shared/utils/logger';
-import api from '@/engine/api/client';
 import { apiConfig } from '@/config';
+import { FormsService } from '@/modules/Forms/services/formsService';
 import { parseSingleResponse } from '@/shared/utils/responseParser';
 import { 
     useVueTable, 
@@ -505,7 +505,7 @@ const sorting = ref([{ id: 'created_at', desc: true }]);
 
 const fetchForm = async () => {
     try {
-        const response = await api.get(`/manage/cms/forms/${formId.value}`);
+        const response = await FormsService.get(String(formId.value));
         form.value = parseSingleResponse(response);
     } catch (error) {
         logger.error('Failed to fetch form:', error);
@@ -526,7 +526,7 @@ const fetchStatistics = async () => {
             params.days = analyticsDays.value;
         }
 
-        const response = await api.get(`/manage/cms/forms/${formId.value}/submissions/statistics`, { params });
+        const response = await FormsService.submissionStatistics(String(formId.value), params);
         statistics.value = parseSingleResponse(response);
         
         if (!selectedAggregateField.value && statistics.value && (statistics.value.chartable_fields?.length ?? 0) > 0) {
@@ -551,8 +551,8 @@ const handlePresetChange = () => {
 
 const fetchSamples = async () => {
     try {
-        const response = await api.get(`/manage/cms/forms/${formId.value}/submissions`, {
-            params: { per_page: 20, sort_by: 'created_at', sort_order: 'desc' }
+        const response = await FormsService.listSubmissions(String(formId.value), {
+            per_page: 20, sort_by: 'created_at', sort_order: 'desc'
         });
         const data = parseSingleResponse(response) as { data: Record<string, unknown>[] };
         rawSamples.value = (data?.data as Record<string, unknown>[]) || [];
@@ -667,7 +667,7 @@ const exportData = (format = 'xlsx') => {
         })
     });
     const baseUrl = apiConfig.externalUrl;
-    const url = `${baseUrl}/api/v1/manage/cms/forms/${formId.value}/submissions/export?${params.toString()}`;
+    const url = FormsService.submissionsExportUrl(String(formId.value), params.toString(), baseUrl);
     window.open(url, '_blank');
 };
 

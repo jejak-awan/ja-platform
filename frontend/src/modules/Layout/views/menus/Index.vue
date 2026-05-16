@@ -89,9 +89,9 @@ import { useI18n } from 'vue-i18n';
 import { useLayoutStore } from '@/modules/Layout/stores/layout';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import MenuBuilder from '@/modules/Layout/views/menus/components/MenuBuilder.vue';
-import MenuList from '@/modules/Layout/views/menus/components/MenuList.vue';
-import MenuModal from '@/modules/Layout/views/menus/components/MenuModal.vue';
+import MenuBuilder from '@/modules/Layout/components/menus/MenuBuilder.vue';
+import MenuList from '@/modules/Layout/components/menus/MenuList.vue';
+import MenuModal from '@/modules/Layout/components/menus/MenuModal.vue';
 import { 
     Button
 } from '@/shared/components/ui';
@@ -139,17 +139,17 @@ const openCreateModal = () => {
     showCreateModal.value = true;
 };
 
-const handleMenuCreated = async (newMenu: { id?: string }) => {
+const handleMenuCreated = async (newMenu: { id?: string | number }) => {
     showCreateModal.value = false;
     await fetchMenus();
     if (newMenu && newMenu.id) {
-        selectedMenuId.value = newMenu.id;
+        selectedMenuId.value = String(newMenu.id);
         viewMode.value = 'builder';
     }
 };
 
-const handleSelectMenu = (menuId: string) => {
-    selectedMenuId.value = menuId;
+const handleSelectMenu = (menuId: string | number) => {
+    selectedMenuId.value = String(menuId);
     viewMode.value = 'builder';
 };
 

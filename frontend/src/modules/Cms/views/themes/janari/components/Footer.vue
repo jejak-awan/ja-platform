@@ -205,16 +205,16 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useTheme } from '@/shared/composables/useTheme'
+import { useTheme } from '@/modules/Cms/composables/useTheme'
 import { useMenu } from '@/modules/Layout/composables/useMenu'
 import { useSystemStore } from '@/modules/System/stores/system'
 import { useToast } from '@/shared/composables/useToast'
 import { useFormValidation } from '@/shared/composables/useFormValidation'
 import { useResponsiveDevice } from '@/shared/composables/useResponsiveDevice';
-import { useThemeMotion } from '@/shared/composables/useThemeMotion';
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion';
 import { useJanariIdentity, trimStr, toWhatsAppDialDigits } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity';
 import { newsletterSchema } from '@/shared/schemas'
-import type { MenuItem } from '@/modules/Cms/types/menu';
+import type { MenuItem } from '@/modules/Layout/types/menu';
 import Twitter from 'lucide-vue-next/dist/esm/icons/twitter.js';
 import Instagram from 'lucide-vue-next/dist/esm/icons/instagram.js';
 import Facebook from 'lucide-vue-next/dist/esm/icons/facebook.js';
@@ -252,8 +252,8 @@ const loading = ref(false)
 const email = ref('')
 
 const brandingDisplay = computed(() => getSetting('branding_display', 'logo_only'));
-const coreStore = useSystemStore();
-const siteSettings = computed(() => coreStore.settings);
+const systemStore = useSystemStore();
+const siteSettings = computed(() => systemStore.settings);
 const { displaySiteName, displaySiteDescription } = useJanariIdentity();
 
 const siteName = computed(() => displaySiteName.value);

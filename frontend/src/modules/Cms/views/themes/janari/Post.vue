@@ -142,7 +142,7 @@ import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue';
 import BlogSidebar from './components/BlogSidebar.vue';
 import { useRoute } from 'vue-router';
 // import { useI18n } from 'vue-i18n';
-import api from '@/engine/api/client';
+import { CmsService } from '@/modules/Cms/services/cmsService';
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity';
 
 import { useIconHydration } from '@/shared/composables/useIconHydration';
@@ -173,7 +173,7 @@ watch(() => post.value, () => {
 onMounted(async () => {
     try {
         const slug = route.params.slug as string;
-        const response = await api.get(`/ja/contents/${slug}`);
+        const response = await CmsService.publicContent(slug);
         post.value = response.data;
     } catch (error) {
         logger.error('Failed to load post:', error);

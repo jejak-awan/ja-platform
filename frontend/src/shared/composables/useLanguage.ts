@@ -85,7 +85,7 @@ export function useLanguage() {
         if (!isAuthenticated()) return null;
 
         try {
-            const response = await api.get('/profile/preferences');
+            const response = await api.get('/manage/system/manage/system/profile/preferences');
             if (response.data?.locale) {
                 return response.data.locale;
             }
@@ -102,7 +102,7 @@ export function useLanguage() {
         if (!isAuthenticated()) return;
 
         try {
-            await api.put('/profile/preferences', { locale });
+            await api.put('/manage/system/manage/system/profile/preferences', { locale });
         } catch (error: unknown) {
             logger.warning('Locale sync failed:', (error as Error).message);
         }

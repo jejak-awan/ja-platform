@@ -249,8 +249,8 @@ import {
   Button, LucideIcon, Input, Label, Textarea,
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem
 } from '@/shared/components/ui';
-import { IndonesianLocation, type LocationItem } from '@/shared/services/IndonesianLocation';
-import MediaPicker from '@/shared/components/media/MediaPicker.vue';
+import { IndonesianLocation, type LocationItem } from '@/modules/Library/services/IndonesianLocation';
+import MediaPicker from '@/modules/Media/components/picker/MediaPicker.vue';
 
 const props = defineProps<{
   show: boolean;

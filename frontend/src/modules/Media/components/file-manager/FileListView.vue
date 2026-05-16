@@ -11,13 +11,13 @@
           </th>
           <th class="px-4 py-4 text-left w-12" />
           <th class="px-4 py-4 text-left uppercase tracking-widest text-[10px]">
-            {{ $t('modules.core.file_manager.sort.name') }}
+            {{ $t('modules.system.file_manager.sort.name') }}
           </th>
           <th class="px-4 py-4 text-left uppercase tracking-widest text-[10px]">
-            {{ $t('modules.core.file_manager.sort.size') }}
+            {{ $t('modules.system.file_manager.sort.size') }}
           </th>
           <th class="px-4 py-4 text-left uppercase tracking-widest text-[10px]">
-            {{ $t('modules.core.file_manager.sort.date') }}
+            {{ $t('modules.system.file_manager.sort.date') }}
           </th>
           <th class="px-4 py-4 text-right w-24" />
         </tr>

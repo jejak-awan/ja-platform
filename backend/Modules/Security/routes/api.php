@@ -11,6 +11,7 @@ Route::prefix('v1')->group(function (): void {
     Route::post('/security/csp-report', [CspReportController::class, 'store'])->middleware('throttle:100,1');
     Route::post('/security/crep-collect', [CspReportController::class, 'store'])->middleware('throttle:100,1');
     Route::post('/security/verify-connection', [SecurityController::class, 'verifyConnection'])->middleware('throttle:60,1');
+    Route::post('/journal/frontend', [SecurityController::class, 'storeFrontendLog'])->middleware('throttle:100,1');
 
     // Console Management (Admin Layer)
     Route::prefix('manage/security')->middleware(['auth:sanctum', 'throttle:120,1'])->group(function (): void {

@@ -115,7 +115,7 @@
                     </div>
                     
                     <div class="flex flex-col items-start min-w-0 flex-1">
-                      <span class="text-[12px] font-bold truncate w-full tracking-tight" :class="lv.id === activeUnit?.id && activeUnit?.id !== 0 ? 'text-primary' : 'text-foreground'">
+                      <span class="text-[12px] font-bold truncate w-full tracking-tight" :class="lv.id === activeUnit?.id && String(activeUnit?.id) !== '0' ? 'text-primary' : 'text-foreground'">
                         {{ lv.name }}
                       </span>
                       <span class="text-[9px] font-bold opacity-60 tracking-tight text-muted-foreground">
@@ -171,7 +171,7 @@ import {
 } from '@/shared/components/ui';
 import { useUnitStore } from '../stores/unit';
 import { useSchoolStore } from '../stores/school';
-import { useAuthStore } from '../../Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -248,10 +248,10 @@ const filteredLevels = computed(() => {
 });
 
 const activeUnit = computed(() => {
-  const unitId = Number(unitStore.activeUnitId);
+  const rawId = unitStore.activeUnitId;
   const contextType = unitStore.activeContextType;
 
-  if (unitId === "0") {
+  if (String(rawId) === '0') {
     let name = t('common.labels.systemAdmin');
     if (contextType === 'foundation') name = t('common.labels.foundationAdmin');
     if (contextType === 'authority') name = t('common.labels.authorityAdmin');
@@ -289,15 +289,15 @@ const getUnitIcon = (type: string | undefined) => {
   }
 };
 
-const resolveContextPath = (id: string, type: 'system' | 'foundation' | 'authority' | 'unit') => {
-  if (id === "0") {
+const resolveContextPath = (id: string | number, type: 'system' | 'foundation' | 'authority' | 'unit') => {
+  if (id === '0') {
     if (type === 'system') return '/dash';
     return '/dash/school';
   }
   return '/dash/school-dashboard';
 };
 
-const handleSelect = async (id: string, type: 'system' | 'foundation' | 'authority' | 'unit') => {
+const handleSelect = async (id: string | number, type: 'system' | 'foundation' | 'authority' | 'unit') => {
   if (unitStore.switchingContext) return;
   if (unitStore.activeUnitId === id && unitStore.activeContextType === type) {
     showSelector.value = false;

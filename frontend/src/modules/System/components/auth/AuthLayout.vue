@@ -43,8 +43,8 @@ import { useSystemStore } from '@/modules/System/stores/system';
 import LayoutTemplate from 'lucide-vue-next/dist/esm/icons/layout-template.js';
 import { computed } from 'vue';
 
-const coreStore = useSystemStore();
-const branding = computed(() => coreStore.appIdentity);
+const systemStore = useSystemStore();
+const branding = computed(() => systemStore.appIdentity);
 </script>
 
 <style scoped>

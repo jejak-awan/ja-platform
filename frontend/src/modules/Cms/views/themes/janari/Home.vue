@@ -105,9 +105,9 @@ const PartnersSection = defineAsyncComponent(() => import('./components/Partners
 const CtaSection = defineAsyncComponent(() => import('./components/CtaSection.vue'))
 
 // Helpers
-import { useThemeMotion } from '@/shared/composables/useThemeMotion'
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
-import { useTheme } from '@/shared/composables/useTheme';
+import { useTheme } from '@/modules/Cms/composables/useTheme';
 
 const { getSetting } = useTheme();
 const { ScrollTrigger } = useThemeMotion()

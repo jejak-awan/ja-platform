@@ -7,7 +7,7 @@ use Modules\Analytics\Http\Controllers\AnalyticsController;
 
 Route::prefix('v1')->group(function (): void {
     // Public Tracking
-    Route::prefix('analytics')->group(function (): void {
+    Route::prefix('public/analytics')->group(function (): void {
         Route::post('/track-visit', [AnalyticsController::class, 'trackVisit'])->middleware('throttle:analytics-visit');
         Route::post('/track', [AnalyticsController::class, 'trackEvent'])->middleware('throttle:120,1');
         Route::post('/track/batch', [AnalyticsController::class, 'trackBatch'])->middleware('throttle:120,1');

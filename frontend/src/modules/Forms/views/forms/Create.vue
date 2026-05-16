@@ -221,7 +221,7 @@
 import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/engine/api/client';
+import { FormsService } from '@/modules/Forms/services/formsService';
 import { useToast } from '@/shared/composables/useToast';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
 import { formSettingsSchema } from '@/shared/schemas';
@@ -285,7 +285,7 @@ const handleSubmit = async () => {
             redirect_url: formData.redirect_url,
             is_active: formData.is_active
         };
-        const res = await api.post('/manage/forms', payload);
+        const res = await FormsService.create(payload);
         const created = res.data as { id: string };
         toast.success.create(t('modules.cms.forms.title'));
         router.push({ name: 'forms.edit', params: { id: String(created.id) } });

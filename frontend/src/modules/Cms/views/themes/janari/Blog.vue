@@ -257,10 +257,10 @@ import BlogSidebar from './components/BlogSidebar.vue'
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, nextTick, watch, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useTheme } from '@/shared/composables/useTheme'
+import { useTheme } from '@/modules/Cms/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
 import api from '@/engine/api/client'
-import { useThemeMotion } from '@/shared/composables/useThemeMotion'
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion'
 import ArrowRight from 'lucide-vue-next/dist/esm/icons/arrow-right.js';
 import Clock from 'lucide-vue-next/dist/esm/icons/clock.js';
 
@@ -529,7 +529,7 @@ onMounted(async () => {
   }
 
   if (!pageData.value || !pageData.value.body) {
-    await fetchPosts("1")
+    await fetchPosts(1)
   }
   
   loading.value = false

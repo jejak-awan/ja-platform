@@ -22,18 +22,7 @@
     </div>
 
     <template v-else>
-      <!-- Page Body Content if available -->
-      <SafeHtml
-        v-if="pageData && pageData.body"
-        class="container mx-auto px-6 py-10 cms-content"
-        :html="pageData.body"
-        mode="cms"
-      />
-
-      <div
-        v-else
-        class="space-y-0"
-      >
+      <div class="space-y-0">
         <section class="relative overflow-hidden border-y border-border/50 aspect-[16/9] md:aspect-[21/9] lg:aspect-[3/1] min-h-[300px]">
           <img
             v-if="contactHeroImage"
@@ -57,494 +46,502 @@
         </section>
 
         <main class="container mx-auto px-6 py-20">
+          <!-- Page Body Content if available -->
+          <SafeHtml
+            v-if="pageData && pageData.body"
+            class="mb-16 cms-content max-w-4xl"
+            :html="pageData.body"
+            mode="cms"
+          />
+
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-          <!-- Info Column -->
-          <div
-            ref="infoCol"
-            class="lg:col-span-5 space-y-10"
-          >
-            <Card
-              ref="contactCard"
-              class="p-8 space-y-8 bg-card/50 backdrop-blur-sm border-border/60"
+            <!-- Info Column -->
+            <div
+              ref="infoCol"
+              class="lg:col-span-5 space-y-10"
             >
-              <div
-                class="contact-info-item flex items-start gap-6 p-4 -m-4 rounded-xl border border-transparent transition-all duration-500 hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_24px_hsl(var(--primary)/0.15)]"
-                @mouseenter="onInfoItemEnter"
-                @mouseleave="onInfoItemLeave"
-                @mousedown="onInfoItemPress"
-                @mouseup="onInfoItemRelease"
-              >
-                <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0 shadow-sm">
-                  <Mail class="w-6 h-6" />
-                </div>
-                <div class="flex-1 min-w-0">
-                  <h3 class="font-bold text-xs uppercase tracking-widest text-muted-foreground mb-1">
-                    Email Resmi
-                  </h3>
-                  <a
-                    :href="'mailto:' + displayEmail"
-                    class="text-lg font-bold hover:text-primary transition-colors"
-                  >
-                    {{ displayEmail }}
-                  </a>
-                </div>
-              </div>
-
-              <div
-                class="contact-info-item flex items-start gap-6 p-4 -m-4 rounded-xl border border-transparent transition-all duration-500 hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_24px_hsl(var(--primary)/0.15)]"
-                @mouseenter="onInfoItemEnter"
-                @mouseleave="onInfoItemLeave"
-                @mousedown="onInfoItemPress"
-                @mouseup="onInfoItemRelease"
-              >
-                <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0 shadow-sm">
-                  <Phone class="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 class="font-bold text-xs uppercase tracking-widest text-muted-foreground mb-1">
-                    Telepon / WA
-                  </h3>
-                  <a
-                    v-if="phoneDialHref"
-                    :href="phoneDialHref"
-                    class="text-lg font-bold hover:text-primary transition-colors"
-                  >
-                    {{ displayPhone }}
-                  </a>
-                  <p
-                    v-else-if="displayPhone"
-                    class="text-lg font-bold"
-                  >
-                    {{ displayPhone }}
-                  </p>
-                  <p
-                    v-else
-                    class="text-sm text-muted-foreground"
-                  >
-                    Atur di Pengaturan → Identitas atau di Theme Customizer (bagian Contact).
-                  </p>
-                </div>
-              </div>
-
-              <div
-                class="contact-info-item flex items-start gap-6 p-4 -m-4 rounded-xl border border-transparent transition-all duration-500 hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_24px_hsl(var(--primary)/0.15)]"
-                @mouseenter="onInfoItemEnter"
-                @mouseleave="onInfoItemLeave"
-                @mousedown="onInfoItemPress"
-                @mouseup="onInfoItemRelease"
-              >
-                <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0 shadow-sm">
-                  <MapPin class="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 class="font-bold text-xs uppercase tracking-widest text-muted-foreground mb-1">
-                    Alamat
-                  </h3>
-                  <Popover
-                    v-if="displayAddress && mapEnabled"
-                    v-model:open="mapPopoverOpen"
-                    @update:open="onMapPopoverOpenChange"
-                  >
-                    <PopoverTrigger as-child>
-                      <button
-                        type="button"
-                        class="block w-full text-left text-base font-bold leading-relaxed text-balance hover:text-primary transition-colors"
-                      >
-                        {{ displayAddress }}
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      side="top"
-                      :side-offset="14"
-                      align="start"
-                      class="!max-w-none w-[min(92vw,44rem)] p-3.5 space-y-3 rounded-2xl !border-primary/65 !bg-background/96 dark:!bg-background/96 backdrop-blur-md !ring-1 !ring-primary/45 !shadow-[0_0_0_1px_hsl(var(--primary)/0.45),0_0_44px_hsl(var(--primary)/0.38),0_26px_72px_rgba(0,0,0,0.58)]"
-                    >
-                      <div class="rounded-xl overflow-hidden border border-primary/30 bg-muted/20 shadow-[0_0_24px_hsl(var(--primary)/0.12)]">
-                        <iframe
-                          v-if="mapIframeVisible"
-                          :src="mapEmbedUrl"
-                          class="w-full h-56"
-                          loading="lazy"
-                          referrerpolicy="no-referrer-when-downgrade"
-                          title="Contact location map"
-                        />
-                      </div>
-                      <p class="text-xs text-muted-foreground leading-relaxed">
-                        {{ displayAddress }}
-                      </p>
-                      <div class="flex flex-wrap gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          @click="openMapExternal"
-                        >
-                          Buka Peta
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          @click="openMapDirections"
-                        >
-                          Petunjuk Arah
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          @click="copyLocationAddress"
-                        >
-                          Copy Alamat
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          @click="copyLocationCoordinates"
-                        >
-                          Copy Koordinat
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          @click="shareLocation"
-                        >
-                          Share Lokasi
-                        </Button>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                  <p
-                    v-else-if="displayAddress"
-                    class="text-base font-bold leading-relaxed text-balance"
-                  >
-                    {{ displayAddress }}
-                  </p>
-                  <p
-                    v-else
-                    class="text-sm text-muted-foreground"
-                  >
-                    Atur di Pengaturan → Identitas atau di Theme Customizer (bagian Contact).
-                  </p>
-                </div>
-              </div>
-            </Card>
-          </div>
-
-          <!-- Form Column -->
-          <div
-            ref="formCol"
-            class="lg:col-span-7"
-          >
-            <Card class="p-8 md:p-12 shadow-xl border-border/40">
-              <div class="mb-8">
-                <h2 class="text-2xl font-bold mb-2">
-                  {{ formDefinition?.name || 'Kirim Pesan' }}
-                </h2>
-                <p class="text-muted-foreground">
-                  {{ formDefinition?.description || 'Isi formulir di bawah ini, tim kami akan segera menghubungi Anda.' }}
-                </p>
-              </div>
-
-              <!-- Loading form schema -->
-              <div
-                v-if="formLoading"
-                class="flex flex-col items-center justify-center py-16 gap-3"
-              >
-                <Loader2 class="w-8 h-8 animate-spin text-primary/50" />
-                <p class="text-sm text-muted-foreground">
-                  Memuat formulir…
-                </p>
-              </div>
-
-              <!-- Form unavailable -->
-              <Alert
-                v-else-if="formLoadError"
-                variant="destructive"
-                class="mb-4"
-              >
-                <AlertTitle>Formulir tidak tersedia</AlertTitle>
-                <AlertDescription>
-                  {{ formLoadError }}
-                </AlertDescription>
-              </Alert>
-
-              <!-- Dynamic CMS form -->
-              <form
-                v-else-if="formDefinition && formDefinition.fields?.length"
-                class="space-y-6"
-                @submit.prevent="submitForm"
+              <Card
+                ref="contactCard"
+                class="p-8 space-y-8 bg-card/50 backdrop-blur-sm border-border/60"
               >
                 <div
-                  v-for="field in formDefinition.fields"
-                  :key="field.name"
-                  class="space-y-2"
-                  @focusin="trackStartOnce"
+                  class="contact-info-item flex items-start gap-6 p-4 -m-4 rounded-xl border border-transparent transition-all duration-500 hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_24px_hsl(var(--primary)/0.15)]"
+                  @mouseenter="onInfoItemEnter"
+                  @mouseleave="onInfoItemLeave"
+                  @mousedown="onInfoItemPress"
+                  @mouseup="onInfoItemRelease"
                 >
-                  <template v-if="field.type === 'file' || field.type === 'image'">
-                    <Label
-                      :for="'cf-' + field.name"
-                      class="text-sm font-medium leading-none"
+                  <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0 shadow-sm">
+                    <Mail class="w-6 h-6" />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-xs uppercase tracking-widest text-muted-foreground mb-1">
+                      Email Resmi
+                    </h3>
+                    <a
+                      :href="'mailto:' + displayEmail"
+                      class="text-lg font-bold hover:text-primary transition-colors"
                     >
-                      {{ field.label }}
-                      <span
-                        v-if="field.is_required"
-                        class="text-destructive"
-                      >*</span>
-                    </Label>
-                    <p
-                      v-if="field.help_text"
-                      class="text-xs text-muted-foreground"
-                    >
-                      {{ field.help_text }}
-                    </p>
-                    <Input
-                      :id="'cf-' + field.name"
-                      type="file"
-                      class="cursor-pointer bg-background/80 file:mr-3 file:rounded file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary"
-                      :accept="field.type === 'image' ? 'image/*' : undefined"
-                      :required="field.is_required"
-                      :class="fieldErrorClass(field.name)"
-                      @change="onFileInputChange(field.name, $event)"
-                    />
-                    <p
-                      v-if="field.placeholder"
-                      class="text-xs text-muted-foreground"
-                    >
-                      {{ field.placeholder }}
-                    </p>
-                  </template>
-
-                  <template v-else>
-                    <Label
-                      :for="'cf-' + field.name"
-                      class="text-sm font-medium leading-none"
-                    >
-                      {{ field.label }}
-                      <span
-                        v-if="field.is_required"
-                        class="text-destructive"
-                      >*</span>
-                    </Label>
-                    <p
-                      v-if="field.help_text"
-                      class="text-xs text-muted-foreground"
-                    >
-                      {{ field.help_text }}
-                    </p>
-
-                    <!-- text -->
-                    <Input
-                      v-if="field.type === 'text'"
-                      :id="'cf-' + field.name"
-                      v-model="formValues[field.name] as string"
-                      type="text"
-                      :placeholder="field.placeholder || ''"
-                      :required="field.is_required"
-                      :class="fieldErrorClass(field.name)"
-                    />
-
-                    <!-- email -->
-                    <Input
-                      v-else-if="field.type === 'email'"
-                      :id="'cf-' + field.name"
-                      v-model="formValues[field.name] as string"
-                      type="email"
-                      :placeholder="field.placeholder || ''"
-                      :required="field.is_required"
-                      :class="fieldErrorClass(field.name)"
-                    />
-
-                    <!-- url -->
-                    <Input
-                      v-else-if="field.type === 'url'"
-                      :id="'cf-' + field.name"
-                      v-model="formValues[field.name] as string"
-                      type="url"
-                      :placeholder="field.placeholder || ''"
-                      :required="field.is_required"
-                      :class="fieldErrorClass(field.name)"
-                    />
-
-                    <!-- number -->
-                    <Input
-                      v-else-if="field.type === 'number'"
-                      :id="'cf-' + field.name"
-                      v-model="formValues[field.name] as string"
-                      type="number"
-                      :placeholder="field.placeholder || ''"
-                      :required="field.is_required"
-                      :class="fieldErrorClass(field.name)"
-                    />
-
-                    <!-- textarea -->
-                    <Textarea
-                      v-else-if="field.type === 'textarea'"
-                      :id="'cf-' + field.name"
-                      v-model="formValues[field.name] as string"
-                      rows="4"
-                      :placeholder="field.placeholder || ''"
-                      :required="field.is_required"
-                      :class="fieldErrorClass(field.name)"
-                    />
-
-                    <!-- date -->
-                    <Input
-                      v-else-if="field.type === 'date'"
-                      :id="'cf-' + field.name"
-                      v-model="formValues[field.name] as string"
-                      type="date"
-                      :required="field.is_required"
-                      :class="fieldErrorClass(field.name)"
-                    />
-
-                    <!-- datetime -->
-                    <Input
-                      v-else-if="field.type === 'datetime'"
-                      :id="'cf-' + field.name"
-                      v-model="formValues[field.name] as string"
-                      type="datetime-local"
-                      :required="field.is_required"
-                      :class="fieldErrorClass(field.name)"
-                    />
-
-                    <!-- boolean -->
-                    <div
-                      v-else-if="field.type === 'boolean'"
-                      class="flex items-center gap-2 pt-1"
-                    >
-                      <Checkbox
-                        :id="'cf-' + field.name"
-                        :checked="!!formValues[field.name]"
-                        @update:checked="(v: boolean | 'indeterminate') => { formValues[field.name] = v === true }"
-                      />
-                      <label
-                        :for="'cf-' + field.name"
-                        class="text-sm text-muted-foreground cursor-pointer"
-                      >{{ field.placeholder || 'Ya' }}</label>
-                    </div>
-
-                    <!-- select -->
-                    <Select
-                      v-else-if="field.type === 'select'"
-                      :model-value="String(formValues[field.name] ?? '')"
-                      @update:model-value="formValues[field.name] = $event"
-                    >
-                      <SelectTrigger :id="'cf-' + field.name" :class="fieldErrorClass(field.name)">
-                        <SelectValue :placeholder="field.placeholder || 'Pilih'" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem
-                          v-for="opt in selectOptions(field)"
-                          :key="opt.value"
-                          :value="opt.value"
-                        >
-                          {{ opt.label }}
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <!-- radio -->
-                    <div
-                      v-else-if="field.type === 'radio'"
-                      class="space-y-2"
-                    >
-                      <label
-                        v-for="opt in selectOptions(field)"
-                        :key="opt.value"
-                        class="flex items-center gap-2 text-sm cursor-pointer"
-                      >
-                        <input
-                          v-model="formValues[field.name]"
-                          type="radio"
-                          class="h-4 w-4 accent-primary"
-                          :value="opt.value"
-                          :name="'cf-' + field.name"
-                          :required="field.is_required"
-                        >
-                        <span>{{ opt.label }}</span>
-                      </label>
-                    </div>
-
-                    <!-- multiselect / checkbox group -->
-                    <div
-                      v-else-if="field.type === 'multiselect' || field.type === 'checkbox'"
-                      class="space-y-2"
-                    >
-                      <label
-                        v-for="opt in selectOptions(field)"
-                        :key="opt.value"
-                        class="flex items-center gap-2 text-sm cursor-pointer"
-                      >
-                        <Checkbox
-                          :checked="multiHas(field.name, opt.value)"
-                          @update:checked="(v: boolean | 'indeterminate') => toggleMulti(field.name, opt.value, v === true)"
-                        />
-                        <span>{{ opt.label }}</span>
-                      </label>
-                    </div>
-
-                    <!-- json -->
-                    <Textarea
-                      v-else-if="field.type === 'json'"
-                      :id="'cf-' + field.name"
-                      v-model="formValues[field.name] as string"
-                      rows="4"
-                      class="font-mono text-xs"
-                      :placeholder="field.placeholder || '{}'"
-                      :required="field.is_required"
-                      :class="fieldErrorClass(field.name)"
-                    />
-
-                    <!-- fallback -->
-                    <Input
-                      v-else
-                      :id="'cf-' + field.name"
-                      v-model="formValues[field.name] as string"
-                      type="text"
-                      :placeholder="field.placeholder || ''"
-                      :required="field.is_required"
-                      :class="fieldErrorClass(field.name)"
-                    />
-
-                    <p
-                      v-if="fieldErrors[field.name]"
-                      class="text-xs text-destructive"
-                    >
-                      {{ fieldErrors[field.name] }}
-                    </p>
-                  </template>
+                      {{ displayEmail }}
+                    </a>
+                  </div>
                 </div>
 
-                <CaptchaWrapper
-                  v-if="formDefinition.settings?.captcha_required"
-                  ref="captchaRef"
-                  action="contact"
-                  @verified="onCaptchaVerified"
-                />
-
-                <Button
-                  type="submit"
-                  class="w-full sm:w-auto"
-                  :disabled="submitting || !canSubmit"
+                <div
+                  class="contact-info-item flex items-start gap-6 p-4 -m-4 rounded-xl border border-transparent transition-all duration-500 hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_24px_hsl(var(--primary)/0.15)]"
+                  @mouseenter="onInfoItemEnter"
+                  @mouseleave="onInfoItemLeave"
+                  @mousedown="onInfoItemPress"
+                  @mouseup="onInfoItemRelease"
                 >
-                  <Loader2
-                    v-if="submitting"
-                    class="w-4 h-4 mr-2 animate-spin"
-                  />
-                  Kirim Pesan
-                </Button>
-              </form>
+                  <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0 shadow-sm">
+                    <Phone class="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-xs uppercase tracking-widest text-muted-foreground mb-1">
+                      Telepon / WA
+                    </h3>
+                    <a
+                      v-if="phoneDialHref"
+                      :href="phoneDialHref"
+                      class="text-lg font-bold hover:text-primary transition-colors"
+                    >
+                      {{ displayPhone }}
+                    </a>
+                    <p
+                      v-else-if="displayPhone"
+                      class="text-lg font-bold"
+                    >
+                      {{ displayPhone }}
+                    </p>
+                    <p
+                      v-else
+                      class="text-sm text-muted-foreground"
+                    >
+                      Atur di Pengaturan → Identitas atau di Theme Customizer (bagian Contact).
+                    </p>
+                  </div>
+                </div>
 
-              <!-- Empty form definition -->
-              <Alert
-                v-else-if="formDefinition && !formDefinition.fields?.length"
-                variant="destructive"
-              >
-                <AlertTitle>Formulir belum dikonfigurasi</AlertTitle>
-                <AlertDescription>
-                  Formulir aktif tetapi tidak memiliki kolom yang valid untuk pengiriman publik.
-                </AlertDescription>
-              </Alert>
-            </Card>
-          </div>
+                <div
+                  class="contact-info-item flex items-start gap-6 p-4 -m-4 rounded-xl border border-transparent transition-all duration-500 hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_24px_hsl(var(--primary)/0.15)]"
+                  @mouseenter="onInfoItemEnter"
+                  @mouseleave="onInfoItemLeave"
+                  @mousedown="onInfoItemPress"
+                  @mouseup="onInfoItemRelease"
+                >
+                  <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0 shadow-sm">
+                    <MapPin class="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-xs uppercase tracking-widest text-muted-foreground mb-1">
+                      Alamat
+                    </h3>
+                    <Popover
+                      v-if="displayAddress && mapEnabled"
+                      v-model:open="mapPopoverOpen"
+                      @update:open="onMapPopoverOpenChange"
+                    >
+                      <PopoverTrigger as-child>
+                        <button
+                          type="button"
+                          class="block w-full text-left text-base font-bold leading-relaxed text-balance hover:text-primary transition-colors"
+                        >
+                          {{ displayAddress }}
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        side="top"
+                        :side-offset="14"
+                        align="start"
+                        class="!max-w-none w-[min(92vw,44rem)] p-3.5 space-y-3 rounded-2xl !border-primary/65 !bg-background/96 dark:!bg-background/96 backdrop-blur-md !ring-1 !ring-primary/45 !shadow-[0_0_0_1px_hsl(var(--primary)/0.45),0_0_44px_hsl(var(--primary)/0.38),0_26px_72px_rgba(0,0,0,0.58)]"
+                      >
+                        <div class="rounded-xl overflow-hidden border border-primary/30 bg-muted/20 shadow-[0_0_24px_hsl(var(--primary)/0.12)]">
+                          <iframe
+                            v-if="mapIframeVisible"
+                            :src="mapEmbedUrl"
+                            class="w-full h-56"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Contact location map"
+                          />
+                        </div>
+                        <p class="text-xs text-muted-foreground leading-relaxed">
+                          {{ displayAddress }}
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            @click="openMapExternal"
+                          >
+                            Buka Peta
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            @click="openMapDirections"
+                          >
+                            Petunjuk Arah
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            @click="copyLocationAddress"
+                          >
+                            Copy Alamat
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            @click="copyLocationCoordinates"
+                          >
+                            Copy Koordinat
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            @click="shareLocation"
+                          >
+                            Share Lokasi
+                          </Button>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                    <p
+                      v-else-if="displayAddress"
+                      class="text-base font-bold leading-relaxed text-balance"
+                    >
+                      {{ displayAddress }}
+                    </p>
+                    <p
+                      v-else
+                      class="text-sm text-muted-foreground"
+                    >
+                      Atur di Pengaturan → Identitas atau di Theme Customizer (bagian Contact).
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            <!-- Form Column -->
+            <div
+              ref="formCol"
+              class="lg:col-span-7"
+            >
+              <Card class="p-8 md:p-12 shadow-xl border-border/40">
+                <div class="mb-8">
+                  <h2 class="text-2xl font-bold mb-2">
+                    {{ formDefinition?.name || 'Kirim Pesan' }}
+                  </h2>
+                  <p class="text-muted-foreground">
+                    {{ formDefinition?.description || 'Isi formulir di bawah ini, tim kami akan segera menghubungi Anda.' }}
+                  </p>
+                </div>
+
+                <!-- Loading form schema -->
+                <div
+                  v-if="formLoading"
+                  class="flex flex-col items-center justify-center py-16 gap-3"
+                >
+                  <Loader2 class="w-8 h-8 animate-spin text-primary/50" />
+                  <p class="text-sm text-muted-foreground">
+                    Memuat formulir…
+                  </p>
+                </div>
+
+                <!-- Form unavailable -->
+                <Alert
+                  v-else-if="formLoadError"
+                  variant="destructive"
+                  class="mb-4"
+                >
+                  <AlertTitle>Formulir tidak tersedia</AlertTitle>
+                  <AlertDescription>
+                    {{ formLoadError }}
+                  </AlertDescription>
+                </Alert>
+
+                <!-- Dynamic CMS form -->
+                <form
+                  v-else-if="formDefinition && formDefinition.fields?.length"
+                  class="space-y-6"
+                  @submit.prevent="submitForm"
+                >
+                  <div
+                    v-for="field in formDefinition.fields"
+                    :key="field.name"
+                    class="space-y-2"
+                    @focusin="trackStartOnce"
+                  >
+                    <template v-if="field.type === 'file' || field.type === 'image'">
+                      <Label
+                        :for="'cf-' + field.name"
+                        class="text-sm font-medium leading-none"
+                      >
+                        {{ field.label }}
+                        <span
+                          v-if="field.is_required"
+                          class="text-destructive"
+                        >*</span>
+                      </Label>
+                      <p
+                        v-if="field.help_text"
+                        class="text-xs text-muted-foreground"
+                      >
+                        {{ field.help_text }}
+                      </p>
+                      <Input
+                        :id="'cf-' + field.name"
+                        type="file"
+                        class="cursor-pointer bg-background/80 file:mr-3 file:rounded file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary"
+                        :accept="field.type === 'image' ? 'image/*' : undefined"
+                        :required="field.is_required"
+                        :class="fieldErrorClass(field.name)"
+                        @change="onFileInputChange(field.name, $event)"
+                      />
+                      <p
+                        v-if="field.placeholder"
+                        class="text-xs text-muted-foreground"
+                      >
+                        {{ field.placeholder }}
+                      </p>
+                    </template>
+
+                    <template v-else>
+                      <Label
+                        :for="'cf-' + field.name"
+                        class="text-sm font-medium leading-none"
+                      >
+                        {{ field.label }}
+                        <span
+                          v-if="field.is_required"
+                          class="text-destructive"
+                        >*</span>
+                      </Label>
+                      <p
+                        v-if="field.help_text"
+                        class="text-xs text-muted-foreground"
+                      >
+                        {{ field.help_text }}
+                      </p>
+
+                      <!-- text -->
+                      <Input
+                        v-if="field.type === 'text'"
+                        :id="'cf-' + field.name"
+                        v-model="formValues[field.name] as string"
+                        type="text"
+                        :placeholder="field.placeholder || ''"
+                        :required="field.is_required"
+                        :class="fieldErrorClass(field.name)"
+                      />
+
+                      <!-- email -->
+                      <Input
+                        v-else-if="field.type === 'email'"
+                        :id="'cf-' + field.name"
+                        v-model="formValues[field.name] as string"
+                        type="email"
+                        :placeholder="field.placeholder || ''"
+                        :required="field.is_required"
+                        :class="fieldErrorClass(field.name)"
+                      />
+
+                      <!-- url -->
+                      <Input
+                        v-else-if="field.type === 'url'"
+                        :id="'cf-' + field.name"
+                        v-model="formValues[field.name] as string"
+                        type="url"
+                        :placeholder="field.placeholder || ''"
+                        :required="field.is_required"
+                        :class="fieldErrorClass(field.name)"
+                      />
+
+                      <!-- number -->
+                      <Input
+                        v-else-if="field.type === 'number'"
+                        :id="'cf-' + field.name"
+                        v-model="formValues[field.name] as string"
+                        type="number"
+                        :placeholder="field.placeholder || ''"
+                        :required="field.is_required"
+                        :class="fieldErrorClass(field.name)"
+                      />
+
+                      <!-- textarea -->
+                      <Textarea
+                        v-else-if="field.type === 'textarea'"
+                        :id="'cf-' + field.name"
+                        v-model="formValues[field.name] as string"
+                        rows="4"
+                        :placeholder="field.placeholder || ''"
+                        :required="field.is_required"
+                        :class="fieldErrorClass(field.name)"
+                      />
+
+                      <!-- date -->
+                      <Input
+                        v-else-if="field.type === 'date'"
+                        :id="'cf-' + field.name"
+                        v-model="formValues[field.name] as string"
+                        type="date"
+                        :required="field.is_required"
+                        :class="fieldErrorClass(field.name)"
+                      />
+
+                      <!-- datetime -->
+                      <Input
+                        v-else-if="field.type === 'datetime'"
+                        :id="'cf-' + field.name"
+                        v-model="formValues[field.name] as string"
+                        type="datetime-local"
+                        :required="field.is_required"
+                        :class="fieldErrorClass(field.name)"
+                      />
+
+                      <!-- boolean -->
+                      <div
+                        v-else-if="field.type === 'boolean'"
+                        class="flex items-center gap-2 pt-1"
+                      >
+                        <Checkbox
+                          :id="'cf-' + field.name"
+                          :checked="!!formValues[field.name]"
+                          @update:checked="(v: boolean | 'indeterminate') => { formValues[field.name] = v === true }"
+                        />
+                        <label
+                          :for="'cf-' + field.name"
+                          class="text-sm text-muted-foreground cursor-pointer"
+                        >{{ field.placeholder || 'Ya' }}</label>
+                      </div>
+
+                      <!-- select -->
+                      <Select
+                        v-else-if="field.type === 'select'"
+                        :model-value="String(formValues[field.name] ?? '')"
+                        @update:model-value="formValues[field.name] = $event"
+                      >
+                        <SelectTrigger :id="'cf-' + field.name" :class="fieldErrorClass(field.name)">
+                          <SelectValue :placeholder="field.placeholder || 'Pilih'" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem
+                            v-for="opt in selectOptions(field)"
+                            :key="opt.value"
+                            :value="opt.value"
+                          >
+                            {{ opt.label }}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+
+                      <!-- radio -->
+                      <div
+                        v-else-if="field.type === 'radio'"
+                        class="space-y-2"
+                      >
+                        <label
+                          v-for="opt in selectOptions(field)"
+                          :key="opt.value"
+                          class="flex items-center gap-2 text-sm cursor-pointer"
+                        >
+                          <input
+                            v-model="formValues[field.name]"
+                            type="radio"
+                            class="h-4 w-4 accent-primary"
+                            :value="opt.value"
+                            :name="'cf-' + field.name"
+                            :required="field.is_required"
+                          >
+                          <span>{{ opt.label }}</span>
+                        </label>
+                      </div>
+
+                      <!-- multiselect / checkbox group -->
+                      <div
+                        v-else-if="field.type === 'multiselect' || field.type === 'checkbox'"
+                        class="space-y-2"
+                      >
+                        <label
+                          v-for="opt in selectOptions(field)"
+                          :key="opt.value"
+                          class="flex items-center gap-2 text-sm cursor-pointer"
+                        >
+                          <Checkbox
+                            :checked="multiHas(field.name, opt.value)"
+                            @update:checked="(v: boolean | 'indeterminate') => toggleMulti(field.name, opt.value, v === true)"
+                          />
+                          <span>{{ opt.label }}</span>
+                        </label>
+                      </div>
+
+                      <!-- json -->
+                      <Textarea
+                        v-else-if="field.type === 'json'"
+                        :id="'cf-' + field.name"
+                        v-model="formValues[field.name] as string"
+                        rows="4"
+                        class="font-mono text-xs"
+                        :placeholder="field.placeholder || '{}'"
+                        :required="field.is_required"
+                        :class="fieldErrorClass(field.name)"
+                      />
+
+                      <!-- fallback -->
+                      <Input
+                        v-else
+                        :id="'cf-' + field.name"
+                        v-model="formValues[field.name] as string"
+                        type="text"
+                        :placeholder="field.placeholder || ''"
+                        :required="field.is_required"
+                        :class="fieldErrorClass(field.name)"
+                      />
+
+                      <p
+                        v-if="fieldErrors[field.name]"
+                        class="text-xs text-destructive"
+                      >
+                        {{ fieldErrors[field.name] }}
+                      </p>
+                    </template>
+                  </div>
+
+                  <CaptchaWrapper
+                    v-if="formDefinition.settings?.captcha_required"
+                    ref="captchaRef"
+                    action="contact"
+                    @verified="onCaptchaVerified"
+                  />
+
+                  <Button
+                    type="submit"
+                    class="w-full sm:w-auto"
+                    :disabled="submitting || !canSubmit"
+                  >
+                    <Loader2
+                      v-if="submitting"
+                      class="w-4 h-4 mr-2 animate-spin"
+                    />
+                    Kirim Pesan
+                  </Button>
+                </form>
+
+                <!-- Empty form definition -->
+                <Alert
+                  v-else-if="formDefinition && !formDefinition.fields?.length"
+                  variant="destructive"
+                >
+                  <AlertTitle>Formulir belum dikonfigurasi</AlertTitle>
+                  <AlertDescription>
+                    Formulir aktif tetapi tidak memiliki kolom yang valid untuk pengiriman publik.
+                  </AlertDescription>
+                </Alert>
+              </Card>
+            </div>
           </div>
         </main>
       </div>
@@ -559,7 +556,7 @@ import { useHead } from '@unhead/vue'
 import axios from 'axios'
 import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue'
 import { useRouter } from 'vue-router'
-import { useTheme } from '@/shared/composables/useTheme'
+import { useTheme } from '@/modules/Cms/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
 import api, { getCsrfCookie } from '@/engine/api/client'
 import { useCmsStore } from '@/modules/Cms/stores/cms'
@@ -587,7 +584,7 @@ import Phone from 'lucide-vue-next/dist/esm/icons/phone.js';
 import MapPin from 'lucide-vue-next/dist/esm/icons/map-pin.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import { useToast } from '@/shared/composables/useToast'
-import { useThemeMotion } from '@/shared/composables/useThemeMotion'
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion'
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity'
 import type { CaptchaPayload } from '@/modules/System/components/captcha/CaptchaWrapper.vue'
 

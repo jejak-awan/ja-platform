@@ -1,10 +1,10 @@
 <template>
   <AuthLayout>
     <template #title>
-      {{ t('modules.core.auth.verifyEmail.title') }}
+      {{ t('modules.system.auth.verifyEmail.title') }}
     </template>
     <template #subtitle>
-      {{ t('modules.core.auth.verifyEmail.description') }}
+      {{ t('modules.system.auth.verifyEmail.description') }}
     </template>
 
     <div
@@ -21,7 +21,7 @@
           <Mail class="h-5 w-5" />
         </div>
         <p class="text-muted-foreground text-[10px] leading-relaxed">
-          {{ t('modules.core.auth.verifyEmail.resendPrompt') }}
+          {{ t('modules.system.auth.verifyEmail.resendPrompt') }}
         </p>
       </div>
 
@@ -38,15 +38,15 @@
           <span
             v-if="loading"
             class="text-xs"
-          >{{ t('modules.core.auth.verifyEmail.sending') }}</span>
+          >{{ t('modules.system.auth.verifyEmail.sending') }}</span>
           <span
             v-else-if="resendCooldown > 0"
             class="text-xs"
-          >{{ t('modules.core.auth.verifyEmail.cooldown', { seconds: resendCooldown }) }}</span>
+          >{{ t('modules.system.auth.verifyEmail.cooldown', { seconds: resendCooldown }) }}</span>
           <span
             v-else
             class="text-xs"
-          >{{ t('modules.core.auth.verifyEmail.resendButton') }}</span>
+          >{{ t('modules.system.auth.verifyEmail.resendButton') }}</span>
         </Button>
 
         <div class="text-center">
@@ -55,7 +55,7 @@
             class="inline-flex items-center text-sm font-bold text-primary hover:text-primary/80 transition-colors group"
           >
             <ArrowLeft class="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            {{ t('modules.core.auth.forgotPassword.backToLogin') }}
+            {{ t('modules.system.auth.forgotPassword.backToLogin') }}
           </router-link>
         </div>
       </div>
@@ -67,10 +67,10 @@
     >
       <CheckCircle class="mx-auto h-8 w-8 text-success mb-2" />
       <p class="text-success font-black text-sm">
-        {{ t('modules.core.auth.verifyEmail.success') }}
+        {{ t('modules.system.auth.verifyEmail.success') }}
       </p>
       <p class="text-[10px] text-success/70 mt-0.5">
-        {{ t('modules.core.auth.verifyEmail.redirecting') }}
+        {{ t('modules.system.auth.verifyEmail.redirecting') }}
       </p>
     </div>
   </AuthLayout>
@@ -128,22 +128,22 @@ const handleVerify = async (token: string, email: string) => {
 
         if (payload.success !== false) {
             verified.value = true;
-            message.value = t('modules.core.auth.verifyEmail.success');
+            message.value = t('modules.system.auth.verifyEmail.success');
             messageType.value = 'success';
             
             setTimeout(() => {
                 router.push({ name: 'login' });
             }, 2000);
         } else {
-            message.value = payload.message || t('modules.core.auth.verifyEmail.failed');
+            message.value = payload.message || t('modules.system.auth.verifyEmail.failed');
             messageType.value = 'error';
         }
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
-            message.value = err.response?.data?.message || t('modules.core.auth.verifyEmail.failed');
+            message.value = err.response?.data?.message || t('modules.system.auth.verifyEmail.failed');
         } else {
-            message.value = t('modules.core.auth.verifyEmail.failed');
+            message.value = t('modules.system.auth.verifyEmail.failed');
         }
         messageType.value = 'error';
     } finally {
@@ -164,7 +164,7 @@ const handleResend = async () => {
         const payload = response.data as { success?: boolean; message?: string };
 
         if (payload.success !== false) {
-            message.value = t('modules.core.auth.verifyEmail.resendSuccess');
+            message.value = t('modules.system.auth.verifyEmail.resendSuccess');
             messageType.value = 'success';
             
             // Start cooldown timer (60 seconds)
@@ -177,15 +177,15 @@ const handleResend = async () => {
                 }
             }, 1000);
         } else {
-            message.value = payload.message || t('modules.core.auth.verifyEmail.failed');
+            message.value = payload.message || t('modules.system.auth.verifyEmail.failed');
             messageType.value = 'error';
         }
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
-            message.value = err.response?.data?.message || t('modules.core.auth.verifyEmail.failed');
+            message.value = err.response?.data?.message || t('modules.system.auth.verifyEmail.failed');
         } else {
-            message.value = t('modules.core.auth.verifyEmail.failed');
+            message.value = t('modules.system.auth.verifyEmail.failed');
         }
         messageType.value = 'error';
     } finally {

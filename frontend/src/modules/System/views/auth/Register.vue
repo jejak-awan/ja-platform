@@ -4,7 +4,7 @@
       Create account
     </template>
     <template #subtitle>
-      {{ t('modules.core.auth.register.subtitle') || 'Join our community and start building' }}
+      {{ t('modules.system.auth.register.subtitle') || 'Join our community and start building' }}
     </template>
 
     <form
@@ -25,7 +25,7 @@
           required
           class="auth-input h-9 text-sm"
           :class="errors.name ? 'border-destructive/50 ring-destructive/20 focus:border-destructive' : ''"
-          :placeholder="t('modules.core.auth.register.namePlaceholder')"
+          :placeholder="t('modules.system.auth.register.namePlaceholder')"
         />
         <p
           v-if="errors.name"
@@ -49,7 +49,7 @@
           required
           class="auth-input h-9 text-sm"
           :class="errors.email ? 'border-destructive/50 ring-destructive/20 focus:border-destructive' : ''"
-          :placeholder="t('modules.core.auth.register.emailPlaceholder')"
+          :placeholder="t('modules.system.auth.register.emailPlaceholder')"
         />
         <p
           v-if="errors.email"
@@ -76,7 +76,7 @@
               required
               class="auth-input h-9 text-sm pr-10"
               :class="errors.password ? 'border-destructive/50 ring-destructive/20 focus:border-destructive' : ''"
-              :placeholder="t('modules.core.auth.register.passwordPlaceholder')"
+              :placeholder="t('modules.system.auth.register.passwordPlaceholder')"
             />
             <button 
               type="button"
@@ -107,7 +107,7 @@
             autocomplete="new-password"
             required
             class="auth-input h-9 text-sm"
-            :placeholder="t('modules.core.auth.register.confirmPasswordPlaceholder')"
+            :placeholder="t('modules.system.auth.register.confirmPasswordPlaceholder')"
           />
         </div>
         <p
@@ -130,13 +130,13 @@
           for="terms"
           class="text-xs font-medium leading-none text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
         >
-          {{ t('modules.core.auth.register.terms_prefix') }} <router-link
+          {{ t('modules.system.auth.register.terms_prefix') }} <router-link
             :to="{ name: 'terms' }"
             class="text-primary hover:underline"
-          >{{ t('modules.core.auth.register.terms_link') }}</router-link> {{ t('modules.core.auth.register.terms_and') }} <router-link
+          >{{ t('modules.system.auth.register.terms_link') }}</router-link> {{ t('modules.system.auth.register.terms_and') }} <router-link
             :to="{ name: 'privacy' }"
             class="text-primary hover:underline"
-          >{{ t('modules.core.auth.register.privacy_link') }}</router-link>
+          >{{ t('modules.system.auth.register.privacy_link') }}</router-link>
         </label>
       </div>
 
@@ -172,7 +172,7 @@
         <span
           v-else
           class="text-xs"
-        >{{ t('modules.core.auth.register.submit') }}</span>
+        >{{ t('modules.system.auth.register.submit') }}</span>
       </Button>
 
       <div class="relative my-3">
@@ -208,12 +208,12 @@
       </div>
 
       <div class="text-center text-[10px] text-muted-foreground mt-3">
-        {{ t('modules.core.auth.register.alreadyHaveAccount') }} 
+        {{ t('modules.system.auth.register.alreadyHaveAccount') }} 
         <router-link
           :to="{ name: 'login' }"
           class="font-bold text-primary hover:text-primary/80 transition-all ml-1"
         >
-          {{ t('modules.core.auth.register.login') }}
+          {{ t('modules.system.auth.register.login') }}
         </router-link>
       </div>
     </form>
@@ -227,7 +227,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/modules/System/stores/auth';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
-import { registerSchema } from '@/shared/schemas/auth';
+import { registerSchema } from '@/modules/System/schemas/auth';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Github from 'lucide-vue-next/dist/esm/icons/github.js';
 import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
@@ -319,7 +319,7 @@ const handleRegister = async () => {
     }
     
     if (captchaEnabled.value && !captchaVerified.value) {
-        message.value = t('modules.core.auth.captcha.required');
+        message.value = t('modules.system.auth.captcha.required');
         messageType.value = 'error';
         return;
     }

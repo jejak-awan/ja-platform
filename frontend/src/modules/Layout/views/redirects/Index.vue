@@ -194,7 +194,7 @@ import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import RedirectModal from '@/modules/Cms/components/redirects/RedirectModal.vue';
+import RedirectModal from '@/modules/Layout/components/redirects/RedirectModal.vue';
 import { Badge, Button, Card, CardContent, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
@@ -289,7 +289,7 @@ const deleteRedirect = async (redirect: Redirect) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/manage/cms/redirects/${redirect.id}`);
+        await api.delete(`/manage/layout/url-rewrites/${redirect.id}`);
         toast.success.delete(t('features.redirects.title'));
         fetchRedirects();
     } catch (error: unknown) {

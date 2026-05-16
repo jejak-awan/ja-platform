@@ -53,8 +53,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, markRaw } from 'vue'
 import JanariSplitText from '@/modules/Cms/views/themes/janari/components/JanariSplitText.vue'
-import { useTheme } from '@/shared/composables/useTheme'
-import { useThemeMotion } from '@/shared/composables/useThemeMotion'
+import { useTheme } from '@/modules/Cms/composables/useTheme'
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 import Monitor from 'lucide-vue-next/dist/esm/icons/monitor.js'
 import Cpu from 'lucide-vue-next/dist/esm/icons/cpu.js'

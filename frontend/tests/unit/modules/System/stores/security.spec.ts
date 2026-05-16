@@ -125,7 +125,7 @@ describe('Security Store', () => {
         mockDigest.mockImplementation(async () => {
             callCount++;
             const buffer = new Uint8Array(32);
-            if (callCount === "10") {
+            if (callCount === 10) {
                 // Return a hash that starts with '0' (for difficulty 1)
                 buffer[0] = 0x01;
             } else {

@@ -42,7 +42,7 @@ class StudioSeeder extends Seeder
     /**
      * Seed data for a specific unit
      */
-    private function seedUnitData(User $admin, ?int $unitId): void
+    private function seedUnitData(User $admin, string|int|null $unitId): void
     {
         // 1. Categories
         $categories = [
@@ -67,6 +67,7 @@ class StudioSeeder extends Seeder
 
         // 2. CMS Pages (Wadah)
         $pages = [
+            ['title' => 'Tentang Kami', 'slug' => 'about'],
             ['title' => 'Akademik', 'slug' => 'akademik'],
             ['title' => 'Jurusan', 'slug' => 'jurusan'],
             ['title' => 'Prestasi', 'slug' => 'prestasi'],
@@ -115,11 +116,18 @@ class StudioSeeder extends Seeder
         $menuItems = [
             ['title' => 'Beranda', 'url' => '/', 'sort_order' => 1, 'type' => 'custom'],
             [
+                'title' => 'Tentang Kami',
+                'type' => 'page',
+                'target_id' => $pageMap['about'] ?? null,
+                'url' => '/about',
+                'sort_order' => 2,
+            ],
+            [
                 'title' => 'Akademik',
                 'type' => 'page',
                 'target_id' => $pageMap['akademik'] ?? null,
                 'url' => '/akademik',
-                'sort_order' => 2,
+                'sort_order' => 3,
                 'children' => [
                     [
                         'title' => 'Jurusan',
@@ -136,35 +144,35 @@ class StudioSeeder extends Seeder
                 'type' => 'page',
                 'target_id' => $pageMap['prestasi'] ?? null,
                 'url' => '/prestasi',
-                'sort_order' => 3
+                'sort_order' => 4
             ],
             [
                 'title' => 'PPDB',
                 'type' => 'page',
                 'target_id' => $pageMap['ppdb'] ?? null,
                 'url' => '/ppdb',
-                'sort_order' => 4
+                'sort_order' => 5
             ],
             [
                 'title' => 'Kelulusan',
                 'type' => 'page',
                 'target_id' => $pageMap['graduation'] ?? null,
                 'url' => '/graduation',
-                'sort_order' => 5
+                'sort_order' => 6
             ],
             [
                 'title' => 'Berita',
                 'type' => 'page',
                 'target_id' => $pageMap['blog'] ?? null,
                 'url' => '/blog',
-                'sort_order' => 6
+                'sort_order' => 7
             ],
             [
                 'title' => 'Kontak',
                 'type' => 'page',
                 'target_id' => $pageMap['contact'] ?? null,
                 'url' => '/contact',
-                'sort_order' => 7
+                'sort_order' => 8
             ],
         ];
 

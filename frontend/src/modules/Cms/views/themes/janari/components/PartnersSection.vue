@@ -40,8 +40,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useTheme } from '@/shared/composables/useTheme'
-import { useThemeMotion } from '@/shared/composables/useThemeMotion'
+import { useTheme } from '@/modules/Cms/composables/useTheme'
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion'
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 
 const { getSetting } = useTheme()

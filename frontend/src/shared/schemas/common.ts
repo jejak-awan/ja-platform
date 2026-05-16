@@ -2,6 +2,7 @@
  * Common form validation schemas using Zod with i18n support
  */
 import { z } from 'zod';
+import { userModelSchema } from './models/core';
 
 /**
  * Helper to create translatable error message
@@ -187,4 +188,42 @@ export const languageSchema = z.object({
     code: z.string().min(2, t('common.validation.min', { field: 'Code', min: 2 })),
     name: z.string().min(1, t('common.validation.required', { field: 'Name' })),
     create_from_template: z.boolean().default(true),
+});
+
+export const moveCategorySchema = z.object({
+    parent_id: z.union([z.string(), z.number()]).nullable().optional(),
+});
+
+/**
+ * Category form schema
+ */
+export const categorySchema = z.object({
+    name: z.string().min(1, t('common.validation.required', { field: 'Name' })),
+    slug: z.string().min(1, t('common.validation.required', { field: 'Slug' })),
+    description: z.string().optional().nullable(),
+    image: z.string().optional().nullable(),
+    parent_id: z.union([z.string(), z.number()]).nullable().optional(),
+    is_active: z.boolean().default(true),
+    sort_order: z.number().default(0),
+});
+
+/**
+ * Auth response schema for login/register
+ */
+export const authResponseSchema = z.object({
+    user: userModelSchema.optional(),
+    token: z.string().optional(),
+    requires_two_factor: z.boolean().optional(),
+    user_id: z.union([z.string(), z.number()]).optional(),
+    message: z.string().optional(),
+    redirect_to: z.string().optional(),
+});
+
+/**
+ * Tag form schema
+ */
+export const tagSchema = z.object({
+    name: z.string().min(1, t('common.validation.required', { field: 'Name' })),
+    slug: z.string().optional(),
+    description: z.string().optional().nullable(),
 });

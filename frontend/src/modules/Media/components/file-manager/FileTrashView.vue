@@ -10,7 +10,7 @@
         </div>
         <div>
           <h2 class="text-lg font-bold tracking-tight">
-            {{ $t('modules.core.file_manager.trash.title') }}
+            {{ $t('modules.system.file_manager.trash.title') }}
           </h2>
           <p class="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
             {{ trashItems.length }} items
@@ -30,7 +30,7 @@
             class="w-4 h-4 mr-2"
             :class="{ 'animate-spin': trashLoading }"
           />
-          {{ $t('modules.core.file_manager.trash.refresh') || 'Refresh' }}
+          {{ $t('modules.system.file_manager.trash.refresh') || 'Refresh' }}
         </Button>
         <Button
           variant="destructive"
@@ -52,7 +52,7 @@
     >
       <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mb-4" />
       <p class="text-sm font-medium animate-pulse">
-        {{ $t('modules.core.file_manager.trash.scanning') || 'Scanning recycle bin...' }}
+        {{ $t('modules.system.file_manager.trash.scanning') || 'Scanning recycle bin...' }}
       </p>
     </div>
         
@@ -67,10 +67,10 @@
         />
       </div>
       <h3 class="text-lg font-bold text-foreground/90">
-        {{ $t('modules.core.file_manager.trash.emptyTitle') || 'Your trash is empty' }}
+        {{ $t('modules.system.file_manager.trash.emptyTitle') || 'Your trash is empty' }}
       </h3>
       <p class="text-sm text-muted-foreground max-w-[280px] mt-2">
-        {{ $t('modules.core.file_manager.trash.emptyDescription') || 'Any files or folders you delete will appear here for a limited time before being cleared for good.' }}
+        {{ $t('modules.system.file_manager.trash.emptyDescription') || 'Any files or folders you delete will appear here for a limited time before being cleared for good.' }}
       </p>
     </div>
         

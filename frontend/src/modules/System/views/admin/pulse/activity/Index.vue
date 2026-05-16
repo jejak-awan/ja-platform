@@ -17,7 +17,7 @@
         variant-type="outline"
         @click="clearLogs"
       >
-        {{ t('modules.core.system.logs.clear') }}
+        {{ t('modules.system.system.logs.clear') }}
       </Button>
     </div>
 
@@ -322,7 +322,7 @@
         :per-page="Number(perPage)"
         class="border-none shadow-none mt-4 px-6 py-4"
         @page-change="fetchLogs"
-        @update:per-page="(val) => { perPage = val; fetchLogs("1"); }"
+        @update:per-page="(val) => { perPage = val; fetchLogs(1); }"
       />
     </div>
   </div>
@@ -472,8 +472,8 @@ const clearDateFilter = () => {
 
 const clearLogs = async () => {
     const confirmed = await confirm({
-        title: t('modules.core.system.logs.actions.clear'),
-        message: t('modules.core.system.logs.confirm.clear') || 'Are you sure you want to clear all logs?',
+        title: t('modules.system.system.logs.actions.clear'),
+        message: t('modules.system.system.logs.confirm.clear') || 'Are you sure you want to clear all logs?',
         variant: 'danger',
         confirmText: t('common.actions.clear'),
     });
@@ -482,7 +482,7 @@ const clearLogs = async () => {
 
     try {
         await api.post('/manage/activity-journal/clear');
-        toast.success.action(t('modules.core.system.logs.messages.cleared'));
+        toast.success.action(t('modules.system.system.logs.messages.cleared'));
         fetchLogs();
     } catch (error: unknown) {
         logger.error('Failed to clear logs:', (error as Error).message);
@@ -512,7 +512,7 @@ const exportLogs = async () => {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-        toast.success.action(t('modules.core.analytics.export.success') || 'Export started');
+        toast.success.action(t('modules.system.analytics.export.success') || 'Export started');
     } catch (error: unknown) {
         logger.error('Failed to export activity logs:', (error as Error).message);
         toast.error.fromResponse(error);
@@ -523,7 +523,7 @@ const exportLogs = async () => {
 
 const fetchUsers = async () => {
     try {
-        const response = await api.get('/manage/users');
+        const response = await api.get('/manage/system/users');
         users.value = getResponseList<User>(response.data);
     } catch (error: unknown) {
         logger.error('Failed to fetch users:', error);
@@ -551,7 +551,7 @@ const getRecursiveValue = (obj: Record<string, unknown> | null | undefined, key:
 
 // Watch filters for auto-refresh
 watch([typeFilter, userFilter, dateFrom, dateTo], () => {
-    fetchLogs("1");
+    fetchLogs(1);
 });
 
 onMounted(() => {

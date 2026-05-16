@@ -225,7 +225,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useTheme } from '@/shared/composables/useTheme';
+import { useTheme } from '@/modules/Cms/composables/useTheme';
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity';
 import {
   Card, CardContent, Button, Input, Label

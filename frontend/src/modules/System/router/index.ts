@@ -1,18 +1,13 @@
 import type { RouteRecordRaw } from 'vue-router';
-import systemRoutes from './system';
+import innerSystemRoutes from './system';
 import teamRoutes from './team';
 import developerRoutes from './developer';
 
-const coreRoutes: RouteRecordRaw[] = [
-    {
-        path: 'dashboard',
-        name: 'core.dashboard',
-        component: () => import('@/modules/System/views/admin/Dashboard.vue'),
-        meta: { permission: 'view dashboard' },
-    },
-    ...systemRoutes,
+/** Dashboard route is registered in `engine/router/admin.ts` as `system.dashboard`. */
+const systemRoutes: RouteRecordRaw[] = [
+    ...innerSystemRoutes,
     ...teamRoutes,
     ...developerRoutes,
 ];
 
-export default coreRoutes;
+export default systemRoutes;

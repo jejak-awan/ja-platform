@@ -31,7 +31,7 @@ describe('Content Store', () => {
 
         expect(store.loading).toBe(false);
         expect(store.currentContent).toEqual(mockContent);
-        expect(api.get).toHaveBeenCalledWith('/ja/contents/test-slug');
+        expect(api.get).toHaveBeenCalledWith('/public/cms/contents/test-slug');
     });
 
     it('handles alternative response structure', async () => {

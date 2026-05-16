@@ -153,7 +153,7 @@ import {
   Label, Input, LucideIcon
 } from '@/shared/components/ui';
 import TiptapEditor from '@/shared/components/editor/TiptapEditor.vue';
-import MediaPicker from '@/shared/components/media/MediaPicker.vue';
+import MediaPicker from '@/modules/Media/components/picker/MediaPicker.vue';
 
 const props = defineProps<{
   settings: any;

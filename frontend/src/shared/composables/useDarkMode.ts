@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue';
-import { useCmsStore } from '@/modules/Cms/stores/cms';
+import { useSystemStore } from '@/modules/System/stores/system';
 import { SECURITY_ROUTES } from '@/config/security';
 
 type ThemeMode = 'light' | 'dark' | 'system'
@@ -34,13 +34,13 @@ const initFrontendTheme = () => {
 export function syncDocumentDarkClassForRoute(path: string) {
     const isAdmin = path.startsWith(SECURITY_ROUTES.dashboardBase)
     if (isAdmin) {
-        const cmsStore = useCmsStore()
+        const systemStore = useSystemStore()
         const raw = localStorage.getItem('admin-dark-mode') || 'system'
         const mode: ThemeMode = raw === 'light' || raw === 'dark' || raw === 'system' ? raw : 'system'
-        if (cmsStore.themeMode !== mode) {
-            cmsStore.setThemeMode(mode, false)
+        if (systemStore.themeMode !== mode) {
+            systemStore.setThemeMode(mode, false)
         } else {
-            cmsStore.applyThemeToDocument()
+            systemStore.applyThemeToDocument()
         }
         return
     }
@@ -55,18 +55,18 @@ export function syncDocumentDarkClassForRoute(path: string) {
 }
 
 export function useDarkMode(scope: DarkModeScope = 'admin') {
-    const cmsStore = useCmsStore();
+    const systemStore = useSystemStore();
     if (scope === 'frontend') {
         initFrontendTheme()
     }
 
-    const isDark = computed(() => scope === 'admin' ? cmsStore.isDarkMode : frontendIsDarkMode.value);
+    const isDark = computed(() => scope === 'admin' ? systemStore.isDarkMode : frontendIsDarkMode.value);
     const actualMode = computed(() => isDark.value ? 'dark' : 'light');
-    const currentMode = computed(() => scope === 'admin' ? cmsStore.themeMode : frontendThemeMode.value);
+    const currentMode = computed(() => scope === 'admin' ? systemStore.themeMode : frontendThemeMode.value);
 
     const setMode = (mode: ThemeMode) => {
         if (scope === 'admin') {
-            cmsStore.setThemeMode(mode);
+            systemStore.setThemeMode(mode);
             return;
         }
 
@@ -82,7 +82,7 @@ export function useDarkMode(scope: DarkModeScope = 'admin') {
 
     const toggleMode = () => {
         if (scope === 'admin') {
-            cmsStore.toggleDarkMode();
+            systemStore.toggleDarkMode();
             return;
         }
 
@@ -101,6 +101,6 @@ export function useDarkMode(scope: DarkModeScope = 'admin') {
             DARK: 'dark',
             SYSTEM: 'system'
         },
-        loadFromBackend: () => scope === 'admin' ? cmsStore.loadThemePreferences() : Promise.resolve(),
+        loadFromBackend: () => scope === 'admin' ? systemStore.loadThemePreferences() : Promise.resolve(),
     };
 }

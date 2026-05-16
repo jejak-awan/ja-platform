@@ -99,7 +99,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useTheme } from '@/shared/composables/useTheme';
+import { useTheme } from '@/modules/Cms/composables/useTheme';
 import PageDisabled from './components/PageDisabled.vue';
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings';
 import Trophy from 'lucide-vue-next/dist/esm/icons/trophy.js';

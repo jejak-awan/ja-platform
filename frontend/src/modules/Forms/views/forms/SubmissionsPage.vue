@@ -400,8 +400,8 @@ import {
     createColumnHelper,
     FlexRender
 } from '@tanstack/vue-table';
-import api from '@/engine/api/client';
 import { apiConfig } from '@/config';
+import { FormsService } from '@/modules/Forms/services/formsService';
 import { parseSingleResponse } from '@/shared/utils/responseParser';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
@@ -612,7 +612,7 @@ const table = useVueTable({
         sorting.value = typeof updaterOrValue === 'function' 
             ? updaterOrValue(sorting.value) 
             : updaterOrValue;
-        fetchSubmissions("1");
+        fetchSubmissions(1);
     },
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
@@ -623,7 +623,7 @@ const selectedRowsCount = computed(() => Object.keys(rowSelection.value).length)
 // --- API Methods ---
 const fetchForm = async () => {
     try {
-        const response = await api.get(`/manage/cms/forms/${formId.value}`);
+        const response = await FormsService.get(String(formId.value));
         form.value = (response.data) as Form;
     } catch (error: unknown) {
         logger.error('Error fetching form:', error);
@@ -655,7 +655,7 @@ const fetchSubmissions = async (page = 1) => {
             ...(dateFrom.value && { date_from: dateFrom.value }),
             ...(dateTo.value && { date_to: dateTo.value })
         };
-        const response = await api.get(`/manage/cms/forms/${formId.value}/submissions`, { params });
+        const response = await FormsService.listSubmissions(String(formId.value), params);
         const paginatedData = response.data;
         submissions.value = paginatedData?.data || [];
         pagination.value = {
@@ -674,7 +674,7 @@ const fetchSubmissions = async (page = 1) => {
 
 const fetchStatistics = async () => {
     try {
-        const response = await api.get(`/manage/cms/forms/${formId.value}/submissions/statistics`);
+        const response = await FormsService.submissionStatistics(String(formId.value));
         statistics.value = parseSingleResponse(response) as SubmissionStatistics;
     } catch (error) {
         logger.error('Failed to fetch statistics:', error);
@@ -695,7 +695,7 @@ const viewSubmission = async (submission: Submission) => {
 
 const markAsRead = async (submission: Submission, refresh = true) => {
     try {
-        await api.put(`/manage/cms/form-submissions/${submission.id}/read`);
+        await FormsService.markSubmissionRead(String(submission.id));
         if (refresh) {
             fetchSubmissions(pagination.value?.current_page || 1);
             fetchStatistics();
@@ -709,7 +709,7 @@ const markAsRead = async (submission: Submission, refresh = true) => {
 
 const archiveSubmission = async (submission: Submission) => {
     try {
-        await api.put(`/manage/cms/form-submissions/${submission.id}/archive`);
+        await FormsService.archiveSubmission(String(submission.id));
         fetchSubmissions(pagination.value?.current_page || 1);
         fetchStatistics();
     } catch (error: unknown) {
@@ -728,7 +728,7 @@ const deleteSubmission = async (submission: Submission) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/manage/cms/form-submissions/${submission.id}`);
+        await FormsService.deleteSubmission(String(submission.id));
         submissions.value = submissions.value.filter(s => s.id !== submission.id);
         toast.success.default(t('modules.cms.forms.submissions.messages.deleteSuccess'));
         fetchStatistics();
@@ -745,7 +745,7 @@ const handleBulkMarkRead = async () => {
     const selectedIds = selectedRows.map(row => row.original.id);
     
     try {
-        await Promise.all(selectedIds.map(id => api.put(`/manage/cms/form-submissions/${id}/read`)));
+        await Promise.all(selectedIds.map(id => FormsService.markSubmissionRead(String(id))));
         toast.success.default(t('modules.cms.forms.submissions.messages.bulkReadSuccess', { count: selectedIds.length }));
         fetchSubmissions(pagination.value?.current_page || 1);
         fetchStatistics();
@@ -769,7 +769,7 @@ const handleBulkArchive = async () => {
     if (!confirmed) return;
 
     try {
-        await Promise.all(selectedIds.map(id => api.put(`/manage/cms/form-submissions/${id}/archive`)));
+        await Promise.all(selectedIds.map(id => FormsService.archiveSubmission(String(id))));
         toast.success.default(t('modules.cms.forms.submissions.messages.bulkArchiveSuccess', { count: selectedIds.length }));
         fetchSubmissions(pagination.value?.current_page || 1);
         fetchStatistics();
@@ -793,7 +793,7 @@ const handleBulkDelete = async () => {
     if (!confirmed) return;
 
     try {
-        await Promise.all(selectedIds.map(id => api.delete(`/manage/cms/form-submissions/${id}`)));
+        await Promise.all(selectedIds.map(id => FormsService.deleteSubmission(String(id))));
         toast.success.default(t('modules.cms.forms.submissions.messages.bulkDeleteSuccess', { count: selectedIds.length }));
         fetchSubmissions(pagination.value?.current_page || 1);
         fetchStatistics();
@@ -826,7 +826,7 @@ const exportSubmissions = async (format = 'xlsx') => {
             ...(dateTo.value && { date_to: dateTo.value })
         });
         const baseUrl = apiConfig.externalUrl;
-        const url = `${baseUrl}/api/v1/manage/cms/forms/${formId.value}/submissions/export?${params.toString()}`;
+        const url = FormsService.submissionsExportUrl(String(formId.value), params.toString(), baseUrl);
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', `submissions-${formId.value}.${format}`);
@@ -844,7 +844,7 @@ const exportPdf = (submission: Submission) => {
     if (!submission) return;
     try {
         const baseUrl = apiConfig.externalUrl;
-        const exportUrl = `${baseUrl}/api/v1/manage/cms/form-submissions/${submission.id}/export-pdf`;
+        const exportUrl = FormsService.exportSubmissionPdfUrl(String(submission.id), baseUrl);
         window.open(exportUrl, '_blank');
     } catch (error: unknown) {
         logger.error('Failed to export PDF:', error);
@@ -896,12 +896,12 @@ let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 watch(search, () => {
     if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
     searchDebounceTimer = setTimeout(() => {
-        fetchSubmissions("1");
+        fetchSubmissions(1);
     }, 300);
 });
 
 watch([statusFilter, dateFrom, dateTo], () => {
-    fetchSubmissions("1");
+    fetchSubmissions(1);
 });
 
 onMounted(() => {

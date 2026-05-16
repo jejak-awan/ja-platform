@@ -1,59 +1,20 @@
 import { logger } from '@/shared/utils/logger';
 import { defineStore } from 'pinia';
-import api from '@/engine/api/client';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
-import type { CMSState, Content, SiteSettings } from '@/modules/Cms/types/cms';
+import { CmsService } from '@/modules/Cms/services/cmsService';
+import type { CMSState, Content } from '@/modules/Cms/types/cms';
 
-const PUBLIC_SETTINGS_CACHE_KEY = 'public_settings_snapshot_v1';
-
-const defaultSiteSettings = (): SiteSettings => ({
-    site_name: 'JA-Platform',
-    site_description: 'Jejakawan',
-    site_url: '',
-    admin_email: '',
-    site_version: 'v1.0',
-    site_logo: '',
-    site_favicon: '/favicon.svg'
-});
-
-const readCachedPublicSettings = (): SiteSettings | null => {
-    if (typeof window === 'undefined') return null;
-    try {
-        const raw = window.sessionStorage.getItem(PUBLIC_SETTINGS_CACHE_KEY);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null;
-        return { ...defaultSiteSettings(), ...(parsed as Record<string, unknown>) };
-    } catch {
-        return null;
-    }
-};
-
-const writeCachedPublicSettings = (settings: SiteSettings): void => {
-    if (typeof window === 'undefined') return;
-    try {
-        window.sessionStorage.setItem(PUBLIC_SETTINGS_CACHE_KEY, JSON.stringify(settings));
-    } catch {
-        // ignore storage quota / privacy mode errors
-    }
-};
 
 export const useCmsStore = defineStore('cms', {
     state: (): CMSState => ({
         contents: [],
         categories: [],
-        tags: [],
-        media: [],
         settings: {}, // Store settings by group or flat key-value
-        siteSettings: readCachedPublicSettings() ?? defaultSiteSettings(),
         currentContent: null,
         loading: false,
         loadingGroups: {}, // To track loading state for specific settings groups
         settingsPromises: {}, // To store promises for ongoing settings group fetches
-        publicSettingsPromise: null, // Promise for public settings fetch
-        publicSettingsLoaded: readCachedPublicSettings() !== null, // Flag to track if public settings were fetched
-        themeMode: 'system', // 'light', 'dark', 'system'
-        isDarkMode: false,
+        publicSettingsLoaded: false,
     }),
 
     actions: {
@@ -81,7 +42,7 @@ export const useCmsStore = defineStore('cms', {
             // Create and store the promise for this fetch operation
             const promise = (async () => {
                 try {
-                    const response = await api.get(`/manage/cms/settings/group/${group}`);
+                    const response = await CmsService.settingsGroup(group);
                     const settingsData = response.data || {};
                     
                     // Only update if there are actual new keys or changed values to prevent reactive thrashing
@@ -104,45 +65,11 @@ export const useCmsStore = defineStore('cms', {
             return promise;
         },
 
-        async fetchPublicSettings(options: { force?: boolean } = {}) {
-            // If already loading, return existing promise
-            if (this.publicSettingsPromise && !options.force) {
-                return this.publicSettingsPromise;
-            }
-
-            // Create and store the promise for this fetch operation
-            this.publicSettingsPromise = (async () => {
-                try {
-                    const response = await api.get('/public/system/settings');
-                    const settingsData = response.data || {};
-                    
-                    // Stability: Check for actual differences before triggering reactivity
-                    const currentSettings = this.siteSettings as Record<string, unknown>;
-                    const incomingSettings = settingsData as Record<string, unknown>;
-                    const hasChanges = Object.entries(incomingSettings).some(([key, value]) => currentSettings[key] !== value);
-
-                    if (hasChanges) {
-                        this.siteSettings = { ...this.siteSettings, ...settingsData };
-                    }
-                    writeCachedPublicSettings(this.siteSettings);
-                    
-                    return this.siteSettings;
-                } catch (error: unknown) {
-                    logger.error('Error fetching public settings:', error);
-                    return this.siteSettings;
-                } finally {
-                    this.publicSettingsLoaded = true; // Always mark as loaded to prevent loops
-                    this.publicSettingsPromise = null;
-                }
-            })();
-
-            return this.publicSettingsPromise;
-        },
 
         async fetchContents(params: Record<string, unknown> = {}) {
             this.loading = true;
             try {
-                const response = await api.get('/public/cms/contents', { params });
+                const response = await CmsService.publicContents(params);
                 const { data } = parseResponse(response);
                 this.contents = ensureArray(data);
                 return { data: this.contents };
@@ -158,7 +85,7 @@ export const useCmsStore = defineStore('cms', {
         async fetchContent(slug: string): Promise<Content | null> {
             this.loading = true;
             try {
-                const response = await api.get(`/public/cms/contents/${slug}`);
+                const response = await CmsService.publicContent(slug);
                 this.currentContent = response.data;
                 return response.data;
             } catch (error: unknown) {
@@ -171,123 +98,31 @@ export const useCmsStore = defineStore('cms', {
 
         async fetchCategories() {
             try {
-                const response = await api.get('/public/cms/categories');
+                const response = await CmsService.publicCategories();
                 const { data } = parseResponse(response);
                 this.categories = ensureArray(data);
                 return this.categories;
             } catch (error: unknown) {
                 logger.error('Error fetching categories:', error);
                 this.categories = [];
-                return [];
             }
         },
-
-        async fetchTags() {
+        
+        async fetchPublicSettings() {
+            if (this.publicSettingsLoaded) return this.settings;
             try {
-                const response = await api.get('/public/library/tags');
-                const { data } = parseResponse(response);
-                this.tags = ensureArray(data);
-                return this.tags;
+                // Fetch basic CMS and Layout settings as "public" settings
+                await Promise.all([
+                    this.fetchSettingsGroup('cms'),
+                    this.fetchSettingsGroup('layout')
+                ]);
+                this.publicSettingsLoaded = true;
+                return this.settings;
             } catch (error: unknown) {
-                logger.error('Error fetching tags:', error);
-                this.tags = [];
-                return [];
+                logger.error('Error fetching public settings:', error);
+                return this.settings;
             }
         },
 
-        async initTheme() {
-            const THEME_KEY = 'admin-dark-mode';
-
-            // 1. Detect system preference
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-            // 2. Load from localStorage or fallback to system
-            const saved = localStorage.getItem(THEME_KEY) || 'system';
-            this.themeMode = saved as 'light' | 'dark' | 'system';
-
-            // 3. Resolve actual dark mode state
-            this.isDarkMode = saved === 'dark' || (saved === 'system' && prefersDark);
-
-            // 4. Apply to document
-            this.applyThemeToDocument();
-
-            // 5. Watch for system changes
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                if (this.themeMode === 'system') {
-                    this.isDarkMode = e.matches;
-                    this.applyThemeToDocument();
-                }
-            });
-
-            // 6. Try to load from backend (if authenticated)
-            await this.loadThemePreferences();
-        },
-
-        async loadThemePreferences() {
-            if (!this.isAuthenticatedLocally()) return;
-            try {
-                const response = await api.get('/profile/preferences');
-                const backendMode = response.data?.dark_mode;
-                const isValidThemeMode = backendMode === 'light' || backendMode === 'dark' || backendMode === 'system';
-                if (isValidThemeMode) {
-                    if (this.themeMode !== backendMode) {
-                        this.setThemeMode(backendMode, false); // Don't sync back to backend
-                    }
-                }
-            } catch (error: unknown) {
-                const message = error instanceof Error ? error.message : String(error);
-                logger.debug('Failed to load theme preferences:', { message });
-            }
-        },
-
-        async syncThemeWithBackend(mode: string) {
-            if (!this.isAuthenticatedLocally()) return;
-            try {
-                await api.put('/profile/preferences', { dark_mode: mode });
-            } catch (error: unknown) {
-                const message = error instanceof Error ? error.message : String(error);
-                logger.debug('Theme sync failed:', { message });
-            }
-        },
-
-        setThemeMode(mode: 'light' | 'dark' | 'system', syncToBackend = true) {
-            const THEME_KEY = 'admin-dark-mode';
-
-            // Add no-transitions class to prevent flashing
-            document.documentElement.classList.add('no-transitions');
-
-            this.themeMode = mode;
-            localStorage.setItem(THEME_KEY, mode);
-
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            this.isDarkMode = mode === 'dark' || (mode === 'system' && prefersDark);
-
-            this.applyThemeToDocument();
-
-            if (syncToBackend) {
-                this.syncThemeWithBackend(mode);
-            }
-
-            // Remove no-transitions class after short delay
-            setTimeout(() => {
-                document.documentElement.classList.remove('no-transitions');
-            }, 50);
-        },
-
-        toggleDarkMode(value?: boolean) {
-            // If value is provided (e.g. from a switch), use it. 
-            // Otherwise, toggle current state.
-            const isDark = value !== undefined ? value : !this.isDarkMode;
-            const next = isDark ? 'dark' : 'light';
-            this.setThemeMode(next);
-        },
-
-        applyThemeToDocument() {
-            if (this.isDarkMode) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        },
     },
 });

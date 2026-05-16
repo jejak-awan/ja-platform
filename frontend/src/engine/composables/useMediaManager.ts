@@ -3,9 +3,11 @@ import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import api from '@/engine/api/client';
+import { MediaService } from '@/modules/Media/services/mediaService';
+import { LibraryService } from '@/modules/Library/services/libraryService';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
-import type { Media, MediaFolder, Tag, MediaStats } from '@/modules/Cms/types/cms';
+import type { Media, MediaFolder, MediaStats } from '@/modules/Media/types/media';
+import type { Tag } from '@/modules/Library/types/taxonomy';
 import type { PaginationData } from '@/shared/utils/responseParser';
 
 export function useMediaManager() {
@@ -20,9 +22,9 @@ export function useMediaManager() {
     const folders = ref<MediaFolder[]>([]);
     const treeFolders = ref<MediaFolder[]>([]);
     const isTrashMode = ref(false);
-    const selectedFolder = ref<number | null>(null);
-    const selectedMedia = ref<number[]>([]);
-    const selectedFolders = ref<number[]>([]);
+    const selectedFolder = ref<string | number | null>(null);
+    const selectedMedia = ref<(string | number)[]>([]);
+    const selectedFolders = ref<(string | number)[]>([]);
     const pagination = ref<PaginationData | null>(null);
     const statistics = ref<MediaStats | null>(null);
     const search = ref('');
@@ -39,7 +41,7 @@ export function useMediaManager() {
     const bulkAction = ref('');
     const bulkProcessing = ref(false);
     const bulkProgress = ref(0);
-    const expandedFolders = ref(new Set<number>());
+    const expandedFolders = ref(new Set<string | number>());
 
     // Modal State
     const showUploadModal = ref(false);
@@ -54,9 +56,9 @@ export function useMediaManager() {
     const breadcrumbs = computed(() => {
         if (selectedFolder.value === null) return [];
         const crumbs = [];
-        let currentId: number | null | undefined = selectedFolder.value;
+        let currentId: string | number | null | undefined = selectedFolder.value;
         while (currentId) {
-            const folder: MediaFolder | undefined = folders.value.find(f => f.id === currentId);
+            const folder: MediaFolder | undefined = folders.value.find((f: MediaFolder) => f.id === currentId);
             if (folder) {
                 crumbs.unshift({ id: folder.id, name: folder.name });
                 currentId = folder.parent_id;
@@ -69,14 +71,14 @@ export function useMediaManager() {
 
     const currentFolders = computed(() => {
         if (isTrashMode.value) {
-            return folders.value.filter(f => f.is_trashed);
+            return folders.value.filter((f: MediaFolder) => f.is_trashed);
         }
         if (selectedFolder.value === null) {
-            return treeFolders.value.filter(f => !f.is_trashed);
+            return treeFolders.value.filter((f: MediaFolder) => !f.is_trashed);
         }
-        const current = folders.value.find(f => f.id === selectedFolder.value);
+        const current = folders.value.find((f: MediaFolder) => f.id === selectedFolder.value);
         if (!current || current.is_trashed) return [];
-        return (current.children || []).filter(f => !f.is_trashed);
+        return (current.children || []).filter((f: MediaFolder) => !f.is_trashed);
     });
 
     const fetchMedia = async () => {
@@ -103,7 +105,7 @@ export function useMediaManager() {
             if (dateFromFilter.value) params.date_from = dateFromFilter.value;
             if (dateToFilter.value) params.date_to = dateToFilter.value;
 
-            const response = await api.get('/manage/media', { params });
+            const response = await MediaService.list(params);
             const { data, pagination: paginationData } = parseResponse(response);
             mediaList.value = ensureArray(data);
             if (paginationData) pagination.value = paginationData;
@@ -116,7 +118,7 @@ export function useMediaManager() {
 
     const fetchStatistics = async () => {
         try {
-            const response = await api.get('/manage/media/statistics');
+            const response = await MediaService.statistics();
             statistics.value = response.data;
         } catch {
             // logger.error('Failed to fetch media statistics:', error);
@@ -125,7 +127,7 @@ export function useMediaManager() {
 
     const fetchFolders = async () => {
         try {
-            const response = await api.get('/manage/folders', { params: { tree: true, trashed: 'with' } });
+            const response = await MediaService.listFolders({ tree: true, trashed: 'with' });
             const { data } = parseResponse(response);
             treeFolders.value = ensureArray(data);
 
@@ -147,9 +149,7 @@ export function useMediaManager() {
 
     const fetchTags = async () => {
         try {
-            const response = await api.get('/manage/library/tags', {
-                params: { usage: 'media' }
-            });
+            const response = await LibraryService.listTags({ usage: 'media' });
             tags.value = response.data || [];
         } catch (error) {
             logger.error('Failed to fetch tags:', error);
@@ -158,16 +158,15 @@ export function useMediaManager() {
 
     const fetchFilters = async () => {
         try {
-            const response = await api.get('/manage/media/filters');
+            const response = await MediaService.filters();
             const payload = response.data as { success?: boolean; authors?: { id: string | string; name: string }[] };
             if (payload.success === false) return;
             const authors = Array.isArray(payload.authors)
                 ? payload.authors
-                    .map((author) => ({
-                        id: Number(author.id),
+                    .map((author: { id: string | number; name: string }) => ({
+                        id: String(author.id),
                         name: author.name
                     }))
-                    .filter((author) => !Number.isNaN(author.id))
                 : [];
             availableFilters.value = {
                 ...availableFilters.value,
@@ -178,7 +177,7 @@ export function useMediaManager() {
         }
     };
 
-    const toggleFolder = (folderId: number) => {
+    const toggleFolder = (folderId: string | number) => {
         if (expandedFolders.value.has(folderId)) {
             expandedFolders.value.delete(folderId);
         } else {
@@ -186,7 +185,7 @@ export function useMediaManager() {
         }
     };
 
-    const selectFolder = (id: string | null) => {
+    const selectFolder = (id: string | number | null) => {
         isTrashMode.value = false;
         selectedFolder.value = id;
     };
@@ -200,10 +199,10 @@ export function useMediaManager() {
 
     const restoreMedia = async (media: Media) => {
         try {
-            await api.post(`/manage/cms/media/${media.id}/restore`);
+            await MediaService.restore(String(media.id));
             await fetchMedia();
             fetchStatistics();
-            toast.success.action(t('modules.core.media.messages.restoreSuccess') || 'Media restored successfully');
+            toast.success.action(t('modules.system.media.messages.restoreSuccess') || 'Media restored successfully');
         } catch (error: unknown) {
             toast.error.fromResponse(error);
         }
@@ -211,10 +210,10 @@ export function useMediaManager() {
 
     const restoreFolder = async (folder: MediaFolder) => {
         try {
-            await api.post(`/manage/cms/media-folders/${folder.id}/restore`);
+            await MediaService.restoreFolder(String(folder.id));
             await fetchFolders();
             fetchStatistics();
-            toast.success.action(t('modules.core.media.messages.folderRestoreSuccess') || 'Folder restored successfully');
+            toast.success.action(t('modules.system.media.messages.folderRestoreSuccess') || 'Folder restored successfully');
         } catch (error: unknown) {
             toast.error.fromResponse(error);
         }
@@ -222,19 +221,19 @@ export function useMediaManager() {
 
     const emptyTrash = async () => {
         const confirmed = await confirmDialog({
-            title: t('modules.core.media.confirm.emptyTrashTitle'),
-            message: t('modules.core.media.confirm.emptyTrashMessage'),
+            title: t('modules.system.media.confirm.emptyTrashTitle'),
+            message: t('modules.system.media.confirm.emptyTrashMessage'),
             variant: 'danger',
-            confirmText: t('modules.core.media.confirm.delete'),
-            cancelText: t('modules.core.media.confirm.cancel')
+            confirmText: t('modules.system.media.confirm.delete'),
+            cancelText: t('modules.system.media.confirm.cancel')
         });
         if (!confirmed) return;
         try {
-            await api.post('/manage/media/empty-trash');
+            await MediaService.emptyTrash();
             await fetchMedia();
             await fetchFolders();
             fetchStatistics();
-            toast.success.action(t('modules.core.media.messages.emptyTrashSuccess') || 'Trash emptied successfully');
+            toast.success.action(t('modules.system.media.messages.emptyTrashSuccess') || 'Trash emptied successfully');
         } catch (error: unknown) {
             toast.error.fromResponse(error);
         }
@@ -243,17 +242,17 @@ export function useMediaManager() {
     const deleteMedia = async (media: Media, isPermanentArg?: boolean) => {
         const isPermanent = isPermanentArg ?? isTrashMode.value;
         const confirmed = await confirmDialog({
-            title: isPermanent ? t('modules.core.media.confirm.deletePermanentTitle') : t('modules.core.media.confirm.deleteTitle'),
-            message: isPermanent ? t('modules.core.media.confirm.deletePermanentMessage') : t('modules.core.media.confirm.deleteMessage'),
+            title: isPermanent ? t('modules.system.media.confirm.deletePermanentTitle') : t('modules.system.media.confirm.deleteTitle'),
+            message: isPermanent ? t('modules.system.media.confirm.deletePermanentMessage') : t('modules.system.media.confirm.deleteMessage'),
             variant: 'danger',
-            confirmText: t('modules.core.media.confirm.delete'),
-            cancelText: t('modules.core.media.confirm.cancel')
+            confirmText: t('modules.system.media.confirm.delete'),
+            cancelText: t('modules.system.media.confirm.cancel')
         });
         if (!confirmed) return;
         try {
             const params = isPermanent ? { permanent: 1 } : {};
-            await api.delete(`/manage/media/${media.id}`, { params });
-            toast.success.action(t('modules.core.media.messages.deleteSuccess') || 'Media deleted successfully');
+            await MediaService.delete(String(media.id), params);
+            toast.success.action(t('modules.system.media.messages.deleteSuccess') || 'Media deleted successfully');
             await fetchMedia();
             fetchStatistics();
         } catch (error: unknown) {
@@ -264,17 +263,20 @@ export function useMediaManager() {
     const deleteFolder = async (folder: MediaFolder, isPermanentArg?: boolean) => {
         const isPermanent = isPermanentArg ?? isTrashMode.value;
         const confirmed = await confirmDialog({
-            title: isPermanent ? t('modules.core.media.confirm.deletePermanentTitle') : t('modules.core.media.confirm.deleteTitle'),
-            message: isPermanent ? t('modules.core.media.confirm.deletePermanentMessage') : t('modules.core.media.confirm.deleteMessage'),
+            title: isPermanent ? t('modules.system.media.confirm.deletePermanentTitle') : t('modules.system.media.confirm.deleteTitle'),
+            message: isPermanent ? t('modules.system.media.confirm.deletePermanentMessage') : t('modules.system.media.confirm.deleteMessage'),
             variant: 'danger',
-            confirmText: t('modules.core.media.confirm.delete'),
-            cancelText: t('modules.core.media.confirm.delete')
+            confirmText: t('modules.system.media.confirm.delete'),
+            cancelText: t('modules.system.media.confirm.delete')
         });
         if (!confirmed) return;
         try {
-            const url = isPermanent ? `/manage/cms/media-folders/${folder.id}/force-delete` : `/manage/cms/media-folders/${folder.id}/delete`;
-            await api.post(url);
-            toast.success.action(t('modules.core.media.messages.folderDeleted') || 'Folder deleted successfully');
+            if (isPermanent) {
+                await MediaService.forceDeleteFolder(String(folder.id));
+            } else {
+                await MediaService.deleteFolder(String(folder.id));
+            }
+            toast.success.action(t('modules.system.media.messages.folderDeleted') || 'Folder deleted successfully');
             await fetchFolders();
             if (selectedFolder.value === folder.id) selectedFolder.value = folder.parent_id || null;
             fetchStatistics();
@@ -321,25 +323,25 @@ export function useMediaManager() {
         selectedFolders.value = [];
     };
 
-    const handleBulkAction = async (action: string, options: { folderId?: number | null; altText?: string } = {}) => {
+    const handleBulkAction = async (action: string, options: { folderId?: string | number | null; altText?: string } = {}) => {
         if (!action || (selectedMedia.value.length === 0 && selectedFolders.value.length === 0)) return;
 
         if (action === 'delete') {
             const confirmed = await confirmDialog({
-                title: t('modules.core.media.confirm.deleteTitle'),
-                message: t('modules.core.media.confirm.deleteMessage'),
+                title: t('modules.system.media.confirm.deleteTitle'),
+                message: t('modules.system.media.confirm.deleteMessage'),
                 variant: 'danger',
-                confirmText: t('modules.core.media.confirm.delete'),
-                cancelText: t('modules.core.media.confirm.cancel')
+                confirmText: t('modules.system.media.confirm.delete'),
+                cancelText: t('modules.system.media.confirm.cancel')
             });
             if (!confirmed) return;
             bulkProcessing.value = true;
             try {
-                await api.post('/manage/media/bulk', { action: 'delete', media_ids: selectedMedia.value });
+                await MediaService.bulk({ action: 'delete', media_ids: selectedMedia.value });
                 await fetchMedia();
                 fetchStatistics();
                 selectedMedia.value = [];
-                toast.success.action(t('modules.core.media.messages.bulkDeleted') || 'Items deleted successfully');
+                toast.success.action(t('modules.system.media.messages.bulkDeleted') || 'Items deleted successfully');
             } catch (error: unknown) {
                 toast.error.fromResponse(error);
             } finally {
@@ -348,17 +350,17 @@ export function useMediaManager() {
         } else if (action === 'restore' || action === 'delete_permanent') {
             if (action === 'delete_permanent') {
                 const confirmed = await confirmDialog({
-                    title: t('modules.core.media.confirm.deletePermanentTitle'),
-                    message: t('modules.core.media.confirm.deletePermanentMessage'),
+                    title: t('modules.system.media.confirm.deletePermanentTitle'),
+                    message: t('modules.system.media.confirm.deletePermanentMessage'),
                     variant: 'danger',
-                    confirmText: t('modules.core.media.confirm.delete'),
-                    cancelText: t('modules.core.media.confirm.cancel')
+                    confirmText: t('modules.system.media.confirm.delete'),
+                    cancelText: t('modules.system.media.confirm.cancel')
                 });
                 if (!confirmed) return;
             }
             bulkProcessing.value = true;
             try {
-                await api.post('/manage/media/bulk', {
+                await MediaService.bulk({
                     action: action === 'restore' ? 'restore' : 'delete_permanent',
                     media_ids: selectedMedia.value,
                     folder_ids: selectedFolders.value
@@ -371,8 +373,8 @@ export function useMediaManager() {
                 selectedFolders.value = [];
 
                 const successMsg = action === 'restore'
-                    ? (t('modules.core.media.messages.bulkRestored') || 'Items restored successfully')
-                    : (t('modules.core.media.messages.bulkDeletedPermanent') || 'Items permanently deleted');
+                    ? (t('modules.system.media.messages.bulkRestored') || 'Items restored successfully')
+                    : (t('modules.system.media.messages.bulkDeletedPermanent') || 'Items permanently deleted');
 
                 toast.success.action(successMsg);
             } catch (error: unknown) {
@@ -383,14 +385,14 @@ export function useMediaManager() {
         } else if (action === 'move') {
             bulkProcessing.value = true;
             try {
-                await api.post('/manage/media/bulk', {
+                await MediaService.bulk({
                     action: 'move',
                     media_ids: selectedMedia.value,
                     folder_id: options.folderId,
                 });
                 await fetchMedia();
                 selectedMedia.value = [];
-                toast.success.action(t('modules.core.media.messages.bulkMoved') || 'Items moved successfully');
+                toast.success.action(t('modules.system.media.messages.bulkMoved') || 'Items moved successfully');
             } catch (error: unknown) {
                 toast.error.fromResponse(error);
             } finally {
@@ -399,14 +401,14 @@ export function useMediaManager() {
         } else if (action === 'update_alt') {
             bulkProcessing.value = true;
             try {
-                await api.post('/manage/media/bulk', {
+                await MediaService.bulk({
                     action: 'update_alt',
                     media_ids: selectedMedia.value,
                     alt_text: options.altText,
                 });
                 await fetchMedia();
                 selectedMedia.value = [];
-                toast.success.action(t('modules.core.media.messages.bulkAltUpdated') || 'Alt text updated successfully');
+                toast.success.action(t('modules.system.media.messages.bulkAltUpdated') || 'Alt text updated successfully');
             } catch (error: unknown) {
                 toast.error.fromResponse(error);
             } finally {
@@ -415,7 +417,7 @@ export function useMediaManager() {
         } else if (action === 'download') {
             bulkProcessing.value = true;
             try {
-                const response = await api.post('/manage/media/download-zip', { ids: selectedMedia.value }, { responseType: 'blob' });
+                const response = await MediaService.downloadZip(selectedMedia.value);
                 const blob = new Blob([response.data], { type: 'application/zip' });
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
@@ -426,7 +428,7 @@ export function useMediaManager() {
                 link.remove();
                 window.URL.revokeObjectURL(url);
                 selectedMedia.value = [];
-                toast.success.action(t('modules.core.media.messages.bulkDownloadSuccess') || 'Media downloaded successfully');
+                toast.success.action(t('modules.system.media.messages.bulkDownloadSuccess') || 'Media downloaded successfully');
             } catch (error: unknown) {
                 toast.error.fromResponse(error);
             } finally {
@@ -503,7 +505,7 @@ export function useMediaManager() {
     const copyMediaUrl = (media: Media) => {
         if (media.url) {
             navigator.clipboard.writeText(media.url);
-            toast.success.action(t('modules.core.media.messages.urlCopied') || 'URL copied to clipboard');
+            toast.success.action(t('modules.system.media.messages.urlCopied') || 'URL copied to clipboard');
         }
     };
 

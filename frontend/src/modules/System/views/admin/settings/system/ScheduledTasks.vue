@@ -578,7 +578,7 @@ const runCommandDialogOpen = ref(false);
 const selectedTaskOutput = ref('');
 const editingTask = ref<ScheduledTask | null>(null);
 const saving = ref(false);
-const running = ref<number | null>(null);
+const running = ref<string | null>(null);
 const allowedCommands = ref<AllowedCommand[]>([]);
 const cronPreset = ref('');
 const errors = ref<Record<string, string | string[]>>({});
@@ -658,7 +658,7 @@ const copyCronScript = async () => {
 };
 
 // Selection & Bulk Actions
-const selectedTasks = ref<number[]>([]);
+const selectedTasks = ref<string[]>([]);
 const bulkActionSelection = ref('');
 
 const columnHelper = createColumnHelper<ScheduledTask>();
@@ -776,8 +776,7 @@ const table = useVueTable({
 // Sync selectedTasks with rowSelection
 watch(rowSelection, (newSelection: RowSelectionState) => {
     selectedTasks.value = Object.keys(newSelection)
-        .filter(key => newSelection[key])
-        .map(id => Number(id));
+        .filter(key => newSelection[key]);
 }, { deep: true });
 
 // Clear selection when tasks change
@@ -903,7 +902,7 @@ async function fetchAllowedCommands() : Promise<void> {
 }
 
 const debouncedSearch = debounce(() => {
-    fetchTasks("1");
+    fetchTasks(1);
 }, 300);
 
 const changePage = (page: number) => {

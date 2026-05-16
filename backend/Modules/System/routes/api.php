@@ -34,10 +34,13 @@ Route::prefix('v1')->group(function (): void {
     Route::prefix('manage/system')->middleware(['auth:sanctum'])->group(function (): void {
         Route::get('dashboard', [DashboardController::class, 'admin']);
 
+        Route::get('users/stats', [UserController::class, 'stats']);
         Route::apiResource('users', UserController::class);
+        Route::get('roles/permissions', [RoleController::class, 'permissions']);
         Route::apiResource('roles', RoleController::class);
 
         Route::get('settings/group/{group}', [SettingController::class, 'getGroup']);
+        Route::post('settings/test-storage', [SettingController::class, 'testStorage']);
         Route::apiResource('settings', SettingController::class);
 
         Route::apiResource('plugins', PluginController::class);

@@ -1,12 +1,6 @@
 /**
  * Form validation schemas index
- * Re-exports all schemas for easy importing
- * 
- * Usage:
- * import { loginSchema, createUserSchema, contentSchema } from '@/shared/schemas';
+ * Re-exports shared utility schemas
  */
-export * from './auth';
-export * from './users';
-export * from './content';
 export * from './common';
 export * from './models';

@@ -473,7 +473,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import api from '@/engine/api/client';
+import { FormsService } from '@/modules/Forms/services/formsService';
 import { useToast } from '@/shared/composables/useToast';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import { Badge, Button, Card, Checkbox, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, DataTable } from '@/shared/components/ui';
@@ -509,7 +509,7 @@ import TrendingUp from 'lucide-vue-next/dist/esm/icons/trending-up.js';
 import LayoutTemplate from 'lucide-vue-next/dist/esm/icons/layout-template.js';
 import Database from 'lucide-vue-next/dist/esm/icons/database.js';
 
-import type { Form } from '@/modules/Cms/types/forms';
+import type { Form } from '@/modules/Forms/types/forms';
 
 interface FormFilters {
     trashed?: string;
@@ -749,7 +749,7 @@ const fetchForms = async () => {
             params.trashed = trashedFilter.value;
         }
 
-        const response = await api.get('/manage/forms', { params });
+        const response = await FormsService.list(params);
         const { data } = parseResponse<Form>(response);
         forms.value = ensureArray<Form>(data);
     } catch (error: unknown) {
@@ -770,7 +770,7 @@ const viewSubmissions = (form: Form) => {
 
 const toggleFormStatus = async (form: Form) => {
     try {
-        const response = await api.put(`/manage/cms/forms/${form.id}`, {
+        const response = await FormsService.update(String(form.id), {
             is_active: !form.is_active
         });
         const updatedForm = (response.data) as Form;
@@ -796,7 +796,7 @@ const deleteForm = async (form: Form) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/manage/cms/forms/${form.id}`);
+        await FormsService.delete(String(form.id));
         toast.success.delete('Form');
         fetchForms();
     } catch (error: unknown) {
@@ -817,7 +817,7 @@ const handleDuplicate = async (withSubmissions: boolean) => {
     
     try {
         duplicating.value = true;
-        await api.post(`/manage/cms/forms/${duplicatingForm.value.id}/duplicate`, {
+        await FormsService.duplicate(String(duplicatingForm.value.id), {
             with_submissions: withSubmissions
         });
         toast.success.duplicate('Form');
@@ -842,7 +842,7 @@ const restoreForm = async (form: Form) => {
     if (!confirmed) return;
 
     try {
-        await api.post(`/manage/cms/forms/${form.id}/restore`);
+        await FormsService.restore(String(form.id));
         toast.success.restore('Form');
         fetchForms();
     } catch (error: unknown) {
@@ -862,7 +862,7 @@ const forceDeleteForm = async (form: Form) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/manage/cms/forms/${form.id}/force-delete`);
+        await FormsService.forceDelete(String(form.id));
         toast.success.action(t('common.messages.success.deleted', { item: 'Form' }));
         fetchForms();
     } catch (error: unknown) {
@@ -894,7 +894,7 @@ const handleBulkDelete = async () => {
 
 const performBulkAction = async () => {
     try {
-        await api.delete('/manage/forms/bulk-delete', { data: { ids: selectedIds.value } });
+        await FormsService.bulkAction({ ids: selectedIds.value, action: 'delete' });
         toast.success.default(t('modules.cms.forms.submissions.messages.bulkDeleteSuccess', { count: selectedIds.value.length }));
         selectedIds.value = [];
         fetchForms();

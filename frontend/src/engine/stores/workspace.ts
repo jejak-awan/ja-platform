@@ -4,10 +4,8 @@ import { ref, computed } from 'vue';
 export type WorkspaceContextType = 'system' | 'unit' | 'foundation' | 'authority';
 
 export const useWorkspaceStore = defineStore('workspace', () => {
-    const activeWorkspaceId = ref<number | null>(
-        sessionStorage.getItem('active_workspace_id') 
-            ? Number(sessionStorage.getItem('active_workspace_id')) 
-            : null
+    const activeWorkspaceId = ref<string | number | null>(
+        sessionStorage.getItem('active_workspace_id') || null
     );
     const activeWorkspaceName = ref<string | null>(sessionStorage.getItem('active_workspace_name') || null);
     const activeContextType = ref<WorkspaceContextType>(
@@ -20,7 +18,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     const activeId = computed(() => activeWorkspaceId.value || 0);
     const context = computed(() => activeContextType.value);
 
-    async function setWorkspaceContext(id: string | null, type: WorkspaceContextType = 'unit', name: string | null = null, silent = false) {
+    async function setWorkspaceContext(id: string | number | null, type: WorkspaceContextType = 'unit', name: string | null = null, silent = false) {
         if (activeWorkspaceId.value === id && activeContextType.value === type && !silent) return;
 
         switching.value = true;
@@ -51,7 +49,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     }
 
     async function setSystemContext(silent = false) {
-        await setWorkspaceContext(0, 'system', 'System', silent);
+        await setWorkspaceContext('0', 'system', 'System', silent);
     }
 
     function initWorkspace() {
@@ -59,12 +57,12 @@ export const useWorkspaceStore = defineStore('workspace', () => {
         const savedContext = sessionStorage.getItem('active_workspace_context') as WorkspaceContextType;
         
         if (savedId !== null && savedContext) {
-            activeWorkspaceId.value = Number(savedId);
+            activeWorkspaceId.value = savedId;
             activeContextType.value = savedContext;
             activeWorkspaceName.value = sessionStorage.getItem('active_workspace_name');
         } else {
             activeContextType.value = 'system';
-            activeWorkspaceId.value = 0;
+            activeWorkspaceId.value = '0';
         }
     }
 

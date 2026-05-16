@@ -87,7 +87,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
      * Send test email
      * Sends a test email to the specified address
      */
-    public function sendTest(Request $request): \Illuminate\Http\JsonResponse
+    public function sendTestEmail(Request $request): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'to' => 'required|email',
@@ -202,7 +202,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
      * Get recent email logs
      * Returns recent email sending logs (from cache or log files)
      */
-    public function getRecentLogs(Request $request): \Illuminate\Http\JsonResponse
+    public function recentJournal(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             $limitRaw = $request->get('limit', 10);

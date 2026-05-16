@@ -5,9 +5,9 @@
   >
     <DialogContent class="sm:max-w-md">
       <DialogHeader>
-        <DialogTitle>{{ $t('modules.core.file_manager.modals.createFolder.title') }}</DialogTitle>
+        <DialogTitle>{{ $t('modules.system.file_manager.modals.createFolder.title') }}</DialogTitle>
         <DialogDescription>
-          {{ $t('modules.core.file_manager.modals.createFolder.placeholder') || 'Create a new folder to organize your digital assets.' }}
+          {{ $t('modules.system.file_manager.modals.createFolder.placeholder') || 'Create a new folder to organize your digital assets.' }}
         </DialogDescription>
       </DialogHeader>
 
@@ -17,13 +17,13 @@
       >
         <div class="grid gap-2">
           <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            {{ $t('modules.core.file_manager.modals.createFolder.name') || 'Folder Name' }} <span class="text-destructive">*</span>
+            {{ $t('modules.system.file_manager.modals.createFolder.name') || 'Folder Name' }} <span class="text-destructive">*</span>
           </label>
           <Input
             v-model="folderName"
             type="text"
             required
-            :placeholder="$t('modules.core.file_manager.modals.createFolder.placeholder')"
+            :placeholder="$t('modules.system.file_manager.modals.createFolder.placeholder')"
             class="col-span-3"
           />
         </div>
@@ -36,7 +36,7 @@
           class="rounded-xl h-10 px-5 border-border/60 hover:bg-accent/10 text-foreground font-bold transition-colors"
           @click="$emit('close')"
         >
-          {{ $t('modules.core.file_manager.modals.createFolder.cancel') || 'Cancel' }}
+          {{ $t('modules.system.file_manager.modals.createFolder.cancel') || 'Cancel' }}
         </Button>
         <Button
           :disabled="creating || !isValid"
@@ -48,7 +48,7 @@
             v-if="creating"
             class="w-4 h-4 mr-2 animate-spin"
           />
-          {{ creating ? $t('modules.core.file_manager.modals.createFolder.creating') : $t('modules.core.file_manager.modals.createFolder.create') }}
+          {{ creating ? $t('modules.system.file_manager.modals.createFolder.creating') : $t('modules.system.file_manager.modals.createFolder.create') }}
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -102,7 +102,7 @@ const handleSubmit = async () => {
     creating.value = true;
     clearErrors();
     try {
-        await api.post('/manage/file-manager/folder', {
+        await api.post('/manage/media/file-manager/folder', {
             name: folderName.value,
             path: props.path,
         });

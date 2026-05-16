@@ -21,18 +21,15 @@
     </div>
     
     <template v-else>
-      <!-- Page Body Content if available -->
-      <SafeHtml
-        v-if="pageData && pageData.body"
-        class="container mx-auto px-4 py-16 cms-content"
-        :html="pageData.body"
-        mode="cms"
-      />
+      <div class="flex-1">
+        <!-- Page Body Content if available -->
+        <SafeHtml
+          v-if="pageData && pageData.body"
+          class="container mx-auto px-4 py-16 cms-content"
+          :html="pageData.body"
+          mode="cms"
+        />
 
-      <div
-        v-else
-        class="flex-1"
-      >
         <!-- Header -->
         <section
           ref="headerSection"
@@ -168,10 +165,10 @@ import { ref, onMounted, nextTick, computed } from 'vue'
 import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue'
 import { useRouter } from 'vue-router'
 import { logger } from '@/shared/utils/logger'
-import { useTheme } from '@/shared/composables/useTheme'
+import { useTheme } from '@/modules/Cms/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
 import api from '@/engine/api/client'
-import { useThemeMotion } from '@/shared/composables/useThemeMotion'
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion'
 
 interface TeamMember {
     name: string;

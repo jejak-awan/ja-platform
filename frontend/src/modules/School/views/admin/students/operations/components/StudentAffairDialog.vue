@@ -189,7 +189,7 @@ import { parseResponse } from '@/shared/utils/responseParser';
 import type { Student } from '@/modules/School/types';
 
 interface AffairForm {
-    id?: number;
+    id?: string | number;
     student_id: string;
     type?: string;
     category?: string;
@@ -201,7 +201,7 @@ interface AffairForm {
     title?: string;
     level?: string;
     date: string;
-    staff_id?: number;
+    staff_id?: string | number;
 }
 
 const props = defineProps<{

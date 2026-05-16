@@ -66,7 +66,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, type Component } from 'vue';
 import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue';
-import { useTheme } from '@/shared/composables/useTheme';
+import { useTheme } from '@/modules/Cms/composables/useTheme';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import Monitor from 'lucide-vue-next/dist/esm/icons/monitor.js';
 import Tablet from 'lucide-vue-next/dist/esm/icons/tablet.js';

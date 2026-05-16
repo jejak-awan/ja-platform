@@ -264,7 +264,7 @@ const variables = ref([
 const fetchTemplate = async () => {
     loading.value = true;
     try {
-        const response = await api.get(`/manage/cms/email-templates/${templateId}`);
+        const response = await api.get(`/manage/system/email-templates/${templateId}`);
         const template = parseSingleResponse<Record<string, unknown>>(response) || {};
         
         form.value = {
@@ -298,7 +298,7 @@ const previewTemplate = async () => {
 
 const handleSendTest = async () => {
     try {
-        await api.post(`/manage/cms/email-templates/${templateId}/send-test`);
+        await api.post(`/manage/system/email-templates/${templateId}/send-test`);
         toast.success.action(t('features.email_templates.messages.send_test_success'));
     } catch (error: unknown) {
         logger.error('Failed to send test email:', error);
@@ -314,7 +314,7 @@ const handleSubmit = async () => {
     saving.value = true;
     clearErrors();
     try {
-        await api.put(`/manage/cms/email-templates/${templateId}`, form.value);
+        await api.put(`/manage/system/email-templates/${templateId}`, form.value);
         initialForm.value = JSON.parse(JSON.stringify(form.value));
         toast.success.update(t('features.email_templates.list.title'));
         router.push({ name: 'email-templates' });

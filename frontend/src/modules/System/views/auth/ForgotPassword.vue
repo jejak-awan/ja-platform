@@ -4,7 +4,7 @@
       Forgot password?
     </template>
     <template #subtitle>
-      {{ t('modules.core.auth.forgotPassword.subtitle') || 'Enter your email and we\'ll send you a reset link' }}
+      {{ t('modules.system.auth.forgotPassword.subtitle') || 'Enter your email and we\'ll send you a reset link' }}
     </template>
 
     <form
@@ -25,7 +25,7 @@
           required
           class="auth-input h-9 text-sm"
           :class="errors.email ? 'border-destructive/50 ring-destructive/20 focus:border-destructive' : ''"
-          :placeholder="t('modules.core.auth.login.emailPlaceholder')"
+          :placeholder="t('modules.system.auth.login.emailPlaceholder')"
         />
         <p
           v-if="errors.email"
@@ -64,11 +64,11 @@
         <span
           v-if="loading"
           class="text-xs"
-        >{{ t('modules.core.auth.verifyEmail.sending') }}</span>
+        >{{ t('modules.system.auth.verifyEmail.sending') }}</span>
         <span
           v-else
           class="text-xs"
-        >{{ t('modules.core.auth.forgotPassword.submit') }}</span>
+        >{{ t('modules.system.auth.forgotPassword.submit') }}</span>
       </Button>
 
       <div class="text-center text-[10px] text-muted-foreground mt-3">
@@ -77,7 +77,7 @@
           class="inline-flex items-center font-bold text-primary hover:text-primary/80 transition-all group"
         >
           <ArrowLeft class="mr-2 h-3 w-3 transition-transform group-hover:-translate-x-1" />
-          {{ t('modules.core.auth.forgotPassword.backToLogin') }}
+          {{ t('modules.system.auth.forgotPassword.backToLogin') }}
         </router-link>
       </div>
     </form>
@@ -89,7 +89,7 @@ import { ref, reactive, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/modules/System/stores/auth';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
-import { forgotPasswordSchema } from '@/shared/schemas/auth';
+import { forgotPasswordSchema } from '@/modules/System/schemas/auth';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import CaptchaWrapper, { type CaptchaPayload } from '@/modules/System/components/captcha/CaptchaWrapper.vue';

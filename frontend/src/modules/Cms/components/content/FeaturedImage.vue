@@ -66,7 +66,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
-import MediaPicker from '@/shared/components/media/MediaPicker.vue';
+import MediaPicker from '@/modules/Media/components/picker/MediaPicker.vue';
 import {
     Card,
     CardHeader,
@@ -79,8 +79,8 @@ import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import { useSystemStore } from '@/modules/System/stores/system';
 
-const coreStore = useSystemStore();
-const { settings } = storeToRefs(coreStore);
+const systemStore = useSystemStore();
+const { settings } = storeToRefs(systemStore);
 
 const maxUploadSizeMB = computed(() => {
     // Setting is in KB, convert to MB
@@ -90,7 +90,7 @@ const maxUploadSizeMB = computed(() => {
 
 onMounted(async () => {
     // Ensure media settings are loaded for the limits
-    await coreStore.fetchSettingsGroup('media');
+    await systemStore.fetchSettingsGroup('media');
 });
 
 defineProps<{

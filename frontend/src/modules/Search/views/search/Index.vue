@@ -124,7 +124,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
 import ChevronRight from 'lucide-vue-next/dist/esm/icons/chevron-right.js';
-import api from '@/engine/api/client';
+import { SearchService } from '@/modules/Search/services/searchService';
 
 const { t } = useI18n();
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
@@ -178,9 +178,7 @@ const performSearch = async () => {
     loading.value = true;
     
     try {
-        const response = await api.get('/manage/cms/search', {
-            params: { q: query.value },
-        });
+        const response = await SearchService.search({ q: query.value });
         const { data } = parseResponse(response);
         results.value = ensureArray(data);
         

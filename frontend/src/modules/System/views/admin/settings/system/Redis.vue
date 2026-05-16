@@ -1156,7 +1156,7 @@ const resolveCacheDriver = (value: unknown): string | null => {
 
 const getCacheDriverFromSettings = async (): Promise<string | null> => {
   try {
-    const response = await api.get('/manage/settings')
+    const response = await api.get('/manage/system/settings')
     const rows = response?.data
     if (!Array.isArray(rows)) return null
 

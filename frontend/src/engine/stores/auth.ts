@@ -78,7 +78,7 @@ export const useAuthStore = defineStore('auth', {
         async fetchUser() {
             this.loading = true;
             try {
-                const response = await api.get('/user');
+                const response = await api.get('/public/system/auth/me');
                 this.user = response.data;
                 this.isAuthenticated = true;
             } catch (error) {
@@ -110,6 +110,7 @@ export const useAuthStore = defineStore('auth', {
         },
 
         hasPermission(permissionName: string): boolean {
+            if (this.hasRole("super")) return true;
             return this.user?.permissions.some(p => p.name === permissionName) ?? false;
         },
 

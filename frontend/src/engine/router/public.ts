@@ -23,13 +23,13 @@ const routes: Array<RouteRecordRaw> = [
         meta: { guestOnly: true, authContext: 'system' },
     },
     {
-        path: '/forgot-password',
+        path: '/public/system/auth/forgot-password',
         name: 'forgot-password',
         component: () => import('@/modules/System/views/auth/ForgotPassword.vue'),
         meta: { guestOnly: true },
     },
     {
-        path: '/reset-password',
+        path: '/public/system/auth/reset-password',
         name: 'reset-password',
         component: () => import('@/modules/System/views/auth/ResetPassword.vue'),
         meta: { guestOnly: true },

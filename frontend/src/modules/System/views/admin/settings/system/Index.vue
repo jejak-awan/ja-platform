@@ -2,7 +2,7 @@
   <div>
     <div class="mb-6">
       <h1 class="text-2xl font-bold text-foreground">
-        {{ t('modules.core.system.info.title') }}
+        {{ t('modules.system.system.info.title') }}
       </h1>
     </div>
 
@@ -30,13 +30,13 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-muted-foreground">
-                {{ t('modules.core.system.info.health.title') }}
+                {{ t('modules.system.system.info.health.title') }}
               </p>
               <p
                 class="text-2xl font-semibold mt-1"
                 :class="systemHealth === 'healthy' ? 'text-green-600' : systemHealth === 'warning' ? 'text-yellow-600' : 'text-red-600'"
               >
-                {{ systemHealth === 'healthy' ? t('modules.core.system.info.health.healthy') : systemHealth === 'warning' ? t('modules.core.system.info.health.warning') : t('modules.core.system.info.health.critical') }}
+                {{ systemHealth === 'healthy' ? t('modules.system.system.info.health.healthy') : systemHealth === 'warning' ? t('modules.system.system.info.health.warning') : t('modules.system.system.info.health.critical') }}
               </p>
             </div>
             <div>
@@ -59,10 +59,10 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-muted-foreground">
-                {{ t('modules.core.system.info.cache.title') }}
+                {{ t('modules.system.system.info.cache.title') }}
               </p>
               <p class="text-2xl font-semibold text-foreground">
-                {{ cacheStatus || t('modules.core.system.info.cache.active') }}
+                {{ cacheStatus || t('modules.system.system.info.cache.active') }}
               </p>
             </div>
           </div>
@@ -74,7 +74,7 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-muted-foreground">
-                {{ t('modules.core.system.info.uptime') }}
+                {{ t('modules.system.system.info.uptime') }}
               </p>
               <p class="text-2xl font-semibold text-foreground">
                 {{ formatUptime(systemInfo.uptime) }}
@@ -90,25 +90,25 @@
         <div class="lg:col-span-2 bg-card border border-border rounded-lg p-6">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-semibold text-foreground">
-              {{ t('modules.core.system.info.title') }}
+              {{ t('modules.system.system.info.title') }}
             </h2>
             <router-link
               to="/dash/settings?tab=performance"
               class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80 text-sm"
             >
               <RotateCcw class="h-4 w-4" />
-              {{ t('modules.core.system.info.cache.manage') }}
+              {{ t('modules.system.system.info.cache.manage') }}
             </router-link>
           </div>
           <div class="grid grid-cols-1 gap-6">
             <div>
               <h3 class="text-sm font-medium text-foreground mb-3 font-bold border-b pb-1">
-                {{ t('modules.core.system.info.sections.application') }}
+                {{ t('modules.system.system.info.sections.application') }}
               </h3>
               <dl class="space-y-2">
                 <div class="flex justify-between">
                   <dt class="text-sm text-muted-foreground">
-                    {{ t('modules.core.system.info.sections.phpVersion') }}
+                    {{ t('modules.system.system.info.sections.phpVersion') }}
                   </dt>
                   <dd class="text-sm text-foreground font-mono">
                     {{ systemInfo.php_version || '-' }}
@@ -116,7 +116,7 @@
                 </div>
                 <div class="flex justify-between">
                   <dt class="text-sm text-muted-foreground">
-                    {{ t('modules.core.system.info.sections.laravelVersion') }}
+                    {{ t('modules.system.system.info.sections.laravelVersion') }}
                   </dt>
                   <dd class="text-sm text-foreground font-mono">
                     {{ systemInfo.laravel_version || '-' }}
@@ -124,7 +124,7 @@
                 </div>
                 <div class="flex justify-between">
                   <dt class="text-sm text-muted-foreground">
-                    {{ t('modules.core.system.info.sections.environment') }}
+                    {{ t('modules.system.system.info.sections.environment') }}
                   </dt>
                   <dd class="text-sm text-foreground capitalize">
                     {{ systemInfo.environment || '-' }}
@@ -132,25 +132,25 @@
                 </div>
                 <div class="flex justify-between">
                   <dt class="text-sm text-muted-foreground">
-                    {{ t('modules.core.system.info.sections.debugMode') }}
+                    {{ t('modules.system.system.info.sections.debugMode') }}
                   </dt>
                   <dd
                     class="text-sm"
                     :class="systemInfo.debug_mode ? 'text-red-500' : 'text-green-500'"
                   >
-                    {{ systemInfo.debug_mode ? t('modules.core.system.info.sections.enabled') : t('modules.core.system.info.sections.disabled') }}
+                    {{ systemInfo.debug_mode ? t('modules.system.system.info.sections.enabled') : t('modules.system.system.info.sections.disabled') }}
                   </dd>
                 </div>
               </dl>
             </div>
             <div>
               <h3 class="text-sm font-medium text-foreground mb-3 font-bold border-b pb-1">
-                {{ t('modules.core.system.info.sections.server') }}
+                {{ t('modules.system.system.info.sections.server') }}
               </h3>
               <dl class="space-y-2">
                 <div class="flex justify-between">
                   <dt class="text-sm text-muted-foreground">
-                    {{ t('modules.core.system.info.sections.serverSoftware') }}
+                    {{ t('modules.system.system.info.sections.serverSoftware') }}
                   </dt>
                   <dd
                     class="text-sm text-foreground truncate max-w-[200px]"
@@ -161,7 +161,7 @@
                 </div>
                 <div class="flex justify-between">
                   <dt class="text-sm text-muted-foreground">
-                    {{ t('modules.core.system.info.sections.memoryUsage') }}
+                    {{ t('modules.system.system.info.sections.memoryUsage') }}
                   </dt>
                   <dd class="text-sm text-foreground font-mono">
                     {{ displayMemory }}
@@ -169,7 +169,7 @@
                 </div>
                 <div class="flex justify-between">
                   <dt class="text-sm text-muted-foreground">
-                    {{ t('modules.core.system.info.sections.diskUsage') }}
+                    {{ t('modules.system.system.info.sections.diskUsage') }}
                   </dt>
                   <dd class="text-sm text-foreground font-mono">
                     {{ displayDisk }}
@@ -177,7 +177,7 @@
                 </div>
                 <div class="flex justify-between">
                   <dt class="text-sm text-muted-foreground">
-                    {{ t('modules.core.system.info.sections.database') }}
+                    {{ t('modules.system.system.info.sections.database') }}
                   </dt>
                   <dd class="text-sm text-foreground font-semibold">
                     {{ systemInfo.database || '-' }}
@@ -191,7 +191,7 @@
         <!-- Quick Actions -->
         <div class="bg-card border border-border rounded-lg p-6">
           <h2 class="text-lg font-semibold text-foreground mb-4">
-            {{ t('modules.core.system.info.quickActions.title') }}
+            {{ t('modules.system.system.info.quickActions.title') }}
           </h2>
           <div class="grid grid-cols-2 gap-3">
             <router-link
@@ -199,7 +199,7 @@
               class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Settings class="h-8 w-8 text-primary mb-2" />
-              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.core.system.info.quickActions.settings') }}</span>
+              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.system.system.info.quickActions.settings') }}</span>
             </router-link>
                     
             <router-link
@@ -207,7 +207,7 @@
               class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Download class="h-8 w-8 text-green-600 dark:text-green-400 mb-2" />
-              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.core.system.info.quickActions.backups') }}</span>
+              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.system.system.info.quickActions.backups') }}</span>
             </router-link>
                     
             <router-link
@@ -215,7 +215,7 @@
               class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Database class="h-8 w-8 text-red-500 dark:text-red-400 mb-2" />
-              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.core.system.info.quickActions.redis') }}</span>
+              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.system.system.info.quickActions.redis') }}</span>
             </router-link>
                     
             <router-link
@@ -223,7 +223,7 @@
               class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Clock class="h-8 w-8 text-blue-500 dark:text-blue-400 mb-2" />
-              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.core.system.info.quickActions.scheduledTasks') }}</span>
+              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.system.system.info.quickActions.scheduledTasks') }}</span>
             </router-link>
                     
             <router-link
@@ -231,7 +231,7 @@
               class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Terminal class="h-8 w-8 text-yellow-500 dark:text-yellow-400 mb-2" />
-              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.core.system.info.quickActions.commandRunner') }}</span>
+              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.system.system.info.quickActions.commandRunner') }}</span>
             </router-link>
 
             <router-link
@@ -239,7 +239,7 @@
               class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Bell class="h-8 w-8 text-purple-500 dark:text-purple-400 mb-2" />
-              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.core.system.info.quickActions.notifications') }}</span>
+              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.system.system.info.quickActions.notifications') }}</span>
             </router-link>
 
             <router-link
@@ -247,7 +247,7 @@
               class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <Mail class="h-8 w-8 text-orange-500 dark:text-orange-400 mb-2" />
-              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.core.system.info.quickActions.emailSettings') }}</span>
+              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.system.system.info.quickActions.emailSettings') }}</span>
             </router-link>
 
             <router-link
@@ -255,7 +255,7 @@
               class="flex flex-col items-center p-4 rounded-lg hover:bg-accent/50"
             >
               <FileText class="h-8 w-8 text-sky-500 dark:text-sky-400 mb-2" />
-              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.core.system.info.quickActions.emailTemplates') }}</span>
+              <span class="text-xs font-medium text-foreground text-center">{{ t('modules.system.system.info.quickActions.emailTemplates') }}</span>
             </router-link>
           </div>
         </div>

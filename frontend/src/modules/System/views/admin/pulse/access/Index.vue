@@ -22,7 +22,7 @@
         variant-type="outline"
         @click="clearLogs"
       >
-        {{ t('modules.core.system.logs.clear') }}
+        {{ t('modules.system.system.logs.clear') }}
       </Button>
     </div>
 
@@ -320,7 +320,7 @@
         :per-page="perPage"
         class="border-none shadow-none"
         @page-change="fetchHistory"
-        @update:per-page="(val) => { perPage = val; fetchHistory("1"); }"
+        @update:per-page="(val) => { perPage = val; fetchHistory(1); }"
       />
     </div>
   </div>
@@ -455,7 +455,7 @@ const fetchSuspicious = async () : Promise<void> => {
 
 const fetchUsers = async () : Promise<void> => {
     try {
-        const response = await api.get('/manage/users');
+        const response = await api.get('/manage/system/users');
         users.value = getResponseList(response.data);
     } catch (error: unknown) {
         logger.error('Failed to fetch users:', error);
@@ -465,8 +465,8 @@ const fetchUsers = async () : Promise<void> => {
 
 const clearLogs = async () : Promise<void> => {
     const confirmed = await confirm({
-        title: t('modules.core.system.logs.actions.clear'),
-        message: t('modules.core.system.logs.confirm.clear') || 'Are you sure you want to clear all logs?',
+        title: t('modules.system.system.logs.actions.clear'),
+        message: t('modules.system.system.logs.confirm.clear') || 'Are you sure you want to clear all logs?',
         variant: 'danger',
         confirmText: t('common.actions.clear'),
     });
@@ -477,7 +477,7 @@ const clearLogs = async () : Promise<void> => {
         await api.post('/manage/access-journal/clear');
         await fetchHistory();
         await fetchStatistics();
-        toast.success.action(t('modules.core.system.logs.messages.cleared') || 'Logs cleared successfully');
+        toast.success.action(t('modules.system.system.logs.messages.cleared') || 'Logs cleared successfully');
     } catch (error: unknown) {
         logger.error('Failed to clear logs:', (error as Error).message);
         toast.error.fromResponse(error);
@@ -505,7 +505,7 @@ const exportHistory = async () : Promise<void> => {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-        toast.success.action(t('modules.core.analytics.export.success') || 'Export started');
+        toast.success.action(t('modules.system.analytics.export.success') || 'Export started');
     } catch (error: unknown) {
         logger.error('Failed to export:', (error as Error).message);
         toast.error.fromResponse(error);

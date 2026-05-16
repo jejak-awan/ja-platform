@@ -32,10 +32,10 @@
         >
           <div class="space-y-2">
             <h3 class="text-lg font-medium">
-              {{ $t('modules.core.auth.twoFactor.setupTitle') || 'Setup Two-Factor Authentication' }}
+              {{ $t('modules.system.auth.twoFactor.setupTitle') || 'Setup Two-Factor Authentication' }}
             </h3>
             <p class="text-sm text-muted-foreground">
-              {{ $t('modules.core.auth.twoFactor.setupDesc') || 'Add an extra layer of security to your account by requiring a verification code from your authenticator app.' }}
+              {{ $t('modules.system.auth.twoFactor.setupDesc') || 'Add an extra layer of security to your account by requiring a verification code from your authenticator app.' }}
             </p>
           </div>
 
@@ -45,9 +45,9 @@
             class="bg-warning/10 border-warning/20 text-warning"
           >
             <ShieldAlert class="h-4 w-4" />
-            <AlertTitle>{{ $t('modules.core.auth.twoFactor.requiredTitle') || 'Setup Required' }}</AlertTitle>
+            <AlertTitle>{{ $t('modules.system.auth.twoFactor.requiredTitle') || 'Setup Required' }}</AlertTitle>
             <AlertDescription>
-              {{ $t('modules.core.auth.twoFactor.requiredDesc') || 'Your account security policy requires 2FA to be enabled.' }}
+              {{ $t('modules.system.auth.twoFactor.requiredDesc') || 'Your account security policy requires 2FA to be enabled.' }}
             </AlertDescription>
           </Alert>
 
@@ -67,7 +67,7 @@
                 v-if="generating"
                 class="mr-2 h-4 w-4"
               />
-              {{ generating ? $t('common.actions.generating') || 'Generating...' : $t('modules.core.auth.twoFactor.generateQR') || 'Generate QR Code' }}
+              {{ generating ? $t('common.actions.generating') || 'Generating...' : $t('modules.system.auth.twoFactor.generateQR') || 'Generate QR Code' }}
             </Button>
           </div>
 
@@ -86,7 +86,7 @@
               </div>
               <div class="text-center space-y-2">
                 <p class="text-sm font-medium">
-                  {{ $t('modules.core.auth.twoFactor.scanQR') || 'Scan this QR code with your app' }}
+                  {{ $t('modules.system.auth.twoFactor.scanQR') || 'Scan this QR code with your app' }}
                 </p>
                 <div class="flex items-center gap-2 text-xs font-mono bg-background px-3 py-1.5 rounded border border-border">
                   <span class="truncate max-w-[150px]">{{ secret }}</span>
@@ -104,7 +104,7 @@
 
             <div class="space-y-6">
               <div class="space-y-2">
-                <Label for="verify-code">{{ $t('modules.core.auth.twoFactor.enterCode') || 'Verification Code' }}</Label>
+                <Label for="verify-code">{{ $t('modules.system.auth.twoFactor.enterCode') || 'Verification Code' }}</Label>
                 <Input
                   id="verify-code"
                   v-model="verificationCode"
@@ -115,7 +115,7 @@
                   @input="verificationCode = verificationCode.replace(/\D/g, '')"
                 />
                 <p class="text-xs text-muted-foreground">
-                  {{ $t('modules.core.auth.twoFactor.codeHelp') || 'Enter the 6-digit code from your authenticator app.' }}
+                  {{ $t('modules.system.auth.twoFactor.codeHelp') || 'Enter the 6-digit code from your authenticator app.' }}
                 </p>
               </div>
 
@@ -129,7 +129,7 @@
                     v-if="enabling"
                     class="mr-2 h-4 w-4"
                   />
-                  {{ enabling ? $t('common.actions.verifying') || 'Verifying...' : $t('modules.core.auth.twoFactor.enable') || 'Enable 2FA' }}
+                  {{ enabling ? $t('common.actions.verifying') || 'Verifying...' : $t('modules.system.auth.twoFactor.enable') || 'Enable 2FA' }}
                 </Button>
                 <Button
                   variant="ghost"
@@ -152,7 +152,7 @@
             <div class="space-y-1">
               <div class="flex items-center gap-2">
                 <h3 class="text-lg font-medium">
-                  {{ $t('modules.core.auth.twoFactor.enabledTitle') || '2FA is Enabled' }}
+                  {{ $t('modules.system.auth.twoFactor.enabledTitle') || '2FA is Enabled' }}
                 </h3>
                 <Badge
                   variant="success"
@@ -162,13 +162,13 @@
                 </Badge>
               </div>
               <p class="text-sm text-muted-foreground">
-                {{ $t('modules.core.auth.twoFactor.enabledDesc') || 'Your account is protected with two-factor authentication.' }}
+                {{ $t('modules.system.auth.twoFactor.enabledDesc') || 'Your account is protected with two-factor authentication.' }}
               </p>
               <p
                 v-if="status.enabled_at"
                 class="text-xs text-muted-foreground"
               >
-                {{ $t('modules.core.auth.twoFactor.enabledAt') || 'Enabled on' }}: {{ new Date(status.enabled_at).toLocaleString() }}
+                {{ $t('modules.system.auth.twoFactor.enabledAt') || 'Enabled on' }}: {{ new Date(status.enabled_at).toLocaleString() }}
               </p>
             </div>
             <Button
@@ -178,7 +178,7 @@
               @click="showDisableConfirm = true"
             >
               <Trash2 class="h-4 w-4 mr-2" />
-              {{ $t('modules.core.auth.twoFactor.disable') || 'Disable 2FA' }}
+              {{ $t('modules.system.auth.twoFactor.disable') || 'Disable 2FA' }}
             </Button>
           </div>
 
@@ -189,10 +189,10 @@
             <div class="flex items-center justify-between">
               <div class="space-y-1">
                 <h4 class="text-md font-medium">
-                  {{ $t('modules.core.auth.twoFactor.recoveryTitle') || 'Recovery Codes' }}
+                  {{ $t('modules.system.auth.twoFactor.recoveryTitle') || 'Recovery Codes' }}
                 </h4>
                 <p class="text-sm text-muted-foreground">
-                  {{ $t('modules.core.auth.twoFactor.recoveryDesc') || 'Use these codes if you lose access to your authenticator app.' }}
+                  {{ $t('modules.system.auth.twoFactor.recoveryDesc') || 'Use these codes if you lose access to your authenticator app.' }}
                 </p>
               </div>
               <div
@@ -203,7 +203,7 @@
                   variant="outline"
                   class="font-mono"
                 >
-                  {{ status.backup_codes_count }} {{ $t('modules.core.auth.twoFactor.codesRemaining') || 'codes left' }}
+                  {{ status.backup_codes_count }} {{ $t('modules.system.auth.twoFactor.codesRemaining') || 'codes left' }}
                 </Badge>
                 <Button
                   variant="outline"
@@ -211,7 +211,7 @@
                   @click="showRegenPassword = true"
                 >
                   <RefreshCcw class="h-3 w-3 mr-2" />
-                  {{ $t('modules.core.auth.twoFactor.regenerate') || 'Regenerate' }}
+                  {{ $t('modules.system.auth.twoFactor.regenerate') || 'Regenerate' }}
                 </Button>
               </div>
             </div>
@@ -233,7 +233,7 @@
               <div class="flex items-center justify-between gap-4">
                 <p class="text-xs text-warning font-medium">
                   <AlertTriangle class="h-3 w-3 inline mr-1" />
-                  {{ $t('modules.core.auth.twoFactor.saveWarning') || 'Save these codes now. They will not be shown again.' }}
+                  {{ $t('modules.system.auth.twoFactor.saveWarning') || 'Save these codes now. They will not be shown again.' }}
                 </p>
                 <div class="flex gap-2">
                   <Button
@@ -263,9 +263,9 @@
           >
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>{{ $t('modules.core.auth.twoFactor.disableTitle') || 'Disable 2FA' }}</DialogTitle>
+                <DialogTitle>{{ $t('modules.system.auth.twoFactor.disableTitle') || 'Disable 2FA' }}</DialogTitle>
                 <DialogDescription>
-                  {{ $t('modules.core.auth.twoFactor.disableConfirm') || 'To disable two-factor authentication, please enter your password for confirmation.' }}
+                  {{ $t('modules.system.auth.twoFactor.disableConfirm') || 'To disable two-factor authentication, please enter your password for confirmation.' }}
                 </DialogDescription>
               </DialogHeader>
               <form
@@ -301,7 +301,7 @@
                       v-if="disabling"
                       class="mr-2 h-4 w-4"
                     />
-                    {{ disabling ? $t('common.actions.disabling') || 'Disabling...' : $t('modules.core.auth.twoFactor.confirmDisable') || 'Confirm Disable' }}
+                    {{ disabling ? $t('common.actions.disabling') || 'Disabling...' : $t('modules.system.auth.twoFactor.confirmDisable') || 'Confirm Disable' }}
                   </Button>
                 </DialogFooter>
               </form>
@@ -315,9 +315,9 @@
           >
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>{{ $t('modules.core.auth.twoFactor.regenTitle') || 'Regenerate Backup Codes' }}</DialogTitle>
+                <DialogTitle>{{ $t('modules.system.auth.twoFactor.regenTitle') || 'Regenerate Backup Codes' }}</DialogTitle>
                 <DialogDescription>
-                  {{ $t('modules.core.auth.twoFactor.regenDesc') || 'Regenerating codes will invalidate your current ones. Enter password to continue.' }}
+                  {{ $t('modules.system.auth.twoFactor.regenDesc') || 'Regenerating codes will invalidate your current ones. Enter password to continue.' }}
                 </DialogDescription>
               </DialogHeader>
               <form
@@ -352,7 +352,7 @@
                       v-if="regenerating"
                       class="mr-2 h-4 w-4"
                     />
-                    {{ regenerating ? $t('common.actions.regenerating') || 'Regenerating...' : $t('modules.core.auth.twoFactor.confirmRegen') || 'Regenerate Codes' }}
+                    {{ regenerating ? $t('common.actions.regenerating') || 'Regenerating...' : $t('modules.system.auth.twoFactor.confirmRegen') || 'Regenerate Codes' }}
                   </Button>
                 </DialogFooter>
               </form>
@@ -502,7 +502,7 @@ const enable2FA = async () => {
             code: verificationCode.value,
         });
         
-        toast.success(t('common.status.success'), t('modules.core.auth.twoFactor.messages.enableSuccess'));
+        toast.success(t('common.status.success'), t('modules.system.auth.twoFactor.messages.enableSuccess'));
         verificationCode.value = '';
         qrCodeUrl.value = null;
         secret.value = null;
@@ -510,9 +510,9 @@ const enable2FA = async () => {
     } catch (error: unknown) {
         if (error && typeof error === 'object' && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
-            toast.error(t('common.status.failed'), err.response?.data?.message || t('modules.core.auth.messages.error'));
+            toast.error(t('common.status.failed'), err.response?.data?.message || t('modules.system.auth.messages.error'));
         } else {
-            toast.error(t('common.status.failed'), t('modules.core.auth.messages.error'));
+            toast.error(t('common.status.failed'), t('modules.system.auth.messages.error'));
         }
     } finally {
         enabling.value = false;
@@ -526,7 +526,7 @@ const disable2FA = async () => {
             password: passwordConfirm.value,
         });
         
-        toast.success(t('common.status.success'), t('modules.core.auth.twoFactor.messages.disableSuccess'));
+        toast.success(t('common.status.success'), t('modules.system.auth.twoFactor.messages.disableSuccess'));
         passwordConfirm.value = '';
         showDisableConfirm.value = false;
         backupCodes.value = [];
@@ -534,9 +534,9 @@ const disable2FA = async () => {
     } catch (error: unknown) {
         if (error && typeof error === 'object' && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
-            toast.error(t('common.status.failed'), err.response?.data?.message || t('modules.core.auth.messages.error'));
+            toast.error(t('common.status.failed'), err.response?.data?.message || t('modules.system.auth.messages.error'));
         } else {
-            toast.error(t('common.status.failed'), t('modules.core.auth.messages.error'));
+            toast.error(t('common.status.failed'), t('modules.system.auth.messages.error'));
         }
     } finally {
         disabling.value = false;
@@ -554,16 +554,16 @@ const regenerateBackupCodes = async () => {
         if (data.backup_codes) {
             backupCodes.value = data.backup_codes;
         }
-        toast.success(t('common.status.success'), t('modules.core.auth.twoFactor.messages.regenerateSuccess'));
+        toast.success(t('common.status.success'), t('modules.system.auth.twoFactor.messages.regenerateSuccess'));
         passwordConfirm.value = '';
         showRegenPassword.value = false;
         await fetchStatus();
     } catch (error: unknown) {
         if (error && typeof error === 'object' && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
-            toast.error(t('common.status.failed'), err.response?.data?.message || t('modules.core.auth.messages.error'));
+            toast.error(t('common.status.failed'), err.response?.data?.message || t('modules.system.auth.messages.error'));
         } else {
-            toast.error(t('common.status.failed'), t('modules.core.auth.messages.error'));
+            toast.error(t('common.status.failed'), t('modules.system.auth.messages.error'));
         }
     } finally {
         regenerating.value = false;
@@ -574,7 +574,7 @@ const copySecret = async () => {
     if (!secret.value) return;
     try {
         await navigator.clipboard.writeText(secret.value);
-        toast.success(t('common.status.success'), t('modules.core.auth.twoFactor.messages.copySuccess'));
+        toast.success(t('common.status.success'), t('modules.system.auth.twoFactor.messages.copySuccess'));
     } catch {
         toast.error(t('common.status.failed'), t('common.messages.error.default'));
     }

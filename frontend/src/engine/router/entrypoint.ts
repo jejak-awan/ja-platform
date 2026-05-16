@@ -12,8 +12,8 @@ const ADMIN_ENTRYPOINT_PATHS = [
     SECURITY_ROUTES.register,
     '/login',
     '/register',
-    '/forgot-password',
-    '/reset-password',
+    '/public/system/auth/forgot-password',
+    '/public/system/auth/reset-password',
     '/verify-email',
 ] as const;
 

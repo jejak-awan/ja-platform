@@ -144,7 +144,7 @@ import {
 // Props passed from the parent component (InstitutionTabs)
 const props = defineProps<{
   show: boolean;
-  editingId: number | null;
+  editingId: string | number | null;
   form: any;
   isMultiBranch?: boolean;
   isMultiLevel?: boolean;

@@ -23,7 +23,7 @@
             v-else
             class="w-4 h-4 mr-2.5 opacity-70"
           />
-          {{ t('modules.core.file_manager.actions.open') }}
+          {{ t('modules.system.file_manager.actions.open') }}
         </Button>
 
         <!-- Download -->
@@ -35,7 +35,7 @@
           @click="handleAction('download')"
         >
           <Download class="w-4 h-4 mr-2.5 opacity-70" />
-          {{ t('modules.core.file_manager.actions.download') }}
+          {{ t('modules.system.file_manager.actions.download') }}
         </Button>
 
         <div class="h-px bg-border/40 my-1 mx-1" />
@@ -48,7 +48,7 @@
           @click="handleAction('copyPath')"
         >
           <Link class="w-4 h-4 mr-2.5 opacity-70" />
-          {{ t('modules.core.file_manager.actions.copyPath') }}
+          {{ t('modules.system.file_manager.actions.copyPath') }}
         </Button>
 
         <!-- Copy URL -->
@@ -60,7 +60,7 @@
           @click="handleAction('copyUrl')"
         >
           <Copy class="w-4 h-4 mr-2.5 opacity-70" />
-          {{ t('modules.core.file_manager.actions.copyUrl') }}
+          {{ t('modules.system.file_manager.actions.copyUrl') }}
         </Button>
 
         <div class="h-px bg-border/40 my-1 mx-1" />
@@ -73,7 +73,7 @@
           @click="handleAction('copy')"
         >
           <CopyIcon class="w-4 h-4 mr-2.5 opacity-70" />
-          {{ t('modules.core.file_manager.actions.copy') }}
+          {{ t('modules.system.file_manager.actions.copy') }}
         </Button>
 
         <div class="h-px bg-border/40 my-1 mx-1" />
@@ -86,7 +86,7 @@
           @click="handleAction('delete')"
         >
           <Trash2 class="w-4 h-4 mr-2.5 opacity-70" />
-          {{ t('modules.core.file_manager.actions.delete') }}
+          {{ t('modules.system.file_manager.actions.delete') }}
         </Button>
       </div>
     </PopoverContent>

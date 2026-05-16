@@ -1,7 +1,7 @@
 <template>
   <div class="captcha-slider">
     <p class="text-sm text-muted-foreground mb-2">
-      {{ t('modules.core.auth.captcha.slideToVerify') }}
+      {{ t('modules.system.auth.captcha.slideToVerify') }}
     </p>
         
     <div 
@@ -46,7 +46,7 @@
         v-if="!dragging && !verified" 
         class="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground pointer-events-none"
       >
-        {{ t('modules.core.auth.captcha.dragSlider') }}
+        {{ t('modules.system.auth.captcha.dragSlider') }}
       </span>
     </div>
         
@@ -163,7 +163,7 @@ const endDrag = async (_e?: MouseEvent | TouchEvent) => {
         emit('verified', { token: token.value, answer: String(Math.round(progress.value)) })
     } catch (e: unknown) {
         // Just like MathCaptcha, we catch 422 as expected verification failure
-        error.value = t('modules.core.auth.captcha.tryAgain')
+        error.value = t('modules.system.auth.captcha.tryAgain')
         progress.value = 0
         
         const err = e as AxiosError;

@@ -9,9 +9,9 @@
       @drop.prevent
     >
       <DialogHeader>
-        <DialogTitle>{{ $t('modules.core.file_manager.modals.upload.title') }}</DialogTitle>
+        <DialogTitle>{{ $t('modules.system.file_manager.modals.upload.title') }}</DialogTitle>
         <DialogDescription>
-          {{ $t('modules.core.file_manager.modals.upload.placeholder') || 'Drag and drop files here or click to select files to upload.' }}
+          {{ $t('modules.system.file_manager.modals.upload.placeholder') || 'Drag and drop files here or click to select files to upload.' }}
         </DialogDescription>
       </DialogHeader>
 
@@ -41,12 +41,12 @@
           />
           <div class="text-sm text-muted-foreground">
             <span class="text-primary font-bold group-hover/upload:underline">
-              {{ $t('modules.core.file_manager.modals.upload.clickToUpload') }}
+              {{ $t('modules.system.file_manager.modals.upload.clickToUpload') }}
             </span>
-            {{ $t('modules.core.file_manager.modals.upload.dragAndDrop') }}
+            {{ $t('modules.system.file_manager.modals.upload.dragAndDrop') }}
           </div>
           <p class="mt-2 text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">
-            {{ $t('modules.core.file_manager.modals.upload.formats') }}
+            {{ $t('modules.system.file_manager.modals.upload.formats') }}
           </p>
         </div>
 
@@ -56,7 +56,7 @@
           class="mt-6 space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar"
         >
           <h4 class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center justify-between">
-            <span>{{ $t('modules.core.file_manager.modals.upload.selectedFiles') }}</span>
+            <span>{{ $t('modules.system.file_manager.modals.upload.selectedFiles') }}</span>
             <span class="bg-primary/10 text-primary px-1.5 py-0.5 rounded-md font-bold">{{ selectedFiles.length }}</span>
           </h4>
           <div
@@ -106,7 +106,7 @@
           class="mt-6 bg-primary/5 p-4 rounded-xl border border-primary/10 animate-in fade-in zoom-in-95"
         >
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-primary uppercase tracking-widest">{{ $t('modules.core.file_manager.modals.upload.uploading') }}</span>
+            <span class="text-xs font-bold text-primary uppercase tracking-widest">{{ $t('modules.system.file_manager.modals.upload.uploading') }}</span>
             <span class="text-xs font-bold text-primary">{{ uploadProgress }}%</span>
           </div>
           <div class="w-full bg-primary/10 rounded-full h-1.5 overflow-hidden">
@@ -124,7 +124,7 @@
           class="rounded-xl h-10 px-5 border-border/60 hover:bg-accent/10 text-foreground font-bold transition-colors"
           @click="$emit('close')"
         >
-          {{ $t('modules.core.file_manager.modals.upload.cancel') }}
+          {{ $t('modules.system.file_manager.modals.upload.cancel') }}
         </Button>
         <Button
           :disabled="uploading || !isValid"
@@ -135,7 +135,7 @@
             v-if="uploading"
             class="mr-2 h-4 w-4 animate-spin"
           />
-          {{ uploading ? $t('modules.core.file_manager.modals.upload.uploading') : $t('modules.core.file_manager.modals.upload.uploadAction', { count: selectedFiles.length }) }}
+          {{ uploading ? $t('modules.system.file_manager.modals.upload.uploading') : $t('modules.system.file_manager.modals.upload.uploadAction', { count: selectedFiles.length }) }}
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -260,7 +260,7 @@ const handleUpload = async () => {
         });
         formData.append('path', props.path);
 
-        await api.post('/manage/file-manager/upload', formData, {
+        await api.post('/manage/media/file-manager/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

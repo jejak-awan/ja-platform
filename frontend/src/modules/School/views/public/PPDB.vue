@@ -152,7 +152,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useTheme } from '@/shared/composables/useTheme';
+import { useTheme } from '@/modules/Cms/composables/useTheme';
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity';
 import Sparkles from 'lucide-vue-next/dist/esm/icons/sparkles.js';
 import UserPlus from 'lucide-vue-next/dist/esm/icons/user-plus.js';

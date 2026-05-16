@@ -38,7 +38,7 @@ import { useSessionTimeout } from '@/shared/composables/useSessionTimeout';
 import { syncDocumentDarkClassForRoute } from '@/shared/composables/useDarkMode';
 import { useHead } from '@unhead/vue';
 import { useSystemStore } from '@/modules/System/stores/system';
-import { applyFavicon, resolveFavicon } from '@/shared/utils/favicon';
+import { applyFavicon, resolveFavicon } from '@/modules/System/utils/favicon';
 
 const Toast = defineAsyncComponent(() => import('@/shared/components/ui/Toast.vue'));
 const ConfirmModal = defineAsyncComponent(() => import('@/shared/components/ui/ConfirmModal.vue'));
@@ -48,7 +48,7 @@ const SessionTimeoutModal = defineAsyncComponent(() => import('@/shared/componen
 const { confirmState } = useConfirm();
 const { isWarningVisible, timeRemaining, extendSession, manualLogout } = useSessionTimeout();
 const route = useRoute();
-const coreStore = useSystemStore();
+const systemStore = useSystemStore();
 
 watch(
     () => route.path,
@@ -64,15 +64,15 @@ useHead({
 
 onMounted(async () => {
     // Standard initialization: Fetch unified public settings from Core
-    await coreStore.fetchPublicSettings();
+    await systemStore.fetchPublicSettings();
 });
 
 onUnmounted(() => {
 });
 
 const faviconHref = computed(() => resolveFavicon([
-    coreStore.siteSettings?.site_favicon,
-    coreStore.appIdentity?.app_favicon,
+    systemStore.siteSettings?.site_favicon,
+    systemStore.appIdentity?.app_favicon,
 ]));
 
 watch(

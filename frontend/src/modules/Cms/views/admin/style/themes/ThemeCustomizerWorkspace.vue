@@ -386,7 +386,7 @@ import {
 import SettingControl from '@/modules/Cms/components/themes/customizer/sidebar/SettingControl.vue'
 import CustomizerSidebar from '@/modules/Cms/components/themes/customizer/sidebar/Sidebar.vue'
 import BindingsSection from '@/modules/Cms/components/themes/customizer/editor/BindingsSection.vue'
-import MediaPicker from '@/shared/components/media/MediaPicker.vue'
+import MediaPicker from '@/modules/Media/components/picker/MediaPicker.vue'
 
 // Icons
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
@@ -902,7 +902,7 @@ async function previewSlotData(slotId: string) {
                 results = results.filter((item) => String(item?.slug || '') === String(config.pageSlug))
             }
         } else if (config.sourceType === 'api_categories') {
-            const res = await api.get('/manage/cms/categories')
+            const res = await api.get('/manage/library/categories')
             const parsed = parseResponse<any>(res)
             results = ensureArray<any>(parsed.data)
         }
@@ -924,7 +924,7 @@ function filterPreviewFields(item: any) {
 
 async function fetchCategories() {
     try {
-        const r = await api.get('/manage/cms/categories')
+        const r = await api.get('/manage/library/categories')
         const parsed = parseResponse<any>(r)
         categories.value = ensureArray<any>(parsed.data)
     } catch { /* silent */ }

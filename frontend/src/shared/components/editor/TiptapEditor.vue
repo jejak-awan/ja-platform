@@ -116,7 +116,7 @@ import MediaBubbleMenu from '@/shared/components/editor/MediaBubbleMenu.vue';
 import ContextMenu from '@/shared/components/editor/ContextMenu.vue';
 import PropertiesPopover from '@/shared/components/editor/PropertiesPopover.vue';
 import TableInsertDialog from '@/shared/components/editor/TableInsertDialog.vue';
-import MediaPicker from '@/shared/components/media/MediaPicker.vue';
+import MediaPicker from '@/modules/Media/components/picker/MediaPicker.vue';
 
 // Custom Extensions
 import { CustomImage } from '@/shared/components/editor/extensions/CustomImage';
@@ -129,7 +129,7 @@ import { CodeBlockWithCopyExtension } from '@/shared/components/editor/extension
 import { HtmlEmbed } from '@/shared/components/editor/extensions/HtmlEmbedExtension';
 import { Icon } from '@/shared/components/editor/extensions/IconExtension';
 
-import type { Media } from '@/modules/Cms/types/media';
+import type { Media } from '@/modules/Media/types/media';
 
 import { createLowlight } from 'lowlight';
 import javascript from 'highlight.js/lib/languages/javascript';

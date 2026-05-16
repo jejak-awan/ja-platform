@@ -1,8 +1,8 @@
 export interface Student {
-    id: string;
-    school_id: string;
-    workspace_id?: number;
-    user_id?: number;
+    id: string | number;
+    school_id: string | number | number;
+    workspace_id?: string | number;
+    user_id?: string | number;
     nisn: string;
     nis: string;
     nik: string;
@@ -39,14 +39,14 @@ export interface Student {
     guardian_income?: string;
     photo?: string;
     status: 'active' | 'graduated' | 'dropped_out' | 'moved';
-    department_id?: number;
+    department_id?: string | number;
     department?: {
-        id: string;
+        id: string | number;
         name: string;
         code: string;
     };
     level?: {
-        id: string;
+        id: string | number;
         name: string;
     };
     created_at?: string;
@@ -55,20 +55,20 @@ export interface Student {
 }
 
 export interface Violation {
-    id: string;
-    student_id: string;
-    category_id: string;
+    id: string | number;
+    student_id: string | number | number;
+    category_id: string | number | number;
     date: string;
     points: number;
     description: string;
-    reporter_id: string;
+    reporter_id: string | number | number;
     created_at?: string;
     updated_at?: string;
 }
 
 export interface Achievement {
-    id: string;
-    student_id: string;
+    id: string | number;
+    student_id: string | number | number;
     title: string;
     category: 'academic' | 'non-academic';
     level: 'school' | 'district' | 'province' | 'national' | 'international';
@@ -79,9 +79,9 @@ export interface Achievement {
 }
 
 export interface CounselingRecord {
-    id: string;
-    student_id: string;
-    staff_id: string;
+    id: string | number;
+    student_id: string | number | number;
+    staff_id: string | number | number;
     date: string;
     topic: string;
     content: string;
@@ -91,7 +91,7 @@ export interface CounselingRecord {
 }
 
 export interface Enrollment {
-    id: string;
+    id: string | number;
     registration_number: string;
     full_name: string;
     email: string;
@@ -103,7 +103,7 @@ export interface Enrollment {
 
 export interface AdmissionSettings {
     is_open: boolean;
-    academic_year_id: string;
+    academic_year_id: string | number | number;
     start_date: string;
     end_date: string;
 }

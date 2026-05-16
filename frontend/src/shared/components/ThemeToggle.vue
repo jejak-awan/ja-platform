@@ -40,13 +40,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useCmsStore } from '@/modules/Cms/stores/cms'
+import { useSystemStore } from '@/modules/System/stores/system'
 
-const cmsStore = useCmsStore()
-const isDark = computed(() => cmsStore.isDarkMode)
+const systemStore = useSystemStore()
+const isDark = computed(() => systemStore.isDarkMode)
 
 const toggleTheme = () => {
-  cmsStore.toggleDarkMode()
+  systemStore.toggleDarkMode()
 }
 </script>
 

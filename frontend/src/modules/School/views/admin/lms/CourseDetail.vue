@@ -183,7 +183,7 @@ import { ChevronLeft, Plus, Pencil, Trash2, FileText, PlayCircle, FileDown, File
 import TiptapEditor from '@/shared/components/editor/TiptapEditor.vue';
 
 const route = useRoute();
-const courseId = route.params.id;
+const courseId = route.params.id as string;
 
 const course = ref<any>(null);
 const loading = ref(false);
@@ -191,7 +191,7 @@ const submitting = ref(false);
 
 const showAddLessonModal = ref(false);
 const showAddTopicModal = ref(false);
-const activeLessonId = ref<number | null>(null);
+const activeLessonId = ref<string | number | null>(null);
 
 const lessonForm = ref({ title: '', order: 0 });
 const topicForm = ref({
@@ -235,7 +235,7 @@ const createLesson = async () => {
   }
 };
 
-const openAddTopicModal = (lessonId: number) => {
+const openAddTopicModal = (lessonId: string | number) => {
   activeLessonId.value = lessonId;
   showAddTopicModal.value = true;
 };

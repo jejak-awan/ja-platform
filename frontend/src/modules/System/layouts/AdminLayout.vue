@@ -71,7 +71,7 @@ import { useAuthStore } from '@/modules/System/stores/auth';
 
 const router = useRouter();
 const route = useRoute();
-const coreStore = useSystemStore();
+const systemStore = useSystemStore();
 const authStore = useAuthStore();
 const { t, te } = useI18n();
 const { sidebarMinimized, sidebarOpen, toggleSidebarMinimize, toggleSidebarOpen, closeSidebar } = useSidebar();
@@ -93,9 +93,9 @@ const handleResize = () => {
 // Reactive Global Title Management
 const pageTitle = ref('Janari App');
 
-watch([() => route?.name, () => coreStore.appIdentity?.app_name, () => route?.meta], () => {
+watch([() => route?.name, () => systemStore.appIdentity?.app_name, () => route?.meta], () => {
     if (!route) return;
-    const appName = coreStore.appIdentity?.app_name || 'Janari App';
+    const appName = systemStore.appIdentity?.app_name || 'Janari App';
     
     if (route.meta?.title) {
         const titleKey = route.meta.title as string;
@@ -128,7 +128,7 @@ watch([() => route?.name, () => coreStore.appIdentity?.app_name, () => route?.me
 onMounted(async () => {
     window.addEventListener('resize', handleResize);
     // Only fetch core identity. Module-specific data should be fetched by the modules themselves.
-    await coreStore.fetchAppIdentity();
+    await systemStore.fetchAppIdentity();
 });
 
 onUnmounted(() => {

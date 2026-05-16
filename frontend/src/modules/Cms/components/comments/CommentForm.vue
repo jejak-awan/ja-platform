@@ -36,7 +36,7 @@
           v-if="!authStore.isAuthenticated"
           class="space-y-2"
         >
-          <Label>{{ $t('modules.core.settings.labels.enable_captcha') }}</Label>
+          <Label>{{ $t('modules.system.settings.labels.enable_captcha') }}</Label>
           <CaptchaWrapper 
             action="comment" 
             @verified="handleCaptchaVerified" 
@@ -94,7 +94,7 @@ interface CommentForm {
     name: string;
     email: string;
     body: string;
-    parent_id: string | string | null;
+    parent_id: string | number | null;
     captcha_token: string;
     captcha_input: string;
 }

@@ -211,7 +211,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, computed } from 'vue'
-import { useThemeMotion } from '@/shared/composables/useThemeMotion'
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion'
 import { useThemeComponentBindings } from '@/modules/Cms/composables/useThemeDataBindings'
 
 // Dynamic Data Integration

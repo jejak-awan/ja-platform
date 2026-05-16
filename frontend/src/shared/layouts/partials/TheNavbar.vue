@@ -297,7 +297,7 @@ import api from '@/engine/api/client';
 import { getResponseList } from '@/shared/utils/responseParser';
 import BreadcrumbTrail from '@/shared/components/BreadcrumbTrail.vue';
 import DarkModeToggle from '@/shared/components/DarkModeToggle.vue';
-import GlobalSearch from '@/shared/components/GlobalSearch.vue';
+import GlobalSearch from '@/modules/Search/components/GlobalSearch.vue';
 import UnitSelector from '@/modules/School/components/UnitSelector.vue';
 
 import Menu from 'lucide-vue-next/dist/esm/icons/menu.js';

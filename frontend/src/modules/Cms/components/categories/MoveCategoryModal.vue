@@ -150,7 +150,7 @@ const handleSubmit = async () => {
     saving.value = true;
     clearErrors();
     try {
-        await api.post(`/manage/cms/categories/${props.category.id}/move`, {
+        await api.post(`/manage/library/categories/${props.category.id}/move`, {
             parent_id: selectedParentId.value,
         });
         toast.success.action(t('modules.cms.categories.messages.moveSuccess'));

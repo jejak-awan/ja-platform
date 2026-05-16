@@ -14,11 +14,11 @@
         :key="setting.id"
         :model-value="(formData[setting.key] as any)"
         :field-key="setting.key"
-        :label="$t('modules.core.settings.labels.' + setting.key)"
-        :description="$t('modules.core.settings.descriptions.' + setting.key)"
+        :label="$t('modules.system.settings.labels.' + setting.key)"
+        :description="$t('modules.system.settings.descriptions.' + setting.key)"
         :type="setting.type"
-        :enabled-text="$t('modules.core.settings.enabled')"
-        :disabled-text="$t('modules.core.settings.disabled')"
+        :enabled-text="$t('modules.system.settings.enabled')"
+        :disabled-text="$t('modules.system.settings.disabled')"
         :error="errors?.[setting.key]"
         :disabled="isSettingDisabled(setting.key)"
         @update:model-value="(value) => updateField(setting.key, value)"
@@ -115,8 +115,8 @@ const securitySettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'authentication',
-            title: t('modules.core.settings.groups.authentication.title'),
-            description: t('modules.core.settings.groups.authentication.description'),
+            title: t('modules.system.settings.groups.authentication.title'),
+            description: t('modules.system.settings.groups.authentication.description'),
             icon: ShieldCheckIcon,
             color: 'emerald',
             keys: ['enable_registration', 'require_email_verification', 'enable_2fa', 'two_factor_method', 'two_factor_enforced_roles'],
@@ -125,8 +125,8 @@ const securitySettingsGrouped = computed(() => {
         },
         {
             id: 'password',
-            title: t('modules.core.settings.groups.password.title'),
-            description: t('modules.core.settings.groups.password.description'),
+            title: t('modules.system.settings.groups.password.title'),
+            description: t('modules.system.settings.groups.password.description'),
             icon: KeyIcon,
             color: 'amber',
             keys: ['password_min_length', 'password_require_uppercase', 'password_require_lowercase', 'password_require_number', 'password_require_symbol'],
@@ -135,8 +135,8 @@ const securitySettingsGrouped = computed(() => {
         },
         {
             id: 'session',
-            title: t('modules.core.settings.groups.session.title'),
-            description: t('modules.core.settings.groups.session.description'),
+            title: t('modules.system.settings.groups.session.title'),
+            description: t('modules.system.settings.groups.session.description'),
             icon: ClockIcon,
             color: 'blue',
             keys: ['session_lifetime', 'single_session_enabled', 'max_concurrent_sessions', 'log_retention_days'],
@@ -145,8 +145,8 @@ const securitySettingsGrouped = computed(() => {
         },
         {
             id: 'access',
-            title: t('modules.core.settings.groups.access.title'),
-            description: t('modules.core.settings.groups.access.description'),
+            title: t('modules.system.settings.groups.access.title'),
+            description: t('modules.system.settings.groups.access.description'),
             icon: LockIcon,
             color: 'red',
             keys: ['login_attempts_limit', 'block_duration_minutes'],
@@ -155,8 +155,8 @@ const securitySettingsGrouped = computed(() => {
         },
         {
             id: 'captcha',
-            title: t('modules.core.settings.groups.captcha.title'),
-            description: t('modules.core.settings.groups.captcha.description'),
+            title: t('modules.system.settings.groups.captcha.title'),
+            description: t('modules.system.settings.groups.captcha.description'),
             icon: BotIcon,
             color: 'purple',
             keys: ['enable_captcha', 'captcha_method', 'captcha_on_login', 'captcha_on_register'],
@@ -166,8 +166,8 @@ const securitySettingsGrouped = computed(() => {
         {
             id: 'bot-shield',
 
-            title: t('modules.core.settings.groups.botShield.title'),
-            description: t('modules.core.settings.groups.botShield.description'),
+            title: t('modules.system.settings.groups.botShield.title'),
+            description: t('modules.system.settings.groups.botShield.description'),
             icon: ShieldCheckIcon,
             color: 'indigo',
             keys: ['shield_protection_mode', 'shield_protection_difficulty', 'shield_enable_ip_intelligence', 'shield_allowed_countries', 'shield_log_verification_success'],
@@ -176,8 +176,8 @@ const securitySettingsGrouped = computed(() => {
         },
         {
             id: 'scanner-protection',
-            title: t('modules.core.settings.groups.scannerProtection.title'),
-            description: t('modules.core.settings.groups.scannerProtection.description'),
+            title: t('modules.system.settings.groups.scannerProtection.title'),
+            description: t('modules.system.settings.groups.scannerProtection.description'),
             icon: BotIcon,
             color: 'orange',
             keys: ['scanner_auto_block_threshold', 'security_learned_scanner_paths'],
@@ -186,8 +186,8 @@ const securitySettingsGrouped = computed(() => {
         },
         {
             id: 'threat-intel',
-            title: t('modules.core.settings.groups.threatIntel.title'),
-            description: t('modules.core.settings.groups.threatIntel.description'),
+            title: t('modules.system.settings.groups.threatIntel.title'),
+            description: t('modules.system.settings.groups.threatIntel.description'),
             icon: ShieldCheckIcon,
             color: 'orange',
             keys: ['abuseipdb_api_key', 'threat_intel_auto_block_threshold'],
@@ -196,8 +196,8 @@ const securitySettingsGrouped = computed(() => {
         },
         {
             id: 'notifications',
-            title: t('modules.core.settings.groups.securityNotifications.title'),
-            description: t('modules.core.settings.groups.securityNotifications.description'),
+            title: t('modules.system.settings.groups.securityNotifications.title'),
+            description: t('modules.system.settings.groups.securityNotifications.description'),
             icon: ShieldCheckIcon,
             color: 'pink',
             keys: ['telegram_bot_token', 'telegram_chat_id', 'email_to', 'webhook_url'],

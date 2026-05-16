@@ -1,5 +1,5 @@
 // Modules
-import core from './modules/core/index';
+import core from './modules/system/index';
 import cms from './modules/cms/index';
 import school from './modules/school/index';
 
@@ -54,7 +54,7 @@ const common = {
 };
 
 const modules = {
-    core,
+    system: core,
     cms,
     school,
 };

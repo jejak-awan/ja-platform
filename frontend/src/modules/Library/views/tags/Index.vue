@@ -179,7 +179,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
-import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
+// import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import BarChart3 from 'lucide-vue-next/dist/esm/icons/chart-bar-stacked.js';
 import MousePointer2 from 'lucide-vue-next/dist/esm/icons/mouse-pointer-2.js';
 import Edit from 'lucide-vue-next/dist/esm/icons/pen.js';
@@ -219,7 +219,7 @@ import {
 } from '@tanstack/vue-table';
 
 import { useAuthStore } from '@/modules/System/stores/auth';
-import type { Tag } from '@/modules/Library/stores/library';
+import type { Tag } from '@/modules/Library/types/taxonomy';
 
 defineProps<{
     isEmbedded?: boolean;
@@ -368,7 +368,7 @@ const changePage = (page: number) => {
     }
 };
 
-const changePerPage = (value: string | number) => {
+const changePerPage = (_value: string | number) => {
     // pagination is computed from store, so we can't directly mutate it here easily
     // but the store might need a way to set per_page
     fetchTags(1);

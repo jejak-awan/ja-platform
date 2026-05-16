@@ -203,7 +203,7 @@ const defaultLevel = computed(() => {
 });
 
 const currentUnit = computed(() => {
-    if (unitStore.activeUnitId === "0") return null;
+    if (unitStore.activeUnitId === '0') return null;
     return props.levels?.find(l => l.id === unitStore.activeUnitId) || null;
 });
 

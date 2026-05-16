@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import api from '@/engine/api/client';
 import { logger } from '@/shared/utils/logger';
 import { ensureArray } from '@/shared/utils/responseParser';
+import { MediaService } from '@/modules/Media/services/mediaService';
 
 export interface MediaFile {
     id: string;
@@ -38,7 +38,7 @@ export const useMediaStore = defineStore('media', {
         async fetchMedia(folderId: string | null = null) {
             this.loading = true;
             try {
-                const response = await api.get('/manage/media', { params: { folder_id: folderId } });
+                const response = await MediaService.list({ folder_id: folderId });
                 this.files = ensureArray(response.data?.files);
                 this.folders = ensureArray(response.data?.folders);
                 this.currentFolder = folderId;
@@ -56,9 +56,7 @@ export const useMediaStore = defineStore('media', {
             if (folderId) formData.append('folder_id', folderId);
 
             try {
-                const response = await api.post('/manage/media/upload', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
+                const response = await MediaService.upload(formData);
                 await this.fetchMedia(folderId);
                 return response.data;
             } catch (error) {

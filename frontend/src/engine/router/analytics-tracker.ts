@@ -1,6 +1,7 @@
 import { logger } from '@/shared/utils/logger';
 import type { RouteLocationNormalized } from 'vue-router';
-import api, { consumeApiPerfEntries } from '@/engine/api/client';
+import { consumeApiPerfEntries } from '@/engine/api/client';
+import { AnalyticsService } from '@/shared/services/analyticsService';
 import { SECURITY_ROUTES } from '@/config/security';
 import axios from 'axios';
 
@@ -77,7 +78,7 @@ export const trackRouteVisit = (to: RouteLocationNormalized, from: RouteLocation
     };
 
     const send = () => {
-        api.post('/analytics/track-visit', payload).catch((err) => {
+        AnalyticsService.trackVisit(payload).catch((err) => {
             if (axios.isAxiosError(err) && err.response?.status === 403) {
                 // Avoid noisy retry loops while edge protection is blocking this endpoint.
                 analyticsBlockedUntil = Date.now() + 5 * 60 * 1000;

@@ -95,12 +95,12 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import api from '@/engine/api/client';
+import { LibraryService } from '@/modules/Library/services/libraryService';
 import { useToast } from '@/shared/composables/useToast';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
 import { tagSchema } from '@/shared/schemas';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import type { Tag } from '@/modules/Cms/types/cms';
+import type { Tag } from '@/modules/Library/types/taxonomy';
 
 // Shadcn UI
 import {
@@ -193,11 +193,11 @@ const handleSubmit = async () => {
     saving.value = true;
     clearErrors();
     try {
-        if (isEdit.value) {
-            await api.put(`/manage/cms/tags/${props.tag?.id}`, form.value);
+        if (isEdit.value && props.tag?.id) {
+            await LibraryService.updateTag(props.tag.id, form.value);
             toast.success.update('Tag');
         } else {
-            await api.post('/manage/library/tags', form.value);
+            await LibraryService.createTag(form.value);
             toast.success.create('Tag');
         }
         

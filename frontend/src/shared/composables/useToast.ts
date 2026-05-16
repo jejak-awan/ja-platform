@@ -53,20 +53,20 @@ export function useToast() {
         'Server Error': 'common.messages.error.server',
 
         // Media Specific Errors (all variations)
-        'You do not have permission to delete media': 'modules.core.media.errors.noPermissionDelete',
-        'You do not have permission to update media': 'modules.core.media.errors.noPermissionUpdate',
-        'You do not have permission to restore media': 'modules.core.media.errors.noPermissionUpdate',
-        'You do not have permission to permanently delete media': 'modules.core.media.errors.noPermissionDelete',
-        'You do not have permission to edit media': 'modules.core.media.errors.noPermissionUpdate',
-        'You do not have permission to view this media': 'modules.core.media.errors.noPermissionUpdate',
-        'You do not have permission to update this media': 'modules.core.media.errors.noPermissionUpdate',
-        'You do not have permission to delete this media': 'modules.core.media.errors.noPermissionDelete',
-        'You do not have permission to restore this media': 'modules.core.media.errors.noPermissionUpdate',
-        'You do not have permission to manage this media': 'modules.core.media.errors.noPermissionManage',
-        'You cannot update global media': 'modules.core.media.errors.cannotUpdateGlobal',
-        'You cannot delete global media': 'modules.core.media.errors.cannotDeleteGlobal',
-        'You cannot restore global media': 'modules.core.media.errors.cannotDeleteGlobal',
-        'Media is currently in use': 'modules.core.media.errors.mediaInUse',
+        'You do not have permission to delete media': 'modules.system.media.errors.noPermissionDelete',
+        'You do not have permission to update media': 'modules.system.media.errors.noPermissionUpdate',
+        'You do not have permission to restore media': 'modules.system.media.errors.noPermissionUpdate',
+        'You do not have permission to permanently delete media': 'modules.system.media.errors.noPermissionDelete',
+        'You do not have permission to edit media': 'modules.system.media.errors.noPermissionUpdate',
+        'You do not have permission to view this media': 'modules.system.media.errors.noPermissionUpdate',
+        'You do not have permission to update this media': 'modules.system.media.errors.noPermissionUpdate',
+        'You do not have permission to delete this media': 'modules.system.media.errors.noPermissionDelete',
+        'You do not have permission to restore this media': 'modules.system.media.errors.noPermissionUpdate',
+        'You do not have permission to manage this media': 'modules.system.media.errors.noPermissionManage',
+        'You cannot update global media': 'modules.system.media.errors.cannotUpdateGlobal',
+        'You cannot delete global media': 'modules.system.media.errors.cannotDeleteGlobal',
+        'You cannot restore global media': 'modules.system.media.errors.cannotDeleteGlobal',
+        'Media is currently in use': 'modules.system.media.errors.mediaInUse',
     };
 
     /**
@@ -183,10 +183,10 @@ export function useToast() {
             markSpam: (item = 'Item') => toast.success(t('common.messages.toast.success'), t('common.messages.success.marked_spam', { item })),
 
             // Media Specific
-            upload: () => toast.success(t('common.messages.toast.success'), t('modules.core.media.toast.uploadSuccess') || 'File uploaded successfully'),
-            move: () => toast.success(t('common.messages.toast.success'), t('modules.core.media.toast.moveSuccess') || 'Item moved successfully'),
-            folderCreated: () => toast.success(t('common.messages.toast.success'), t('modules.core.media.toast.folderCreatedSuccess') || 'Folder created successfully'),
-            urlCopied: () => toast.success(t('common.messages.toast.success'), t('modules.core.media.toast.urlCopied') || 'URL copied to clipboard'),
+            upload: () => toast.success(t('common.messages.toast.success'), t('modules.system.media.toast.uploadSuccess') || 'File uploaded successfully'),
+            move: () => toast.success(t('common.messages.toast.success'), t('modules.system.media.toast.moveSuccess') || 'Item moved successfully'),
+            folderCreated: () => toast.success(t('common.messages.toast.success'), t('modules.system.media.toast.folderCreatedSuccess') || 'Folder created successfully'),
+            urlCopied: () => toast.success(t('common.messages.toast.success'), t('modules.system.media.toast.urlCopied') || 'URL copied to clipboard'),
 
             // Content Template Specific
             createFromTemplate: () => toast.success(t('common.messages.toast.success'), t('modules.cms.content_templates.messages.createContentSuccess') || 'Content created from template'),
@@ -203,8 +203,8 @@ export function useToast() {
             validation: (message) => toast.error(t('common.messages.toast.error'), message || t('common.messages.error.validation')),
 
             // Media Specific
-            permission: () => toast.error(t('common.messages.toast.error'), t('modules.core.media.toast.permissionDenied') || 'Permission denied'),
-            fileTooLarge: () => toast.warning(t('common.messages.toast.warning'), t('modules.core.media.toast.fileTooLarge') || 'File is too large'),
+            permission: () => toast.error(t('common.messages.toast.error'), t('modules.system.media.toast.permissionDenied') || 'Permission denied'),
+            fileTooLarge: () => toast.warning(t('common.messages.toast.warning'), t('modules.system.media.toast.fileTooLarge') || 'File is too large'),
 
             // Specific Domain Errors
             templateCreateContent: (error) => toast.error(t('common.messages.toast.error'), getErrorMessage(error, 'modules.cms.content_templates.messages.createError')),

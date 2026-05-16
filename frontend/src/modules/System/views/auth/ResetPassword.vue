@@ -4,7 +4,7 @@
       Reset password
     </template>
     <template #subtitle>
-      {{ t('modules.core.auth.resetPassword.subtitle') || 'Enter your new password below' }}
+      {{ t('modules.system.auth.resetPassword.subtitle') || 'Enter your new password below' }}
     </template>
 
     <form
@@ -24,7 +24,7 @@
           required
           class="auth-input h-9 text-sm"
           :class="errors.email ? 'border-destructive/50 ring-destructive/20 focus:border-destructive' : ''"
-          :placeholder="t('modules.core.auth.login.emailPlaceholder')"
+          :placeholder="t('modules.system.auth.login.emailPlaceholder')"
         />
       </div>
                 
@@ -32,7 +32,7 @@
         <Label
           for="token"
           class="text-[10px] uppercase tracking-wider font-bold ml-1 text-muted-foreground/80"
-        >{{ t('modules.core.auth.resetPassword.tokenLabel') }}</Label>
+        >{{ t('modules.system.auth.resetPassword.tokenLabel') }}</Label>
         <Input
           id="token"
           v-model="form.token"
@@ -60,7 +60,7 @@
               required
               class="auth-input h-9 text-sm pr-10"
               :class="errors.password ? 'border-destructive/50 ring-destructive/20 focus:border-destructive' : ''"
-              :placeholder="t('modules.core.auth.login.passwordPlaceholder')"
+              :placeholder="t('modules.system.auth.login.passwordPlaceholder')"
             />
             <button
               type="button"
@@ -142,7 +142,7 @@
         <span
           v-else
           class="text-xs"
-        >{{ t('modules.core.auth.resetPassword.submit') }}</span>
+        >{{ t('modules.system.auth.resetPassword.submit') }}</span>
       </Button>
 
       <div class="text-center text-[10px] text-muted-foreground mt-3">
@@ -151,7 +151,7 @@
           class="inline-flex items-center font-bold text-primary hover:text-primary/80 transition-all group"
         >
           <ArrowLeft class="mr-2 h-3 w-3 transition-transform group-hover:-translate-x-1" />
-          {{ t('modules.core.auth.forgotPassword.backToLogin') }}
+          {{ t('modules.system.auth.forgotPassword.backToLogin') }}
         </router-link>
       </div>
     </form>
@@ -164,7 +164,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/modules/System/stores/auth';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
-import { resetPasswordSchema } from '@/shared/schemas/auth';
+import { resetPasswordSchema } from '@/modules/System/schemas/auth';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';

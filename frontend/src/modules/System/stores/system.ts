@@ -14,7 +14,7 @@ export interface SiteSettings {
     [key: string]: any;
 }
 
-export interface CoreState {
+export interface SystemState {
     settings: Record<string, any>;
     appIdentity: {
         app_name: string;
@@ -35,12 +35,14 @@ export interface CoreState {
     settingsPromises: Record<string, Promise<any>>;
     publicSettingsLoaded: boolean;
     publicSettingsPromise: Promise<any> | null;
+    themeMode: 'light' | 'dark' | 'system';
+    isDarkMode: boolean;
 }
 
 // siteSettings moved back to CmsStore as per user request (CMS is public web authority)
 
-export const useSystemStore = defineStore('core', {
-    state: (): CoreState => ({
+export const useSystemStore = defineStore('system', {
+    state: (): SystemState => ({
         settings: {},
         appIdentity: {
             app_name: 'Janari App',
@@ -69,6 +71,8 @@ export const useSystemStore = defineStore('core', {
         settingsPromises: {},
         publicSettingsLoaded: false,
         publicSettingsPromise: null,
+        themeMode: 'system', // 'light', 'dark', 'system'
+        isDarkMode: false,
     }),
 
     actions: {
@@ -96,7 +100,7 @@ export const useSystemStore = defineStore('core', {
                     return settingsData;
                 }
                 catch (error: unknown) {
-                    logger.error(`[Core Store] Error fetching ${group} settings:`, error);
+                    logger.error(`[System Store] Error fetching ${group} settings:`, error);
                     return {};
                 } finally {
                     this.loadingGroups = { ...this.loadingGroups, [group]: false };
@@ -154,7 +158,7 @@ export const useSystemStore = defineStore('core', {
 
                     return data;
                 } catch (error) {
-                    logger.error('[Core Store] Error fetching public settings:', error);
+                    logger.error('[System Store] Error fetching public settings:', error);
                     return {};
                 } finally {
                     this.publicSettingsLoaded = true;
@@ -188,13 +192,120 @@ export const useSystemStore = defineStore('core', {
                 
                 return this.appIdentity;
             } catch (error) {
-                logger.error('[Core Store] Error fetching app identity:', error);
+                logger.error('[System Store] Error fetching app identity:', error);
                 return this.appIdentity;
             }
         },
 
         getSetting(key: string, defaultValue: any = null) {
             return this.settings[key] !== undefined ? this.settings[key] : defaultValue;
-        }
+        },
+
+        isAuthenticatedLocally(): boolean {
+            const userRaw = localStorage.getItem('user');
+            if (!userRaw) return false;
+
+            try {
+                const parsed = JSON.parse(userRaw);
+                return !!parsed && typeof parsed === 'object';
+            } catch {
+                return false;
+            }
+        },
+
+        async initTheme() {
+            const THEME_KEY = 'admin-dark-mode';
+
+            // 1. Detect system preference
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            // 2. Load from localStorage or fallback to system
+            const saved = localStorage.getItem(THEME_KEY) || 'system';
+            this.themeMode = saved as 'light' | 'dark' | 'system';
+
+            // 3. Resolve actual dark mode state
+            this.isDarkMode = saved === 'dark' || (saved === 'system' && prefersDark);
+
+            // 4. Apply to document
+            this.applyThemeToDocument();
+
+            // 5. Watch for system changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (this.themeMode === 'system') {
+                    this.isDarkMode = e.matches;
+                    this.applyThemeToDocument();
+                }
+            });
+
+            // 6. Try to load from backend (if authenticated)
+            await this.loadThemePreferences();
+        },
+
+        async loadThemePreferences() {
+            if (!this.isAuthenticatedLocally()) return;
+            try {
+                const response = await api.get('/manage/system/profile/preferences', { _skipManualRedirect: true } as any);
+                const backendMode = response.data?.dark_mode;
+                const isValidThemeMode = backendMode === 'light' || backendMode === 'dark' || backendMode === 'system';
+                if (isValidThemeMode) {
+                    if (this.themeMode !== backendMode) {
+                        this.setThemeMode(backendMode, false); // Don't sync back to backend
+                    }
+                }
+            } catch (error: unknown) {
+                const message = error instanceof Error ? error.message : String(error);
+                logger.debug('[System Store] Failed to load theme preferences:', { message });
+            }
+        },
+
+        async syncThemeWithBackend(mode: string) {
+            if (!this.isAuthenticatedLocally()) return;
+            try {
+                await api.put('/manage/system/profile/preferences', { dark_mode: mode }, { _skipManualRedirect: true } as any);
+            } catch (error: unknown) {
+                const message = error instanceof Error ? error.message : String(error);
+                logger.debug('[System Store] Theme sync failed:', { message });
+            }
+        },
+
+        setThemeMode(mode: 'light' | 'dark' | 'system', syncToBackend = true) {
+            const THEME_KEY = 'admin-dark-mode';
+
+            // Add no-transitions class to prevent flashing
+            document.documentElement.classList.add('no-transitions');
+
+            this.themeMode = mode;
+            localStorage.setItem(THEME_KEY, mode);
+
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            this.isDarkMode = mode === 'dark' || (mode === 'system' && prefersDark);
+
+            this.applyThemeToDocument();
+
+            if (syncToBackend) {
+                this.syncThemeWithBackend(mode);
+            }
+
+            // Remove no-transitions class after short delay
+            setTimeout(() => {
+                document.documentElement.classList.remove('no-transitions');
+            }, 50);
+        },
+
+        toggleDarkMode(value?: boolean) {
+            // If value is provided (e.g. from a switch), use it. 
+            // Otherwise, toggle current state.
+            const isDark = value !== undefined ? value : !this.isDarkMode;
+            const next = isDark ? 'dark' : 'light';
+            this.setThemeMode(next);
+        },
+
+        applyThemeToDocument() {
+            if (this.isDarkMode) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        },
     },
 });

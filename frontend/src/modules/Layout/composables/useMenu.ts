@@ -2,13 +2,13 @@ import { logger } from '@/shared/utils/logger';
 import { ref, computed, watch, provide, inject, type InjectionKey, type Ref, toRaw } from 'vue';
 import api from '@/engine/api/client';
 import { parseResponse, ensureArray, parseSingleResponse } from '@/shared/utils/responseParser';
-import type { Menu, MenuItem, MenuItemDTO } from '@/modules/Cms/types/menu';
+import type { Menu, MenuItem, MenuItemDTO } from '@/modules/Layout/types/menu';
 
 export interface MenuContext {
     menu: Ref<Menu | null>;
     items: Ref<MenuItem[]>;
     selectedItem: Ref<MenuItem | null>;
-    selectedItemId: Ref<number | string | null>;
+    selectedItemId: Ref<string | number | null>;
     isLoading: Ref<boolean>;
     isSaving: Ref<boolean>;
     error: Ref<unknown>;
@@ -23,20 +23,20 @@ export interface MenuContext {
     copyItem: (item: MenuItem) => void;
     cutItem: (item: MenuItem) => void;
     pasteItem: (parentId?: number | string | null) => void;
-    findItemById: (id: string | string) => MenuItem | null;
-    findParent: (id: string | string) => MenuItem | null;
+    findItemById: (id: string | number | null) => MenuItem | null;
+    findParent: (id: string | number | null) => MenuItem | null;
     buildTree: (flatItems: MenuItem[]) => MenuItem[];
     flattenTree: (treeItems: MenuItem[]) => MenuItemDTO[];
     addItem: (itemData: Partial<MenuItem>, parentId?: number | string | null) => MenuItem;
-    removeItem: (id: string | string) => void;
-    updateItem: (id: string | string, updates: Partial<MenuItem>) => void;
-    duplicateItem: (id: string | string) => void;
-    moveItem: (id: string | string, newParentId: number | string | null, newIndex?: number | null) => void;
-    selectItem: (id: string | string | null) => void;
+    removeItem: (id: string | number | null) => void;
+    updateItem: (id: string | number | null, updates: Partial<MenuItem>) => void;
+    duplicateItem: (id: string | number | null) => void;
+    moveItem: (id: string | number | null, newParentId: number | string | null, newIndex?: number | null) => void;
+    selectItem: (id: string | number | null) => void;
     clearSelection: () => void;
     fetchMenu: () => Promise<void>;
     saveMenu: (menuData?: Partial<Menu>) => Promise<boolean>;
-    deleteItem: (id: string | string) => Promise<void>;
+    deleteItem: (id: string | number | null) => Promise<void>;
     markClean: () => void;
     menus: Ref<Record<string, Menu>>;
     fetchMenuByLocation: (location: string) => Promise<void>;
@@ -58,6 +58,20 @@ const deepClone = <T>(obj: T): T => {
 };
 
 /**
+ * Build nested tree from flat items array
+ */
+const buildTree = (flatItems: MenuItem[], parentId: number | string | null = null): MenuItem[] => {
+    if (!Array.isArray(flatItems)) return [];
+    return flatItems
+        .filter(item => item.parent_id == parentId) // Use loose comparison for string/number IDs
+        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+        .map(item => ({
+            ...item,
+            children: buildTree(flatItems, item.id as number | string | null)
+        }));
+};
+
+/**
  * useMenu composable - Centralized state management for Menu Builder
  */
 // Global state for frontend/shared usage
@@ -65,8 +79,12 @@ const menus = ref<Record<string, Menu>>({});
 
 const fetchMenuByLocation = async (location: string) => {
     try {
-        const response = await api.get(`/public/layout/menus/location/${location}?module=cms`);
-        menus.value[location] = parseSingleResponse(response) as Menu;
+        const response = await api.get(`/public/layout/menus/location/${location}`);
+        const menu = parseSingleResponse(response) as Menu;
+        if (menu && Array.isArray(menu.items)) {
+            menu.items = buildTree(menu.items);
+        }
+        menus.value[location] = menu;
     } catch (err) {
         // Silent fail for frontend menus to avoid crashing app
         logger.warning(`Failed to fetch menu for location: ${location}`, err);
@@ -83,9 +101,13 @@ const fetchMenuByIdentifier = async (identifier: string | number, cacheKey?: str
     const targetKey = cacheKey || raw;
 
     try {
-        const endpoint = isNumericId ? `/public/layout/menus/${raw}` : `/public/layout/menus/location/${raw}?module=cms`;
+        const endpoint = isNumericId ? `/public/layout/menus/${raw}` : `/public/layout/menus/location/${raw}`;
         const response = await api.get(endpoint);
-        menus.value[targetKey] = parseSingleResponse(response) as Menu;
+        const menu = parseSingleResponse(response) as Menu;
+        if (menu && Array.isArray(menu.items)) {
+            menu.items = buildTree(menu.items);
+        }
+        menus.value[targetKey] = menu;
     } catch (err) {
         logger.warning(`Failed to fetch menu by identifier: ${raw}`, err);
     }
@@ -106,7 +128,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
     // ==================== HISTORY ====================
     interface HistoryState {
         items: MenuItem[];
-        selectedItemId: number | string | null;
+        selectedItemId: string | number | null;
     }
     const history = ref<HistoryState[]>([]);
     const historyIndex = ref(-1);
@@ -237,18 +259,6 @@ export function useMenu(menuId?: Ref<number | string | null>) {
 
     // ==================== ITEM HELPERS ====================
 
-    /**
-     * Build nested tree from flat items array
-     */
-    const buildTree = (flatItems: MenuItem[], parentId: number | string | null = null): MenuItem[] => {
-        return flatItems
-            .filter(item => item.parent_id == parentId) // Use loose comparison for string/number IDs
-            .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
-            .map(item => ({
-                ...item,
-                children: buildTree(flatItems, item.id as number | string | null)
-            }));
-    };
 
     /**
      * Flatten tree to array for API
@@ -291,7 +301,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
     /**
      * Find item by ID recursively
      */
-    const findItemById = (id: string | string, searchItems: MenuItem[] = items.value): MenuItem | null => {
+    const findItemById = (id: string | number | null, searchItems: MenuItem[] = items.value): MenuItem | null => {
         if (!searchItems || !Array.isArray(searchItems)) return null;
         for (const item of searchItems) {
             if (!item) continue;
@@ -309,7 +319,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
     /**
      * Find parent of an item
      */
-    const findParent = (id: string | string, searchItems: MenuItem[] = items.value, parent: MenuItem | null = null): MenuItem | null => {
+    const findParent = (id: string | number | null, searchItems: MenuItem[] = items.value, parent: MenuItem | null = null): MenuItem | null => {
         if (!searchItems || !Array.isArray(searchItems)) return null;
         for (const item of searchItems) {
             if (!item) continue;
@@ -360,7 +370,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         return newItem;
     };
 
-    const removeItem = (id: string | string) => {
+    const removeItem = (id: string | number | null) => {
         const removeFromList = (list: MenuItem[]): boolean => {
             const index = list.findIndex(i => (i.id || i._temp_id) == id);
             if (index > -1) {
@@ -384,7 +394,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         takeSnapshot();
     };
 
-    const updateItem = (id: string | string, updates: Partial<MenuItem>) => {
+    const updateItem = (id: string | number | null, updates: Partial<MenuItem>) => {
         const item = findItemById(id);
         if (item) {
             Object.assign(item, updates);
@@ -392,7 +402,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         }
     };
 
-    const duplicateItem = (id: string | string) => {
+    const duplicateItem = (id: string | number | null) => {
         const item = findItemById(id);
         if (!item) return;
 
@@ -413,7 +423,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         takeSnapshot();
     };
 
-    const moveItem = (id: string | string, newParentId: number | string | null, newIndex: number | null = null) => {
+    const moveItem = (id: string | number | null, newParentId: number | string | null, newIndex: number | null = null) => {
         const item = findItemById(id);
         if (!item) return;
 
@@ -447,7 +457,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         takeSnapshot();
     };
 
-    const selectItem = (id: string | string | null) => {
+    const selectItem = (id: string | number | null) => {
         selectedItemId.value = id;
     };
 
@@ -571,7 +581,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         }
     };
 
-    const deleteItem = async (id: string | string) => {
+    const deleteItem = async (id: string | number | null) => {
         const item = findItemById(id);
         if (!item) return;
 

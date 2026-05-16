@@ -4,10 +4,10 @@
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
       <div>
         <h1 class="text-2xl font-bold tracking-tight text-foreground">
-          {{ $t('modules.core.analytics.title') }}
+          {{ $t('modules.system.analytics.title') }}
         </h1>
         <p class="text-sm text-muted-foreground">
-          {{ $t('modules.core.analytics.subtitle') }}
+          {{ $t('modules.system.analytics.subtitle') }}
         </p>
       </div>
             
@@ -19,7 +19,7 @@
             type="date" 
             class="h-9 border-0 bg-transparent focus-visible:ring-0 w-[140px]" 
           />
-          <span class="text-muted-foreground text-xs uppercase font-medium">{{ $t('modules.core.analytics.to') }}</span>
+          <span class="text-muted-foreground text-xs uppercase font-medium">{{ $t('modules.system.analytics.to') }}</span>
           <Input 
             v-model="dateTo" 
             type="date" 
@@ -27,7 +27,7 @@
           />
         </div>
         <Button @click="fetchAnalytics">
-          {{ $t('modules.core.analytics.apply') }}
+          {{ $t('modules.system.analytics.apply') }}
         </Button>
                 
         <!-- Export Dropdown -->
@@ -48,7 +48,7 @@
               v-else
               class="w-4 h-4 mr-2 animate-spin"
             />
-            {{ exporting ? $t('modules.core.analytics.export.exporting') : $t('modules.core.analytics.export.button') }}
+            {{ exporting ? $t('modules.system.analytics.export.exporting') : $t('modules.system.analytics.export.button') }}
           </Button>
           <div
             v-if="showExportMenu"
@@ -58,19 +58,19 @@
               class="w-full px-4 py-2 text-left text-sm text-popover-foreground hover:bg-accent transition-colors"
               @click="exportData('visits')"
             >
-              {{ $t('modules.core.analytics.export.visits') }}
+              {{ $t('modules.system.analytics.export.visits') }}
             </button>
             <button
               class="w-full px-4 py-2 text-left text-sm text-popover-foreground hover:bg-accent transition-colors"
               @click="exportData('events')"
             >
-              {{ $t('modules.core.analytics.export.events') }}
+              {{ $t('modules.system.analytics.export.events') }}
             </button>
             <button
               class="w-full px-4 py-2 text-left text-sm text-popover-foreground hover:bg-accent transition-colors"
               @click="exportData('sessions')"
             >
-              {{ $t('modules.core.analytics.export.sessions') }}
+              {{ $t('modules.system.analytics.export.sessions') }}
             </button>
           </div>
         </div>
@@ -83,7 +83,7 @@
       class="text-center py-12"
     >
       <p class="text-muted-foreground">
-        {{ $t('modules.core.analytics.loading') }}
+        {{ $t('modules.system.analytics.loading') }}
       </p>
     </div>
 
@@ -98,7 +98,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-muted-foreground">
-                  {{ $t('modules.core.analytics.overview.totalVisits') }}
+                  {{ $t('modules.system.analytics.overview.totalVisits') }}
                 </p>
                 <p class="text-2xl font-bold tracking-tight text-foreground">
                   {{ formatNumber(overview.total_visits || 0) }}
@@ -115,7 +115,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-muted-foreground">
-                  {{ $t('modules.core.analytics.overview.uniqueVisitors') }}
+                  {{ $t('modules.system.analytics.overview.uniqueVisitors') }}
                 </p>
                 <p class="text-2xl font-bold tracking-tight text-foreground">
                   {{ formatNumber(overview.unique_visitors || 0) }}
@@ -132,7 +132,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-muted-foreground">
-                  {{ $t('modules.core.analytics.overview.totalSessions') }}
+                  {{ $t('modules.system.analytics.overview.totalSessions') }}
                 </p>
                 <p class="text-2xl font-bold tracking-tight text-foreground">
                   {{ formatNumber(overview.total_sessions || 0) }}
@@ -149,7 +149,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-muted-foreground">
-                  {{ $t('modules.core.analytics.overview.bounceRate') }}
+                  {{ $t('modules.system.analytics.overview.bounceRate') }}
                 </p>
                 <p class="text-2xl font-bold tracking-tight text-foreground">
                   {{ overview.bounce_rate || 0 }}%
@@ -170,21 +170,21 @@
                 class="bg-background/50 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 gap-1.5 py-1"
               >
                 <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                {{ $t('modules.core.analytics.charts.realtime') }}
+                {{ $t('modules.system.analytics.charts.realtime') }}
               </Badge>
             </div>
             <div class="flex items-center gap-8">
               <div class="text-center">
                 <span class="text-xl font-bold text-indigo-500 dark:text-indigo-400">{{ realtime.active_sessions || 0 }}</span>
-                <span class="text-xs font-medium text-muted-foreground ml-1.5 uppercase tracking-wider">{{ $t('modules.core.analytics.realtime.activeSessions') }}</span>
+                <span class="text-xs font-medium text-muted-foreground ml-1.5 uppercase tracking-wider">{{ $t('modules.system.analytics.realtime.activeSessions') }}</span>
               </div>
               <div class="text-center">
                 <span class="text-xl font-bold text-emerald-500 dark:text-emerald-400">{{ formatNumber(realtime.visits_last_hour || 0) }}</span>
-                <span class="text-xs font-medium text-muted-foreground ml-1.5 uppercase tracking-wider">{{ $t('modules.core.analytics.realtime.visitsLastHour') }}</span>
+                <span class="text-xs font-medium text-muted-foreground ml-1.5 uppercase tracking-wider">{{ $t('modules.system.analytics.realtime.visitsLastHour') }}</span>
               </div>
               <div class="text-center">
                 <span class="text-xl font-bold text-blue-500 dark:text-blue-400">{{ realtime.top_pages_now?.length || 0 }}</span>
-                <span class="text-xs font-medium text-muted-foreground ml-1.5 uppercase tracking-wider">{{ $t('modules.core.analytics.realtime.activePages') }}</span>
+                <span class="text-xs font-medium text-muted-foreground ml-1.5 uppercase tracking-wider">{{ $t('modules.system.analytics.realtime.activePages') }}</span>
               </div>
             </div>
           </div>
@@ -196,7 +196,7 @@
         <CardHeader class="pb-3 border-b border-border/50">
           <CardTitle class="text-base font-semibold flex items-center gap-2">
             <TrendingUp class="w-4 h-4 text-primary" />
-            {{ $t('modules.core.analytics.sections.traffic') }}
+            {{ $t('modules.system.analytics.sections.traffic') }}
           </CardTitle>
         </CardHeader>
         <CardContent class="p-6">
@@ -204,13 +204,13 @@
             <!-- Visits Chart -->
             <div class="lg:col-span-2">
               <h4 class="text-xs font-semibold text-muted-foreground capitalize tracking-wide mb-4">
-                {{ $t('modules.core.analytics.charts.visitsOverTime') }}
+                {{ $t('modules.system.analytics.charts.visitsOverTime') }}
               </h4>
               <div class="h-[240px]">
                 <LineChart
                   v-if="visits.length > 0"
                   :data="visits"
-                  :label="$t('modules.core.analytics.charts.visits')"
+                  :label="$t('modules.system.analytics.charts.visits')"
                 />
                 <div
                   v-else
@@ -218,7 +218,7 @@
                 >
                   <BarChart3 class="w-8 h-8 mb-2 opacity-20" />
                   <p class="text-sm">
-                    {{ $t('modules.core.analytics.noData') }}
+                    {{ $t('modules.system.analytics.noData') }}
                   </p>
                 </div>
               </div>
@@ -226,7 +226,7 @@
             <!-- Top Pages -->
             <div>
               <h4 class="text-xs font-semibold text-muted-foreground capitalize tracking-wide mb-4">
-                {{ $t('modules.core.analytics.charts.topPages') }}
+                {{ $t('modules.system.analytics.charts.topPages') }}
               </h4>
               <div class="space-y-3 max-h-[240px] overflow-y-auto pr-2 custom-scrollbar">
                 <div
@@ -247,7 +247,7 @@
                   class="h-full flex flex-col items-center justify-center py-12 text-muted-foreground bg-muted/30 rounded-lg"
                 >
                   <p class="text-xs italic">
-                    {{ $t('modules.core.analytics.noData') }}
+                    {{ $t('modules.system.analytics.noData') }}
                   </p>
                 </div>
               </div>
@@ -263,7 +263,7 @@
           <CardHeader class="pb-3 border-b border-border/50">
             <CardTitle class="text-base font-semibold flex items-center gap-2">
               <Monitor class="w-4 h-4 text-primary" />
-              {{ $t('modules.core.analytics.sections.technology') }}
+              {{ $t('modules.system.analytics.sections.technology') }}
             </CardTitle>
           </CardHeader>
           <CardContent class="p-6">
@@ -271,7 +271,7 @@
               <!-- Devices -->
               <div>
                 <h4 class="text-xs font-semibold text-muted-foreground capitalize tracking-wide mb-4">
-                  {{ $t('modules.core.analytics.charts.devices') }}
+                  {{ $t('modules.system.analytics.charts.devices') }}
                 </h4>
                 <div class="h-[160px]">
                   <DoughnutChart
@@ -284,14 +284,14 @@
                     v-else
                     class="h-full flex items-center justify-center text-muted-foreground bg-muted/30 rounded-lg text-xs"
                   >
-                    {{ $t('modules.core.analytics.noData') }}
+                    {{ $t('modules.system.analytics.noData') }}
                   </div>
                 </div>
               </div>
               <!-- Browsers -->
               <div>
                 <h4 class="text-xs font-semibold text-muted-foreground capitalize tracking-wide mb-4">
-                  {{ $t('modules.core.analytics.charts.browsers') }}
+                  {{ $t('modules.system.analytics.charts.browsers') }}
                 </h4>
                 <div class="h-[160px]">
                   <DoughnutChart
@@ -304,7 +304,7 @@
                     v-else
                     class="h-full flex items-center justify-center text-muted-foreground bg-muted/30 rounded-lg text-xs"
                   >
-                    {{ $t('modules.core.analytics.noData') }}
+                    {{ $t('modules.system.analytics.noData') }}
                   </div>
                 </div>
               </div>
@@ -317,7 +317,7 @@
           <CardHeader class="pb-3 border-b border-border/50">
             <CardTitle class="text-base font-semibold flex items-center gap-2">
               <Globe class="w-4 h-4 text-primary" />
-              {{ $t('modules.core.analytics.sections.geography') }}
+              {{ $t('modules.system.analytics.sections.geography') }}
             </CardTitle>
           </CardHeader>
           <CardContent class="p-6">
@@ -325,7 +325,7 @@
               <!-- Countries -->
               <div>
                 <h4 class="text-xs font-semibold text-muted-foreground capitalize tracking-wide mb-4">
-                  {{ $t('modules.core.analytics.charts.topCountries') }}
+                  {{ $t('modules.system.analytics.charts.topCountries') }}
                 </h4>
                 <div class="h-[160px]">
                   <BarChart
@@ -339,14 +339,14 @@
                     v-else
                     class="h-full flex items-center justify-center text-muted-foreground bg-muted/30 rounded-lg text-xs"
                   >
-                    {{ $t('modules.core.analytics.noData') }}
+                    {{ $t('modules.system.analytics.noData') }}
                   </div>
                 </div>
               </div>
               <!-- Referrers -->
               <div>
                 <h4 class="text-xs font-semibold text-muted-foreground capitalize tracking-wide mb-4">
-                  {{ $t('modules.core.analytics.charts.topReferrers') }}
+                  {{ $t('modules.system.analytics.charts.topReferrers') }}
                 </h4>
                 <div class="space-y-2.5 max-h-[160px] overflow-y-auto pr-1 flex flex-col justify-center">
                   <div
@@ -367,7 +367,7 @@
                     class="flex flex-col items-center justify-center py-8 text-muted-foreground bg-muted/30 rounded-lg"
                   >
                     <p class="text-[10px] italic">
-                      {{ $t('modules.core.analytics.noData') }}
+                      {{ $t('modules.system.analytics.noData') }}
                     </p>
                   </div>
                 </div>
@@ -382,7 +382,7 @@
         <CardHeader class="pb-3 border-b border-border/50">
           <CardTitle class="text-base font-semibold flex items-center gap-2">
             <FileText class="w-4 h-4 text-primary" />
-            {{ $t('modules.core.analytics.sections.content') }}
+            {{ $t('modules.system.analytics.sections.content') }}
           </CardTitle>
         </CardHeader>
         <CardContent class="p-6">
@@ -405,7 +405,7 @@
               </div>
               <div class="mt-4 flex items-end justify-between">
                 <span class="text-2xl font-bold tracking-tight text-foreground tabular-nums">{{ content.visits_count || 0 }}</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">{{ $t('modules.core.analytics.labels.visits') }}</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">{{ $t('modules.system.analytics.labels.visits') }}</span>
               </div>
             </div>
             <div
@@ -414,7 +414,7 @@
             >
               <FileText class="w-10 h-10 mb-2 opacity-10" />
               <p class="text-sm italic">
-                {{ $t('modules.core.analytics.noData') }}
+                {{ $t('modules.system.analytics.noData') }}
               </p>
             </div>
           </div>
@@ -428,7 +428,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/engine/api/client';
+import { AnalyticsService } from '@/shared/services/analyticsService';
 import { useToast } from '@/shared/composables/useToast';
 import { parseResponse, parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
 import LineChart from '@/modules/System/components/charts/LineChart.vue';
@@ -538,15 +538,15 @@ const fetchAnalytics = async () => {
     try {
         const params = { date_from: dateFrom.value, date_to: dateTo.value };
         const [overviewRes, visitsRes, topPagesRes, topContentRes, devicesRes, browsersRes, countriesRes, referrersRes, realtimeRes] = await Promise.all([
-            api.get('/manage/cms/analytics/overview', { params }),
-            api.get('/manage/cms/analytics/visits', { params }),
-            api.get('/manage/cms/analytics/top-pages', { params }),
-            api.get('/manage/cms/analytics/top-content', { params }),
-            api.get('/manage/cms/analytics/devices', { params }),
-            api.get('/manage/cms/analytics/browsers', { params }),
-            api.get('/manage/cms/analytics/countries', { params }),
-            api.get('/manage/cms/analytics/referrers', { params }),
-            api.get('/manage/cms/analytics/realtime'),
+            AnalyticsService.overview(params),
+            AnalyticsService.visits(params),
+            AnalyticsService.topPages(params),
+            AnalyticsService.topContent(params),
+            AnalyticsService.devices(params),
+            AnalyticsService.browsers(params),
+            AnalyticsService.countries(params),
+            AnalyticsService.referrers(params),
+            AnalyticsService.realtime(),
         ]);
 
         overview.value = parseSingleResponse(overviewRes) || {};
@@ -577,9 +577,10 @@ const exportData = async (type: string) => {
     showExportMenu.value = false;
     exporting.value = true;
     try {
-        const response = await api.get('/manage/cms/analytics/export', {
-            params: { date_from: dateFrom.value, date_to: dateTo.value, type },
-            responseType: 'blob'
+        const response = await AnalyticsService.export({
+            date_from: dateFrom.value,
+            date_to: dateTo.value,
+            type,
         });
         const blob = new Blob([response.data], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
@@ -590,7 +591,7 @@ const exportData = async (type: string) => {
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        toast.success.action(t('modules.core.analytics.export.success') || 'Export started');
+        toast.success.action(t('modules.system.analytics.export.success') || 'Export started');
     } catch (error: unknown) {
         logger.error('Failed to export:', error);
         toast.error.fromResponse(error);
@@ -602,7 +603,7 @@ const exportData = async (type: string) => {
 onMounted(() => {
     fetchAnalytics();
     refreshInterval = setInterval(() => {
-        api.get('/manage/cms/analytics/realtime').then(res => {
+        AnalyticsService.realtime().then(res => {
             realtime.value = parseSingleResponse(res) || {};
         }).catch(err => {
             logger.error('Realtime fetch failed:', err);

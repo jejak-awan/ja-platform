@@ -7,6 +7,7 @@ import SettingGroup from '@/modules/System/components/settings/SettingGroup.vue'
 import SettingField from '@/modules/System/components/settings/SettingField.vue'
 import { Button } from '@/shared/components/ui';
 import { useConfirm } from '@/shared/composables/useConfirm'
+import { systemPaths } from '@/engine/api/paths';
 import type { SettingValue } from '@/engine/types/settings'
 
 interface Setting {
@@ -84,8 +85,8 @@ const mediaSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'upload',
-            title: t('modules.core.settings.groups.upload.title'),
-            description: t('modules.core.settings.groups.upload.description'),
+            title: t('modules.system.settings.groups.upload.title'),
+            description: t('modules.system.settings.groups.upload.description'),
             icon: UploadIcon,
             color: 'blue',
             keys: ['max_upload_size', 'allowed_image_types', 'allowed_file_types', 'storage_driver'],
@@ -98,8 +99,8 @@ const mediaSettingsGrouped = computed(() => {
     if (driver === 's3') {
         groups.push({
             id: 's3_config',
-            title: t('modules.core.settings.groups.s3.title'),
-            description: t('modules.core.settings.groups.s3.description'),
+            title: t('modules.system.settings.groups.s3.title'),
+            description: t('modules.system.settings.groups.s3.description'),
             icon: CloudIcon,
             color: 'orange',
             keys: ['aws_access_key_id', 'aws_secret_access_key', 'aws_default_region', 'aws_bucket', 'aws_endpoint'],
@@ -113,8 +114,8 @@ const mediaSettingsGrouped = computed(() => {
     if (driver === 'google') {
         groups.push({
             id: 'google_config',
-            title: t('modules.core.settings.groups.google.title'),
-            description: t('modules.core.settings.groups.google.description'),
+            title: t('modules.system.settings.groups.google.title'),
+            description: t('modules.system.settings.groups.google.description'),
             icon: CloudIcon,
             color: 'red',
             keys: ['google_client_id', 'google_client_secret', 'google_refresh_token', 'google_folder_id'],
@@ -128,8 +129,8 @@ const mediaSettingsGrouped = computed(() => {
     if (driver === 'ftp') {
         groups.push({
             id: 'ftp_config',
-            title: t('modules.core.settings.groups.ftp.title'),
-            description: t('modules.core.settings.groups.ftp.description'),
+            title: t('modules.system.settings.groups.ftp.title'),
+            description: t('modules.system.settings.groups.ftp.description'),
             icon: ServerIcon,
             color: 'purple',
             keys: ['ftp_host', 'ftp_username', 'ftp_password', 'ftp_root', 'ftp_port', 'ftp_ssl'],
@@ -143,8 +144,8 @@ const mediaSettingsGrouped = computed(() => {
     if (driver === 'dropbox') {
         groups.push({
             id: 'dropbox_config',
-            title: t('modules.core.settings.groups.dropbox.title'),
-            description: t('modules.core.settings.groups.dropbox.description'),
+            title: t('modules.system.settings.groups.dropbox.title'),
+            description: t('modules.system.settings.groups.dropbox.description'),
             icon: CloudIcon,
             color: 'indigo',
             keys: ['dropbox_authorization_token'],
@@ -157,8 +158,8 @@ const mediaSettingsGrouped = computed(() => {
     // Add Image Processing group (last)
     groups.push({
         id: 'image_processing',
-        title: t('modules.core.settings.groups.imageProcessing.title'),
-        description: t('modules.core.settings.groups.imageProcessing.description'),
+        title: t('modules.system.settings.groups.imageProcessing.title'),
+        description: t('modules.system.settings.groups.imageProcessing.description'),
         icon: ImageIcon,
         color: 'pink',
         keys: ['thumbnail_width', 'thumbnail_height', 'enable_watermark', 'watermark_text'],
@@ -182,13 +183,13 @@ const testConnection = async () => {
     testResult.value = null;
     try {
         // Send current formData to test endpoint
-        const response = await api.post('/manage/cms/settings/test-storage', {
+        const response = await api.post(systemPaths.testStorage, {
             driver: props.formData.storage_driver,
             config: props.formData
         });
         testResult.value = { success: true, message: response.data.message };
     } catch (error: unknown) {
-        let msg = t('modules.core.settings.groups.test.failed') || 'Connection failed. Please check your credentials.';
+        let msg = t('modules.system.settings.groups.test.failed') || 'Connection failed. Please check your credentials.';
         if (axios.isAxiosError(error)) {
             msg = error.response?.data?.message || msg;
         }
@@ -209,16 +210,16 @@ const migrationLogs = ref<MigrationLog[]>([]);
 const stopMigration = ref(false);
 
 const migrationProgress = computed(() => {
-    if (totalFiles.value === "0") return 0;
+    if (totalFiles.value === 0) return 0;
     return Math.round((processedFiles.value / totalFiles.value) * 100);
 });
 
 const startMigration = async () => {
     const confirmed = await confirm({
-        title: t('modules.core.settings.groups.migration.confirm_title'),
-        message: t('modules.core.settings.groups.migration.confirm_message'),
+        title: t('modules.system.settings.groups.migration.confirm_title'),
+        message: t('modules.system.settings.groups.migration.confirm_message'),
         variant: 'warning',
-        confirmText: t('modules.core.settings.groups.migration.start'),
+        confirmText: t('modules.system.settings.groups.migration.start'),
     });
 
     if (!confirmed) return;
@@ -235,9 +236,9 @@ const startMigration = async () => {
         const files = response.data; // Array of paths
         totalFiles.value = files.length;
 
-        if (totalFiles.value === "0") {
+        if (totalFiles.value === 0) {
             migrationStatus.value = 'completed';
-            migrationLogs.value.push({ type: 'info', message: t('modules.core.settings.groups.migration.no_files') || 'No files to migrate.' });
+            migrationLogs.value.push({ type: 'info', message: t('modules.system.settings.groups.migration.no_files') || 'No files to migrate.' });
             return;
         }
 
@@ -247,7 +248,7 @@ const startMigration = async () => {
         const batchSize = 10;
         for (let i = 0; i < files.length; i += batchSize) {
             if (stopMigration.value) {
-                migrationLogs.value.push({ type: 'warning', message: t('modules.core.settings.groups.migration.stopped') || 'Migration stopped by user.' });
+                migrationLogs.value.push({ type: 'warning', message: t('modules.system.settings.groups.migration.stopped') || 'Migration stopped by user.' });
                 break;
             }
 
@@ -275,7 +276,7 @@ const startMigration = async () => {
         
         if (!stopMigration.value) {
             migrationStatus.value = 'completed';
-            migrationLogs.value.push({ type: 'success', message: t('modules.core.settings.groups.migration.success') || 'Migration completed successfully.' });
+            migrationLogs.value.push({ type: 'success', message: t('modules.system.settings.groups.migration.success') || 'Migration completed successfully.' });
         }
 
     } catch (error: unknown) {
@@ -311,11 +312,11 @@ const handleStopMigration = () => {
         :key="setting.id"
         :model-value="(formData[setting.key] as any)"
         :field-key="setting.key"
-        :label="$t('modules.core.settings.labels.' + setting.key)"
-        :description="$t('modules.core.settings.descriptions.' + setting.key)"
+        :label="$t('modules.system.settings.labels.' + setting.key)"
+        :description="$t('modules.system.settings.descriptions.' + setting.key)"
         :type="setting.type"
-        :enabled-text="$t('modules.core.settings.enabled')"
-        :disabled-text="$t('modules.core.settings.disabled')"
+        :enabled-text="$t('modules.system.settings.enabled')"
+        :disabled-text="$t('modules.system.settings.disabled')"
         :error="errors?.[setting.key]"
         @update:model-value="(value) => updateField(setting.key, value)"
       />
@@ -332,8 +333,8 @@ const handleStopMigration = () => {
             variant="secondary"
             @click="testConnection"
           >
-            <span v-if="testingConnection">{{ $t('modules.core.settings.groups.test.testing') }}</span>
-            <span v-else>{{ $t('modules.core.settings.groups.test.button') }}</span>
+            <span v-if="testingConnection">{{ $t('modules.system.settings.groups.test.testing') }}</span>
+            <span v-else>{{ $t('modules.system.settings.groups.test.button') }}</span>
           </Button>
                     
           <div
@@ -352,10 +353,10 @@ const handleStopMigration = () => {
       class="p-6 bg-card border border-border rounded-lg"
     >
       <h3 class="text-lg font-medium text-foreground mb-2">
-        {{ $t('modules.core.settings.groups.migration.title') }}
+        {{ $t('modules.system.settings.groups.migration.title') }}
       </h3>
       <p class="text-sm text-muted-foreground mb-4">
-        {{ $t('modules.core.settings.groups.migration.description', { driver: formData.storage_driver }) }}
+        {{ $t('modules.system.settings.groups.migration.description', { driver: formData.storage_driver }) }}
       </p>
 
       <div
@@ -363,7 +364,7 @@ const handleStopMigration = () => {
         class="flex gap-4"
       >
         <Button @click="startMigration">
-          {{ $t('modules.core.settings.groups.migration.start') }}
+          {{ $t('modules.system.settings.groups.migration.start') }}
         </Button>
       </div>
 
@@ -373,8 +374,8 @@ const handleStopMigration = () => {
       >
         <div class="flex justify-between text-sm text-foreground">
           <span>
-            <span v-if="migrationStatus === 'scanning'">{{ $t('modules.core.settings.groups.migration.scanning') }}</span>
-            <span v-else>{{ $t('modules.core.settings.groups.migration.migrating', { processed: processedFiles, total: totalFiles }) }}</span>
+            <span v-if="migrationStatus === 'scanning'">{{ $t('modules.system.settings.groups.migration.scanning') }}</span>
+            <span v-else>{{ $t('modules.system.settings.groups.migration.migrating', { processed: processedFiles, total: totalFiles }) }}</span>
           </span>
           <span>{{ migrationProgress }}%</span>
         </div>
@@ -392,7 +393,7 @@ const handleStopMigration = () => {
           size="sm"
           @click="handleStopMigration"
         >
-          {{ $t('modules.core.settings.groups.migration.stop') }}
+          {{ $t('modules.system.settings.groups.migration.stop') }}
         </Button>
       </div>
 

@@ -107,12 +107,8 @@ import {
     Button,
     Input
 } from '@/shared/components/ui';
-import api from '@/engine/api/client';
+import { AiService } from '@/modules/Ai/services/aiService';
 import { useToast } from '@/shared/composables/useToast';
-
-interface AiGenerateResponse {
-    content: string;
-}
 
 const props = defineProps<{
     open: boolean;
@@ -134,7 +130,7 @@ const handleCommand = async (prompt: string) => {
     
     loading.value = true;
     try {
-        const response = await api.post<AiGenerateResponse>('/manage/cms/ai/generate', {
+        const response = await AiService.generate({
             prompt: prompt,
             context: props.context
         });

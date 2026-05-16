@@ -103,8 +103,8 @@ import { useToast } from '@/shared/composables/useToast';
 import { parseResponse } from '@/shared/utils/responseParser';
 
 interface AttendanceRecord {
-  id?: number;
-  student_id: string;
+  id?: string | number;
+  student_id: string | number;
   student_name: string;
   status: string;
   notes: string;

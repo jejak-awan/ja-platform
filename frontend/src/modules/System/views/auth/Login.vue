@@ -1,10 +1,10 @@
 <template>
   <AuthLayout>
     <template #title>
-      {{ requiresTwoFactor ? (t('modules.core.auth.twoFactor.title') || 'Two-Factor') : 'Welcome back' }}
+      {{ requiresTwoFactor ? (t('modules.system.auth.twoFactor.title') || 'Two-Factor') : 'Welcome back' }}
     </template>
     <template #subtitle>
-      {{ requiresTwoFactor ? (t('modules.core.auth.twoFactor.subtitle') || 'Enter the code from your app.') : (t('modules.core.auth.login.subtitle') || 'Enter your credentials to access your account') }}
+      {{ requiresTwoFactor ? (t('modules.system.auth.twoFactor.subtitle') || 'Enter the code from your app.') : (t('modules.system.auth.login.subtitle') || 'Enter your credentials to access your account') }}
     </template>
 
     <!-- 2FA Verification Form -->
@@ -18,7 +18,7 @@
             for="two-factor-code"
             class="text-[10px] uppercase tracking-wider font-bold ml-1 text-muted-foreground/80"
           >
-            {{ t('modules.core.auth.twoFactor.codeLabel') || 'Verification Code' }}
+            {{ t('modules.system.auth.twoFactor.codeLabel') || 'Verification Code' }}
           </Label>
           <Input
             id="two-factor-code"
@@ -52,7 +52,7 @@
             v-if="loading"
             class="mr-2 h-4 w-4 animate-spin"
           />
-          {{ loading ? t('modules.core.auth.twoFactor.verifying') || 'Verifying...' : t('modules.core.auth.twoFactor.verify') || 'Verify Code' }}
+          {{ loading ? t('modules.system.auth.twoFactor.verifying') || 'Verifying...' : t('modules.system.auth.twoFactor.verify') || 'Verify Code' }}
         </Button>
 
         <Button
@@ -87,7 +87,7 @@
             required
             class="auth-input h-9 text-sm"
             :class="errors.email ? 'border-destructive/50 ring-destructive/20 focus:border-destructive' : ''"
-            :placeholder="t('modules.core.auth.login.emailPlaceholder')"
+            :placeholder="t('modules.system.auth.login.emailPlaceholder')"
           />
           <p
             v-if="errors.email"
@@ -106,7 +106,7 @@
               :to="{ name: 'forgot-password' }"
               class="text-[10px] font-bold text-primary hover:text-primary/80 transition-colors uppercase tracking-wider"
             >
-              {{ t('modules.core.auth.login.forgotPassword') }}
+              {{ t('modules.system.auth.login.forgotPassword') }}
             </router-link>
           </div>
           <div class="relative">
@@ -120,7 +120,7 @@
               required
               class="auth-input h-9 text-sm pr-10"
               :class="errors.password ? 'border-destructive/50 ring-destructive/20 focus:border-destructive' : ''"
-              :placeholder="t('modules.core.auth.login.passwordPlaceholder')"
+              :placeholder="t('modules.system.auth.login.passwordPlaceholder')"
             />
             <button 
               type="button"
@@ -158,7 +158,7 @@
               for="remember-me"
               class="text-xs font-medium leading-none text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
             >
-              {{ t('modules.core.auth.login.rememberMe') }}
+              {{ t('modules.system.auth.login.rememberMe') }}
             </label>
           </div>
         </div>
@@ -184,9 +184,9 @@
           class="rounded-xl bg-destructive/10 p-2 text-[10px] text-destructive border border-destructive/20 animate-fade"
         >
           <p class="font-bold mb-0.5">
-            {{ t('modules.core.auth.messages.tooManyAttempts') }}
+            {{ t('modules.system.auth.messages.tooManyAttempts') }}
           </p>
-          <p>{{ t('modules.core.auth.messages.retryDetails', { time: formatRetryTime(retryAfter) }) }}</p>
+          <p>{{ t('modules.system.auth.messages.retryDetails', { time: formatRetryTime(retryAfter) }) }}</p>
         </div>
 
         <div
@@ -209,15 +209,15 @@
           <span
             v-if="loading"
             class="text-xs"
-          >{{ t('modules.core.auth.login.submit') }}...</span>
+          >{{ t('modules.system.auth.login.submit') }}...</span>
           <span
             v-else-if="rateLimited"
             class="text-xs"
-          >{{ t('modules.core.media.modals.bulk.wait') }}...</span>
+          >{{ t('modules.system.media.modals.bulk.wait') }}...</span>
           <span
             v-else
             class="text-xs"
-          >{{ t('modules.core.auth.login.submit') }}</span>
+          >{{ t('modules.system.auth.login.submit') }}</span>
         </Button>
 
         <!-- Social Logins Placeholder -->
@@ -257,12 +257,12 @@
           v-if="registrationEnabled"
           class="text-center text-[10px] text-muted-foreground mt-3"
         >
-          {{ t('modules.core.auth.login.noAccount') }} 
+          {{ t('modules.system.auth.login.noAccount') }} 
           <router-link
             :to="{ name: 'register' }"
             class="font-bold text-primary hover:text-primary/80 transition-all ml-1"
           >
-            {{ t('modules.core.auth.login.register') }}
+            {{ t('modules.system.auth.login.register') }}
           </router-link>
         </div>
       </form>
@@ -279,7 +279,7 @@ import { useAuthStore } from '@/modules/System/stores/auth';
 import { useWorkspaceStore } from '@/engine/stores/workspace';
 import { useSystemStore } from '@/modules/System/stores/system';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
-import { loginSchema } from '@/shared/schemas/auth';
+import { loginSchema } from '@/modules/System/schemas/auth';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Github from 'lucide-vue-next/dist/esm/icons/github.js';
 import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
@@ -302,7 +302,7 @@ const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
 const { t } = useI18n();
-const coreStore = useSystemStore();
+const systemStore = useSystemStore();
 const { errors, validateWithZod, setErrors, clearErrors } = useFormValidation(loginSchema);
 
 const captchaRef = ref<{ enabled: boolean; refresh: () => void } | null>(null);
@@ -317,7 +317,7 @@ const passwordInput = ref<{ $el: HTMLElement; focus: () => void } | null>(null);
 
 // 2FA State
 const requiresTwoFactor = ref(false);
-const twoFactorUserId = ref<number | null>(null);
+const twoFactorUserId = ref<number | string | null>(null);
 const twoFactorCode = ref('');
 
 const showPassword = ref(false);
@@ -355,7 +355,7 @@ const hasTriggeredPostLoginRedirect = ref(false);
 // Check for session timeout
 const timeoutMessage = computed(() => {
     if (route.query.timeout === '1') {
-        return t('modules.core.auth.messages.timeout');
+        return t('modules.system.auth.messages.timeout');
     }
     return null;
 });
@@ -373,10 +373,10 @@ onMounted(async () => {
     resetLockdown();
 
     // Fetch latest public settings (logo, name, etc)
-    await coreStore.fetchPublicSettings();
+    await systemStore.fetchPublicSettings();
 
     // Check if registration is enabled from the store we just updated
-    registrationEnabled.value = coreStore.siteSettings.enable_registration === true;
+    registrationEnabled.value = systemStore.siteSettings.enable_registration === true;
 
     // Check for registration_disabled redirect info
     if (route.query.info === 'registration_disabled') {
@@ -400,17 +400,17 @@ onMounted(async () => {
 });
 
 const formatRetryTime = (seconds: number) => {
-    if (seconds <= 0) return t('modules.core.auth.retry.moment');
+    if (seconds <= 0) return t('modules.system.auth.retry.moment');
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     
     if (minutes > 0) {
         if (secs > 0) {
-            return t('modules.core.auth.retry.minutesSeconds', { minutes, seconds: secs });
+            return t('modules.system.auth.retry.minutesSeconds', { minutes, seconds: secs });
         }
-        return t('modules.core.auth.retry.minutes', minutes);
+        return t('modules.system.auth.retry.minutes', minutes);
     }
-    return t('modules.core.auth.retry.seconds', secs);
+    return t('modules.system.auth.retry.seconds', secs);
 };
 
 const startRetryTimer = (initialSeconds: number) => {
@@ -468,7 +468,7 @@ const verifyTwoFactor = async () => {
         if (result.success) {
             completeLogin();
         } else {
-             message.value = result.message || t('modules.core.auth.twoFactor.invalidCode');
+             message.value = result.message || t('modules.system.auth.twoFactor.invalidCode');
              messageType.value = 'error';
              
              // Reset code on failure so user can try again easily
@@ -477,7 +477,7 @@ const verifyTwoFactor = async () => {
 
     } catch (e) {
         logger.error('2FA Error:', e);
-        message.value = t('modules.core.auth.messages.error');
+        message.value = t('modules.system.auth.messages.error');
         messageType.value = 'error';
     } finally {
         loading.value = false;
@@ -502,7 +502,7 @@ const completeLogin = async () => {
         sessionStorage.removeItem('active_workspace_context');
     }
 
-    message.value = t('modules.core.auth.messages.success');
+    message.value = t('modules.system.auth.messages.success');
     messageType.value = 'success';
 
     // Check if there's a redirect query parameter
@@ -537,7 +537,7 @@ const handleLogin = async () => {
     }
     
     if (captchaEnabled.value && !captchaVerified.value) {
-        message.value = t('modules.core.auth.captcha.required');
+        message.value = t('modules.system.auth.captcha.required');
         messageType.value = 'error';
         return;
     }
@@ -627,7 +627,7 @@ const handleLogin = async () => {
                     }
                 } else {
                     // General error message (no field-specific errors)
-                    message.value = result.message || t('modules.core.auth.messages.failed');
+                    message.value = result.message || t('modules.system.auth.messages.failed');
                     messageType.value = 'error';
                     
                     // Focus password field on general failure (usually wrong creds)
@@ -638,7 +638,7 @@ const handleLogin = async () => {
         }
     } catch (error) {
         logger.error('Login error:', error);
-        message.value = t('modules.core.auth.messages.error');
+        message.value = t('modules.system.auth.messages.error');
         messageType.value = 'error';
         rateLimited.value = false;
     } finally {

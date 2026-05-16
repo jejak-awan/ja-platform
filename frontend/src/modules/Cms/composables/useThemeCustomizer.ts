@@ -107,7 +107,7 @@ export function useThemeCustomizer(slug: string, t: TranslateFn) {
     async function fetchThemeData() {
         loading.value = true;
         try {
-            const response = await api.get(`/manage/cms/themes/${slug}`);
+            const response = await api.get(`/manage/layout/themes/${slug}`);
             theme.value = response.data;
 
             const defaults: Record<string, unknown> = {};
@@ -145,7 +145,7 @@ export function useThemeCustomizer(slug: string, t: TranslateFn) {
                 ...formValues.value,
                 [THEME_DATA_BINDINGS_KEY]: bindings.value,
             };
-            await api.put(`/manage/cms/themes/${slug}/customization`, {
+            await api.put(`/manage/layout/themes/${slug}/customization`, {
                 settings: payload,
                 custom_css: customCss.value,
             });

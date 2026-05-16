@@ -831,7 +831,7 @@ const emit = defineEmits<{
     (e: 'insertIcon', iconName: string): void;
 }>();
 
-const coreStore = useSystemStore();
+const systemStore = useSystemStore();
 const activeTab = ref('home');
 
 const handleIconSelect = (iconName: string) => {
@@ -888,19 +888,19 @@ watch(() => props.editor?.isActive('table'), (isInTable) => {
 }, { immediate: true });
 
 const isAiEnabled = computed(() => {
-    const enabled = coreStore.settings['ai_enabled'];
+    const enabled = systemStore.settings['ai_enabled'];
     const isEnabled = enabled && enabled !== '0' && enabled !== 'false';
     if (!isEnabled) return false;
     
     // Check if default provider has key
-    const provider = (coreStore.settings['ai_default_provider'] as string) || 'gemini';
-    return !!coreStore.settings[`${provider}_api_key`];
+    const provider = (systemStore.settings['ai_default_provider'] as string) || 'gemini';
+    return !!systemStore.settings[`${provider}_api_key`];
 });
 
 onMounted(() => {
     // Check if store has ai settings, if not fetch them
-    if (!coreStore.settings['gemini_api_key']) {
-        coreStore.fetchSettingsGroup('ai');
+    if (!systemStore.settings['gemini_api_key']) {
+        systemStore.fetchSettingsGroup('ai');
     }
 });
 

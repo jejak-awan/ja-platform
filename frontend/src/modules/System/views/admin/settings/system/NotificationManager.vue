@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-bold tracking-tight text-foreground">
-        {{ $t('modules.core.system.notifications.title') }}
+        {{ $t('modules.system.system.notifications.title') }}
       </h1>
     </div>
 
@@ -14,7 +14,7 @@
       >
         <Card>
           <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle>{{ $t('modules.core.system.notifications.create.title') }}</CardTitle>
+            <CardTitle>{{ $t('modules.system.system.notifications.create.title') }}</CardTitle>
             <Button
               variant="ghost"
               size="icon"
@@ -40,21 +40,21 @@
           <CardContent class="space-y-4 pt-2">
             <div class="space-y-2">
               <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                {{ $t('modules.core.system.notifications.form.target_type') }}
+                {{ $t('modules.system.system.notifications.form.target_type') }}
               </label>
               <Select v-model="form.target_type">
                 <SelectTrigger>
-                  <SelectValue :placeholder="$t('modules.core.system.notifications.form.target_type')" />
+                  <SelectValue :placeholder="$t('modules.system.system.notifications.form.target_type')" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">
-                    {{ $t('modules.core.system.notifications.form.targets.all') }}
+                    {{ $t('modules.system.system.notifications.form.targets.all') }}
                   </SelectItem>
                   <SelectItem value="role">
-                    {{ $t('modules.core.system.notifications.form.targets.role') }}
+                    {{ $t('modules.system.system.notifications.form.targets.role') }}
                   </SelectItem>
                   <SelectItem value="user">
-                    {{ $t('modules.core.system.notifications.form.targets.user') }}
+                    {{ $t('modules.system.system.notifications.form.targets.user') }}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -64,10 +64,10 @@
               v-if="form.target_type === 'role'"
               class="space-y-2"
             >
-              <label class="text-sm font-medium leading-none">{{ $t('modules.core.system.notifications.form.targets.role') }}</label>
+              <label class="text-sm font-medium leading-none">{{ $t('modules.system.system.notifications.form.targets.role') }}</label>
               <Select v-model="form.target_id">
                 <SelectTrigger>
-                  <SelectValue :placeholder="$t('modules.core.system.notifications.form.targets.role')" />
+                  <SelectValue :placeholder="$t('modules.system.system.notifications.form.targets.role')" />
                 </SelectTrigger>
                 <SelectContent>
                   <template v-if="roles && roles.length">
@@ -87,11 +87,11 @@
               v-if="form.target_type === 'user'"
               class="space-y-2"
             >
-              <label class="text-sm font-medium leading-none">{{ $t('modules.core.system.notifications.form.targets.user') }}</label>
+              <label class="text-sm font-medium leading-none">{{ $t('modules.system.system.notifications.form.targets.user') }}</label>
               <!-- Simple select for users, might need autocomplete for large user bases -->
               <Select v-model="form.target_id">
                 <SelectTrigger>
-                  <SelectValue :placeholder="$t('modules.core.system.notifications.form.targets.user')" />
+                  <SelectValue :placeholder="$t('modules.system.system.notifications.form.targets.user')" />
                 </SelectTrigger>
                 <SelectContent>
                   <template v-if="users && users.length">
@@ -108,10 +108,10 @@
             </div>
 
             <div class="space-y-2">
-              <label class="text-sm font-medium leading-none">{{ $t('modules.core.system.notifications.form.type') }}</label>
+              <label class="text-sm font-medium leading-none">{{ $t('modules.system.system.notifications.form.type') }}</label>
               <Select v-model="form.type">
                 <SelectTrigger>
-                  <SelectValue :placeholder="$t('modules.core.system.notifications.form.type')" />
+                  <SelectValue :placeholder="$t('modules.system.system.notifications.form.type')" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="info">
@@ -141,7 +141,7 @@
                 for="is_async"
                 class="text-sm font-medium leading-none cursor-pointer"
               >
-                {{ $t('modules.core.system.notifications.form.process_async') }}
+                {{ $t('modules.system.system.notifications.form.process_async') }}
               </label>
             </div>
 
@@ -153,26 +153,26 @@
               <AlertTriangle class="h-4 w-4 shrink-0" />
               <div>
                 <p class="font-semibold">
-                  {{ $t('modules.core.system.notifications.queue.inactive_title') }}
+                  {{ $t('modules.system.system.notifications.queue.inactive_title') }}
                 </p>
-                <p>{{ $t('modules.core.system.notifications.queue.inactive_message') }}</p>
+                <p>{{ $t('modules.system.system.notifications.queue.inactive_message') }}</p>
               </div>
             </div>
 
             <div class="space-y-2">
-              <label class="text-sm font-medium leading-none">{{ $t('modules.core.system.notifications.form.title') }}</label>
+              <label class="text-sm font-medium leading-none">{{ $t('modules.system.system.notifications.form.title') }}</label>
               <Input
                 v-model="form.title"
-                :placeholder="$t('modules.core.system.notifications.form.title')"
+                :placeholder="$t('modules.system.system.notifications.form.title')"
               />
             </div>
 
             <div class="space-y-2">
-              <label class="text-sm font-medium leading-none">{{ $t('modules.core.system.notifications.form.message') }}</label>
+              <label class="text-sm font-medium leading-none">{{ $t('modules.system.system.notifications.form.message') }}</label>
               <textarea
                 v-model="form.message"
                 class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                :placeholder="$t('modules.core.system.notifications.form.message')"
+                :placeholder="$t('modules.system.system.notifications.form.message')"
               />
             </div>
 
@@ -189,7 +189,7 @@
                 v-else
                 class="mr-2 h-4 w-4"
               />
-              {{ sending ? $t('modules.core.system.notifications.form.sending') : $t('modules.core.system.notifications.form.send') }}
+              {{ sending ? $t('modules.system.system.notifications.form.sending') : $t('modules.system.system.notifications.form.send') }}
             </Button>
           </CardContent>
         </Card>
@@ -207,9 +207,9 @@
                 @click="sidebarCollapsed = false"
               >
                 <Plus class="mr-2 h-4 w-4" />
-                {{ $t('modules.core.system.notifications.create.title') }}
+                {{ $t('modules.system.system.notifications.create.title') }}
               </Button>
-              <CardTitle>{{ $t('modules.core.system.notifications.history.title') }}</CardTitle>
+              <CardTitle>{{ $t('modules.system.system.notifications.history.title') }}</CardTitle>
             </div>
             <div
               v-if="selectedItems.length > 0"
@@ -230,7 +230,7 @@
                   v-else
                   class="h-4 w-4 mr-2"
                 />
-                {{ $t('modules.core.system.notifications.form.revoke') }}
+                {{ $t('modules.system.system.notifications.form.revoke') }}
               </Button>
             </div>
           </CardHeader>
@@ -245,10 +245,10 @@
                         @update:checked="toggleSelectAll"
                       />
                     </TableHead>
-                    <TableHead>{{ $t('modules.core.system.notifications.table.title') }}</TableHead>
-                    <TableHead>{{ $t('modules.core.system.notifications.table.type') }}</TableHead>
-                    <TableHead>{{ $t('modules.core.system.notifications.table.recipients') }}</TableHead>
-                    <TableHead>{{ $t('modules.core.system.notifications.table.sent_at') }}</TableHead>
+                    <TableHead>{{ $t('modules.system.system.notifications.table.title') }}</TableHead>
+                    <TableHead>{{ $t('modules.system.system.notifications.table.type') }}</TableHead>
+                    <TableHead>{{ $t('modules.system.system.notifications.table.recipients') }}</TableHead>
+                    <TableHead>{{ $t('modules.system.system.notifications.table.sent_at') }}</TableHead>
                     <TableHead class="text-right">
                       {{ $t('common.actions.title') }}
                     </TableHead>
@@ -450,7 +450,7 @@ const users = ref<User[]>([]);
 const history = ref<Notification[]>([]);
 const pagination = ref<PaginationInfo | null>(null);
 const sending = ref(false);
-const revoking = ref<number | null>(null);
+const revoking = ref<string | null>(null);
 const selectedItems = ref<SelectedItem[]>([]);
 const bulkRevoking = ref(false);
 const queueHealth = ref<QueueHealth | null>(null);
@@ -512,8 +512,8 @@ const fetchQueueHealth = async (): Promise<void> => {
 const fetchData = async (): Promise<void> => {
     try {
         const [rolesRes, usersRes] = await Promise.all([
-            api.get('/manage/roles'),
-            api.get('/manage/users')
+            api.get('/manage/system/roles'),
+            api.get('/manage/system/users')
         ]);
         roles.value = parseResponse<Role>(rolesRes).data;
         users.value = parseResponse<User>(usersRes).data;
@@ -589,10 +589,10 @@ const toggleSelectAll = () => {
 
 const handleBulkRevoke = async () => {
     const confirmed = await confirm({
-        title: t('modules.core.system.notifications.form.revoke'),
-        message: t('modules.core.system.notifications.confirm.revoke'),
+        title: t('modules.system.system.notifications.form.revoke'),
+        message: t('modules.system.system.notifications.confirm.revoke'),
         variant: 'danger',
-        confirmText: t('modules.core.system.notifications.form.revoke'),
+        confirmText: t('modules.system.system.notifications.form.revoke'),
     });
 
     if (!confirmed) return;
@@ -602,12 +602,12 @@ const handleBulkRevoke = async () => {
         await api.post('/manage/notifications/system/bulk-revoke', {
             broadcasts: selectedItems.value
         });
-        toast.success.action(t('modules.core.system.notifications.messages.revoked'));
+        toast.success.action(t('modules.system.system.notifications.messages.revoked'));
         selectedItems.value = [];
         fetchHistory(pagination.value?.current_page || 1);
     } catch (error: unknown) {
         logger.error('Failed to bulk revoke:', error);
-        toast.error.validation(t('modules.core.system.notifications.messages.failed'));
+        toast.error.validation(t('modules.system.system.notifications.messages.failed'));
     } finally {
         bulkRevoking.value = false;
     }
@@ -615,10 +615,10 @@ const handleBulkRevoke = async () => {
 
 const handleRevoke = async (notification: Notification) => {
     const confirmed = await confirm({
-        title: t('modules.core.system.notifications.form.revoke'),
-        message: t('modules.core.system.notifications.confirm.revoke'),
+        title: t('modules.system.system.notifications.form.revoke'),
+        message: t('modules.system.system.notifications.confirm.revoke'),
         variant: 'danger',
-        confirmText: t('modules.core.system.notifications.form.revoke'),
+        confirmText: t('modules.system.system.notifications.form.revoke'),
     });
 
     if (!confirmed) return;
@@ -630,11 +630,11 @@ const handleRevoke = async (notification: Notification) => {
             message: notification.message,
             created_at: notification.created_at
         });
-        toast.success.action(t('modules.core.system.notifications.messages.revoked'));
+        toast.success.action(t('modules.system.system.notifications.messages.revoked'));
         fetchHistory(pagination.value?.current_page || 1);
     } catch (error: unknown) {
         logger.error('Failed to revoke:', error);
-        toast.error.validation(t('modules.core.system.notifications.messages.failed'));
+        toast.error.validation(t('modules.system.system.notifications.messages.failed'));
     } finally {
         revoking.value = null;
     }
@@ -652,10 +652,10 @@ const handleSend = async () => {
     }
 
     const confirmed = await confirm({
-        title: t('modules.core.system.notifications.create.title'),
-        message: t('modules.core.system.notifications.confirm.send'),
+        title: t('modules.system.system.notifications.create.title'),
+        message: t('modules.system.system.notifications.confirm.send'),
         variant: 'info',
-        confirmText: t('modules.core.system.notifications.form.send'),
+        confirmText: t('modules.system.system.notifications.form.send'),
     });
 
     if (!confirmed) return;
@@ -664,7 +664,7 @@ const handleSend = async () => {
     try {
         await api.post('/manage/notifications/broadcast', form);
         toast.success.action(form.is_async 
-            ? t('modules.core.system.notifications.messages.sent') 
+            ? t('modules.system.system.notifications.messages.sent') 
             : 'Notifikasi berhasil dikirim secara langsung'
         );
         
@@ -680,7 +680,7 @@ const handleSend = async () => {
 
     } catch (error: unknown) {
         logger.error('Failed to send:', error);
-        toast.error.validation(t('modules.core.system.notifications.messages.failed'));
+        toast.error.validation(t('modules.system.system.notifications.messages.failed'));
     } finally {
         sending.value = false;
     }

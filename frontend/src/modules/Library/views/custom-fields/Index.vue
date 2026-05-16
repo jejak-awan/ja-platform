@@ -260,8 +260,8 @@ import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import FieldGroupModal from '@/modules/Cms/components/custom-fields/FieldGroupModal.vue';
-import FieldModal from '@/modules/Cms/components/custom-fields/FieldModal.vue';
+import FieldGroupModal from '@/modules/Library/components/custom-fields/FieldGroupModal.vue';
+import FieldModal from '@/modules/Library/components/custom-fields/FieldModal.vue';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import { Badge, Button, Card, CardContent, CardHeader, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui';
 
@@ -273,7 +273,7 @@ import Layout from 'lucide-vue-next/dist/esm/icons/layout-dashboard.js';
 import FileCode from 'lucide-vue-next/dist/esm/icons/file-code.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
-import type { FieldGroup, CustomField } from '@/modules/Cms/types/custom-fields';
+import type { FieldGroup, CustomField } from '@/modules/Library/types/custom-fields';
 
 const { t } = useI18n();
 const { confirm } = useConfirm();
@@ -308,7 +308,7 @@ const filteredFields = computed(() => {
 const fetchFieldGroups = async () => {
     loadingGroups.value = true;
     try {
-        const response = await api.get('/manage/cms/field-groups');
+        const response = await api.get('/manage/library/field-groups');
         const { data } = parseResponse<FieldGroup>(response);
         fieldGroups.value = ensureArray<FieldGroup>(data);
     } catch (error: unknown) {
@@ -348,7 +348,7 @@ const deleteGroup = async (group: FieldGroup) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/manage/cms/field-groups/${group.id}`);
+        await api.delete(`/manage/library/field-groups/${group.id}`);
         toast.success.delete(t('features.developer.custom_fields.tabs.groups'));
         fetchFieldGroups();
     } catch (error: unknown) {
@@ -385,7 +385,7 @@ const deleteField = async (field: CustomField) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/manage/cms/custom-fields/${field.id}`);
+        await api.delete(`/manage/library/custom-fields/${field.id}`);
         toast.success.delete(t('features.developer.custom_fields.tabs.fields'));
         fetchCustomFields();
     } catch (error: unknown) {

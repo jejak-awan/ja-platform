@@ -18,11 +18,11 @@
           v-show="isMaintenanceSettingVisible(setting.key)"
           :model-value="(formData[setting.key] as any)"
           :field-key="setting.key"
-          :label="$t('modules.core.settings.labels.' + setting.key)"
-          :description="$t('modules.core.settings.descriptions.' + setting.key)"
+          :label="$t('modules.system.settings.labels.' + setting.key)"
+          :description="$t('modules.system.settings.descriptions.' + setting.key)"
           :type="setting.type"
-          :enabled-text="$t('modules.core.settings.enabled')"
-          :disabled-text="$t('modules.core.settings.disabled')"
+          :enabled-text="$t('modules.system.settings.enabled')"
+          :disabled-text="$t('modules.system.settings.disabled')"
           :error="errors?.[setting.key]"
           :readonly="isFieldProtected(setting.key)"
           @update:model-value="(value) => updateField(setting.key, value)"
@@ -33,10 +33,10 @@
           class="space-y-2"
         >
           <label class="block text-sm font-medium text-foreground">
-            {{ $t('modules.core.settings.labels.content.autosave_interval_seconds') }}
+            {{ $t('modules.system.settings.labels.content.autosave_interval_seconds') }}
           </label>
           <p class="text-xs text-muted-foreground">
-            {{ $t('modules.core.settings.descriptions.content.autosave_interval_seconds') }}
+            {{ $t('modules.system.settings.descriptions.content.autosave_interval_seconds') }}
           </p>
 
           <Select
@@ -101,7 +101,7 @@ interface Props {
 
 import { useSystemStore } from '@/modules/System/stores/system'
 const { t } = useI18n()
-const coreStore = useSystemStore()
+const systemStore = useSystemStore()
 
 const props = defineProps<Props>()
 
@@ -196,7 +196,7 @@ const isFieldProtected = (key: string) => {
     // Branding fields are protected if no White Label license
     const brandingKeys = ['app_name', 'app_logo', 'app_favicon', 'branding_display'];
     if (brandingKeys.includes(key)) {
-        return !coreStore.appIdentity.has_white_label;
+        return !systemStore.appIdentity.has_white_label;
     }
     
     // License Type is readonly
@@ -214,8 +214,8 @@ const generalSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'license',
-            title: t('modules.core.settings.groups.license.title'),
-            description: t('modules.core.settings.groups.license.description'),
+            title: t('modules.system.settings.groups.license.title'),
+            description: t('modules.system.settings.groups.license.description'),
             icon: ToolIcon,
             color: 'purple',
             keys: ['license_key', 'license_type'],
@@ -224,8 +224,8 @@ const generalSettingsGrouped = computed(() => {
         },
         {
             id: 'brand',
-            title: t('modules.core.settings.groups.brand.title'),
-            description: t('modules.core.settings.groups.brand.description'),
+            title: t('modules.system.settings.groups.brand.title'),
+            description: t('modules.system.settings.groups.brand.description'),
             icon: BrandIcon,
             color: 'indigo',
             keys: ['app_name', 'app_logo', 'app_favicon', 'branding_display'],
@@ -234,8 +234,8 @@ const generalSettingsGrouped = computed(() => {
         },
         {
             id: 'localization',
-            title: t('modules.core.settings.groups.localization.title'),
-            description: t('modules.core.settings.groups.localization.description'),
+            title: t('modules.system.settings.groups.localization.title'),
+            description: t('modules.system.settings.groups.localization.description'),
             icon: ClockIcon,
             color: 'amber',
             keys: ['timezone', 'date_format', 'time_format', 'items_per_page'],
@@ -244,8 +244,8 @@ const generalSettingsGrouped = computed(() => {
         },
         {
             id: 'maintenance',
-            title: t('modules.core.settings.groups.maintenance.title'),
-            description: t('modules.core.settings.groups.maintenance.description'),
+            title: t('modules.system.settings.groups.maintenance.title'),
+            description: t('modules.system.settings.groups.maintenance.description'),
             icon: ToolIcon,
             color: 'orange',
             keys: ['maintenance_mode', 'maintenance_title', 'maintenance_message', 'maintenance_countdown_enabled', 'maintenance_end_time'],

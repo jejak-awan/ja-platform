@@ -243,7 +243,8 @@ const getRandomColor = (id: string) => {
     'bg-indigo-100 text-indigo-700 border-indigo-200',
     'bg-cyan-100 text-cyan-700 border-cyan-200',
   ];
-  return colors[id % colors.length];
+  const hash = String(id).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return colors[hash % colors.length];
 };
 
 const handleAdd = () => {

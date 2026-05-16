@@ -1,5 +1,5 @@
 import { onUnmounted, ref } from 'vue'
-import { useTheme } from '@/shared/composables/useTheme'
+import { useTheme } from '@/modules/Cms/composables/useTheme'
 
 export interface AnimationOptions {
   delay?: number
@@ -118,7 +118,15 @@ export function useThemeMotion() {
     cleanups.forEach((fn) => fn())
     cleanups.length = 0
   }
-  const createTimeline = (_vars?: Record<string, unknown>) => createTimelineStub()
+  const createTimeline = (_vars?: Record<string, unknown>) => ({
+    to: (_target: unknown, _vars: Record<string, unknown>, _pos?: string | number) => createTimelineStub(),
+    from: (_target: unknown, _vars: Record<string, unknown>, _pos?: string | number) => createTimelineStub(),
+    fromTo: (_target: unknown, _fromVars: Record<string, unknown>, _toVars: Record<string, unknown>, _pos?: string | number) => createTimelineStub(),
+    add: (_anim: unknown, _pos?: string | number) => createTimelineStub(),
+    play: noop,
+    pause: noop,
+    kill: noop,
+  })
 
   onUnmounted(cleanup)
 
@@ -128,7 +136,7 @@ export function useThemeMotion() {
   }
 
   const motion = {
-    to: (target: unknown, vars: Record<string, unknown>) => {
+    to: (target: unknown, vars: Record<string, unknown>, _pos?: string | number) => {
       toArray(target).forEach((el) => applyStyles(el, vars))
       return { kill: noop, scrollTrigger: null }
     },
@@ -136,6 +144,7 @@ export function useThemeMotion() {
       target: unknown,
       _fromVars: Record<string, unknown>,
       toVars: Record<string, unknown>,
+      _pos?: string | number
     ) => {
       toArray(target).forEach((el) => applyStyles(el, toVars))
       return { kill: noop, scrollTrigger: null }
@@ -143,7 +152,7 @@ export function useThemeMotion() {
     set: (target: unknown, vars: Record<string, unknown>) => {
       toArray(target).forEach((el) => applyStyles(el, vars))
     },
-    timeline: (_vars?: Record<string, unknown>) => createTimelineStub(),
+    timeline: (_vars?: Record<string, unknown>) => createTimeline(),
   }
 
   return {

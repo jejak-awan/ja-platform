@@ -145,7 +145,7 @@
 import { ref, onMounted, computed, markRaw } from 'vue';
 import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue';
 import { useRouter } from 'vue-router';
-import { useTheme } from '@/shared/composables/useTheme';
+import { useTheme } from '@/modules/Cms/composables/useTheme';
 import PageDisabled from './components/PageDisabled.vue';
 import api from '@/engine/api/client';
 import { useThemeDataBindings } from '@/modules/Cms/composables/useThemeDataBindings';

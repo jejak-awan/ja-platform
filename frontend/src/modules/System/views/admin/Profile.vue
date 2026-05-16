@@ -83,7 +83,7 @@
                 </div>
                 <div>
                   <MediaPicker
-                    :label="$t('modules.core.users.form.selectAvatar')"
+                    :label="$t('modules.system.users.form.selectAvatar')"
                     @selected="(media: { url: string }) => profileForm.avatar = media.url"
                   />
                   <p class="mt-2 text-xs text-muted-foreground">
@@ -317,7 +317,7 @@ import { isAxiosError } from 'axios';
 // Standardized Async Components
 const LoginHistory = defineAsyncComponent(() => import('@/modules/System/components/admin/LoginHistory.vue'));
 const TwoFactorSettings = defineAsyncComponent(() => import('@/modules/System/components/admin/TwoFactorSettings.vue'));
-const MediaPicker = defineAsyncComponent(() => import('@/shared/components/media/MediaPicker.vue'));
+const MediaPicker = defineAsyncComponent(() => import('@/modules/Media/components/picker/MediaPicker.vue'));
 
 // Shadcn Components
 // Shadcn Components

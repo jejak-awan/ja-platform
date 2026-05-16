@@ -180,7 +180,7 @@ import {
     SelectTrigger, 
     SelectValue 
 } from '@/shared/components/ui';
-import api from '@/engine/api/client';
+import { AiService } from '@/modules/Ai/services/aiService';
 import { useToast } from '@/shared/composables/useToast';
 import { useSystemStore } from '@/modules/System/stores/system';
 
@@ -195,10 +195,6 @@ interface AiModel {
     name: string;
 }
 
-interface AiGenerateResponse {
-    content: string;
-}
-
 const props = defineProps<{
     context?: string;
     disabled?: boolean;
@@ -209,7 +205,7 @@ const emit = defineEmits<{
 }>();
 
 const toast = useToast();
-const coreStore = useSystemStore();
+const systemStore = useSystemStore();
 
 const isOpen = ref(false);
 const customPrompt = ref('');
@@ -224,7 +220,7 @@ const loadingModels = ref(false);
 const activeProviders = computed(() => {
     return providers.value.filter(p => {
         // Check if provider API key is set in settings
-        const key = (coreStore.settings as Record<string, any>)?.[`${p.id}_api_key`];
+        const key = (systemStore.settings as Record<string, any>)?.[`${p.id}_api_key`];
         return !!key;
     });
 });
@@ -304,7 +300,7 @@ const stopDrag = () => {
 
 const fetchProviders = async () => {
     try {
-        const response = await api.get<AiProvider[]>('/manage/cms/ai/providers');
+        const response = await AiService.providers();
         providers.value = response.data;
         
         // Ensure selected provider is valid/active
@@ -313,7 +309,7 @@ const fetchProviders = async () => {
             toast.service.warning('No active AI providers found. Please configure them in settings.');
         } else {
              // Use default provider from settings if available & active
-            const defaultProvider = coreStore.settings?.ai_default_provider as string;
+            const defaultProvider = systemStore.settings?.ai_default_provider as string;
             const isDefaultActive = activeProviders.value.find(p => p.id === defaultProvider);
            
             if (isDefaultActive) {
@@ -343,7 +339,7 @@ const fetchModels = async () => {
     
     loadingModels.value = true;
     try {
-        const response = await api.get<AiModel[]>(`/manage/cms/ai/models/${provider}`);
+        const response = await AiService.models(provider);
         const resultModels = response.data;
         models.value[provider] = resultModels;
         
@@ -362,7 +358,7 @@ const handleCommand = async (prompt: string) => {
     
     loading.value = true;
     try {
-        const response = await api.post<AiGenerateResponse>('/manage/cms/ai/generate', {
+        const response = await AiService.generate({
             prompt: prompt,
             context: props.context,
             provider: selectedProvider.value,

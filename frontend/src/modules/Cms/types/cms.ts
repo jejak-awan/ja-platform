@@ -1,12 +1,7 @@
 import type { Category, Tag } from './taxonomy';
-import type { Media } from './media';
-import type { Menu, MenuItem } from './menu';
-import type { SiteSettings } from '@/engine/types/settings';
+import type { MenuItem } from '@/modules/Layout/types/menu';
 
 export * from './taxonomy';
-export * from './media';
-export * from '@/engine/types/settings';
-export type { Menu, MenuItem };
 
 export interface ContentForm {
     title: string;
@@ -21,7 +16,7 @@ export interface ContentForm {
     featured_image_title?: string;
     featured_image_caption?: string;
     featured_image_position?: 'hero' | 'inline-top' | 'full-bleed' | string;
-    category_id?: number | string | null;
+    category_id?: string | number | null;
     published_at?: string;
     meta_title?: string;
     meta_description?: string;
@@ -35,8 +30,8 @@ export interface ContentForm {
 }
 
 export interface Content extends ContentForm {
-    id: string;
-    author_id?: number;
+    id: string | number;
+    author_id?: string | number;
     author?: {
         id: string;
         name: string;
@@ -56,18 +51,12 @@ export interface Content extends ContentForm {
 export interface CMSState {
     contents: Content[];
     categories: Category[];
-    tags: Tag[];
-    media: Media[];
     settings: Record<string, string | number | boolean | null>;
-    siteSettings: SiteSettings;
     currentContent: Content | null;
     loading: boolean;
     loadingGroups: Record<string, boolean>;
     settingsPromises: Record<string, Promise<unknown>>;
-    publicSettingsPromise: Promise<SiteSettings> | null;
     publicSettingsLoaded: boolean;
-    themeMode: 'light' | 'dark' | 'system';
-    isDarkMode: boolean;
 }
 
 export interface ContentTemplate {

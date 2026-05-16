@@ -144,11 +144,10 @@ export const useAuthStore = defineStore('auth', {
 
                 // Handle 2FA requirement
                 if (responseData && responseData.requires_two_factor) {
-                    const parsedUserId = Number(responseData.user_id);
                     return {
                         success: true,
                         requiresTwoFactor: true,
-                        userId: Number.isNaN(parsedUserId) ? undefined : parsedUserId,
+                        userId: responseData.user_id,
                         message: response.data.message
                     };
                 }
@@ -303,7 +302,7 @@ export const useAuthStore = defineStore('auth', {
 
         async forgotPassword(data: { email: string; captcha_token?: string; captcha_answer?: string }): Promise<AuthResponse> {
             try {
-                const response: AxiosResponse<{ message: string }> = await api.post('/forgot-password', data);
+                const response: AxiosResponse<{ message: string }> = await api.post('/public/system/auth/forgot-password', data);
                 return { success: true, message: response.data.message };
             } catch (error: unknown) {
                 const axiosError = isAxiosError(error) ? error : null;
@@ -317,7 +316,7 @@ export const useAuthStore = defineStore('auth', {
 
         async resetPassword(data: ResetPasswordData): Promise<AuthResponse> {
             try {
-                const response: AxiosResponse<{ message: string }> = await api.post('/reset-password', data);
+                const response: AxiosResponse<{ message: string }> = await api.post('/public/system/auth/reset-password', data);
                 return { success: true, message: response.data.message };
             } catch (error: unknown) {
                 const axiosError = isAxiosError(error) ? error : null;

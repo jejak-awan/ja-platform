@@ -11,7 +11,7 @@
       >
         <AccordionTrigger class="hover:no-underline py-0">
           <h3 class="text-lg font-medium text-foreground">
-            {{ $t('modules.core.settings.emailTest.title') }}
+            {{ $t('modules.system.settings.emailTest.title') }}
           </h3>
         </AccordionTrigger>
         <AccordionContent class="pt-6">
@@ -20,33 +20,33 @@
             <!-- LEFT COLUMN: Send Test Email Form -->
             <div class="p-4 bg-muted rounded-lg">
               <h4 class="text-sm font-medium text-foreground mb-3">
-                {{ $t('modules.core.settings.emailTest.sendTest') }}
+                {{ $t('modules.system.settings.emailTest.sendTest') }}
               </h4>
               <div class="space-y-3">
                 <div>
-                  <label class="block text-xs font-medium text-foreground mb-1">{{ $t('modules.core.settings.emailTest.recipient') }}</label>
+                  <label class="block text-xs font-medium text-foreground mb-1">{{ $t('modules.system.settings.emailTest.recipient') }}</label>
                   <Input
                     :model-value="testEmail.to"
                     type="email"
-                    :placeholder="$t('modules.core.settings.emailTest.recipientPlaceholder')"
+                    :placeholder="$t('modules.system.settings.emailTest.recipientPlaceholder')"
                     @update:model-value="$emit('update:test-email', { ...testEmail, to: String($event) })"
                   />
                 </div>
                 <div>
-                  <label class="block text-xs font-medium text-foreground mb-1">{{ $t('modules.core.settings.emailTest.subject') }}</label>
+                  <label class="block text-xs font-medium text-foreground mb-1">{{ $t('modules.system.settings.emailTest.subject') }}</label>
                   <Input
                     :model-value="testEmail.subject"
                     type="text"
-                    :placeholder="$t('modules.core.settings.emailTest.subjectPlaceholder')"
+                    :placeholder="$t('modules.system.settings.emailTest.subjectPlaceholder')"
                     @update:model-value="$emit('update:test-email', { ...testEmail, subject: String($event) })"
                   />
                 </div>
                 <div>
-                  <label class="block text-xs font-medium text-foreground mb-1">{{ $t('modules.core.settings.emailTest.message') }}</label>
+                  <label class="block text-xs font-medium text-foreground mb-1">{{ $t('modules.system.settings.emailTest.message') }}</label>
                   <Textarea
                     :model-value="testEmail.message"
                     :rows="3"
-                    :placeholder="$t('modules.core.settings.emailTest.messagePlaceholder')"
+                    :placeholder="$t('modules.system.settings.emailTest.messagePlaceholder')"
                     @update:model-value="$emit('update:test-email', { ...testEmail, message: String($event) })"
                   />
                 </div>
@@ -56,7 +56,7 @@
                   class="w-full"
                   @click="$emit('send-test-email')"
                 >
-                  {{ sendingTestEmail ? $t('modules.core.settings.emailTest.sending') : $t('modules.core.settings.emailTest.sendTest') }}
+                  {{ sendingTestEmail ? $t('modules.system.settings.emailTest.sending') : $t('modules.system.settings.emailTest.sendTest') }}
                 </Button>
                 <div
                   v-if="testEmailResult"
@@ -74,7 +74,7 @@
               <div class="p-4 bg-muted rounded-lg">
                 <div class="flex items-center justify-between mb-3">
                   <h4 class="text-sm font-medium text-foreground">
-                    {{ $t('modules.core.settings.emailTest.queueStatus') }}
+                    {{ $t('modules.system.settings.emailTest.queueStatus') }}
                   </h4>
                   <Button
                     type="button"
@@ -83,7 +83,7 @@
                     :disabled="loadingQueueStatus"
                     @click="$emit('refresh-queue')"
                   >
-                    {{ loadingQueueStatus ? $t('modules.core.settings.loading') : $t('modules.core.settings.emailTest.refresh') }}
+                    {{ loadingQueueStatus ? $t('modules.system.settings.loading') : $t('modules.system.settings.emailTest.refresh') }}
                   </Button>
                 </div>
                 <div
@@ -91,15 +91,15 @@
                   class="text-sm text-muted-foreground space-y-1"
                 >
                   <div class="flex justify-between">
-                    <span>{{ $t('modules.core.settings.emailTest.driver') }}:</span>
+                    <span>{{ $t('modules.system.settings.emailTest.driver') }}:</span>
                     <span class="font-medium text-foreground">{{ queueStatus.driver }}</span>
                   </div>
                   <div class="flex justify-between">
-                    <span>{{ $t('modules.core.settings.emailTest.pending') }}:</span>
+                    <span>{{ $t('modules.system.settings.emailTest.pending') }}:</span>
                     <span class="font-medium text-foreground">{{ queueStatus.pending_jobs }}</span>
                   </div>
                   <div class="flex justify-between">
-                    <span>{{ $t('modules.core.settings.emailTest.failedJobs') }}:</span>
+                    <span>{{ $t('modules.system.settings.emailTest.failedJobs') }}:</span>
                     <span
                       class="font-medium"
                       :class="Number(queueStatus.failed_jobs) > 0 ? 'text-destructive' : 'text-foreground'"
@@ -110,7 +110,7 @@
                   v-else
                   class="text-sm text-muted-foreground"
                 >
-                  {{ $t('modules.core.settings.loading') }}
+                  {{ $t('modules.system.settings.loading') }}
                 </div>
               </div>
 
@@ -118,7 +118,7 @@
               <div class="p-4 bg-muted rounded-lg">
                 <div class="flex items-center justify-between mb-3">
                   <h4 class="text-sm font-medium text-foreground">
-                    {{ $t('modules.core.settings.emailTest.recentLogs') }}
+                    {{ $t('modules.system.settings.emailTest.recentLogs') }}
                   </h4>
                   <Button
                     type="button"
@@ -127,7 +127,7 @@
                     :disabled="loadingLogs"
                     @click="$emit('refresh-logs')"
                   >
-                    {{ loadingLogs ? $t('modules.core.settings.loading') : $t('modules.core.settings.emailTest.refresh') }}
+                    {{ loadingLogs ? $t('modules.system.settings.loading') : $t('modules.system.settings.emailTest.refresh') }}
                   </Button>
                 </div>
                 <div
@@ -156,7 +156,7 @@
                   v-else-if="emailLogs && emailLogs.length === 0"
                   class="text-sm text-muted-foreground"
                 >
-                  {{ $t('modules.core.settings.emailTest.noLogs') }}
+                  {{ $t('modules.system.settings.emailTest.noLogs') }}
                 </div>
               </div>
             </div>

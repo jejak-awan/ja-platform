@@ -97,21 +97,19 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useHead } from '@unhead/vue';
-import { useCmsStore } from '@/modules/Cms/stores/cms';
 import { useSystemStore } from '@/modules/System/stores/system';
 import { SECURITY_ROUTES } from '@/config/security';
 
 
-const cmsStore = useCmsStore();
-const coreStore = useSystemStore();
+const systemStore = useSystemStore();
 
-const publicSettings = computed(() => cmsStore.siteSettings);
+const publicSettings = computed(() => systemStore.siteSettings);
 const loginUrl = SECURITY_ROUTES.login;
 
-const title = computed(() => coreStore.maintenance.title || 'Coming Soon');
-const message = computed(() => coreStore.maintenance.message || 'We are currently working on something awesome. Please check back later.');
-const countdownEnabled = computed(() => coreStore.maintenance.countdown_enabled);
-const targetDateStr = computed(() => coreStore.maintenance.end_time);
+const title = computed(() => systemStore.maintenance.title || 'Coming Soon');
+const message = computed(() => systemStore.maintenance.message || 'We are currently working on something awesome. Please check back later.');
+const countdownEnabled = computed(() => systemStore.maintenance.countdown_enabled);
+const targetDateStr = computed(() => systemStore.maintenance.end_time);
 
 const targetDate = computed(() => {
     if (!targetDateStr.value) return null;
@@ -148,8 +146,8 @@ const updateCountdown = () => {
 let healthTimer: number | null = null;
 const pollHealth = async () => {
     try {
-        await coreStore.fetchPublicSettings();
-        if (!coreStore.maintenance.mode) {
+        await systemStore.fetchPublicSettings();
+        if (!systemStore.maintenance.mode) {
             window.location.href = '/';
         }
     } catch {
@@ -164,10 +162,7 @@ useHead({
 onMounted(async () => {
     // Always refresh settings when on maintenance page
     try {
-        await Promise.all([
-            cmsStore.fetchPublicSettings(),
-            coreStore.fetchPublicSettings(),
-        ]);
+        await systemStore.fetchPublicSettings();
     } catch (error) {
         console.error('Failed to fetch settings for maintenance mode:', error);
     }

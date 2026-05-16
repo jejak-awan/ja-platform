@@ -1,22 +1,22 @@
 import { defineAsyncComponent } from 'vue';
 import type { JanariModule } from '@/engine/types/module';
-import coreRoutes from './router/index';
-import { coreNavigation } from './navigation';
+import systemRoutes from './router/index';
+import { systemNavigation } from './navigation';
 
-export const CoreModule: JanariModule = {
-    id: 'core',
-    name: 'System Core',
-    routes: coreRoutes,
-    navigation: coreNavigation,
+export const SystemModule: JanariModule = {
+    id: 'system',
+    name: 'System Platform',
+    routes: systemRoutes,
+    navigation: systemNavigation,
     dashboards: [
         {
-            id: 'core-admin',
+            id: 'system-admin',
             priority: 100,
-            routeName: 'core.dashboard',
+            routeName: 'system.dashboard',
             condition: (user) => user?.roles?.some((r: any) => r.name === 'super') ?? false,
             component: defineAsyncComponent(() => import('./components/dashboard/AdminDashboard.vue'))
         }
     ]
 };
 
-export default CoreModule;
+export default SystemModule;

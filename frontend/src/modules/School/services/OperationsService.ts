@@ -9,7 +9,7 @@ export const OperationsService = {
         return api.get('admin/extensions/logs', { params });
     },
 
-    async getExecutiveSummary(schoolId: number): Promise<AxiosResponse<any>> {
+    async getExecutiveSummary(schoolId: string | number): Promise<AxiosResponse<any>> {
         return api.get('admin/analytics/summary', { params: { school_id: schoolId } });
     },
 
@@ -28,7 +28,7 @@ export const OperationsService = {
         });
     },
 
-    async checkOutVisitor(id: string | string): Promise<AxiosResponse<Visitor>> {
+    async checkOutVisitor(id: string | number): Promise<AxiosResponse<Visitor>> {
         return api.post(`admin/operations/visitors/${id}/check-out`);
     },
 
@@ -48,11 +48,11 @@ export const OperationsService = {
         return api.post('admin/operations/attendance', data);
     },
 
-    async updateAttendance(id: string | string, data: Partial<Attendance>): Promise<AxiosResponse<Attendance>> {
+    async updateAttendance(id: string | number, data: Partial<Attendance>): Promise<AxiosResponse<Attendance>> {
         return api.put(`admin/operations/attendance/${id}`, data);
     },
 
-    async deleteAttendance(id: string | string): Promise<AxiosResponse<void>> {
+    async deleteAttendance(id: string | number): Promise<AxiosResponse<void>> {
         return api.delete(`admin/operations/attendance/${id}`);
     },
 
@@ -74,11 +74,11 @@ export const OperationsService = {
         return api.post(`admin/operations/${type}`, data);
     },
 
-    async updateStudentAffair(type: string, id: string | string, data: any): Promise<AxiosResponse<any>> {
+    async updateStudentAffair(type: string, id: string | number, data: any): Promise<AxiosResponse<any>> {
         return api.put(`admin/operations/${type}/${id}`, data);
     },
 
-    async deleteStudentAffair(type: string, id: string | string): Promise<AxiosResponse<void>> {
+    async deleteStudentAffair(type: string, id: string | number): Promise<AxiosResponse<void>> {
         return api.delete(`admin/operations/${type}/${id}`);
     },
 
@@ -120,11 +120,11 @@ export const OperationsService = {
         return api.post('admin/operations/document-templates', data);
     },
 
-    async updateDocumentTemplate(id: string | string, data: any): Promise<AxiosResponse<any>> {
+    async updateDocumentTemplate(id: string | number, data: any): Promise<AxiosResponse<any>> {
         return api.put(`admin/operations/document-templates/${id}`, data);
     },
 
-    async deleteDocumentTemplate(id: string | string): Promise<AxiosResponse<void>> {
+    async deleteDocumentTemplate(id: string | number): Promise<AxiosResponse<void>> {
         return api.delete(`admin/operations/document-templates/${id}`);
     }
 };

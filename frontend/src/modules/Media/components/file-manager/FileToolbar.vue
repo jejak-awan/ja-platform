@@ -26,7 +26,7 @@
               </Button>
             </TooltipTrigger>
             <TooltipContent side="bottom">
-              {{ $t('modules.core.file_manager.actions.home') }}
+              {{ $t('modules.system.file_manager.actions.home') }}
             </TooltipContent>
           </Tooltip>
           <template
@@ -34,7 +34,7 @@
             :key="index"
           >
             <span
-              v-if="Number(index) === "0" || Number(index) >= pathParts.length - 2"
+              v-if="Number(index) === 0 || Number(index) >= pathParts.length - 2"
               class="flex items-center gap-0.5 sm:gap-1 min-w-0"
             >
               <span class="text-muted-foreground/40 text-[10px] select-none">/</span>
@@ -49,7 +49,7 @@
               </Button>
             </span>
             <span
-              v-else-if="Number(index) === "1" && pathParts.length > 3"
+              v-else-if="Number(index) === 1 && pathParts.length > 3"
               class="flex items-center gap-0.5 sm:gap-1"
             >
               <span class="text-muted-foreground/40 text-[10px] select-none">/</span>
@@ -65,7 +65,7 @@
             <Input
               v-model="searchQuery"
               type="text"
-              :placeholder="$t('modules.core.file_manager.actions.search')"
+              :placeholder="$t('modules.system.file_manager.actions.search')"
               class="pl-8 sm:pl-9 bg-background border-border/40 rounded-lg h-8 sm:h-9 text-[11px] sm:text-xs focus-visible:ring-1 focus-visible:ring-primary/20 transition-colors duration-200 w-full"
             />
           </div>
@@ -90,7 +90,7 @@
                 side="bottom"
                 align="center"
               >
-                {{ $t('modules.core.media.filter.advanced') || 'Advanced Filters' }}
+                {{ $t('modules.system.media.filter.advanced') || 'Advanced Filters' }}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -118,7 +118,7 @@
               </Button>
             </TooltipTrigger>
             <TooltipContent side="bottom">
-              {{ viewMode === 'grid' ? $t('modules.core.file_manager.bulk.list_view') : $t('modules.core.file_manager.bulk.grid_view') }}
+              {{ viewMode === 'grid' ? $t('modules.system.file_manager.bulk.list_view') : $t('modules.system.file_manager.bulk.grid_view') }}
             </TooltipContent>
           </Tooltip>
         </div>
@@ -132,7 +132,7 @@
         <div class="flex items-center justify-between gap-4 overflow-x-auto flex-nowrap custom-scrollbar pb-1">
           <div class="flex items-center gap-2">
             <div class="h-8 flex-shrink-0 flex items-center px-3 rounded-lg bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest select-none border border-primary/20">
-              {{ selectedItems.length }} <span class="hidden sm:inline ml-1">{{ $t('modules.core.file_manager.bulk.label_count') }}</span>
+              {{ selectedItems.length }} <span class="hidden sm:inline ml-1">{{ $t('modules.system.file_manager.bulk.label_count') }}</span>
             </div>
                     
             <div class="flex items-center gap-1 p-0.5 bg-accent/5 rounded-lg border border-border/40">
@@ -145,11 +145,11 @@
                     @click="copyToClipboard(selectedItems, 'copy')"
                   >
                     <Copy class="w-3.5 h-3.5 mr-1.5" />
-                    <span>{{ $t('modules.core.file_manager.actions.copy') }}</span>
+                    <span>{{ $t('modules.system.file_manager.actions.copy') }}</span>
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  {{ $t('modules.core.file_manager.actions.copy') }}
+                  {{ $t('modules.system.file_manager.actions.copy') }}
                 </TooltipContent>
               </Tooltip>
 
@@ -162,11 +162,11 @@
                     @click="copyToClipboard(selectedItems, 'move')"
                   >
                     <MoveIcon class="w-3.5 h-3.5 mr-1.5" />
-                    <span>{{ $t('modules.core.file_manager.actions.move') }}</span>
+                    <span>{{ $t('modules.system.file_manager.actions.move') }}</span>
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  {{ $t('modules.core.file_manager.actions.move') }}
+                  {{ $t('modules.system.file_manager.actions.move') }}
                 </TooltipContent>
               </Tooltip>
 
@@ -181,11 +181,11 @@
                     @click="bulkDelete"
                   >
                     <Trash2 class="w-3.5 h-3.5 mr-1.5" />
-                    <span>{{ $t('modules.core.file_manager.actions.delete') }}</span>
+                    <span>{{ $t('modules.system.file_manager.actions.delete') }}</span>
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  {{ $t('modules.core.file_manager.actions.delete') }}
+                  {{ $t('modules.system.file_manager.actions.delete') }}
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -199,12 +199,12 @@
                 class="h-8 px-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-destructive/10 hover:text-destructive transition-colors text-xs"
                 @click="clearSelection"
               >
-                {{ $t('modules.core.file_manager.bulk.clear_selection') }}
+                {{ $t('modules.system.file_manager.bulk.clear_selection') }}
                 <X class="w-3.5 h-3.5 ml-1.5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="bottom">
-              {{ $t('modules.core.file_manager.bulk.clear_selection') }}
+              {{ $t('modules.system.file_manager.bulk.clear_selection') }}
             </TooltipContent>
           </Tooltip>
         </div>
@@ -219,30 +219,30 @@
           <!-- Type Filter -->
           <div class="space-y-1.5 min-w-0">
             <label class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 ml-1">
-              {{ $t('modules.core.media.filter.type') || 'Type' }}
+              {{ $t('modules.system.media.filter.type') || 'Type' }}
             </label>
             <Select v-model="filterType">
               <SelectTrigger class="bg-background h-10 border-border/40 rounded-lg w-full">
-                <SelectValue :placeholder="$t('modules.core.file_manager.filter.all')" />
+                <SelectValue :placeholder="$t('modules.system.file_manager.filter.all')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">
-                  {{ $t('modules.core.file_manager.filter.all') }}
+                  {{ $t('modules.system.file_manager.filter.all') }}
                 </SelectItem>
                 <SelectItem value="images">
-                  {{ $t('modules.core.file_manager.filter.images') }}
+                  {{ $t('modules.system.file_manager.filter.images') }}
                 </SelectItem>
                 <SelectItem value="videos">
-                  {{ $t('modules.core.file_manager.filter.videos') }}
+                  {{ $t('modules.system.file_manager.filter.videos') }}
                 </SelectItem>
                 <SelectItem value="documents">
-                  {{ $t('modules.core.file_manager.filter.documents') }}
+                  {{ $t('modules.system.file_manager.filter.documents') }}
                 </SelectItem>
                 <SelectItem value="audio">
-                  {{ $t('modules.core.file_manager.filter.audio') }}
+                  {{ $t('modules.system.file_manager.filter.audio') }}
                 </SelectItem>
                 <SelectItem value="archives">
-                  {{ $t('modules.core.file_manager.filter.archives') }}
+                  {{ $t('modules.system.file_manager.filter.archives') }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -251,22 +251,22 @@
           <!-- Sort Field Filter -->
           <div class="space-y-1.5 min-w-0">
             <label class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 ml-1">
-              {{ $t('modules.core.media.filter.sort') }}
+              {{ $t('modules.system.media.filter.sort') }}
             </label>
             <div class="flex items-center gap-1.5">
               <Select v-model="sortBy">
                 <SelectTrigger class="bg-background h-10 border-border/40 rounded-lg w-full">
-                  <SelectValue :placeholder="$t('modules.core.file_manager.sort.name')" />
+                  <SelectValue :placeholder="$t('modules.system.file_manager.sort.name')" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="name">
-                    {{ $t('modules.core.file_manager.sort.name') }}
+                    {{ $t('modules.system.file_manager.sort.name') }}
                   </SelectItem>
                   <SelectItem value="size">
-                    {{ $t('modules.core.file_manager.sort.size') }}
+                    {{ $t('modules.system.file_manager.sort.size') }}
                   </SelectItem>
                   <SelectItem value="date">
-                    {{ $t('modules.core.file_manager.sort.date') }}
+                    {{ $t('modules.system.file_manager.sort.date') }}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -287,15 +287,15 @@
           <!-- Author Filter -->
           <div class="space-y-1.5 min-w-0">
             <label class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 ml-1">
-              {{ $t('modules.core.media.filter.author') || 'Author' }}
+              {{ $t('modules.system.media.filter.author') || 'Author' }}
             </label>
             <Select v-model="authorFilterString">
               <SelectTrigger class="bg-background h-10 border-border/40 rounded-lg w-full">
-                <SelectValue :placeholder="$t('modules.core.media.filter.allAuthors') || 'All Authors'" />
+                <SelectValue :placeholder="$t('modules.system.media.filter.allAuthors') || 'All Authors'" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">
-                  {{ $t('modules.core.media.filter.allAuthors') || 'All Authors' }}
+                  {{ $t('modules.system.media.filter.allAuthors') || 'All Authors' }}
                 </SelectItem>
                 <SelectItem
                   v-for="author in availableFilters.authors"
@@ -311,7 +311,7 @@
           <!-- Size Filter -->
           <div class="space-y-1.5 min-w-0">
             <label class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 ml-1">
-              {{ $t('modules.core.media.filter.size') || 'Size (KB)' }}
+              {{ $t('modules.system.media.filter.size') || 'Size (KB)' }}
             </label>
             <div class="flex items-center gap-1.5">
               <Input 
@@ -333,7 +333,7 @@
           <!-- Date Filter -->
           <div class="space-y-1.5 min-w-0 xl:col-span-2">
             <label class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 ml-1">
-              {{ $t('modules.core.media.filter.dateRange') || 'Date Range' }}
+              {{ $t('modules.system.media.filter.dateRange') || 'Date Range' }}
             </label>
             <div class="flex items-center gap-1.5">
               <Input 

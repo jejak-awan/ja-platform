@@ -871,7 +871,7 @@ class ContentController extends BaseApiController
                 'action' => 'required|in:publish,approve,reject,draft,archive,delete,change_category,restore,force_delete',
                 'content_ids' => 'required|array',
                 'content_ids.*' => 'integer',
-                'category_id' => 'required_if:action,change_category|exists:cms_categories,id',
+                'category_id' => 'required_if:action,change_category|exists:lib_categories,id',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $this->validationError($e->errors());

@@ -124,7 +124,7 @@ class ContentTemplateController extends BaseApiController
             'excerpt_template' => 'nullable|string',
             'default_fields' => 'nullable|array',
             'meta' => 'nullable|array',
-            'category_id' => 'nullable|exists:cms_categories,id',
+            'category_id' => 'nullable|exists:lib_categories,id',
             'is_active' => 'boolean',
             'author_id' => 'nullable|exists:users,id',
         ]);
@@ -185,7 +185,7 @@ class ContentTemplateController extends BaseApiController
             'excerpt_template' => 'nullable|string',
             'default_fields' => 'nullable|array',
             'meta' => 'nullable|array',
-            'category_id' => 'nullable|exists:cms_categories,id',
+            'category_id' => 'nullable|exists:lib_categories,id',
             'is_active' => 'boolean',
             'author_id' => 'nullable|exists:users,id',
         ]);

@@ -118,7 +118,7 @@ export function useSessionTimeout() {
 
             try {
                 // Lightweight check to validate session
-                await api.get('/user', { _skipManualRedirect: true } as Record<string, unknown>);
+                await api.get('/public/system/auth/me', { _skipManualRedirect: true } as Record<string, unknown>);
             } catch (error: unknown) {
                 const err = error as { response?: { status?: number } };
                 // Double check flag to prevent race conditions with api.js interceptor
@@ -223,7 +223,7 @@ export function useSessionTimeout() {
     const extendSession = async () => {
         try {
             // Make a lightweight API call to extend the session
-            await api.get('/user');
+            await api.get('/public/system/auth/me');
 
             // Reset activity time
             lastActivityTime.value = Date.now();

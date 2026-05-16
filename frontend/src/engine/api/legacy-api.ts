@@ -149,7 +149,7 @@ api.interceptors.request.use(
         }
 
         // Public detection for header scoping
-        const publicPaths = ['/public/settings', '/public/cms/', '/public/layout/', '/public/library/', '/public/search/', '/public/newsletter/', '/public/school/'];
+        const publicPaths = ['/public/settings', '/public/system/', '/public/cms/', '/public/layout/', '/public/library/', '/public/search/', '/public/newsletter/', '/public/school/', '/analytics/'];
         const isPublic = publicPaths.some(endpoint => config.url?.includes(endpoint));
 
         if (!isPublic) {
@@ -322,7 +322,7 @@ api.interceptors.response.use(
             triggerVaporLock();
 
             // Public endpoints are frontend routes that don't require session termination on 401
-            const publicEndpoints = ['ja/', 'analytics/', 'public/'];
+            const publicEndpoints = ['analytics/', 'public/'];
             const isPublicEndpoint = publicEndpoints.some(endpoint => url.includes(endpoint));
             const hasAuthHeader = !!error.config?.headers?.Authorization;
 
@@ -371,7 +371,7 @@ api.interceptors.response.use(
             // 403/503 Forbidden/Maintenance handling
             // We NO LONGER push to the router inside the interceptor for critical initialization APIs.
             // This prevents the infinite recursion loop between the Guard and the Interceptor.
-            if (url.includes('public/settings') || url.includes('system/health') || url.endsWith('/user') || url.includes('captcha/')) {
+            if (url.includes('public/settings') || url.includes('system/health') || url.endsWith('/public/system/auth/me') || url.includes('captcha/')) {
                 logger.debug('Critical API blocked (403/503):', { url });
                 return Promise.reject(error);
             }

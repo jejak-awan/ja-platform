@@ -140,7 +140,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/engine/api/client';
+import { NewsletterService } from '@/modules/Newsletter/services/newsletterService';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { parseResponse } from '@/shared/utils/responseParser';
@@ -305,7 +305,7 @@ const fetchSubscribers = async () => {
             params[key] = value;
         });
 
-        const response = await api.get('/manage/newsletter/subscribers', { params });
+        const response = await NewsletterService.listSubscribers(params);
         const { data, pagination: pag } = parseResponse(response);
         subscribers.value = data as Subscriber[];
         if (pag) {
@@ -350,10 +350,10 @@ const deleteSubscriber = async (subscriber: Subscriber) => {
 
     try {
         if (isTrashed) {
-             await api.delete(`/manage/cms/newsletter/subscribers/${subscriber.id}/force-delete`);
+             await NewsletterService.forceDeleteSubscriber(String(subscriber.id));
              toast.success.action(t('common.messages.success.deleted', { item: 'Subscriber' }));
         } else {
-            await api.delete(`/manage/cms/newsletter/subscribers/${subscriber.id}`);
+            await NewsletterService.deleteSubscriber(String(subscriber.id));
             toast.success.delete('Subscriber');
         }
         fetchSubscribers();
@@ -374,7 +374,7 @@ const restoreSubscriber = async (subscriber: Subscriber) => {
     if (!confirmed) return;
 
     try {
-        await api.post(`/manage/cms/newsletter/subscribers/${subscriber.id}/restore`);
+        await NewsletterService.restoreSubscriber(String(subscriber.id));
         toast.success.restore('Subscriber');
         fetchSubscribers();
     } catch (error: unknown) {
@@ -385,7 +385,7 @@ const restoreSubscriber = async (subscriber: Subscriber) => {
 
 const exportCsv = async () => {
     try {
-        const response = await api.get('/manage/newsletter/export', {
+        const response = await NewsletterService.exportSubscribers({
             params: { status: filters.value.status },
             responseType: 'blob',
         });
@@ -436,7 +436,7 @@ const bulkAction = async (action: string) => {
          }
 
          try {
-             await api.post('/manage/newsletter/subscribers/bulk-action', {
+             await NewsletterService.bulkSubscribers({
                  ids: selectedIds.value,
                  action: action
              });
@@ -448,7 +448,7 @@ const bulkAction = async (action: string) => {
          }
     } else if (action === 'restore') {
          try {
-             await api.post('/manage/newsletter/subscribers/bulk-action', {
+             await NewsletterService.bulkSubscribers({
                  ids: selectedIds.value,
                  action: 'restore'
              });
@@ -460,7 +460,7 @@ const bulkAction = async (action: string) => {
          }
     } else if (action === 'unsubscribe' || action === 'subscribe') {
          try {
-             await api.post('/manage/newsletter/subscribers/bulk-action', {
+             await NewsletterService.bulkSubscribers({
                  ids: selectedIds.value,
                  action: action
              });

@@ -46,7 +46,7 @@ import { reactive, watch, ref, onMounted } from 'vue';
 import type { UnitSettings } from '../../../../../stores/unit';
 import type { SchoolUnit } from '@/modules/School/types';
 import { Accordion } from '@/shared/components/ui';
-import { IndonesianLocation, type LocationItem } from '@/shared/services/IndonesianLocation';
+import { IndonesianLocation, type LocationItem } from '@/modules/Library/services/IndonesianLocation';
 
 // Import split sections
 import LocationSection from './LocationSection.vue';

@@ -169,7 +169,7 @@
                 </template>
               </TabsTrigger>
               <TabsTrigger
-                v-if="showLevelsTab && isGlobalAdmin && (unitStore.activeUnitId === "0" || !isMultiLevel)"
+                v-if="showLevelsTab && isGlobalAdmin && (unitStore.activeUnitId === '0' || !isMultiLevel)"
                 value="levels"
                 class="h-12 px-2 bg-transparent border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground rounded-none font-bold text-xs transition-all shadow-none"
               >
@@ -203,7 +203,7 @@
 
             <!-- TAB: UNIT JENJANG / DETAIL TEKNIS -->
             <TabsContent
-              v-if="showLevelsTab && isGlobalAdmin && (unitStore.activeUnitId === "0" || !isMultiLevel)"
+              v-if="showLevelsTab && isGlobalAdmin && (unitStore.activeUnitId === '0' || !isMultiLevel)"
               value="levels"
               class="mt-0"
             >
@@ -373,8 +373,8 @@ const isIdentityEditRestricted = computed(() => {
 const activeTab = ref('identity');
 const savingUnit = ref(false);
 const showUnitDialog = ref(false);
-const editingUnitId = ref<number | null>(null);
-const selectedUnitId = ref<number | null>(null);
+const editingUnitId = ref<string | number | null>(null);
+const selectedUnitId = ref<string | number | null>(null);
 const showDeleteConfirm = ref(false);
 const deleteConfirmName = ref('');
 const isDeleting = ref(false);
@@ -405,7 +405,7 @@ const canAddMoreLevels = computed(() => {
 });
 
 const identityForm = ref({
-  id: undefined as number | undefined,
+  id: undefined as string | number | undefined,
   name: '',
   type: '',
   is_multi_unit: false,

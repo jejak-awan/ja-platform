@@ -261,7 +261,7 @@ import {
   Label, Input, Switch, LucideIcon, Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
   Badge, Textarea
 } from '@/shared/components/ui';
-import type { LocationItem } from '@/shared/services/IndonesianLocation';
+import type { LocationItem } from '@/modules/Library/services/IndonesianLocation';
 
 const props = defineProps<{
   settings: any;

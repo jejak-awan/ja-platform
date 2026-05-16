@@ -5,7 +5,7 @@ import { useSystemStore } from '@/modules/System/stores/system';
 
 export function useAuthBranding() {
     const route = useRoute();
-    const coreStore = useSystemStore();
+    const systemStore = useSystemStore();
     
 
 
@@ -14,17 +14,17 @@ export function useAuthBranding() {
         
         if (context === 'tenant') {
             return {
-                name: coreStore.siteSettings?.site_name || coreStore.appIdentity.app_name,
-                logo: coreStore.siteSettings?.site_logo || coreStore.appIdentity.app_logo,
-                description: coreStore.siteSettings?.site_description || '',
+                name: systemStore.siteSettings?.site_name || systemStore.appIdentity.app_name,
+                logo: systemStore.siteSettings?.site_logo || systemStore.appIdentity.app_logo,
+                description: systemStore.siteSettings?.site_description || '',
                 type: 'tenant'
             };
         }
         
         // Default to system (Core)
         return {
-            name: coreStore.appIdentity.app_name,
-            logo: coreStore.appIdentity.app_logo,
+            name: systemStore.appIdentity.app_name,
+            logo: systemStore.appIdentity.app_logo,
             description: '',
             type: 'system'
         };

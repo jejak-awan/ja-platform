@@ -39,8 +39,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import JanariSplitText from './JanariSplitText.vue'
-import { useTheme } from '@/shared/composables/useTheme'
-import { useThemeMotion } from '@/shared/composables/useThemeMotion'
+import { useTheme } from '@/modules/Cms/composables/useTheme'
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion'
 
 const { getSetting } = useTheme()
 const { scaleReveal, splitTextRevealSafe } = useThemeMotion()

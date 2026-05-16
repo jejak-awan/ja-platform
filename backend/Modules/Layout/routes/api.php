@@ -35,8 +35,10 @@ Route::prefix('v1')->group(function (): void {
 
         // Themes
         Route::get('themes/active', [ThemeController::class, 'getActive']);
+        Route::get('themes/active/locations', [ThemeController::class, 'locations']);
         Route::get('themes/available', [ThemeController::class, 'available']);
         Route::post('themes/{theme}/activate', [ThemeController::class, 'activate']);
+        Route::post('themes/scan', [ThemeController::class, 'scan']);
         Route::post('themes/install', [ThemeController::class, 'install']);
         Route::apiResource('themes', ThemeController::class);
     });

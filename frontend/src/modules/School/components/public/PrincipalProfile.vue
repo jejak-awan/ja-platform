@@ -150,8 +150,8 @@
 <script setup lang="ts">
 import JanariSplitText from '@/modules/Cms/views/themes/janari/components/JanariSplitText.vue'
 import { computed, ref, onMounted, nextTick } from 'vue'
-import { useTheme } from '@/shared/composables/useTheme'
-import { useThemeMotion } from '@/shared/composables/useThemeMotion'
+import { useTheme } from '@/modules/Cms/composables/useTheme'
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion'
 import User from 'lucide-vue-next/dist/esm/icons/user.js'
 
 const { getSetting } = useTheme()

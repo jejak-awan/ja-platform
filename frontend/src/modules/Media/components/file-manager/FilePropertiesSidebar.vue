@@ -10,7 +10,7 @@
       <!-- Header -->
       <div class="p-4 border-b border-border/40 flex items-center justify-between bg-transparent">
         <h3 class="font-semibold text-xs uppercase tracking-widest text-muted-foreground/80">
-          {{ t('modules.core.file_manager.properties.title', 'Details') }}
+          {{ t('modules.system.file_manager.properties.title', 'Details') }}
         </h3>
         <Button
           variant="ghost"
@@ -69,18 +69,18 @@
 
           <div class="space-y-3">
             <div class="flex justify-between text-xs">
-              <span class="text-muted-foreground">{{ t('modules.core.file_manager.properties.type', 'Type') }}</span>
+              <span class="text-muted-foreground">{{ t('modules.system.file_manager.properties.type', 'Type') }}</span>
               <span class="font-medium capitalize">{{ activeFile?.extension || 'Folder' }}</span>
             </div>
             <div
               v-if="activeFile"
               class="flex justify-between text-xs"
             >
-              <span class="text-muted-foreground">{{ t('modules.core.file_manager.properties.size', 'Size') }}</span>
+              <span class="text-muted-foreground">{{ t('modules.system.file_manager.properties.size', 'Size') }}</span>
               <span class="font-medium">{{ formatFileSize(activeFile.size) }}</span>
             </div>
             <div class="flex justify-between text-xs">
-              <span class="text-muted-foreground">{{ t('modules.core.file_manager.properties.modified', 'Modified') }}</span>
+              <span class="text-muted-foreground">{{ t('modules.system.file_manager.properties.modified', 'Modified') }}</span>
               <span class="font-medium">{{ formatDate(activeItem.updated_at) }}</span>
             </div>
           </div>
@@ -122,7 +122,7 @@
           <Info class="w-8 h-8 opacity-20" />
         </div>
         <p class="text-sm font-medium">
-          {{ t('modules.core.file_manager.properties.select_item', 'Select a file or folder to see details') }}
+          {{ t('modules.system.file_manager.properties.select_item', 'Select a file or folder to see details') }}
         </p>
       </div>
     </div>

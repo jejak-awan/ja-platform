@@ -2,10 +2,10 @@
   <div>
     <div class="mb-6">
       <h1 class="text-2xl font-bold text-foreground">
-        {{ $t('modules.core.settings.title') }}
+        {{ $t('modules.system.settings.title') }}
       </h1>
       <p class="mt-1 text-sm text-muted-foreground">
-        {{ $t('modules.core.settings.description') }}
+        {{ $t('modules.system.settings.description') }}
       </p>
     </div>
 
@@ -14,7 +14,7 @@
       class="bg-card border border-border rounded-lg p-12 text-center"
     >
       <p class="text-muted-foreground">
-        {{ $t('modules.core.settings.loading') }}
+        {{ $t('modules.system.settings.loading') }}
       </p>
     </div>
 
@@ -39,7 +39,7 @@
                 :is="getTabIcon(tab.id)"
                 class="w-4 h-4 mr-2"
               />
-              {{ $t('modules.core.settings.tabs.' + tab.id) }}
+              {{ $t('modules.system.settings.tabs.' + tab.id) }}
             </TabsTrigger>
           </TabsList>
         </div>
@@ -54,7 +54,7 @@
             class="text-center py-8"
           >
             <p class="text-muted-foreground">
-              {{ $t('modules.core.settings.noSettings') }}
+              {{ $t('modules.system.settings.noSettings') }}
             </p>
           </div>
 
@@ -136,6 +136,30 @@
               />
             </TabsContent>
 
+            <TabsContent value="identity">
+              <PlatformIdentityTab
+                v-model:form-data="formData"
+                :settings="settings"
+                :errors="errors"
+              />
+            </TabsContent>
+
+            <TabsContent value="seo">
+              <SeoTab
+                v-model:form-data="formData"
+                :settings="settings"
+                :errors="errors"
+              />
+            </TabsContent>
+
+            <TabsContent value="analytics">
+              <AnalyticsTab
+                v-model:form-data="formData"
+                :settings="settings"
+                :errors="errors"
+              />
+            </TabsContent>
+
             <TabsContent value="ai">
               <AiTab
                 v-model:form-data="formData"
@@ -152,13 +176,13 @@
               variant="outline"
               @click="resetForm"
             >
-              {{ $t('modules.core.settings.reset') }}
+              {{ $t('modules.system.settings.reset') }}
             </Button>
             <Button
               type="submit"
               :disabled="saving || !isDirty"
             >
-              {{ saving ? $t('modules.core.settings.saving') : $t('modules.core.settings.save') }}
+              {{ saving ? $t('modules.system.settings.saving') : $t('modules.system.settings.save') }}
             </Button>
           </div>
         </form>
@@ -194,6 +218,9 @@ import ImageIcon from 'lucide-vue-next/dist/esm/icons/image.js';
 import Sparkles from 'lucide-vue-next/dist/esm/icons/sparkles.js';
 
 // Async Tab Components
+const PlatformIdentityTab = defineAsyncComponent(() => import('./tabs/PlatformIdentityTab.vue'));
+const SeoTab = defineAsyncComponent(() => import('./tabs/SeoTab.vue'));
+const AnalyticsTab = defineAsyncComponent(() => import('./tabs/AnalyticsTab.vue'));
 const GeneralTab = defineAsyncComponent(() => import('./tabs/GeneralTab.vue'));
 const EmailTab = defineAsyncComponent(() => import('./tabs/EmailTab.vue'));
 const SecurityTab = defineAsyncComponent(() => import('./tabs/SecurityTab.vue'));
@@ -220,7 +247,7 @@ interface Tab {
 
 const { t } = useI18n();
 const authStore = useAuthStore();
-const coreStore = useSystemStore();
+const systemStore = useSystemStore();
 const route = useRoute();
 const { confirm } = useConfirm();
 const toast = useToast();
@@ -228,7 +255,7 @@ const toast = useToast();
 const loading = ref(false);
 const saving = ref(false);
 // Initialize tab from query param if present (e.g., ?tab=performance)
-const validTabs = ['system', 'security', 'performance', 'monitoring', 'email', 'media', 'ai'];
+const validTabs = ['system', 'identity', 'seo', 'analytics', 'security', 'performance', 'monitoring', 'email', 'media', 'ai'];
 const initialTab = validTabs.includes(route.query.tab as string) ? (route.query.tab as string) : 'system';
 const activeTab = ref(initialTab);
 const settings = ref<Setting[]>([]);
@@ -272,6 +299,9 @@ const warmingCache = ref(false);
 const tabs = computed<Tab[]>(() => {
     const allTabs: Tab[] = [
         { id: 'system', label: 'System' },
+        { id: 'identity', label: 'Identity' },
+        { id: 'seo', label: 'SEO' },
+        { id: 'analytics', label: 'Analytics' },
         { id: 'security', label: 'Security' },
         { id: 'performance', label: 'Performance' },
         { id: 'monitoring', label: 'Monitoring' },
@@ -299,6 +329,9 @@ const getTabIcon = (tabId: string) => {
         case 'email': return Mail;
         case 'media': return ImageIcon;
         case 'ai': return Sparkles;
+        case 'identity': return ImageIcon;
+        case 'seo': return SettingsIcon;
+        case 'analytics': return Activity;
         default: return SettingsIcon;
     }
 };
@@ -318,7 +351,7 @@ const currentSettings = computed(() => {
 const fetchSettings = async () => {
     try {
         loading.value = true;
-        const response = await api.get('/manage/settings');
+        const response = await api.get('/manage/system/settings');
         const { data } = parseResponse(response);
         const rawSettings = ensureArray(data) as Setting[];
 
@@ -509,13 +542,13 @@ const handleSubmit = async () => {
             };
         });
 
-        await api.post('/manage/settings/bulk-update', {
+        await api.post('/manage/system/settings/bulk-update', {
             settings: settingsToUpdate,
         });
         
         toast.success.save();
         await fetchSettings();
-        await coreStore.fetchSettingsGroup(activeTab.value); // Force refresh store for reactivity
+        await systemStore.fetchSettingsGroup(activeTab.value); // Force refresh store for reactivity
 
         // Refresh cache status if on performance tab
         if (activeTab.value === 'performance') {
@@ -543,10 +576,10 @@ const validateEmailConfig = async () => {
     validatingConfig.value = true;
     configValidation.value = null;
     try {
-        const response = await api.get('/manage/email-test/validate-config');
+        const response = await api.get('/manage/system/email-test/validate-config');
         configValidation.value = parseSingleResponse<{ valid: boolean; errors: string[]; warnings: string[] }>(response);
     } catch (error: unknown) {
-        let errorMsg = t('modules.core.settings.emailTest.failed');
+        let errorMsg = t('modules.system.settings.emailTest.failed');
         if (typeof error === 'object' && error !== null && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
             errorMsg = err.response?.data?.message || errorMsg;
@@ -565,10 +598,10 @@ const testSmtpConnection = async () => {
     testingConnection.value = true;
     connectionResult.value = null;
     try {
-        const response = await api.post('/manage/email-test/test-connection');
+        const response = await api.post('/manage/system/email-test/test-connection');
         connectionResult.value = parseSingleResponse<{ connected: boolean; host: string; port: string; error?: string }>(response);
     } catch (error: unknown) {
-        let errorMsg = t('modules.core.settings.emailTest.failed');
+        let errorMsg = t('modules.system.settings.emailTest.failed');
         if (typeof error === 'object' && error !== null && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
             errorMsg = err.response?.data?.message || errorMsg;
@@ -588,7 +621,7 @@ const sendTestEmail = async () => {
     if (!testEmail.value.to) {
         testEmailResult.value = {
             success: false,
-            message: t('modules.core.settings.emailTest.recipientRequired'),
+            message: t('modules.system.settings.emailTest.recipientRequired'),
         };
         return;
     }
@@ -596,7 +629,7 @@ const sendTestEmail = async () => {
     sendingTestEmail.value = true;
     testEmailResult.value = null;
     try {
-        const response = await api.post('/manage/email-test/send-test', {
+        const response = await api.post('/manage/system/email-test/send-test', {
             to: testEmail.value.to,
             subject: testEmail.value.subject || undefined,
             message: testEmail.value.message || undefined,
@@ -604,7 +637,7 @@ const sendTestEmail = async () => {
         const message = response.data?.message;
         testEmailResult.value = {
             success: true,
-            message: message || t('modules.core.settings.emailTest.sentSuccess'),
+            message: message || t('modules.system.settings.emailTest.sentSuccess'),
         };
         // Clear form
         testEmail.value.subject = '';
@@ -612,7 +645,7 @@ const sendTestEmail = async () => {
         // Refresh logs
         await getRecentLogs();
     } catch (error: unknown) {
-        let errorMsg = t('modules.core.settings.emailTest.sendFailed');
+        let errorMsg = t('modules.system.settings.emailTest.sendFailed');
         if (typeof error === 'object' && error !== null && 'response' in error) {
             const err = error as { response?: { data?: { message?: string } } };
             errorMsg = err.response?.data?.message || errorMsg;
@@ -629,7 +662,7 @@ const sendTestEmail = async () => {
 const getQueueStatus = async () => {
     loadingQueueStatus.value = true;
     try {
-        const response = await api.get('/manage/email-test/queue-status');
+        const response = await api.get('/manage/system/email-test/queue-status');
         queueStatus.value = parseSingleResponse<QueueStatus>(response);
     } catch {
         queueStatus.value = {
@@ -646,7 +679,7 @@ const getQueueStatus = async () => {
 const getRecentLogs = async () => {
     loadingLogs.value = true;
     try {
-        const response = await api.get('/manage/email-test/recent-journal?limit=10');
+        const response = await api.get('/manage/system/email-test/recent-journal?limit=10');
         const parsed = parseSingleResponse<{ logs: EmailLog[] }>(response);
         emailLogs.value = parsed?.logs || [];
     } catch {
@@ -668,10 +701,10 @@ const getCacheStatus = async () => {
 
 const clearSystemCache = async () => {
     const confirmed = await confirm({
-        title: t('modules.core.settings.cache.clearTitle', 'Clear Cache'),
+        title: t('modules.system.settings.cache.clearTitle', 'Clear Cache'),
         message: 'Are you sure you want to clear the system cache?',
         variant: 'warning',
-        confirmText: t('modules.core.settings.cache.clearConfirm', 'Clear Cache'),
+        confirmText: t('modules.system.settings.cache.clearConfirm', 'Clear Cache'),
     });
 
     if (!confirmed) return;
@@ -679,7 +712,7 @@ const clearSystemCache = async () => {
     clearingCache.value = true;
     try {
         await api.post('/manage/system/cache/clear');
-        toast.success.action(t('modules.core.settings.cache.cleared'));
+        toast.success.action(t('modules.system.settings.cache.cleared'));
         getCacheStatus();
     } catch (error: unknown) {
         toast.error.fromResponse(error);
@@ -692,7 +725,7 @@ const warmSystemCache = async () => {
     warmingCache.value = true;
     try {
         await api.post('/manage/system/cache/warm');
-        toast.success.action(t('modules.core.settings.cache.warmed'));
+        toast.success.action(t('modules.system.settings.cache.warmed'));
         getCacheStatus();
     } catch (error: unknown) {
         toast.error.fromResponse(error);

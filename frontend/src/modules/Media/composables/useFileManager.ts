@@ -80,8 +80,8 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
     };
 
-    const coreStore = useSystemStore();
-    const { settings } = storeToRefs(coreStore);
+    const systemStore = useSystemStore();
+    const { settings } = storeToRefs(systemStore);
 
     const isImage = (file: FileItem) => {
         const imageExtensions = settings.value.allowed_image_types 
@@ -316,7 +316,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
     const fetchCurrentPath = async () => {
         loading.value = true;
         try {
-            const response = await api.get('/manage/file-manager', {
+            const response = await api.get('/manage/media/file-manager', {
                 params: {
                     path: currentPath.value,
                     page: currentPage.value,
@@ -350,7 +350,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         if (scannedPaths.value.has(path) && !recursive) return;
 
         try {
-            const response = await api.get('/manage/file-manager', {
+            const response = await api.get('/manage/media/file-manager', {
                 params: { path },
             });
             const data = parseSingleResponse<{ folders: FolderItem[] }>(response) || { folders: [] };
@@ -442,8 +442,8 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const deleteItem = async (item: FileItem | FolderItem) => {
         const isFolder = 'children' in item || !('extension' in item);
-        const title = isFolder ? t('modules.core.file_manager.actions.delete_folder') : t('modules.core.file_manager.actions.delete_file');
-        const message = isFolder ? t('modules.core.file_manager.messages.deleteFolderConfirm', { name: item.name }) : t('modules.core.file_manager.messages.deleteFileConfirm', { name: item.name });
+        const title = isFolder ? t('modules.system.file_manager.actions.delete_folder') : t('modules.system.file_manager.actions.delete_file');
+        const message = isFolder ? t('modules.system.file_manager.messages.deleteFolderConfirm', { name: item.name }) : t('modules.system.file_manager.messages.deleteFileConfirm', { name: item.name });
 
         const confirmed = await confirmDialog({
             title,
@@ -455,7 +455,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         if (!confirmed) return;
 
         try {
-            const url = isFolder ? '/manage/file-manager/folder/delete' : '/manage/file-manager/delete';
+            const url = isFolder ? '/manage/media/file-manager/folder/delete' : '/manage/media/file-manager/delete';
             await api.post(url, { path: item.path.replace(/^\//, '') });
 
             if (isFolder) {
@@ -466,7 +466,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
             }
             await fetchCurrentPath();
             fetchTrash();
-            toast.success.action(isFolder ? t('modules.core.file_manager.messages.folderDeleted') : t('modules.core.file_manager.messages.fileDeleted'));
+            toast.success.action(isFolder ? t('modules.system.file_manager.messages.folderDeleted') : t('modules.system.file_manager.messages.fileDeleted'));
         } catch (error: unknown) {
             toast.error.fromResponse(error);
         }
@@ -474,8 +474,8 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const bulkDelete = async () => {
         const confirmed = await confirmDialog({
-            title: t('modules.core.file_manager.bulk.delete'),
-            message: t('modules.core.file_manager.bulk.confirmDelete', { count: selectedItems.value.length }),
+            title: t('modules.system.file_manager.bulk.delete'),
+            message: t('modules.system.file_manager.bulk.confirmDelete', { count: selectedItems.value.length }),
             variant: 'danger',
             confirmText: t('common.actions.delete'),
         });
@@ -485,7 +485,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         try {
             for (const item of selectedItems.value) {
                 const isFolder = 'children' in item || !('extension' in item);
-                const url = isFolder ? '/manage/file-manager/folder/delete' : '/manage/file-manager/delete';
+                const url = isFolder ? '/manage/media/file-manager/folder/delete' : '/manage/media/file-manager/delete';
                 await api.post(url, { path: item.path.replace(/^\//, '') });
                 if (isFolder) {
                     const folderPath = item.path.endsWith('/') ? item.path : item.path + '/';
@@ -496,7 +496,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
             clearSelection();
             await fetchCurrentPath();
             fetchTrash();
-            toast.success.action(t('modules.core.file_manager.messages.bulkDeleted'));
+            toast.success.action(t('modules.system.file_manager.messages.bulkDeleted'));
         } catch (error: unknown) {
             toast.error.fromResponse(error);
         }
@@ -510,14 +510,14 @@ export function useFileManager(options: { rootPath?: string } = {}) {
             })),
             action
         };
-        toast.success.action(t(`modules.core.file_manager.messages.${action === 'copy' ? 'copiedToClipboard' : 'movedToClipboard'}`));
+        toast.success.action(t(`modules.system.file_manager.messages.${action === 'copy' ? 'copiedToClipboard' : 'movedToClipboard'}`));
     };
 
     const pasteFromClipboard = async (destinationPath: string) => {
         if (clipboard.value.items.length === 0) return;
         loading.value = true;
         try {
-            const endpoint = clipboard.value.action === 'move' ? '/manage/file-manager/move' : '/manage/file-manager/copy';
+            const endpoint = clipboard.value.action === 'move' ? '/manage/media/file-manager/move' : '/manage/media/file-manager/copy';
             for (const item of clipboard.value.items) {
                 await api.post(endpoint, {
                     source: item.path.replace(/^\//, ''),
@@ -529,7 +529,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
             allFolders.value = [];
             await fetchAllFolders();
             await fetchCurrentPath();
-            toast.success.action(t('modules.core.file_manager.messages.pasted'));
+            toast.success.action(t('modules.system.file_manager.messages.pasted'));
         } catch (error: unknown) {
             toast.error.fromResponse(error);
         } finally {
@@ -539,7 +539,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const moveItem = async (sourcePath: string, destinationPath: string, type: 'file' | 'folder') => {
         try {
-            await api.post('/manage/file-manager/move', {
+            await api.post('/manage/media/file-manager/move', {
                 source: sourcePath.replace(/^\//, ''),
                 destination: destinationPath === '/' ? '' : destinationPath.replace(/^\//, ''),
                 type
@@ -547,7 +547,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
             allFolders.value = [];
             await fetchAllFolders();
             await fetchCurrentPath();
-            toast.success.action(t('modules.core.file_manager.messages.moved'));
+            toast.success.action(t('modules.system.file_manager.messages.moved'));
         } catch (error: unknown) {
             toast.error.fromResponse(error);
         }
@@ -556,7 +556,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
     const fetchTrash = async () => {
         trashLoading.value = true;
         try {
-            const response = await api.get('/manage/file-manager/trash');
+            const response = await api.get('/manage/media/file-manager/trash');
             trashItems.value = response.data?.data?.items || [];
         } catch (error) {
             logger.error('Failed to fetch trash:', error);
@@ -567,12 +567,12 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const restoreTrashItem = async (item: TrashItem) => {
         try {
-            await api.post('/manage/file-manager/restore', { id: item.id });
+            await api.post('/manage/media/file-manager/restore', { id: item.id });
             await fetchTrash();
             allFolders.value = [];
             await fetchAllFolders();
             await fetchCurrentPath();
-            toast.success.action(t('modules.core.file_manager.messages.restored'));
+            toast.success.action(t('modules.system.file_manager.messages.restored'));
         } catch (error) {
             toast.error.fromResponse(error);
         }
@@ -580,15 +580,15 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const emptyTrash = async () => {
         const confirmed = await confirmDialog({
-            title: t('modules.core.file_manager.trash.empty'),
-            message: t('modules.core.file_manager.trash.emptyConfirm') || 'Are you sure you want to permanently delete all items in trash?',
+            title: t('modules.system.file_manager.trash.empty'),
+            message: t('modules.system.file_manager.trash.emptyConfirm') || 'Are you sure you want to permanently delete all items in trash?',
             variant: 'danger',
-            confirmText: t('modules.core.file_manager.trash.empty'),
+            confirmText: t('modules.system.file_manager.trash.empty'),
         });
         if (!confirmed) return;
         try {
-            await api.post('/manage/file-manager/trash/empty');
-            toast.success.action(t('modules.core.file_manager.messages.trashEmptied'));
+            await api.post('/manage/media/file-manager/trash/empty');
+            toast.success.action(t('modules.system.file_manager.messages.trashEmptied'));
             fetchTrash();
         } catch (error) {
             toast.error.fromResponse(error);
@@ -597,15 +597,15 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const deleteFromTrashPermanent = async (item: TrashItem) => {
         const confirmed = await confirmDialog({
-            title: t('modules.core.file_manager.trash.permanent_delete'),
-            message: t('modules.core.file_manager.trash.confirmPermanentDelete', { name: item.name }),
+            title: t('modules.system.file_manager.trash.permanent_delete'),
+            message: t('modules.system.file_manager.trash.confirmPermanentDelete', { name: item.name }),
             variant: 'danger',
             confirmText: t('common.actions.delete'),
         });
         if (!confirmed) return;
         try {
-            await api.post('/manage/file-manager/trash/permanent', { id: item.id });
-            toast.success.action(t('modules.core.file_manager.messages.deleteSuccess'));
+            await api.post('/manage/media/file-manager/trash/permanent', { id: item.id });
+            toast.success.action(t('modules.system.file_manager.messages.deleteSuccess'));
             fetchTrash();
         } catch (error) {
             toast.error.fromResponse(error);
@@ -615,9 +615,9 @@ export function useFileManager(options: { rootPath?: string } = {}) {
     const copyPath = async (item: FileItem | FolderItem) => {
         try {
             await navigator.clipboard.writeText(item.path);
-            toast.success.action(t('modules.core.file_manager.messages.path_copied', 'Path copied'));
+            toast.success.action(t('modules.system.file_manager.messages.path_copied', 'Path copied'));
         } catch {
-            toast.error.default(t('modules.core.file_manager.messages.copy_failed', 'Failed to copy'));
+            toast.error.default(t('modules.system.file_manager.messages.copy_failed', 'Failed to copy'));
         }
     };
 
@@ -625,9 +625,9 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         if (file.url) {
             try {
                 await navigator.clipboard.writeText(file.url);
-                toast.success.action(t('modules.core.file_manager.messages.url_copied', 'URL copied'));
+                toast.success.action(t('modules.system.file_manager.messages.url_copied', 'URL copied'));
             } catch {
-                toast.error.default(t('modules.core.file_manager.messages.copy_failed', 'Failed to copy'));
+                toast.error.default(t('modules.system.file_manager.messages.copy_failed', 'Failed to copy'));
             }
         }
     };

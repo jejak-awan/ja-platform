@@ -16,7 +16,7 @@ export const handleBeforeEachGuard = async (
     paths: GuardPaths,
 ): Promise<void> => {
     const authStore = useAuthStore();
-    const coreStore = useSystemStore();
+    const systemStore = useSystemStore();
 
     // 1. Workspace Context Interceptor
     if (to.query.unit_context !== undefined) {
@@ -63,12 +63,12 @@ export const handleBeforeEachGuard = async (
         to.path === paths.loginPath ||
         to.path === paths.registerPath;
 
-    if (!coreStore.publicSettingsLoaded && !isSpecialRoute) {
+    if (!systemStore.publicSettingsLoaded && !isSpecialRoute) {
         try {
-            if (!coreStore.publicSettingsPromise) {
-                await coreStore.fetchPublicSettings();
+            if (!systemStore.publicSettingsPromise) {
+                await systemStore.fetchPublicSettings();
             } else {
-                await coreStore.publicSettingsPromise;
+                await systemStore.publicSettingsPromise;
             }
         } catch (e) {
             logger.error('Failed to preload settings in router guard:', e);
@@ -76,7 +76,7 @@ export const handleBeforeEachGuard = async (
     }
 
     // Use CoreStore for maintenance mode (Unified Infrastructure)
-    const isMaintenance = !!coreStore.maintenance.mode;
+    const isMaintenance = !!systemStore.maintenance.mode;
     const canBypassMaintenance = authStore.isAuthenticated && authStore.getRoleRank() >= 90;
     const isMaintenanceRoute = to.name === 'maintenance' || to.path === '/maintenance';
     const isLoginRoute = to.name === 'login' || to.path === paths.loginPath;

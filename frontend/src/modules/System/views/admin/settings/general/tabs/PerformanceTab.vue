@@ -23,10 +23,10 @@
           </div>
           <div>
             <h3 class="text-sm font-semibold text-foreground">
-              {{ $t('modules.core.settings.cache.status') }}
+              {{ $t('modules.system.settings.cache.status') }}
             </h3>
             <p class="text-xs text-muted-foreground">
-              {{ $t('modules.core.settings.descriptions.cache_status') }}
+              {{ $t('modules.system.settings.descriptions.cache_status') }}
             </p>
           </div>
         </div>
@@ -56,13 +56,13 @@
               v-if="!cacheStatus"
               class="text-center py-8 text-muted-foreground text-sm"
             >
-              {{ $t('modules.core.settings.cache.loading') }}
+              {{ $t('modules.system.settings.cache.loading') }}
             </div>
             <div v-else>
               <div class="grid grid-cols-2 gap-4 mb-4">
                 <div class="p-3 rounded-lg bg-muted border border-border/50">
                   <p class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
-                    {{ $t('modules.core.settings.cache.driver') }}
+                    {{ $t('modules.system.settings.cache.driver') }}
                   </p>
                   <p class="text-sm font-bold text-foreground mt-1">
                     {{ cacheStatus.driver }}
@@ -70,15 +70,15 @@
                 </div>
                 <div class="p-3 rounded-lg bg-muted border border-border/50">
                   <p class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
-                    {{ $t('modules.core.settings.cache.status') }}
+                    {{ $t('modules.system.settings.cache.status') }}
                   </p>
                   <p class="text-sm font-bold text-foreground mt-1">
-                    {{ cacheStatus.enabled ? $t('modules.core.settings.enabled') : $t('modules.core.settings.disabled') }}
+                    {{ cacheStatus.enabled ? $t('modules.system.settings.enabled') : $t('modules.system.settings.disabled') }}
                   </p>
                 </div>
                 <div class="p-3 rounded-lg bg-muted border border-border/50">
                   <p class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
-                    {{ $t('modules.core.settings.cache.keys') }}
+                    {{ $t('modules.system.settings.cache.keys') }}
                   </p>
                   <p class="text-sm font-bold text-foreground mt-1">
                     {{ cacheStatus.keys }}
@@ -86,7 +86,7 @@
                 </div>
                 <div class="p-3 rounded-lg bg-muted border border-border/50">
                   <p class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
-                    {{ $t('modules.core.settings.cache.size') }}
+                    {{ $t('modules.system.settings.cache.size') }}
                   </p>
                   <p class="text-sm font-bold text-foreground mt-1">
                     {{ cacheStatus.size }}
@@ -130,7 +130,7 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   ><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
-                  {{ clearingCache ? $t('modules.core.settings.cache.clearing') : $t('modules.core.settings.cache.clear') }}
+                  {{ clearingCache ? $t('modules.system.settings.cache.clearing') : $t('modules.system.settings.cache.clear') }}
                 </button>
                 <button
                   type="button"
@@ -167,7 +167,7 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   ><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.24-2.14.7-3.09C7.07 13.1 8 13.9 8.5 14.5z" /></svg>
-                  {{ warmingCache ? $t('modules.core.settings.cache.warming') : $t('modules.core.settings.cache.warm') }}
+                  {{ warmingCache ? $t('modules.system.settings.cache.warming') : $t('modules.system.settings.cache.warm') }}
                 </button>
               </div>
             </div>
@@ -181,13 +181,13 @@
             >
               <div>
                 <label class="block text-sm font-medium text-foreground mb-1">
-                  {{ $t('modules.core.settings.labels.' + setting.key) }}
+                  {{ $t('modules.system.settings.labels.' + setting.key) }}
                 </label>
                 <p
                   v-if="setting.description"
                   class="text-xs text-muted-foreground mb-2"
                 >
-                  {{ $t('modules.core.settings.descriptions.' + setting.key) }}
+                  {{ $t('modules.system.settings.descriptions.' + setting.key) }}
                 </p>
 
                 <select
@@ -223,7 +223,7 @@
                       <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after: after:shadow-md peer-checked:bg-success" />
                     </div>
                     <span class="ml-3 text-sm text-foreground">
-                      {{ formData[setting.key] ? $t('modules.core.settings.enabled') : $t('modules.core.settings.disabled') }}
+                      {{ formData[setting.key] ? $t('modules.system.settings.enabled') : $t('modules.system.settings.disabled') }}
                     </span>
                   </label>
                 </div>
@@ -318,7 +318,7 @@
               CDN Configuration
             </h3>
             <p class="text-xs text-muted-foreground">
-              {{ $t('modules.core.settings.descriptions.cdn_status') }}
+              {{ $t('modules.system.settings.descriptions.cdn_status') }}
             </p>
           </div>
         </div>
@@ -355,13 +355,13 @@
           <!-- Enable CDN -->
           <div v-if="cdnEnabledSetting">
             <label class="block text-sm font-medium text-foreground mb-1">
-              {{ $t('modules.core.settings.labels.' + (cdnEnabledSetting?.key || '')) }}
+              {{ $t('modules.system.settings.labels.' + (cdnEnabledSetting?.key || '')) }}
             </label>
             <p
               v-if="cdnEnabledSetting?.description"
               class="text-xs text-muted-foreground mb-3"
             >
-              {{ $t('modules.core.settings.descriptions.' + (cdnEnabledSetting?.key || '')) }}
+              {{ $t('modules.system.settings.descriptions.' + (cdnEnabledSetting?.key || '')) }}
             </p>
             <label class="flex items-center cursor-pointer">
               <div class="relative">
@@ -374,7 +374,7 @@
                 <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after: after:shadow-md peer-checked:bg-success" />
               </div>
               <span class="ml-3 text-sm text-foreground">
-                {{ formData[cdnEnabledSetting?.key || ''] ? $t('modules.core.settings.enabled') : $t('modules.core.settings.disabled') }}
+                {{ formData[cdnEnabledSetting?.key || ''] ? $t('modules.system.settings.enabled') : $t('modules.system.settings.disabled') }}
               </span>
             </label>
           </div>
@@ -385,13 +385,13 @@
               class="block text-sm font-medium text-foreground mb-1"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              {{ cdnPresetSetting ? $t('modules.core.settings.labels.' + cdnPresetSetting.key) : 'CDN Provider' }}
+              {{ cdnPresetSetting ? $t('modules.system.settings.labels.' + cdnPresetSetting.key) : 'CDN Provider' }}
             </label>
             <p
               class="text-xs text-muted-foreground mb-2"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              {{ cdnPresetSetting ? $t('modules.core.settings.descriptions.' + cdnPresetSetting.key) : 'Pilih provider CDN Anda' }}
+              {{ cdnPresetSetting ? $t('modules.system.settings.descriptions.' + cdnPresetSetting.key) : 'Pilih provider CDN Anda' }}
             </p>
             <select
               :value="formData[cdnPresetSetting?.key || '']"
@@ -423,14 +423,14 @@
               class="block text-sm font-medium text-foreground mb-1"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              {{ $t('modules.core.settings.labels.' + (cdnUrlSetting?.key || '')) }}
+              {{ $t('modules.system.settings.labels.' + (cdnUrlSetting?.key || '')) }}
             </label>
             <p
               v-if="cdnUrlSetting?.description"
               class="text-xs text-muted-foreground mb-2"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              {{ $t('modules.core.settings.descriptions.' + (cdnUrlSetting?.key || '')) }}
+              {{ $t('modules.system.settings.descriptions.' + (cdnUrlSetting?.key || '')) }}
             </p>
             <input
               :value="(formData[cdnUrlSetting?.key || ''] as any)"
@@ -461,13 +461,13 @@
               class="block text-sm font-medium text-foreground mb-1"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              {{ cdnIncludedDirsSetting ? $t('modules.core.settings.labels.' + cdnIncludedDirsSetting.key) : 'Direktori yang Disertakan' }}
+              {{ cdnIncludedDirsSetting ? $t('modules.system.settings.labels.' + cdnIncludedDirsSetting.key) : 'Direktori yang Disertakan' }}
             </label>
             <p
               class="text-xs text-muted-foreground mb-2"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              {{ cdnIncludedDirsSetting ? $t('modules.core.settings.descriptions.' + cdnIncludedDirsSetting.key) : 'Daftar direktori untuk dilayani via CDN' }}
+              {{ cdnIncludedDirsSetting ? $t('modules.system.settings.descriptions.' + cdnIncludedDirsSetting.key) : 'Daftar direktori untuk dilayani via CDN' }}
             </p>
             <input
               :value="(formData[cdnIncludedDirsSetting?.key || ''] as any)"
@@ -491,13 +491,13 @@
               class="block text-sm font-medium text-foreground mb-1"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              {{ cdnExcludedExtsSetting ? $t('modules.core.settings.labels.' + cdnExcludedExtsSetting.key) : 'Ekstensi yang Dikecualikan' }}
+              {{ cdnExcludedExtsSetting ? $t('modules.system.settings.labels.' + cdnExcludedExtsSetting.key) : 'Ekstensi yang Dikecualikan' }}
             </label>
             <p
               class="text-xs text-muted-foreground mb-2"
               :class="{'opacity-50': !formData.enable_cdn}"
             >
-              {{ cdnExcludedExtsSetting ? $t('modules.core.settings.descriptions.' + cdnExcludedExtsSetting.key) : 'Ekstensi file yang dikecualikan dari CDN' }}
+              {{ cdnExcludedExtsSetting ? $t('modules.system.settings.descriptions.' + cdnExcludedExtsSetting.key) : 'Ekstensi file yang dikecualikan dari CDN' }}
             </p>
             <input
               :value="(formData[cdnExcludedExtsSetting?.key || ''] as any)"
@@ -548,10 +548,10 @@
           </div>
           <div>
             <h3 class="text-sm font-semibold text-foreground">
-              {{ $t('modules.core.settings.tabs.performance') }} Settings
+              {{ $t('modules.system.settings.tabs.performance') }} Settings
             </h3>
             <p class="text-xs text-muted-foreground">
-              {{ $t('modules.core.settings.descriptions.performance_status') }}
+              {{ $t('modules.system.settings.descriptions.performance_status') }}
             </p>
           </div>
         </div>
@@ -581,13 +581,13 @@
           >
             <div>
               <label class="block text-sm font-medium text-foreground mb-1">
-                {{ $t('modules.core.settings.labels.' + setting.key) }}
+                {{ $t('modules.system.settings.labels.' + setting.key) }}
               </label>
               <p
                 v-if="setting.description"
                 class="text-xs text-muted-foreground mb-2"
               >
-                {{ $t('modules.core.settings.descriptions.' + setting.key) }}
+                {{ $t('modules.system.settings.descriptions.' + setting.key) }}
               </p>
 
               <input
@@ -618,7 +618,7 @@
                     <div class="w-11 h-6 bg-muted rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after: after:shadow-md peer-checked:bg-success" />
                   </div>
                   <span class="ml-3 text-sm text-foreground">
-                    {{ formData[setting.key] ? $t('modules.core.settings.enabled') : $t('modules.core.settings.disabled') }}
+                    {{ formData[setting.key] ? $t('modules.system.settings.enabled') : $t('modules.system.settings.disabled') }}
                   </span>
                 </label>
               </div>

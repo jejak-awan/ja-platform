@@ -222,7 +222,7 @@ const router = useRouter()
 const route = useRoute()
 const categories = ref<Category[]>([])
 const loadingCategories = ref(true)
-const expandedCategories = ref<Set<number>>(new Set())
+const expandedCategories = ref<Set<string>>(new Set())
 
 const suggestions = ref<SearchSuggestionItem[]>([])
 const showSuggestions = ref(false)

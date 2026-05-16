@@ -173,7 +173,7 @@ const nodes = computed(() => [
     { label: 'Kebijakan Sistem', count: 3, icon: Settings },
 ]);
 
-const handleUnitSelect = (id: string) => {
+const handleUnitSelect = (id: string | number) => {
   unitStore.setActiveLevel(id, 'unit', true);
   router.push({ name: 'schools.dashboard' });
 };

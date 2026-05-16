@@ -6,7 +6,7 @@
     <DialogContent class="sm:max-w-[600px]">
       <DialogHeader>
         <DialogTitle>
-          {{ task ? t('modules.core.system.scheduled_tasks.modal.title_edit') : t('modules.core.system.scheduled_tasks.modal.title_create') }}
+          {{ task ? t('modules.system.system.scheduled_tasks.modal.title_edit') : t('modules.system.system.scheduled_tasks.modal.title_create') }}
         </DialogTitle>
       </DialogHeader>
 
@@ -16,58 +16,58 @@
       >
         <div>
           <label class="block text-sm font-medium text-foreground mb-1">
-            {{ t('modules.core.system.scheduled_tasks.modal.name_label') }} <span class="text-red-500">*</span>
+            {{ t('modules.system.system.scheduled_tasks.modal.name_label') }} <span class="text-red-500">*</span>
           </label>
           <input
             v-model="form.name"
             type="text"
             required
             class="w-full px-3 py-2 border border-input bg-card text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-            :placeholder="t('modules.core.system.scheduled_tasks.modal.name_placeholder')"
+            :placeholder="t('modules.system.system.scheduled_tasks.modal.name_placeholder')"
           >
         </div>
 
         <div>
           <label class="block text-sm font-medium text-foreground mb-1">
-            {{ t('modules.core.system.scheduled_tasks.modal.command_label') }} <span class="text-red-500">*</span>
+            {{ t('modules.system.system.scheduled_tasks.modal.command_label') }} <span class="text-red-500">*</span>
           </label>
           <input
             v-model="form.command"
             type="text"
             required
             class="w-full px-3 py-2 border border-input bg-card text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary font-mono text-sm"
-            :placeholder="t('modules.core.system.scheduled_tasks.modal.command_placeholder')"
+            :placeholder="t('modules.system.system.scheduled_tasks.modal.command_placeholder')"
           >
           <p class="mt-1 text-xs text-muted-foreground">
-            {{ t('modules.core.system.scheduled_tasks.modal.command_help') }}
+            {{ t('modules.system.system.scheduled_tasks.modal.command_help') }}
           </p>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-foreground mb-1">
-            {{ t('modules.core.system.scheduled_tasks.modal.schedule_label') }} <span class="text-red-500">*</span>
+            {{ t('modules.system.system.scheduled_tasks.modal.schedule_label') }} <span class="text-red-500">*</span>
           </label>
           <input
             v-model="form.schedule"
             type="text"
             required
             class="w-full px-3 py-2 border border-input bg-card text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary font-mono text-sm"
-            :placeholder="t('modules.core.system.scheduled_tasks.modal.schedule_placeholder')"
+            :placeholder="t('modules.system.system.scheduled_tasks.modal.schedule_placeholder')"
           >
           <p class="mt-1 text-xs text-muted-foreground">
-            {{ t('modules.core.system.scheduled_tasks.modal.schedule_help') }}
+            {{ t('modules.system.system.scheduled_tasks.modal.schedule_help') }}
           </p>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-foreground mb-1">
-            {{ t('modules.core.system.scheduled_tasks.modal.description_label') }}
+            {{ t('modules.system.system.scheduled_tasks.modal.description_label') }}
           </label>
           <textarea
             v-model="form.description"
             rows="3"
             class="w-full px-3 py-2 border border-input bg-card text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-            :placeholder="t('modules.core.system.scheduled_tasks.modal.description_placeholder')"
+            :placeholder="t('modules.system.system.scheduled_tasks.modal.description_placeholder')"
           />
         </div>
 
@@ -82,7 +82,7 @@
             for="is_active"
             class="ml-2 block text-sm text-foreground"
           >
-            {{ t('modules.core.system.scheduled_tasks.modal.active_label') }}
+            {{ t('modules.system.system.scheduled_tasks.modal.active_label') }}
           </label>
         </div>
       </form>
@@ -92,7 +92,7 @@
           variant="outline"
           @click="$emit('close')"
         >
-          {{ t('modules.core.system.scheduled_tasks.modal.cancel') }}
+          {{ t('modules.system.system.scheduled_tasks.modal.cancel') }}
         </Button>
         <Button
           :disabled="saving"
@@ -102,7 +102,7 @@
             v-if="saving"
             class="w-4 h-4 mr-2 animate-spin"
           />
-          {{ saving ? t('modules.core.system.scheduled_tasks.modal.saving') : (task ? t('modules.core.system.scheduled_tasks.modal.update') : t('modules.core.system.scheduled_tasks.modal.create_action')) }}
+          {{ saving ? t('modules.system.system.scheduled_tasks.modal.saving') : (task ? t('modules.system.system.scheduled_tasks.modal.update') : t('modules.system.system.scheduled_tasks.modal.create_action')) }}
         </Button>
       </DialogFooter>
     </DialogContent>

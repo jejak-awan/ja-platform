@@ -23,8 +23,12 @@ class ThemeController extends BaseApiController
         $levelId = \Illuminate\Support\Facades\Context::get('workspace_id');
         $themes = Theme::withoutGlobalScope('school_unit')
             ->where(function ($query) use ($levelId): void {
-                $query->where('workspace_id', $levelId)
-                    ->orWhereNull('workspace_id');
+                if ($levelId && $levelId !== "0" && $levelId !== 0) {
+                    $query->where("workspace_id", (string) $levelId);
+                } else {
+                    $query->whereNull("workspace_id");
+                }
+                $query->orWhereNull("workspace_id");
             })
             ->ofType($type)
             ->latest()

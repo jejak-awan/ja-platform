@@ -33,7 +33,7 @@ export const InstitutionService = {
         return api.get('admin/school/stats');
     },
 
-    async getInstitutionDetail(id: string | string): Promise<AxiosResponse<School>> {
+    async getInstitutionDetail(id: string | number): Promise<AxiosResponse<School>> {
         return api.get(`admin/school/${id}`);
     },
 
@@ -41,7 +41,7 @@ export const InstitutionService = {
         return api.get('admin/analytics/summary-full');
     },
 
-    async getUnits(schoolId?: number): Promise<AxiosResponse<SchoolUnit[]>> {
+    async getUnits(schoolId?: string | number): Promise<AxiosResponse<SchoolUnit[]>> {
         const params = schoolId ? { school_id: schoolId } : {};
         return api.get('admin/institution/levels', { params });
     },
@@ -50,19 +50,19 @@ export const InstitutionService = {
         return api.post('admin/institution/levels', data);
     },
 
-    async updateUnit(id: string, data: Partial<SchoolUnit>): Promise<AxiosResponse<SchoolUnit>> {
+    async updateUnit(id: string | number, data: Partial<SchoolUnit>): Promise<AxiosResponse<SchoolUnit>> {
         return api.put(`admin/institution/levels/${id}`, data);
     },
 
-    async deleteUnit(id: string): Promise<AxiosResponse<void>> {
+    async deleteUnit(id: string | number): Promise<AxiosResponse<void>> {
         return api.delete(`admin/institution/levels/${id}`);
     },
 
-    async selectUnit(id: string): Promise<AxiosResponse<SchoolUnit>> {
+    async selectUnit(id: string | number): Promise<AxiosResponse<SchoolUnit>> {
         return api.post(`admin/institution/levels/${id}/select`);
     },
 
-    async deleteInstitution(id: string): Promise<AxiosResponse<void>> {
+    async deleteInstitution(id: string | number): Promise<AxiosResponse<void>> {
         return api.delete(`admin/school/${id}`);
     }
 };

@@ -223,7 +223,7 @@ const fetchStaff = async (page = 1) => {
 };
 
 const handleSearch = _.debounce(() => {
-    fetchStaff("1");
+    fetchStaff(1);
 }, 500);
 
 const handlePageChange = (page: number) => {

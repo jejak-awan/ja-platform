@@ -1,16 +1,11 @@
 import { defineStore } from 'pinia';
-import api from '@/engine/api/client';
 import { logger } from '@/shared/utils/logger';
 import { ensureArray, parseResponse } from '@/shared/utils/responseParser';
+import { LibraryService } from '@/modules/Library/services/libraryService';
+import type { Tag } from '@/modules/Library/types/taxonomy';
+export type { Tag };
 
-export interface Tag {
-    id: string;
-    name: string;
-    slug: string;
-    type: string;
-    description?: string;
-    contents_count?: number;
-}
+
 
 export interface LibraryState {
     tags: Tag[];
@@ -31,7 +26,7 @@ export const useLibraryStore = defineStore('library', {
         async fetchTags(params: Record<string, any> = {}) {
             this.loading = true;
             try {
-                const response = await api.get('/manage/library/tags', { params });
+                const response = await LibraryService.listTags(params);
                 const { data, pagination } = parseResponse(response);
                 this.tags = ensureArray(data);
                 this.pagination = pagination;
@@ -46,7 +41,7 @@ export const useLibraryStore = defineStore('library', {
 
         async fetchStatistics() {
             try {
-                const response = await api.get('/manage/library/tags/statistics');
+                const response = await LibraryService.tagStatistics();
                 this.statistics = response.data?.data || response.data;
                 return this.statistics;
             } catch (error) {
@@ -58,9 +53,9 @@ export const useLibraryStore = defineStore('library', {
         async saveTag(tag: Partial<Tag>) {
             this.loading = true;
             try {
-                const method = tag.id ? 'put' : 'post';
-                const url = tag.id ? `/manage/library/tags/${tag.id}` : '/manage/library/tags';
-                const response = await api[method](url, tag);
+                const response = tag.id
+                    ? await LibraryService.updateTag(tag.id, tag)
+                    : await LibraryService.createTag(tag);
                 await this.fetchTags({ type: tag.type });
                 return response.data;
             } catch (error) {
@@ -71,10 +66,10 @@ export const useLibraryStore = defineStore('library', {
             }
         },
 
-        async deleteTag(id: string, type: string = 'cms') {
+        async deleteTag(id: string | number, type: string = 'cms') {
             this.loading = true;
             try {
-                await api.delete(`/manage/library/tags/${id}`);
+                await LibraryService.deleteTag(id);
                 await this.fetchTags({ type });
             } catch (error) {
                 logger.error('[Library Store] Error deleting tag:', error);

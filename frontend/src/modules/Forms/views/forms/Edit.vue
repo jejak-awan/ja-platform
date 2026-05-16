@@ -245,7 +245,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import api from '@/engine/api/client';
+import { FormsService } from '@/modules/Forms/services/formsService';
 import { useToast } from '@/shared/composables/useToast';
 import { useFormValidation } from '@/shared/composables/useFormValidation';
 import { formSettingsSchema } from '@/shared/schemas';
@@ -288,7 +288,7 @@ const isDirty = computed(() => {
 const fetchForm = async () => {
     loading.value = true;
     try {
-        const response = await api.get(`/manage/cms/forms/${route.params.id}`);
+        const response = await FormsService.get(String(route.params.id));
         const data = response.data;
         Object.assign(formData, {
             name: data.name,
@@ -324,7 +324,7 @@ const handleSubmit = async () => {
             redirect_url: formData.redirect_url,
             is_active: formData.is_active
         };
-        await api.put(`/manage/cms/forms/${route.params.id}`, payload);
+        await FormsService.update(String(route.params.id), payload);
         initialForm.value = JSON.parse(JSON.stringify(formData));
         toast.success.update(t('modules.cms.forms.title'));
         router.push({ name: 'forms' });

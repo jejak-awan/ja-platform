@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import api from '@/engine/api/client';
 import { logger } from '@/shared/utils/logger';
 import { ensureArray } from '@/shared/utils/responseParser';
+import { LayoutService } from '@/modules/Layout/services/layoutService';
 
 export interface MenuItem {
     id: string;
@@ -32,7 +32,7 @@ export const useLayoutStore = defineStore('layout', {
         async fetchAllMenus(params: Record<string, any> = {}) {
             this.loading = true;
             try {
-                const response = await api.get('/manage/layout/menus', { params });
+                const response = await LayoutService.listMenus(params);
                 this.menuList = ensureArray(response.data?.data || response.data);
                 this.trashedCount = response.data?.meta?.trashed_count ?? 0;
                 return this.menuList;
@@ -47,7 +47,7 @@ export const useLayoutStore = defineStore('layout', {
         async fetchMenu(location: string, module: string = 'cms') {
             this.loading = true;
             try {
-                const response = await api.get(`/public/layout/menus/${location}`, { params: { module } });
+                const response = await LayoutService.publicMenuByLocation(location, module);
                 this.menus[location] = ensureArray(response.data);
                 return this.menus[location];
             } catch (error) {
@@ -57,12 +57,11 @@ export const useLayoutStore = defineStore('layout', {
                 this.loading = false;
             }
         },
-        
+
         async deleteMenu(id: string, force = false) {
             this.loading = true;
             try {
-                const url = force ? `/manage/layout/menus/${id}/force-delete` : `/manage/layout/menus/${id}`;
-                await api.delete(url);
+                await LayoutService.deleteMenu(id, force);
                 return true;
             } catch (error) {
                 logger.error('[Layout Store] Error deleting menu:', error);
@@ -75,7 +74,7 @@ export const useLayoutStore = defineStore('layout', {
         async restoreMenu(id: string) {
             this.loading = true;
             try {
-                await api.post(`/manage/layout/menus/${id}/restore`);
+                await LayoutService.restoreMenu(id);
                 return true;
             } catch (error) {
                 logger.error('[Layout Store] Error restoring menu:', error);
@@ -88,7 +87,7 @@ export const useLayoutStore = defineStore('layout', {
         async fetchWidgets(location: string, module: string = 'cms') {
             this.loading = true;
             try {
-                const response = await api.get(`/public/layout/widgets/${location}`, { params: { module } });
+                const response = await LayoutService.publicWidgetsByLocation(location, module);
                 this.widgets[location] = ensureArray(response.data);
                 return this.widgets[location];
             } catch (error) {

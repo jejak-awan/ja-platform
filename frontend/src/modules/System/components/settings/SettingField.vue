@@ -229,7 +229,7 @@ import {
     Button,
     LucideIcon
 } from '@/shared/components/ui'
-import MediaPicker from '@/shared/components/media/MediaPicker.vue'
+import MediaPicker from '@/modules/Media/components/picker/MediaPicker.vue'
 
 interface SettingOption {
     value: string | number;
@@ -341,7 +341,7 @@ const applyPreset = (value: string | number) => {
 }
 
 const colSpanClass = computed(() => {
-    if (props.colSpan === 'full' || props.colSpan === "2") {
+    if (props.colSpan === 'full' || props.colSpan === 2) {
         return 'col-span-1 md:col-span-2'
     }
     return 'col-span-1'

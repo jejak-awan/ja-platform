@@ -131,7 +131,7 @@ apiClient.interceptors.response.use(
         return response;
     },
     async (error: AxiosError) => {
-        const config = error.config as (InternalAxiosRequestConfig & { _perfStartedAt?: number }) | undefined;
+        const config = error.config as (InternalAxiosRequestConfig & { _perfStartedAt?: number; _skipManualRedirect?: boolean }) | undefined;
         if (config) {
             const startedAt = config._perfStartedAt || performance.now();
             pushApiPerfEntry({
@@ -149,9 +149,14 @@ apiClient.interceptors.response.use(
         if (status === 401 || status === 419) {
             if (isRedirectingToLogin) return Promise.reject(error);
             
+            // Respect manual skip flag from request config
+            if (config?._skipManualRedirect) {
+                return Promise.reject(error);
+            }
+            
             const url = error.config?.url || '';
-            // Skip redirection for logout (intended) or user profile fetch (can be guest)
-            if (url.includes('logout') || url.includes('user')) {
+            // Skip redirection for logout (intended), public endpoints, or user profile fetch (can be guest)
+            if (url.includes('logout') || url.includes('auth/me') || url.includes('user') || url.includes('/public/')) {
                 return Promise.reject(error);
             }
 

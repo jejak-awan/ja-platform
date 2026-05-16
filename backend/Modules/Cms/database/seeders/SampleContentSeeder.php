@@ -29,7 +29,7 @@ class SampleContentSeeder extends Seeder
         $tags = $this->createTags();
 
         // Create menus
-        $this->createMenus();
+        // $this->createMenus();
 
         // Create pages
         $this->createLandingPage($user);
@@ -100,7 +100,7 @@ class SampleContentSeeder extends Seeder
 
         foreach ($headerItems as $item) {
             MenuItem::firstOrCreate(
-                ['menu_id' => $headerMenu->id, 'title' => $item['title']],
+                ['menu_id' => $headerMenu->id, 'url' => $item['url']],
                 array_merge($item, ['menu_id' => $headerMenu->id, 'type' => 'custom'])
             );
         }
@@ -120,7 +120,7 @@ class SampleContentSeeder extends Seeder
 
         foreach ($footerItems1 as $item) {
             MenuItem::firstOrCreate(
-                ['menu_id' => $footerCol1->id, 'title' => $item['title']],
+                ['menu_id' => $footerCol1->id, 'url' => $item['url']],
                 array_merge($item, ['menu_id' => $footerCol1->id, 'type' => 'custom'])
             );
         }
@@ -140,7 +140,7 @@ class SampleContentSeeder extends Seeder
 
         foreach ($footerItems2 as $item) {
             MenuItem::firstOrCreate(
-                ['menu_id' => $footerCol2->id, 'title' => $item['title']],
+                ['menu_id' => $footerCol2->id, 'url' => $item['url']],
                 array_merge($item, ['menu_id' => $footerCol2->id, 'type' => 'custom'])
             );
         }
@@ -314,7 +314,7 @@ class SampleContentSeeder extends Seeder
                 'slug' => 'about',
                 'type' => 'page',
                 'status' => 'published',
-                'body' => '<h1>About JA-Platform</h1><p>We are building the future of content management - simple, powerful, and beautiful.</p><h2>Our Story</h2><p>JA-Platform was born from a simple idea: content management should be easy, fast, and beautiful.</p>',
+                'body' => null, // Let theme default handle this for better aesthetics
                 'author_id' => $user->id,
                 'published_at' => now(),
                 'meta_title' => 'About JA-Platform - Our Story',

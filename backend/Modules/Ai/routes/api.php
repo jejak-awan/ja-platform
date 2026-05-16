@@ -9,6 +9,7 @@ Route::prefix('v1')->group(function (): void {
     // Console Management
     Route::prefix('manage/ai')->middleware(['auth:sanctum'])->group(function (): void {
         Route::get('providers', [AiController::class, 'getProviders']);
+        Route::get('models/{provider}', [AiController::class, 'getModels']);
         Route::post('generate', [AiController::class, 'generate']);
     });
 });

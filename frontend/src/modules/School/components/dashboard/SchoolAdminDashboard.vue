@@ -82,7 +82,7 @@
         <CardContent class="p-6">
           <div class="h-[300px] flex items-center justify-center">
             <Bar 
-              v-if="unitStore.activeUnitId === "0" && chartData.labels.length > 0"
+              v-if="unitStore.activeUnitId === '0' && chartData.labels.length > 0"
               :data="chartData" 
               :options="barChartOptions" 
             />
@@ -112,7 +112,7 @@
         <CardContent class="p-6">
           <div class="h-[300px] flex items-center justify-center">
              <Bar 
-              v-if="unitStore.activeUnitId === "0" && staffChartData.labels.length > 0"
+              v-if="unitStore.activeUnitId === '0' && staffChartData.labels.length > 0"
               :data="staffChartData" 
               :options="barChartOptions" 
             />

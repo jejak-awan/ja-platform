@@ -96,7 +96,7 @@ const loading = ref(false);
 const isEdit = ref(false);
 
 const form = ref({
-  id: undefined as number | undefined,
+  id: undefined as string | undefined,
   school_id: "1",
   name: '',
   start_time: '07:00',
@@ -127,7 +127,7 @@ const handleSubmit = async () => {
   loading.value = true;
   try {
     if (isEdit.value) {
-      await HRService.updateShift(form.value.id!, form.value);
+      await HRService.updateShift(String(form.value.id), form.value);
       toast.success.action('Shift berhasil diperbarui');
     } else {
       await HRService.storeShift(form.value);

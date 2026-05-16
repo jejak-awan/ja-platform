@@ -243,7 +243,7 @@ const getActionLabel = (action: string) => {
 
 const saveRecentAction = (action: string) => {
   const newAction: RecentAction = {
-    id: Date.now(),
+    id: String(Date.now()),
     action,
     timestamp: new Date().toISOString(),
   };

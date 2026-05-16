@@ -22,7 +22,7 @@
           @click="handleClearLogs"
         >
           <Trash2 class="w-4 h-4 mr-2" />
-          {{ $t('modules.core.system.logs.clear') }}
+          {{ $t('modules.system.system.logs.clear') }}
         </Button>
         <Button
           :disabled="loading"
@@ -615,15 +615,15 @@ const fetchLogs = async (): Promise<void> => {
 
 const clearLogs = async (): Promise<void> => {
     const confirmed = await confirm({
-        title: t('modules.core.system.logs.actions.clear'),
-        message: t('modules.core.system.logs.confirm.clear'),
+        title: t('modules.system.system.logs.actions.clear'),
+        message: t('modules.system.system.logs.confirm.clear'),
         variant: 'danger',
         confirmText: t('common.actions.clear'),
     });
     if (!confirmed) return;
     try {
         await api.delete('/manage/security/journal');
-        toast.success.action(t('modules.core.system.logs.messages.cleared'));
+        toast.success.action(t('modules.system.system.logs.messages.cleared'));
         fetchLogs();
     } catch (_error: unknown) {
         logger.error('Failed to clear logs:', _error);

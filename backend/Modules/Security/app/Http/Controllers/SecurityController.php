@@ -896,4 +896,28 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
 
         return $this->success($updated, 'Security settings updated successfully');
     }
+
+    /**
+     * Store frontend logs/journal.
+     */
+    public function storeFrontendLog(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $logData = $request->all();
+        
+        // Log to Laravel logs for now
+        \Illuminate\Support\Facades\Log::channel('frontend')->info('Frontend Journal:', $logData);
+
+        // Also record as a security log if it's an error
+        if (($logData['level'] ?? '') === 'error' || ($logData['level'] ?? '') === 'critical') {
+            SecurityLog::log(
+                'frontend_error',
+                $request->user(),
+                IpHelper::getClientIp($request),
+                $logData['message'] ?? 'Frontend Error',
+                $logData
+            );
+        }
+
+        return response()->json(['success' => true]);
+    }
 }

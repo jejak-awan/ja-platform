@@ -52,13 +52,13 @@ const baseRoutes: Array<RouteRecordRaw> = [
         meta: { public: true },
     },
     {
-        path: '/forgot-password',
+        path: '/public/system/auth/forgot-password',
         name: 'forgot-password',
         component: () => import('@/modules/System/views/auth/ForgotPassword.vue'),
         meta: { guestOnly: true },
     },
     {
-        path: '/reset-password',
+        path: '/public/system/auth/reset-password',
         name: 'reset-password',
         component: () => import('@/modules/System/views/auth/ResetPassword.vue'),
         meta: { guestOnly: true },
@@ -92,7 +92,7 @@ const dashboardRoute: RouteRecordRaw = {
         // 1. Explicit Core Dashboard (Priority Resolution)
         {
             path: 'dashboard',
-            name: 'core.dashboard',
+            name: 'system.dashboard',
             component: () => import('@/modules/System/views/admin/Dashboard.vue'),
             meta: { permission: 'view dashboard' },
         },
@@ -115,7 +115,7 @@ const dashboardRoute: RouteRecordRaw = {
 
                 // A. Super Admin in System Mode -> Core Dashboard
                 if (isSuper && workspaceStore.isSystem) {
-                    return { name: 'core.dashboard' };
+                    return { name: 'system.dashboard' };
                 }
 
                 // B. Scoped Landing: Find the best dashboard from registered modules
@@ -123,7 +123,7 @@ const dashboardRoute: RouteRecordRaw = {
                 const availableDashboard = dashboards.find(d => d.condition ? d.condition(authStore.user, authStore) : true);
 
                 if (availableDashboard) {
-                    return { name: availableDashboard.routeName || 'core.dashboard' };
+                    return { name: availableDashboard.routeName || 'system.dashboard' };
                 }
 
                 // C. Final Fallback: If no dashboard access, go to landing page
@@ -131,7 +131,7 @@ const dashboardRoute: RouteRecordRaw = {
             },
         },
         // 3. Register all module routes from Registry
-        ...registry.getAllRoutes().filter(r => r.name !== 'core.dashboard'),
+        ...registry.getAllRoutes().filter(r => r.name !== 'system.dashboard'),
     ],
 };
 

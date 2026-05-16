@@ -236,7 +236,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 
 // Local state
-const selectedIds = ref<number[]>([]);
+const selectedIds = ref<string[]>([]);
 const sorting = ref<SortingState>([]);
 const localFilters = ref({ ...props.filters });
 

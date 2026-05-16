@@ -60,12 +60,12 @@ const props = withDefaults(defineProps<{
   subtitle: null
 });
 
-const coreStore = useSystemStore();
-const displayTitle = computed(() => props.title || coreStore.appIdentity?.app_name || 'Janari App');
+const systemStore = useSystemStore();
+const displayTitle = computed(() => props.title || systemStore.appIdentity?.app_name || 'Janari App');
 
 const displaySubtitle = computed(() => {
   if (props.subtitle) return props.subtitle;
-  const tier = coreStore.appIdentity?.app_license_tier || 'basic';
+  const tier = systemStore.appIdentity?.app_license_tier || 'basic';
   
   // Pretty names for tiers
   const tierNames: Record<string, string> = {
@@ -79,7 +79,7 @@ const displaySubtitle = computed(() => {
 });
 
 const licenseBadgeClasses = computed(() => {
-  const tier = coreStore.appIdentity?.app_license_tier || 'basic';
+  const tier = systemStore.appIdentity?.app_license_tier || 'basic';
   
   switch(tier) {
     case 'pro':
@@ -93,7 +93,7 @@ const licenseBadgeClasses = computed(() => {
   }
 });
 
-const appLogo = computed(() => coreStore.appIdentity?.app_logo || '');
+const appLogo = computed(() => systemStore.appIdentity?.app_logo || '');
 </script>
 
 <style scoped>

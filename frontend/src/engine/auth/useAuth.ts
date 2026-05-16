@@ -54,7 +54,7 @@ export function useAuth() {
         // Deterministic redirect based on rank
         if (rank >= 100) {
             workspaceStore.setSystemContext();
-            await router.replace({ name: 'core.dashboard' });
+            await router.replace({ name: 'system.dashboard' });
         } else {
             // For non-super admins, context might depend on their active unit
             // This will be handled by the default dashboard redirect in the router

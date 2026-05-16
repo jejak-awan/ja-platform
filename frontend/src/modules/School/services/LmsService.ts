@@ -49,15 +49,15 @@ const LmsService = {
     return api.post('/admin/lms/courses', data);
   },
 
-  createLesson(courseId: number, data: any) {
+  createLesson(courseId: string | number, data: any) {
     return api.post(`/admin/lms/courses/${courseId}/lessons`, data);
   },
 
-  createTopic(lessonId: number, data: any) {
+  createTopic(lessonId: string | number, data: any) {
     return api.post(`/admin/lms/lessons/${lessonId}/topics`, data);
   },
 
-  addQuestion(quizId: number, data: any) {
+  addQuestion(quizId: string | number, data: any) {
     return api.post(`/admin/lms/quizzes/${quizId}/questions`, data);
   },
 
@@ -70,19 +70,19 @@ const LmsService = {
     return api.get('/student/lms/my-courses');
   },
 
-  getLearningData(courseId: number) {
+  getLearningData(courseId: string | number) {
     return api.get(`/student/lms/courses/${courseId}/learn`);
   },
 
-  completeTopic(topicId: number, metadata: any = {}) {
+  completeTopic(topicId: string | number, metadata: any = {}) {
     return api.post(`/student/lms/topics/${topicId}/complete`, { metadata });
   },
 
-  startQuiz(quizId: number) {
+  startQuiz(quizId: string | number) {
     return api.post(`/student/lms/quizzes/${quizId}/start`);
   },
 
-  submitQuiz(attemptId: number, answers: any) {
+  submitQuiz(attemptId: string | number, answers: any) {
     return api.post(`/student/lms/attempts/${attemptId}/submit`, { answers });
   }
 };

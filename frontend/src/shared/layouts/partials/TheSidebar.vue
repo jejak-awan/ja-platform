@@ -332,17 +332,18 @@ defineEmits<{
 const { t, te } = useI18n();
 const $route = useRoute();
 const authStore = useAuthStore();
-const coreStore = useSystemStore();
+const systemStore = useSystemStore();
 const workspaceStore = useWorkspaceStore();
 const navigationStore = useNavigationStore();
 
-const activeUnitId = computed(() => Number(workspaceStore.activeId));
+const activeUnitId = computed(() => workspaceStore.activeId);
 
 // Dynamic Dashboard logic that doesn't depend on School/Cms modules directly
 const dashboardLink = computed(() => {
-    if (activeUnitId.value === 0) {
+    const isGlobal = activeUnitId.value === 0 || activeUnitId.value === '0';
+    if (isGlobal) {
         return workspaceStore.activeContextType === 'system' 
-            ? { name: 'core.dashboard' } 
+            ? { name: 'system.dashboard' } 
             : { name: 'dashboard' }; // Let the router handle the default landing
     }
     // Generic approach: If there's an active ID, we assume we're in a scoped dashboard
@@ -350,7 +351,8 @@ const dashboardLink = computed(() => {
 });
 
 const dashboardLabel = computed(() => {
-    if (activeUnitId.value === 0) {
+    const isGlobal = activeUnitId.value === 0 || activeUnitId.value === '0';
+    if (isGlobal) {
         return workspaceStore.activeContextType === 'system' 
             ? t('common.navigation.menu.dashboard') 
             : t('common.navigation.menu.foundationDashboard');
@@ -359,12 +361,12 @@ const dashboardLabel = computed(() => {
 });
 
 const isDashboardActive = computed(() => {
-    const names = ['dashboard', 'core.dashboard', 'foundation.dashboard', 'schools.dashboard', 'schools.index'];
+    const names = ['dashboard', 'system.dashboard', 'foundation.dashboard', 'schools.dashboard', 'schools.index'];
     return names.includes(String($route.name));
 });
 
 const sidebarSections = computed<SidebarSection[]>(() => {
-    const isGlobal = activeUnitId.value === 0;
+    const isGlobal = activeUnitId.value === 0 || activeUnitId.value === '0';
     const isSuperAdmin = authStore.getRoleRank() >= 100;
     const contextType = workspaceStore.activeContextType;
     
@@ -375,7 +377,7 @@ const sidebarSections = computed<SidebarSection[]>(() => {
     ];
 
     if (isSuperAdmin && isGlobal && contextType === 'system') {
-        sections.push({ key: 'core', labelKey: 'common.navigation.sections.core', icon: getIcon('settings') });
+        sections.push({ key: 'system', labelKey: 'common.navigation.sections.core', icon: getIcon('settings') });
     }
 
     return sections;
@@ -444,7 +446,7 @@ const isSectionActive = (key: string) => {
 
 const filteredNavigation = computed(() => {
     const filtered: Record<string, NavItem[]> = {};
-    const isGlobal = activeUnitId.value === 0;
+    const isGlobal = activeUnitId.value === 0 || activeUnitId.value === '0';
 
     for (const [group, items] of Object.entries(navigationStore.navigationGroups)) {
         filtered[group] = items
@@ -484,7 +486,7 @@ const filteredNavigation = computed(() => {
 const getNavigationLabel = (item: NavItem) => item.label || '';
 
 const getVisitTooltip = computed(() => {
-    const siteUrl = coreStore.siteSettings?.site_url || 'domain.com';
+    const siteUrl = systemStore.siteSettings?.site_url || 'domain.com';
     let domain = siteUrl;
     try {
         const url = new URL(siteUrl.startsWith('http') ? siteUrl : `https://${siteUrl}`);

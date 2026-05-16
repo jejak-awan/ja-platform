@@ -117,7 +117,7 @@ import Pencil from 'lucide-vue-next/dist/esm/icons/pencil.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Layout from 'lucide-vue-next/dist/esm/icons/layout-dashboard.js';
-import WidgetModal from '@/modules/Cms/components/widgets/WidgetModal.vue';
+import WidgetModal from '@/modules/Layout/components/widgets/WidgetModal.vue';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 
 const { t } = useI18n();
@@ -167,7 +167,7 @@ const deleteWidget = async (widget: Widget) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/manage/cms/widgets/${widget.id}`);
+        await api.delete(`/manage/layout/widgets/${widget.id}`);
         toast.success.delete(t('features.widgets.title'));
         fetchWidgets();
     } catch (error: unknown) {

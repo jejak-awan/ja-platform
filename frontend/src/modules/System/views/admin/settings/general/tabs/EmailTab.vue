@@ -13,11 +13,11 @@
         :key="setting.id"
         :model-value="(formData[setting.key] as any)"
         :field-key="setting.key"
-        :label="$t('modules.core.settings.labels.' + setting.key)"
-        :description="$t('modules.core.settings.descriptions.' + setting.key)"
+        :label="$t('modules.system.settings.labels.' + setting.key)"
+        :description="$t('modules.system.settings.descriptions.' + setting.key)"
         :type="setting.type"
-        :enabled-text="$t('modules.core.settings.enabled')"
-        :disabled-text="$t('modules.core.settings.disabled')"
+        :enabled-text="$t('modules.system.settings.enabled')"
+        :disabled-text="$t('modules.system.settings.disabled')"
         :error="errors?.[setting.key]"
         @update:model-value="(value) => updateField(setting.key, value)"
       />
@@ -38,7 +38,7 @@
                 :disabled="validatingConfig"
                 @click="$emit('validate-config')"
               >
-                {{ validatingConfig ? $t('modules.core.settings.emailTest.validating') : $t('modules.core.settings.emailTest.validate') }}
+                {{ validatingConfig ? $t('modules.system.settings.emailTest.validating') : $t('modules.system.settings.emailTest.validate') }}
               </Button>
               <div
                 v-if="configValidation"
@@ -47,11 +47,11 @@
                 <span
                   v-if="configValidation.valid"
                   class="text-success"
-                >✓ {{ $t('modules.core.settings.emailTest.valid') }}</span>
+                >✓ {{ $t('modules.system.settings.emailTest.valid') }}</span>
                 <span
                   v-else
                   class="text-destructive"
-                >✗ {{ $t('modules.core.settings.emailTest.invalid') }}</span>
+                >✗ {{ $t('modules.system.settings.emailTest.invalid') }}</span>
               </div>
             </div>
                         
@@ -64,7 +64,7 @@
                 :disabled="testingConnection"
                 @click="$emit('test-connection')"
               >
-                {{ testingConnection ? $t('modules.core.settings.emailTest.testing') : $t('modules.core.settings.emailTest.testConnection') }}
+                {{ testingConnection ? $t('modules.system.settings.emailTest.testing') : $t('modules.system.settings.emailTest.testConnection') }}
               </Button>
               <div
                 v-if="connectionResult"
@@ -73,11 +73,11 @@
                 <span
                   v-if="connectionResult.connected"
                   class="text-success"
-                >✓ {{ $t('modules.core.settings.emailTest.connected', { host: connectionResult.host, port: connectionResult.port }) }}</span>
+                >✓ {{ $t('modules.system.settings.emailTest.connected', { host: connectionResult.host, port: connectionResult.port }) }}</span>
                 <span
                   v-else
                   class="text-destructive"
-                >✗ {{ $t('modules.core.settings.emailTest.failed') }}</span>
+                >✗ {{ $t('modules.system.settings.emailTest.failed') }}</span>
               </div>
             </div>
           </div>
@@ -92,7 +92,7 @@
               class="mb-2"
             >
               <p class="text-xs font-medium text-destructive mb-1">
-                {{ $t('modules.core.settings.emailTest.errors') }}
+                {{ $t('modules.system.settings.emailTest.errors') }}
               </p>
               <ul class="text-xs text-destructive list-disc list-inside">
                 <li
@@ -105,7 +105,7 @@
             </div>
             <div v-if="configValidation.warnings && configValidation.warnings.length > 0">
               <p class="text-xs font-medium text-warning mb-1">
-                {{ $t('modules.core.settings.emailTest.warnings') }}
+                {{ $t('modules.system.settings.emailTest.warnings') }}
               </p>
               <ul class="text-xs text-warning list-disc list-inside">
                 <li
@@ -190,8 +190,8 @@ const emailSettingsGrouped = computed(() => {
     const groups: SettingGroupData[] = [
         {
             id: 'smtp',
-            title: t('modules.core.settings.groups.smtp.title'),
-            description: t('modules.core.settings.groups.smtp.description'),
+            title: t('modules.system.settings.groups.smtp.title'),
+            description: t('modules.system.settings.groups.smtp.description'),
             icon: MailIcon,
             color: 'indigo',
             keys: [

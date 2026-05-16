@@ -70,7 +70,7 @@
 <script setup lang="ts">
 import JanariSplitText from './JanariSplitText.vue'
 import { ref, onMounted, nextTick } from 'vue'
-import { useThemeMotion } from '@/shared/composables/useThemeMotion'
+import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion'
 
 interface Testimonial {
   name: string;

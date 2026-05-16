@@ -56,7 +56,7 @@ const saving = ref(false);
 const fetchStaff = async () => {
     fetching.value = true;
     try {
-        const response = await HRService.getStaffDetail(route.params.id);
+        const response = await HRService.getStaffDetail(route.params.id as string);
         staff.value = (parseResponse(response) as any).data;
     } catch (e) {
         toast.error.fromResponse(e);
@@ -69,7 +69,7 @@ const fetchStaff = async () => {
 const handleSubmit = async (formData: any) => {
   saving.value = true;
   try {
-    await HRService.updateStaff(route.params.id, formData);
+    await HRService.updateStaff(route.params.id as string, formData);
     toast.success.action('Data staff berhasil diperbarui');
     router.push({ name: 'staff.index' });
   } catch (e) {

@@ -58,15 +58,15 @@ test.describe('Public theme + contact navigation', () => {
             body: JSON.stringify(body),
         });
 
-        await page.route('**/api/v1/ja/themes/active**', async (route) => {
+        await page.route('**/api/v1/public/layout/themes/active**', async (route) => {
             await route.fulfill(fulfillJson(themeJson));
         });
 
-        await page.route('**/api/v1/public/settings**', async (route) => {
+        await page.route('**/api/v1/public/system/settings**', async (route) => {
             await route.fulfill(fulfillJson(publicSettingsJson));
         });
 
-        await page.route('**/api/v1/ja/contents/contact**', async (route) => {
+        await page.route('**/api/v1/public/cms/contents/contact**', async (route) => {
             if (route.request().method() !== 'GET') {
                 await route.continue();
 
@@ -75,7 +75,7 @@ test.describe('Public theme + contact navigation', () => {
             await route.fulfill(fulfillJson(contactContentJson));
         });
 
-        await page.route('**/api/v1/ja/forms/contact**', async (route) => {
+        await page.route('**/api/v1/public/forms/contact**', async (route) => {
             const method = route.request().method();
             if (method === 'GET') {
                 await route.fulfill(fulfillJson(contactFormJson));

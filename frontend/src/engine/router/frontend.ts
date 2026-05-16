@@ -1,14 +1,14 @@
 import type { RouteRecordRaw } from 'vue-router'
 
 // Theme Page Resolver
-const ThemePageResolver = () => import('@/shared/components/ThemePageResolver.vue')
+const ThemePageResolver = () => import('@/modules/Cms/components/themes/ThemePageResolver.vue')
 
 // Frontend theme routes
 const frontendRoutes: RouteRecordRaw[] = [
     {
         path: '/',
         name: 'frontend',
-        component: () => import('@/modules/Cms/layouts/FrontendLayout.vue'),
+        component: () => import('@/modules/Layout/layouts/FrontendLayout.vue'),
         meta: { public: true },
         children: [
             {
