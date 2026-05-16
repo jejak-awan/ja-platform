@@ -62,3 +62,6 @@ backend/public/logo-bw.png
 backend/public/site.webmanifest
 backend/public/stats.html
 backend/bootstrap/cache/*.php
+
+# Private documentation
+docs/
