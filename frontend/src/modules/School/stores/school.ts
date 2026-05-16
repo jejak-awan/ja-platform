@@ -25,7 +25,7 @@ export const useSchoolStore = defineStore('school', {
             return this.fetchSchool();
         },
 
-        async fetchSchool(_id?: number) {
+        async fetchSchool(_id: string) {
             this.loading = true;
             try {
                 const response = await InstitutionService.getInstitution();

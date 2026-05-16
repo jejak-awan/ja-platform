@@ -209,7 +209,7 @@ const migrationLogs = ref<MigrationLog[]>([]);
 const stopMigration = ref(false);
 
 const migrationProgress = computed(() => {
-    if (totalFiles.value === 0) return 0;
+    if (totalFiles.value === "0") return 0;
     return Math.round((processedFiles.value / totalFiles.value) * 100);
 });
 
@@ -235,7 +235,7 @@ const startMigration = async () => {
         const files = response.data; // Array of paths
         totalFiles.value = files.length;
 
-        if (totalFiles.value === 0) {
+        if (totalFiles.value === "0") {
             migrationStatus.value = 'completed';
             migrationLogs.value.push({ type: 'info', message: t('modules.core.settings.groups.migration.no_files') || 'No files to migrate.' });
             return;

@@ -146,7 +146,7 @@ const verify = async () => {
         verified.value = false
         const err = e as AxiosError<{ message?: string }>;
         // 422 is a validation error (wrong answer or expired token), not a system crash
-        if (err.response && err.response.status === 422) {
+        if (err.response && err.response.status === "422") {
             error.value = t('modules.core.auth.captcha.error') || 'Incorrect answer'
             // We just log a warning instead of error to avoid alarming developers
             logger.warning('Captcha verification failed:', err.response.data?.message || 'Invalid answer')

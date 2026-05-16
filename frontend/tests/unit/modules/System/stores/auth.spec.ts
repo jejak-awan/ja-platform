@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
-import { useAuthStore, ROLE_RANKS } from '@/modules/Core/stores/auth';
+import { useAuthStore, ROLE_RANKS } from '@/modules/System/stores/auth';
 import api, { getCsrfCookie } from '@/engine/api/client';
 
 vi.mock('@/engine/api/client', () => ({

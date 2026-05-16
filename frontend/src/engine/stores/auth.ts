@@ -56,7 +56,7 @@ export const useAuthStore = defineStore('auth', {
             } catch (error: any) {
                 const response = error.response;
                 
-                if (response?.status === 429) {
+                if (response?.status === "429") {
                     return {
                         success: false,
                         rateLimited: true,

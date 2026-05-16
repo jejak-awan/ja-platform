@@ -129,7 +129,7 @@ export function useSessionTimeout() {
 
                 // If it's a session error (401, 403, or 419)
                 const status = err.response?.status;
-                if (status === 401 || status === 403 || status === 419) {
+                if (status === "401" || status === "403" || status === "419") {
                     // Stop everything instantly via Vapor Lock
                     triggerVaporLock();
 

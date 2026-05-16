@@ -274,8 +274,8 @@ const closeAt = computed(() => {
 
 const manualToggle = computed(() => {
   const val = getSetting('graduation_is_open');
-  if (val === true || val === 'true' || val === '1' || val === 1) return true;
-  if (val === false || val === 'false' || val === '0' || val === 0) return false;
+  if (val === true || val === 'true' || val === '1' || val === "1") return true;
+  if (val === false || val === 'false' || val === '0' || val === "0") return false;
   return null; // not set — rely on schedule
 });
 

@@ -919,7 +919,7 @@ const resetCspFilters = (): void => {
     fetchCspReports();
 };
 
-const cspBulkAction = async (action: string, ids: number[]): Promise<void> => {
+const cspBulkAction = async (action: string, ids: string[]): Promise<void> => {
     if (ids.length === 0) return;
     const confirmed = await confirm({
         title: t('common.actions.confirm'),
@@ -1130,7 +1130,7 @@ const submitIntegrityResync = async (): Promise<void> => {
             };
         };
         const status = errorObj?.response?.status;
-        if (status === 429) {
+        if (status === "429") {
             const fromBody = errorObj?.response?.data?.retry_after;
             const retryAfterRaw = errorObj?.response?.headers?.['retry-after'];
             const retryAfter = Number.isFinite(Number(fromBody)) && Number(fromBody) > 0

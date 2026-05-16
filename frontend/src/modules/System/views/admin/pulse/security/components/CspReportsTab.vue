@@ -228,7 +228,7 @@ const emit = defineEmits<{
     'refresh': [];
     'apply-filters': [];
     'reset-filters': [];
-    'bulk-action': [action: string, ids: number[]];
+    'bulk-action': [action: string, ids: string[]];
     'page-change': [page: number];
     'per-page-change': [perPage: number];
 }>();

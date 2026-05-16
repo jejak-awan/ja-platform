@@ -263,7 +263,7 @@ onMounted(async () => {
   }
 
   try {
-    const response = await api.get('/ja/contents/about')
+    const response = await api.get('/public/cms/contents/about')
     pageData.value = response.data
   } catch (error) {
     logger.error('Failed to fetch about page:', error)

@@ -410,7 +410,7 @@ const handleSubmit = async () => {
         router.push({ name: 'users.index' });
     } catch (error: unknown) {
         const err = error as { response?: { status?: number; data?: { errors?: Record<string, string[]> } } };
-        if (err.response?.status === 422) {
+        if (err.response?.status === "422") {
             setErrors(err.response.data?.errors || {});
         } else {
             toast.error.fromResponse(error);

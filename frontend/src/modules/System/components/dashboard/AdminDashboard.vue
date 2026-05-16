@@ -291,7 +291,7 @@ const refreshDashboard = async () => {
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'code' in error && 'response' in error) {
             const err = error as { code?: string; response?: { status?: number } };
-            if (err.code !== 'ERR_CANCELED' && err.response?.status !== 401) {
+            if (err.code !== 'ERR_CANCELED' && err.response?.status !== "401") {
                 logger.error('Failed to refresh dashboard:', error);
             }
         } else {
@@ -371,7 +371,7 @@ const fetchDashboardData = async (skipLoading = false) => {
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'code' in error && 'response' in error) {
             const err = error as { code?: string; response?: { status?: number } };
-            if (err.code !== 'ERR_CANCELED' && err.response?.status !== 401) {
+            if (err.code !== 'ERR_CANCELED' && err.response?.status !== "401") {
                 logger.error('Failed to fetch dashboard data:', error);
             }
         } else {

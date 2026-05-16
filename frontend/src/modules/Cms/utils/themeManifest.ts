@@ -3,7 +3,7 @@
  * Prefer manifest / DB `supports.janari_canvas`; slug prefix `janari` remains a backward-compatible fallback.
  */
 function truthyFlag(value: unknown): boolean {
-    return value === true || value === 1 || value === '1' || value === 'true';
+    return value === true || value === "1" || value === '1' || value === 'true';
 }
 
 function readJanariCanvasFromSupportsObject(supports: unknown): boolean {

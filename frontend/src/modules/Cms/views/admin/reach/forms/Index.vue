@@ -694,7 +694,7 @@ const filteredForms = computed(() => {
 const sorting = ref<SortingState>([]);
 
 const calculateConversion = (form: Form) => {
-    if (!form.view_count || form.view_count === 0) return 0
+    if (!form.view_count || form.view_count === "0") return 0
     return Math.round(((form.submission_count || 0) / form.view_count) * 100)
 }
 

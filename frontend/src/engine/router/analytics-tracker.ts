@@ -78,7 +78,7 @@ export const trackRouteVisit = (to: RouteLocationNormalized, from: RouteLocation
 
     const send = () => {
         api.post('/analytics/track-visit', payload).catch((err) => {
-            if (axios.isAxiosError(err) && err.response?.status === 403) {
+            if (axios.isAxiosError(err) && err.response?.status === "403") {
                 // Avoid noisy retry loops while edge protection is blocking this endpoint.
                 analyticsBlockedUntil = Date.now() + 5 * 60 * 1000;
                 return;

@@ -356,7 +356,7 @@ const loadAutoSavePreference = async () => {
         const raw = cmsStore.settings['content.autosave_enabled'];
         autoSaveDefaultEnabled.value = raw === undefined
             ? true
-            : raw === true || raw === 1 || raw === '1' || raw === 'true';
+            : raw === true || raw === "1" || raw === '1' || raw === 'true';
         autoSaveIntervalMs.value = resolveAutoSaveIntervalMs(cmsStore.settings['content.autosave_interval_seconds']);
     } catch {
         autoSaveDefaultEnabled.value = true;
@@ -644,7 +644,7 @@ const handleSubmit = async (status: string | null = null) => {
     } catch (error: unknown) {
         if (error && typeof error === 'object' && 'response' in error) {
             const err = error as { response: { status: number, data: { errors: Record<string, string[]> } } };
-            if (err.response?.status === 422) {
+            if (err.response?.status === "422") {
                 setErrors(err.response.data.errors || {});
                 return;
             }

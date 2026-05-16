@@ -83,7 +83,7 @@ const steps = computed(() => {
 
 const fetchStatus = async () => {
     try {
-        const response = await api.get('/admin/school/setup-status');
+        const response = await api.get('/manage/school/setup-status');
         const payload = response.data as {
             success?: boolean;
             steps?: Record<string, boolean>;

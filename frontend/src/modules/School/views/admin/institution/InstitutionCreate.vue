@@ -494,9 +494,9 @@ const statuses = computed(() => [
 ]);
 
 const isValidStep = computed(() => {
-  if (step.value === 1) return form.name.length >= 3;
-  if (step.value === 2) return !!form.type;
-  if (step.value === 4 && form.type === 'negeri') {
+  if (step.value === "1") return form.name.length >= 3;
+  if (step.value === "2") return !!form.type;
+  if (step.value === "4" && form.type === 'negeri') {
     return !!form.initial_level;
   }
   return true;
@@ -506,7 +506,7 @@ const isValidStep = computed(() => {
 const showLocationStep = computed(() => form.type === 'swasta');
 
 // Whether current step is the last step — always step 4 internally
-const isLastStep = computed(() => step.value === 4);
+const isLastStep = computed(() => step.value === "4");
 
 // Dynamic wizard steps for progress indicator
 const wizardSteps = computed(() => {
@@ -530,7 +530,7 @@ const totalDisplaySteps = computed(() => wizardSteps.value.length);
 
 const nextStep = () => {
   if (isValidStep.value) {
-    if (step.value === 2 && !showLocationStep.value) {
+    if (step.value === "2" && !showLocationStep.value) {
       // negeri/swasta: skip lokasi (step 3), go straight to jenjang (step 4)
       form.is_multi_branch = false;
       if (form.type === 'negeri') form.is_multi_unit = false;
@@ -542,7 +542,7 @@ const nextStep = () => {
 };
 
 const prevStep = () => {
-  if (step.value === 4 && !showLocationStep.value) {
+  if (step.value === "4" && !showLocationStep.value) {
     // negeri/swasta: skip back over lokasi (step 3), go to status (step 2)
     step.value = 2;
   } else {

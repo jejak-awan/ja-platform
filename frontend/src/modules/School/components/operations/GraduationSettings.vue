@@ -155,7 +155,7 @@ const fetchSettings = async () => {
             currentSetting.value = null;
         }
     } catch (e: any) {
-        if (e.response && e.response.status === 404) {
+        if (e.response && e.response.status === "404") {
             currentSetting.value = null;
         } else {
             toast.error.fromResponse(e);

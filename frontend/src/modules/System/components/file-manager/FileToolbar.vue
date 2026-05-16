@@ -34,7 +34,7 @@
             :key="index"
           >
             <span
-              v-if="Number(index) === 0 || Number(index) >= pathParts.length - 2"
+              v-if="Number(index) === "0" || Number(index) >= pathParts.length - 2"
               class="flex items-center gap-0.5 sm:gap-1 min-w-0"
             >
               <span class="text-muted-foreground/40 text-[10px] select-none">/</span>
@@ -49,7 +49,7 @@
               </Button>
             </span>
             <span
-              v-else-if="Number(index) === 1 && pathParts.length > 3"
+              v-else-if="Number(index) === "1" && pathParts.length > 3"
               class="flex items-center gap-0.5 sm:gap-1"
             >
               <span class="text-muted-foreground/40 text-[10px] select-none">/</span>

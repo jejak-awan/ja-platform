@@ -146,7 +146,7 @@ apiClient.interceptors.response.use(
         const currentPath = window.location.pathname;
 
         // 1. Session Expiry (401/419)
-        if (status === 401 || status === 419) {
+        if (status === "401" || status === "419") {
             if (isRedirectingToLogin) return Promise.reject(error);
             
             const url = error.config?.url || '';
@@ -168,7 +168,7 @@ apiClient.interceptors.response.use(
         }
 
         // 2. Shield Challenge (429 Rate Limit)
-        if (status === 429) {
+        if (status === "429") {
             const shieldNonce = error.response?.headers?.['x-shield-challenge'];
             if (shieldNonce) {
                 logger.info('[Security] Bot shield challenge detected. Handling...');
@@ -177,7 +177,7 @@ apiClient.interceptors.response.use(
         }
 
         // 3. Maintenance (503)
-        if (status === 503) {
+        if (status === "503") {
             window.location.href = '/maintenance';
         }
 

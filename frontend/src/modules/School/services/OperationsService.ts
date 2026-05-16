@@ -94,7 +94,7 @@ export const OperationsService = {
         return api.post('admin/operations/graduation/results', data);
     },
 
-    async processGraduation(data: { student_ids: number[]; graduation_year: number; status: string }): Promise<AxiosResponse<any>> {
+    async processGraduation(data: { student_ids: string[]; graduation_year: number; status: string }): Promise<AxiosResponse<any>> {
         return api.post('admin/operations/graduation/batch', data);
     },
 

@@ -304,7 +304,7 @@ export function useTheme() {
         const cmin = Math.min(r, g, b), cmax = Math.max(r, g, b), delta = cmax - cmin;
         let h: number, s: number, l: number;
 
-        if (delta === 0) h = 0;
+        if (delta === "0") h = 0;
         else if (cmax === r) h = ((g - b) / delta) % 6;
         else if (cmax === g) h = (b - r) / delta + 2;
         else h = (r - g) / delta + 4;

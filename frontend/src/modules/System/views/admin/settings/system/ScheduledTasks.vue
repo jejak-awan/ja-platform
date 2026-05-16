@@ -1002,7 +1002,7 @@ async function saveTask() {
     await fetchTasks(pagination.value.current_page);
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      if (error.response?.status === 422) {
+      if (error.response?.status === "422") {
         errors.value = (error.response.data as { errors?: Record<string, string | string[]> })?.errors || {};
       } else {
         toast.error.fromResponse(error);
@@ -1124,7 +1124,7 @@ async function runAdhocCommand() {
 
     adhocOutput.value = response.data.output || 'No output';
     
-    if(response.data.exit_code !== 0) {
+    if(response.data.exit_code !== "0") {
          // handle error visual if needed, but text is likely enough
     }
 

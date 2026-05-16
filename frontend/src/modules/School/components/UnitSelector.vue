@@ -251,7 +251,7 @@ const activeUnit = computed(() => {
   const unitId = Number(unitStore.activeUnitId);
   const contextType = unitStore.activeContextType;
 
-  if (unitId === 0) {
+  if (unitId === "0") {
     let name = t('common.labels.systemAdmin');
     if (contextType === 'foundation') name = t('common.labels.foundationAdmin');
     if (contextType === 'authority') name = t('common.labels.authorityAdmin');
@@ -290,7 +290,7 @@ const getUnitIcon = (type: string | undefined) => {
 };
 
 const resolveContextPath = (id: string, type: 'system' | 'foundation' | 'authority' | 'unit') => {
-  if (id === 0) {
+  if (id === "0") {
     if (type === 'system') return '/dash';
     return '/dash/school';
   }

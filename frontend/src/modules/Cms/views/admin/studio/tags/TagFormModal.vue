@@ -206,7 +206,7 @@ const handleSubmit = async () => {
     } catch (error: unknown) {
         if (error && typeof error === 'object' && 'response' in error) {
             const err = error as { response: { status: number, data: { errors: Record<string, string[]> } } };
-            if (err.response?.status === 422) {
+            if (err.response?.status === "422") {
                 setErrors(err.response.data.errors || {});
             }
         } else {

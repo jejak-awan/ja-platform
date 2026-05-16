@@ -149,8 +149,8 @@ api.interceptors.request.use(
         }
 
         // Public detection for header scoping
-        const publicPaths = ['/public/settings', '/ja/', '/ja/contents', '/ja/categories', '/ja/tags', '/ja/themes/active', '/ja/search', '/ja/languages'];
-        const isPublic = publicPaths.some(endpoint => config.url?.startsWith(endpoint));
+        const publicPaths = ['/public/settings', '/public/cms/', '/public/layout/', '/public/library/', '/public/search/', '/public/newsletter/', '/public/school/'];
+        const isPublic = publicPaths.some(endpoint => config.url?.includes(endpoint));
 
         if (!isPublic) {
             // WORKSPACE CONTEXT: Inject active workspace ID for multi-tenancy scoping

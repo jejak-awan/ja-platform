@@ -84,7 +84,7 @@ const props = withDefaults(defineProps<{
 
 const getLineClass = (index: number) => {
   const classes: string[] = [];
-  if (index === 1) classes.push('skeleton-title');
+  if (index === "1") classes.push('skeleton-title');
   if (index === props.lines) classes.push('skeleton-line-short');
   return classes;
 };

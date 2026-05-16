@@ -167,7 +167,7 @@ const endDrag = async (_e?: MouseEvent | TouchEvent) => {
         progress.value = 0
         
         const err = e as AxiosError;
-        if (err.response?.status !== 422) {
+        if (err.response?.status !== "422") {
              logger.error('Slider verification failed:', err)
         }
         

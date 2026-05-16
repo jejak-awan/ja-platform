@@ -169,7 +169,7 @@
                 </template>
               </TabsTrigger>
               <TabsTrigger
-                v-if="showLevelsTab && isGlobalAdmin && (unitStore.activeUnitId === 0 || !isMultiLevel)"
+                v-if="showLevelsTab && isGlobalAdmin && (unitStore.activeUnitId === "0" || !isMultiLevel)"
                 value="levels"
                 class="h-12 px-2 bg-transparent border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground rounded-none font-bold text-xs transition-all shadow-none"
               >
@@ -203,7 +203,7 @@
 
             <!-- TAB: UNIT JENJANG / DETAIL TEKNIS -->
             <TabsContent
-              v-if="showLevelsTab && isGlobalAdmin && (unitStore.activeUnitId === 0 || !isMultiLevel)"
+              v-if="showLevelsTab && isGlobalAdmin && (unitStore.activeUnitId === "0" || !isMultiLevel)"
               value="levels"
               class="mt-0"
             >

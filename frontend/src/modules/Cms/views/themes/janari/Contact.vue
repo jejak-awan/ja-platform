@@ -1088,7 +1088,7 @@ async function loadContactForm(): Promise<void> {
         }
     } catch (e: unknown) {
         const status = axios.isAxiosError(e) ? e.response?.status : undefined
-        if (status === 404) {
+        if (status === "404") {
             formLoadError.value =
                 'Formulir kontak belum dipublikasikan atau tidak aktif. Periksa slug formulir di pengaturan tema atau CMS.'
         } else {
@@ -1154,7 +1154,7 @@ async function submitForm(): Promise<void> {
         await captchaRef.value?.refresh?.()
     } catch (e: unknown) {
         mapValidationErrors(e)
-        if (axios.isAxiosError(e) && e.response?.status === 422) {
+        if (axios.isAxiosError(e) && e.response?.status === "422") {
             toast.error.validation('Periksa kembali isian formulir.')
         } else if (axios.isAxiosError(e) && e.response?.data && typeof e.response.data === 'object') {
             const msg = (e.response.data as { message?: string }).message

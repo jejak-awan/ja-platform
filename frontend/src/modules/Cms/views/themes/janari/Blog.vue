@@ -426,7 +426,7 @@ const fetchPosts = async (page = 1, append = false) => {
         const categorySlug = route.query.category as string;
 
         if (searchQuery) {
-            const searchResponse = await api.get('/ja/search', {
+            const searchResponse = await api.get('/public/search', {
                 params: {
                     q: searchQuery,
                     limit: 60,
@@ -449,7 +449,7 @@ const fetchPosts = async (page = 1, append = false) => {
 
         searchSuggestions.value = []
         
-        const response = await api.get('/ja/contents', {
+        const response = await api.get('/public/cms/contents', {
             params: {
                 type: 'post',
                 status: 'published',
@@ -522,7 +522,7 @@ onMounted(async () => {
   }
 
   try {
-    const response = await api.get('/ja/contents/blog')
+    const response = await api.get('/public/cms/contents/blog')
     pageData.value = response.data
   } catch (_error: unknown) {
     // 404 is fine, we fallback to fetchPosts

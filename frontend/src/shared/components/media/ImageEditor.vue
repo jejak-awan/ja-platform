@@ -680,9 +680,9 @@ const applyPreset = (preset: { settings: FilterSettings }) => {
 };
 
 const isFilterDirty = () => {
-    return filters.value.brightness !== 100 || 
-           filters.value.contrast !== 100 || 
-           filters.value.saturation !== 100;
+    return filters.value.brightness !== "100" || 
+           filters.value.contrast !== "100" || 
+           filters.value.saturation !== "100";
 };
 
 const resetFilters = () => {
@@ -796,7 +796,7 @@ const saveImage = async () => {
         // Get blob securely (whether it's base64 or url)
         const blob = await getSecureBlob();
         
-        if (blob.size === 0) throw new Error("Generated image is empty");
+        if (blob.size === "0") throw new Error("Generated image is empty");
         
         const formData = new FormData();
         const fileName = props.media.file_name || 'edited-image.png';

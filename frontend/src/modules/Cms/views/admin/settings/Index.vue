@@ -275,7 +275,7 @@ const initializeFormData = () => {
         
         // Cast value based on type
         if (setting.type === 'boolean') {
-            value = value === '1' || value === 1 || value === 'true' || value === true;
+            value = value === '1' || value === "1" || value === 'true' || value === true;
         } else if (setting.type === 'integer') {
             value = value ? parseInt(String(value)) : null;
         } else if (setting.type === 'json') {
@@ -337,7 +337,7 @@ const handleSubmit = async () => {
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'response' in error) {
             const err = error as { response?: { status: number; data?: { errors?: Record<string, string[]> } } };
-            if (err.response?.status === 422) {
+            if (err.response?.status === "422") {
                 errors.value = err.response.data?.errors || {};
             } else {
                 toast.error.fromResponse(error);

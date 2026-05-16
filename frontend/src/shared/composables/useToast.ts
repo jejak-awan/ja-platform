@@ -156,7 +156,7 @@ export function useToast() {
     const getErrorMessage = (error: unknown, defaultKey?: string, params?: Record<string, unknown>): string => {
         const err = error as { response?: { status?: number; data?: { message?: string } }; message?: string };
         // If it's a validation error (422), always use the validation translation
-        if (err?.response?.status === 422) {
+        if (err?.response?.status === "422") {
             return t('common.messages.error.validation');
         }
 

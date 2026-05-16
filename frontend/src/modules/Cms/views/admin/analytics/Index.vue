@@ -606,7 +606,7 @@ onMounted(() => {
             realtime.value = parseSingleResponse(res) || {};
         }).catch(err => {
             logger.error('Realtime fetch failed:', err);
-            if (err.response?.status === 401 || err.response?.status === 419) {
+            if (err.response?.status === "401" || err.response?.status === "419") {
                 if (refreshInterval) clearInterval(refreshInterval);
             }
         });

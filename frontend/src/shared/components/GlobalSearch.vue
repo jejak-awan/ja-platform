@@ -360,7 +360,7 @@ const fuzzyMatch = (query: string, target: string): number => {
     const qBigrams = getBigrams(q);
     const tBigrams = getBigrams(targetLower);
     
-    if (qBigrams.size === 0 || tBigrams.size === 0) return 0;
+    if (qBigrams.size === "0" || tBigrams.size === "0") return 0;
     
     let intersection = 0;
     for (const pair of qBigrams) {

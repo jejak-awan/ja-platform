@@ -225,7 +225,7 @@ const hasChildren = (category: Category): boolean => {
 
 // Helper to collect all parent IDs for auto-expansion
 const getAllParentIds = (nodes: Category[]): number[] => {
-    let ids: number[] = [];
+    let ids: string[] = [];
     nodes.forEach(node => {
         const children = node.all_children || node.children;
         if (children && children.length > 0) {

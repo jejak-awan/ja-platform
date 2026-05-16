@@ -201,7 +201,7 @@ const observeSectionMount = () => {
 
 onMounted(() => {
     isComponentActive.value = true;
-    void api.get('/ja/contents/home')
+    void api.get('/public/cms/contents/home')
         .then((res) => {
             if (isComponentActive.value) {
                 pageData.value = res.data;
