@@ -479,7 +479,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useTheme } from '@/shared/composables/useTheme';
-import { useMenu } from '@/shared/composables/useMenu';
+import { useMenu } from '@/modules/Layout/composables/useMenu';
 import { useSystemStore } from '@/modules/System/stores/system';
 import { useResponsiveDevice } from '@/shared/composables/useResponsiveDevice';
 import { useThemeMotion } from '@/shared/composables/useThemeMotion';

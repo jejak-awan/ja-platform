@@ -317,7 +317,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
 
-import { useMenu, provideMenu } from '@/shared/composables/useMenu';
+import { useMenu, provideMenu } from '@/modules/Layout/composables/useMenu';
 import { useToast } from '@/shared/composables/useToast';
 import type { Menu } from '@/modules/Cms/types/menu';
 

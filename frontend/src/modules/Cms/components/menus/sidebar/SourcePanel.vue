@@ -264,7 +264,7 @@ import { useI18n } from 'vue-i18n';
 import draggable from 'vuedraggable';
 import api from '@/engine/api/client';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
-import { useMenuContext } from '@/shared/composables/useMenu';
+import { useMenuContext } from '@/modules/Layout/composables/useMenu';
 import { menuItemRegistry } from '../registry';
 
 // UI Components

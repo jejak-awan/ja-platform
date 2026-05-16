@@ -155,7 +155,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useMenuContext } from '@/shared/composables/useMenu';
+import { useMenuContext } from '@/modules/Layout/composables/useMenu';
 import { menuItemRegistry } from '../registry';
 import type { MenuItem, MenuItemSetting, PropertyValue } from '@/modules/Cms/types/menu';
 

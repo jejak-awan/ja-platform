@@ -206,7 +206,7 @@
 import { ref, computed, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useTheme } from '@/shared/composables/useTheme'
-import { useMenu } from '@/shared/composables/useMenu'
+import { useMenu } from '@/modules/Layout/composables/useMenu'
 import { useSystemStore } from '@/modules/System/stores/system'
 import { useToast } from '@/shared/composables/useToast'
 import { useFormValidation } from '@/shared/composables/useFormValidation'
