@@ -294,7 +294,7 @@ import ShieldAlert from 'lucide-vue-next/dist/esm/icons/shield-alert.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
 interface Vulnerability {
-    id: number;
+    id: string;
     package_name: string;
     version: string;
     severity: string;
@@ -308,7 +308,7 @@ interface Package {
     version: string;
     source: string;
     status: string;
-    vulnerability_id: number | null;
+    vulnerability_id: string | null;
 }
 
 interface VulnStats {

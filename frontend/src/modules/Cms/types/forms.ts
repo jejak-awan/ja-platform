@@ -21,7 +21,7 @@ export interface FormField {
 }
 
 export interface Form {
-    id: number;
+    id: string;
     name: string;
     slug: string;
     description?: string | null;
@@ -40,8 +40,8 @@ export interface Form {
 }
 
 export interface FormSubmission {
-    id: number;
-    form_id: number;
+    id: string;
+    form_id: string;
     data: Record<string, unknown>;
     ip_address?: string;
     user_agent?: string;

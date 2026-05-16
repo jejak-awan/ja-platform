@@ -71,11 +71,11 @@ export const useSchoolStore = defineStore('school', {
             }
         },
 
-        async updateSchool(_id: number, data: School) {
+        async updateSchool(_id: string, data: School) {
             return this.saveInstitution(data);
         },
 
-        async deleteSchool(id: number) {
+        async deleteSchool(id: string) {
             this.loading = true;
             try {
                 await InstitutionService.deleteInstitution(id);

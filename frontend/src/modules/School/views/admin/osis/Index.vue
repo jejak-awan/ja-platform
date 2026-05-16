@@ -17,7 +17,7 @@ const activeTab = ref('programs');
 
 // Interfaces
 interface OsisProgram {
-    id: number;
+    id: string;
     name: string;
     description: string;
     status: string;
@@ -26,8 +26,8 @@ interface OsisProgram {
 }
 
 interface OsisMember {
-    id: number;
-    student_id: number;
+    id: string;
+    student_id: string;
     position: string;
     period: string;
     student?: {
@@ -38,7 +38,7 @@ interface OsisMember {
 
 
 interface OsisSuggestion {
-    id: number;
+    id: string;
     subject: string;
     content: string;
     status: string;

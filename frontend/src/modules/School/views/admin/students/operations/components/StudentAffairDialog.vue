@@ -222,7 +222,7 @@ const resetForm = () => {
     if (props.type === 'violation') {
         form.value = { student_id: '', category: '', points: 0, date: today, description: '' };
     } else if (props.type === 'counseling') {
-        form.value = { student_id: '', type: 'Individual', problem: '', solution: '', status: 'Resolved', date: today, staff_id: 1 };
+        form.value = { student_id: '', type: 'Individual', problem: '', solution: '', status: 'Resolved', date: today, staff_id: "1" };
     } else {
         form.value = { student_id: '', title: '', level: '', type: '', date: today };
     }

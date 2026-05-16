@@ -1,5 +1,5 @@
 export interface ShieldLog {
-    id: number;
+    id: string;
     event_type: string;
     ip_address: string;
     details: string;
@@ -23,12 +23,12 @@ export interface PaginationInfo {
     last_page: number;
 }
 export interface AuditLog {
-    id: number;
+    id: string;
     user_id?: number;
     user_name?: string;
     event: string;
     auditable_type: string;
-    auditable_id: number;
+    auditable_id: string;
     old_values?: Record<string, unknown>;
     new_values?: Record<string, unknown>;
     url?: string;

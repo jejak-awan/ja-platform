@@ -50,7 +50,7 @@ const emit = defineEmits<{
 }>();
 
 interface Menu {
-    id: number;
+    id: string;
     name: string;
     slug: string;
     location: string;
@@ -266,7 +266,7 @@ const handleBulkAction = async () => {
     }
 };
 
-watch([search, statusFilter], () => fetchMenus(1));
+watch([search, statusFilter], () => fetchMenus("1"));
 
 onMounted(() => fetchMenus());
 </script>
@@ -418,7 +418,7 @@ onMounted(() => fetchMenus());
           :per-page="parseInt(perPage)"
           :current-page="pagination.current_page"
           @page-change="fetchMenus"
-          @update:per-page="(val) => { perPage = String(val); fetchMenus(1); }"
+          @update:per-page="(val) => { perPage = String(val); fetchMenus("1"); }"
         />
       </div>
     </Card>

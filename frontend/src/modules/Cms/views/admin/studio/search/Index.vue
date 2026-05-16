@@ -133,7 +133,7 @@ const route = useRoute();
 const router = useRouter();
 
 interface SearchResult {
-    id: number | string;
+    id: string | string;
     type: string;
     title: string;
     description?: string;

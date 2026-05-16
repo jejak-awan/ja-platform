@@ -100,7 +100,7 @@ describe('CMS Store', () => {
 
     it('fetches contents', async () => {
         const store = useCmsStore();
-        vi.mocked(api.get).mockResolvedValueOnce({ data: { data: [{ id: 1 }], pagination: {} } });
+        vi.mocked(api.get).mockResolvedValueOnce({ data: { data: [{ id: "1" }], pagination: {} } });
 
         const result = await store.fetchContents({ page: 1 });
         expect(api.get).toHaveBeenCalledWith('/ja/contents', { params: { page: 1 } });
@@ -136,7 +136,7 @@ describe('CMS Store', () => {
 
     it('fetches categories', async () => {
         const store = useCmsStore();
-        vi.mocked(api.get).mockResolvedValueOnce({ data: { data: [{ id: 1 }] } });
+        vi.mocked(api.get).mockResolvedValueOnce({ data: { data: [{ id: "1" }] } });
 
         const res = await store.fetchCategories();
         expect(store.categories).toHaveLength(1);
@@ -154,7 +154,7 @@ describe('CMS Store', () => {
 
     it('fetches tags', async () => {
         const store = useCmsStore();
-        vi.mocked(api.get).mockResolvedValueOnce({ data: { data: [{ id: 1 }] } });
+        vi.mocked(api.get).mockResolvedValueOnce({ data: { data: [{ id: "1" }] } });
 
         const res = await store.fetchTags();
         expect(store.tags).toHaveLength(1);
@@ -192,7 +192,7 @@ describe('CMS Store', () => {
 
     it('syncs theme with backend', async () => {
         const store = useCmsStore();
-        localStorage.setItem('user', JSON.stringify({ id: 1, name: 'Test User' }));
+        localStorage.setItem('user', JSON.stringify({ id: "1", name: 'Test User' }));
         vi.mocked(api.put).mockResolvedValueOnce({});
 
         store.setThemeMode('light');
@@ -206,7 +206,7 @@ describe('CMS Store', () => {
 
     it('syncs theme with backend failure handled gracefully', async () => {
         const store = useCmsStore();
-        localStorage.setItem('user', JSON.stringify({ id: 1, name: 'Test User' }));
+        localStorage.setItem('user', JSON.stringify({ id: "1", name: 'Test User' }));
         vi.mocked(api.put).mockRejectedValueOnce(new Error('network'));
 
         await store.syncThemeWithBackend('light');
@@ -214,7 +214,7 @@ describe('CMS Store', () => {
 
     it('loads theme preferences from backend', async () => {
         const store = useCmsStore();
-        localStorage.setItem('user', JSON.stringify({ id: 1, name: 'Test User' }));
+        localStorage.setItem('user', JSON.stringify({ id: "1", name: 'Test User' }));
         vi.mocked(api.get).mockResolvedValueOnce({ data: { success: true, data: { dark_mode: 'dark' } } });
 
         store.themeMode = 'light';
@@ -224,7 +224,7 @@ describe('CMS Store', () => {
 
     it('loads theme preferences from backend failure handled', async () => {
         const store = useCmsStore();
-        localStorage.setItem('user', JSON.stringify({ id: 1, name: 'Test User' }));
+        localStorage.setItem('user', JSON.stringify({ id: "1", name: 'Test User' }));
         vi.mocked(api.get).mockRejectedValueOnce(new Error('network'));
 
         store.themeMode = 'light';

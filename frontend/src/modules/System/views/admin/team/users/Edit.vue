@@ -505,7 +505,7 @@ const handleSubmit = async () => {
         await api.put(`/manage/system/users/${route.params.id}`, payload);
         
         // Refresh auth user if updating self
-        if (authStore.user?.id === Number(route.params.id)) {
+        if (authStore.user?.id === route.params.id) {
             await authStore.fetchUser();
         }
 

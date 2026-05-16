@@ -79,12 +79,12 @@ import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 
 interface User {
-    id: number;
+    id: string;
     name: string;
 }
 
 interface IpManagementItem {
-    id: number | string;
+    id: string | string;
     ip_address: string;
     reason?: string | null;
     creator?: User | null;

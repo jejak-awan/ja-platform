@@ -529,7 +529,7 @@ onMounted(async () => {
   }
 
   if (!pageData.value || !pageData.value.body) {
-    await fetchPosts(1)
+    await fetchPosts("1")
   }
   
   loading.value = false

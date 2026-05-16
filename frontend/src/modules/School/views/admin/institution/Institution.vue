@@ -420,7 +420,7 @@ const unitForm = ref<any>({
   level: 'smk',
   name: '',
   npsn: '',
-  school_id: 1,
+  school_id: "1",
   settings: {
     accreditation: 'A'
   },

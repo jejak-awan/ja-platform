@@ -15,11 +15,11 @@ export const LogisticsService = {
         return api.post(`admin/sarpras/${type}`, data);
     },
 
-    async updateSarprasData(type: string, id: number | string, data: any): Promise<AxiosResponse<any>> {
+    async updateSarprasData(type: string, id: string | string, data: any): Promise<AxiosResponse<any>> {
         return api.put(`admin/sarpras/${type}/${id}`, data);
     },
 
-    async deleteSarprasData(type: string, id: number | string): Promise<AxiosResponse<void>> {
+    async deleteSarprasData(type: string, id: string | string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/sarpras/${type}/${id}`);
     },
 
@@ -32,7 +32,7 @@ export const LogisticsService = {
         return api.get('admin/sarpras/asset');
     },
 
-    async deleteAsset(id: number | string): Promise<AxiosResponse<void>> {
+    async deleteAsset(id: string | string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/sarpras/asset/${id}`);
     },
 

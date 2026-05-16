@@ -610,7 +610,7 @@ interface PublicFormField {
 }
 
 interface PublicFormDefinition {
-    id: number;
+    id: string;
     slug: string;
     name: string;
     description?: string | null;

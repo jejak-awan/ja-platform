@@ -120,7 +120,7 @@ import api from '@/engine/api/client';
 import { Spinner, Pagination } from '@/shared/components/ui';
 
 interface LoginEntry {
-    id: number;
+    id: string;
     status: 'success' | 'failed';
     failure_reason: string | null;
     ip_address: string;

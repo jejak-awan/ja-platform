@@ -1,6 +1,6 @@
 export interface Student {
-    id: number;
-    school_id: number;
+    id: string;
+    school_id: string;
     workspace_id?: number;
     user_id?: number;
     nisn: string;
@@ -41,12 +41,12 @@ export interface Student {
     status: 'active' | 'graduated' | 'dropped_out' | 'moved';
     department_id?: number;
     department?: {
-        id: number;
+        id: string;
         name: string;
         code: string;
     };
     level?: {
-        id: number;
+        id: string;
         name: string;
     };
     created_at?: string;
@@ -55,20 +55,20 @@ export interface Student {
 }
 
 export interface Violation {
-    id: number;
-    student_id: number;
-    category_id: number;
+    id: string;
+    student_id: string;
+    category_id: string;
     date: string;
     points: number;
     description: string;
-    reporter_id: number;
+    reporter_id: string;
     created_at?: string;
     updated_at?: string;
 }
 
 export interface Achievement {
-    id: number;
-    student_id: number;
+    id: string;
+    student_id: string;
     title: string;
     category: 'academic' | 'non-academic';
     level: 'school' | 'district' | 'province' | 'national' | 'international';
@@ -79,9 +79,9 @@ export interface Achievement {
 }
 
 export interface CounselingRecord {
-    id: number;
-    student_id: number;
-    staff_id: number;
+    id: string;
+    student_id: string;
+    staff_id: string;
     date: string;
     topic: string;
     content: string;
@@ -91,7 +91,7 @@ export interface CounselingRecord {
 }
 
 export interface Enrollment {
-    id: number;
+    id: string;
     registration_number: string;
     full_name: string;
     email: string;
@@ -103,7 +103,7 @@ export interface Enrollment {
 
 export interface AdmissionSettings {
     is_open: boolean;
-    academic_year_id: number;
+    academic_year_id: string;
     start_date: string;
     end_date: string;
 }

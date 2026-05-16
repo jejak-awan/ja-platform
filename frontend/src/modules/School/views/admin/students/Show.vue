@@ -351,7 +351,7 @@ const parentFields = computed(() => [
 
 const fetchData = async () => {
   try {
-    await studentStore.fetchStudent(Number(route.params.id));
+    await studentStore.fetchStudent(route.params.id);
   } catch (e) {
     console.error(e);
   }

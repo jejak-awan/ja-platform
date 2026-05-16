@@ -104,7 +104,7 @@ import { parseResponse } from '@/shared/utils/responseParser';
 
 interface AttendanceRecord {
   id?: number;
-  student_id: number;
+  student_id: string;
   student_name: string;
   status: string;
   notes: string;
@@ -219,9 +219,9 @@ const handleSave = async () => {
                 date: selectedDate.value,
                 status: statusMap[record.status] || 'present',
                 notes: record.notes,
-                school_id: 1,
-                academic_year_id: 1, // Should be dynamic
-                semester_id: 1, // Should be dynamic
+                school_id: "1",
+                academic_year_id: "1", // Should be dynamic
+                semester_id: "1", // Should be dynamic
             };
             if (record.id) {
                 return OperationsService.updateAttendance(record.id, data);

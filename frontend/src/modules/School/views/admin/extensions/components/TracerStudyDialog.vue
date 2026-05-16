@@ -168,7 +168,7 @@ import { OperationsService } from '@/modules/School/services/OperationsService';
 import { parseResponse } from '@/shared/utils/responseParser';
 
 interface Graduate {
-  id: number | string;
+  id: string | string;
   graduation_year: string | number;
   student?: {
     full_name: string;

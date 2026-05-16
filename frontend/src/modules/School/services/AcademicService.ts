@@ -18,11 +18,11 @@ export const AcademicService = {
         return api.post('admin/academic/years', data);
     },
 
-    async updateAcademicYear(id: number, data: Partial<AcademicYear>): Promise<AxiosResponse<AcademicYear>> {
+    async updateAcademicYear(id: string, data: Partial<AcademicYear>): Promise<AxiosResponse<AcademicYear>> {
         return api.put(`admin/academic/years/${id}`, data);
     },
 
-    async deleteAcademicYear(id: number): Promise<AxiosResponse<void>> {
+    async deleteAcademicYear(id: string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/academic/years/${id}`);
     },
 
@@ -34,11 +34,11 @@ export const AcademicService = {
         return api.post('admin/academic/semesters', data);
     },
 
-    async updateSemester(id: number, data: Partial<Semester>): Promise<AxiosResponse<Semester>> {
+    async updateSemester(id: string, data: Partial<Semester>): Promise<AxiosResponse<Semester>> {
         return api.put(`admin/academic/semesters/${id}`, data);
     },
 
-    async deleteSemester(id: number): Promise<AxiosResponse<void>> {
+    async deleteSemester(id: string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/academic/semesters/${id}`);
     },
 
@@ -50,11 +50,11 @@ export const AcademicService = {
         return api.post('admin/academic/subjects', data);
     },
 
-    async updateSubject(id: number, data: Partial<Subject>): Promise<AxiosResponse<Subject>> {
+    async updateSubject(id: string, data: Partial<Subject>): Promise<AxiosResponse<Subject>> {
         return api.put(`admin/academic/subjects/${id}`, data);
     },
 
-    async deleteSubject(id: number): Promise<AxiosResponse<void>> {
+    async deleteSubject(id: string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/academic/subjects/${id}`);
     },
 
@@ -82,11 +82,11 @@ export const AcademicService = {
         return api.post('admin/academic/study-groups', data);
     },
 
-    async updateStudyGroup(id: number, data: Partial<StudyGroup>): Promise<AxiosResponse<StudyGroup>> {
+    async updateStudyGroup(id: string, data: Partial<StudyGroup>): Promise<AxiosResponse<StudyGroup>> {
         return api.put(`admin/academic/study-groups/${id}`, data);
     },
 
-    async deleteStudyGroup(id: number): Promise<AxiosResponse<void>> {
+    async deleteStudyGroup(id: string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/academic/study-groups/${id}`);
     },
 
@@ -98,11 +98,11 @@ export const AcademicService = {
         return api.post('admin/academic/schedules', data);
     },
 
-    async updateSchedule(id: number, data: Partial<Schedule>): Promise<AxiosResponse<Schedule>> {
+    async updateSchedule(id: string, data: Partial<Schedule>): Promise<AxiosResponse<Schedule>> {
         return api.put(`admin/academic/schedules/${id}`, data);
     },
 
-    async deleteSchedule(id: number): Promise<AxiosResponse<void>> {
+    async deleteSchedule(id: string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/academic/schedules/${id}`);
     },
 
@@ -114,11 +114,11 @@ export const AcademicService = {
         return api.post('admin/academic/journals', data);
     },
 
-    async updateJournal(id: number, data: Partial<Journal>): Promise<AxiosResponse<Journal>> {
+    async updateJournal(id: string, data: Partial<Journal>): Promise<AxiosResponse<Journal>> {
         return api.put(`admin/academic/journals/${id}`, data);
     },
 
-    async deleteJournal(id: number): Promise<AxiosResponse<void>> {
+    async deleteJournal(id: string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/academic/journals/${id}`);
     }
 };

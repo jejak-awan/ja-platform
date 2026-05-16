@@ -97,7 +97,7 @@ const isEdit = ref(false);
 
 const form = ref({
   id: undefined as number | undefined,
-  school_id: 1,
+  school_id: "1",
   name: '',
   start_time: '07:00',
   end_time: '14:00',
@@ -112,7 +112,7 @@ watch(() => props.open, (val) => {
     } else {
       form.value = {
         id: undefined,
-        school_id: 1,
+        school_id: "1",
         name: '',
         start_time: '07:00',
         end_time: '14:00',

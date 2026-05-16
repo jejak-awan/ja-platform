@@ -312,7 +312,7 @@ interface AutoTuneChange {
 }
 
 interface AutoTuneLog {
-    id: number;
+    id: string;
     created_at: string;
     metadata?: {
         changes?: (string | AutoTuneChange)[];

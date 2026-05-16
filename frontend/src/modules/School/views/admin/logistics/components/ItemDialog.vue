@@ -107,7 +107,7 @@ const toast = useToast();
 const loading = ref(false);
 
 const form = ref({
-  school_id: 1,
+  school_id: "1",
   category_id: '',
   sku: '',
   name: '',
@@ -127,7 +127,7 @@ const handleSubmit = async () => {
     toast.success.action('Barang berhasil disimpan');
     emit('save');
     emit('update:open', false);
-    form.value = { school_id: 1, category_id: '', sku: '', name: '', unit: 'pcs', quantity_on_hand: 0, minimum_stock: 5 };
+    form.value = { school_id: "1", category_id: '', sku: '', name: '', unit: 'pcs', quantity_on_hand: 0, minimum_stock: 5 };
   } catch (e) {
     toast.error.fromResponse(e);
   } finally {

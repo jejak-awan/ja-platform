@@ -61,7 +61,7 @@ const { t } = useI18n();
 const { confirm } = useConfirm();
 
 interface Template {
-    id: number | string;
+    id: string | string;
     name: string;
     subject?: string | null;
     type?: string | null;

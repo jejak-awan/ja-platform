@@ -157,7 +157,7 @@ const fetchMetadata = async () => {
 const handleSubmit = () => {
   const data = { ...form.value };
   if (data.homeroom_teacher_id === 'none') data.homeroom_teacher_id = undefined;
-  emit('submit', { ...data, school_id: 1 });
+  emit('submit', { ...data, school_id: "1" });
 };
 
 onMounted(fetchMetadata);

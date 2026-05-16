@@ -3,7 +3,7 @@ import api from '../api/client';
 import { logger } from '@/shared/utils/logger';
 
 interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
     roles: Array<{ name: string; guard_name: string }>;

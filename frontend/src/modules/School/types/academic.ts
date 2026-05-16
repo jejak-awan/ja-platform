@@ -1,5 +1,5 @@
 export interface AcademicYear {
-    id: number;
+    id: string;
     name: string;
     start_date: string;
     end_date: string;
@@ -9,8 +9,8 @@ export interface AcademicYear {
 }
 
 export interface Semester {
-    id: number;
-    academic_year_id: number;
+    id: string;
+    academic_year_id: string;
     name: string;
     type: 'odd' | 'even';
     status: 'active' | 'inactive';
@@ -19,7 +19,7 @@ export interface Semester {
 }
 
 export interface Subject {
-    id: number;
+    id: string;
     code: string;
     name: string;
     description?: string;
@@ -28,8 +28,8 @@ export interface Subject {
 }
 
 export interface StudyGroup {
-    id: number;
-    workspace_id: number;
+    id: string;
+    workspace_id: string;
     name: string;
     description?: string;
     created_at?: string;
@@ -37,10 +37,10 @@ export interface StudyGroup {
 }
 
 export interface Schedule {
-    id: number;
-    study_group_id: number;
-    subject_id: number;
-    staff_id: number;
+    id: string;
+    study_group_id: string;
+    subject_id: string;
+    staff_id: string;
     day: number;
     start_time: string;
     end_time: string;
@@ -50,8 +50,8 @@ export interface Schedule {
 }
 
 export interface Journal {
-    id: number;
-    schedule_id: number;
+    id: string;
+    schedule_id: string;
     date: string;
     topic: string;
     description?: string;
@@ -61,7 +61,7 @@ export interface Journal {
 }
 
 export interface Department {
-    id: number;
+    id: string;
     name: string;
     description?: string;
     created_at?: string;
@@ -69,9 +69,9 @@ export interface Department {
 }
 
 export interface StudyGroupMember {
-    id: number;
-    study_group_id: number;
-    student_id: number;
+    id: string;
+    study_group_id: string;
+    student_id: string;
     joined_at: string;
     student?: {
         full_name: string;

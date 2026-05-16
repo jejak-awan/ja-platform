@@ -77,7 +77,7 @@ const toast = useToast();
 const loading = ref(false);
 
 const form = ref({
-  school_id: 1,
+  school_id: "1",
   company_name: '',
   position: '',
   description: '',
@@ -93,7 +93,7 @@ const handleSubmit = async () => {
     toast.success.action('Lowongan berhasil diposting');
     emit('save');
     emit('update:open', false);
-    form.value = { school_id: 1, company_name: '', position: '', description: '', deadline: '' };
+    form.value = { school_id: "1", company_name: '', position: '', description: '', deadline: '' };
   } catch (e) {
     toast.error.fromResponse(e);
   } finally {

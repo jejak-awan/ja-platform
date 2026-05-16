@@ -1,7 +1,7 @@
 import api from '@/engine/api/client';
 
 export interface Course {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   summary: string;
@@ -14,14 +14,14 @@ export interface Course {
   semester_id?: number;
   department_id?: number;
   grade_id?: number;
-  academic_year?: { id: number, year: string };
-  semester?: { id: number, semester: string };
-  department?: { id: number, name: string };
-  grade?: { id: number, name: string };
+  academic_year?: { id: string, year: string };
+  semester?: { id: string, semester: string };
+  department?: { id: string, name: string };
+  grade?: { id: string, name: string };
 }
 
 export interface Topic {
-  id: number;
+  id: string;
   title: string;
   order: number;
   topicable_type: string;
@@ -29,7 +29,7 @@ export interface Topic {
 }
 
 export interface Lesson {
-  id: number;
+  id: string;
   title: string;
   summary: string;
   topics: Topic[];
@@ -41,7 +41,7 @@ const LmsService = {
     return api.get('/admin/lms/courses');
   },
   
-  getCourseDetails(id: number) {
+  getCourseDetails(id: string) {
     return api.get(`/admin/lms/courses/${id}`);
   },
 

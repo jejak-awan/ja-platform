@@ -49,7 +49,7 @@ export const useLmsStore = defineStore('lms', {
       }
     },
 
-    async fetchCourseDetails(id: number) {
+    async fetchCourseDetails(id: string) {
       this.loading = true;
       try {
         const response = await LmsService.getCourseDetails(id);

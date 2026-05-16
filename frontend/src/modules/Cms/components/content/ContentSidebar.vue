@@ -762,7 +762,7 @@ const handleTagEnter = () => {
     } else {
         // Create new tag (temporary, will be created on backend during save)
         const newTag: Tag = { 
-            id: 0, 
+            id: "0", 
             name: name, 
             slug: name.toLowerCase().replace(/\s+/g, '-'),
             isNew: true 

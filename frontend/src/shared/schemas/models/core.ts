@@ -4,7 +4,7 @@ import { z } from 'zod';
  * Permission Schema
  */
 export const permissionModelSchema = z.object({
-    id: z.number(),
+    id: z.string().uuid(),
     name: z.string(),
     description: z.string().optional().nullable(),
 });
@@ -13,7 +13,7 @@ export const permissionModelSchema = z.object({
  * Role Schema
  */
 export const roleModelSchema = z.object({
-    id: z.number(),
+    id: z.string().uuid(),
     name: z.string(),
     permissions: z.array(permissionModelSchema).optional(),
     users_count: z.number().optional(),
@@ -23,7 +23,7 @@ export const roleModelSchema = z.object({
  * User Schema
  */
 export const userModelSchema = z.object({
-    id: z.number(),
+    id: z.string().uuid(),
     name: z.string(),
     email: z.string().email(),
     avatar: z.union([

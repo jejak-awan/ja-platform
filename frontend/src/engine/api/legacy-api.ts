@@ -1,7 +1,7 @@
 import { logger } from '@/shared/utils/logger';
 import { appConfig } from '@/config';
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosError, type AxiosResponse, type AxiosRequestConfig } from 'axios';
-import { SystemMonitor } from '../../modules/Core/services/SystemMonitor';
+import { SystemMonitor } from '../../modules/System/services/SystemMonitor';
 import { type ZodSchema } from 'zod';
 import { SECURITY_ROUTES, isProtectedDashboardPath } from '@/config/security';
 import { useSystemError } from '@/shared/composables/useSystemError';

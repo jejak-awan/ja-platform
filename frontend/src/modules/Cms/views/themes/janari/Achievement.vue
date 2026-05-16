@@ -126,7 +126,7 @@ const { data: dynamicAchievements, hasBinding } = useThemeDataBindings('achievem
 
 const mockAchievements = [
   { 
-    id: 1, 
+    id: "1", 
     cat: 'Akademik',
     level: 'Nasional', 
     year: '2025',
@@ -137,7 +137,7 @@ const mockAchievements = [
     imagePlaceholder: 'OSN Gold Photo'
   },
   { 
-    id: 2, 
+    id: "2", 
     cat: 'Olahraga',
     level: 'Provinsi', 
     year: '2024',

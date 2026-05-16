@@ -169,7 +169,7 @@ import BellOff from 'lucide-vue-next/dist/esm/icons/bell-off.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
 interface Notification {
-    id: number | string;
+    id: string | string;
     title: string;
     message: string;
     type: string;

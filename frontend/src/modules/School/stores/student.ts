@@ -41,7 +41,7 @@ export const useStudentStore = defineStore('student', {
             }
         },
 
-        async fetchStudent(id: number) {
+        async fetchStudent(id: string) {
             this.loading = true;
             try {
                 const response = await StudentService.getStudent(id);
@@ -53,7 +53,7 @@ export const useStudentStore = defineStore('student', {
             }
         },
 
-        async saveStudent(data: Partial<Student>, id: number | null = null) {
+        async saveStudent(data: Partial<Student>, id: string | null = null) {
             try {
                 if (id) await StudentService.updateStudent(id, data);
                 else await StudentService.createStudent(data);
@@ -64,7 +64,7 @@ export const useStudentStore = defineStore('student', {
             }
         },
 
-        async deleteStudent(id: number) {
+        async deleteStudent(id: string) {
             try {
                 await StudentService.deleteStudent(id);
                 this.students = this.students.filter(s => s.id !== id);

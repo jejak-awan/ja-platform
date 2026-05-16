@@ -203,7 +203,7 @@ import ChevronDown from 'lucide-vue-next/dist/esm/icons/chevron-down.js'
 import Search from 'lucide-vue-next/dist/esm/icons/search.js'
 
 interface Category {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   contents_count?: number;
@@ -289,7 +289,7 @@ const totalPostsCount = computed(() => {
   }, 0)
 })
 
-const toggleCategory = (id: number) => {
+const toggleCategory = (id: string) => {
   if (expandedCategories.value.has(id)) {
     expandedCategories.value.delete(id)
   } else {

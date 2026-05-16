@@ -249,16 +249,16 @@ import {
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
 interface FieldGroup {
-    id: number | string;
+    id: string | string;
     name: string;
 }
 
 interface Field {
-    id: number | string;
+    id: string | string;
     label: string;
     name: string;
     type: string;
-    field_group_id: number | string | null;
+    field_group_id: string | string | null;
     default_value: unknown;
     options: string | string[] | (string | number | Record<string, unknown>)[];
     instructions: string | null;
@@ -270,7 +270,7 @@ interface FieldForm {
     label: string;
     name: string;
     type: string;
-    field_group_id: number | string | null;
+    field_group_id: string | string | null;
     default_value: string;
     options: string;
     instructions: string;

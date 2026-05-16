@@ -204,7 +204,7 @@ const MonitoringTab = defineAsyncComponent(() => import('./tabs/MonitoringTab.vu
 const EmailTestSection = defineAsyncComponent(() => import('./EmailTestSection.vue'));
 
 interface Setting {
-    id: number | string;
+    id: string | string;
     key: string;
     value: unknown;
     type: string;

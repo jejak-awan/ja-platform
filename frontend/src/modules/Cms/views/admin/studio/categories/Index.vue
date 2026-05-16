@@ -208,7 +208,7 @@ const editingCategory = ref<Category | null>(null);
 const { confirm } = useConfirm();
 
 // Toggle expand/collapse
-const toggleExpand = (id: number) => {
+const toggleExpand = (id: string) => {
     const index = expandedIds.value.indexOf(id);
     if (index > -1) {
         expandedIds.value.splice(index, 1);
@@ -418,7 +418,7 @@ const fetchCategories = async (page = 1) => {
 };
 
 const debouncedSearch = debounce(() => {
-    fetchCategories(1);
+    fetchCategories("1");
 }, 300);
 
 // Watch search input
@@ -428,7 +428,7 @@ watch(search, () => {
 
 // Handle filter change
 const onFilterChange = () => {
-    fetchCategories(1);
+    fetchCategories("1");
 };
 
 const changePage = (page: number) => {
@@ -439,7 +439,7 @@ const changePage = (page: number) => {
 
 const changePerPage = (perPage: string | number) => {
     pagination.value.per_page = typeof perPage === 'string' ? parseInt(perPage) : perPage;
-    fetchCategories(1);
+    fetchCategories("1");
 };
 
 // Modal Actions

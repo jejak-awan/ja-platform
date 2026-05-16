@@ -393,18 +393,18 @@ import {
 } from '@/shared/components/ui';
 
 interface Role {
-    id: number;
+    id: string;
     name: string;
 }
 
 interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
 }
 
 interface Notification {
-    id: number;
+    id: string;
     title: string;
     message: string;
     type: string;

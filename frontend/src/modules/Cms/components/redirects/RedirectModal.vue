@@ -137,7 +137,7 @@ import { useFormValidation } from '@/shared/composables/useFormValidation';
 import { redirectSchema } from '@/shared/schemas/common';
 
 interface Redirect {
-    id: number | string;
+    id: string | string;
     from_url: string;
     to_url: string;
     status_code: number;

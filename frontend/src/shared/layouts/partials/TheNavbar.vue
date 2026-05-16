@@ -324,7 +324,7 @@ import {
 import type { User } from '@/engine/types/auth';
 
 interface Notification {
-    id: number;
+    id: string;
     title: string;
     message: string;
     read_at: string | null;

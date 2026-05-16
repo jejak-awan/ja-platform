@@ -143,7 +143,7 @@ import { widgetSchema } from '@/shared/schemas/common';
 type WidgetType = 'html' | 'text' | 'recent_posts' | 'categories' | 'custom';
 
 interface Widget {
-    id: number;
+    id: string;
     title: string;
     type: string;
     location?: string;

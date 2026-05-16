@@ -194,7 +194,7 @@ import Terminal from 'lucide-vue-next/dist/esm/icons/terminal.js';
 import Clock from 'lucide-vue-next/dist/esm/icons/clock.js';
 
 interface RecentAction {
-    id: number;
+    id: string;
     action: string;
     timestamp: string;
 }

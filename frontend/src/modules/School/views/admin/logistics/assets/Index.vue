@@ -300,7 +300,7 @@ const handlePageChange = (page: number) => {
 
 watch(activeTab, () => {
   rows.value = [];
-  fetchData(1);
+  fetchData("1");
 });
 
 const handleAdd = () => {

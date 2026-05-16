@@ -38,7 +38,7 @@ export const useLogisticsStore = defineStore('logistics', {
             }
         },
 
-        async saveAsset(data: Partial<Asset>, id: number | null = null) {
+        async saveAsset(data: Partial<Asset>, id: string | null = null) {
             try {
                 if (id) await LogisticsService.updateSarprasData('asset', id, data);
                 else await LogisticsService.storeSarprasData('asset', data);
@@ -49,7 +49,7 @@ export const useLogisticsStore = defineStore('logistics', {
             }
         },
 
-        async deleteAsset(id: number) {
+        async deleteAsset(id: string) {
             try {
                 await LogisticsService.deleteAsset(id);
                 this.assets = this.assets.filter(a => a.id !== id);

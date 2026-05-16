@@ -178,13 +178,13 @@ import { HRService } from '@/modules/School/services/HRService';
 import { parseResponse } from '@/shared/utils/responseParser';
 
 interface SchoolAsset {
-  id: number | string;
+  id: string | string;
   name: string;
   code?: string;
 }
 
 interface StaffMember {
-  id: number | string;
+  id: string | string;
   full_name: string;
 }
 

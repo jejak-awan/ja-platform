@@ -35,7 +35,7 @@ export function useMediaManager() {
     const dateFromFilter = ref('');
     const dateToFilter = ref('');
     const tags = ref<Tag[]>([]);
-    const availableFilters = ref<{ tags: Tag[], authors: { id: number, name: string }[] }>({ tags: [], authors: [] });
+    const availableFilters = ref<{ tags: Tag[], authors: { id: string, name: string }[] }>({ tags: [], authors: [] });
     const bulkAction = ref('');
     const bulkProcessing = ref(false);
     const bulkProgress = ref(0);
@@ -159,7 +159,7 @@ export function useMediaManager() {
     const fetchFilters = async () => {
         try {
             const response = await api.get('/manage/cms/media/filters');
-            const payload = response.data as { success?: boolean; authors?: { id: number | string; name: string }[] };
+            const payload = response.data as { success?: boolean; authors?: { id: string | string; name: string }[] };
             if (payload.success === false) return;
             const authors = Array.isArray(payload.authors)
                 ? payload.authors
@@ -186,7 +186,7 @@ export function useMediaManager() {
         }
     };
 
-    const selectFolder = (id: number | null) => {
+    const selectFolder = (id: string | null) => {
         isTrashMode.value = false;
         selectedFolder.value = id;
     };

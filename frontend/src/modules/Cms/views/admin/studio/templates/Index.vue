@@ -264,7 +264,7 @@
           :per-page="Number(perPage)"
           class="border-none shadow-none mt-4 px-6 py-4"
           @page-change="(p: number) => fetchTemplates(p)"
-          @update:per-page="(val) => { perPage = String(val); fetchTemplates(1); }"
+          @update:per-page="(val) => { perPage = String(val); fetchTemplates("1"); }"
         />
       </CardContent>
     </Card>
@@ -294,7 +294,7 @@ import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
 
 interface Template {
-    id: number;
+    id: string;
     name: string;
     type: string;
     description?: string;
@@ -326,7 +326,7 @@ const allSelected = computed(() => {
 });
 
 const handleSearch = debounce(() => {
-    fetchTemplates(1);
+    fetchTemplates("1");
 }, 300);
 
 const fetchTemplates = async (page: number | string = 1) => {
@@ -425,7 +425,7 @@ const toggleSelectAll = (checked: boolean) => {
     }
 };
 
-const toggleSelection = (id: number, checked: boolean) => {
+const toggleSelection = (id: string, checked: boolean) => {
     if (checked) {
         selectedTemplates.value.push(id);
     } else {

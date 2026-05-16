@@ -166,7 +166,7 @@ const toast = useToast();
 const { confirm } = useConfirm();
 
 interface Subscriber {
-    id: number | string;
+    id: string | string;
     name: string | null;
     email: string;
     status: 'subscribed' | 'unsubscribed';

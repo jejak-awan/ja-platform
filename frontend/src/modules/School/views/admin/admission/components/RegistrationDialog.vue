@@ -128,7 +128,7 @@ const form = ref({
   gender: '',
   nisn: '',
   academic_year_id: '',
-  school_id: 1,
+  school_id: "1",
   workspace_id: ''
 });
 

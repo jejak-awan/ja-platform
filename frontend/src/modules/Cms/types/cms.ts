@@ -35,10 +35,10 @@ export interface ContentForm {
 }
 
 export interface Content extends ContentForm {
-    id: number;
+    id: string;
     author_id?: number;
     author?: {
-        id: number;
+        id: string;
         name: string;
         email: string;
     } | null;
@@ -71,7 +71,7 @@ export interface CMSState {
 }
 
 export interface ContentTemplate {
-    id: number;
+    id: string;
     name: string;
     slug: string;
     description?: string;

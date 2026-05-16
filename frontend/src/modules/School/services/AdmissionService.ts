@@ -23,11 +23,11 @@ export const AdmissionService = {
         return api.post('admin/admission/enrollments', data);
     },
 
-    async updateEnrollmentStatus(id: number | string, status: string): Promise<AxiosResponse<Enrollment>> {
+    async updateEnrollmentStatus(id: string | string, status: string): Promise<AxiosResponse<Enrollment>> {
         return api.patch(`admin/admission/enrollments/${id}/status`, { status });
     },
 
-    async admitEnrollment(id: number | string): Promise<AxiosResponse<any>> {
+    async admitEnrollment(id: string | string): Promise<AxiosResponse<any>> {
         return api.post(`admin/admission/enrollments/${id}/admit`);
     }
 };

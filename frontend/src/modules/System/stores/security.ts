@@ -37,19 +37,19 @@ export const useSecurityStore = defineStore('security', {
         async solveChallenge(nonce: string, difficulty: number): Promise<string | null> {
             this.lastChallenge = { nonce, difficulty }
             this.showShield()
-            this.updateShield(10, t('features.security.shield.challenge.status.analyzing'))
+            this.updateShield("10", t('features.security.shield.challenge.status.analyzing'))
 
             try {
                 const solution = await this.calculatePoW(nonce, difficulty)
 
                 if (solution !== null) {
-                    this.updateShield(80, t('features.security.shield.challenge.status.finalizing'))
+                    this.updateShield("80", t('features.security.shield.challenge.status.finalizing'))
                     
                     const fingerprint = getCanvasFingerprint()
                     const success = await this.verifyOnBackend(nonce, solution, fingerprint)
 
                     if (success) {
-                        this.updateShield(100, t('features.security.shield.challenge.status.verified'))
+                        this.updateShield("100", t('features.security.shield.challenge.status.verified'))
                         setTimeout(() => this.hideShield(), 500)
                         return String(solution)
                     }
@@ -58,7 +58,7 @@ export const useSecurityStore = defineStore('security', {
                 throw new Error('Verification failed')
             } catch (error) {
                 logger.error('Security challenge failed:', error)
-                this.updateShield(0, t('features.security.shield.challenge.status.failed'))
+                this.updateShield("0", t('features.security.shield.challenge.status.failed'))
                 setTimeout(() => this.hideShield(), 2000)
                 return null
             }

@@ -268,7 +268,7 @@ const { confirm } = useConfirm();
 const router = useRouter();
 
 interface Theme {
-    id: number;
+    id: string;
     name: string;
     slug: string;
     description?: string;

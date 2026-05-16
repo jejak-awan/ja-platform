@@ -200,7 +200,7 @@ const loading = ref(false);
 const fetchData = async () => {
   loading.value = true;
   try {
-    const response = await HRService.getStaffDetail(Number(route.params.id));
+    const response = await HRService.getStaffDetail(route.params.id);
     staff.value = parseResponse(response).data;
   } catch (e) {
     console.error(e);

@@ -95,7 +95,7 @@ import ChevronRight from 'lucide-vue-next/dist/esm/icons/chevron-right.js';
 import { Button, Badge } from '@/shared/components/ui';
 
 interface Category {
-    id: number | string;
+    id: string | string;
     name: string;
     slug: string;
     image?: string;

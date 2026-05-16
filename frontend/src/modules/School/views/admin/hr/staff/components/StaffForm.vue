@@ -334,7 +334,7 @@ const emit = defineEmits(['submit']);
 const activeTab = ref('biography');
 
 const form = ref({
-  school_id: 15, // Default for SMK NEGERI 1 CIJULANG
+  school_id: "15", // Default for SMK NEGERI 1 CIJULANG
   nuptk: '',
   nik: '',
   full_name: '',

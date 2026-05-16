@@ -286,7 +286,7 @@ const handleSubmit = async () => {
             is_active: formData.is_active
         };
         const res = await api.post('/manage/cms/forms', payload);
-        const created = res.data as { id: number };
+        const created = res.data as { id: string };
         toast.success.create(t('modules.cms.forms.title'));
         router.push({ name: 'forms.edit', params: { id: String(created.id) } });
     } catch (error: unknown) {

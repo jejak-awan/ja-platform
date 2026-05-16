@@ -11,7 +11,7 @@ export const StudentService = {
         return api.get('admin/students', { params: { search: query, per_page: 20 } });
     },
 
-    async getStudent(id: number): Promise<AxiosResponse<Student>> {
+    async getStudent(id: string): Promise<AxiosResponse<Student>> {
         return api.get(`admin/students/${id}`);
     },
 
@@ -19,11 +19,11 @@ export const StudentService = {
         return api.post('admin/students', data);
     },
 
-    async updateStudent(id: number, data: Partial<Student>): Promise<AxiosResponse<Student>> {
+    async updateStudent(id: string, data: Partial<Student>): Promise<AxiosResponse<Student>> {
         return api.put(`admin/students/${id}`, data);
     },
 
-    async deleteStudent(id: number): Promise<AxiosResponse<void>> {
+    async deleteStudent(id: string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/students/${id}`);
     },
 

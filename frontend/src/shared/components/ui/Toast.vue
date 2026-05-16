@@ -58,7 +58,7 @@ import { ref, h } from 'vue';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 
 interface ToastOptions {
-  id: number;
+  id: string;
   title?: string;
   description?: string;
   variant?: 'default' | 'success' | 'error' | 'warning' | 'info';
@@ -140,7 +140,7 @@ const addToast = (options: Partial<Omit<ToastOptions, 'id'>>) => {
   return id;
 };
 
-const removeToast = (id: number) => {
+const removeToast = (id: string) => {
   const index = toasts.value.findIndex(t => t.id === id);
   if (index > -1) {
     toasts.value.splice(index, 1);

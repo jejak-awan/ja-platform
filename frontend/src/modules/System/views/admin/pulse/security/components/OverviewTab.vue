@@ -558,13 +558,13 @@ import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
 import Send from 'lucide-vue-next/dist/esm/icons/send.js';
 
 interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
 }
 
 interface Log {
-    id: number;
+    id: string;
     event_type: string;
     ip_address: string;
     user_id?: number | null;

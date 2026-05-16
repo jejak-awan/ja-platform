@@ -86,7 +86,7 @@ import SettingField from '@/modules/System/components/settings/SettingField.vue'
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui'
 
 interface Setting {
-    id: number | string;
+    id: string | string;
     key: string;
     value: unknown;
     type: string;

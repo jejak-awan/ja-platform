@@ -263,7 +263,7 @@ import Paperclip from 'lucide-vue-next/dist/esm/icons/paperclip.js';
 import ImageIcon from 'lucide-vue-next/dist/esm/icons/image.js';
 
 export interface AdminFormFieldRow {
-    id: number;
+    id: string;
     form_id?: number;
     name: string;
     label: string;

@@ -279,12 +279,12 @@ const fetchFilters = async () => {
 }
 
 const handleFilter = _.debounce(() => {
-    fetchData(1);
+    fetchData("1");
 }, 500);
 
 const resetFilters = () => {
     filters.value = { search: '', level_id: '', study_group_id: '' };
-    fetchData(1);
+    fetchData("1");
 }
 
 const handlePageChange = (page: number) => {

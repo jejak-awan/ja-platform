@@ -275,7 +275,7 @@ const fetchShifts = async () => {
   await hrStore.fetchShifts();
 };
 
-const handleUpdateLeave = async (id: number, status: string) => {
+const handleUpdateLeave = async (id: string, status: string) => {
   try {
     await hrStore.updateLeaveStatus(id, status);
     toast.success.action(t('modules.school.academic.messages.updateSuccess'));
@@ -290,7 +290,7 @@ const handleAddShift = () => {
   dialogs.value.shift = true;
 };
 
-const handleDeleteShift = async (id: number) => {
+const handleDeleteShift = async (id: string) => {
   if (await confirm({ 
       title: t('common.actions.delete'), 
       description: t('modules.school.academic.messages.deleteConfirm'), 

@@ -322,7 +322,7 @@
         :per-page="Number(perPage)"
         class="border-none shadow-none mt-4 px-6 py-4"
         @page-change="fetchLogs"
-        @update:per-page="(val) => { perPage = val; fetchLogs(1); }"
+        @update:per-page="(val) => { perPage = val; fetchLogs("1"); }"
       />
     </div>
   </div>
@@ -358,13 +358,13 @@ import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
 import EyeOff from 'lucide-vue-next/dist/esm/icons/eye-off.js';
 
 interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
 }
 
 interface ActivityLog {
-    id: number;
+    id: string;
     action: string;
     type?: string;
     description: string;
@@ -551,7 +551,7 @@ const getRecursiveValue = (obj: Record<string, unknown> | null | undefined, key:
 
 // Watch filters for auto-refresh
 watch([typeFilter, userFilter, dateFrom, dateTo], () => {
-    fetchLogs(1);
+    fetchLogs("1");
 });
 
 onMounted(() => {

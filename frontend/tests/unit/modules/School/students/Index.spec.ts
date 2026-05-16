@@ -42,7 +42,7 @@ describe('Student Index Component', () => {
         const mockResponse = {
             data: {
                 data: [
-                    { id: 1, nisn: '1234567890', full_name: 'John Doe', gender: 'L', level: { name: 'High' } }
+                    { id: "1", nisn: '1234567890', full_name: 'John Doe', gender: 'L', level: { name: 'High' } }
                 ],
                 total: 1,
                 per_page: 20,
@@ -72,7 +72,7 @@ describe('Student Index Component', () => {
 
     it('handles delete request correctly', async () => {
         const mockData = [
-            { id: 1, nisn: '1234567890', full_name: 'John Doe', gender: 'L', level: { name: 'High' } }
+            { id: "1", nisn: '1234567890', full_name: 'John Doe', gender: 'L', level: { name: 'High' } }
         ];
 
         vi.mocked(api.get).mockResolvedValue({

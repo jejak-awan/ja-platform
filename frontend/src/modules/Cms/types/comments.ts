@@ -3,9 +3,9 @@ import type { User } from '@/engine/types/auth';
 export type CommentStatus = 'pending' | 'approved' | 'rejected' | 'spam';
 
 export interface Comment {
-    id: number;
+    id: string;
     parent_id?: number | null;
-    content_id: number;
+    content_id: string;
     user_id?: number | null;
     name?: string | null;
     email?: string | null;
@@ -19,7 +19,7 @@ export interface Comment {
     // Relations
     user?: User | null;
     content?: {
-        id: number;
+        id: string;
         title: string;
         slug: string;
     };

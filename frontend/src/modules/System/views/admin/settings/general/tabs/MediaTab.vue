@@ -10,7 +10,7 @@ import { useConfirm } from '@/shared/composables/useConfirm'
 import type { SettingValue } from '@/engine/types/settings'
 
 interface Setting {
-    id: number | string;
+    id: string | string;
     key: string;
     value: unknown;
     type: string;

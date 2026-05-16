@@ -88,7 +88,7 @@ import { moveCategorySchema } from '@/shared/schemas';
 import api from '@/engine/api/client';
 
 interface Category {
-    id: number | string;
+    id: string | string;
     name: string;
     parent_id?: number | string | null;
     [key: string]: unknown;

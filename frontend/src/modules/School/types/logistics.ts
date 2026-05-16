@@ -1,6 +1,6 @@
 export interface Asset {
-    id: number;
-    school_id: number;
+    id: string;
+    school_id: string;
     code: string;
     name: string;
     category?: string;
@@ -14,9 +14,9 @@ export interface Asset {
 }
 
 export interface InventoryItem {
-    id: number;
-    school_id: number;
-    category_id: number;
+    id: string;
+    school_id: string;
+    category_id: string;
     code: string;
     name: string;
     stock: number;
@@ -27,7 +27,7 @@ export interface InventoryItem {
 }
 
 export interface HostelBlock {
-    id: number;
+    id: string;
     name: string;
     description?: string;
     created_at?: string;
@@ -35,8 +35,8 @@ export interface HostelBlock {
 }
 
 export interface HostelRoom {
-    id: number;
-    block_id: number;
+    id: string;
+    block_id: string;
     number: string;
     capacity: number;
     occupied: number;
@@ -46,8 +46,8 @@ export interface HostelRoom {
 }
 
 export interface TransportRoute {
-    id: number;
-    school_id: number;
+    id: string;
+    school_id: string;
     name: string;
     description?: string;
     vehicle_id?: number;
@@ -57,13 +57,13 @@ export interface TransportRoute {
 }
 
 export interface HostelBed {
-    id: number;
-    room_id: number;
+    id: string;
+    room_id: string;
     bed_number: string;
     status: 'available' | 'occupied' | 'maintenance';
     allocation?: {
-        id: number;
-        student_id: number;
+        id: string;
+        student_id: string;
         student_name: string;
         start_date: string;
     };
@@ -72,7 +72,7 @@ export interface HostelBed {
 }
 
 export interface TransportVehicle {
-    id: number;
+    id: string;
     plate_number: string;
     model?: string;
     capacity?: number;
@@ -80,7 +80,7 @@ export interface TransportVehicle {
 }
 
 export interface Vacancy {
-    id: number;
+    id: string;
     position: string;
     company_name: string;
     description?: string;
@@ -89,9 +89,9 @@ export interface Vacancy {
 }
 
 export interface Application {
-    id: number;
-    vacancy_id: number;
-    student_id: number;
+    id: string;
+    vacancy_id: string;
+    student_id: string;
     status: string;
     created_at: string;
     student?: {

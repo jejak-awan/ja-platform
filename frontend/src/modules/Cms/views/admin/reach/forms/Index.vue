@@ -873,7 +873,7 @@ const forceDeleteForm = async (form: Form) => {
 
 const selectedIds = ref<(number | string)[]>([]);
 
-const toggleSelection = (id: number | string) => {
+const toggleSelection = (id: string | string) => {
     const index = selectedIds.value.indexOf(id);
     if (index === -1) {
         selectedIds.value.push(id);

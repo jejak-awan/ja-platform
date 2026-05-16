@@ -35,7 +35,7 @@ import SettingField from '@/modules/System/components/settings/SettingField.vue'
 import type { Component } from 'vue'
 
 interface Setting {
-    id: number | string;
+    id: string | string;
     key: string;
     value: unknown;
     type: string;

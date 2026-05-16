@@ -163,7 +163,7 @@ describe('MediaUpload.vue', () => {
         await selectMockFile(wrapper);
 
         vi.mocked(api.post).mockResolvedValueOnce({
-            data: { data: { id: 1, url: 'https://test/test.jpg' } }
+            data: { data: { id: "1", url: 'https://test/test.jpg' } }
         });
 
         const uploadBtn = wrapper.find('button.bg-green-600');

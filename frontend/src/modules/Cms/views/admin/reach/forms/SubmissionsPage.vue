@@ -426,7 +426,7 @@ interface SubmissionUser {
 }
 
 interface Submission {
-    id: number | string;
+    id: string | string;
     status: 'new' | 'read' | 'archived';
     created_at: string;
     ip_address?: string;
@@ -435,7 +435,7 @@ interface Submission {
 }
 
 interface Form {
-    id: number | string;
+    id: string | string;
     name: string;
 }
 
@@ -612,7 +612,7 @@ const table = useVueTable({
         sorting.value = typeof updaterOrValue === 'function' 
             ? updaterOrValue(sorting.value) 
             : updaterOrValue;
-        fetchSubmissions(1);
+        fetchSubmissions("1");
     },
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
@@ -896,12 +896,12 @@ let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 watch(search, () => {
     if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
     searchDebounceTimer = setTimeout(() => {
-        fetchSubmissions(1);
+        fetchSubmissions("1");
     }, 300);
 });
 
 watch([statusFilter, dateFrom, dateTo], () => {
-    fetchSubmissions(1);
+    fetchSubmissions("1");
 });
 
 onMounted(() => {

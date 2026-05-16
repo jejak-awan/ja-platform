@@ -1,18 +1,18 @@
 export interface Permission {
-    id: number;
+    id: string;
     name: string;
     description?: string;
 }
 
 export interface Role {
-    id: number;
+    id: string;
     name: string;
     permissions?: Permission[];
     users_count?: number;
 }
 
 export interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
     avatar?: string | { url?: string; path?: string } | null;
@@ -27,7 +27,7 @@ export interface User {
     location?: string | null;
     created_at?: string;
     updated_at?: string;
-    levels?: Array<{ id: number; name: string; level: string }>;
+    levels?: Array<{ id: string; name: string; level: string }>;
 }
 
 export interface AuthState {

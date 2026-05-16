@@ -95,7 +95,7 @@
             </div>
             <Select
               v-model="filterUsage"
-              @update:model-value="fetchTags(1)"
+              @update:model-value="fetchTags("1")"
             >
               <SelectTrigger class="w-[180px]">
                 <SelectValue :placeholder="$t('modules.cms.tags.filters.usage')" />
@@ -335,7 +335,7 @@ watch(tags, () => {
 });
 
 const onSearchInput = debounce(() => {
-    fetchTags(1);
+    fetchTags("1");
 }, 500);
 
 const fetchTags = async (page = 1) => {
@@ -382,7 +382,7 @@ const changePage = (page: number) => {
 
 const changePerPage = (value: string | number) => {
     pagination.value.per_page = typeof value === 'string' ? parseInt(value) : value;
-    fetchTags(1);
+    fetchTags("1");
 };
 
 

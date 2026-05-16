@@ -131,7 +131,7 @@ import SettingField from '@/modules/System/components/settings/SettingField.vue'
 import { Button } from '@/shared/components/ui';
 
 interface Setting {
-    id: number | string;
+    id: string | string;
     key: string;
     value: unknown;
     type: string;

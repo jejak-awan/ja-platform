@@ -337,7 +337,7 @@ const levels = ref<any[]>([]);
 const departments = ref<any[]>([]);
 
 const form = ref<any>({
-  school_id: 1,
+  school_id: "1",
   workspace_id: '',
   full_name: '',
   nisn: '',

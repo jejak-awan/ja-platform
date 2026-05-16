@@ -240,7 +240,7 @@ interface Stats {
 }
 
 interface ActivityLog {
-    id: number;
+    id: string;
     action: string;
     description: string;
     model_type: string;
@@ -248,7 +248,7 @@ interface ActivityLog {
 }
 
 interface SecurityLog {
-    id: number;
+    id: string;
     event_type: string;
     ip_address: string;
     created_at: string;

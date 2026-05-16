@@ -223,14 +223,14 @@ const fetchStaff = async (page = 1) => {
 };
 
 const handleSearch = _.debounce(() => {
-    fetchStaff(1);
+    fetchStaff("1");
 }, 500);
 
 const handlePageChange = (page: number) => {
   fetchStaff(page);
 };
 
-const handleDelete = async (id: number) => {
+const handleDelete = async (id: string) => {
   const isConfirmed = await confirm({
     title: t('modules.school.hr.staff.messages.deleteConfirmTitle'),
     message: t('modules.school.hr.staff.messages.deleteConfirmMessage'),

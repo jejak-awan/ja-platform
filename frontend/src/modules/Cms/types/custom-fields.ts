@@ -1,5 +1,5 @@
 export interface FieldGroup {
-    id: number;
+    id: string;
     name: string;
     description?: string | null;
     fields_count?: number;
@@ -9,8 +9,8 @@ export interface FieldGroup {
 }
 
 export interface CustomField {
-    id: number;
-    field_group_id: number;
+    id: string;
+    field_group_id: string;
     label: string;
     name: string;
     type: string;

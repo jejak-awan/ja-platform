@@ -115,7 +115,7 @@ import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import ZapOff from 'lucide-vue-next/dist/esm/icons/zap-off.js';
 
 interface Activity {
-    id: number;
+    id: string;
     user_id?: number | null;
     user?: {
         name: string;

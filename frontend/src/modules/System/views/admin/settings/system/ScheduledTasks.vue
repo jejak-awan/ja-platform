@@ -523,7 +523,7 @@ import Copy from 'lucide-vue-next/dist/esm/icons/copy.js';
 import Check from 'lucide-vue-next/dist/esm/icons/check.js';
 
 interface ScheduledTask {
-  id: number;
+  id: string;
   name: string;
   command: string;
   schedule: string;
@@ -903,7 +903,7 @@ async function fetchAllowedCommands() : Promise<void> {
 }
 
 const debouncedSearch = debounce(() => {
-    fetchTasks(1);
+    fetchTasks("1");
 }, 300);
 
 const changePage = (page: number) => {

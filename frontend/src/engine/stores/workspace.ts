@@ -20,7 +20,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     const activeId = computed(() => activeWorkspaceId.value || 0);
     const context = computed(() => activeContextType.value);
 
-    async function setWorkspaceContext(id: number | null, type: WorkspaceContextType = 'unit', name: string | null = null, silent = false) {
+    async function setWorkspaceContext(id: string | null, type: WorkspaceContextType = 'unit', name: string | null = null, silent = false) {
         if (activeWorkspaceId.value === id && activeContextType.value === type && !silent) return;
 
         switching.value = true;

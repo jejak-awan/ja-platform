@@ -1,8 +1,8 @@
 import type { Exam } from './lms';
 
 export interface CbtSession {
-    id: number;
-    exam_id: number;
+    id: string;
+    exam_id: string;
     name: string;
     token?: string;
     start_time: string;

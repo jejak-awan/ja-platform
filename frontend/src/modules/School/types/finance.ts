@@ -2,9 +2,9 @@ import type { Student } from './student';
 import type { AcademicYear } from './academic';
 
 export interface FeeType {
-    id: number;
-    school_id: number;
-    workspace_id: number;
+    id: string;
+    school_id: string;
+    workspace_id: string;
     name: string;
     code?: string;
     amount: number;
@@ -16,12 +16,12 @@ export interface FeeType {
 }
 
 export interface StudentBill {
-    id: number;
-    school_id: number;
-    workspace_id: number;
-    student_id: number;
-    fee_type_id: number;
-    academic_year_id: number;
+    id: string;
+    school_id: string;
+    workspace_id: string;
+    student_id: string;
+    fee_type_id: string;
+    academic_year_id: string;
     semester_id?: number;
     month?: number;
     amount: number;
@@ -40,9 +40,9 @@ export interface StudentBill {
 export type Bill = StudentBill;
 
 export interface PaymentTransaction {
-    id: number;
-    school_id: number;
-    student_bill_id: number;
+    id: string;
+    school_id: string;
+    student_bill_id: string;
     amount: number;
     payment_date: string;
     payment_method: 'cash' | 'transfer' | 'digital_wallet' | string;
@@ -56,9 +56,9 @@ export interface PaymentTransaction {
 }
 
 export interface Expense {
-    id: number;
-    school_id: number;
-    workspace_id: number;
+    id: string;
+    school_id: string;
+    workspace_id: string;
     category: string;
     date: string;
     amount: number;
@@ -69,10 +69,10 @@ export interface Expense {
 }
 
 export interface Budget {
-    id: number;
-    school_id: number;
-    workspace_id: number;
-    academic_year_id: number;
+    id: string;
+    school_id: string;
+    workspace_id: string;
+    academic_year_id: string;
     category: string;
     planned_amount: number;
     actual_amount: number;

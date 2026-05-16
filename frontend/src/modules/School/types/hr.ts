@@ -1,6 +1,6 @@
 export interface Staff {
-    id: number;
-    school_id: number;
+    id: string;
+    school_id: string;
     nip?: string;
     name: string;
     email: string;
@@ -13,8 +13,8 @@ export interface Staff {
 }
 
 export interface LeaveRequest {
-    id: number;
-    staff_id: number;
+    id: string;
+    staff_id: string;
     type: 'sick' | 'annual' | 'special' | 'maternity';
     start_date: string;
     end_date: string;
@@ -26,8 +26,8 @@ export interface LeaveRequest {
 }
 
 export interface Shift {
-    id: number;
-    school_id: number;
+    id: string;
+    school_id: string;
     name: string;
     start_time: string;
     end_time: string;
@@ -38,8 +38,8 @@ export interface Shift {
 }
 
 export interface SalaryStructure {
-    id: number;
-    staff_id: number;
+    id: string;
+    staff_id: string;
     basic_salary: number;
     allowances?: Record<string, number>;
     deductions?: Record<string, number>;
@@ -47,8 +47,8 @@ export interface SalaryStructure {
 }
 
 export interface Payroll {
-    id: number;
-    staff_id: number;
+    id: string;
+    staff_id: string;
     period: string;
     basic_salary: number;
     total_allowance: number;

@@ -127,7 +127,7 @@ import {
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
 interface Task {
-    id: number;
+    id: string;
     name: string;
     command: string;
     schedule: string;

@@ -162,7 +162,7 @@ const handleCheckIn = async (formData: FormData) => {
     }
 }
 
-const handleCheckOut = async (id: number) => {
+const handleCheckOut = async (id: string) => {
     if (confirm(t('modules.school.operations.visitors.actions.checkOutConfirm'))) {
         loading.value = true;
         try {

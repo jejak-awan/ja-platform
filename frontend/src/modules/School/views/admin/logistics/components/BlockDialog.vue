@@ -85,7 +85,7 @@ const toast = useToast();
 const loading = ref(false);
 
 const form = ref({
-  school_id: 1, // Dynamic school ID if needed
+  school_id: "1", // Dynamic school ID if needed
   name: '',
   gender: 'mixed',
   description: ''
@@ -101,7 +101,7 @@ const handleSubmit = async () => {
     emit('save');
     emit('update:open', false);
     // Reset form
-    form.value = { school_id: 1, name: '', gender: 'mixed', description: '' };
+    form.value = { school_id: "1", name: '', gender: 'mixed', description: '' };
   } catch (e) {
     toast.error.fromResponse(e);
   } finally {

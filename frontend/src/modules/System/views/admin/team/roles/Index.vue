@@ -731,9 +731,9 @@ const duplicateRole = (role: Role) => {
     router.push({ name: 'roles.create' });
 };
  
-const isSelected = (id: number) => selectedRoleIds.value.includes(id);
+const isSelected = (id: string) => selectedRoleIds.value.includes(id);
 
-const toggleSelection = (id: number) => {
+const toggleSelection = (id: string) => {
     const index = selectedRoleIds.value.indexOf(id);
     if (index > -1) {
         selectedRoleIds.value.splice(index, 1);
@@ -769,7 +769,7 @@ const syncMatrixFromRoles = () => {
     initialData.value.matrixPermissions = JSON.parse(JSON.stringify(matrix));
 };
 
-const getRole = (id: number | string) => roles.value.find(r => r && String(r.id) === String(id));
+const getRole = (id: string | string) => roles.value.find(r => r && String(r.id) === String(id));
 const roleIdToNum = (id: string | number) => Number(id);
 
 // Permission Handlers

@@ -1,8 +1,8 @@
 export interface Exam {
-    id: number;
+    id: string;
     title: string;
     description?: string;
-    subject_id: number;
+    subject_id: string;
     start_time: string;
     end_time: string;
     duration_minutes: number;
@@ -12,36 +12,36 @@ export interface Exam {
 }
 
 export interface QuestionBank {
-    id: number;
+    id: string;
     title: string;
-    subject_id: number;
+    subject_id: string;
     question_count: number;
     created_at: string;
     updated_at: string;
 }
 
 export interface Course {
-    id: number;
+    id: string;
     title: string;
     description?: string;
-    teacher_id: number;
+    teacher_id: string;
     status: 'active' | 'archived';
     created_at: string;
     updated_at: string;
 }
 
 export interface ExamResult {
-    id: number;
-    exam_id: number;
-    student_id: number;
+    id: string;
+    exam_id: string;
+    student_id: string;
     score: number;
     passed: boolean;
     completed_at: string;
 }
 
 export interface Question {
-    id: number;
-    bank_id: number;
+    id: string;
+    bank_id: string;
     type: 'multiple_choice' | 'essay';
     content: string;
     options?: Record<string, unknown> | unknown[];

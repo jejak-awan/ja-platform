@@ -182,13 +182,13 @@ import { OperationsService } from '@/modules/School/services/OperationsService';
 import { parseResponse } from '@/shared/utils/responseParser';
 
 interface LibraryBook {
-  id: number | string;
+  id: string | string;
   title: string;
   quantity: number;
 }
 
 interface Borrower {
-  id: number | string;
+  id: string | string;
   full_name: string;
 }
 

@@ -63,7 +63,7 @@ import { getResponseObject } from '@/shared/utils/responseParser';
 import AlertTriangle from 'lucide-vue-next/dist/esm/icons/triangle-alert.js';
 
 interface Alert {
-    id: number;
+    id: string;
     title: string;
     message: string;
     severity: 'critical' | 'warning' | 'info';

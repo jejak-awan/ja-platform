@@ -166,7 +166,7 @@ import { contentSchema } from '@/shared/schemas';
 import type { Category, Tag, ContentForm, Menu } from '@/modules/Cms/types/cms';
 
 interface ConflictDetails {
-    id: number;
+    id: string;
     title: string;
     is_trashed: boolean;
     suggested_slug: string;

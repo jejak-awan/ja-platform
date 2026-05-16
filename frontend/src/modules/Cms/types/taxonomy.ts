@@ -1,5 +1,5 @@
 export interface Category {
-    id: number;
+    id: string;
     name: string;
     slug: string;
     description?: string;
@@ -16,7 +16,7 @@ export interface Category {
 }
 
 export interface Tag {
-    id: number;
+    id: string;
     name: string;
     slug: string;
     description?: string;

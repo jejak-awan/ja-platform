@@ -642,7 +642,7 @@ import { ArrowRight } from 'lucide-vue-next'
 import type { CacheStatus } from '@/engine/types/settings'
 
 interface Setting {
-    id: number | string;
+    id: string | string;
     key: string;
     value: unknown;
     type: string;

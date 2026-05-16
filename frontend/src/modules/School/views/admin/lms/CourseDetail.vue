@@ -183,7 +183,7 @@ import { ChevronLeft, Plus, Pencil, Trash2, FileText, PlayCircle, FileDown, File
 import TiptapEditor from '@/shared/components/editor/TiptapEditor.vue';
 
 const route = useRoute();
-const courseId = Number(route.params.id);
+const courseId = route.params.id;
 
 const course = ref<any>(null);
 const loading = ref(false);

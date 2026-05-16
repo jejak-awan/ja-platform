@@ -192,7 +192,7 @@ const authorities = computed(() => {
   
   if (isSuperAdmin.value) {
     list.push({
-      id: 0,
+      id: "0",
       name: t('common.labels.systemAdmin'),
       label: t('common.labels.systemAdminDesc'),
       icon: 'ShieldCheck',
@@ -202,7 +202,7 @@ const authorities = computed(() => {
 
   if (isSuperAdmin.value || schoolType === 'public') {
     list.push({
-      id: 0,
+      id: "0",
       name: t('common.labels.authorityAdmin'),
       label: t('common.labels.authorityAdminDesc'),
       icon: 'Building2',
@@ -212,7 +212,7 @@ const authorities = computed(() => {
 
   if (isSuperAdmin.value || (schoolType === 'private' && isFoundationAdmin.value)) {
     list.push({
-      id: 0,
+      id: "0",
       name: t('common.labels.foundationAdmin'),
       label: t('common.labels.foundationAdminDesc'),
       icon: 'Library',
@@ -257,7 +257,7 @@ const activeUnit = computed(() => {
     if (contextType === 'authority') name = t('common.labels.authorityAdmin');
     
     return {
-      id: 0,
+      id: "0",
       name,
       level: contextType
     };
@@ -289,7 +289,7 @@ const getUnitIcon = (type: string | undefined) => {
   }
 };
 
-const resolveContextPath = (id: number, type: 'system' | 'foundation' | 'authority' | 'unit') => {
+const resolveContextPath = (id: string, type: 'system' | 'foundation' | 'authority' | 'unit') => {
   if (id === 0) {
     if (type === 'system') return '/dash';
     return '/dash/school';
@@ -297,7 +297,7 @@ const resolveContextPath = (id: number, type: 'system' | 'foundation' | 'authori
   return '/dash/school-dashboard';
 };
 
-const handleSelect = async (id: number, type: 'system' | 'foundation' | 'authority' | 'unit') => {
+const handleSelect = async (id: string, type: 'system' | 'foundation' | 'authority' | 'unit') => {
   if (unitStore.switchingContext) return;
   if (unitStore.activeUnitId === id && unitStore.activeContextType === type) {
     showSelector.value = false;

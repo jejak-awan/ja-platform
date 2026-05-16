@@ -247,7 +247,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 interface Setting {
-    id: number | string;
+    id: string | string;
     key: string;
     value: unknown;
     type: string;

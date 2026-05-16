@@ -114,7 +114,7 @@ import LmsService from '../../../services/LmsService';
 import QuizRenderer from '../../../components/lms/QuizRenderer.vue';
 
 const route = useRoute();
-const courseId = Number(route.params.id);
+const courseId = route.params.id;
 
 const course = ref<any>(null);
 const program = ref<any[]>([]);

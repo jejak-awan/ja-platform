@@ -256,11 +256,11 @@ import { useConfirm } from '@/shared/composables/useConfirm';
 import toast from '@/shared/services/legacy-toast';
 
 interface Revision {
-    id: number;
+    id: string;
     version: number;
     author_id?: number;
     author?: {
-        id: number;
+        id: string;
         name: string;
     } | null;
     data: {

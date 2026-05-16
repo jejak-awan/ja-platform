@@ -1,6 +1,6 @@
 export interface Visitor {
-    id: number;
-    school_id: number;
+    id: string;
+    school_id: string;
     name: string;
     purpose: string;
     check_in: string;
@@ -11,8 +11,8 @@ export interface Visitor {
 }
 
 export interface UksVisit {
-    id: number;
-    patient_id: number;
+    id: string;
+    patient_id: string;
     patient_type: string;
     complaint: string;
     treatment?: string;
@@ -23,7 +23,7 @@ export interface UksVisit {
 }
 
 export interface Attendance {
-    id: number;
+    id: string;
     student_id?: number;
     staff_id?: number;
     date: string;
@@ -34,11 +34,11 @@ export interface Attendance {
 }
 
 export interface OperationAuditLog {
-    id: number;
-    user_id: number;
+    id: string;
+    user_id: string;
     action: string;
     model_type: string;
-    model_id: number;
+    model_id: string;
     fields?: Record<string, unknown>;
     ip_address: string;
     user_agent?: string;
@@ -46,7 +46,7 @@ export interface OperationAuditLog {
 }
 
 export interface LibraryBook {
-    id: number | string;
+    id: string | string;
     title: string;
     author?: string;
     quantity: number;
@@ -54,13 +54,13 @@ export interface LibraryBook {
 }
 
 export interface Borrower {
-    id: number | string;
+    id: string | string;
     full_name: string;
     identity_number?: string;
 }
 
 export interface Graduate {
-    id: number | string;
+    id: string | string;
     graduation_year: string | number;
     student?: {
         full_name: string;

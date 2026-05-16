@@ -445,7 +445,7 @@ import Copy from 'lucide-vue-next/dist/esm/icons/copy.js';
 import Check from 'lucide-vue-next/dist/esm/icons/check.js';
 
 interface Backup {
-    id: number;
+    id: string;
     name: string;
     type: string;
     size: number;
@@ -491,11 +491,11 @@ const initialScheduleForm = ref<typeof scheduleForm.value | null>(null);
 const visiblePasswords = ref<Record<number, boolean>>({});
 const copiedPasswords = ref<Record<number, boolean>>({});
 
-const togglePasswordVisibility = (id: number) => {
+const togglePasswordVisibility = (id: string) => {
     visiblePasswords.value[id] = !visiblePasswords.value[id];
 };
 
-const copyPassword = async (id: number, password: string) => {
+const copyPassword = async (id: string, password: string) => {
     try {
         await navigator.clipboard.writeText(password);
         copiedPasswords.value[id] = true;

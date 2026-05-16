@@ -120,7 +120,7 @@ import User from 'lucide-vue-next/dist/esm/icons/user.js';
 import Calendar from 'lucide-vue-next/dist/esm/icons/calendar.js';
 
 interface Post {
-    id: number;
+    id: string;
     title: string;
     slug: string;
     excerpt?: string;

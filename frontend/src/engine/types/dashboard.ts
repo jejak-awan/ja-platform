@@ -49,7 +49,7 @@ export interface CreatorDashboardData {
 }
 
 export type TopContentItem = {
-    id: number | string;
+    id: string | string;
     title: string;
     type: string;
     views: number;

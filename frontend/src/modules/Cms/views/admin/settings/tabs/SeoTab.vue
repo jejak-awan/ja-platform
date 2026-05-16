@@ -33,7 +33,7 @@ import SettingGroup from '@/modules/System/components/settings/SettingGroup.vue'
 import SettingField from '@/modules/System/components/settings/SettingField.vue'
 
 interface Setting {
-    id: number | string;
+    id: string | string;
     key: string;
     value: unknown;
     type: string;

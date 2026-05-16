@@ -113,7 +113,7 @@ import HelpCircle from 'lucide-vue-next/dist/esm/icons/circle-question-mark.js';
 import Home from 'lucide-vue-next/dist/esm/icons/house.js';
 
 interface ContentItem {
-    id: number | string;
+    id: string | string;
     title: string;
     created_at: string;
     [key: string]: unknown;

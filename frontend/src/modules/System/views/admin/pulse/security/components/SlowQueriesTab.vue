@@ -137,12 +137,12 @@ import {
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 
 interface User {
-    id: number;
+    id: string;
     name: string;
 }
 
 interface SlowQuery {
-    id: number;
+    id: string;
     route: string | null;
     duration: number;
     user_id?: number | null;

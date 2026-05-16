@@ -38,7 +38,7 @@ export const useHRStore = defineStore('hr', {
             }
         },
 
-        async fetchStaffDetail(id: number) {
+        async fetchStaffDetail(id: string) {
             this.loading = true;
             try {
                 const response = await HRService.getStaffDetail(id);
@@ -50,7 +50,7 @@ export const useHRStore = defineStore('hr', {
             }
         },
 
-        async saveStaff(data: Partial<Staff>, id: number | null = null) {
+        async saveStaff(data: Partial<Staff>, id: string | null = null) {
             try {
                 if (id) await HRService.updateStaff(id, data);
                 else await HRService.storeStaff(data);
@@ -61,7 +61,7 @@ export const useHRStore = defineStore('hr', {
             }
         },
 
-        async deleteStaff(id: number) {
+        async deleteStaff(id: string) {
             try {
                 await HRService.deleteStaff(id);
                 this.staff = this.staff.filter(s => s.id !== id);
@@ -84,7 +84,7 @@ export const useHRStore = defineStore('hr', {
             }
         },
 
-        async updateLeaveStatus(id: number, status: string) {
+        async updateLeaveStatus(id: string, status: string) {
             try {
                 await HRService.updateLeaveStatus(id, status);
                 const leave = this.leaves.find(l => l.id === id);
@@ -108,7 +108,7 @@ export const useHRStore = defineStore('hr', {
             }
         },
 
-        async saveShift(data: Partial<Shift>, id: number | null = null) {
+        async saveShift(data: Partial<Shift>, id: string | null = null) {
             try {
                 if (id) {
                     await HRService.updateShift(id, data);
@@ -122,7 +122,7 @@ export const useHRStore = defineStore('hr', {
             }
         },
 
-        async deleteShift(id: number) {
+        async deleteShift(id: string) {
             try {
                 await HRService.deleteShift(id);
                 this.shifts = this.shifts.filter(s => s.id !== id);

@@ -60,7 +60,7 @@ const saving = ref(false);
 const fetchStudent = async () => {
     fetching.value = true;
     try {
-        const response = await StudentService.getStudent(Number(route.params.id));
+        const response = await StudentService.getStudent(route.params.id);
         student.value = parseResponse(response).data;
     } catch (e) {
         toast.error.fromResponse(e);
@@ -73,7 +73,7 @@ const fetchStudent = async () => {
 const handleSubmit = async (formData: any) => {
   saving.value = true;
   try {
-    await StudentService.updateStudent(Number(route.params.id), formData);
+    await StudentService.updateStudent(route.params.id, formData);
     toast.success.action(t('modules.school.academic.messages.updateSuccess'));
     router.push({ name: 'students.index' });
   } catch (e) {

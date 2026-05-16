@@ -125,7 +125,7 @@ const { confirm } = useConfirm();
 const toast = useToast();
 
 interface Widget {
-    id: number;
+    id: string;
     title: string;
     type: string;
     location?: string;

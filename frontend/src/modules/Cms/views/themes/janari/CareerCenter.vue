@@ -173,7 +173,7 @@ onMounted(() => {
 // Demo data - in a real app this would come from an API
 const jobs = [
   { 
-    id: 1, 
+    id: "1", 
     title: 'Junior Web Developer', 
     company: 'PT. Teknologi Kreatif Digital', 
     location: 'Jakarta (Remote)', 
@@ -181,7 +181,7 @@ const jobs = [
     isNew: true
   },
   { 
-    id: 2, 
+    id: "2", 
     title: 'Mekanik Alat Berat', 
     company: 'United Tractors Indonesia', 
     location: 'Kalimantan Timur', 
@@ -189,7 +189,7 @@ const jobs = [
     isNew: true
   },
   { 
-    id: 3, 
+    id: "3", 
     title: 'Editor Video & Motion', 
     company: 'Arkadia Creative Hub', 
     location: 'Bandung', 

@@ -4,7 +4,7 @@ const themeJson = {
     success: true,
     message: 'ok',
     data: {
-        id: 1,
+        id: "1",
         name: 'Janari',
         slug: 'janari',
         type: 'frontend',
@@ -41,7 +41,7 @@ const contactFormJson = {
     success: true,
     message: 'ok',
     data: {
-        id: 1,
+        id: "1",
         slug: 'contact',
         name: 'Contact',
         description: null,

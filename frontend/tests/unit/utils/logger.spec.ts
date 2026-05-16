@@ -53,7 +53,7 @@ describe('logger util', () => {
     });
 
     it('includes user_id from localStorage', async () => {
-        localStorage.setItem('user', JSON.stringify({ id: 99 }));
+        localStorage.setItem('user', JSON.stringify({ id: "99" }));
         logger.error('Log with user');
         const calls = vi.mocked(api.post).mock.calls;
         const logPayload = calls[0] ? (calls[0][1] as any) : {};
@@ -107,7 +107,7 @@ describe('logger util', () => {
         expect(console.warn).toHaveBeenCalledWith('[Logger] Rate limit exceeded. Further logs paused for 1 minute.');
 
         vi.advanceTimersByTime(61000);
-        logger.error('Error 26', { id: 26 });
+        logger.error('Error 26', { id: "26" });
         expect(api.post).toHaveBeenCalledTimes(21);
     });
 

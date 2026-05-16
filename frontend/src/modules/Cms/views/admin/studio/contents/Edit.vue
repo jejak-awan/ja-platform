@@ -219,7 +219,7 @@ import type { Content, Category, Tag, ContentForm, Menu } from '@/modules/Cms/ty
 interface LockStatus {
     is_locked: boolean;
     locked_by?: {
-        id: number;
+        id: string;
         name: string;
     };
     can_unlock: boolean;

@@ -16,10 +16,10 @@ export default {
     saveTemplate(data: TemplateData): Promise<AxiosResponse> {
         return api.post('/manage/cms/content-templates', data);
     },
-    deleteTemplate(id: number | string): Promise<AxiosResponse> {
+    deleteTemplate(id: string | string): Promise<AxiosResponse> {
         return api.delete(`/manage/cms/content-templates/${id}`);
     },
-    getTemplate(id: number | string): Promise<AxiosResponse> {
+    getTemplate(id: string | string): Promise<AxiosResponse> {
         return api.get(`/manage/cms/content-templates/${id}`);
     }
 }

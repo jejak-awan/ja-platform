@@ -376,13 +376,13 @@ import type { ShieldLog, ShieldStats, PaginationInfo as SecurityPaginationInfo }
 
 // Types
 interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
 }
 
 interface Log {
-    id: number;
+    id: string;
     event_type: string;
     ip_address: string;
     user_id?: number | null;
@@ -414,7 +414,7 @@ interface SecurityKpi {
 }
 
 interface IpManagementItem {
-    id: number | string;
+    id: string | string;
     ip_address: string;
     reason?: string | null;
     creator?: User | null;
@@ -427,7 +427,7 @@ interface IpStatus {
 }
 
 interface CspReport {
-    id: number;
+    id: string;
     violated_directive: string;
     blocked_uri: string | null;
     document_uri: string;
@@ -444,7 +444,7 @@ interface CspStats {
 }
 
 interface SlowQuery {
-    id: number;
+    id: string;
     route: string | null;
     duration: number;
     user_id?: number | null;
@@ -461,7 +461,7 @@ interface SlowQueryStats {
 }
 
 interface Vulnerability {
-    id: number;
+    id: string;
     package_name: string;
     version: string;
     severity: string;

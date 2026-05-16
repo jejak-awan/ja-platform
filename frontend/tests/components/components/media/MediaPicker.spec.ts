@@ -67,12 +67,12 @@ describe('MediaPicker.vue', () => {
 
         vi.mocked(api.get).mockResolvedValue({
             data: {
-                data: [{ id: 1, name: 'file.jpg' }],
-                folders: [{ id: 2, name: 'Subfolder' }]
+                data: [{ id: "1", name: 'file.jpg' }],
+                folders: [{ id: "2", name: 'Subfolder' }]
             }
         })
 
-        await (wrapper.vm as any).navigateToFolder({ id: 2, name: 'Subfolder' })
+        await (wrapper.vm as any).navigateToFolder({ id: "2", name: 'Subfolder' })
         expect((wrapper.vm as any).currentFolderId).toBe(2)
 
         await (wrapper.vm as any).navigateToBreadcrumb(-1) // Back to root
@@ -88,7 +88,7 @@ describe('MediaPicker.vue', () => {
 
     it('selects and confirms media', async () => {
         const wrapper = mount(MediaPicker, globalMocks)
-        const media = { id: 10, url: 'test.jpg' }
+        const media = { id: "10", url: 'test.jpg' }
             ; (wrapper.vm as any).selectMedia(media)
         expect((wrapper.vm as any).selectedMediaId).toBe(10)
 
@@ -107,7 +107,7 @@ describe('MediaPicker.vue', () => {
 
     it('handles media uploaded and selects it', async () => {
         const wrapper = mount(MediaPicker, globalMocks)
-        const newMedia = { id: 20, url: 'new.jpg' }
+        const newMedia = { id: "20", url: 'new.jpg' }
         await (wrapper.vm as any).handleMediaUploaded({ media: newMedia })
 
         expect((wrapper.vm as any).mediaList[0].id).toBe(20)
@@ -122,11 +122,11 @@ describe('MediaPicker.vue', () => {
             }
         })
 
-        const invalidMedia = { id: 30, url: 'test.gif', extension: 'gif' }
+        const invalidMedia = { id: "30", url: 'test.gif', extension: 'gif' }
         await (wrapper.vm as any).selectMedia(invalidMedia)
         expect((wrapper.vm as any).selectedMediaId).toBeNull()
 
-        const validMedia = { id: 31, url: 'test.jpg', extension: 'jpg' }
+        const validMedia = { id: "31", url: 'test.jpg', extension: 'jpg' }
         await (wrapper.vm as any).selectMedia(validMedia)
         expect((wrapper.vm as any).selectedMediaId).toBe(31)
     })
@@ -134,8 +134,8 @@ describe('MediaPicker.vue', () => {
     it('navigates through breadcrumbs correctly', async () => {
         const wrapper = mount(MediaPicker, globalMocks)
         const folders = [
-            { id: 1, name: 'F1' },
-            { id: 2, name: 'F2' }
+            { id: "1", name: 'F1' },
+            { id: "2", name: 'F2' }
         ]
             ; (wrapper.vm as any).breadcrumbs = [...folders]
 
@@ -162,7 +162,7 @@ describe('MediaPicker.vue', () => {
         vi.mocked(api.get).mockResolvedValueOnce({ data: { data: [] } }) // Folders
         vi.mocked(api.get).mockResolvedValueOnce({
             data: {
-                data: { data: [{ id: 100, url: 'paginated.jpg' }] } // Paginated media
+                data: { data: [{ id: "100", url: 'paginated.jpg' }] } // Paginated media
             }
         })
 

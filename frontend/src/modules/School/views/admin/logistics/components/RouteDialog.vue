@@ -88,7 +88,7 @@ const loading = ref(false);
 const stopInput = ref('');
 
 const form = ref({
-  school_id: 1,
+  school_id: "1",
   name: '',
   start_location: '',
   end_location: '',
@@ -107,7 +107,7 @@ const handleSubmit = async () => {
     toast.success.action('Rute berhasil dibuat');
     emit('save');
     emit('update:open', false);
-    form.value = { school_id: 1, name: '', start_location: '', end_location: '', stops: [], fee: 0 };
+    form.value = { school_id: "1", name: '', start_location: '', end_location: '', stops: [], fee: 0 };
     stopInput.value = '';
   } catch (e) {
     toast.error.fromResponse(e);

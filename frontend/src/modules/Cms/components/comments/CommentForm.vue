@@ -94,7 +94,7 @@ interface CommentForm {
     name: string;
     email: string;
     body: string;
-    parent_id: number | string | null;
+    parent_id: string | string | null;
     captcha_token: string;
     captcha_input: string;
 }

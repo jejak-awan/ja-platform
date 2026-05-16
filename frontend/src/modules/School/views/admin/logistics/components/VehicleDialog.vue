@@ -84,7 +84,7 @@ const toast = useToast();
 const loading = ref(false);
 
 const form = ref({
-  school_id: 1,
+  school_id: "1",
   plate_number: '',
   model: '',
   capacity: 15,
@@ -101,7 +101,7 @@ const handleSubmit = async () => {
     toast.success.action('Kendaraan berhasil didaftarkan');
     emit('save');
     emit('update:open', false);
-    form.value = { school_id: 1, plate_number: '', model: '', capacity: 15, driver_name: '', driver_phone: '' };
+    form.value = { school_id: "1", plate_number: '', model: '', capacity: 15, driver_name: '', driver_phone: '' };
   } catch (e) {
     toast.error.fromResponse(e);
   } finally {

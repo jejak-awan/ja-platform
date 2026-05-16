@@ -105,6 +105,6 @@ watch(() => props.initialData, (val) => {
 }, { immediate: true });
 
 const handleSubmit = () => {
-  emit('submit', { ...form.value, school_id: 1 });
+  emit('submit', { ...form.value, school_id: "1" });
 };
 </script>

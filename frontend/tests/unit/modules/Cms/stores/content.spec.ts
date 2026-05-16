@@ -21,7 +21,7 @@ describe('Content Store', () => {
 
     it('fetches content successfully', async () => {
         const store = useContentStore();
-        const mockContent = { id: 1, title: 'Test Content', slug: 'test-slug' };
+        const mockContent = { id: "1", title: 'Test Content', slug: 'test-slug' };
 
         vi.mocked(api.get).mockResolvedValueOnce({
             data: { data: mockContent }
@@ -36,7 +36,7 @@ describe('Content Store', () => {
 
     it('handles alternative response structure', async () => {
         const store = useContentStore();
-        const mockContent = { id: 1, title: 'Test Content' };
+        const mockContent = { id: "1", title: 'Test Content' };
 
         // Some APIs return data directly without a .data wrapper
         vi.mocked(api.get).mockResolvedValueOnce({
@@ -63,7 +63,7 @@ describe('Content Store', () => {
 
     it('clears content', () => {
         const store = useContentStore();
-        store.currentContent = { id: 1 } as any;
+        store.currentContent = { id: "1" } as any;
 
         store.clearContent();
 

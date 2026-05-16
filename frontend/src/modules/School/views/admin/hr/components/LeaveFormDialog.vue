@@ -124,7 +124,7 @@ const loading = ref(false);
 const staffList = ref<any[]>([]);
 
 const form = ref<any>({
-  school_id: 1,
+  school_id: "1",
   staff_id: undefined,
   type: 'Cuti Tahunan',
   start_date: new Date().toISOString().split('T')[0],

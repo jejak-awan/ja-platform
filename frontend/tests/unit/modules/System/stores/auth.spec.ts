@@ -42,7 +42,7 @@ describe('Auth Store', () => {
 
     describe('Getters', () => {
         const mockUser = {
-            id: 1,
+            id: "1",
             name: 'Admin',
             roles: [{ name: 'admin' }],
             permissions: [{ name: 'edit content' }]
@@ -102,7 +102,7 @@ describe('Auth Store', () => {
 
     describe('Actions', () => {
         it('initAuth restores user from localStorage', () => {
-            const userData = { id: 1, name: 'Test' };
+            const userData = { id: "1", name: 'Test' };
             localStorage.setItem('user', JSON.stringify(userData));
 
             const store = useAuthStore();
@@ -114,7 +114,7 @@ describe('Auth Store', () => {
 
         it('login handles successful authentication', async () => {
             const store = useAuthStore();
-            const userData = { user: { id: 1, name: 'Admin' } };
+            const userData = { user: { id: "1", name: 'Admin' } };
 
             vi.mocked(api.post).mockResolvedValueOnce({
                 data: { data: userData }
@@ -132,7 +132,7 @@ describe('Auth Store', () => {
         it('login handles 2FA requirement', async () => {
             const store = useAuthStore();
             vi.mocked(api.post).mockResolvedValueOnce({
-                data: { data: { requires_two_factor: true, user_id: 123 } }
+                data: { data: { requires_two_factor: true, user_id: "123" } }
             });
 
             const result = await store.login({ email: 'test@example.com', password: 'password' });
@@ -198,7 +198,7 @@ describe('Auth Store', () => {
 
         it('logout clears state and localStorage', async () => {
             const store = useAuthStore();
-            store.user = { id: 1 } as any;
+            store.user = { id: "1" } as any;
             store.isAuthenticated = true;
 
             await store.logout();
@@ -211,7 +211,7 @@ describe('Auth Store', () => {
 
         it('fetchUser updates current user data', async () => {
             const store = useAuthStore();
-            const userData = { id: 1, name: 'Fetched' };
+            const userData = { id: "1", name: 'Fetched' };
 
             vi.mocked(api.get).mockResolvedValueOnce({
                 data: { data: userData }
@@ -225,7 +225,7 @@ describe('Auth Store', () => {
 
         it('register handles success', async () => {
             const store = useAuthStore();
-            const userData = { user: { id: 1, name: 'New User' } };
+            const userData = { user: { id: "1", name: 'New User' } };
             vi.mocked(api.post).mockResolvedValueOnce({ data: userData });
 
             const result = await store.register({ name: 'New', email: 'n@e.c', password: 'p' } as any);

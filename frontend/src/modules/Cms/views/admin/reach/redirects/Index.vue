@@ -208,7 +208,7 @@ import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import { parseResponse, ensureArray, parseSingleResponse } from '@/shared/utils/responseParser';
 
 interface Redirect {
-    id: number | string;
+    id: string | string;
     from_url: string;
     to_url: string;
     status_code: number;

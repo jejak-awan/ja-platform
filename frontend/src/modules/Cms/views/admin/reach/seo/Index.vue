@@ -372,7 +372,7 @@ interface AnalysisResult {
 }
 
 interface SeoContent {
-    id: number | string;
+    id: string | string;
     title: string;
 }
 

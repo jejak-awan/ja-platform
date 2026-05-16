@@ -7,7 +7,7 @@ export const HRService = {
         return api.get('admin/staff', { params });
     },
 
-    async getStaffDetail(id: number | string): Promise<AxiosResponse<Staff>> {
+    async getStaffDetail(id: string | string): Promise<AxiosResponse<Staff>> {
         return api.get(`admin/staff/${id}`);
     },
 
@@ -15,11 +15,11 @@ export const HRService = {
         return api.post('admin/staff', data);
     },
 
-    async updateStaff(id: number | string, data: Partial<Staff>): Promise<AxiosResponse<Staff>> {
+    async updateStaff(id: string | string, data: Partial<Staff>): Promise<AxiosResponse<Staff>> {
         return api.put(`admin/staff/${id}`, data);
     },
 
-    async deleteStaff(id: number | string): Promise<AxiosResponse<void>> {
+    async deleteStaff(id: string | string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/staff/${id}`);
     },
 
@@ -28,7 +28,7 @@ export const HRService = {
         return api.get('admin/hr/leaves', { params });
     },
 
-    async updateLeaveStatus(id: number, status: string): Promise<AxiosResponse<LeaveRequest>> {
+    async updateLeaveStatus(id: string, status: string): Promise<AxiosResponse<LeaveRequest>> {
         return api.patch(`admin/hr/leaves/${id}/status`, { status });
     },
 
@@ -45,11 +45,11 @@ export const HRService = {
         return api.post('admin/hr/shifts', data);
     },
 
-    async updateShift(id: number, data: Partial<Shift>): Promise<AxiosResponse<Shift>> {
+    async updateShift(id: string, data: Partial<Shift>): Promise<AxiosResponse<Shift>> {
         return api.put(`admin/hr/shifts/${id}`, data);
     },
 
-    async deleteShift(id: number): Promise<AxiosResponse<void>> {
+    async deleteShift(id: string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/hr/shifts/${id}`);
     },
 
@@ -73,7 +73,7 @@ export const HRService = {
         return api.post('admin/hr/salary-structures', data);
     },
 
-    async generatePayroll(data: { period: string; school_id: number; workspace_id: number }): Promise<AxiosResponse<{ message: string; generated_count: number }>> {
+    async generatePayroll(data: { period: string; school_id: string; workspace_id: string }): Promise<AxiosResponse<{ message: string; generated_count: number }>> {
         return api.post('admin/hr/payrolls/generate', data);
     }
     */

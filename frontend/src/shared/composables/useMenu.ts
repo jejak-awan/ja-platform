@@ -23,20 +23,20 @@ export interface MenuContext {
     copyItem: (item: MenuItem) => void;
     cutItem: (item: MenuItem) => void;
     pasteItem: (parentId?: number | string | null) => void;
-    findItemById: (id: number | string) => MenuItem | null;
-    findParent: (id: number | string) => MenuItem | null;
+    findItemById: (id: string | string) => MenuItem | null;
+    findParent: (id: string | string) => MenuItem | null;
     buildTree: (flatItems: MenuItem[]) => MenuItem[];
     flattenTree: (treeItems: MenuItem[]) => MenuItemDTO[];
     addItem: (itemData: Partial<MenuItem>, parentId?: number | string | null) => MenuItem;
-    removeItem: (id: number | string) => void;
-    updateItem: (id: number | string, updates: Partial<MenuItem>) => void;
-    duplicateItem: (id: number | string) => void;
-    moveItem: (id: number | string, newParentId: number | string | null, newIndex?: number | null) => void;
-    selectItem: (id: number | string | null) => void;
+    removeItem: (id: string | string) => void;
+    updateItem: (id: string | string, updates: Partial<MenuItem>) => void;
+    duplicateItem: (id: string | string) => void;
+    moveItem: (id: string | string, newParentId: number | string | null, newIndex?: number | null) => void;
+    selectItem: (id: string | string | null) => void;
     clearSelection: () => void;
     fetchMenu: () => Promise<void>;
     saveMenu: (menuData?: Partial<Menu>) => Promise<boolean>;
-    deleteItem: (id: number | string) => Promise<void>;
+    deleteItem: (id: string | string) => Promise<void>;
     markClean: () => void;
     menus: Ref<Record<string, Menu>>;
     fetchMenuByLocation: (location: string) => Promise<void>;
@@ -291,7 +291,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
     /**
      * Find item by ID recursively
      */
-    const findItemById = (id: number | string, searchItems: MenuItem[] = items.value): MenuItem | null => {
+    const findItemById = (id: string | string, searchItems: MenuItem[] = items.value): MenuItem | null => {
         if (!searchItems || !Array.isArray(searchItems)) return null;
         for (const item of searchItems) {
             if (!item) continue;
@@ -309,7 +309,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
     /**
      * Find parent of an item
      */
-    const findParent = (id: number | string, searchItems: MenuItem[] = items.value, parent: MenuItem | null = null): MenuItem | null => {
+    const findParent = (id: string | string, searchItems: MenuItem[] = items.value, parent: MenuItem | null = null): MenuItem | null => {
         if (!searchItems || !Array.isArray(searchItems)) return null;
         for (const item of searchItems) {
             if (!item) continue;
@@ -360,7 +360,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         return newItem;
     };
 
-    const removeItem = (id: number | string) => {
+    const removeItem = (id: string | string) => {
         const removeFromList = (list: MenuItem[]): boolean => {
             const index = list.findIndex(i => (i.id || i._temp_id) == id);
             if (index > -1) {
@@ -384,7 +384,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         takeSnapshot();
     };
 
-    const updateItem = (id: number | string, updates: Partial<MenuItem>) => {
+    const updateItem = (id: string | string, updates: Partial<MenuItem>) => {
         const item = findItemById(id);
         if (item) {
             Object.assign(item, updates);
@@ -392,7 +392,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         }
     };
 
-    const duplicateItem = (id: number | string) => {
+    const duplicateItem = (id: string | string) => {
         const item = findItemById(id);
         if (!item) return;
 
@@ -413,7 +413,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         takeSnapshot();
     };
 
-    const moveItem = (id: number | string, newParentId: number | string | null, newIndex: number | null = null) => {
+    const moveItem = (id: string | string, newParentId: number | string | null, newIndex: number | null = null) => {
         const item = findItemById(id);
         if (!item) return;
 
@@ -447,7 +447,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         takeSnapshot();
     };
 
-    const selectItem = (id: number | string | null) => {
+    const selectItem = (id: string | string | null) => {
         selectedItemId.value = id;
     };
 
@@ -571,7 +571,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         }
     };
 
-    const deleteItem = async (id: number | string) => {
+    const deleteItem = async (id: string | string) => {
         const item = findItemById(id);
         if (!item) return;
 

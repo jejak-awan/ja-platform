@@ -770,7 +770,7 @@ onMounted(() => {
           :per-page="parseInt(perPage) || 10"
           :current-page="pagination.current_page || 1"
           @page-change="fetchContents"
-          @update:per-page="(val: number) => { perPage = String(val); fetchContents(1); }"
+          @update:per-page="(val: number) => { perPage = String(val); fetchContents("1"); }"
         />
       </div>
     </Card>

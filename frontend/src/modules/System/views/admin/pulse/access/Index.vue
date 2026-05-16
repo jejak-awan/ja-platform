@@ -320,7 +320,7 @@
         :per-page="perPage"
         class="border-none shadow-none"
         @page-change="fetchHistory"
-        @update:per-page="(val) => { perPage = val; fetchHistory(1); }"
+        @update:per-page="(val) => { perPage = val; fetchHistory("1"); }"
       />
     </div>
   </div>
@@ -353,13 +353,13 @@ import AlertTriangle from 'lucide-vue-next/dist/esm/icons/triangle-alert.js';
 import { Card, CardHeader, CardTitle, CardContent } from '@/shared/components/ui';
 
 interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
 }
 
 interface LoginEntry {
-    id: number;
+    id: string;
     user?: User | null;
     ip_address: string;
     user_agent?: string | null;
@@ -381,7 +381,7 @@ interface LoginStatistics {
 interface SuspiciousAlert {
     type: 'brute_force' | 'new_ip' | 'shared_ip';
     severity: 'high' | 'medium' | 'low';
-    user?: { id: number; name: string; email: string } | null;
+    user?: { id: string; name: string; email: string } | null;
     ip_address: string;
     details: string;
     count?: number;

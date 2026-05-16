@@ -22,7 +22,7 @@ export interface FolderItem {
 }
 
 export interface TrashItem {
-    id: number;
+    id: string;
     name: string;
     type: 'file' | 'folder';
     original_path: string;

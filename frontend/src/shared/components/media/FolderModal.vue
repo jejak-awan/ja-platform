@@ -128,7 +128,7 @@ import type { MediaFolder } from '@/modules/Cms/types/cms';
 
 interface FolderForm {
     name: string;
-    parent_id: number | null;
+    parent_id: string | null;
     is_shared: boolean;
 }
 

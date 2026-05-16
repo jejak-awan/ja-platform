@@ -53,7 +53,7 @@ export const useAcademicStore = defineStore('academic', {
             }
         },
 
-        async deleteAcademicYear(id: number) {
+        async deleteAcademicYear(id: string) {
             try {
                 await AcademicService.deleteAcademicYear(id);
                 this.years = this.years.filter(y => y.id !== id);
@@ -76,7 +76,7 @@ export const useAcademicStore = defineStore('academic', {
             }
         },
 
-        async deleteSubject(id: number) {
+        async deleteSubject(id: string) {
             try {
                 await AcademicService.deleteSubject(id);
                 this.subjects = this.subjects.filter(s => s.id !== id);
@@ -86,7 +86,7 @@ export const useAcademicStore = defineStore('academic', {
             }
         },
 
-        async saveAcademicYear(data: Partial<AcademicYear>, id: number | null = null) {
+        async saveAcademicYear(data: Partial<AcademicYear>, id: string | null = null) {
             try {
                 if (id) await AcademicService.updateAcademicYear(id, data);
                 else await AcademicService.storeAcademicYear(data);
@@ -97,7 +97,7 @@ export const useAcademicStore = defineStore('academic', {
             }
         },
 
-        async saveSubject(data: Partial<Subject>, id: number | null = null) {
+        async saveSubject(data: Partial<Subject>, id: string | null = null) {
             try {
                 if (id) await AcademicService.updateSubject(id, data);
                 else await AcademicService.storeSubject(data);
@@ -108,7 +108,7 @@ export const useAcademicStore = defineStore('academic', {
             }
         },
 
-        async saveStudyGroup(data: Partial<StudyGroup>, id: number | null = null) {
+        async saveStudyGroup(data: Partial<StudyGroup>, id: string | null = null) {
             try {
                 if (id) await AcademicService.updateStudyGroup(id, data);
                 else await AcademicService.storeStudyGroup(data);
@@ -132,7 +132,7 @@ export const useAcademicStore = defineStore('academic', {
             }
         },
 
-        async deleteStudyGroup(id: number) {
+        async deleteStudyGroup(id: string) {
             try {
                 await AcademicService.deleteStudyGroup(id);
                 this.studyGroups = this.studyGroups.filter(g => g.id !== id);

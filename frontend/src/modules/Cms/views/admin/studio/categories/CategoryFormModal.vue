@@ -230,7 +230,7 @@ interface CategoryForm {
 }
 
 interface FlattenedCategory {
-    id: number;
+    id: string;
     label: string;
     raw: Category;
 }

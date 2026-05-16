@@ -46,7 +46,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
     const maxSizeFilter = ref<number | string>('');
     const dateFromFilter = ref('');
     const dateToFilter = ref('');
-    const availableFilters = ref<{ authors: { id: number | string, name: string }[] }>({ authors: [] });
+    const availableFilters = ref<{ authors: { id: string | string, name: string }[] }>({ authors: [] });
 
     // Selection state
     const selectedItems = ref<(FileItem | FolderItem)[]>([]);
@@ -377,7 +377,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
     const fetchFilters = async () => {
         try {
             const response = await api.get('/manage/cms/media/filters'); // Using media filters endpoint for authors as it's shared
-            const filters = getResponseObject<{ authors?: { id: number | string; name: string }[] }>(response.data);
+            const filters = getResponseObject<{ authors?: { id: string | string; name: string }[] }>(response.data);
             const authors = filters?.authors;
             availableFilters.value = {
                 authors: Array.isArray(authors) ? authors : []

@@ -475,7 +475,7 @@ interface PageData {
 }
 
 interface ContentData {
-    id: number;
+    id: string;
     title: string;
     visits_count: number;
     author?: { name: string };

@@ -141,13 +141,13 @@ import {
 import CommentForm from '@/modules/Cms/components/comments/CommentForm.vue';
 
 interface User {
-    id: number | string;
+    id: string | string;
     name: string;
     avatar?: string;
 }
 
 interface Comment {
-    id: number | string;
+    id: string | string;
     name?: string;
     body: string;
     created_at: string;

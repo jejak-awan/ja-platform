@@ -320,7 +320,7 @@ import LanguagesIcon from 'lucide-vue-next/dist/esm/icons/languages.js';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import { getLocale, getAvailableLocales, getBrowserLocale } from '@/engine/i18n';
 interface Language {
-    id: number;
+    id: string;
     code: string;
     name: string;
     is_default: boolean;

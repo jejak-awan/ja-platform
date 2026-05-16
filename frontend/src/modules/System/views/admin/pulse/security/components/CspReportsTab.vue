@@ -185,7 +185,7 @@ import {
 import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 
 interface CspReport {
-    id: number;
+    id: string;
     violated_directive: string;
     blocked_uri: string | null;
     document_uri: string;

@@ -112,7 +112,7 @@ import {
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
 interface FieldGroup {
-    id: number | string;
+    id: string | string;
     name: string;
     description: string | null;
     attachable_type: string | null;

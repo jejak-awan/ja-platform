@@ -233,7 +233,7 @@ const formatTime = (time: string) => {
   return time.split(':').slice(0, 2).join(':');
 };
 
-const getRandomColor = (id: number) => {
+const getRandomColor = (id: string) => {
   const colors = [
     'bg-blue-100 text-blue-700 border-blue-200',
     'bg-purple-100 text-purple-700 border-purple-200',
@@ -271,10 +271,10 @@ const handleSave = async (formData: any) => {
     } else {
       await AcademicService.storeSchedule({
           ...formData,
-          school_id: 1, // Will be handled by backend usually but let's be safe
-          workspace_id: 1, // Will be handled by context middleware
-          academic_year_id: 1, // Should be dynamic
-          semester_id: 1, // Should be dynamic
+          school_id: "1", // Will be handled by backend usually but let's be safe
+          workspace_id: "1", // Will be handled by context middleware
+          academic_year_id: "1", // Should be dynamic
+          semester_id: "1", // Should be dynamic
       });
       toast.success.action(t('modules.school.academic.messages.scheduleAddSuccess'));
     }
@@ -287,7 +287,7 @@ const handleSave = async (formData: any) => {
   }
 };
 
-const handleDelete = async (id: number) => {
+const handleDelete = async (id: string) => {
     try {
         await AcademicService.deleteSchedule(id);
         toast.success.action(t('modules.school.academic.messages.scheduleDeleteSuccess'));

@@ -12,7 +12,7 @@ describe('responseParser util', () => {
         });
 
         it('handles direct array data', () => {
-            const resp = { data: [{ id: 1 }, { id: 2 }] } as unknown as AxiosResponse;
+            const resp = { data: [{ id: "1" }, { id: "2" }] } as unknown as AxiosResponse;
             const res = parseResponse(resp);
             expect(res.data).toHaveLength(2);
             expect((res.data[0] as any).id).toBe(1);
@@ -21,7 +21,7 @@ describe('responseParser util', () => {
         it('handles data wrapped in items with pagination', () => {
             const resp = {
                 data: {
-                    items: [{ id: 1 }],
+                    items: [{ id: "1" }],
                     pagination: { current_page: 1, last_page: 2, from: 1, to: 10, total: 20 }
                 }
             } as unknown as AxiosResponse;
@@ -35,7 +35,7 @@ describe('responseParser util', () => {
             const resp = {
                 data: {
                     data: {
-                        data: [{ id: 1 }],
+                        data: [{ id: "1" }],
                         current_page: 1, last_page: 1, from: 1, to: 1, total: 1, per_page: 15
                     }
                 }
@@ -49,7 +49,7 @@ describe('responseParser util', () => {
         it('handles single object in data wrapper', () => {
             const resp = {
                 data: {
-                    data: { id: 42 }
+                    data: { id: "42" }
                 }
             } as unknown as AxiosResponse;
 
@@ -61,7 +61,7 @@ describe('responseParser util', () => {
         it('handles array in data wrapper', () => {
             const resp = {
                 data: {
-                    data: [{ id: 42 }],
+                    data: [{ id: "42" }],
                     meta: { pagination: { current_page: 1, last_page: 2, from: 1, to: 1, total: 2 } }
                 }
             } as unknown as AxiosResponse;
@@ -77,11 +77,11 @@ describe('responseParser util', () => {
         });
 
         it('extracts nested data object', () => {
-            expect(parseSingleResponse({ data: { data: { id: 1 } } } as unknown as AxiosResponse)).toEqual({ id: 1 });
+            expect(parseSingleResponse({ data: { data: { id: "1" } } } as unknown as AxiosResponse)).toEqual({ id: "1" });
         });
 
         it('returns direct data object', () => {
-            expect(parseSingleResponse({ data: { id: 2 } } as unknown as AxiosResponse)).toEqual({ id: 2 });
+            expect(parseSingleResponse({ data: { id: "2" } } as unknown as AxiosResponse)).toEqual({ id: "2" });
         });
     });
 

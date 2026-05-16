@@ -368,7 +368,7 @@ import ImageEditor from './ImageEditor.vue';
 import type { Media } from '@/modules/Cms/types/cms';
 
 interface UsageDetail {
-    id: number | string;
+    id: string | string;
     type: string;
     title?: string;
 }

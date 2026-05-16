@@ -32,7 +32,7 @@ export interface ThemeManifest {
 }
 
 export interface Theme {
-    id: number | string;
+    id: string | string;
     name: string;
     slug: string;
     manifest?: ThemeManifest;
