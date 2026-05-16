@@ -7,7 +7,7 @@ import { useSystemStore } from '@/modules/System/stores/system';
 import { storeToRefs } from 'pinia';
 import api from '@/engine/api/client';
 import { parseSingleResponse, getResponseObject } from '@/shared/utils/responseParser';
-import type { FileItem, FolderItem, TrashItem } from '@/modules/Cms/types/file-manager';
+import type { FileItem, FolderItem, TrashItem } from '@/modules/Media/types/file-manager';
 
 export function useFileManager(options: { rootPath?: string } = {}) {
     const { t } = useI18n();

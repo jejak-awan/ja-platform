@@ -111,7 +111,7 @@ import {
 } from '@/shared/components/ui';
 import { FileManagerKey } from '@/engine/keys';
 
-import type { FileItem, FolderItem } from '@/modules/Cms/types/file-manager';
+import type { FileItem, FolderItem } from '@/modules/Media/types/file-manager';
 
 const { item } = defineProps<{
     item: FileItem | FolderItem;

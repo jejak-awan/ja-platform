@@ -112,7 +112,7 @@ import {
 import { useToast } from '@/shared/composables/useToast';
 import api from '@/engine/api/client';
 import { FileManagerKey } from '@/engine/keys';
-import type { FileItem, FolderItem } from '@/modules/Cms/types/file-manager';
+import type { FileItem, FolderItem } from '@/modules/Media/types/file-manager';
 
 defineProps<{
     item: FileItem | FolderItem;

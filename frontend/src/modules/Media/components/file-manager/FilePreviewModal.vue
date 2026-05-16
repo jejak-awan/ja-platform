@@ -143,7 +143,7 @@ import {
     Button 
 } from '@/shared/components/ui';
 import { FileManagerKey } from '@/engine/keys';
-import type { FileItem } from '@/modules/Cms/types/file-manager';
+import type { FileItem } from '@/modules/Media/types/file-manager';
 import { useToast } from '@/shared/composables/useToast';
 
 defineProps<{

@@ -188,7 +188,7 @@ import {
 import FileContextMenu from './FileContextMenu.vue';
 import FileActionDropdown from './FileActionDropdown.vue';
 import MoreVertical from 'lucide-vue-next/dist/esm/icons/ellipsis-vertical.js';
-import type { FileItem, FolderItem } from '@/modules/Cms/types/file-manager';
+import type { FileItem, FolderItem } from '@/modules/Media/types/file-manager';
 import Folder from 'lucide-vue-next/dist/esm/icons/folder.js';
 import { FileManagerKey } from '@/engine/keys';
 

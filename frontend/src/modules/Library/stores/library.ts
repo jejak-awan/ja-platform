@@ -8,26 +8,33 @@ export interface Tag {
     name: string;
     slug: string;
     type: string;
+    description?: string;
+    contents_count?: number;
 }
 
 export interface LibraryState {
     tags: Tag[];
+    pagination: any | null;
+    statistics: Record<string, number> | null;
     loading: boolean;
 }
 
 export const useLibraryStore = defineStore('library', {
     state: (): LibraryState => ({
         tags: [],
+        pagination: null,
+        statistics: null,
         loading: false,
     }),
 
     actions: {
-        async fetchTags(type: string = 'cms') {
+        async fetchTags(params: Record<string, any> = {}) {
             this.loading = true;
             try {
-                const response = await api.get('/public/library/tags', { params: { type } });
-                const { data } = parseResponse(response);
+                const response = await api.get('/manage/library/tags', { params });
+                const { data, pagination } = parseResponse(response);
                 this.tags = ensureArray(data);
+                this.pagination = pagination;
                 return this.tags;
             } catch (error) {
                 logger.error('[Library Store] Error fetching tags:', error);
@@ -37,13 +44,24 @@ export const useLibraryStore = defineStore('library', {
             }
         },
 
+        async fetchStatistics() {
+            try {
+                const response = await api.get('/manage/library/tags/statistics');
+                this.statistics = response.data?.data || response.data;
+                return this.statistics;
+            } catch (error) {
+                logger.error('[Library Store] Error fetching statistics:', error);
+                return null;
+            }
+        },
+
         async saveTag(tag: Partial<Tag>) {
             this.loading = true;
             try {
                 const method = tag.id ? 'put' : 'post';
                 const url = tag.id ? `/manage/library/tags/${tag.id}` : '/manage/library/tags';
                 const response = await api[method](url, tag);
-                await this.fetchTags(tag.type);
+                await this.fetchTags({ type: tag.type });
                 return response.data;
             } catch (error) {
                 logger.error('[Library Store] Error saving tag:', error);
@@ -57,7 +75,7 @@ export const useLibraryStore = defineStore('library', {
             this.loading = true;
             try {
                 await api.delete(`/manage/library/tags/${id}`);
-                await this.fetchTags(type);
+                await this.fetchTags({ type });
             } catch (error) {
                 logger.error('[Library Store] Error deleting tag:', error);
                 throw error;

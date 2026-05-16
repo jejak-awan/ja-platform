@@ -131,7 +131,7 @@
 
 <script setup lang="ts">
 import { inject, computed } from 'vue';
-import type { FileItem } from '@/modules/Cms/types/file-manager';
+import type { FileItem } from '@/modules/Media/types/file-manager';
 import { useI18n } from 'vue-i18n';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import FileIcon from 'lucide-vue-next/dist/esm/icons/file.js';

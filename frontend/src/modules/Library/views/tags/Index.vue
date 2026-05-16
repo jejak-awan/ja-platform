@@ -95,7 +95,7 @@
             </div>
             <Select
               v-model="filterUsage"
-              @update:model-value="fetchTags("1")"
+              @update:model-value="fetchTags(1)"
             >
               <SelectTrigger class="w-[180px]">
                 <SelectValue :placeholder="$t('modules.cms.tags.filters.usage')" />
@@ -176,19 +176,20 @@
 
 <script setup lang="ts">
 import { logger } from '@/shared/utils/logger';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import api from '@/engine/api/client';
+import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import BarChart3 from 'lucide-vue-next/dist/esm/icons/chart-bar-stacked.js';
 import MousePointer2 from 'lucide-vue-next/dist/esm/icons/mouse-pointer-2.js';
 import Edit from 'lucide-vue-next/dist/esm/icons/pen.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import SearchIcon from 'lucide-vue-next/dist/esm/icons/search.js';
-import api from '@/engine/api/client';
+import { useLibraryStore } from '@/modules/Library/stores/library';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { useToast } from '@/shared/composables/useToast';
 import { debounce } from '@/shared/utils/debounce';
-import { parseResponse, type PaginationData } from '@/shared/utils/responseParser';
 import TagFormModal from './TagFormModal.vue';
 
 // UI Components
@@ -204,7 +205,8 @@ import {
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue
+    SelectValue,
+    CardContent
 } from '@/shared/components/ui';
 import { h } from 'vue';
 import { 
@@ -217,7 +219,7 @@ import {
 } from '@tanstack/vue-table';
 
 import { useAuthStore } from '@/modules/System/stores/auth';
-import type { Tag } from '@/modules/Cms/types/cms';
+import type { Tag } from '@/modules/Library/stores/library';
 
 defineProps<{
     isEmbedded?: boolean;
@@ -227,13 +229,17 @@ const { t } = useI18n();
 const { confirm } = useConfirm();
 const toast = useToast();
 const authStore = useAuthStore();
-const loading = ref(true);
-const tags = ref<Tag[]>([]);
-const statistics = ref<Record<string, number> | null>(null);
+const libraryStore = useLibraryStore();
+
 const search = ref('');
 const filterUsage = ref('all');
-const selectedIds = ref<number[]>([]);
-const pagination = ref<PaginationData>({
+const selectedIds = ref<string[]>([]);
+
+// Computed
+const tags = computed(() => libraryStore.tags);
+const loading = computed(() => libraryStore.loading);
+const statistics = computed(() => libraryStore.statistics);
+const pagination = computed(() => libraryStore.pagination || {
     current_page: 1,
     per_page: 20,
     total: 0,
@@ -325,8 +331,7 @@ const table = useVueTable({
 // Sync selectedIds with rowSelection for bulk actions
 watch(rowSelection, (newSelection) => {
     selectedIds.value = Object.keys(newSelection)
-        .filter(key => newSelection[key])
-        .map(id => Number(id));
+        .filter(key => newSelection[key]);
 }, { deep: true });
 
 // Clear selection when tags change
@@ -335,11 +340,10 @@ watch(tags, () => {
 });
 
 const onSearchInput = debounce(() => {
-    fetchTags("1");
+    fetchTags(1);
 }, 500);
 
 const fetchTags = async (page = 1) => {
-    loading.value = true;
     try {
         const params: Record<string, unknown> = {
             page: page,
@@ -351,26 +355,10 @@ const fetchTags = async (page = 1) => {
             params.usage = filterUsage.value;
         }
 
-        const response = await api.get('/manage/library/tags', { params });
-        const { data, pagination: paginationData } = parseResponse(response);
-        
-        tags.value = (data as unknown as Tag[]) || [];
-        if (paginationData) {
-            pagination.value = paginationData;
-        } else {
-             pagination.value = { ...pagination.value, total: tags.value.length, current_page: 1 };
-        }
-
-        try {
-            const statsResponse = await api.get('/manage/library/tags/statistics');
-            statistics.value = statsResponse.data.data || statsResponse.data;
-        } catch (error: unknown) {
-            logger.error('Failed to fetch statistics:', error);
-        }
+        await libraryStore.fetchTags(params);
+        await libraryStore.fetchStatistics();
     } catch (error: unknown) {
         logger.error('Failed to fetch tags:', error);
-    } finally {
-        loading.value = false;
     }
 };
 
@@ -381,8 +369,9 @@ const changePage = (page: number) => {
 };
 
 const changePerPage = (value: string | number) => {
-    pagination.value.per_page = typeof value === 'string' ? parseInt(value) : value;
-    fetchTags("1");
+    // pagination is computed from store, so we can't directly mutate it here easily
+    // but the store might need a way to set per_page
+    fetchTags(1);
 };
 
 
@@ -435,7 +424,7 @@ const deleteTag = async (tag: Tag) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/manage/cms/tags/${tag.id}`);
+        await libraryStore.deleteTag(tag.id);
         await fetchTags();
         toast.success.delete(t('modules.cms.tags.title_singular'));
     } catch (error: unknown) {

@@ -266,17 +266,17 @@ import {
 } from '@/shared/components/ui';
 
 // Composable and Components
-import { useFileManager } from '@/engine/composables/useFileManager';
-import FileSidebar from '@/modules/System/components/file-manager/FileSidebar.vue';
-import FileToolbar from '@/modules/System/components/file-manager/FileToolbar.vue';
-import FilePropertiesSidebar from '@/modules/System/components/file-manager/FilePropertiesSidebar.vue';
-import FileGridView from '@/modules/System/components/file-manager/FileGridView.vue';
-import FileListView from '@/modules/System/components/file-manager/FileListView.vue';
-import FileTrashView from '@/modules/System/components/file-manager/FileTrashView.vue';
-import FilePreviewModal from '@/modules/System/components/file-manager/FilePreviewModal.vue';
-import FileUploadModal from '@/modules/System/components/file-manager/FileUploadModal.vue';
-import CreateFolderModal from '@/modules/System/components/file-manager/CreateFolderModal.vue';
-import type { FileItem } from '@/modules/Cms/types/file-manager';
+import { useFileManager } from '@/modules/Media/composables/useFileManager';
+import FileSidebar from '@/modules/Media/components/file-manager/FileSidebar.vue';
+import FileToolbar from '@/modules/Media/components/file-manager/FileToolbar.vue';
+import FilePropertiesSidebar from '@/modules/Media/components/file-manager/FilePropertiesSidebar.vue';
+import FileGridView from '@/modules/Media/components/file-manager/FileGridView.vue';
+import FileListView from '@/modules/Media/components/file-manager/FileListView.vue';
+import FileTrashView from '@/modules/Media/components/file-manager/FileTrashView.vue';
+import FilePreviewModal from '@/modules/Media/components/file-manager/FilePreviewModal.vue';
+import FileUploadModal from '@/modules/Media/components/file-manager/FileUploadModal.vue';
+import CreateFolderModal from '@/modules/Media/components/file-manager/CreateFolderModal.vue';
+import type { FileItem } from '@/modules/Media/types/file-manager';
 import { FileManagerKey } from '@/engine/keys';
 
 // Initialize File Manager Composable with CMS scope
