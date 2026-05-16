@@ -557,7 +557,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, nextTick, defineAsyncComponent, watchEffect } from 'vue'
 import { useHead } from '@unhead/vue'
 import axios from 'axios'
-import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue'
+import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue'
 import { useRouter } from 'vue-router'
 import { useTheme } from '@/shared/composables/useTheme'
 import PageDisabled from './components/PageDisabled.vue'
@@ -589,9 +589,9 @@ import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import { useToast } from '@/shared/composables/useToast'
 import { useThemeMotion } from '@/shared/composables/useThemeMotion'
 import { useJanariIdentity } from '@/modules/Cms/views/themes/janari/composables/useJanariIdentity'
-import type { CaptchaPayload } from '@/modules/Core/components/captcha/CaptchaWrapper.vue'
+import type { CaptchaPayload } from '@/modules/System/components/captcha/CaptchaWrapper.vue'
 
-const CaptchaWrapper = defineAsyncComponent(() => import('@/modules/Core/components/captcha/CaptchaWrapper.vue'))
+const CaptchaWrapper = defineAsyncComponent(() => import('@/modules/System/components/captcha/CaptchaWrapper.vue'))
 
 import type { Content } from '@/modules/Cms/types/cms'
 
@@ -1062,7 +1062,7 @@ async function trackStartOnce(): Promise<void> {
     }
     startTracked.value = true
     try {
-        await api.post(`/ja/forms/${encodeURIComponent(formDefinition.value.slug)}/track`, { event: 'start' })
+        await api.post(`/public/forms/${encodeURIComponent(formDefinition.value.slug)}/track`, { event: 'start' })
     } catch {
         /* ignore */
     }
@@ -1077,12 +1077,12 @@ async function loadContactForm(): Promise<void> {
 
     try {
         const slug = contactFormSlug.value
-        const res = await api.get<PublicFormDefinition>(`/ja/forms/${encodeURIComponent(slug)}`)
+        const res = await api.get<PublicFormDefinition>(`/public/forms/${encodeURIComponent(slug)}`)
         formDefinition.value = res.data as PublicFormDefinition
         initFormValuesFromDefinition()
 
         try {
-            await api.post(`/ja/forms/${encodeURIComponent(slug)}/track`, { event: 'view' })
+            await api.post(`/public/forms/${encodeURIComponent(slug)}/track`, { event: 'view' })
         } catch {
             /* ignore */
         }
@@ -1116,7 +1116,7 @@ async function submitForm(): Promise<void> {
             body.captcha_answer = captchaPayload.value.answer
         }
 
-        const url = `/ja/forms/${encodeURIComponent(formDefinition.value.slug)}/submit`
+        const url = `/public/forms/${encodeURIComponent(formDefinition.value.slug)}/submit`
         const useMultipart = formHasFileFields()
         let res: { data: { submission_id?: number; redirect_url?: string } }
 
@@ -1220,7 +1220,7 @@ onMounted(async () => {
     }
 
     const bootstrap: Promise<unknown>[] = [
-        api.get('/ja/contents/contact').then((r) => {
+        api.get('/public/cms/contents/contact').then((r) => {
             pageData.value = r.data as PageData
         }).catch((e) => {
             logger.warning('[Contact] Content fetch skipped:', e)

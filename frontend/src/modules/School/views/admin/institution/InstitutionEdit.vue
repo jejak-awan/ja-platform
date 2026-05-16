@@ -399,7 +399,7 @@ import { ref, reactive, onMounted, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useSchoolStore } from '../../../stores/school';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { useToast } from '@/shared/composables/useToast';
 import {
   Card, CardContent, Button, Input, Label, Textarea, LucideIcon,

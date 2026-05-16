@@ -74,7 +74,7 @@
 <script setup lang="ts">
 import { computed, type Component } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { useI18n } from 'vue-i18n';
 import { SECURITY_ROUTES } from '@/config/security';
 import Fingerprint from 'lucide-vue-next/dist/esm/icons/fingerprint-pattern.js';

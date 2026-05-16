@@ -343,7 +343,7 @@ async function fetchFields(): Promise<void> {
     loading.value = true;
     loadError.value = null;
     try {
-        const res = await api.get(`/admin/cms/forms/${props.formId}`);
+        const res = await api.get(`/manage/cms/forms/${props.formId}`);
         const data = res.data as { fields?: AdminFormFieldRow[] };
         const raw = data.fields;
         const list = Array.isArray(raw) ? raw as AdminFormFieldRow[] : [];
@@ -363,7 +363,7 @@ async function persistField(field: AdminFormFieldRow): Promise<void> {
         const optionsPayload = needsOptions(field.type)
             ? linesToOptions(field._optionsLines ?? '')
             : null;
-        await api.put(`/admin/cms/forms/${props.formId}/fields/${field.id}`, {
+        await api.put(`/manage/cms/forms/${props.formId}/fields/${field.id}`, {
             label: field.label,
             type: field.type,
             placeholder: field.placeholder || null,
@@ -407,7 +407,7 @@ async function onTypeChange(field: AdminFormFieldRow, newType: string): Promise<
 async function addField(type: string): Promise<void> {
     adding.value = true;
     try {
-        const res = await api.post(`/admin/cms/forms/${props.formId}/fields`, {
+        const res = await api.post(`/manage/cms/forms/${props.formId}/fields`, {
             label: t('modules.cms.forms.builder.defaultQuestion'),
             type,
             is_required: false,
@@ -427,7 +427,7 @@ async function removeField(field: AdminFormFieldRow): Promise<void> {
         return;
     }
     try {
-        await api.delete(`/admin/cms/forms/${props.formId}/fields/${field.id}`);
+        await api.delete(`/manage/cms/forms/${props.formId}/fields/${field.id}`);
         fields.value = fields.value.filter((f) => f.id !== field.id);
         toast.success.default(t('modules.cms.forms.builder.deleted'));
     } catch (e: unknown) {
@@ -448,7 +448,7 @@ async function onDragEnd(): Promise<void> {
         return;
     }
     try {
-        await api.post(`/admin/cms/forms/${props.formId}/reorder-fields`, { order: after });
+        await api.post(`/manage/cms/forms/${props.formId}/reorder-fields`, { order: after });
     } catch (e: unknown) {
         logger.error('Reorder failed', e);
         toast.error.fromResponse(e);

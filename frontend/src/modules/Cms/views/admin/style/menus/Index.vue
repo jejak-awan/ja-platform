@@ -127,7 +127,7 @@ const selectedMenu = computed(() => {
 const fetchMenus = async () => {
     isLoading.value = true;
     try {
-        const response = await api.get('/admin/cms/menus', {
+        const response = await api.get('/manage/cms/menus', {
             params: {
                 trashed: trashedFilter.value,
                 per_page: 100 // Get many for the dropdown
@@ -189,10 +189,10 @@ const deleteCurrentMenu = async () => {
 
     try {
         if (isTrashed) {
-             await api.delete(`/admin/cms/menus/${selectedMenuId.value}/force-delete`);
+             await api.delete(`/manage/cms/menus/${selectedMenuId.value}/force-delete`);
              toast.success.action(t('common.messages.success.deleted', { item: t('modules.cms.menus.title') }));
         } else {
-            await api.delete(`/admin/cms/menus/${selectedMenuId.value}`);
+            await api.delete(`/manage/cms/menus/${selectedMenuId.value}`);
             toast.success.delete(t('modules.cms.menus.title'));
         }
         selectedMenuId.value = null;
@@ -216,7 +216,7 @@ const restoreCurrentMenu = async () => {
     if (!confirmed) return;
 
     try {
-        await api.post(`/admin/cms/menus/${selectedMenuId.value}/restore`);
+        await api.post(`/manage/cms/menus/${selectedMenuId.value}/restore`);
         toast.success.restore(t('modules.cms.menus.title'));
         await fetchMenus();
     } catch (error: unknown) {

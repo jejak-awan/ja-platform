@@ -29,8 +29,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import SettingGroup from '@/modules/Core/components/settings/SettingGroup.vue'
-import SettingField from '@/modules/Core/components/settings/SettingField.vue'
+import SettingGroup from '@/modules/System/components/settings/SettingGroup.vue'
+import SettingField from '@/modules/System/components/settings/SettingField.vue'
 
 interface Setting {
     id: number | string;

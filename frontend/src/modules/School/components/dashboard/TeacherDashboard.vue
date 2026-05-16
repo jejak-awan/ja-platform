@@ -199,7 +199,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import {
   Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter,
   Button, LucideIcon, Badge

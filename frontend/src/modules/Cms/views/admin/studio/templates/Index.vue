@@ -281,7 +281,7 @@ import { useConfirm } from '@/shared/composables/useConfirm';
 import { useToast } from '@/shared/composables/useToast';
 import { parseResponse, ensureArray, parseSingleResponse, type PaginationData } from '@/shared/utils/responseParser';
 import { debounce } from '@/shared/utils/debounce';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { Badge, Button, Card, CardContent, Checkbox, Input, Pagination, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui';
 
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
@@ -341,7 +341,7 @@ const fetchTemplates = async (page: number | string = 1) => {
             trashed: trashedFilter.value !== 'without' ? trashedFilter.value : undefined
         };
 
-        const response = await api.get('/admin/cms/content-templates', { params });
+        const response = await api.get('/manage/cms/content-templates', { params });
         const { data, pagination: pag } = parseResponse(response);
         
         templates.value = ensureArray(data);
@@ -357,7 +357,7 @@ const fetchTemplates = async (page: number | string = 1) => {
 
 const createFromTemplate = async (template: Template) => {
     try {
-        const response = await api.post(`/admin/cms/content-templates/${template.id}/create-content`);
+        const response = await api.post(`/manage/cms/content-templates/${template.id}/create-content`);
         const content = parseSingleResponse<{ id: string | number }>(response);
         if (content && content.id) {
             toast.success.createFromTemplate();
@@ -384,10 +384,10 @@ const handleDelete = async (template: Template) => {
 
     try {
         if (isTrashed) {
-            await api.delete(`/admin/cms/content-templates/${template.id}/force-delete`);
+            await api.delete(`/manage/cms/content-templates/${template.id}/force-delete`);
             toast.success.action(t('common.messages.success.deleted', { item: t('modules.cms.content_templates.title_singular') }));
         } else {
-            await api.delete(`/admin/cms/content-templates/${template.id}`);
+            await api.delete(`/manage/cms/content-templates/${template.id}`);
             toast.success.delete(t('modules.cms.content_templates.title_singular'));
         }
         await fetchTemplates(pagination.value?.current_page || 1);
@@ -408,7 +408,7 @@ const handleRestore = async (template: Template) => {
     if (!confirmed) return;
 
     try {
-        await api.post(`/admin/cms/content-templates/${template.id}/restore`);
+        await api.post(`/manage/cms/content-templates/${template.id}/restore`);
         toast.success.restore(t('modules.cms.content_templates.title_singular'));
         await fetchTemplates(pagination.value?.current_page || 1);
     } catch (error: unknown) {
@@ -456,7 +456,7 @@ const handleBulkAction = async () => {
         }
 
         try {
-            await api.post('/admin/cms/content-templates/bulk-action', {
+            await api.post('/manage/cms/content-templates/bulk-action', {
                 action: action,
                 ids: selectedTemplates.value
             });
@@ -469,7 +469,7 @@ const handleBulkAction = async () => {
         }
     } else if (action === 'restore') {
         try {
-            await api.post('/admin/cms/content-templates/bulk-action', {
+            await api.post('/manage/cms/content-templates/bulk-action', {
                 action: 'restore',
                 ids: selectedTemplates.value
             });

@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { useTheme } from '@/shared/composables/useTheme'
-import { useCoreStore } from '@/modules/Core/stores/core'
+import { useSystemStore } from '@/modules/System/stores/system'
 import { config } from '@/config'
 import type { SiteSettings } from '@/engine/types/settings'
 
@@ -27,7 +27,7 @@ export function toWhatsAppDialDigits(input: string): string {
  */
 export function useJanariIdentity() {
     const { getSetting } = useTheme()
-    const coreStore = useCoreStore()
+    const coreStore = useSystemStore()
     const site = computed(() => coreStore.settings as SiteSettings)
 
     const displayEmail = computed(() => {

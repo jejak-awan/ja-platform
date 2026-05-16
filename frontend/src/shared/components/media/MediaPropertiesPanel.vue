@@ -238,7 +238,7 @@
 import { ref, inject, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from '@/shared/composables/useToast';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import api from '@/engine/api/client';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import FileIcon from 'lucide-vue-next/dist/esm/icons/file-text.js';
@@ -373,7 +373,7 @@ const handleSubmit = async () => {
     
     saving.value = true;
     try {
-        await api.put(`/admin/cms/media/${activeMedia.value.id}`, {
+        await api.put(`/manage/cms/media/${activeMedia.value.id}`, {
             name: form.value.name,
             alt: form.value.alt,
             description: form.value.description,

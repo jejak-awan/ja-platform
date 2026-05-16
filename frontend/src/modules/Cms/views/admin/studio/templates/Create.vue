@@ -243,7 +243,7 @@ const handleSubmit = async () => {
     saving.value = true;
     clearErrors();
     try {
-        await api.post('/admin/cms/content-templates', form.value);
+        await api.post('/manage/cms/content-templates', form.value);
         toast.success.create(t('modules.cms.content_templates.title_singular'));
         router.push({ name: 'studio', query: { tab: 'templates' } });
     } catch (error: unknown) {

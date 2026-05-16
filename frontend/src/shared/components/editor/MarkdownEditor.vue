@@ -67,7 +67,7 @@ import { ref, computed, watch, nextTick, type Component } from 'vue';
 import { marked } from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.min.css';
-import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
+import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue';
 import { Button } from '@/shared/components/ui';
 
 import Bold from 'lucide-vue-next/dist/esm/icons/bold.js';

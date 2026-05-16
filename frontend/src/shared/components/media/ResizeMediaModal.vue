@@ -180,7 +180,7 @@ const handleResize = async () => {
 
     resizing.value = true;
     try {
-        await api.post(`/admin/cms/media/${props.media.id}/resize`, {
+        await api.post(`/manage/cms/media/${props.media.id}/resize`, {
             width: width.value,
             height: height.value,
             maintain_aspect_ratio: maintainAspectRatio.value,

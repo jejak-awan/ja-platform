@@ -181,7 +181,7 @@
 <script setup lang="ts">
 import { logger } from '@/shared/utils/logger';
 import { computed, ref, onMounted, watch } from 'vue';
-import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
+import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue';
 import { useRoute } from 'vue-router';
 import JanariSplitText from './components/JanariSplitText.vue';
 import api from '@/engine/api/client';
@@ -219,7 +219,7 @@ const fetchPage = async () => {
 
     loading.value = true;
     try {
-        const response = await api.get(`/ja/contents/${slug}`);
+        const response = await api.get(`/public/cms/contents/${slug}`);
         pageData.value = response.data;
     } catch (error) {
         logger.error('Failed to load page:', error);

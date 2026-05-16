@@ -294,8 +294,8 @@ import { useI18n } from 'vue-i18n';
 import { useNavigationStore } from '@/shared/stores/navigation';
 import type { NavItem } from '@/shared/utils/navigation';
 import { getIcon } from '@/shared/utils/icons';
-import { useAuthStore } from '@/modules/Core/stores/auth';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useAuthStore } from '@/modules/System/stores/auth';
+import { useSystemStore } from '@/modules/System/stores/system';
 import { useWorkspaceStore } from '@/engine/stores/workspace';
 import TheLogo from '@/shared/layouts/partials/TheLogo.vue';
 import { 
@@ -332,7 +332,7 @@ defineEmits<{
 const { t, te } = useI18n();
 const $route = useRoute();
 const authStore = useAuthStore();
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 const workspaceStore = useWorkspaceStore();
 const navigationStore = useNavigationStore();
 

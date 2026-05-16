@@ -891,18 +891,18 @@ async function previewSlotData(slotId: string) {
         if (config.sourceType === 'api_posts') {
             const params: any = { status: 'published', type: 'post', per_page: config.limit || 5, sort_by: config.orderBy || 'published_at' }
             if (config.categoryFilter && config.categoryFilter !== 'all') params.category = config.categoryFilter
-            const res = await api.get('/admin/cms/contents', { params })
+            const res = await api.get('/manage/cms/contents', { params })
             const parsed = parseResponse<any>(res)
             results = ensureArray<any>(parsed.data)
         } else if (config.sourceType === 'api_pages') {
-            const res = await api.get('/admin/cms/contents', { params: { type: 'page', status: 'published' } })
+            const res = await api.get('/manage/cms/contents', { params: { type: 'page', status: 'published' } })
             const parsed = parseResponse<any>(res)
             results = ensureArray<any>(parsed.data)
             if (config.pageSlug) {
                 results = results.filter((item) => String(item?.slug || '') === String(config.pageSlug))
             }
         } else if (config.sourceType === 'api_categories') {
-            const res = await api.get('/admin/cms/categories')
+            const res = await api.get('/manage/cms/categories')
             const parsed = parseResponse<any>(res)
             results = ensureArray<any>(parsed.data)
         }
@@ -924,7 +924,7 @@ function filterPreviewFields(item: any) {
 
 async function fetchCategories() {
     try {
-        const r = await api.get('/admin/cms/categories')
+        const r = await api.get('/manage/cms/categories')
         const parsed = parseResponse<any>(r)
         categories.value = ensureArray<any>(parsed.data)
     } catch { /* silent */ }
@@ -932,7 +932,7 @@ async function fetchCategories() {
 
 async function fetchMenus() {
     try {
-        const r = await api.get('/admin/cms/menus')
+        const r = await api.get('/manage/cms/menus')
         const parsed = parseResponse<any>(r)
         const data = ensureArray<any>(parsed.data)
         availableMenus.value = data.map((m: any) => ({ value: m.id, label: m.name }))
@@ -942,7 +942,7 @@ async function fetchMenus() {
 
 async function fetchPages() {
     try {
-        const r = await api.get('/admin/cms/contents', { params: { type: 'page' } })
+        const r = await api.get('/manage/cms/contents', { params: { type: 'page' } })
         const parsed = parseResponse<any>(r)
         pages.value = ensureArray<any>(parsed.data)
     } catch { /* silent */ }

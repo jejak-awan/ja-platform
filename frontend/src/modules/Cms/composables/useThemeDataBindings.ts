@@ -67,7 +67,7 @@ async function resolveSlotData(binding: SlotBinding): Promise<unknown[]> {
             if (binding.tagFilter && binding.tagFilter !== 'all') {
                 params.tag = binding.tagFilter
             }
-            const response = await api.get('/ja/contents', { params })
+            const response = await api.get('/public/cms/contents', { params })
             const data = response.data
 
             return Array.isArray(data) ? data : data?.data || []
@@ -75,9 +75,9 @@ async function resolveSlotData(binding: SlotBinding): Promise<unknown[]> {
 
         if (binding.sourceType === 'api_pages') {
             if (binding.pageSlug) {
-                const response = await api.get(`/ja/contents/${binding.pageSlug}`)
+                const response = await api.get(`/public/cms/contents/${binding.pageSlug}`)
                 const data = response.data
-
+ 
                 return data ? [data] : []
             }
             const params: Record<string, unknown> = {
@@ -85,16 +85,16 @@ async function resolveSlotData(binding: SlotBinding): Promise<unknown[]> {
                 status: 'published',
                 per_page: binding.limit || 10,
             }
-            const response = await api.get('/ja/contents', { params })
+            const response = await api.get('/public/cms/contents', { params })
             const data = response.data
-
+ 
             return Array.isArray(data) ? data : data?.data || []
         }
 
         if (binding.sourceType === 'api_categories') {
-            const response = await api.get('/ja/categories')
+            const response = await api.get('/public/cms/categories')
             const data = response.data
-
+ 
             return Array.isArray(data) ? data : []
         }
     } catch (e) {

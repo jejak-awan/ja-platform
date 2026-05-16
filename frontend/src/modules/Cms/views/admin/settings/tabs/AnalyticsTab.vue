@@ -3,8 +3,8 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import api from '@/engine/api/client'
 import { parseSingleResponse } from '@/shared/utils/responseParser'
-import SettingGroup from '@/modules/Core/components/settings/SettingGroup.vue'
-import SettingField from '@/modules/Core/components/settings/SettingField.vue'
+import SettingGroup from '@/modules/System/components/settings/SettingGroup.vue'
+import SettingField from '@/modules/System/components/settings/SettingField.vue'
 import { Button } from '@/shared/components/ui';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
@@ -98,7 +98,7 @@ const handleCleanup = async () => {
 
     cleaning.value = true
     try {
-        const response = await api.post('/admin/cms/analytics/cleanup')
+        const response = await api.post('/manage/cms/analytics/cleanup')
         const payload = parseSingleResponse<{ total_deleted?: number }>(response)
         const count = typeof payload?.total_deleted === 'number' ? payload.total_deleted : 0
         toast.success.action(t('modules.cms.settings.groups.analytics.cleanupSuccess', { count }))
@@ -123,7 +123,7 @@ const handlePurgeAll = async () => {
 
     purging.value = true
     try {
-        const response = await api.post('/admin/cms/analytics/purge-all', {
+        const response = await api.post('/manage/cms/analytics/purge-all', {
             confirmation: 'RESET_ALL_ANALYTICS',
         })
         const payload = parseSingleResponse<{ total_deleted?: number }>(response)

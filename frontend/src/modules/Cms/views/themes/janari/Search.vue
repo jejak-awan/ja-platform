@@ -58,7 +58,7 @@ const pageData = ref<Content | null>(null)
 
 const fetchPageData = async () => {
     try {
-        const response = await api.get('/ja/contents/search')
+        const response = await api.get('/public/cms/contents/search')
         pageData.value = response.data
     } catch {
         // Silent fail
@@ -70,7 +70,7 @@ const search = async () => {
   
   loading.value = true
   try {
-    const response = await api.get('/ja/search', {
+    const response = await api.get('/public/search', {
       params: { q: searchQuery.value }
     })
     results.value = response.data || []

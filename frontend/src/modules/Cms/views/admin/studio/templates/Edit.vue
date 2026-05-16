@@ -241,7 +241,7 @@ const isDirty = computed(() => {
 const fetchTemplate = async () => {
     loading.value = true;
     try {
-        const response = await api.get(`/admin/cms/content-templates/${templateId}`);
+        const response = await api.get(`/manage/cms/content-templates/${templateId}`);
         const template = parseSingleResponse<ContentTemplate>(response);
         
         if (template) {
@@ -273,7 +273,7 @@ const handleSubmit = async () => {
     saving.value = true;
     clearErrors();
     try {
-        await api.put(`/admin/cms/content-templates/${templateId}`, form.value);
+        await api.put(`/manage/cms/content-templates/${templateId}`, form.value);
         toast.success.update(t('modules.cms.content_templates.title_singular'));
         
         // Update initial form after successful save

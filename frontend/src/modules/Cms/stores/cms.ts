@@ -81,7 +81,7 @@ export const useCmsStore = defineStore('cms', {
             // Create and store the promise for this fetch operation
             const promise = (async () => {
                 try {
-                    const response = await api.get(`/admin/cms/settings/group/${group}`);
+                    const response = await api.get(`/manage/cms/settings/group/${group}`);
                     const settingsData = response.data || {};
                     
                     // Only update if there are actual new keys or changed values to prevent reactive thrashing
@@ -113,7 +113,7 @@ export const useCmsStore = defineStore('cms', {
             // Create and store the promise for this fetch operation
             this.publicSettingsPromise = (async () => {
                 try {
-                    const response = await api.get('/public/settings');
+                    const response = await api.get('/public/system/settings');
                     const settingsData = response.data || {};
                     
                     // Stability: Check for actual differences before triggering reactivity
@@ -142,7 +142,7 @@ export const useCmsStore = defineStore('cms', {
         async fetchContents(params: Record<string, unknown> = {}) {
             this.loading = true;
             try {
-                const response = await api.get('/ja/contents', { params });
+                const response = await api.get('/public/cms/contents', { params });
                 const { data } = parseResponse(response);
                 this.contents = ensureArray(data);
                 return { data: this.contents };
@@ -158,7 +158,7 @@ export const useCmsStore = defineStore('cms', {
         async fetchContent(slug: string): Promise<Content | null> {
             this.loading = true;
             try {
-                const response = await api.get(`/ja/contents/${slug}`);
+                const response = await api.get(`/public/cms/contents/${slug}`);
                 this.currentContent = response.data;
                 return response.data;
             } catch (error: unknown) {
@@ -171,7 +171,7 @@ export const useCmsStore = defineStore('cms', {
 
         async fetchCategories() {
             try {
-                const response = await api.get('/ja/categories');
+                const response = await api.get('/public/cms/categories');
                 const { data } = parseResponse(response);
                 this.categories = ensureArray(data);
                 return this.categories;
@@ -184,7 +184,7 @@ export const useCmsStore = defineStore('cms', {
 
         async fetchTags() {
             try {
-                const response = await api.get('/ja/tags');
+                const response = await api.get('/public/library/tags');
                 const { data } = parseResponse(response);
                 this.tags = ensureArray(data);
                 return this.tags;

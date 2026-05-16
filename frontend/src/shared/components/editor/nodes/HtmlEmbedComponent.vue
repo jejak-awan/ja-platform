@@ -122,7 +122,7 @@ import Code from 'lucide-vue-next/dist/esm/icons/code.js';
 import MousePointerClick from 'lucide-vue-next/dist/esm/icons/mouse-pointer-click.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import Maximize2 from 'lucide-vue-next/dist/esm/icons/maximize.js';
-import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
+import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue';
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()

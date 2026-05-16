@@ -814,7 +814,7 @@ import LayoutGrid from 'lucide-vue-next/dist/esm/icons/layout-grid.js';
 import Sparkles from 'lucide-vue-next/dist/esm/icons/sparkles.js';
 import Smile from 'lucide-vue-next/dist/esm/icons/smile.js';
 
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 import AiAssistPopover from '@/shared/components/editor/AiAssistPopover.vue';
 import type { Editor } from '@tiptap/vue-3';
 
@@ -831,7 +831,7 @@ const emit = defineEmits<{
     (e: 'insertIcon', iconName: string): void;
 }>();
 
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 const activeTab = ref('home');
 
 const handleIconSelect = (iconName: string) => {

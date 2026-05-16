@@ -15,7 +15,7 @@ import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import Calendar from 'lucide-vue-next/dist/esm/icons/calendar.js';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { useToast } from '@/shared/composables/useToast';
@@ -257,7 +257,7 @@ const fetchContents = async (page: number = 1) => {
             params.status = statusFilter.value;
         }
 
-        const response = await api.get('/admin/cms/contents', { params });
+        const response = await api.get('/manage/cms/contents', { params });
         const { data, pagination: meta } = parseResponse<Content[]>(response);
         
         contents.value = ensureArray(data);
@@ -275,7 +275,7 @@ const fetchContents = async (page: number = 1) => {
 
 const fetchStats = async () => {
     try {
-        const response = await api.get('/admin/cms/contents/stats');
+        const response = await api.get('/manage/cms/contents/stats');
         const data = parseSingleResponse<ContentStats>(response);
         stats.value = data || {
             total: 0,
@@ -296,7 +296,7 @@ const toggleFeatured = async (content: Content) => {
     content.is_featured = !previousState;
 
     try {
-        await api.patch(`/admin/cms/contents/${content.id}/toggle-featured`);
+        await api.patch(`/manage/cms/contents/${content.id}/toggle-featured`);
         toast.success.action(t('common.messages.success.updated'));
     } catch (error: unknown) {
         content.is_featured = previousState;
@@ -353,7 +353,7 @@ const handleBulkAction = async (action: string) => {
     }
 
     try {
-        await api.post('/admin/cms/contents/bulk-action', {
+        await api.post('/manage/cms/contents/bulk-action', {
             action: action,
             content_ids: selectedContents.value,
         });
@@ -381,7 +381,7 @@ const handleEmptyTrash = async () => {
     if (!confirmed) return;
 
     try {
-        await api.delete('/admin/cms/contents/trash/empty');
+        await api.delete('/manage/cms/contents/trash/empty');
         await fetchContents();
         await fetchStats();
         toast.success.action(t('common.messages.success.deleted'));
@@ -400,7 +400,7 @@ const handleDelete = async (content: Content) => {
     });
     if (!confirmed) return;
     try {
-        await api.delete(`/admin/cms/contents/${content.id}`);
+        await api.delete(`/manage/cms/contents/${content.id}`);
         await fetchContents();
         await fetchStats();
     } catch (error: unknown) {
@@ -420,7 +420,7 @@ const handleRestore = async (content: Content) => {
     if (!confirmed) return;
 
     try {
-        await api.put(`/admin/cms/contents/${content.id}/restore`);
+        await api.put(`/manage/cms/contents/${content.id}/restore`);
         await fetchContents();
         await fetchStats();
         toast.success.action(t('common.messages.success.restored'));
@@ -439,7 +439,7 @@ const handleForceDelete = async (content: Content) => {
     });
     if (!confirmed) return;
     try {
-        await api.delete(`/admin/cms/contents/${content.id}/force-delete`);
+        await api.delete(`/manage/cms/contents/${content.id}/force-delete`);
         await fetchContents();
         await fetchStats();
     } catch (error: unknown) {

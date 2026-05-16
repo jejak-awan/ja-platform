@@ -138,7 +138,7 @@
 <script setup lang="ts">
 import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted, nextTick, watch } from 'vue';
-import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
+import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue';
 import BlogSidebar from './components/BlogSidebar.vue';
 import { useRoute } from 'vue-router';
 // import { useI18n } from 'vue-i18n';

@@ -259,12 +259,12 @@
 <script setup lang="ts">
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
 import { parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
 
-import QuickActions from '@/modules/Core/components/admin/QuickActions.vue';
+import QuickActions from '@/modules/System/components/admin/QuickActions.vue';
 import {
     Card,
     CardHeader,
@@ -284,8 +284,8 @@ import {
     TableHeader,
     TableRow
 } from '@/shared/components/ui';
-import DoughnutChart from '@/modules/Core/components/charts/DoughnutChart.vue';
-import LineChart from '@/modules/Core/components/charts/LineChart.vue';
+import DoughnutChart from '@/modules/System/components/charts/DoughnutChart.vue';
+import LineChart from '@/modules/System/components/charts/LineChart.vue';
 
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import Image from 'lucide-vue-next/dist/esm/icons/image.js';

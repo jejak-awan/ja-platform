@@ -182,7 +182,7 @@ import {
 } from '@/shared/components/ui';
 import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 
 interface AiProvider {
     id: string;
@@ -209,7 +209,7 @@ const emit = defineEmits<{
 }>();
 
 const toast = useToast();
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 
 const isOpen = ref(false);
 const customPrompt = ref('');
@@ -304,7 +304,7 @@ const stopDrag = () => {
 
 const fetchProviders = async () => {
     try {
-        const response = await api.get<AiProvider[]>('/admin/cms/ai/providers');
+        const response = await api.get<AiProvider[]>('/manage/cms/ai/providers');
         providers.value = response.data;
         
         // Ensure selected provider is valid/active
@@ -343,7 +343,7 @@ const fetchModels = async () => {
     
     loadingModels.value = true;
     try {
-        const response = await api.get<AiModel[]>(`/admin/cms/ai/models/${provider}`);
+        const response = await api.get<AiModel[]>(`/manage/cms/ai/models/${provider}`);
         const resultModels = response.data;
         models.value[provider] = resultModels;
         
@@ -362,7 +362,7 @@ const handleCommand = async (prompt: string) => {
     
     loading.value = true;
     try {
-        const response = await api.post<AiGenerateResponse>('/admin/cms/ai/generate', {
+        const response = await api.post<AiGenerateResponse>('/manage/cms/ai/generate', {
             prompt: prompt,
             context: props.context,
             provider: selectedProvider.value,

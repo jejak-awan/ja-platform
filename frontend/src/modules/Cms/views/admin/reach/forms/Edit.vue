@@ -288,7 +288,7 @@ const isDirty = computed(() => {
 const fetchForm = async () => {
     loading.value = true;
     try {
-        const response = await api.get(`/admin/cms/forms/${route.params.id}`);
+        const response = await api.get(`/manage/cms/forms/${route.params.id}`);
         const data = response.data;
         Object.assign(formData, {
             name: data.name,
@@ -324,7 +324,7 @@ const handleSubmit = async () => {
             redirect_url: formData.redirect_url,
             is_active: formData.is_active
         };
-        await api.put(`/admin/cms/forms/${route.params.id}`, payload);
+        await api.put(`/manage/cms/forms/${route.params.id}`, payload);
         initialForm.value = JSON.parse(JSON.stringify(formData));
         toast.success.update(t('modules.cms.forms.title'));
         router.push({ name: 'forms' });

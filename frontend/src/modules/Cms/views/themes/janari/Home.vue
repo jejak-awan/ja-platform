@@ -90,7 +90,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, nextTick, onBeforeUnmount, defineAsyncComponent } from 'vue'
-import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue'
+import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue'
 import api from '@/engine/api/client'
 
 // Above-the-fold (LCP): static import

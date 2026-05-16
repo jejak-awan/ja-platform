@@ -749,7 +749,7 @@ const fetchForms = async () => {
             params.trashed = trashedFilter.value;
         }
 
-        const response = await api.get('/admin/cms/forms', { params });
+        const response = await api.get('/manage/cms/forms', { params });
         const { data } = parseResponse<Form>(response);
         forms.value = ensureArray<Form>(data);
     } catch (error: unknown) {
@@ -770,7 +770,7 @@ const viewSubmissions = (form: Form) => {
 
 const toggleFormStatus = async (form: Form) => {
     try {
-        const response = await api.put(`/admin/cms/forms/${form.id}`, {
+        const response = await api.put(`/manage/cms/forms/${form.id}`, {
             is_active: !form.is_active
         });
         const updatedForm = (response.data) as Form;
@@ -796,7 +796,7 @@ const deleteForm = async (form: Form) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/admin/cms/forms/${form.id}`);
+        await api.delete(`/manage/cms/forms/${form.id}`);
         toast.success.delete('Form');
         fetchForms();
     } catch (error: unknown) {
@@ -817,7 +817,7 @@ const handleDuplicate = async (withSubmissions: boolean) => {
     
     try {
         duplicating.value = true;
-        await api.post(`/admin/cms/forms/${duplicatingForm.value.id}/duplicate`, {
+        await api.post(`/manage/cms/forms/${duplicatingForm.value.id}/duplicate`, {
             with_submissions: withSubmissions
         });
         toast.success.duplicate('Form');
@@ -842,7 +842,7 @@ const restoreForm = async (form: Form) => {
     if (!confirmed) return;
 
     try {
-        await api.post(`/admin/cms/forms/${form.id}/restore`);
+        await api.post(`/manage/cms/forms/${form.id}/restore`);
         toast.success.restore('Form');
         fetchForms();
     } catch (error: unknown) {
@@ -862,7 +862,7 @@ const forceDeleteForm = async (form: Form) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/admin/cms/forms/${form.id}/force-delete`);
+        await api.delete(`/manage/cms/forms/${form.id}/force-delete`);
         toast.success.action(t('common.messages.success.deleted', { item: 'Form' }));
         fetchForms();
     } catch (error: unknown) {
@@ -894,7 +894,7 @@ const handleBulkDelete = async () => {
 
 const performBulkAction = async () => {
     try {
-        await api.delete('/admin/cms/forms/bulk-delete', { data: { ids: selectedIds.value } });
+        await api.delete('/manage/cms/forms/bulk-delete', { data: { ids: selectedIds.value } });
         toast.success.default(t('modules.cms.forms.submissions.messages.bulkDeleteSuccess', { count: selectedIds.value.length }));
         selectedIds.value = [];
         fetchForms();

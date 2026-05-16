@@ -206,10 +206,10 @@ const handleSubmit = async () => {
             status_code: Number(form.value.status_code)
         };
         if (props.redirect) {
-            await api.put(`/admin/cms/redirects/${props.redirect.id}`, payload);
+            await api.put(`/manage/cms/redirects/${props.redirect.id}`, payload);
             toast.success.update(t('features.redirects.title'));
         } else {
-            await api.post('/admin/cms/redirects', payload);
+            await api.post('/manage/cms/redirects', payload);
             toast.success.create(t('features.redirects.title'));
         }
         emit('saved');

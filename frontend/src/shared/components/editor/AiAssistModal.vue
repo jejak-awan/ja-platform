@@ -134,7 +134,7 @@ const handleCommand = async (prompt: string) => {
     
     loading.value = true;
     try {
-        const response = await api.post<AiGenerateResponse>('/admin/cms/ai/generate', {
+        const response = await api.post<AiGenerateResponse>('/manage/cms/ai/generate', {
             prompt: prompt,
             context: props.context
         });

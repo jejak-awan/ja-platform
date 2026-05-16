@@ -285,7 +285,7 @@ const handleSubmit = async () => {
             redirect_url: formData.redirect_url,
             is_active: formData.is_active
         };
-        const res = await api.post('/admin/cms/forms', payload);
+        const res = await api.post('/manage/cms/forms', payload);
         const created = res.data as { id: number };
         toast.success.create(t('modules.cms.forms.title'));
         router.push({ name: 'forms.edit', params: { id: String(created.id) } });

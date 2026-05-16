@@ -267,15 +267,15 @@ import {
 
 // Composable and Components
 import { useFileManager } from '@/engine/composables/useFileManager';
-import FileSidebar from '@/modules/Core/components/file-manager/FileSidebar.vue';
-import FileToolbar from '@/modules/Core/components/file-manager/FileToolbar.vue';
-import FilePropertiesSidebar from '@/modules/Core/components/file-manager/FilePropertiesSidebar.vue';
-import FileGridView from '@/modules/Core/components/file-manager/FileGridView.vue';
-import FileListView from '@/modules/Core/components/file-manager/FileListView.vue';
-import FileTrashView from '@/modules/Core/components/file-manager/FileTrashView.vue';
-import FilePreviewModal from '@/modules/Core/components/file-manager/FilePreviewModal.vue';
-import FileUploadModal from '@/modules/Core/components/file-manager/FileUploadModal.vue';
-import CreateFolderModal from '@/modules/Core/components/file-manager/CreateFolderModal.vue';
+import FileSidebar from '@/modules/System/components/file-manager/FileSidebar.vue';
+import FileToolbar from '@/modules/System/components/file-manager/FileToolbar.vue';
+import FilePropertiesSidebar from '@/modules/System/components/file-manager/FilePropertiesSidebar.vue';
+import FileGridView from '@/modules/System/components/file-manager/FileGridView.vue';
+import FileListView from '@/modules/System/components/file-manager/FileListView.vue';
+import FileTrashView from '@/modules/System/components/file-manager/FileTrashView.vue';
+import FilePreviewModal from '@/modules/System/components/file-manager/FilePreviewModal.vue';
+import FileUploadModal from '@/modules/System/components/file-manager/FileUploadModal.vue';
+import CreateFolderModal from '@/modules/System/components/file-manager/CreateFolderModal.vue';
 import type { FileItem } from '@/modules/Cms/types/file-manager';
 import { FileManagerKey } from '@/engine/keys';
 

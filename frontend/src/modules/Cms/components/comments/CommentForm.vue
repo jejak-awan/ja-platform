@@ -73,9 +73,9 @@
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import CaptchaWrapper from '@/modules/Core/components/captcha/CaptchaWrapper.vue';
+import CaptchaWrapper from '@/modules/System/components/captcha/CaptchaWrapper.vue';
 import {
     Card,
     CardHeader,
@@ -135,7 +135,7 @@ const handleSubmit = async () => {
     loading.value = true;
     clearErrors();
     try {
-        await api.post(`/ja/contents/${props.contentId}/comments`, form.value);
+        await api.post(`/public/cms/contents/${props.contentId}/comments`, form.value);
         
         // Reset form
         form.value = {

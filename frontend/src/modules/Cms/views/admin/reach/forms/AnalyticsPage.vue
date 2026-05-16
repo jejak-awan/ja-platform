@@ -470,9 +470,9 @@ import ArrowUpDown from 'lucide-vue-next/dist/esm/icons/arrow-up-down.js';
 import Clock from 'lucide-vue-next/dist/esm/icons/clock.js';
 import CalendarDays from 'lucide-vue-next/dist/esm/icons/calendar-days.js';
 
-import LineChart from '@/modules/Core/components/charts/LineChart.vue';
-import BarChart from '@/modules/Core/components/charts/BarChart.vue';
-import DoughnutChart from '@/modules/Core/components/charts/DoughnutChart.vue';
+import LineChart from '@/modules/System/components/charts/LineChart.vue';
+import BarChart from '@/modules/System/components/charts/BarChart.vue';
+import DoughnutChart from '@/modules/System/components/charts/DoughnutChart.vue';
 
 interface AnalyticsStatistics {
     total: number;
@@ -505,7 +505,7 @@ const sorting = ref([{ id: 'created_at', desc: true }]);
 
 const fetchForm = async () => {
     try {
-        const response = await api.get(`/admin/cms/forms/${formId.value}`);
+        const response = await api.get(`/manage/cms/forms/${formId.value}`);
         form.value = parseSingleResponse(response);
     } catch (error) {
         logger.error('Failed to fetch form:', error);
@@ -526,7 +526,7 @@ const fetchStatistics = async () => {
             params.days = analyticsDays.value;
         }
 
-        const response = await api.get(`/admin/cms/forms/${formId.value}/submissions/statistics`, { params });
+        const response = await api.get(`/manage/cms/forms/${formId.value}/submissions/statistics`, { params });
         statistics.value = parseSingleResponse(response);
         
         if (!selectedAggregateField.value && statistics.value && (statistics.value.chartable_fields?.length ?? 0) > 0) {
@@ -551,7 +551,7 @@ const handlePresetChange = () => {
 
 const fetchSamples = async () => {
     try {
-        const response = await api.get(`/admin/cms/forms/${formId.value}/submissions`, {
+        const response = await api.get(`/manage/cms/forms/${formId.value}/submissions`, {
             params: { per_page: 20, sort_by: 'created_at', sort_order: 'desc' }
         });
         const data = parseSingleResponse(response) as { data: Record<string, unknown>[] };
@@ -667,7 +667,7 @@ const exportData = (format = 'xlsx') => {
         })
     });
     const baseUrl = apiConfig.externalUrl;
-    const url = `${baseUrl}/api/v1/admin/cms/forms/${formId.value}/submissions/export?${params.toString()}`;
+    const url = `${baseUrl}/api/v1/manage/cms/forms/${formId.value}/submissions/export?${params.toString()}`;
     window.open(url, '_blank');
 };
 

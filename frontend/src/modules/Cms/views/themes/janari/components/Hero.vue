@@ -411,7 +411,7 @@ const updateStableData = async () => {
         try {
             const params: any = { type: 'post', status: 'published', per_page: 10 }
             if (heroNewsCategory.value) params.category = heroNewsCategory.value
-            const res = await api.get('/ja/contents', { params });
+            const res = await api.get('/public/cms/contents', { params });
             const rawData = res.data || [];
             const posts = Array.isArray(rawData) ? rawData : (rawData?.data || []);
             if (posts.length > 0) {

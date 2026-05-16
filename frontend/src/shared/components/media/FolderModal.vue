@@ -123,7 +123,7 @@ import {
     DialogDescription,
     DialogFooter
 } from '@/shared/components/ui';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import type { MediaFolder } from '@/modules/Cms/types/cms';
 
 interface FolderForm {
@@ -158,7 +158,7 @@ const canManageMedia = authStore.hasPermission('manage media');
 
 const fetchFolders = async () => {
     try {
-        const response = await api.get('/admin/cms/media-folders');
+        const response = await api.get('/manage/cms/media-folders');
         const data = response.data || [];
         folders.value = data.filter((f: MediaFolder) => !f.is_trashed);
     } catch (error) {
@@ -171,7 +171,7 @@ const handleSubmit = async () => {
 
     saving.value = true;
     try {
-        await api.post('/admin/cms/media-folders', form.value);
+        await api.post('/manage/cms/media-folders', form.value);
         toast.success.create('Folder');
         emit('created');
         emit('close');

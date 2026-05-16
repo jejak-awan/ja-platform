@@ -5,7 +5,7 @@ import { SECURITY_ROUTES } from '@/config/security';
 import { handleBeforeEachGuard } from './guards';
 import { attemptChunkRecoveryReload, isChunkLoadError } from '@/shared/utils/chunkRecovery';
 import { useSystemError } from '@/shared/composables/useSystemError';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { registry } from '@/engine/registry';
 import { useWorkspaceStore } from '@/engine/stores/workspace';
 
@@ -24,13 +24,13 @@ const baseRoutes: Array<RouteRecordRaw> = [
     {
         path: '/install',
         name: 'install',
-        component: () => import('@/modules/Core/views/InstallView.vue'),
+        component: () => import('@/modules/System/views/InstallView.vue'),
         meta: { public: true, title: 'Installation Wizard' },
     },
     {
         path: loginPath,
         name: 'login',
-        component: () => import('@/modules/Core/views/auth/Login.vue'),
+        component: () => import('@/modules/System/views/auth/Login.vue'),
         meta: { guestOnly: true, authContext: 'system' },
     },
     {
@@ -42,7 +42,7 @@ const baseRoutes: Array<RouteRecordRaw> = [
     {
         path: registerPath,
         name: 'register',
-        component: () => import('@/modules/Core/views/auth/Register.vue'),
+        component: () => import('@/modules/System/views/auth/Register.vue'),
         meta: { guestOnly: true, authContext: 'system' },
     },
     {
@@ -54,31 +54,31 @@ const baseRoutes: Array<RouteRecordRaw> = [
     {
         path: '/forgot-password',
         name: 'forgot-password',
-        component: () => import('@/modules/Core/views/auth/ForgotPassword.vue'),
+        component: () => import('@/modules/System/views/auth/ForgotPassword.vue'),
         meta: { guestOnly: true },
     },
     {
         path: '/reset-password',
         name: 'reset-password',
-        component: () => import('@/modules/Core/views/auth/ResetPassword.vue'),
+        component: () => import('@/modules/System/views/auth/ResetPassword.vue'),
         meta: { guestOnly: true },
     },
     {
         path: '/403',
         name: 'forbidden',
-        component: () => import('@/modules/Core/views/errors/Forbidden.vue'),
+        component: () => import('@/modules/System/views/errors/Forbidden.vue'),
         meta: { public: true },
     },
     {
         path: '/404',
         name: 'not-found',
-        component: () => import('@/modules/Core/views/errors/NotFound.vue'),
+        component: () => import('@/modules/System/views/errors/NotFound.vue'),
         meta: { public: true },
     },
     {
         path: '/500',
         name: 'server-error',
-        component: () => import('@/modules/Core/views/errors/ServerError.vue'),
+        component: () => import('@/modules/System/views/errors/ServerError.vue'),
         meta: { public: true },
     },
 ];
@@ -86,14 +86,14 @@ const baseRoutes: Array<RouteRecordRaw> = [
 // Dashboard wrapper with dynamic children
 const dashboardRoute: RouteRecordRaw = {
     path: adminPath,
-    component: () => import('@/modules/Core/layouts/AdminLayout.vue'),
+    component: () => import('@/modules/System/layouts/AdminLayout.vue'),
     meta: { auth: true },
     children: [
         // 1. Explicit Core Dashboard (Priority Resolution)
         {
             path: 'dashboard',
             name: 'core.dashboard',
-            component: () => import('@/modules/Core/views/admin/Dashboard.vue'),
+            component: () => import('@/modules/System/views/admin/Dashboard.vue'),
             meta: { permission: 'view dashboard' },
         },
         // 2. Central Redirect Handler (Dynamic Resolution)

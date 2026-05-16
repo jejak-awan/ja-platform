@@ -178,7 +178,7 @@ const performSearch = async () => {
     loading.value = true;
     
     try {
-        const response = await api.get('/admin/cms/search', {
+        const response = await api.get('/manage/cms/search', {
             params: { q: query.value },
         });
         const { data } = parseResponse(response);

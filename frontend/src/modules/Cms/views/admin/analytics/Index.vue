@@ -431,9 +431,9 @@ import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
 import { useToast } from '@/shared/composables/useToast';
 import { parseResponse, parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
-import LineChart from '@/modules/Core/components/charts/LineChart.vue';
-import DoughnutChart from '@/modules/Core/components/charts/DoughnutChart.vue';
-import BarChart from '@/modules/Core/components/charts/BarChart.vue';
+import LineChart from '@/modules/System/components/charts/LineChart.vue';
+import DoughnutChart from '@/modules/System/components/charts/DoughnutChart.vue';
+import BarChart from '@/modules/System/components/charts/BarChart.vue';
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Input } from '@/shared/components/ui';
 
 import Eye from 'lucide-vue-next/dist/esm/icons/eye.js';
@@ -538,15 +538,15 @@ const fetchAnalytics = async () => {
     try {
         const params = { date_from: dateFrom.value, date_to: dateTo.value };
         const [overviewRes, visitsRes, topPagesRes, topContentRes, devicesRes, browsersRes, countriesRes, referrersRes, realtimeRes] = await Promise.all([
-            api.get('/admin/cms/analytics/overview', { params }),
-            api.get('/admin/cms/analytics/visits', { params }),
-            api.get('/admin/cms/analytics/top-pages', { params }),
-            api.get('/admin/cms/analytics/top-content', { params }),
-            api.get('/admin/cms/analytics/devices', { params }),
-            api.get('/admin/cms/analytics/browsers', { params }),
-            api.get('/admin/cms/analytics/countries', { params }),
-            api.get('/admin/cms/analytics/referrers', { params }),
-            api.get('/admin/cms/analytics/realtime'),
+            api.get('/manage/cms/analytics/overview', { params }),
+            api.get('/manage/cms/analytics/visits', { params }),
+            api.get('/manage/cms/analytics/top-pages', { params }),
+            api.get('/manage/cms/analytics/top-content', { params }),
+            api.get('/manage/cms/analytics/devices', { params }),
+            api.get('/manage/cms/analytics/browsers', { params }),
+            api.get('/manage/cms/analytics/countries', { params }),
+            api.get('/manage/cms/analytics/referrers', { params }),
+            api.get('/manage/cms/analytics/realtime'),
         ]);
 
         overview.value = parseSingleResponse(overviewRes) || {};
@@ -577,7 +577,7 @@ const exportData = async (type: string) => {
     showExportMenu.value = false;
     exporting.value = true;
     try {
-        const response = await api.get('/admin/cms/analytics/export', {
+        const response = await api.get('/manage/cms/analytics/export', {
             params: { date_from: dateFrom.value, date_to: dateTo.value, type },
             responseType: 'blob'
         });
@@ -602,7 +602,7 @@ const exportData = async (type: string) => {
 onMounted(() => {
     fetchAnalytics();
     refreshInterval = setInterval(() => {
-        api.get('/admin/cms/analytics/realtime').then(res => {
+        api.get('/manage/cms/analytics/realtime').then(res => {
             realtime.value = parseSingleResponse(res) || {};
         }).catch(err => {
             logger.error('Realtime fetch failed:', err);

@@ -477,7 +477,7 @@ const trashedFilter = computed({
 // Fetch locations
 const fetchLocations = async () => {
     try {
-        const response = await api.get('/admin/cms/themes/active/locations');
+        const response = await api.get('/manage/cms/themes/active/locations');
         const data = response.data || {};
         locations.value = Object.entries(data).map(([key, label]) => ({
             value: key,

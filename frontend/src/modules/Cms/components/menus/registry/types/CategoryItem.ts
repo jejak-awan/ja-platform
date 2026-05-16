@@ -11,7 +11,7 @@ const definition: MenuItemDefinition = {
     defaultTitle: 'Category',
 
     dataSource: {
-        endpoint: '/admin/cms/categories',
+        endpoint: '/manage/cms/categories',
         labelField: 'name',
         valueField: 'id'
     },
@@ -29,7 +29,7 @@ const definition: MenuItemDefinition = {
             type: 'data_select',
             label: 'modules.cms.menus.form.selectCategory',
             required: true,
-            source: '/admin/cms/categories',
+            source: '/manage/cms/categories',
             labelField: 'name',
             valueField: 'id'
         },

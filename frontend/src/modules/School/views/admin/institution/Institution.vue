@@ -341,7 +341,7 @@ import { useI18n } from 'vue-i18n';
 import { useSchoolStore } from '../../../stores/school';
 import { useUnitStore } from '../../../stores/unit';
 import type { SchoolUnit } from '@/modules/School/types';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { useToast } from '@/shared/composables/useToast';
 import {
   Input, Label, Tabs, TabsList, TabsTrigger, TabsContent,

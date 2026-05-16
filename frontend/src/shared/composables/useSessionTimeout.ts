@@ -1,7 +1,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { useSystemError } from '@/shared/composables/useSystemError';
 import { triggerVaporLock } from '@/engine/api/client';
 import api from '@/engine/api/client';

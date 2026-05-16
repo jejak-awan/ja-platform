@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { useWorkspaceStore } from '../stores/workspace';
 import { useRouter } from 'vue-router';
 

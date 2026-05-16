@@ -132,7 +132,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 import MediaPicker from '@/shared/components/media/MediaPicker.vue';
 import {
     Card,
@@ -157,7 +157,7 @@ interface SeoData {
     og_image: string | null;
 }
 
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 const { settings } = storeToRefs(coreStore);
 
 const maxUploadSizeMB = computed(() => {

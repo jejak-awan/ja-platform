@@ -37,7 +37,7 @@ import { useConfirm } from '@/shared/composables/useConfirm';
 import { useSessionTimeout } from '@/shared/composables/useSessionTimeout';
 import { syncDocumentDarkClassForRoute } from '@/shared/composables/useDarkMode';
 import { useHead } from '@unhead/vue';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 import { applyFavicon, resolveFavicon } from '@/shared/utils/favicon';
 
 const Toast = defineAsyncComponent(() => import('@/shared/components/ui/Toast.vue'));
@@ -48,7 +48,7 @@ const SessionTimeoutModal = defineAsyncComponent(() => import('@/shared/componen
 const { confirmState } = useConfirm();
 const { isWarningVisible, timeRemaining, extendSession, manualLogout } = useSessionTimeout();
 const route = useRoute();
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 
 watch(
     () => route.path,

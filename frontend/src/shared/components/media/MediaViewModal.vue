@@ -467,7 +467,7 @@ const stopDrag = () => {
 const fetchUsageDetail = async () => {
     loadingUsage.value = true;
     try {
-        const response = await api.get(`/admin/cms/media/${props.media.id}/usage`);
+        const response = await api.get(`/manage/cms/media/${props.media.id}/usage`);
         const data = response.data || [];
         usageDetail.value = data;
     } catch (error) {
@@ -481,7 +481,7 @@ const fetchUsageDetail = async () => {
 const generateThumbnail = async () => {
     generatingThumbnail.value = true;
     try {
-        await api.post(`/admin/cms/media/${props.media.id}/thumbnail`);
+        await api.post(`/manage/cms/media/${props.media.id}/thumbnail`);
         // We need a proper success toast for thumbnail
         toast.success.action(t('modules.core.media.modals.view.thumbnailGenerated') || 'Thumbnail generated successfully');
         emit('updated');

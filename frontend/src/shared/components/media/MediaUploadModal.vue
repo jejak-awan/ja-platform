@@ -253,7 +253,7 @@ const handleUpload = async () => {
                 formData.append('folder_id', props.folderId.toString());
             }
 
-            await api.post('/admin/cms/media/upload', formData, {
+            await api.post('/manage/cms/media/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { systemState } from '@/modules/Core/services/SystemMonitor';
+import { systemState } from '@/modules/System/services/SystemMonitor';
 import Wrench from 'lucide-vue-next/dist/esm/icons/wrench.js';
 import AlertTriangle from 'lucide-vue-next/dist/esm/icons/triangle-alert.js';
 import LoaderCircle from 'lucide-vue-next/dist/esm/icons/loader-circle.js';

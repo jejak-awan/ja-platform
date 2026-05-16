@@ -11,7 +11,7 @@ const definition: MenuItemDefinition = {
     defaultTitle: 'Post',
 
     dataSource: {
-        endpoint: '/admin/cms/contents?type=post&status=published',
+        endpoint: '/manage/cms/contents?type=post&status=published',
         labelField: 'title',
         valueField: 'id'
     },
@@ -29,7 +29,7 @@ const definition: MenuItemDefinition = {
             type: 'data_select',
             label: 'modules.cms.menus.form.selectPost',
             required: true,
-            source: '/admin/cms/contents?type=post&status=published',
+            source: '/manage/cms/contents?type=post&status=published',
             labelField: 'title',
             valueField: 'id'
         },

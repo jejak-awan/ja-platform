@@ -314,7 +314,7 @@ const customLink = ref({ title: '', url: 'https://' });
 const fetchPages = async () => {
     loadingPages.value = true;
     try {
-        const response = await api.get('/admin/cms/contents?type=page&status=published');
+        const response = await api.get('/manage/cms/contents?type=page&status=published');
         const { data } = parseResponse(response);
         pages.value = ensureArray(data);
     } catch (error) {
@@ -327,7 +327,7 @@ const fetchPages = async () => {
 const fetchPosts = async () => {
     loadingPosts.value = true;
     try {
-        const response = await api.get('/admin/cms/contents?type=post&status=published');
+        const response = await api.get('/manage/cms/contents?type=post&status=published');
         const { data } = parseResponse(response);
         posts.value = ensureArray(data);
     } catch (error) {
@@ -340,7 +340,7 @@ const fetchPosts = async () => {
 const fetchCategories = async () => {
     loadingCategories.value = true;
     try {
-        const response = await api.get('/admin/cms/categories');
+        const response = await api.get('/manage/cms/categories');
         const { data } = parseResponse(response);
         categories.value = ensureArray(data);
     } catch (error) {

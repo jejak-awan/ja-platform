@@ -94,7 +94,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import api from '@/engine/api/client';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 import { useToast } from '@/shared/composables/useToast';
 import type { MediaConstraints, Media } from '@/modules/Cms/types/cms';
 
@@ -111,7 +111,7 @@ const emit = defineEmits<{
 
 const toast = useToast();
 const { t } = useI18n();
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 const { settings } = storeToRefs(coreStore);
 
 // Define reactive settings reference using storeToRefs
@@ -286,7 +286,7 @@ const uploadFile = async () => {
     if (effectiveConstraints.value.maxHeight) formData.append('max_height', effectiveConstraints.value.maxHeight.toString());
 
     try {
-        const response = await api.post('/admin/cms/media/upload', formData, {
+        const response = await api.post('/manage/cms/media/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

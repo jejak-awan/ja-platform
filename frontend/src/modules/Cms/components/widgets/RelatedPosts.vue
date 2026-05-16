@@ -161,7 +161,7 @@ const formatDate = (date: string) => {
 const fetchRelated = async () => {
   loading.value = true;
   try {
-    const response = await api.get(`/ja/contents/${props.slug}/related`);
+    const response = await api.get(`/public/cms/contents/${props.slug}/related`);
     related.value = response.data.slice(0, props.limit);
   } catch (error) {
     logger.error('Failed to fetch related posts:', error);

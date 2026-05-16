@@ -65,7 +65,7 @@ const menus = ref<Record<string, Menu>>({});
 
 const fetchMenuByLocation = async (location: string) => {
     try {
-        const response = await api.get(`/ja/menus/location/${location}`);
+        const response = await api.get(`/public/layout/menus/location/${location}?module=cms`);
         menus.value[location] = parseSingleResponse(response) as Menu;
     } catch (err) {
         // Silent fail for frontend menus to avoid crashing app
@@ -83,7 +83,7 @@ const fetchMenuByIdentifier = async (identifier: string | number, cacheKey?: str
     const targetKey = cacheKey || raw;
 
     try {
-        const endpoint = isNumericId ? `/ja/menus/${raw}` : `/ja/menus/location/${raw}`;
+        const endpoint = isNumericId ? `/public/layout/menus/${raw}` : `/public/layout/menus/location/${raw}?module=cms`;
         const response = await api.get(endpoint);
         menus.value[targetKey] = parseSingleResponse(response) as Menu;
     } catch (err) {
@@ -465,11 +465,11 @@ export function useMenu(menuId?: Ref<number | string | null>) {
 
         try {
             // Fetch menu details
-            const menuResponse = await api.get(`/admin/cms/menus/${menuId?.value}`);
+            const menuResponse = await api.get(`/manage/layout/menus/${menuId?.value}`);
             menu.value = (parseSingleResponse(menuResponse) || {}) as Menu;
 
             // Fetch menu items
-            const itemsResponse = await api.get(`/admin/cms/menus/${menuId?.value}/items`);
+            const itemsResponse = await api.get(`/manage/layout/menus/${menuId?.value}/items`);
             const { data } = parseResponse(itemsResponse);
             const flatItems = ensureArray(data) as MenuItem[];
             items.value = buildTree(flatItems);
@@ -499,7 +499,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
         try {
             // Update menu settings if provided
             if (Object.keys(menuData).length > 0) {
-                await api.put(`/admin/cms/menus/${menuId?.value}`, {
+                await api.put(`/manage/layout/menus/${menuId?.value}`, {
                     ...menu.value,
                     ...menuData
                 });
@@ -510,7 +510,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
 
             // Reorder all items
             const flatItems = flattenTree(items.value);
-            await api.post(`/admin/cms/menus/${menuId?.value}/reorder`, { items: flatItems });
+            await api.post(`/manage/layout/menus/${menuId?.value}/reorder`, { items: flatItems });
 
             // Refresh to get updated IDs
             await fetchMenu();
@@ -559,7 +559,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
                     sort_order: i,
                 };
 
-                const response = await api.post(`/admin/cms/menus/${menuId?.value}/items`, payload);
+                const response = await api.post(`/manage/layout/menus/${menuId?.value}/items`, payload);
                 const newItem = response.data;
                 item.id = newItem.id;
                 delete item._temp_id;
@@ -577,7 +577,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
 
         // If item has a real ID, delete from server
         if (item.id && !String(item.id).startsWith('temp_')) {
-            await api.delete(`/admin/cms/menus/${menuId?.value}/items/${item.id}`);
+            await api.delete(`/manage/layout/menus/${menuId?.value}/items/${item.id}`);
         }
 
         removeItem(id);

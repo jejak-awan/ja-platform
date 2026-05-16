@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 import { storeToRefs } from 'pinia';
 import api from '@/engine/api/client';
 import { parseSingleResponse, getResponseObject } from '@/shared/utils/responseParser';
@@ -80,7 +80,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
     };
 
-    const coreStore = useCoreStore();
+    const coreStore = useSystemStore();
     const { settings } = storeToRefs(coreStore);
 
     const isImage = (file: FileItem) => {
@@ -316,7 +316,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
     const fetchCurrentPath = async () => {
         loading.value = true;
         try {
-            const response = await api.get('/admin/core/file-manager', {
+            const response = await api.get('/manage/file-manager', {
                 params: {
                     path: currentPath.value,
                     page: currentPage.value,
@@ -350,7 +350,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         if (scannedPaths.value.has(path) && !recursive) return;
 
         try {
-            const response = await api.get('/admin/core/file-manager', {
+            const response = await api.get('/manage/file-manager', {
                 params: { path },
             });
             const data = parseSingleResponse<{ folders: FolderItem[] }>(response) || { folders: [] };
@@ -376,7 +376,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const fetchFilters = async () => {
         try {
-            const response = await api.get('/admin/cms/media/filters'); // Using media filters endpoint for authors as it's shared
+            const response = await api.get('/manage/cms/media/filters'); // Using media filters endpoint for authors as it's shared
             const filters = getResponseObject<{ authors?: { id: number | string; name: string }[] }>(response.data);
             const authors = filters?.authors;
             availableFilters.value = {
@@ -455,7 +455,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         if (!confirmed) return;
 
         try {
-            const url = isFolder ? '/admin/core/file-manager/folder/delete' : '/admin/core/file-manager/delete';
+            const url = isFolder ? '/manage/file-manager/folder/delete' : '/manage/file-manager/delete';
             await api.post(url, { path: item.path.replace(/^\//, '') });
 
             if (isFolder) {
@@ -485,7 +485,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         try {
             for (const item of selectedItems.value) {
                 const isFolder = 'children' in item || !('extension' in item);
-                const url = isFolder ? '/admin/core/file-manager/folder/delete' : '/admin/core/file-manager/delete';
+                const url = isFolder ? '/manage/file-manager/folder/delete' : '/manage/file-manager/delete';
                 await api.post(url, { path: item.path.replace(/^\//, '') });
                 if (isFolder) {
                     const folderPath = item.path.endsWith('/') ? item.path : item.path + '/';
@@ -517,7 +517,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         if (clipboard.value.items.length === 0) return;
         loading.value = true;
         try {
-            const endpoint = clipboard.value.action === 'move' ? '/admin/core/file-manager/move' : '/admin/core/file-manager/copy';
+            const endpoint = clipboard.value.action === 'move' ? '/manage/file-manager/move' : '/manage/file-manager/copy';
             for (const item of clipboard.value.items) {
                 await api.post(endpoint, {
                     source: item.path.replace(/^\//, ''),
@@ -539,7 +539,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const moveItem = async (sourcePath: string, destinationPath: string, type: 'file' | 'folder') => {
         try {
-            await api.post('/admin/core/file-manager/move', {
+            await api.post('/manage/file-manager/move', {
                 source: sourcePath.replace(/^\//, ''),
                 destination: destinationPath === '/' ? '' : destinationPath.replace(/^\//, ''),
                 type
@@ -556,7 +556,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
     const fetchTrash = async () => {
         trashLoading.value = true;
         try {
-            const response = await api.get('/admin/core/file-manager/trash');
+            const response = await api.get('/manage/file-manager/trash');
             trashItems.value = response.data?.data?.items || [];
         } catch (error) {
             logger.error('Failed to fetch trash:', error);
@@ -567,7 +567,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const restoreTrashItem = async (item: TrashItem) => {
         try {
-            await api.post('/admin/core/file-manager/restore', { id: item.id });
+            await api.post('/manage/file-manager/restore', { id: item.id });
             await fetchTrash();
             allFolders.value = [];
             await fetchAllFolders();
@@ -587,7 +587,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         });
         if (!confirmed) return;
         try {
-            await api.post('/admin/core/file-manager/trash/empty');
+            await api.post('/manage/file-manager/trash/empty');
             toast.success.action(t('modules.core.file_manager.messages.trashEmptied'));
             fetchTrash();
         } catch (error) {
@@ -604,7 +604,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         });
         if (!confirmed) return;
         try {
-            await api.post('/admin/core/file-manager/trash/permanent', { id: item.id });
+            await api.post('/manage/file-manager/trash/permanent', { id: item.id });
             toast.success.action(t('modules.core.file_manager.messages.deleteSuccess'));
             fetchTrash();
         } catch (error) {

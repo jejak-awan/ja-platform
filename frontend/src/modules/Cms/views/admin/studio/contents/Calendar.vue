@@ -182,7 +182,7 @@ const handleEventDrop = async (info: EventDropArg) => {
     if (!newDate) return;
 
     try {
-        await api.put(`/admin/cms/contents/${contentId}`, {
+        await api.put(`/manage/cms/contents/${contentId}`, {
             published_at: newDate.toISOString().split('T')[0],
         });
         await fetchContents();
@@ -206,7 +206,7 @@ const handleDateClick = (info: DateClickArg) => {
 
 const fetchContents = async () => {
     try {
-        const response = await api.get('/admin/cms/contents', {
+        const response = await api.get('/manage/cms/contents', {
             params: {
                 per_page: 1000,
             },
@@ -221,7 +221,7 @@ const fetchContents = async () => {
 
 const fetchCategories = async () => {
     try {
-        const response = await api.get('/admin/cms/categories');
+        const response = await api.get('/manage/cms/categories');
         const { data } = parseResponse(response);
         categories.value = ensureArray(data);
     } catch (_error: unknown) {

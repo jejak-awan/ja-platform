@@ -474,7 +474,7 @@ const handleSearch = () => {
     loading.value = true;
     searchTimeout.value = setTimeout(async () => {
         try {
-            const response = await api.get('/admin/cms/search', {
+            const response = await api.get('/manage/cms/search', {
                 params: { q: searchQuery.value, limit: 10 }
             });
             // API returns { data: { results: [...], total: ... } }

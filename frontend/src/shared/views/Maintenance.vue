@@ -98,12 +98,12 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useHead } from '@unhead/vue';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 import { SECURITY_ROUTES } from '@/config/security';
 
 
 const cmsStore = useCmsStore();
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 
 const publicSettings = computed(() => cmsStore.siteSettings);
 const loginUrl = SECURITY_ROUTES.login;

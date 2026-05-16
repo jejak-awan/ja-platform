@@ -197,7 +197,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import api from '@/engine/api/client';
 import { parseSingleResponse } from '@/shared/utils/responseParser';
 import {

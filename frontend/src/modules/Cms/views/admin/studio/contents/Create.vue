@@ -361,7 +361,7 @@ const handleAutoSaveToggle = (isEnabled: boolean) => {
 
 const fetchCategories = async () => {
     try {
-        const response = await api.get('/admin/cms/categories', { params: { per_page: 100 } });
+        const response = await api.get('/manage/cms/categories', { params: { per_page: 100 } });
         const { data } = parseResponse(response);
         categories.value = ensureArray(data);
     } catch (error: unknown) {
@@ -376,7 +376,7 @@ const fetchTags = async (query = '') => {
         if (query) {
             params.search = query;
         }
-        const response = await api.get('/admin/cms/tags', { params });
+        const response = await api.get('/manage/cms/tags', { params });
         const { data } = parseResponse(response);
         tags.value = ensureArray(data);
     } catch (error: unknown) {
@@ -386,7 +386,7 @@ const fetchTags = async (query = '') => {
 
 const fetchMenus = async () => {
     try {
-        const response = await api.get('/admin/cms/menus');
+        const response = await api.get('/manage/cms/menus');
         const { data } = parseResponse(response);
         menus.value = ensureArray(data);
     } catch (error: unknown) {
@@ -437,8 +437,8 @@ const handleSubmit = async (status: string | null = null) => {
 
         // If content was auto-saved, use update endpoint
         const endpoint = contentId.value
-            ? `/admin/cms/contents/${contentId.value}`
-            : '/admin/cms/contents';
+            ? `/manage/cms/contents/${contentId.value}`
+            : '/manage/cms/contents';
         const method = contentId.value ? 'put' : 'post';
 
         const response = await (method === 'put'
@@ -519,7 +519,7 @@ const resolveConflict = async (action: 'unique' | 'force_delete') => {
         // Option 2: Force delete the conflicting item (only if trashed)
         try {
             loading.value = true;
-            await api.delete(`/admin/cms/contents/${conflictId}/force-delete`);
+            await api.delete(`/manage/cms/contents/${conflictId}/force-delete`);
             slugConflict.value = null;
             toast.success.action(t('modules.cms.content.messages.conflictResolved'));
             // Retry submission

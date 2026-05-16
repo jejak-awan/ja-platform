@@ -388,7 +388,7 @@ api.interceptors.response.use(
             if (shieldNonce && shieldDifficulty > 0) {
                 try {
                     // Lazy store access to prevent initialization cycles
-                    const { useSecurityStore } = await import('@/modules/Core/stores/security');
+                    const { useSecurityStore } = await import('@/modules/System/stores/security');
                     const securityStore = useSecurityStore();
                     const solution = await securityStore.solveChallenge(shieldNonce, shieldDifficulty);
 

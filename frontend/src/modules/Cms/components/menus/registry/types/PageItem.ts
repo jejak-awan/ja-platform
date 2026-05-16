@@ -12,7 +12,7 @@ const definition: MenuItemDefinition = {
 
     // Data source for fetching pages
     dataSource: {
-        endpoint: '/admin/cms/contents?type=page&status=published',
+        endpoint: '/manage/cms/contents?type=page&status=published',
         labelField: 'title',
         valueField: 'id'
     },
@@ -30,7 +30,7 @@ const definition: MenuItemDefinition = {
             type: 'data_select',
             label: 'modules.cms.menus.form.selectPage',
             required: true,
-            source: '/admin/cms/contents?type=page&status=published',
+            source: '/manage/cms/contents?type=page&status=published',
             labelField: 'title',
             valueField: 'id'
         },

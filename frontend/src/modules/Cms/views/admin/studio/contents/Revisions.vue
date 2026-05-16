@@ -226,7 +226,7 @@
 <script setup lang="ts">
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
-import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
+import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
@@ -289,7 +289,7 @@ const { confirm } = useConfirm();
 const fetchRevisions = async () => {
     loading.value = true;
     try {
-        const response = await api.get(`/admin/cms/contents/${contentId}/revisions`);
+        const response = await api.get(`/manage/cms/contents/${contentId}/revisions`);
         revisions.value = response.data;
         
         // Get content title from first revision or fetch content
@@ -299,7 +299,7 @@ const fetchRevisions = async () => {
                 contentTitle.value = firstRevision.data.title;
             } else {
                 try {
-                    const contentResponse = await api.get(`/admin/cms/contents/${contentId}`);
+                    const contentResponse = await api.get(`/manage/cms/contents/${contentId}`);
                     contentTitle.value = contentResponse.data.data?.title || contentResponse.data.title || t('modules.cms.content.title_singular');
                 } catch {
                     contentTitle.value = t('modules.cms.content.title_singular');
@@ -315,7 +315,7 @@ const fetchRevisions = async () => {
 
 const viewRevision = async (revision: Revision) => {
     try {
-        const response = await api.get(`/admin/cms/contents/${contentId}/revisions/${revision.id}`);
+        const response = await api.get(`/manage/cms/contents/${contentId}/revisions/${revision.id}`);
         viewingRevision.value = response.data;
     } catch (error: unknown) {
         logger.error('Failed to fetch revision detail:', error);
@@ -336,7 +336,7 @@ const restoreRevision = async (revision: Revision) => {
     }
 
     try {
-        await api.post(`/admin/cms/contents/${contentId}/revisions/${revision.id}/restore`);
+        await api.post(`/manage/cms/contents/${contentId}/revisions/${revision.id}/restore`);
         toast.success(t('common.messages.success.restored', { item: `v${revision.version}` }));
         router.push({ name: 'contents.edit', params: { id: contentId } });
     } catch (error: unknown) {

@@ -480,7 +480,7 @@
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useTheme } from '@/shared/composables/useTheme';
 import { useMenu } from '@/shared/composables/useMenu';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 import { useResponsiveDevice } from '@/shared/composables/useResponsiveDevice';
 import { useThemeMotion } from '@/shared/composables/useThemeMotion';
 import { useRoute } from 'vue-router';
@@ -525,7 +525,7 @@ const headerSticky = computed(() => getSetting('header_sticky', true));
 const headerStyle = computed(() => getSetting('header_style', 'glass'));
 const brandingDisplay = computed(() => getSetting('branding_display', 'logo_only'));
 
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 const siteSettings = computed(() => coreStore.settings);
 const { displaySiteName } = useJanariIdentity();
 const siteName = computed(() => displaySiteName.value);

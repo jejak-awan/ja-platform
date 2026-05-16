@@ -449,7 +449,7 @@ const selectedIds = ref<number[]>([]);
 
 const fetchStatistics = async () => {
     try {
-        const response = await api.get('/admin/cms/comments/statistics');
+        const response = await api.get('/manage/cms/comments/statistics');
         statistics.value = (response.data) as CommentStatistics;
     } catch (error: unknown) {
         logger.error('Failed to fetch statistics:', error);
@@ -498,7 +498,7 @@ const bulkAction = async (action: string) => {
     }
     
     try {
-        await api.post('/admin/cms/comments/bulk', {
+        await api.post('/manage/cms/comments/bulk', {
             ids: selectedIds.value,
             action: action
         });
@@ -524,7 +524,7 @@ const fetchComments = async () => {
             params.status = statusFilter.value;
         }
 
-        const response = await api.get('/admin/cms/comments', { params });
+        const response = await api.get('/manage/cms/comments', { params });
         const { data, pagination: paginationData } = parseResponse<Comment>(response);
         comments.value = ensureArray<Comment>(data);
         if (paginationData) {
@@ -546,7 +546,7 @@ const changePage = (page: number) => {
 
 const approveComment = async (comment: Comment) => {
     try {
-        await api.put(`/admin/cms/comments/${comment.id}/approve`);
+        await api.put(`/manage/cms/comments/${comment.id}/approve`);
         await fetchComments();
         toast.success.approve(t('modules.cms.comments.title_singular'));
     } catch (error: unknown) {
@@ -557,7 +557,7 @@ const approveComment = async (comment: Comment) => {
 
 const rejectComment = async (comment: Comment) => {
     try {
-        await api.put(`/admin/cms/comments/${comment.id}/reject`);
+        await api.put(`/manage/cms/comments/${comment.id}/reject`);
         await fetchComments();
         await fetchStatistics();
         toast.success.reject(t('modules.cms.comments.title_singular'));
@@ -569,7 +569,7 @@ const rejectComment = async (comment: Comment) => {
 
 const markAsSpam = async (comment: Comment) => {
     try {
-        await api.put(`/admin/cms/comments/${comment.id}/spam`);
+        await api.put(`/manage/cms/comments/${comment.id}/spam`);
         await fetchComments();
         await fetchStatistics();
         toast.success.markSpam(t('modules.cms.comments.title_singular'));
@@ -599,7 +599,7 @@ const deleteComment = async (comment: Comment) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/admin/cms/comments/${comment.id}`);
+        await api.delete(`/manage/cms/comments/${comment.id}`);
         await fetchComments();
         toast.success.delete(t('modules.cms.comments.title_singular'));
     } catch (error: unknown) {

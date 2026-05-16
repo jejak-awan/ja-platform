@@ -13,25 +13,25 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: SECURITY_ROUTES.login,
         name: 'login',
-        component: () => import('@/modules/Core/views/auth/Login.vue'),
+        component: () => import('@/modules/System/views/auth/Login.vue'),
         meta: { guestOnly: true, authContext: 'system' },
     },
     {
         path: SECURITY_ROUTES.register,
         name: 'register',
-        component: () => import('@/modules/Core/views/auth/Register.vue'),
+        component: () => import('@/modules/System/views/auth/Register.vue'),
         meta: { guestOnly: true, authContext: 'system' },
     },
     {
         path: '/forgot-password',
         name: 'forgot-password',
-        component: () => import('@/modules/Core/views/auth/ForgotPassword.vue'),
+        component: () => import('@/modules/System/views/auth/ForgotPassword.vue'),
         meta: { guestOnly: true },
     },
     {
         path: '/reset-password',
         name: 'reset-password',
-        component: () => import('@/modules/Core/views/auth/ResetPassword.vue'),
+        component: () => import('@/modules/System/views/auth/ResetPassword.vue'),
         meta: { guestOnly: true },
     },
     {
@@ -43,37 +43,37 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/install',
         name: 'install',
-        component: () => import('@/modules/Core/views/InstallView.vue'),
+        component: () => import('@/modules/System/views/InstallView.vue'),
         meta: { public: true, title: 'Installation Wizard' },
     },
     {
         path: '/403',
         name: 'forbidden',
-        component: () => import('@/modules/Core/views/errors/Forbidden.vue'),
+        component: () => import('@/modules/System/views/errors/Forbidden.vue'),
         meta: { public: true },
     },
     {
         path: '/500',
         name: 'server-error',
-        component: () => import('@/modules/Core/views/errors/ServerError.vue'),
+        component: () => import('@/modules/System/views/errors/ServerError.vue'),
         meta: { public: true },
     },
     {
         path: '/404',
         name: 'not-found',
-        component: () => import('@/modules/Core/views/errors/NotFound.vue'),
+        component: () => import('@/modules/System/views/errors/NotFound.vue'),
         meta: { public: true },
     },
     {
         path: '/419',
         name: 'session-expired',
-        component: () => import('@/modules/Core/views/errors/SessionExpired.vue'),
+        component: () => import('@/modules/System/views/errors/SessionExpired.vue'),
         meta: { public: true },
     },
     {
         path: '/429',
         name: 'too-many-requests',
-        component: () => import('@/modules/Core/views/errors/RateLimit.vue'),
+        component: () => import('@/modules/System/views/errors/RateLimit.vue'),
         meta: { public: true },
     },
     {

@@ -77,9 +77,9 @@ import {
 import Image from 'lucide-vue-next/dist/esm/icons/image.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 const { settings } = storeToRefs(coreStore);
 
 const maxUploadSizeMB = computed(() => {

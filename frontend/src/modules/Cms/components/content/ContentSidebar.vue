@@ -614,7 +614,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 import api from '@/engine/api/client';
 import {
     Label,
@@ -643,7 +643,7 @@ import MediaPicker from '@/shared/components/media/MediaPicker.vue';
 import MarkdownEditor from '@/shared/components/editor/MarkdownEditor.vue';
 import type { ContentForm, Category, Tag, MenuItem, Menu } from '@/modules/Cms/types/cms';
 
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 const { settings } = storeToRefs(coreStore);
 
 const { t } = useI18n();
@@ -836,7 +836,7 @@ const fetchMenuParentItems = async (menuId: string | number) => {
     
     loadingParentItems.value = true;
     try {
-        const response = await api.get(`/admin/cms/menus/${menuId}/items`);
+        const response = await api.get(`/manage/cms/menus/${menuId}/items`);
         const data = response.data || [];
         const flatItems = Array.isArray(data) ? data : [];
         

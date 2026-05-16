@@ -143,7 +143,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, markRaw } from 'vue';
-import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue';
+import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue';
 import { useRouter } from 'vue-router';
 import { useTheme } from '@/shared/composables/useTheme';
 import PageDisabled from './components/PageDisabled.vue';
@@ -264,7 +264,7 @@ const loadAcademicContent = async (): Promise<AcademicPageData | null> => {
 
     for (const slug of orderedCandidates) {
       try {
-        const response = await api.get(`/ja/contents/${slug}`);
+        const response = await api.get(`/public/cms/contents/${slug}`);
         writeCachedSlug(slug);
         clearMissState();
         return response.data as AcademicPageData;

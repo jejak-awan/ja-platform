@@ -194,10 +194,10 @@ const handleSubmit = async () => {
     clearErrors();
     try {
         if (isEdit.value) {
-            await api.put(`/admin/cms/tags/${props.tag?.id}`, form.value);
+            await api.put(`/manage/cms/tags/${props.tag?.id}`, form.value);
             toast.success.update('Tag');
         } else {
-            await api.post('/admin/cms/tags', form.value);
+            await api.post('/manage/cms/tags', form.value);
             toast.success.create('Tag');
         }
         

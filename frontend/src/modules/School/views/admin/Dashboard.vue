@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from 'vue';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { LucideIcon } from '@/shared/components/ui';
 
 const authStore = useAuthStore();

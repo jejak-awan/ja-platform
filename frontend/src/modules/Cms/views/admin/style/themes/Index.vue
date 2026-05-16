@@ -290,7 +290,7 @@ const selectedTheme = ref<Theme | null>(null);
 const fetchThemes = async () => {
     try {
         const params = selectedType.value ? { type: selectedType.value } : {};
-        const response = await api.get('/admin/cms/themes', { params });
+        const response = await api.get('/manage/cms/themes', { params });
         const { data } = parseResponse(response);
         themes.value = ensureArray(data);
     } catch (error: unknown) {
@@ -302,7 +302,7 @@ const fetchThemes = async () => {
 const scanThemes = async () => {
     scanning.value = true;
     try {
-        const response = await api.post('/admin/cms/themes/scan');
+        const response = await api.post('/manage/cms/themes/scan');
         await fetchThemes();
         const count = response.data?.count || 0;
         toast.success(t('modules.cms.themes.messages.scanSuccess', { count }));
@@ -325,7 +325,7 @@ const activateTheme = async (theme: Theme) => {
     if (!confirmed) return;
 
     try {
-        await api.post(`/admin/cms/themes/${theme.slug}/activate`);
+        await api.post(`/manage/cms/themes/${theme.slug}/activate`);
         await fetchThemes();
         toast.success(t('modules.cms.themes.messages.activateSuccess'));
     } catch (error: unknown) {
@@ -336,7 +336,7 @@ const activateTheme = async (theme: Theme) => {
 
 const validateTheme = async (theme: Theme) => {
     try {
-        const response = await api.post(`/admin/cms/themes/${theme.slug}/validate`);
+        const response = await api.post(`/manage/cms/themes/${theme.slug}/validate`);
         const data = response.data;
         
         if (data.valid) {

@@ -189,7 +189,7 @@ const isDirty = computed(() => {
 
 
 
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 
 const authStore = useAuthStore();
 const tabs = computed<Tab[]>(() => {
@@ -230,7 +230,7 @@ const currentSettings = computed(() => {
 const fetchSettings = async () => {
     loading.value = true;
     try {
-        const response = await api.get('/admin/cms/settings');
+        const response = await api.get('/manage/cms/settings');
         const { data } = parseResponse(response);
         settings.value = ensureArray(data) as Setting[];
 
@@ -325,7 +325,7 @@ const handleSubmit = async () => {
             };
         });
 
-        await api.post('/admin/cms/settings/bulk-update', {
+        await api.post('/manage/cms/settings/bulk-update', {
             settings: settingsToUpdate,
         });
         

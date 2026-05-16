@@ -1,7 +1,7 @@
 import { logger } from '@/shared/utils/logger';
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { useAuthStore } from '@/modules/Core/stores/auth';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useAuthStore } from '@/modules/System/stores/auth';
+import { useSystemStore } from '@/modules/System/stores/system';
 import { LEGACY_PUBLIC_AUTH_PATHS, isProbePath } from '@/config/security';
 
 interface GuardPaths {
@@ -16,7 +16,7 @@ export const handleBeforeEachGuard = async (
     paths: GuardPaths,
 ): Promise<void> => {
     const authStore = useAuthStore();
-    const coreStore = useCoreStore();
+    const coreStore = useSystemStore();
 
     // 1. Workspace Context Interceptor
     if (to.query.unit_context !== undefined) {

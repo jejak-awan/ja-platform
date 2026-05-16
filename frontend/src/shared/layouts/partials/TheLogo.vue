@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useCoreStore } from '@/modules/Core/stores/core';
+import { useSystemStore } from '@/modules/System/stores/system';
 
 const props = withDefaults(defineProps<{
   minimized?: boolean;
@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<{
   subtitle: null
 });
 
-const coreStore = useCoreStore();
+const coreStore = useSystemStore();
 const displayTitle = computed(() => props.title || coreStore.appIdentity?.app_name || 'Janari App');
 
 const displaySubtitle = computed(() => {

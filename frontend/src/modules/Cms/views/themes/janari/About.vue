@@ -165,7 +165,7 @@
 <script setup lang="ts">
 import JanariSplitText from './components/JanariSplitText.vue'
 import { ref, onMounted, nextTick, computed } from 'vue'
-import SafeHtml from '@/modules/Core/components/ui/SafeHtml.vue'
+import SafeHtml from '@/modules/System/components/ui/SafeHtml.vue'
 import { useRouter } from 'vue-router'
 import { logger } from '@/shared/utils/logger'
 import { useTheme } from '@/shared/composables/useTheme'

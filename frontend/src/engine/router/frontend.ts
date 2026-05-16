@@ -70,7 +70,7 @@ const frontendRoutes: RouteRecordRaw[] = [
             {
                 path: 'terms',
                 name: 'terms',
-                component: () => import('@/modules/Core/views/legal/Terms.vue'),
+                component: () => import('@/modules/System/views/legal/Terms.vue'),
                 meta: {
                     title: 'Terms of Service',
                 }
@@ -78,7 +78,7 @@ const frontendRoutes: RouteRecordRaw[] = [
             {
                 path: 'privacy',
                 name: 'privacy',
-                component: () => import('@/modules/Core/views/legal/Privacy.vue'),
+                component: () => import('@/modules/System/views/legal/Privacy.vue'),
                 meta: {
                     title: 'Privacy Policy',
                 }

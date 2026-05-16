@@ -308,7 +308,7 @@ const filteredFields = computed(() => {
 const fetchFieldGroups = async () => {
     loadingGroups.value = true;
     try {
-        const response = await api.get('/admin/cms/field-groups');
+        const response = await api.get('/manage/cms/field-groups');
         const { data } = parseResponse<FieldGroup>(response);
         fieldGroups.value = ensureArray<FieldGroup>(data);
     } catch (error: unknown) {
@@ -321,7 +321,7 @@ const fetchFieldGroups = async () => {
 const fetchCustomFields = async () => {
     loadingFields.value = true;
     try {
-        const response = await api.get('/admin/cms/custom-fields');
+        const response = await api.get('/manage/cms/custom-fields');
         const { data } = parseResponse<CustomField>(response);
         customFields.value = ensureArray<CustomField>(data);
     } catch (error: unknown) {
@@ -348,7 +348,7 @@ const deleteGroup = async (group: FieldGroup) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/admin/cms/field-groups/${group.id}`);
+        await api.delete(`/manage/cms/field-groups/${group.id}`);
         toast.success.delete(t('features.developer.custom_fields.tabs.groups'));
         fetchFieldGroups();
     } catch (error: unknown) {
@@ -385,7 +385,7 @@ const deleteField = async (field: CustomField) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/admin/cms/custom-fields/${field.id}`);
+        await api.delete(`/manage/cms/custom-fields/${field.id}`);
         toast.success.delete(t('features.developer.custom_fields.tabs.fields'));
         fetchCustomFields();
     } catch (error: unknown) {

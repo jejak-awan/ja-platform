@@ -159,7 +159,7 @@ const table = useVueTable({
 const fetchTemplates = async () => {
     loading.value = true;
     try {
-        const response = await api.get('/admin/cms/email-templates');
+        const response = await api.get('/manage/cms/email-templates');
         const { data } = parseResponse(response);
         templates.value = ensureArray(data);
     } catch (error: unknown) {
@@ -172,7 +172,7 @@ const fetchTemplates = async () => {
 
 const previewTemplate = async (template: Template) => {
     try {
-        const response = await api.post(`/admin/cms/email-templates/${template.id}/preview`);
+        const response = await api.post(`/manage/cms/email-templates/${template.id}/preview`);
         const previewWindow = window.open('', '_blank');
         if (previewWindow) {
             previewWindow.document.write(response.data.html || response.data);
@@ -185,7 +185,7 @@ const previewTemplate = async (template: Template) => {
 
 const sendTestEmail = async (template: Template) => {
     try {
-        await api.post(`/admin/cms/email-templates/${template.id}/send-test`);
+        await api.post(`/manage/cms/email-templates/${template.id}/send-test`);
         toast.success(t('features.email_templates.messages.send_test_success'));
     } catch (error: unknown) {
         logger.error('Failed to send test email:', error);
@@ -205,7 +205,7 @@ const handleDelete = async (template: Template) => {
     if (!confirmed) return;
 
     try {
-        await api.delete(`/admin/cms/email-templates/${template.id}`);
+        await api.delete(`/manage/cms/email-templates/${template.id}`);
         toast.success(t('features.email_templates.messages.delete_success'));
         fetchTemplates();
     } catch (error: unknown) {

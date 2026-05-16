@@ -291,7 +291,7 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { useLanguage, type Language } from '@/shared/composables/useLanguage';
 import api from '@/engine/api/client';
 import { getResponseList } from '@/shared/utils/responseParser';
@@ -337,7 +337,7 @@ interface Notification {
 const authStore = useAuthStore();
 const { t } = useI18n();
 
-import { ROLE_RANKS } from '@/modules/Core/stores/auth';
+import { ROLE_RANKS } from '@/modules/System/stores/auth';
 
 const currentRoleName = computed(() => {
     const roles = authStore.user?.roles;
@@ -440,7 +440,7 @@ const fetchNotifications = async () => {
         loadingNotifications.value = true;
     }
     try {
-        const response = await api.get('/admin/core/notifications?limit=5');
+        const response = await api.get('/manage/system/notifications?limit=5');
         notifications.value = getResponseList<Notification>(response.data);
         hasLoadedNotificationsOnce.value = true;
     } catch (error) {
@@ -455,7 +455,7 @@ const fetchNotifications = async () => {
 const handleNotificationClick = async (notification: Notification) => {
     if (!notification.read_at) {
         try {
-            await api.put(`/admin/core/notifications/${notification.id}/read`);
+            await api.put(`/manage/system/notifications/${notification.id}/read`);
             notification.read_at = new Date().toISOString();
         } catch (error) {
             logger.error('Failed to mark notification as read:', error);

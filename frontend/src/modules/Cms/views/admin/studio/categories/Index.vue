@@ -168,7 +168,7 @@ import {
 } from '@tanstack/vue-table';
 
 // Stores & Composables
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { useToast } from '@/shared/composables/useToast';
 import type { Category } from '@/modules/Cms/types/cms';
@@ -390,7 +390,7 @@ const fetchCategories = async (page = 1) => {
             params.is_active = statusFilter.value === 'active' ? 1 : 0;
         }
 
-        const response = await api.get('/admin/cms/categories', { params });
+        const response = await api.get('/manage/cms/categories', { params });
         const { data, pagination: paginationData } = parseResponse<Category>(response);
         
         categories.value = data || [];
@@ -470,7 +470,7 @@ const deleteCategory = async (category: Category) => {
 
     if (confirmed) {
         try {
-            await api.delete(`/admin/cms/categories/${category.id}`);
+            await api.delete(`/manage/cms/categories/${category.id}`);
             fetchCategories(pagination.value.current_page);
             toast.success.delete(t('modules.cms.categories.title_singular'));
         } catch (error: unknown) {
@@ -492,7 +492,7 @@ const confirmBulkDelete = async () => {
 
    if (confirmed) {
         try {
-            await api.post('/admin/cms/categories/bulk-destroy', { ids: selectedIds.value });
+            await api.post('/manage/cms/categories/bulk-destroy', { ids: selectedIds.value });
             const count = selectedIds.value.length;
             selectedIds.value = [];
             fetchCategories(pagination.value.current_page);

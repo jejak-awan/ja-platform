@@ -96,7 +96,7 @@
 <script setup lang="ts">
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted } from 'vue';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 import api from '@/engine/api/client';
 import { parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
 import dayjs from 'dayjs';

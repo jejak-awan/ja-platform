@@ -365,10 +365,10 @@ const handleSubmit = async () => {
     clearErrors();
     try {
         if (isEdit.value) {
-            await api.put(`/admin/cms/categories/${props.category?.id}`, payload);
+            await api.put(`/manage/cms/categories/${props.category?.id}`, payload);
             toast.success.update('Category');
         } else {
-            await api.post('/admin/cms/categories', payload);
+            await api.post('/manage/cms/categories', payload);
             toast.success.create('Category');
         }
         

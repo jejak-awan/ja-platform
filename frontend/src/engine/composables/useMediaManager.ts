@@ -103,7 +103,7 @@ export function useMediaManager() {
             if (dateFromFilter.value) params.date_from = dateFromFilter.value;
             if (dateToFilter.value) params.date_to = dateToFilter.value;
 
-            const response = await api.get('/admin/cms/media', { params });
+            const response = await api.get('/manage/media', { params });
             const { data, pagination: paginationData } = parseResponse(response);
             mediaList.value = ensureArray(data);
             if (paginationData) pagination.value = paginationData;
@@ -116,7 +116,7 @@ export function useMediaManager() {
 
     const fetchStatistics = async () => {
         try {
-            const response = await api.get('/admin/cms/media/statistics');
+            const response = await api.get('/manage/media/statistics');
             statistics.value = response.data;
         } catch {
             // logger.error('Failed to fetch media statistics:', error);
@@ -125,7 +125,7 @@ export function useMediaManager() {
 
     const fetchFolders = async () => {
         try {
-            const response = await api.get('/admin/cms/media-folders', { params: { tree: true, trashed: 'with' } });
+            const response = await api.get('/manage/folders', { params: { tree: true, trashed: 'with' } });
             const { data } = parseResponse(response);
             treeFolders.value = ensureArray(data);
 
@@ -147,7 +147,7 @@ export function useMediaManager() {
 
     const fetchTags = async () => {
         try {
-            const response = await api.get('/admin/cms/tags', {
+            const response = await api.get('/manage/cms/tags', {
                 params: { usage: 'media' }
             });
             tags.value = response.data || [];
@@ -158,7 +158,7 @@ export function useMediaManager() {
 
     const fetchFilters = async () => {
         try {
-            const response = await api.get('/admin/cms/media/filters');
+            const response = await api.get('/manage/cms/media/filters');
             const payload = response.data as { success?: boolean; authors?: { id: number | string; name: string }[] };
             if (payload.success === false) return;
             const authors = Array.isArray(payload.authors)
@@ -200,7 +200,7 @@ export function useMediaManager() {
 
     const restoreMedia = async (media: Media) => {
         try {
-            await api.post(`/admin/cms/media/${media.id}/restore`);
+            await api.post(`/manage/cms/media/${media.id}/restore`);
             await fetchMedia();
             fetchStatistics();
             toast.success.action(t('modules.core.media.messages.restoreSuccess') || 'Media restored successfully');
@@ -211,7 +211,7 @@ export function useMediaManager() {
 
     const restoreFolder = async (folder: MediaFolder) => {
         try {
-            await api.post(`/admin/cms/media-folders/${folder.id}/restore`);
+            await api.post(`/manage/cms/media-folders/${folder.id}/restore`);
             await fetchFolders();
             fetchStatistics();
             toast.success.action(t('modules.core.media.messages.folderRestoreSuccess') || 'Folder restored successfully');
@@ -230,7 +230,7 @@ export function useMediaManager() {
         });
         if (!confirmed) return;
         try {
-            await api.post('/admin/cms/media/empty-trash');
+            await api.post('/manage/cms/media/empty-trash');
             await fetchMedia();
             await fetchFolders();
             fetchStatistics();
@@ -251,8 +251,8 @@ export function useMediaManager() {
         });
         if (!confirmed) return;
         try {
-            const url = isPermanent ? `/admin/cms/media/${media.id}/force-delete` : `/admin/cms/media/${media.id}/delete`;
-            await api.post(url);
+            const params = isPermanent ? { permanent: 1 } : {};
+            await api.delete(`/manage/media/${media.id}`, { params });
             toast.success.action(t('modules.core.media.messages.deleteSuccess') || 'Media deleted successfully');
             await fetchMedia();
             fetchStatistics();
@@ -272,7 +272,7 @@ export function useMediaManager() {
         });
         if (!confirmed) return;
         try {
-            const url = isPermanent ? `/admin/cms/media-folders/${folder.id}/force-delete` : `/admin/cms/media-folders/${folder.id}/delete`;
+            const url = isPermanent ? `/manage/cms/media-folders/${folder.id}/force-delete` : `/manage/cms/media-folders/${folder.id}/delete`;
             await api.post(url);
             toast.success.action(t('modules.core.media.messages.folderDeleted') || 'Folder deleted successfully');
             await fetchFolders();
@@ -335,7 +335,7 @@ export function useMediaManager() {
             if (!confirmed) return;
             bulkProcessing.value = true;
             try {
-                await api.post('/admin/cms/media/bulk-action', { action: 'delete', ids: selectedMedia.value });
+                await api.post('/manage/media/bulk', { action: 'delete', media_ids: selectedMedia.value });
                 await fetchMedia();
                 fetchStatistics();
                 selectedMedia.value = [];
@@ -358,9 +358,9 @@ export function useMediaManager() {
             }
             bulkProcessing.value = true;
             try {
-                await api.post('/admin/cms/media/bulk-action', {
+                await api.post('/manage/media/bulk', {
                     action: action === 'restore' ? 'restore' : 'delete_permanent',
-                    ids: selectedMedia.value,
+                    media_ids: selectedMedia.value,
                     folder_ids: selectedFolders.value
                 });
 
@@ -383,9 +383,9 @@ export function useMediaManager() {
         } else if (action === 'move') {
             bulkProcessing.value = true;
             try {
-                await api.post('/admin/cms/media/bulk-action', {
+                await api.post('/manage/media/bulk', {
                     action: 'move',
-                    ids: selectedMedia.value,
+                    media_ids: selectedMedia.value,
                     folder_id: options.folderId,
                 });
                 await fetchMedia();
@@ -399,9 +399,9 @@ export function useMediaManager() {
         } else if (action === 'update_alt') {
             bulkProcessing.value = true;
             try {
-                await api.post('/admin/cms/media/bulk-action', {
+                await api.post('/manage/media/bulk', {
                     action: 'update_alt',
-                    ids: selectedMedia.value,
+                    media_ids: selectedMedia.value,
                     alt_text: options.altText,
                 });
                 await fetchMedia();
@@ -415,7 +415,7 @@ export function useMediaManager() {
         } else if (action === 'download') {
             bulkProcessing.value = true;
             try {
-                const response = await api.post('/admin/cms/media/download-zip', { ids: selectedMedia.value }, { responseType: 'blob' });
+                const response = await api.post('/manage/cms/media/download-zip', { ids: selectedMedia.value }, { responseType: 'blob' });
                 const blob = new Blob([response.data], { type: 'application/zip' });
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');

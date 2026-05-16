@@ -307,7 +307,7 @@ const academicEvents = [
 
 const fetchCategories = async () => {
   try {
-    const response = await api.get('/ja/categories?tree=true')
+    const response = await api.get('/public/cms/categories?tree=true')
     // Data is already unwrapped by api.ts interceptor
     categories.value = Array.isArray(response.data) ? response.data : (response.data as any)?.data || []
   } catch (error) {
@@ -348,7 +348,7 @@ const onSearchInput = () => {
     }
 
     try {
-      const response = await api.get('/ja/search/suggestions', {
+      const response = await api.get('/public/search/suggestions', {
         params: {
           q: searchQuery.value,
           limit: 5

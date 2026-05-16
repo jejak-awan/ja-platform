@@ -180,7 +180,7 @@ import { useI18n } from 'vue-i18n';
 import { useHead } from '@unhead/vue';
 import { useCmsStore } from '@/modules/Cms/stores/cms';
 import api from '@/engine/api/client';
-import { useAuthStore } from '@/modules/Core/stores/auth';
+import { useAuthStore } from '@/modules/System/stores/auth';
 
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 import Lock from 'lucide-vue-next/dist/esm/icons/lock.js';
@@ -204,7 +204,7 @@ import {
 } from '@/shared/components/ui';
 import ActionToolbar from '@/modules/Cms/components/content/ActionToolbar.vue';
 import AutoSaveIndicator from '@/shared/components/AutoSaveIndicator.vue';
-import ContentPreviewModal from '@/modules/Core/components/admin/ContentPreviewModal.vue';
+import ContentPreviewModal from '@/modules/System/components/admin/ContentPreviewModal.vue';
 import ContentMain from '@/modules/Cms/components/content/ContentMain.vue';
 import ContentSidebar from '@/modules/Cms/components/content/ContentSidebar.vue';
 
@@ -390,7 +390,7 @@ const toApiPublishedAt = (value: string | undefined | null): string | null | und
 const fetchContent = async () => {
     loading.value = true;
     try {
-        const response = await api.get(`/admin/cms/contents/${contentId}`);
+        const response = await api.get(`/manage/cms/contents/${contentId}`);
         const content = parseSingleResponse<Content>(response);
         
         if (content) {
@@ -469,7 +469,7 @@ const fetchContent = async () => {
 
 const lockContent = async () => {
     try {
-        const response = await api.post(`/admin/cms/contents/${contentId}/lock`);
+        const response = await api.post(`/manage/cms/contents/${contentId}/lock`);
         const data = parseSingleResponse<LockStatus>(response);
         if (data && typeof data === 'object' && 'is_locked' in data) {
             lockStatus.value = data;
@@ -489,7 +489,7 @@ const lockContent = async () => {
 
 const checkLockStatus = async () => {
     try {
-        const response = await api.get(`/admin/cms/contents/${contentId}/lock-status`);
+        const response = await api.get(`/manage/cms/contents/${contentId}/lock-status`);
         const data = parseSingleResponse<LockStatus>(response);
         if (data) {
             lockStatus.value = data;
@@ -501,7 +501,7 @@ const checkLockStatus = async () => {
 
 const handleUnlock = async () => {
     try {
-        await api.post(`/admin/cms/contents/${contentId}/unlock`);
+        await api.post(`/manage/cms/contents/${contentId}/unlock`);
         lockStatus.value = { is_locked: false, can_unlock: true };
         if (lockInterval.value) {
             clearInterval(lockInterval.value);
@@ -538,7 +538,7 @@ const handlePublishFromPreview = async () => {
 
 const fetchCategories = async () => {
     try {
-        const response = await api.get('/admin/cms/categories', { params: { per_page: 100 } });
+        const response = await api.get('/manage/cms/categories', { params: { per_page: 100 } });
         const { data } = parseResponse(response);
         categories.value = ensureArray(data);
     } catch (error: unknown) {
@@ -553,7 +553,7 @@ const fetchTags = async (query = '') => {
         if (query) {
             params.search = query;
         }
-        const response = await api.get('/admin/cms/tags', { params });
+        const response = await api.get('/manage/cms/tags', { params });
         const { data } = parseResponse(response);
         tags.value = ensureArray(data);
     } catch (error: unknown) {
@@ -563,7 +563,7 @@ const fetchTags = async (query = '') => {
 
 const fetchMenus = async () => {
     try {
-        const response = await api.get('/admin/cms/menus');
+        const response = await api.get('/manage/cms/menus');
         menus.value = getResponseList(response.data);
     } catch (error: unknown) {
         logger.error('Failed to fetch menus:', error);
@@ -620,7 +620,7 @@ const handleSubmit = async (status: string | null = null) => {
             new_tags: newTags,
         };
 
-        const response = await api.put(`/admin/cms/contents/${contentId}`, payload);
+        const response = await api.put(`/manage/cms/contents/${contentId}`, payload);
         const updatedContent = parseSingleResponse(response);
         
         if (updatedContent) {

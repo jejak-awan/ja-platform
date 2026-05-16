@@ -176,7 +176,7 @@ const table = useVueTable({
 const fetchMenus = async (page: number = 1) => {
     loading.value = true;
     try {
-        const response = await api.get('/admin/cms/menus', {
+        const response = await api.get('/manage/cms/menus', {
             params: {
                 page,
                 per_page: perPage.value,
@@ -205,7 +205,7 @@ const handleDelete = async (menu: Menu) => {
     });
     if (confirmed) {
         try {
-            await api.delete(`/admin/cms/menus/${menu.id}`);
+            await api.delete(`/manage/cms/menus/${menu.id}`);
             toast.success.delete(t('modules.cms.menus.title'));
             fetchMenus();
         } catch (error) { toast.error.action(error); }
@@ -220,7 +220,7 @@ const handleRestore = async (menu: Menu) => {
     });
     if (confirmed) {
         try {
-            await api.post(`/admin/cms/menus/${menu.id}/restore`);
+            await api.post(`/manage/cms/menus/${menu.id}/restore`);
             toast.success.restore(t('modules.cms.menus.title'));
             fetchMenus();
         } catch (error) { toast.error.action(error); }
@@ -235,7 +235,7 @@ const handleForceDelete = async (menu: Menu) => {
     });
     if (confirmed) {
         try {
-            await api.delete(`/admin/cms/menus/${menu.id}/force-delete`);
+            await api.delete(`/manage/cms/menus/${menu.id}/force-delete`);
             toast.success.delete(t('modules.cms.menus.title'));
             fetchMenus();
         } catch (error) { toast.error.action(error); }
@@ -255,7 +255,7 @@ const handleBulkAction = async () => {
 
     if (confirmed) {
         try {
-            await api.post('/admin/cms/menus/bulk-action', {
+            await api.post('/manage/cms/menus/bulk-action', {
                 action: bulkAction.value,
                 menu_ids: selectedIds
             });
