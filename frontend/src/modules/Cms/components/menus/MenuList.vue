@@ -176,7 +176,7 @@ const table = useVueTable({
 const fetchMenus = async (page: number = 1) => {
     loading.value = true;
     try {
-        const response = await api.get('/manage/cms/menus', {
+        const response = await api.get('/manage/layout/menus', {
             params: {
                 page,
                 per_page: perPage.value,
@@ -255,7 +255,7 @@ const handleBulkAction = async () => {
 
     if (confirmed) {
         try {
-            await api.post('/manage/cms/menus/bulk-action', {
+            await api.post('/manage/layout/menus/bulk-action', {
                 action: bulkAction.value,
                 menu_ids: selectedIds
             });

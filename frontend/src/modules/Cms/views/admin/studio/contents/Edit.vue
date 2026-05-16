@@ -553,7 +553,7 @@ const fetchTags = async (query = '') => {
         if (query) {
             params.search = query;
         }
-        const response = await api.get('/manage/cms/tags', { params });
+        const response = await api.get('/manage/library/tags', { params });
         const { data } = parseResponse(response);
         tags.value = ensureArray(data);
     } catch (error: unknown) {
@@ -563,7 +563,7 @@ const fetchTags = async (query = '') => {
 
 const fetchMenus = async () => {
     try {
-        const response = await api.get('/manage/cms/menus');
+        const response = await api.get('/manage/layout/menus');
         menus.value = getResponseList(response.data);
     } catch (error: unknown) {
         logger.error('Failed to fetch menus:', error);

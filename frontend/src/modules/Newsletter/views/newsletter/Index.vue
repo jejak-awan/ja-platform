@@ -305,7 +305,7 @@ const fetchSubscribers = async () => {
             params[key] = value;
         });
 
-        const response = await api.get('/manage/cms/newsletter/subscribers', { params });
+        const response = await api.get('/manage/newsletter/subscribers', { params });
         const { data, pagination: pag } = parseResponse(response);
         subscribers.value = data as Subscriber[];
         if (pag) {
@@ -385,7 +385,7 @@ const restoreSubscriber = async (subscriber: Subscriber) => {
 
 const exportCsv = async () => {
     try {
-        const response = await api.get('/manage/cms/newsletter/export', {
+        const response = await api.get('/manage/newsletter/export', {
             params: { status: filters.value.status },
             responseType: 'blob',
         });
@@ -436,7 +436,7 @@ const bulkAction = async (action: string) => {
          }
 
          try {
-             await api.post('/manage/cms/newsletter/subscribers/bulk-action', {
+             await api.post('/manage/newsletter/subscribers/bulk-action', {
                  ids: selectedIds.value,
                  action: action
              });
@@ -448,7 +448,7 @@ const bulkAction = async (action: string) => {
          }
     } else if (action === 'restore') {
          try {
-             await api.post('/manage/cms/newsletter/subscribers/bulk-action', {
+             await api.post('/manage/newsletter/subscribers/bulk-action', {
                  ids: selectedIds.value,
                  action: 'restore'
              });
@@ -460,7 +460,7 @@ const bulkAction = async (action: string) => {
          }
     } else if (action === 'unsubscribe' || action === 'subscribe') {
          try {
-             await api.post('/manage/cms/newsletter/subscribers/bulk-action', {
+             await api.post('/manage/newsletter/subscribers/bulk-action', {
                  ids: selectedIds.value,
                  action: action
              });

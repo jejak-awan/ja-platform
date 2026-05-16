@@ -321,7 +321,7 @@ const fetchFieldGroups = async () => {
 const fetchCustomFields = async () => {
     loadingFields.value = true;
     try {
-        const response = await api.get('/manage/cms/custom-fields');
+        const response = await api.get('/manage/library/custom-fields');
         const { data } = parseResponse<CustomField>(response);
         customFields.value = ensureArray<CustomField>(data);
     } catch (error: unknown) {

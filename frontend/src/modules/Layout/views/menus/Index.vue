@@ -56,8 +56,8 @@
       </template>
       <template v-else>
         <MenuBuilder 
-          :key="(selectedMenuId as string | number)" 
-          :menu-id="(selectedMenuId as string | number)"
+          :key="selectedMenuId!" 
+          :menu-id="selectedMenuId!"
           :menus="(menus as any[])"
           :trashed-filter="trashedFilter"
           :trashed-count="trashedCount"
@@ -86,65 +86,52 @@
 import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import api from '@/engine/api/client';
+import { useLayoutStore } from '@/modules/Layout/stores/layout';
 import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import MenuBuilder from '@/modules/Cms/components/menus/MenuBuilder.vue';
-import MenuList from '@/modules/Cms/components/menus/MenuList.vue';
-import MenuModal from '@/modules/Cms/components/menus/MenuModal.vue';
+import MenuBuilder from '@/modules/Layout/views/menus/components/MenuBuilder.vue';
+import MenuList from '@/modules/Layout/views/menus/components/MenuList.vue';
+import MenuModal from '@/modules/Layout/views/menus/components/MenuModal.vue';
 import { 
     Button
 } from '@/shared/components/ui';
 import List from 'lucide-vue-next/dist/esm/icons/list.js';
 import Edit3 from 'lucide-vue-next/dist/esm/icons/pencil.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
-import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 
 const { t } = useI18n();
 const toast = useToast();
 const { confirm } = useConfirm();
+const layoutStore = useLayoutStore();
 
 interface Menu {
-    id: string | number;
+    id: string;
     name: string;
     deleted_at?: string | null;
 }
 
-const menus = ref<Menu[]>([]);
 const showCreateModal = ref(false);
-const selectedMenuId = ref<string | number | null>(null);
-const isLoading = ref(true);
+const selectedMenuId = ref<string | null>(null);
 const trashedFilter = ref('without');
-const trashedCount = ref(0);
 const viewMode = ref<'list' | 'builder'>('list');
 
 // Computed
+const menus = computed(() => layoutStore.menuList as Menu[]);
+const isLoading = computed(() => layoutStore.loading);
+const trashedCount = computed(() => layoutStore.trashedCount);
 const selectedMenu = computed(() => {
-    return menus.value.find(m => m.id.toString() === selectedMenuId.value?.toString());
+    return menus.value.find(m => m.id === selectedMenuId.value);
 });
 
-// Fetch all menus (legacy or for builder dropdown)
+// Fetch all menus
 const fetchMenus = async () => {
-    isLoading.value = true;
     try {
-        const response = await api.get('/manage/cms/menus', {
-            params: {
-                trashed: trashedFilter.value,
-                per_page: 100 // Get many for the dropdown
-            }
+        await layoutStore.fetchAllMenus({
+            trashed: trashedFilter.value,
+            per_page: 100
         });
-        
-        // Capture trashed count from meta
-        trashedCount.value = response.data?.meta?.trashed_count ?? 0;
-
-        const { data } = parseResponse(response);
-        menus.value = ensureArray(data);
-        
     } catch (error: unknown) {
-        logger.error('Failed to fetch menus:', error);
         toast.error.action(t('modules.cms.menus.messages.loadingFailed') || 'Failed to load menus');
-    } finally {
-        isLoading.value = false;
     }
 };
 
@@ -152,16 +139,16 @@ const openCreateModal = () => {
     showCreateModal.value = true;
 };
 
-const handleMenuCreated = async (newMenu: { id?: string | number }) => {
+const handleMenuCreated = async (newMenu: { id?: string }) => {
     showCreateModal.value = false;
     await fetchMenus();
     if (newMenu && newMenu.id) {
-        selectedMenuId.value = newMenu.id.toString();
+        selectedMenuId.value = newMenu.id;
         viewMode.value = 'builder';
     }
 };
 
-const handleSelectMenu = (menuId: string | number) => {
+const handleSelectMenu = (menuId: string) => {
     selectedMenuId.value = menuId;
     viewMode.value = 'builder';
 };
@@ -187,14 +174,11 @@ const deleteCurrentMenu = async () => {
 
     if (!confirmed) return;
 
+    if (!selectedMenuId.value) return;
+
     try {
-        if (isTrashed) {
-             await api.delete(`/manage/cms/menus/${selectedMenuId.value}/force-delete`);
-             toast.success.action(t('common.messages.success.deleted', { item: t('modules.cms.menus.title') }));
-        } else {
-            await api.delete(`/manage/cms/menus/${selectedMenuId.value}`);
-            toast.success.delete(t('modules.cms.menus.title'));
-        }
+        await layoutStore.deleteMenu(selectedMenuId.value, isTrashed);
+        toast.success.delete(t('modules.cms.menus.title'));
         selectedMenuId.value = null;
         await fetchMenus();
     } catch (error: unknown) {
@@ -204,7 +188,7 @@ const deleteCurrentMenu = async () => {
 };
 
 const restoreCurrentMenu = async () => {
-    if (!selectedMenu.value) return;
+    if (!selectedMenu.value || !selectedMenuId.value) return;
 
      const confirmed = await confirm({
         title: t('common.actions.restore'),
@@ -216,7 +200,7 @@ const restoreCurrentMenu = async () => {
     if (!confirmed) return;
 
     try {
-        await api.post(`/manage/cms/menus/${selectedMenuId.value}/restore`);
+        await layoutStore.restoreMenu(selectedMenuId.value);
         toast.success.restore(t('modules.cms.menus.title'));
         await fetchMenus();
     } catch (error: unknown) {

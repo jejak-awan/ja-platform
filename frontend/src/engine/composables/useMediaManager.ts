@@ -147,7 +147,7 @@ export function useMediaManager() {
 
     const fetchTags = async () => {
         try {
-            const response = await api.get('/manage/cms/tags', {
+            const response = await api.get('/manage/library/tags', {
                 params: { usage: 'media' }
             });
             tags.value = response.data || [];
@@ -158,7 +158,7 @@ export function useMediaManager() {
 
     const fetchFilters = async () => {
         try {
-            const response = await api.get('/manage/cms/media/filters');
+            const response = await api.get('/manage/media/filters');
             const payload = response.data as { success?: boolean; authors?: { id: string | string; name: string }[] };
             if (payload.success === false) return;
             const authors = Array.isArray(payload.authors)
@@ -230,7 +230,7 @@ export function useMediaManager() {
         });
         if (!confirmed) return;
         try {
-            await api.post('/manage/cms/media/empty-trash');
+            await api.post('/manage/media/empty-trash');
             await fetchMedia();
             await fetchFolders();
             fetchStatistics();
@@ -415,7 +415,7 @@ export function useMediaManager() {
         } else if (action === 'download') {
             bulkProcessing.value = true;
             try {
-                const response = await api.post('/manage/cms/media/download-zip', { ids: selectedMedia.value }, { responseType: 'blob' });
+                const response = await api.post('/manage/media/download-zip', { ids: selectedMedia.value }, { responseType: 'blob' });
                 const blob = new Blob([response.data], { type: 'application/zip' });
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');

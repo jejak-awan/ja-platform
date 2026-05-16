@@ -159,7 +159,7 @@ const table = useVueTable({
 const fetchTemplates = async () => {
     loading.value = true;
     try {
-        const response = await api.get('/manage/cms/email-templates');
+        const response = await api.get('/manage/newsletter/email-templates');
         const { data } = parseResponse(response);
         templates.value = ensureArray(data);
     } catch (error: unknown) {

@@ -141,7 +141,7 @@ const editingWidget = ref<Widget | null>(null);
 const fetchWidgets = async () => {
     loading.value = true;
     try {
-        const response = await api.get('/manage/cms/widgets');
+        const response = await api.get('/manage/layout/widgets');
         const { data } = parseResponse(response);
         widgets.value = ensureArray(data);
     } catch (error: unknown) {

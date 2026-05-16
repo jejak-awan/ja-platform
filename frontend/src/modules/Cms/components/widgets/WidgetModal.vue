@@ -217,7 +217,7 @@ const handleSubmit = async () => {
             await api.put(`/manage/cms/widgets/${props.widget.id}`, form.value);
             toast.success.update(t('features.widgets.title'));
         } else {
-            await api.post('/manage/cms/widgets', form.value);
+            await api.post('/manage/layout/widgets', form.value);
             toast.success.create(t('features.widgets.title'));
         }
         emit('saved');

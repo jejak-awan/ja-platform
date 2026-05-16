@@ -749,7 +749,7 @@ const fetchForms = async () => {
             params.trashed = trashedFilter.value;
         }
 
-        const response = await api.get('/manage/cms/forms', { params });
+        const response = await api.get('/manage/forms', { params });
         const { data } = parseResponse<Form>(response);
         forms.value = ensureArray<Form>(data);
     } catch (error: unknown) {
@@ -894,7 +894,7 @@ const handleBulkDelete = async () => {
 
 const performBulkAction = async () => {
     try {
-        await api.delete('/manage/cms/forms/bulk-delete', { data: { ids: selectedIds.value } });
+        await api.delete('/manage/forms/bulk-delete', { data: { ids: selectedIds.value } });
         toast.success.default(t('modules.cms.forms.submissions.messages.bulkDeleteSuccess', { count: selectedIds.value.length }));
         selectedIds.value = [];
         fetchForms();

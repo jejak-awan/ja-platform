@@ -932,7 +932,7 @@ async function fetchCategories() {
 
 async function fetchMenus() {
     try {
-        const r = await api.get('/manage/cms/menus')
+        const r = await api.get('/manage/layout/menus')
         const parsed = parseResponse<any>(r)
         const data = ensureArray<any>(parsed.data)
         availableMenus.value = data.map((m: any) => ({ value: m.id, label: m.name }))

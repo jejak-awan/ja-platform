@@ -351,7 +351,7 @@ const fetchTags = async (page = 1) => {
             params.usage = filterUsage.value;
         }
 
-        const response = await api.get('/manage/cms/tags', { params });
+        const response = await api.get('/manage/library/tags', { params });
         const { data, pagination: paginationData } = parseResponse(response);
         
         tags.value = (data as unknown as Tag[]) || [];
@@ -362,7 +362,7 @@ const fetchTags = async (page = 1) => {
         }
 
         try {
-            const statsResponse = await api.get('/manage/cms/tags/statistics');
+            const statsResponse = await api.get('/manage/library/tags/statistics');
             statistics.value = statsResponse.data.data || statsResponse.data;
         } catch (error: unknown) {
             logger.error('Failed to fetch statistics:', error);
@@ -399,7 +399,7 @@ const bulkDelete = async () => {
     if (!confirmed) return;
 
     try {
-        await api.post('/manage/cms/tags/bulk-delete', { ids: selectedIds.value });
+        await api.post('/manage/library/tags/bulk-delete', { ids: selectedIds.value });
         selectedIds.value = [];
         await fetchTags(pagination.value.current_page);
         toast.success.delete(t('modules.cms.tags.title', { count: 2 }));

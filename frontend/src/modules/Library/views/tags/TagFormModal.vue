@@ -197,7 +197,7 @@ const handleSubmit = async () => {
             await api.put(`/manage/cms/tags/${props.tag?.id}`, form.value);
             toast.success.update('Tag');
         } else {
-            await api.post('/manage/cms/tags', form.value);
+            await api.post('/manage/library/tags', form.value);
             toast.success.create('Tag');
         }
         

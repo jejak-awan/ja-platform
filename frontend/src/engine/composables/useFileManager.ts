@@ -376,7 +376,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const fetchFilters = async () => {
         try {
-            const response = await api.get('/manage/cms/media/filters'); // Using media filters endpoint for authors as it's shared
+            const response = await api.get('/manage/media/filters'); // Using media filters endpoint for authors as it's shared
             const filters = getResponseObject<{ authors?: { id: string | string; name: string }[] }>(response.data);
             const authors = filters?.authors;
             availableFilters.value = {

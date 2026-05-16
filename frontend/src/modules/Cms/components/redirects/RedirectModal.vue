@@ -209,7 +209,7 @@ const handleSubmit = async () => {
             await api.put(`/manage/cms/redirects/${props.redirect.id}`, payload);
             toast.success.update(t('features.redirects.title'));
         } else {
-            await api.post('/manage/cms/redirects', payload);
+            await api.post('/manage/layout/redirects', payload);
             toast.success.create(t('features.redirects.title'));
         }
         emit('saved');

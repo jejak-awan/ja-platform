@@ -285,7 +285,7 @@ const fetchTemplate = async () => {
 
 const previewTemplate = async () => {
     try {
-        const response = await api.post('/manage/cms/email-templates/preview', form.value);
+        const response = await api.post('/manage/newsletter/email-templates/preview', form.value);
         const previewWindow = window.open('', '_blank');
         if (previewWindow) {
             previewWindow.document.write(response.data.html);

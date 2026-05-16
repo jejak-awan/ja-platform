@@ -158,7 +158,7 @@ const canManageMedia = authStore.hasPermission('manage media');
 
 const fetchFolders = async () => {
     try {
-        const response = await api.get('/manage/cms/media-folders');
+        const response = await api.get('/manage/media-folders');
         const data = response.data || [];
         folders.value = data.filter((f: MediaFolder) => !f.is_trashed);
     } catch (error) {
@@ -171,7 +171,7 @@ const handleSubmit = async () => {
 
     saving.value = true;
     try {
-        await api.post('/manage/cms/media-folders', form.value);
+        await api.post('/manage/media-folders', form.value);
         toast.success.create('Folder');
         emit('created');
         emit('close');

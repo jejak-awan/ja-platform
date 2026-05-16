@@ -378,7 +378,7 @@ const handleSubmit = async () => {
             await api.put(`/manage/cms/custom-fields/${props.field.id}`, payload);
             toast.success.update(t('features.developer.custom_fields.fields.title'));
         } else {
-            await api.post('/manage/cms/custom-fields', payload);
+            await api.post('/manage/library/custom-fields', payload);
             toast.success.create(t('features.developer.custom_fields.fields.title'));
         }
         emit('saved');

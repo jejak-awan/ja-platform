@@ -249,13 +249,13 @@ const filteredRedirects = computed(() => {
 const fetchRedirects = async () => {
     loading.value = true;
     try {
-        const response = await api.get('/manage/cms/redirects');
+        const response = await api.get('/manage/layout/redirects');
         const { data } = parseResponse(response);
         redirects.value = ensureArray(data) as Redirect[];
         
         // Fetch statistics
         try {
-            const statsResponse = await api.get('/manage/cms/redirects/statistics');
+            const statsResponse = await api.get('/manage/layout/redirects/statistics');
             statistics.value = parseSingleResponse(statsResponse) as RedirectStatistics;
         } catch (error: unknown) {
             // Calculate from redirects if endpoint doesn't exist
