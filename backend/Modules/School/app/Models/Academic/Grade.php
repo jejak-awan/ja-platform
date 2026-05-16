@@ -154,9 +154,11 @@ class Grade extends Model
             $this->practice_score,
             $this->project_score,
             $this->portfolio_score,
-        ], fn($s) => $s !== null);
+        ], fn(?float $s): bool => $s !== null);
 
-        if (empty($scores)) return 0;
+        if ($scores === []) {
+            return 0;
+        }
 
         return round(array_sum($scores) / count($scores), 2);
     }

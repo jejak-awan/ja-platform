@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Facilities (Land, Buildings, Rooms)
-        Schema::create('sch_log_land', function (Blueprint $table) {
+        Schema::create('sch_log_land', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->string('name');
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('sch_log_buildings', function (Blueprint $table) {
+        Schema::create('sch_log_buildings', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('land_asset_id')->onDelete('cascade');
             $table->string('name');
@@ -32,7 +32,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('sch_log_rooms', function (Blueprint $table) {
+        Schema::create('sch_log_rooms', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('building_id')->onDelete('cascade');
             $table->string('name');
@@ -42,7 +42,7 @@ return new class extends Migration
         });
 
         // 2. Assets Base
-        Schema::create('sch_log_assets', function (Blueprint $table) {
+        Schema::create('sch_log_assets', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('room_id')->nullable()->onDelete('set null');
@@ -56,7 +56,7 @@ return new class extends Migration
         });
 
         // 3. Inventory System
-        Schema::create('sch_log_inventory_categories', function (Blueprint $table) {
+        Schema::create('sch_log_inventory_categories', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->string('name');
@@ -64,7 +64,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('sch_log_inventory_items', function (Blueprint $table) {
+        Schema::create('sch_log_inventory_items', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('category_id')->onDelete('cascade');
@@ -79,7 +79,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('sch_log_inventory_transactions', function (Blueprint $table) {
+        Schema::create('sch_log_inventory_transactions', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('item_id')->onDelete('cascade');
@@ -92,7 +92,7 @@ return new class extends Migration
         });
 
         // 4. Hostel (Asrama)
-        Schema::create('sch_log_hostel_blocks', function (Blueprint $table) {
+        Schema::create('sch_log_hostel_blocks', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->string('name');
@@ -101,7 +101,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('sch_log_hostel_rooms', function (Blueprint $table) {
+        Schema::create('sch_log_hostel_rooms', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('block_id')->onDelete('cascade');
             $table->string('name');
@@ -109,7 +109,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('sch_log_hostel_beds', function (Blueprint $table) {
+        Schema::create('sch_log_hostel_beds', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('room_id')->onDelete('cascade');
             $table->string('name');
@@ -117,7 +117,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('sch_log_hostel_allocations', function (Blueprint $table) {
+        Schema::create('sch_log_hostel_allocations', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('bed_id')->onDelete('cascade');
             $table->uuid('student_id')->onDelete('cascade');
@@ -128,7 +128,7 @@ return new class extends Migration
         });
 
         // 5. Transport
-        Schema::create('sch_log_vehicles', function (Blueprint $table) {
+        Schema::create('sch_log_vehicles', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->string('plate_number')->unique();
@@ -137,7 +137,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('sch_log_transport_routes', function (Blueprint $table) {
+        Schema::create('sch_log_transport_routes', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->string('name');
@@ -150,7 +150,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('sch_log_transport_registrations', function (Blueprint $table) {
+        Schema::create('sch_log_transport_registrations', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('student_id')->onDelete('cascade');
             $table->uuid('vehicle_id')->onDelete('cascade');
@@ -164,7 +164,7 @@ return new class extends Migration
         });
 
         // 6. Maintenance
-        Schema::create('sch_log_maintenance_tickets', function (Blueprint $table) {
+        Schema::create('sch_log_maintenance_tickets', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->onDelete('cascade');

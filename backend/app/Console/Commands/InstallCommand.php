@@ -96,12 +96,6 @@ class InstallCommand extends Command
     {
         $this->comment('🔍 Checking system requirements...');
 
-        // Check PHP Version
-        if (version_compare(PHP_VERSION, '8.2.0', '<')) {
-            $this->error('❌ PHP 8.2 or higher is required.');
-            return false;
-        }
-
         // Check for Node
         $nodeCheck = $this->runExternalCommand('node -v');
         if (!$nodeCheck) {
@@ -339,9 +333,9 @@ class InstallCommand extends Command
         if (File::exists($path)) {
             $existing = File::get($path);
             foreach ($data as $key => $value) {
-                if (strpos($existing, "{$key}=") !== false) {
+                if (str_contains($existing, "{$key}=")) {
                     // Check if value contains spaces, if so wrap in quotes if not already
-                    if (strpos($value, ' ') !== false && strpos($value, '"') === false) {
+                    if (str_contains($value, ' ') && !str_contains($value, '"')) {
                         $value = "\"$value\"";
                     }
                     $updated = preg_replace(
@@ -366,7 +360,7 @@ class InstallCommand extends Command
         $process = Process::fromShellCommandline($command, $cwd);
         $process->setTimeout(null);
         
-        $process->run(function ($type, $buffer) {
+        $process->run(function ($type, string|iterable $buffer): void {
             $this->output->write($buffer);
         });
 

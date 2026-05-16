@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Enrollments (Pendaftaran)
-        Schema::create('sch_adm_enrollments', function (Blueprint $table) {
+        Schema::create('sch_adm_enrollments', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->onDelete('cascade');
@@ -26,7 +26,7 @@ return new class extends Migration
         });
 
         // 2. Documents
-        Schema::create('sch_adm_documents', function (Blueprint $table) {
+        Schema::create('sch_adm_documents', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('enrollment_id')->onDelete('cascade');
             $table->string('document_type'); // KK, Ijazah, Akta
@@ -36,7 +36,7 @@ return new class extends Migration
         });
 
         // 3. Verifications
-        Schema::create('sch_adm_verifications', function (Blueprint $table) {
+        Schema::create('sch_adm_verifications', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('enrollment_id')->onDelete('cascade');
             $table->uuid('verifier_id'); // User ID

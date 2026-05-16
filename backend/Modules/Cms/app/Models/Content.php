@@ -16,6 +16,31 @@ use Modules\Library\Models\Category;
 use Modules\System\Traits\CoreLogsActivity;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
+/**
+ * @property string $id
+ * @property string $title
+ * @property string $slug
+ * @property string|null $excerpt
+ * @property string|null $intro
+ * @property string|null $body
+ * @property string|null $featured_image
+ * @property string $status
+ * @property string $type
+ * @property string $author_id
+ * @property string $workspace_id
+ * @property string|null $category_id
+ * @property \Illuminate\Support\Carbon|null $published_at
+ * @property array|null $meta
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @property string|null $meta_keywords
+ * @property string|null $og_image
+ * @property bool $is_featured
+ * @property int $views
+ * @property string $comment_status
+ * @property string|null $locked_by
+ * @property \Illuminate\Support\Carbon|null $locked_at
+ */
 class Content extends Model
 {
     protected $table = 'cms_contents';
@@ -99,7 +124,7 @@ class Content extends Model
     public function getCustomFieldValue(string $slug): ?string
     {
         $field = $this->customFields()
-            ->whereHas('customField', function ($q) use ($slug) {
+            ->whereHas('customField', function ($q) use ($slug): void {
                 $q->where('key', $slug);
             })
             ->first();

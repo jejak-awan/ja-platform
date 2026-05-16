@@ -560,7 +560,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
         $tokenRaw = $request->input('token');
         $token = is_string($tokenRaw) ? $tokenRaw : '';
         $appKey = config('app.key');
-        $expectedHash = hash_hmac('sha256', $user->getEmailForVerification(), is_string($appKey) ? $appKey : '');
+        $expectedHash = hash_hmac('sha256', (string) $user->getEmailForVerification(), is_string($appKey) ? $appKey : '');
 
         if (! hash_equals($expectedHash, $token)) {
             return $this->error('Invalid or expired verification token', 400, [], 'INVALID_TOKEN');

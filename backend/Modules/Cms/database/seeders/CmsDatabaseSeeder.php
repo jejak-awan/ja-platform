@@ -30,7 +30,9 @@ class CmsDatabaseSeeder extends Seeder
         ];
 
         $admin = User::first();
-        if (!$admin) return;
+        if (!$admin) {
+            return;
+        }
 
         foreach ($pages as $page) {
             Content::updateOrCreate(

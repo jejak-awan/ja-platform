@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Staff (Employees / Teachers)
-        Schema::create('sch_hr_staff', function (Blueprint $table) {
+        Schema::create('sch_hr_staff', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->onDelete('set null');
@@ -48,7 +48,7 @@ return new class extends Migration
         });
 
         // 2. Staff Attendance
-        Schema::create('sch_hr_attendances', function (Blueprint $table) {
+        Schema::create('sch_hr_attendances', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('staff_id')->onDelete('cascade');
             $table->date('date');
@@ -62,7 +62,7 @@ return new class extends Migration
         });
 
         // 3. Salary Structures
-        Schema::create('sch_hr_salary_structures', function (Blueprint $table) {
+        Schema::create('sch_hr_salary_structures', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->string('name'); // e.g., Guru GTY Gol III
@@ -73,7 +73,7 @@ return new class extends Migration
         });
 
         // 4. Payrolls
-        Schema::create('sch_hr_payrolls', function (Blueprint $table) {
+        Schema::create('sch_hr_payrolls', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('staff_id')->onDelete('cascade');
             $table->string('month', 2);
@@ -87,7 +87,7 @@ return new class extends Migration
         });
 
         // 5. Staff Shifts
-        Schema::create('sch_hr_shifts', function (Blueprint $table) {
+        Schema::create('sch_hr_shifts', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->string('name');
@@ -98,7 +98,7 @@ return new class extends Migration
         });
 
         // 6. Leave Requests
-        Schema::create('sch_hr_leaves', function (Blueprint $table) {
+        Schema::create('sch_hr_leaves', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('staff_id')->onDelete('cascade');
@@ -112,7 +112,7 @@ return new class extends Migration
         });
 
         // 7. Job Vacancies
-        Schema::create('sch_hr_job_vacancies', function (Blueprint $table) {
+        Schema::create('sch_hr_job_vacancies', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->string('title');
@@ -125,7 +125,7 @@ return new class extends Migration
         });
 
         // 8. Job Applications
-        Schema::create('sch_hr_job_applications', function (Blueprint $table) {
+        Schema::create('sch_hr_job_applications', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('vacancy_id')->onDelete('cascade');
             $table->string('applicant_name');

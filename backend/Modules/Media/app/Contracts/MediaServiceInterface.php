@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Media\Contracts;
 
 use Illuminate\Http\UploadedFile;

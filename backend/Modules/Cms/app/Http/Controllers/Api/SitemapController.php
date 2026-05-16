@@ -38,10 +38,10 @@ class SitemapController extends Controller
     public function pages(): \Illuminate\Http\Response
     {
         /** @var \Illuminate\Http\Response $response */
-        $response = Cache::remember('sitemap_pages', now()->addHours(12), function () {
+        $response = Cache::remember('sitemap_pages', now()->addHours(12), function (): \Illuminate\Http\Response {
             $pages = Content::where('type', 'page')
                 ->where('status', 'published')
-                ->where(function ($q) {
+                ->where(function ($q): void {
                     $q->whereNull('published_at')
                         ->orWhere('published_at', '<=', now());
                 })
@@ -57,10 +57,10 @@ class SitemapController extends Controller
     public function posts(): \Illuminate\Http\Response
     {
         /** @var \Illuminate\Http\Response $response */
-        $response = Cache::remember('sitemap_posts', now()->addHours(12), function () {
+        $response = Cache::remember('sitemap_posts', now()->addHours(12), function (): \Illuminate\Http\Response {
             $posts = Content::where('type', 'post')
                 ->where('status', 'published')
-                ->where(function ($q) {
+                ->where(function ($q): void {
                     $q->whereNull('published_at')
                         ->orWhere('published_at', '<=', now());
                 })
@@ -76,7 +76,7 @@ class SitemapController extends Controller
     public function categories(): \Illuminate\Http\Response
     {
         /** @var \Illuminate\Http\Response $response */
-        $response = Cache::remember('sitemap_categories', now()->addHours(24), function () {
+        $response = Cache::remember('sitemap_categories', now()->addHours(24), function (): \Illuminate\Http\Response {
             $categories = Category::where('is_active', true)->get();
             $urls = [];
 

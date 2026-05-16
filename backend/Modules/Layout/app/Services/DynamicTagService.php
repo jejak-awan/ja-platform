@@ -32,7 +32,7 @@ class DynamicTagService
         foreach ($blocks as &$block) {
             // Process settings
             if (isset($block['settings']) && is_array($block['settings'])) {
-                foreach ($block['settings'] as $key => &$value) {
+                foreach ($block['settings'] as &$value) {
                     if (is_string($value) && str_starts_with($value, '@dynamic:')) {
                         $tag = str_replace('@dynamic:', '', $value);
                         $value = $this->resolveTag($tag, $content, $loopItem);
@@ -86,7 +86,7 @@ class DynamicTagService
 
         // 2. Loop item tags
         if ($loopItem && str_starts_with($key, 'loop_')) {
-            $resolvedValue = match ($key) {
+            return match ($key) {
                 'loop_title' => is_scalar($loopItem['title'] ?? null) ? (string) $loopItem['title'] : '',
                 'loop_excerpt' => is_scalar($loopItem['excerpt'] ?? null) ? (string) $loopItem['excerpt'] : '',
                 'loop_date' => is_scalar($loopItem['date'] ?? null) ? (string) $loopItem['date'] : '',
@@ -97,8 +97,6 @@ class DynamicTagService
                 'loop_index' => is_scalar($loopItem['index'] ?? null) ? (string) $loopItem['index'] : '0',
                 default => ''
             };
-
-            return (string) $resolvedValue;
         }
 
         // 3. Site tags
@@ -136,14 +134,12 @@ class DynamicTagService
                 return '';
             }
 
-            $resolvedValue = match ($key) {
+            return match ($key) {
                 'user_name' => (string) $user->name,
                 'user_email' => (string) $user->email,
                 'user_avatar' => is_scalar($avatar = $user->getAttribute('avatar')) ? (string) $avatar : '',
                 default => ''
             };
-
-            return (string) $resolvedValue;
         }
 
         return '';

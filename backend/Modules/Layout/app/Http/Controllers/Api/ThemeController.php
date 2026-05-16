@@ -10,12 +10,8 @@ use Modules\System\Http\Controllers\BaseApiController;
 
 class ThemeController extends BaseApiController
 {
-    protected ThemeService $themeService;
-
-    public function __construct(ThemeService $themeService)
+    public function __construct(protected ThemeService $themeService)
     {
-        $this->themeService = $themeService;
-
         $this->middleware('auth:sanctum')->except(['getActive']);
         $this->middleware('permission:manage themes')->except(['getActive']);
     }
@@ -26,7 +22,7 @@ class ThemeController extends BaseApiController
         $type = is_string($typeRaw) ? $typeRaw : 'frontend';
         $levelId = \Illuminate\Support\Facades\Context::get('workspace_id');
         $themes = Theme::withoutGlobalScope('school_unit')
-            ->where(function ($query) use ($levelId) {
+            ->where(function ($query) use ($levelId): void {
                 $query->where('workspace_id', $levelId)
                     ->orWhereNull('workspace_id');
             })
@@ -35,7 +31,7 @@ class ThemeController extends BaseApiController
             ->get();
 
         // Attach manifest to each theme
-        $themes->each(function ($theme) {
+        $themes->each(function ($theme): void {
             $theme->manifest = $theme->getManifest();
         });
 
@@ -285,7 +281,7 @@ class ThemeController extends BaseApiController
     {
         $errors = $this->themeService->validateTheme($theme);
 
-        if (empty($errors)) {
+        if ($errors === []) {
             return $this->success([
                 'valid' => true,
                 'theme' => $theme->fresh(),
@@ -321,7 +317,7 @@ class ThemeController extends BaseApiController
         $key = is_string($keyRaw) ? $keyRaw : '';
         $default = $request->input('default');
 
-        if (! $key) {
+        if ($key === '' || $key === '0') {
             return $this->validationError(['key' => ['Key is required']], 'Key is required');
         }
 
@@ -348,7 +344,7 @@ class ThemeController extends BaseApiController
         $type = is_string($typeRaw) ? $typeRaw : 'frontend';
         $theme = $this->themeService->getActiveTheme($type);
 
-        if (! $theme) {
+        if (!$theme instanceof \Modules\Layout\Models\Theme) {
             return $this->success([], 'No active theme found');
         }
 
@@ -406,7 +402,7 @@ class ThemeController extends BaseApiController
 
             /** @var list<string>|false $composableFiles */
             $composableFiles = glob("{$composablesPath}/*.js");
-            $composables = $composableFiles ? array_map('basename', $composableFiles) : [];
+            $composables = $composableFiles ? array_map(basename(...), $composableFiles) : [];
 
             return $this->success([
                 'has_composables' => true,

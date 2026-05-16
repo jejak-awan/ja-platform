@@ -13,7 +13,7 @@ class TrustProxies
      *
      * @var array<int, string>|null
      */
-    protected $proxies = null;
+    protected $proxies;
 
     /**
      * The headers that should be used to detect proxies.
@@ -67,7 +67,7 @@ class TrustProxies
                 return ['*'];
             }
 
-            return array_values(array_filter(array_map('trim', explode(',', $configured)), static fn (string $ip): bool => $ip !== ''));
+            return array_values(array_filter(array_map(trim(...), explode(',', $configured)), static fn (string $ip): bool => $ip !== ''));
         }
 
         if (is_array($configured) && $configured !== []) {
@@ -184,7 +184,7 @@ class TrustProxies
 
         $forwardedFor = $request->header('X-Forwarded-For');
         if (is_string($forwardedFor)) {
-            $ips = array_values(array_filter(array_map('trim', explode(',', $forwardedFor))));
+            $ips = array_values(array_filter(array_map(trim(...), explode(',', $forwardedFor))));
             foreach ($ips as $ip) {
                 if (filter_var($ip, FILTER_VALIDATE_IP)) {
                     return $ip;

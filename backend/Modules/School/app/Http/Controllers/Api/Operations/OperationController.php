@@ -21,18 +21,8 @@ use Modules\School\Http\Requests\Operations\CheckInVisitorRequest;
 
 class OperationController extends BaseController
 {
-    protected AcademicService $academicService;
-    protected StudentService $studentService;
-    protected OperationsService $opsService;
-
-    public function __construct(
-        AcademicService $academicService,
-        StudentService $studentService,
-        OperationsService $opsService
-    ) {
-        $this->academicService = $academicService;
-        $this->studentService = $studentService;
-        $this->opsService = $opsService;
+    public function __construct(protected AcademicService $academicService, protected StudentService $studentService, protected OperationsService $opsService)
+    {
     }
 
     // --- Attendances ---

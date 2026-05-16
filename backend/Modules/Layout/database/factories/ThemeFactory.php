@@ -37,7 +37,7 @@ class ThemeFactory extends Factory
      */
     public function active(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'is_active' => true,
             'status' => 'active',
         ]);
@@ -48,7 +48,7 @@ class ThemeFactory extends Factory
      */
     public function type(string $type): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'type' => $type,
         ]);
     }

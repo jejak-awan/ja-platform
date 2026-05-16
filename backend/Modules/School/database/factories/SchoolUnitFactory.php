@@ -31,16 +31,16 @@ class SchoolUnitFactory extends Factory
 
     public function smk(): static
     {
-        return $this->state(fn() => ['level' => 'smk', 'name' => 'SMK ' . $this->faker->company()]);
+        return $this->state(fn(): array => ['level' => 'smk', 'name' => 'SMK ' . $this->faker->company()]);
     }
 
     public function sma(): static
     {
-        return $this->state(fn() => ['level' => 'sma', 'name' => 'SMA ' . $this->faker->company()]);
+        return $this->state(fn(): array => ['level' => 'sma', 'name' => 'SMA ' . $this->faker->company()]);
     }
 
     public function forSchool(School $school): static
     {
-        return $this->state(fn() => ['school_id' => $school->id]);
+        return $this->state(fn(): array => ['school_id' => $school->id]);
     }
 }

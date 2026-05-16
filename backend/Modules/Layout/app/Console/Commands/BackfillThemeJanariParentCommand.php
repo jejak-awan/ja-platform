@@ -37,7 +37,7 @@ class BackfillThemeJanariParentCommand extends Command
             ->where('slug', '!=', $parentSlug)
             ->orderBy('slug')
             ->get()
-            ->filter(fn (Theme $t) => ! $this->themeFolderLooksValid($t->slug));
+            ->filter(fn (Theme $t): bool => ! $this->themeFolderLooksValid($t->slug));
 
         if ($candidates->isEmpty()) {
             $this->info('Tidak ada tema frontend yang cocok (sudah punya folder sendiri atau sudah punya parent_theme).');
@@ -48,7 +48,7 @@ class BackfillThemeJanariParentCommand extends Command
         $this->warn('Tema berikut tidak punya folder tema di disk dan parent_theme masih kosong:');
         $this->table(
             ['id', 'slug', 'name', 'status'],
-            $candidates->map(fn (Theme $t) => [
+            $candidates->map(fn (Theme $t): array => [
                 $t->id,
                 $t->slug,
                 $t->name,
@@ -63,12 +63,9 @@ class BackfillThemeJanariParentCommand extends Command
             return self::SUCCESS;
         }
 
-        if ($this->input->isInteractive()) {
-            if (! $this->confirm('Set parent_theme = "'.$parentSlug.'" untuk '.$candidates->count().' tema di atas?', true)) {
-                $this->warn('Dibatalkan.');
-
-                return self::SUCCESS;
-            }
+        if ($this->input->isInteractive() && ! $this->confirm('Set parent_theme = "'.$parentSlug.'" untuk '.$candidates->count().' tema di atas?', true)) {
+            $this->warn('Dibatalkan.');
+            return self::SUCCESS;
         }
 
         foreach ($candidates as $theme) {

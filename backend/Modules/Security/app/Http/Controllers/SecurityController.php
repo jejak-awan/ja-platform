@@ -14,32 +14,8 @@ use Modules\Security\Services\SecurityService;
 
 class SecurityController extends \Modules\System\Http\Controllers\BaseApiController
 {
-    protected SecurityService $securityService;
-
-    protected SecurityAlertService $alertService;
-
-    protected \Modules\System\Services\AttackCorrelationService $correlationService;
-
-    protected \Modules\System\Services\FileIntegrityService $fileIntegrityService;
-
-    protected \Modules\Security\Services\SecurityNotificationService $notificationService;
-
-    protected \Modules\System\Services\SecurityAssessmentService $assessmentService;
-
-    public function __construct(
-        SecurityService $securityService,
-        SecurityAlertService $alertService,
-        \Modules\System\Services\AttackCorrelationService $correlationService,
-        \Modules\System\Services\FileIntegrityService $fileIntegrityService,
-        \Modules\Security\Services\SecurityNotificationService $notificationService,
-        \Modules\System\Services\SecurityAssessmentService $assessmentService
-    ) {
-        $this->securityService = $securityService;
-        $this->alertService = $alertService;
-        $this->correlationService = $correlationService;
-        $this->fileIntegrityService = $fileIntegrityService;
-        $this->notificationService = $notificationService;
-        $this->assessmentService = $assessmentService;
+    public function __construct(protected SecurityService $securityService, protected SecurityAlertService $alertService, protected \Modules\System\Services\AttackCorrelationService $correlationService, protected \Modules\System\Services\FileIntegrityService $fileIntegrityService, protected \Modules\Security\Services\SecurityNotificationService $notificationService, protected \Modules\System\Services\SecurityAssessmentService $assessmentService)
+    {
     }
 
     public function index(Request $request): \Illuminate\Http\JsonResponse
@@ -368,7 +344,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
                 $countStr = (string) $count;
                 $retainDaysStr = (string) $retainDays;
 
-                return $this->success(null, 'Cleared '.((string) $count).' security logs older than '.((string) $retainDays).' days');
+                return $this->success(null, 'Cleared '.($count).' security logs older than '.($retainDays).' days');
             }
 
             \Modules\Security\Models\SecurityLog::truncate();
@@ -450,12 +426,12 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
             ->paginate($perPage);
 
         // Transform to include computed details field
-        $logs->getCollection()->transform(function ($log) {
+        $logs->getCollection()->transform(function ($log): array {
             $metadata = $log->metadata ?? [];
             $path = $metadata['path'] ?? null;
 
             // For scanner events, show the attacked path; for shield events, show description
-            $details = $path ? $path : ($log->description ?? '');
+            $details = $path ?: $log->description ?? '';
 
             return [
                 'id' => $log->id,
@@ -665,7 +641,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         ]);
 
         $modulesRaw = $request->input('modules', ['all']);
-        $modules = is_array($modulesRaw) ? array_values(array_filter($modulesRaw, 'is_string')) : ['all'];
+        $modules = is_array($modulesRaw) ? array_values(array_filter($modulesRaw, is_string(...))) : ['all'];
         $durationRaw = $request->input('duration', 60);
         $duration = is_numeric($durationRaw) ? (int) $durationRaw : 60;
 

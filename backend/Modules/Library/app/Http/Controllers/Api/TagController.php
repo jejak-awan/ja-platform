@@ -21,7 +21,7 @@ class TagController extends BaseApiController
 
         // Admin/Manager can see all, others see own + global
         if ($user && ! $user->can('manage tags')) {
-            $query->where(function ($q) use ($user) {
+            $query->where(function ($q) use ($user): void {
                 $q->whereNull('author_id')->orWhere('author_id', $user->id);
             });
         } elseif (! $user) {
@@ -31,7 +31,7 @@ class TagController extends BaseApiController
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('slug', 'like', "%{$search}%");
             });

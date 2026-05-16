@@ -155,11 +155,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getRoleRank(): int
     {
-        $roleRanks = $this->getRoleRankMap();
+        $roleRanks = static::getRoleRankMap();
         $userRoles = $this->getRoleNames();
         $maxRank = 0;
         foreach ($userRoles as $role) {
-            if (! is_string($role)) continue;
+            if (! is_string($role)) {
+                continue;
+            }
             if (isset($roleRanks[$role]) && $roleRanks[$role] > $maxRank) {
                 $maxRank = $roleRanks[$role];
             }
@@ -175,7 +177,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAtLeastRole(string $roleName): bool
     {
         $roleRanks = self::getRoleRankMap();
-        if (! isset($roleRanks[$roleName])) return false;
+        if (! isset($roleRanks[$roleName])) {
+            return false;
+        }
         return $this->getRoleRank() >= $roleRanks[$roleName];
     }
 
@@ -191,7 +195,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return array_merge($coreRanks, static::$moduleRoleRanks);
     }
 
-    public function sendEmailVerificationNotification()
+    public function sendEmailVerificationNotification(): void
     {
         $this->notify(new \Modules\System\Notifications\VerifyEmail);
     }

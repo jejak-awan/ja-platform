@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Schools (Institutional Identity)
-        Schema::create('sch_ins_schools', function (Blueprint $table) {
+        Schema::create('sch_ins_schools', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('npsn', 10)->unique()->nullable();
@@ -55,7 +55,7 @@ return new class extends Migration
         });
 
         // 2. School Units (Jenjang / Levels)
-        Schema::create('sch_ins_levels', function (Blueprint $table) {
+        Schema::create('sch_ins_levels', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->string('level'); // e.g., SMK, SMA, SMP
@@ -68,7 +68,7 @@ return new class extends Migration
         });
 
         // 3. Departments (Jurusan)
-        Schema::create('sch_acad_departments', function (Blueprint $table) {
+        Schema::create('sch_acad_departments', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->onDelete('cascade');
             $table->string('code')->unique();

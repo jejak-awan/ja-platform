@@ -301,14 +301,12 @@ class ThemeCacheService
                 } else {
                     Cache::tags(['widgets'])->flush();
                 }
-            } else {
+            } elseif ($location) {
                 // Fallback: clear widget cache by key
-                if ($location) {
-                    Cache::forget(self::PREFIX_WIDGETS.$location);
-                } else {
-                    // Can't efficiently clear all widgets without tags, so just log
-                    Log::info('Widget cache clear requested but tags not supported');
-                }
+                Cache::forget(self::PREFIX_WIDGETS.$location);
+            } else {
+                // Can't efficiently clear all widgets without tags, so just log
+                Log::info('Widget cache clear requested but tags not supported');
             }
         } catch (\Exception $e) {
             Log::warning('Failed to clear widget cache: '.$e->getMessage());

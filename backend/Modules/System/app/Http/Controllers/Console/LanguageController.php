@@ -8,11 +8,8 @@ use Modules\System\Services\LanguagePackService;
 
 class LanguageController extends \Modules\System\Http\Controllers\BaseApiController
 {
-    protected LanguagePackService $languagePackService;
-
-    public function __construct(LanguagePackService $languagePackService)
+    public function __construct(protected LanguagePackService $languagePackService)
     {
-        $this->languagePackService = $languagePackService;
     }
 
     /**
@@ -23,7 +20,7 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
         $languages = Language::getActive();
 
         // Add UI translation stats to each language
-        $languages = $languages->map(function ($lang) {
+        $languages = $languages->map(function ($lang): \Modules\System\Models\Language {
             $stats = $this->languagePackService->getLocaleStats($lang->code);
             $lang->has_ui_translations = $stats['exists'];
             $lang->translation_keys = $stats['total_keys'] ?? 0;
@@ -210,7 +207,6 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
         }
 
         // Create or update language in DB if it doesn't exist
-        /** @var mixed $localeRaw */
         $localeRaw = $result['locale'] ?? null;
         $locale = is_string($localeRaw) ? $localeRaw : 'en';
         $language = Language::firstOrCreate(

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/school', function () {
+Route::get('/school', function (): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View {
     /** @var view-string $view */
     $view = 'school::index';
     return view($view);

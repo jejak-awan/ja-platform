@@ -122,7 +122,7 @@ class QueryCacheService
      */
     public function generateKey(string $prefix, array $params = []): string
     {
-        if (empty($params)) {
+        if ($params === []) {
             return $prefix;
         }
 

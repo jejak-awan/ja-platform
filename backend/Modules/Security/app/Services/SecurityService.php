@@ -144,7 +144,7 @@ class SecurityService
 
         // Calculate progressive block duration (exponential backoff)
         $blockMinutes = min(
-            $this->baseBlockMinutes * pow(2, $offenseCount - 1),
+            $this->baseBlockMinutes * 2 ** ($offenseCount - 1),
             $this->maxBlockMinutes
         );
 
@@ -613,7 +613,7 @@ class SecurityService
     public function verifyShieldSolution(string $nonce, string $solution, string $ipAddress): bool
     {
         $decoded = base64_decode($nonce);
-        if (! $decoded) {
+        if ($decoded === '' || $decoded === '0') {
             return false;
         }
 

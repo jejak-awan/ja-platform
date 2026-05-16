@@ -62,7 +62,7 @@ class SystemService
         if ($driver !== 'sync') {
             try {
                 \Modules\System\Jobs\QueueHeartbeatJob::dispatch();
-            } catch (\Throwable $e) {
+            } catch (\Throwable) {
                 // Ignore dispatch errors here
             }
         }
@@ -213,7 +213,7 @@ class SystemService
      */
     public function getSystemHealth(): array
     {
-        return Cache::remember('system_health', 60, function () {
+        return Cache::remember('system_health', 60, function (): array {
             $health = [
                 'cpu' => $this->getCpuUsage(),
                 'memory' => $this->getMemoryUsage(),
@@ -292,7 +292,7 @@ class SystemService
 
                             // Get load average just for display
                             $load = sys_getloadavg();
-                            $loadAvg = is_array($load) ? (float) $load[0] : 0.0;
+                            $loadAvg = is_array($load) ? $load[0] : 0.0;
 
                             return [
                                 'percent' => round($cpuPercent, 2),
@@ -315,7 +315,7 @@ class SystemService
 
                     return [
                         'percent' => round($cpuPercent, 2),
-                        'load' => (float) $load[0],
+                        'load' => $load[0],
                         'cores' => $cores,
                         'status' => $cpuPercent > 90 ? 'critical' : ($cpuPercent > 75 ? 'warning' : 'ok'),
                     ];
@@ -331,10 +331,9 @@ class SystemService
     /**
      * Parse /proc/stat content
      *
-     * @param  string  $content
      * @return array{total: float|int, idle: float|int}|null
      */
-    private function parseProcStat($content): ?array
+    private function parseProcStat(string $content): ?array
     {
         // Get the first line which starts with "cpu "
         $lines = explode("\n", $content);
@@ -350,7 +349,7 @@ class SystemService
                 array_shift($parts);
 
                 // Sum all columns for total time
-                $numParts = array_map('floatval', $parts);
+                $numParts = array_map(floatval(...), $parts);
                 $total = array_sum($numParts);
                 // Idle is the 4th column (index 3) + iowait (index 4) usually considered idle regarding CPU utilization?
                 // Standard calculation: Idle = idle + iowait
@@ -418,8 +417,8 @@ class SystemService
                 return ['percent' => 0.0, 'used' => '0 B', 'total' => '0 B', 'free' => '0 B', 'status' => 'unknown'];
             }
 
-            $total = (float) $totalRaw;
-            $free = (float) $freeRaw;
+            $total = $totalRaw;
+            $free = $freeRaw;
             $used = $total - $free;
             $percent = $total > 0 ? ($used / $total) * 100 : 0;
 
@@ -430,7 +429,7 @@ class SystemService
                 'free' => $this->formatBytes($free),
                 'status' => $percent > 90 ? 'critical' : ($percent > 75 ? 'warning' : 'ok'),
             ];
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return ['percent' => 0.0, 'used' => '0 B', 'total' => '0 B', 'free' => '0 B', 'status' => 'unknown'];
         }
     }
@@ -568,7 +567,7 @@ class SystemService
                     $tableName = is_scalar($tableNameRaw) ? (string) $tableNameRaw : 'cache';
                     $keys = DB::table($tableName)->count();
                 }
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 $enabled = false;
             }
         }
@@ -605,7 +604,7 @@ class SystemService
                 'total_mb' => $sizeMb,
                 'formatted' => $this->formatBytes($sizeMb * 1024 * 1024),
             ];
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return ['total_mb' => 0, 'formatted' => '0 B'];
         }
     }
@@ -629,15 +628,13 @@ class SystemService
                 ORDER BY (data_length + index_length) DESC
                 LIMIT 10', [$database]);
 
-            return array_map(function ($table) {
-                return [
-                    'name' => $table->table_name,
-                    'size_mb' => $table->size_mb,
-                    'rows' => $table->table_rows,
-                    'formatted_size' => $this->formatBytes($table->size_mb * 1024 * 1024),
-                ];
-            }, $tables);
-        } catch (\Exception $e) {
+            return array_map(fn(\stdClass $table) => [
+                'name' => $table->table_name,
+                'size_mb' => $table->size_mb,
+                'rows' => $table->table_rows,
+                'formatted_size' => $this->formatBytes($table->size_mb * 1024 * 1024),
+            ], $tables);
+        } catch (\Exception) {
             return [];
         }
     }
@@ -651,7 +648,7 @@ class SystemService
         $bytes = max($bytes, 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
-        $divisor = pow(1024, $pow);
+        $divisor = 1024 ** $pow;
         $bytes /= $divisor;
 
         return round($bytes, $precision).' '.$units[(int) $pow];

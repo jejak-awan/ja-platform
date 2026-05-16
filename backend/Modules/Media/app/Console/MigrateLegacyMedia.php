@@ -14,7 +14,7 @@ class MigrateLegacyMedia extends Command
     protected $signature = 'media:migrate-legacy';
     protected $description = 'Migrate data from legacy core_media tables to new srv_media tables';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Starting media migration...');
 

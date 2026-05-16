@@ -53,7 +53,7 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
                 return $this->forbidden('You do not have permission to view these settings');
             }
 
-            if (! empty($requiredPermissions)) {
+            if ($requiredPermissions !== []) {
                 $hasAny = false;
                 foreach ($requiredPermissions as $perm) {
                     if ($user->can($perm)) {
@@ -140,13 +140,13 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
 
                 // In Core context, we want settings to be Global by default unless explicitly specified.
                 // Since this controller manages system-wide infrastructure, we pass NULL for workspace_id.
-                Setting::set($sKey, $sValue, $sType, $sGroup, null);
+                Setting::set($sKey, $sValue, $sType, $sGroup);
 
                 // Sync with Redis Settings if cache driver is changed to Redis-based
                 if ($sKey === 'cache_driver' && in_array($sValue, ['redis', 'failover'])) {
                     try {
                         \Modules\System\Models\RedisSetting::setValue('enable_redis', true);
-                    } catch (\Throwable $e) {
+                    } catch (\Throwable) {
                         // Silent fail if RedisSetting not available
                     }
                 }
@@ -156,7 +156,7 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
         // Clear config cache to apply changes immediately
         try {
             \Illuminate\Support\Facades\Artisan::call('config:clear');
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             // Silent fail
         }
 

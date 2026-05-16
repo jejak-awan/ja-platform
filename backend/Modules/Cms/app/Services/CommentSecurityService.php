@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Cms\Services;
 
 use Modules\System\Models\Setting;
@@ -14,14 +16,8 @@ class CommentSecurityService
         if ($this->containsBannedWords($content)) {
             return true;
         }
-
-        if ($this->exceedsLinkLimit($content)) {
-            return true;
-        }
-
         // Future: Check against IP blocklist or spam APIs (Akismet)
-
-        return false;
+        return $this->exceedsLinkLimit($content);
     }
 
     /**
@@ -30,7 +26,6 @@ class CommentSecurityService
      */
     protected function containsBannedWords(string $content): bool
     {
-        /** @var mixed $bannedWords */
         $bannedWords = Setting::get('comments.security.banned_words', []);
 
         if (empty($bannedWords)) {
@@ -61,7 +56,6 @@ class CommentSecurityService
      */
     protected function exceedsLinkLimit(string $content): bool
     {
-        /** @var mixed $maxLinksRaw */
         $maxLinksRaw = Setting::get('comments.security.max_links', 2);
         $maxLinks = is_numeric($maxLinksRaw) ? (int) $maxLinksRaw : 2;
 

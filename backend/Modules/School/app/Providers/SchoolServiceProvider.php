@@ -54,20 +54,16 @@ class SchoolServiceProvider extends ServiceProvider
         ]);
 
         // 2. Register dynamic relationships
-        \Modules\System\Models\User::resolveRelationUsing('staff', function ($userModel) {
-            return $userModel->hasMany(\Modules\School\Models\HR\Staff::class);
-        });
+        \Modules\System\Models\User::resolveRelationUsing('staff', fn($userModel) => $userModel->hasMany(\Modules\School\Models\HR\Staff::class));
 
-        \Modules\System\Models\User::resolveRelationUsing('levels', function ($userModel) {
-            return $userModel->hasManyThrough(
-                \Modules\School\Models\Institution\SchoolUnit::class,
-                \Modules\School\Models\HR\Staff::class,
-                'user_id',
-                'id',
-                'id',
-                'workspace_id'
-            );
-        });
+        \Modules\System\Models\User::resolveRelationUsing('levels', fn($userModel) => $userModel->hasManyThrough(
+            \Modules\School\Models\Institution\SchoolUnit::class,
+            \Modules\School\Models\HR\Staff::class,
+            'user_id',
+            'id',
+            'id',
+            'workspace_id'
+        ));
 
         // 3. Register Layout Locations
         if ($this->app->bound(\Modules\System\Contracts\LayoutRegistryInterface::class)) {
@@ -161,8 +157,8 @@ class SchoolServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom($langPath, $this->nameLower);
             $this->loadJsonTranslationsFrom($langPath);
         } else {
-            $this->loadTranslationsFrom(module_path($this->name, 'lang'), $this->nameLower);
-            $this->loadJsonTranslationsFrom(module_path($this->name, 'lang'));
+            $this->loadTranslationsFrom((string) module_path($this->name, 'lang'), $this->nameLower);
+            $this->loadJsonTranslationsFrom((string) module_path($this->name, 'lang'));
         }
     }
 
@@ -173,12 +169,12 @@ class SchoolServiceProvider extends ServiceProvider
     {
         /** @var string $configPathPart */
         $configPathPart = config('modules.paths.generator.config.path');
-        /** @var string $configPath */
-        $configPath = module_path($this->name, $configPathPart);
+        $configPath = (string) module_path($this->name, $configPathPart);
 
         if (is_dir($configPath)) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
 
+            /** @var \SplFileInfo $file */
             /** @var \SplFileInfo $file */
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
@@ -215,7 +211,7 @@ class SchoolServiceProvider extends ServiceProvider
         /** @var array<string, mixed> $module_config */
         $module_config = require $path;
 
-        config([$key => array_replace_recursive($existing, $module_config)]);
+        config([$key => array_replace_recursive((array) $existing, (array) $module_config)]);
     }
 
     /**
@@ -224,7 +220,7 @@ class SchoolServiceProvider extends ServiceProvider
     public function registerViews(): void
     {
         $viewPath = resource_path('views/modules/'.$this->nameLower);
-        $sourcePath = module_path($this->name, 'resources/views');
+        $sourcePath = (string) module_path($this->name, 'resources/views');
 
         $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower.'-module-views']);
 
@@ -232,7 +228,6 @@ class SchoolServiceProvider extends ServiceProvider
 
         /** @var string|null $namespaceConfig */
         $namespaceConfig = config('modules.namespace');
-        /** @var string $namespace */
         $namespace = (string) $namespaceConfig;
         Blade::componentNamespace($namespace.'\\'.$this->name.'\\View\\Components', $this->nameLower);
     }

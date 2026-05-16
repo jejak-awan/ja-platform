@@ -150,7 +150,7 @@ class SampleContentSeeder extends Seeder
 
     private function createLandingPage($user): void
     {
-        $blocks = [
+        [
             // Hero Section
             [
                 'id' => Str::uuid()->toString(),
@@ -253,7 +253,7 @@ class SampleContentSeeder extends Seeder
 
     private function createAboutPage($user): void
     {
-        $blocks = [
+        [
             // Hero
             [
                 'id' => Str::uuid()->toString(),
@@ -327,7 +327,7 @@ class SampleContentSeeder extends Seeder
 
     private function createContactPage($user): void
     {
-        $blocks = [
+        [
             // Hero
             [
                 'id' => Str::uuid()->toString(),
@@ -404,7 +404,7 @@ class SampleContentSeeder extends Seeder
         $this->command->info('Contact page created');
     }
 
-    private function createBlogPosts($user, $categories, $tags): void
+    private function createBlogPosts($user, array $categories, array $tags): void
     {
         $posts = [
             [
@@ -465,14 +465,14 @@ class SampleContentSeeder extends Seeder
                     'author_id' => $user->id,
                     'category_id' => $category?->id,
                     'is_featured' => $postData['is_featured'],
-                    'published_at' => now()->subDays(rand(1, 30)),
+                    'published_at' => now()->subDays(random_int(1, 30)),
                     'meta_title' => $postData['title'],
                     'meta_description' => $postData['excerpt'],
                 ]
             );
 
             // Attach random tags
-            $randomTags = collect($tags)->random(rand(2, 4))->pluck('id');
+            $randomTags = collect($tags)->random(random_int(2, 4))->pluck('id');
             $content->tags()->sync($randomTags);
         }
 
@@ -511,7 +511,7 @@ class SampleContentSeeder extends Seeder
 
         foreach ($posts as $post) {
             // Add 1-3 comments per post
-            $count = rand(1, 3);
+            $count = random_int(1, 3);
             for ($i = 0; $i < $count; $i++) {
                 \Modules\Cms\Models\Comment::create([
                     'content_id' => $post->id,
@@ -519,7 +519,7 @@ class SampleContentSeeder extends Seeder
                     'name' => $user->name,
                     'email' => $user->email,
                     'body' => $sampleComments[array_rand($sampleComments)],
-                    'status' => rand(0, 1) ? 'approved' : 'pending',
+                    'status' => random_int(0, 1) !== 0 ? 'approved' : 'pending',
                 ]);
             }
         }

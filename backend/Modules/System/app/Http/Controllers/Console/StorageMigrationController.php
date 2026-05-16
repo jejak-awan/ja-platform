@@ -19,9 +19,7 @@ class StorageMigrationController extends \Modules\System\Http\Controllers\BaseAp
             $files = Storage::disk('public')->allFiles();
 
             // Filter out hidden files or specific system files if needed
-            $files = array_filter($files, function ($file) {
-                return ! str_starts_with($file, '.');
-            });
+            $files = array_filter($files, fn(string $file) => ! str_starts_with($file, '.'));
 
             return $this->success(array_values($files), 'Files retrieved successfully');
         } catch (\Exception $e) {

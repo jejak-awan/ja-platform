@@ -14,7 +14,9 @@ class ThemeSeeder extends Seeder
     public function run(): void
     {
         $user = User::first();
-        if (!$user) return;
+        if (!$user) {
+            return;
+        }
 
         $this->seedThemes();
         $this->seedThemeSettings();
@@ -22,7 +24,7 @@ class ThemeSeeder extends Seeder
         $this->seedEssentialContent($user);
     }
 
-    private function seedThemes()
+    private function seedThemes(): void
     {
         Theme::updateOrCreate(
             ['slug' => 'janari'],
@@ -37,10 +39,12 @@ class ThemeSeeder extends Seeder
         );
     }
 
-    private function seedThemeSettings()
+    private function seedThemeSettings(): void
     {
         $theme = Theme::withoutGlobalScopes()->whereIn('slug', ['janari', 'janari-education'])->first();
-        if (!$theme) return;
+        if (!$theme) {
+            return;
+        }
 
         $manifestPath = base_path('../frontend/src/modules/Cms/views/themes/janari/theme.json');
         
@@ -56,17 +60,17 @@ class ThemeSeeder extends Seeder
                 }
             }
 
-            $settings['site_title'] = $settings['site_title'] ?? 'SEKOLAHK2ID';
-            $settings['hero_title'] = $settings['hero_title'] ?? 'SEKOLAHK2ID';
-            $settings['hero_subtitle'] = $settings['hero_subtitle'] ?? 'Mencetak Generasi Unggul Siap Kerja, Kuliah, dan Berwirausaha';
-            $settings['brand_logo'] = $settings['brand_logo'] ?? '/logo.png';
-            $settings['brand_favicon'] = $settings['brand_favicon'] ?? '/favicon.ico';
+            $settings['site_title'] ??= 'SEKOLAHK2ID';
+            $settings['hero_title'] ??= 'SEKOLAHK2ID';
+            $settings['hero_subtitle'] ??= 'Mencetak Generasi Unggul Siap Kerja, Kuliah, dan Berwirausaha';
+            $settings['brand_logo'] ??= '/logo.png';
+            $settings['brand_favicon'] ??= '/favicon.ico';
 
             $theme->update(['settings' => $settings]);
         }
     }
 
-    private function seedCategories($user)
+    private function seedCategories($user): void
     {
         $categories = [
             'news-announcement' => 'News & Announcements',
@@ -88,7 +92,7 @@ class ThemeSeeder extends Seeder
         }
     }
 
-    private function seedEssentialContent($user)
+    private function seedEssentialContent($user): void
     {
         // 1. Essential Home Page Record (Global)
         Content::withTrashed()->withoutGlobalScopes()->updateOrCreate(

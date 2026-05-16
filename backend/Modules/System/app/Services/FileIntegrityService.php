@@ -53,7 +53,9 @@ class FileIntegrityService
 
         foreach ($files as $relativePath) {
             $absolutePath = base_path($relativePath);
-            if (! file_exists($absolutePath)) continue;
+            if (! file_exists($absolutePath)) {
+                continue;
+            }
 
             try {
                 $hash = hash_file('sha256', $absolutePath);
@@ -95,14 +97,22 @@ class FileIntegrityService
         $stats = ['backed_up' => 0, 'errors' => 0];
         $files = $this->getMonitoredFiles();
         $backupDir = storage_path(self::BACKUP_PATH);
-        if (! is_dir($backupDir)) mkdir($backupDir, 0750, true);
+        if (! is_dir($backupDir)) {
+            mkdir($backupDir, 0750, true);
+        }
 
         foreach ($files as $relativePath) {
             $src = base_path($relativePath);
-            if (! file_exists($src)) continue;
-            $dest = $backupDir.'/'.md5($relativePath).'.bak';
+            if (! file_exists($src)) {
+                continue;
+            }
+            $dest = $backupDir.'/'.md5((string) $relativePath).'.bak';
             try {
-                if (copy($src, $dest)) $stats['backed_up']++; else $stats['errors']++;
+                if (copy($src, $dest)) {
+                    $stats['backed_up']++;
+                } else {
+                    $stats['errors']++;
+                }
             } catch (\Exception $e) {
                 Log::error("Integrity backup failed for {$relativePath}", ['error' => $e->getMessage()]);
                 $stats['errors']++;
@@ -115,8 +125,10 @@ class FileIntegrityService
     {
         $src = storage_path(self::BACKUP_PATH.'/'.md5($relativePath).'.bak');
         $dest = base_path($relativePath);
-        if (! file_exists($src)) return false;
-        try { return copy($src, $dest); } catch (\Exception $e) { return false; }
+        if (! file_exists($src)) {
+            return false;
+        }
+        try { return copy($src, $dest); } catch (\Exception) { return false; }
     }
 
     public function verify(): array
@@ -159,7 +171,9 @@ class FileIntegrityService
         $files = self::MONITORED_FILES;
         foreach (self::MONITORED_DIR_PATTERNS as $pattern) {
             $dirs = glob(base_path($pattern), GLOB_ONLYDIR);
-            if ($dirs === false) continue;
+            if ($dirs === false) {
+                continue;
+            }
             foreach ($dirs as $dirPath) {
                 $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS));
                 foreach ($iterator as $file) {

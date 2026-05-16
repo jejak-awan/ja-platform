@@ -47,7 +47,7 @@ class ContentFactory extends Factory
      */
     public function published(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => 'published',
             'published_at' => now(),
         ]);
@@ -58,7 +58,7 @@ class ContentFactory extends Factory
      */
     public function draft(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => 'draft',
             'published_at' => null,
         ]);
@@ -69,7 +69,7 @@ class ContentFactory extends Factory
      */
     public function archived(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => 'archived',
         ]);
     }
@@ -79,7 +79,7 @@ class ContentFactory extends Factory
      */
     public function page(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'type' => 'page',
         ]);
     }

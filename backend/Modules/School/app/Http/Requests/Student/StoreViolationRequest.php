@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\School\Http\Requests\Student;
 
 use Illuminate\Foundation\Http\FormRequest;

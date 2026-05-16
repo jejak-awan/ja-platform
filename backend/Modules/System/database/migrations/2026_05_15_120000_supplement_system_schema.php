@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('sys_languages', function (Blueprint $table) {
+        Schema::create('sys_languages', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('code', 10)->unique();
             $table->string('name');
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('sys_translations', function (Blueprint $table) {
+        Schema::create('sys_translations', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('translatable_type')->index();
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->unique(['workspace_id', 'translatable_type', 'translatable_id', 'language_code', 'field'], 'sys_translations_unique');
         });
 
-        Schema::create('sys_notifications', function (Blueprint $table) {
+        Schema::create('sys_notifications', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
             $table->string('type')->default('info');
@@ -47,7 +47,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('sys_scheduled_tasks', function (Blueprint $table) {
+        Schema::create('sys_scheduled_tasks', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('command');
@@ -59,14 +59,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('sys_redis_settings', function (Blueprint $table) {
+        Schema::create('sys_redis_settings', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('key')->unique();
             $table->text('value')->nullable();
             $table->timestamps();
         });
 
-        Schema::create('sys_email_templates', function (Blueprint $table) {
+        Schema::create('sys_email_templates', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('name');
@@ -79,7 +79,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('sys_content_templates', function (Blueprint $table) {
+        Schema::create('sys_content_templates', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('name');
@@ -93,7 +93,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('sys_field_groups', function (Blueprint $table) {
+        Schema::create('sys_field_groups', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('name');
@@ -106,7 +106,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('sys_custom_fields', function (Blueprint $table) {
+        Schema::create('sys_custom_fields', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('field_group_id')->nullable()->index();
@@ -126,7 +126,7 @@ return new class extends Migration
             $table->foreign('field_group_id')->references('id')->on('sys_field_groups')->nullOnDelete();
         });
 
-        Schema::create('sys_content_custom_fields', function (Blueprint $table) {
+        Schema::create('sys_content_custom_fields', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('custom_field_id')->index();
@@ -139,7 +139,7 @@ return new class extends Migration
             $table->foreign('custom_field_id')->references('id')->on('sys_custom_fields')->cascadeOnDelete();
         });
 
-        Schema::create('sys_two_factor_auth', function (Blueprint $table) {
+        Schema::create('sys_two_factor_auth', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->unique();
             $table->text('secret');

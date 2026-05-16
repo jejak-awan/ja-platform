@@ -11,11 +11,8 @@ use Modules\School\Http\Requests\HR\UpdateStaffRequest;
 
 class StaffController extends BaseController
 {
-    protected HRService $service;
-
-    public function __construct(HRService $service)
+    public function __construct(protected HRService $service)
     {
-        $this->service = $service;
     }
 
     public function index(Request $request): \Illuminate\Http\JsonResponse

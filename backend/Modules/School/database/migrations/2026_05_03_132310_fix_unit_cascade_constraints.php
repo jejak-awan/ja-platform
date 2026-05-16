@@ -43,7 +43,9 @@ return new class extends Migration
         ];
 
         foreach ($tables as $tableName) {
-            if (!Schema::hasTable($tableName)) continue;
+            if (!Schema::hasTable($tableName)) {
+                continue;
+            }
             
             $columnsToFix = [];
             if (Schema::hasColumn($tableName, 'workspace_id')) {

@@ -121,10 +121,8 @@ class NotificationController extends \Modules\System\Http\Controllers\BaseApiCon
             return $this->unauthorized('Unauthenticated');
         }
 
-        if (! $user->hasRole('super')) {
-            if (! $user->can('manage system')) {
-                return $this->forbidden('Unauthorized');
-            }
+        if (!$user->hasRole('super') && ! $user->can('manage system')) {
+            return $this->forbidden('Unauthorized');
         }
 
         $limitRaw = $request->input('limit', 20);

@@ -27,14 +27,12 @@ class InstallController extends Controller
         $family = PHP_OS_FAMILY;
         $distro = 'unknown';
 
-        if ($family === 'Linux') {
-            if (File::exists('/etc/os-release')) {
-                $osRelease = File::get('/etc/os-release');
-                if (str_contains($osRelease, 'ubuntu') || str_contains($osRelease, 'debian')) {
-                    $distro = 'debian';
-                } elseif (str_contains($osRelease, 'centos') || str_contains($osRelease, 'almalinux') || str_contains($osRelease, 'rhel') || str_contains($osRelease, 'fedora')) {
-                    $distro = 'rhel';
-                }
+        if ($family === 'Linux' && File::exists('/etc/os-release')) {
+            $osRelease = File::get('/etc/os-release');
+            if (str_contains($osRelease, 'ubuntu') || str_contains($osRelease, 'debian')) {
+                $distro = 'debian';
+            } elseif (str_contains($osRelease, 'centos') || str_contains($osRelease, 'almalinux') || str_contains($osRelease, 'rhel') || str_contains($osRelease, 'fedora')) {
+                $distro = 'rhel';
             }
         }
 
@@ -64,7 +62,7 @@ class InstallController extends Controller
 
         try {
             // 1. Update Environment
-            $host = parse_url($validated['app_url'], PHP_URL_HOST);
+            $host = parse_url((string) $validated['app_url'], PHP_URL_HOST);
             $hostString = is_string($host) ? $host : '';
 
             $this->updateEnv([
@@ -170,7 +168,7 @@ class InstallController extends Controller
 
         $content = File::get($path);
         foreach ($data as $key => $value) {
-            if (strpos($content, "{$key}=") !== false) {
+            if (str_contains($content, "{$key}=")) {
                 $updated = preg_replace("/^{$key}=.*/m", "{$key}={$value}", $content);
                 if ($updated !== null) {
                     $content = $updated;

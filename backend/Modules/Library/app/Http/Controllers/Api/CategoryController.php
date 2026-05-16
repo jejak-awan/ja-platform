@@ -53,8 +53,7 @@ class CategoryController extends BaseApiController
      */
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
-        $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        $request->user();
         $query = Category::query();
 
         // Public categories are always visible if active
@@ -66,20 +65,20 @@ class CategoryController extends BaseApiController
             // For now, we assume global categories are parents.
             $categories = $query->whereNull('parent_id')
                 ->where('is_active', true)
-                ->withCount(['contents' => function ($q) {
+                ->withCount(['contents' => function ($q): void {
                     $q->where('status', 'published')
                       ->where('type', 'post')
-                      ->where(function ($sq) {
+                      ->where(function ($sq): void {
                           $sq->whereNull('published_at')
                             ->orWhere('published_at', '<=', now()->toDateTimeString());
                       });
                 }])
-                ->with(['children' => function ($q) {
+                ->with(['children' => function ($q): void {
                     $q->where('is_active', true)
-                      ->withCount(['contents' => function ($sq) {
+                      ->withCount(['contents' => function ($sq): void {
                           $sq->where('status', 'published')
                             ->where('type', 'post')
-                            ->where(function ($ssq) {
+                            ->where(function ($ssq): void {
                                 $ssq->whereNull('published_at')
                                   ->orWhere('published_at', '<=', now()->toDateTimeString());
                             });
@@ -95,10 +94,10 @@ class CategoryController extends BaseApiController
         // Flat list
         $query->where('is_active', true)
             ->with('parent')
-            ->withCount(['contents' => function ($q) {
+            ->withCount(['contents' => function ($q): void {
                 $q->where('status', 'published')
                   ->where('type', 'post')
-                  ->where(function ($sq) {
+                  ->where(function ($sq): void {
                       $sq->whereNull('published_at')
                         ->orWhere('published_at', '<=', now()->toDateTimeString());
                   });
@@ -107,7 +106,7 @@ class CategoryController extends BaseApiController
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_scalar($searchRaw) ? (string) $searchRaw : '';
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('description', 'like', "%{$search}%");
             });
@@ -250,10 +249,8 @@ class CategoryController extends BaseApiController
         /** @var \Modules\System\Models\User|null $user */
 
         // Scope check for show?
-        if ($user && ! $user->can('manage categories')) {
-            if ($category->author_id && $category->author_id !== $user->id) {
-                return $this->forbidden('You do not have permission to view this category');
-            }
+        if ($user && !$user->can('manage categories') && ($category->author_id && $category->author_id !== $user->id)) {
+            return $this->forbidden('You do not have permission to view this category');
         }
 
         return $this->success($category->load(['parent', 'children', 'contents']), 'Category retrieved successfully');
@@ -302,10 +299,8 @@ class CategoryController extends BaseApiController
             return $this->unauthorized();
         }
 
-        if ($category->locked_by && $category->locked_by !== $user->id) {
-            if ($category->locked_at && $category->locked_at->diffInMinutes(now()) < 60) {
-                return $this->error('Category is currently being edited by another user', 423);
-            }
+        if ($category->locked_by && $category->locked_by !== $user->id && ($category->locked_at && $category->locked_at->diffInMinutes(now()) < 60)) {
+            return $this->error('Category is currently being edited by another user', 423);
         }
 
         // Ownership check
@@ -390,10 +385,8 @@ class CategoryController extends BaseApiController
             return $this->unauthorized();
         }
 
-        if ($category->locked_by && $category->locked_by !== $user->id) {
-            if ($category->locked_at && $category->locked_at->diffInMinutes(now()) < 60) {
-                return $this->error('Cannot delete: Category is currently being edited by another user', 423);
-            }
+        if ($category->locked_by && $category->locked_by !== $user->id && ($category->locked_at && $category->locked_at->diffInMinutes(now()) < 60)) {
+            return $this->error('Cannot delete: Category is currently being edited by another user', 423);
         }
 
         // Ownership check

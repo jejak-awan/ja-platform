@@ -55,7 +55,6 @@ class MediaServiceTest extends TestCase
         $this->assertNotFalse($tempPath);
 
         $method = new \ReflectionMethod(MediaService::class, 'optimizeImage');
-        $method->setAccessible(true);
         $method->invoke($this->service, $tempPath, 1000);
 
         $size = getimagesize($tempPath);
@@ -70,7 +69,6 @@ class MediaServiceTest extends TestCase
         $this->assertNotFalse($tempPath);
 
         $method = new \ReflectionMethod(MediaService::class, 'convertToWebP');
-        $method->setAccessible(true);
         $resultPath = $method->invoke($this->service, $tempPath);
 
         $this->assertNotNull($resultPath);
@@ -161,7 +159,7 @@ class MediaServiceTest extends TestCase
         $this->assertFileExists($zipPath);
         $this->assertEquals('application/zip', mime_content_type($zipPath));
 
-        if (is_string($zipPath) && file_exists($zipPath)) {
+        if (file_exists($zipPath)) {
             unlink($zipPath);
         }
     }
@@ -199,7 +197,6 @@ class MediaServiceTest extends TestCase
         $fullPath = Storage::disk('public')->path('test.svg');
 
         $method = new \ReflectionMethod(MediaService::class, 'sanitizeSvg');
-        $method->setAccessible(true);
         $method->invoke($this->service, $fullPath);
 
         $sanitized = Storage::disk('public')->get('test.svg');
@@ -213,7 +210,6 @@ class MediaServiceTest extends TestCase
         $this->assertNotFalse($tempPath);
 
         $method = new \ReflectionMethod(MediaService::class, 'convertToWebP');
-        $method->setAccessible(true);
         $result = $method->invoke($this->service, $tempPath);
 
         $this->assertNull($result);

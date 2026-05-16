@@ -14,11 +14,8 @@ use Modules\School\Http\Requests\Logistics\RegisterTransportStudentRequest;
 
 class TransportController extends BaseController
 {
-    protected LogisticsService $service;
-
-    public function __construct(LogisticsService $service)
+    public function __construct(protected LogisticsService $service)
     {
-        $this->service = $service;
     }
 
     public function vehicles(): \Illuminate\Http\JsonResponse

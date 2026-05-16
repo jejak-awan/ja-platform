@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Infra\Http\Controllers;
 
 use Modules\System\Http\Controllers\BaseApiController;
@@ -12,7 +14,7 @@ class InfraController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
         return view('infra::index');
     }
@@ -20,7 +22,7 @@ class InfraController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
         return view('infra::create');
     }
@@ -33,7 +35,7 @@ class InfraController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
         return view('infra::show');
     }
@@ -41,7 +43,7 @@ class InfraController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
         return view('infra::edit');
     }

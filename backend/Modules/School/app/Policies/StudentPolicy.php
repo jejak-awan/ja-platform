@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\School\Policies;
 
 use Modules\System\Models\User;

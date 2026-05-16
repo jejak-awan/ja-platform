@@ -58,12 +58,7 @@ class TrackAnalytics
         if (str_starts_with($path, 'admin') || str_starts_with($path, 'api')) {
             return false;
         }
-
         // Don't track static assets
-        if (preg_match('/\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot)$/i', $path)) {
-            return false;
-        }
-
-        return true;
+        return !preg_match('/\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot)$/i', $path);
     }
 }

@@ -14,11 +14,8 @@ class MediaController extends Controller
 {
     use AuthorizesRequests;
 
-    protected MediaServiceInterface $mediaService;
-
-    public function __construct(MediaServiceInterface $mediaService)
+    public function __construct(protected MediaServiceInterface $mediaService)
     {
-        $this->mediaService = $mediaService;
     }
 
     /**
@@ -45,7 +42,7 @@ class MediaController extends Controller
 
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('file_name', 'like', "%{$search}%")
                   ->orWhere('alt', 'like', "%{$search}%");
@@ -194,7 +191,7 @@ class MediaController extends Controller
     public function restore(string $id)
     {
         $file = $this->mediaService->restore($id);
-        if (!$file) {
+        if (!$file instanceof \Modules\Media\Models\File) {
             return response()->json(['success' => false, 'message' => 'Media not found or not in trash'], 404);
         }
 

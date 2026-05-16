@@ -20,7 +20,7 @@ class SchoolModuleCrudTest extends TestCase
     }
 
     #[Test]
-    public function it_can_perform_academic_year_crud()
+    public function it_can_perform_academic_year_crud(): void
     {
         $school = School::factory()->create();
 
@@ -54,7 +54,7 @@ class SchoolModuleCrudTest extends TestCase
     }
 
     #[Test]
-    public function it_can_perform_subject_crud()
+    public function it_can_perform_subject_crud(): void
     {
         $school = School::factory()->create();
 
@@ -88,7 +88,7 @@ class SchoolModuleCrudTest extends TestCase
     }
 
     #[Test]
-    public function it_can_perform_student_crud()
+    public function it_can_perform_student_crud(): void
     {
         $school = School::factory()->create();
         $level = SchoolUnit::factory()->forSchool($school)->smk()->create();

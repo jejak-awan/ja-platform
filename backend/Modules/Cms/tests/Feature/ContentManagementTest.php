@@ -29,7 +29,7 @@ class ContentManagementTest extends TestCase
         $admin = $this->createAdminUser();
         $this->actingAs($admin, 'sanctum');
 
-        $initialCount = Content::count();
+        Content::count();
         Content::factory()->count(5)->create();
 
         $response = $this->getJson('/api/v1/manage/cms/contents');

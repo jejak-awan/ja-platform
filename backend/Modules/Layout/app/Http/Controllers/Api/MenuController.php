@@ -12,11 +12,8 @@ use Modules\System\Contracts\LayoutRegistryInterface;
 
 class MenuController extends BaseApiController
 {
-    protected LayoutRegistryInterface $registry;
-
-    public function __construct(LayoutRegistryInterface $registry)
+    public function __construct(protected LayoutRegistryInterface $registry)
     {
-        $this->registry = $registry;
     }
 
     public function index(Request $request): \Illuminate\Http\JsonResponse
@@ -29,7 +26,7 @@ class MenuController extends BaseApiController
 
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('slug', 'like', "%{$search}%");
             });
@@ -44,7 +41,7 @@ class MenuController extends BaseApiController
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $scope = $request->input('module_scope', 'cms');
-        $allowedLocations = $this->registry->getMenuLocations($scope);
+        $this->registry->getMenuLocations($scope);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -127,7 +124,7 @@ class MenuController extends BaseApiController
             'items.*.parent_id' => 'nullable|exists:lay_menu_items,id',
         ]);
 
-        DB::transaction(function () use ($request, $menu) {
+        DB::transaction(function () use ($request, $menu): void {
             foreach ($request->input('items') as $itemData) {
                 MenuItem::where('id', $itemData['id'])
                     ->where('menu_id', $menu->id)
@@ -149,12 +146,10 @@ class MenuController extends BaseApiController
     {
         $cacheKey = "menu_location_{$location}";
 
-        $menu = Cache::remember($cacheKey, 3600, function () use ($location) {
-            return Menu::where('location', $location)
-                ->where('is_active', true)
-                ->with(['parentItems.children'])
-                ->first();
-        });
+        $menu = Cache::remember($cacheKey, 3600, fn() => Menu::where('location', $location)
+            ->where('is_active', true)
+            ->with(['parentItems.children'])
+            ->first());
 
         if (! $menu) {
             return $this->success(null, 'No active menu found for this location');

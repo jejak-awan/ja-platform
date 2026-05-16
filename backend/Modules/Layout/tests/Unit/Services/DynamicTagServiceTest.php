@@ -21,7 +21,7 @@ class DynamicTagServiceTest extends TestCase
         $this->service = new DynamicTagService;
     }
 
-    public function test_resolve_post_tags()
+    public function test_resolve_post_tags(): void
     {
         $user = User::factory()->create(['name' => 'John Doe']);
         $content = Content::factory()->create([
@@ -36,7 +36,7 @@ class DynamicTagServiceTest extends TestCase
         $this->assertEquals(now()->format('M d, Y'), $this->service->resolveTag('{{post_date}}', $content));
     }
 
-    public function test_resolve_site_tags()
+    public function test_resolve_site_tags(): void
     {
         Setting::set('site_title', 'My Awesome Site');
         Setting::set('site_tagline', 'The best site ever');
@@ -46,7 +46,7 @@ class DynamicTagServiceTest extends TestCase
         $this->assertEquals(now()->year, $this->service->resolveTag('{{current_year}}'));
     }
 
-    public function test_resolve_loop_tags()
+    public function test_resolve_loop_tags(): void
     {
         $loopItem = [
             'title' => 'Loop Title',
@@ -58,7 +58,7 @@ class DynamicTagServiceTest extends TestCase
         $this->assertEquals('1', $this->service->resolveTag('{{loop_index}}', null, $loopItem));
     }
 
-    public function test_resolve_user_tags()
+    public function test_resolve_user_tags(): void
     {
         $user = User::factory()->create(['name' => 'Active User', 'email' => 'user@example.com']);
         $this->actingAs($user);
@@ -67,7 +67,7 @@ class DynamicTagServiceTest extends TestCase
         $this->assertEquals('user@example.com', $this->service->resolveTag('{{user_email}}'));
     }
 
-    public function test_resolve_blocks_recursively()
+    public function test_resolve_blocks_recursively(): void
     {
         $blocks = [
             [
@@ -94,7 +94,7 @@ class DynamicTagServiceTest extends TestCase
         $this->assertEquals(now()->year, $resolved[0]['children'][0]['settings']['content']);
     }
 
-    public function test_resolve_archive_tags()
+    public function test_resolve_archive_tags(): void
     {
         $this->assertEquals('Archive', $this->service->resolveTag('{{archive_title}}'));
     }

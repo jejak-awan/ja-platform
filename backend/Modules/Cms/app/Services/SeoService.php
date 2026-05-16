@@ -10,7 +10,6 @@ class SeoService
      * Analyze the SEO performance of a model.
      * The model should ideally have attributes like title, meta_title, meta_description, etc.
      *
-     * @param Model $model
      * @return array{score: int, max_score: int, percentage: float, grade: string, issues: array<int, string>, suggestions: array<int, string>}
      */
     public function analyze(Model $model): array
@@ -119,7 +118,6 @@ class SeoService
     /**
      * Generate JSON-LD schema for a model.
      *
-     * @param Model $model
      * @param string $type Default schema type
      * @return array<string, mixed>
      */
@@ -183,11 +181,21 @@ class SeoService
     {
         $percentage = ($score / $maxScore) * 100;
 
-        if ($percentage >= 90) return 'A+';
-        if ($percentage >= 80) return 'A';
-        if ($percentage >= 70) return 'B';
-        if ($percentage >= 60) return 'C';
-        if ($percentage >= 50) return 'D';
+        if ($percentage >= 90) {
+            return 'A+';
+        }
+        if ($percentage >= 80) {
+            return 'A';
+        }
+        if ($percentage >= 70) {
+            return 'B';
+        }
+        if ($percentage >= 60) {
+            return 'C';
+        }
+        if ($percentage >= 50) {
+            return 'D';
+        }
         return 'F';
     }
 }

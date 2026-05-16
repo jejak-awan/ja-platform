@@ -11,11 +11,8 @@ use Modules\School\Http\Requests\Student\UpdateStudentRequest;
 
 class StudentController extends BaseController
 {
-    protected StudentService $service;
-
-    public function __construct(StudentService $service)
+    public function __construct(protected StudentService $service)
     {
-        $this->service = $service;
     }
 
     public function index(Request $request): \Illuminate\Http\JsonResponse
@@ -52,9 +49,7 @@ class StudentController extends BaseController
         $this->authorize('view', $student);
 
         return $this->sendResponse(
-            $student->load(['level', 'department', 'studyGroups', 'attendances' => function($q) {
-                return $q->latest()->limit(10);
-            }]),
+            $student->load(['level', 'department', 'studyGroups', 'attendances' => fn($q) => $q->latest()->limit(10)]),
             'Student retrieved successfully.'
         );
     }

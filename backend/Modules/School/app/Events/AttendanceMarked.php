@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\School\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -11,13 +13,10 @@ class AttendanceMarked
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Attendance $attendance;
-
     /**
      * Create a new event instance.
      */
-    public function __construct(Attendance $attendance)
+    public function __construct(public Attendance $attendance)
     {
-        $this->attendance = $attendance;
     }
 }

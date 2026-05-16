@@ -71,7 +71,7 @@ class SecurityNotificationService
         $config = $this->getConfig();
 
         // Telegram
-        if (! empty($config['telegram_bot_token']) && ! empty($config['telegram_chat_id'])) {
+        if (! empty($config['telegram_bot_token']) && (isset($config['telegram_chat_id']) && ($config['telegram_chat_id'] !== '' && $config['telegram_chat_id'] !== '0'))) {
             $this->sendTelegram($config['telegram_bot_token'], $config['telegram_chat_id'], $title, $message, $severity, $metadata);
         }
 
@@ -127,7 +127,7 @@ class SecurityNotificationService
 
         $text = "{$emoji} *{$title}*\n\n{$message}";
 
-        if (! empty($metadata)) {
+        if ($metadata !== []) {
             $text .= "\n\n*Details:*";
             foreach ($metadata as $key => $value) {
                 $val = is_array($value) ? (string) json_encode($value) : (is_scalar($value) ? (string) $value : '');
@@ -169,7 +169,7 @@ class SecurityNotificationService
             $body = "Security Alert [{$severityLabel}]\n\n";
             $body .= "{$title}\n\n{$message}\n";
 
-            if (! empty($metadata)) {
+            if ($metadata !== []) {
                 $body .= "\nDetails:\n";
                 foreach ($metadata as $key => $value) {
                     $val = is_array($value) ? (string) json_encode($value) : (is_scalar($value) ? (string) $value : '');
@@ -182,7 +182,7 @@ class SecurityNotificationService
 
             $appName = is_string($appNameRaw = config('app.name')) ? $appNameRaw : 'K2NET';
 
-            Mail::raw($body, function ($mail) use ($to, $title, $severityLabel, $appName) {
+            Mail::raw($body, function ($mail) use ($to, $title, $severityLabel, $appName): void {
                 $mail->to($to)
                     ->subject("[{$appName}] [{$severityLabel}] {$title}");
             });
@@ -272,7 +272,7 @@ class SecurityNotificationService
      */
     private function getConfig(): array
     {
-        return Cache::remember('security_notification_config', 300, function () {
+        return Cache::remember('security_notification_config', 300, function (): array {
             try {
                 /** @var array<string, string|null> $settings */
                 $settings = \Modules\System\Models\Setting::where('group', 'security')
@@ -291,7 +291,7 @@ class SecurityNotificationService
                     'email_to' => $settings['email_to'] ?? null,
                     'webhook_url' => $settings['webhook_url'] ?? null,
                 ];
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 return [
                     'telegram_bot_token' => null,
                     'telegram_chat_id' => null,

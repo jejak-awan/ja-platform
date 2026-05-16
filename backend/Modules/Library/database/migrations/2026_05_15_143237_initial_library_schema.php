@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Tags
-        Schema::create('lib_tags', function (Blueprint $table) {
+        Schema::create('lib_tags', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('slug')->index();
@@ -28,7 +28,7 @@ return new class extends Migration
         });
 
         // 2. Taggables (Polymorphic Pivot)
-        Schema::create('lib_taggables', function (Blueprint $table) {
+        Schema::create('lib_taggables', function (Blueprint $table): void {
             $table->uuid('tag_id');
             $table->string('taggable_id');
             $table->string('taggable_type');
@@ -38,7 +38,7 @@ return new class extends Migration
         });
 
         // 3. Fields Definition
-        Schema::create('lib_fields', function (Blueprint $table) {
+        Schema::create('lib_fields', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('key')->index();
@@ -60,7 +60,7 @@ return new class extends Migration
         });
 
         // 4. Field Groups
-        Schema::create('lib_field_groups', function (Blueprint $table) {
+        Schema::create('lib_field_groups', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->text('description')->nullable();
@@ -70,7 +70,7 @@ return new class extends Migration
         });
 
         // 5. Field Group Assignments (Connect groups to models)
-        Schema::create('lib_field_group_assignments', function (Blueprint $table) {
+        Schema::create('lib_field_group_assignments', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('group_id');
             $table->string('assignable_type'); // e.g., Modules\Library\Models\Content
@@ -81,7 +81,7 @@ return new class extends Migration
         });
 
         // 6. Pivot Field <-> Group
-        Schema::create('lib_field_group_pivot', function (Blueprint $table) {
+        Schema::create('lib_field_group_pivot', function (Blueprint $table): void {
             $table->uuid('field_id');
             $table->uuid('group_id');
             $table->integer('sort_order')->default(0);
@@ -92,7 +92,7 @@ return new class extends Migration
         });
 
         // 7. Categories
-        Schema::create('lib_categories', function (Blueprint $table) {
+        Schema::create('lib_categories', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('parent_id')->nullable();
             $table->uuid('workspace_id')->nullable()->index();
@@ -110,7 +110,7 @@ return new class extends Migration
             $table->softDeletes();
         });
         
-        Schema::table('lib_categories', function (Blueprint $table) {
+        Schema::table('lib_categories', function (Blueprint $table): void {
             $table->foreign('parent_id')->references('id')->on('lib_categories')->onDelete('set null');
         });
     }

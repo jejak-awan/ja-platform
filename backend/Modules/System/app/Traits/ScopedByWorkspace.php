@@ -10,7 +10,7 @@ trait ScopedByWorkspace
 {
     public static function bootScopedByWorkspace(): void
     {
-        static::addGlobalScope('workspace', function (Builder $builder) {
+        static::addGlobalScope('workspace', function (Builder $builder): void {
             // Bypass scoping for Super Admin or specific administrative tasks
             if (Context::get('bypass_unit_scope')) {
                 return;
@@ -24,7 +24,7 @@ trait ScopedByWorkspace
 
             if ($workspaceId !== null && $workspaceId !== 0) {
                 $table = $model->getTable();
-                $builder->where(function ($query) use ($table, $workspaceId, $hasShared) {
+                $builder->where(function ($query) use ($table, $workspaceId, $hasShared): void {
                     $query->where("{$table}.workspace_id", $workspaceId)
                           ->orWhereNull("{$table}.workspace_id"); // Global records are always visible
                     
@@ -38,7 +38,7 @@ trait ScopedByWorkspace
             }
         });
 
-        static::creating(function (Model $model) {
+        static::creating(function (Model $model): void {
             $workspaceId = Context::get('workspace_id');
             // Only auto-assign for real unit IDs (> 0). ID 0 = Global context → keep null.
             if (is_numeric($workspaceId) && (int)$workspaceId > 0 && ! $model->getAttribute('workspace_id')) {

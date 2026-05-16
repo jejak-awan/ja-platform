@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('srch_indexes', function (Blueprint $table) {
+        Schema::create('srch_indexes', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('searchable_type');
@@ -31,7 +31,7 @@ return new class extends Migration
             }
         });
 
-        Schema::create('srch_queries', function (Blueprint $table) {
+        Schema::create('srch_queries', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('user_id')->nullable()->index();

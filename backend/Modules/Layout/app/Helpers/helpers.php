@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Global Helper Functions for JA-Platform Theme System
  * These functions provide a convenient API for interacting with the theme system.

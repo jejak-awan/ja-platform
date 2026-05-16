@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Backups Registry
-        Schema::create('infra_backups', function (Blueprint $table) {
+        Schema::create('infra_backups', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('filename');
             $table->string('disk');
@@ -22,7 +22,7 @@ return new class extends Migration
         });
 
         // 2. Deleted Files (Recycle Bin)
-        Schema::create('infra_deleted_files', function (Blueprint $table) {
+        Schema::create('infra_deleted_files', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('original_name');
             $table->string('original_path');
@@ -36,7 +36,7 @@ return new class extends Migration
         });
 
         // 3. Webhooks Registry
-        Schema::create('infra_webhooks', function (Blueprint $table) {
+        Schema::create('infra_webhooks', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('url');
@@ -47,7 +47,7 @@ return new class extends Migration
         });
 
         // 4. Domain Redirects
-        Schema::create('infra_redirects', function (Blueprint $table) {
+        Schema::create('infra_redirects', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('from_domain')->index();

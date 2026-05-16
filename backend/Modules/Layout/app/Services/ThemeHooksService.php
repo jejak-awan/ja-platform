@@ -29,9 +29,7 @@ class ThemeHooksService
         ];
 
         // Sort by priority
-        usort($this->actions[$hook], function ($a, $b) {
-            return $a['priority'] <=> $b['priority'];
-        });
+        usort($this->actions[$hook], fn(array $a, array $b) => $a['priority'] <=> $b['priority']);
     }
 
     /**
@@ -63,9 +61,7 @@ class ThemeHooksService
         ];
 
         // Sort by priority
-        usort($this->filters[$hook], function ($a, $b) {
-            return $a['priority'] <=> $b['priority'];
-        });
+        usort($this->filters[$hook], fn(array $a, array $b) => $a['priority'] <=> $b['priority']);
     }
 
     /**
@@ -99,9 +95,7 @@ class ThemeHooksService
 
         $this->actions[$hook] = array_filter(
             $this->actions[$hook],
-            function ($action) use ($callback) {
-                return $action['callback'] !== $callback;
-            }
+            fn(array $action) => $action['callback'] !== $callback
         );
     }
 
@@ -116,9 +110,7 @@ class ThemeHooksService
 
         $this->filters[$hook] = array_filter(
             $this->filters[$hook],
-            function ($filter) use ($callback) {
-                return $filter['callback'] !== $callback;
-            }
+            fn(array $filter) => $filter['callback'] !== $callback
         );
     }
 
@@ -127,7 +119,7 @@ class ThemeHooksService
      */
     public function hasAction(string $hook): bool
     {
-        return isset($this->actions[$hook]) && ! empty($this->actions[$hook]);
+        return isset($this->actions[$hook]) && (isset($this->actions[$hook]) && $this->actions[$hook] !== []);
     }
 
     /**
@@ -135,7 +127,7 @@ class ThemeHooksService
      */
     public function hasFilter(string $hook): bool
     {
-        return isset($this->filters[$hook]) && ! empty($this->filters[$hook]);
+        return isset($this->filters[$hook]) && (isset($this->filters[$hook]) && $this->filters[$hook] !== []);
     }
 
     /**

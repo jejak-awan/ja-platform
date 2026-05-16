@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\School\Policies;
 
 use Modules\System\Models\User;
@@ -10,11 +12,6 @@ class CoursePolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * @param User $user
-     * @param string $ability
-     * @return bool|null
-     */
     public function before(User $user, string $ability): ?bool
     {
         if ($user->isAtLeastRole('admin')) {

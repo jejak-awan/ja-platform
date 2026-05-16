@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\School\Http\Requests\Institution;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,7 +26,7 @@ class UpdateSchoolRequest extends FormRequest
             'type' => 'nullable|string|max:50',
             'is_multi_unit' => 'sometimes|boolean',
             'is_multi_branch' => 'sometimes|boolean',
-            'npsn' => 'nullable|string|size:8|unique:sch_ins_schools,npsn,' . (string)$schoolId,
+            'npsn' => 'nullable|string|size:8|unique:sch_ins_schools,npsn,' . $schoolId,
             'nss' => 'nullable|string|max:20',
             'nds' => 'nullable|string|max:20',
             'status_kepemilikan' => 'nullable|string|max:100',

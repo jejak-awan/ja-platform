@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\Media\Http\Controllers\Api\MediaController;
 use Modules\Media\Http\Controllers\Api\FolderController;
 use Modules\Infra\Http\Controllers\FileManagerController;
 
-Route::prefix('v1/manage')->middleware(['auth:sanctum'])->group(function () {
+Route::prefix('v1/manage')->middleware(['auth:sanctum'])->group(function (): void {
     // Media Routes
-    Route::prefix('media')->group(function () {
+    Route::prefix('media')->group(function (): void {
         Route::get('/', [MediaController::class, 'index']);
         Route::post('/upload', [MediaController::class, 'upload']);
         Route::post('/bulk-action', [MediaController::class, 'bulk']);
@@ -22,7 +24,7 @@ Route::prefix('v1/manage')->middleware(['auth:sanctum'])->group(function () {
     });
 
     // Folder Routes
-    Route::prefix('folders')->group(function () {
+    Route::prefix('folders')->group(function (): void {
         Route::get('/', [FolderController::class, 'index']);
         Route::post('/', [FolderController::class, 'store']);
         Route::put('/{folder}', [FolderController::class, 'update']);
@@ -30,7 +32,7 @@ Route::prefix('v1/manage')->middleware(['auth:sanctum'])->group(function () {
     });
 
     // File Manager Routes (from FileManagerController)
-    Route::prefix('infra/file-manager')->group(function () {
+    Route::prefix('infra/file-manager')->group(function (): void {
         Route::get('/', [FileManagerController::class, 'index']);
         Route::post('/upload', [FileManagerController::class, 'upload']);
         Route::get('/download', [FileManagerController::class, 'download']);

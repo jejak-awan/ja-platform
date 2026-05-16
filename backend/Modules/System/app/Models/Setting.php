@@ -64,7 +64,7 @@ class Setting extends Model
             $query = static::where('key', $key);
 
             if ($id) {
-                $query->where(function($q) use ($id) {
+                $query->where(function($q) use ($id): void {
                     $q->where('workspace_id', $id)
                       ->orWhereNull('workspace_id');
                 })->orderByRaw('workspace_id IS NULL ASC');
@@ -73,7 +73,7 @@ class Setting extends Model
             }
 
             $setting = $query->first();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException) {
             // Table might not exist yet (e.g. during route registration in tests)
             return $default;
         }
@@ -87,7 +87,7 @@ class Setting extends Model
 
     public static function set(string $key, mixed $value, string $type = 'string', string $group = 'general', ?int $workspaceId = null): self
     {
-        $setting = static::updateOrCreate(
+        return static::updateOrCreate(
             ['key' => $key, 'workspace_id' => $workspaceId],
             [
                 'value' => is_array($value) ? json_encode($value) : $value,
@@ -95,8 +95,6 @@ class Setting extends Model
                 'group' => $group,
             ]
         );
-
-        return $setting;
     }
 
     /**
@@ -108,26 +106,17 @@ class Setting extends Model
             ->orderByRaw('workspace_id IS NULL DESC')
             ->get();
 
-        return $settings->mapWithKeys(function ($setting) {
-            return [(string) $setting->key => static::castValue($setting->value, (string) $setting->type)];
-        })->toArray();
+        return $settings->mapWithKeys(fn($setting) => [(string) $setting->key => static::castValue($setting->value, (string) $setting->type)])->toArray();
     }
 
     protected static function castValue(mixed $value, string $type): mixed
     {
-        switch ($type) {
-            case 'integer':
-                return is_numeric($value) ? (int) $value : 0;
-            case 'boolean':
-                return filter_var($value, FILTER_VALIDATE_BOOLEAN);
-            case 'json':
-                return is_string($value) ? json_decode($value, true) : $value;
-            case 'text':
-            case 'string':
-            default:
-                return $value;
-            case 'array':
-                return is_string($value) ? json_decode($value, true) : (array) $value;
-        }
+        return match ($type) {
+            'integer' => is_numeric($value) ? (int) $value : 0,
+            'boolean' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
+            'json' => is_string($value) ? json_decode($value, true) : $value,
+            'array' => is_string($value) ? json_decode($value, true) : (array) $value,
+            default => $value,
+        };
     }
 }

@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Analytics Sessions
-        Schema::create('srv_analytics_sessions', function (Blueprint $table) {
+        Schema::create('srv_analytics_sessions', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('session_id')->unique();
@@ -30,7 +30,7 @@ return new class extends Migration
         });
 
         // 2. Analytics Visits (Individual page views)
-        Schema::create('srv_analytics_visits', function (Blueprint $table) {
+        Schema::create('srv_analytics_visits', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('session_id')->index();
@@ -47,7 +47,7 @@ return new class extends Migration
         });
 
         // 3. Analytics Events
-        Schema::create('srv_analytics_events', function (Blueprint $table) {
+        Schema::create('srv_analytics_events', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('session_id')->index();
@@ -64,7 +64,7 @@ return new class extends Migration
         });
 
         // 4. Slow Queries
-        Schema::create('srv_analytics_slow_queries', function (Blueprint $table) {
+        Schema::create('srv_analytics_slow_queries', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->text('sql');

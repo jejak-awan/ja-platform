@@ -19,7 +19,7 @@ class CommentSecurityServiceTest extends TestCase
         $this->service = new CommentSecurityService;
     }
 
-    public function test_is_spam_with_banned_words()
+    public function test_is_spam_with_banned_words(): void
     {
         Setting::set('comments.security.banned_words', ['spam', 'badword'], 'json');
 
@@ -27,7 +27,7 @@ class CommentSecurityServiceTest extends TestCase
         $this->assertFalse($this->service->isSpam('This is a clean message'));
     }
 
-    public function test_is_spam_banned_words_as_string()
+    public function test_is_spam_banned_words_as_string(): void
     {
         Setting::create([
             'key' => 'comments.security.banned_words',
@@ -38,7 +38,7 @@ class CommentSecurityServiceTest extends TestCase
         $this->assertTrue($this->service->isSpam('Exclusive offer!'));
     }
 
-    public function test_is_spam_exceeds_link_limit()
+    public function test_is_spam_exceeds_link_limit(): void
     {
         Setting::set('comments.security.max_links', 1, 'integer');
 
@@ -49,7 +49,7 @@ class CommentSecurityServiceTest extends TestCase
         $this->assertFalse($this->service->isSpam($clean));
     }
 
-    public function test_get_initial_status()
+    public function test_get_initial_status(): void
     {
         // Case 1: Is Spam
         $this->assertEquals('spam', $this->service->getInitialStatus(true));

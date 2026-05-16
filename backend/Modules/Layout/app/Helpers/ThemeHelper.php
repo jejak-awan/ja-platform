@@ -19,7 +19,7 @@ class ThemeHelper
      */
     protected static function getThemeService(): ThemeService
     {
-        if (self::$themeService === null) {
+        if (!self::$themeService instanceof \Modules\Layout\Services\ThemeService) {
             self::$themeService = app(ThemeService::class);
         }
 
@@ -33,7 +33,7 @@ class ThemeHelper
     {
         try {
             return self::getThemeService()->getActiveTheme($type);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return null;
         }
     }
@@ -45,10 +45,10 @@ class ThemeHelper
     {
         try {
             $theme = self::getThemeService()->getActiveTheme($type);
-            if ($theme) {
+            if ($theme instanceof \Modules\Layout\Models\Theme) {
                 return self::getThemeService()->getThemeSetting($theme, $key, $default);
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Return default on error
         }
 
@@ -71,7 +71,7 @@ class ThemeHelper
                     return asset('themes/'.$theme->path.'/'.ltrim($path, '/'));
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Return null on error
         }
 
@@ -90,7 +90,7 @@ class ThemeHelper
 
                 return isset($supports[$feature]) && $supports[$feature] === true;
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Return false on error
         }
 
@@ -104,10 +104,10 @@ class ThemeHelper
     {
         try {
             $theme = self::getThemeService()->getActiveTheme($type);
-            if ($theme) {
+            if ($theme instanceof \Modules\Layout\Models\Theme) {
                 return self::getThemeService()->getThemeCustomCss($theme);
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Return empty string on error
         }
 
@@ -122,16 +122,16 @@ class ThemeHelper
         try {
             return \Modules\Layout\Models\Menu::where('slug', $slug)
                 ->where('is_active', true)
-                ->with(['items' => function ($query) {
+                ->with(['items' => function ($query): void {
                     $query->where('is_active', true)
                         ->whereNull('parent_id')
                         ->orderBy('sort_order');
-                }, 'items.children' => function ($query) {
+                }, 'items.children' => function ($query): void {
                     $query->where('is_active', true)
                         ->orderBy('sort_order');
                 }])
                 ->first();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return null;
         }
     }

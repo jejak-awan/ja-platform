@@ -19,16 +19,14 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
 
         $grouped = $settings->groupBy('group')->map(function (\Illuminate\Support\Collection $items) {
             /** @var \Illuminate\Support\Collection<int, \Modules\System\Models\RedisSetting> $items */
-            return $items->map(function (\Modules\System\Models\RedisSetting $item) {
-                return [
-                    'id' => $item->id,
-                    'key' => $item->key,
-                    'value' => $this->presentSettingValue($item),
-                    'type' => $item->type,
-                    'description' => $item->description,
-                    'is_encrypted' => $item->is_encrypted,
-                ];
-            })->values()->all();
+            return $items->map(fn(\Modules\System\Models\RedisSetting $item) => [
+                'id' => $item->id,
+                'key' => $item->key,
+                'value' => $this->presentSettingValue($item),
+                'type' => $item->type,
+                'description' => $item->description,
+                'is_encrypted' => $item->is_encrypted,
+            ])->values()->all();
         })->toArray();
 
         return $this->success($grouped, 'Redis settings retrieved successfully');
@@ -68,7 +66,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
             foreach ($settings as $settingData) {
                 if (is_array($settingData) && isset($settingData['key'])) {
                     $key = is_string($settingData['key']) ? $settingData['key'] : '';
-                    if ($key) {
+                    if ($key !== '' && $key !== '0') {
                         RedisSetting::setValue($key, $settingData['value'] ?? null);
                     }
                 }
@@ -311,7 +309,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
 
         try {
             $count += $this->getDatabaseSize(Redis::connection('cache'));
-        } catch (\Exception $e) {
+        } catch (\Exception) {
         }
 
         return $count;
@@ -348,7 +346,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
             $info = $redis->info();
 
             return isset($info['expired_keys']) ? (int) $info['expired_keys'] : 0;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return 0;
         }
     }
@@ -364,7 +362,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
     {
         try {
             Redis::connection($connection)->flushdb();
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             // Continue without failing request; some deployments may not define both connections.
         }
     }
@@ -373,7 +371,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
     {
         try {
             return $this->getDatabaseSize(Redis::connection($connection));
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             return 0;
         }
     }

@@ -8,12 +8,12 @@ use Modules\System\Http\Controllers\BaseApiController;
 
 class InfraRedirectController extends BaseApiController
 {
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('view analytics'); // Using analytics permission for now or manage settings
 
         $redirects = InfraRedirect::query()
-            ->when($request->search, function ($query, $search) {
+            ->when($request->search, function ($query, $search): void {
                 $query->where('from_domain', 'like', "%{$search}%")
                     ->orWhere('to_domain', 'like', "%{$search}%");
             })
@@ -23,7 +23,7 @@ class InfraRedirectController extends BaseApiController
         return $this->success($redirects);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('manage settings');
 
@@ -41,13 +41,13 @@ class InfraRedirectController extends BaseApiController
         return $this->success($redirect, 'Redirect created successfully', 201);
     }
 
-    public function show(InfraRedirect $redirect)
+    public function show(InfraRedirect $redirect): \Illuminate\Http\JsonResponse
     {
         $this->authorize('manage settings');
         return $this->success($redirect);
     }
 
-    public function update(Request $request, InfraRedirect $redirect)
+    public function update(Request $request, InfraRedirect $redirect): \Illuminate\Http\JsonResponse
     {
         $this->authorize('manage settings');
 
@@ -65,7 +65,7 @@ class InfraRedirectController extends BaseApiController
         return $this->success($redirect, 'Redirect updated successfully');
     }
 
-    public function destroy(InfraRedirect $redirect)
+    public function destroy(InfraRedirect $redirect): \Illuminate\Http\JsonResponse
     {
         $this->authorize('manage settings');
         $redirect->delete();
@@ -73,7 +73,7 @@ class InfraRedirectController extends BaseApiController
         return $this->success(null, 'Redirect deleted successfully');
     }
 
-    public function toggle(InfraRedirect $redirect)
+    public function toggle(InfraRedirect $redirect): \Illuminate\Http\JsonResponse
     {
         $this->authorize('manage settings');
         $redirect->update(['is_active' => !$redirect->is_active]);

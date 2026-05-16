@@ -13,11 +13,8 @@ use Modules\School\Http\Requests\Logistics\AdjustStockRequest;
 
 class InventoryController extends BaseController
 {
-    protected LogisticsService $service;
-
-    public function __construct(LogisticsService $service)
+    public function __construct(protected LogisticsService $service)
     {
-        $this->service = $service;
     }
 
     public function categories(): \Illuminate\Http\JsonResponse

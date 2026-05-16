@@ -58,7 +58,7 @@ class StaffAdvancedController extends BaseController
     public function leaveRequests(Request $request): \Illuminate\Http\JsonResponse
     {
         $query = LeaveRequest::with(['staff', 'approver']);
-        
+
         if ($request->has('status')) {
             $query->where('status', $request->status);
         }
@@ -105,7 +105,7 @@ class StaffAdvancedController extends BaseController
     public function salaryStructures(Request $request): \Illuminate\Http\JsonResponse
     {
         $query = SalaryStructure::with('staff');
-        
+
         if ($request->has('staff_id')) {
             $query->where('staff_id', $request->input('staff_id'));
         }

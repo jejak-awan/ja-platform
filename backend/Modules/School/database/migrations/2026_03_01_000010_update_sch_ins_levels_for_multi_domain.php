@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Update School Units (sch_ins_levels)
-        Schema::table('sch_ins_levels', function (Blueprint $table) {
+        Schema::table('sch_ins_levels', function (Blueprint $table): void {
             $table->string('domain')->nullable()->unique()->after('npsn');
             $table->string('subdomain')->nullable()->unique()->after('domain');
             $table->string('kurikulum')->nullable()->after('subdomain');
@@ -29,7 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('sch_ins_levels', function (Blueprint $table) {
+        Schema::table('sch_ins_levels', function (Blueprint $table): void {
             $table->dropColumn(['domain', 'subdomain', 'kurikulum', 'is_active']);
         });
     }

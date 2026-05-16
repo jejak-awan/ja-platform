@@ -97,7 +97,7 @@ class ReportService
             ->toArray();
 
         return [
-            'total_records' => (int) array_sum($stats),
+            'total_records' => array_sum($stats),
             'stats' => $stats,
         ];
     }

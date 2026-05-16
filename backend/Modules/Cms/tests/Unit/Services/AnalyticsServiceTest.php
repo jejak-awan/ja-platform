@@ -25,7 +25,7 @@ class AnalyticsServiceTest extends TestCase
         $this->app->instance(\Modules\System\Services\GeoIpService::class, $geoMock);
     }
 
-    public function test_track_event()
+    public function test_track_event(): void
     {
         $event = AnalyticsService::trackEvent('click', 'Button Click', ['button' => 'Buy Now']);
 
@@ -44,7 +44,7 @@ class AnalyticsServiceTest extends TestCase
         ]);
     }
 
-    public function test_track_batch()
+    public function test_track_batch(): void
     {
         $events = [
             ['type' => 'view', 'name' => 'Page View'],
@@ -57,7 +57,7 @@ class AnalyticsServiceTest extends TestCase
         $this->assertDatabaseCount('srv_analytics_events', 2);
     }
 
-    public function test_specialized_tracking_methods()
+    public function test_specialized_tracking_methods(): void
     {
         $content = Content::factory()->create();
 
@@ -90,7 +90,7 @@ class AnalyticsServiceTest extends TestCase
         $this->assertEquals('http://example.com', $e6->event_data['url']);
     }
 
-    public function test_track_event_failure_logging()
+    public function test_track_event_failure_logging(): void
     {
         // Force failure by removing session
         // Session::flush(); // This might not be enough if session() returns something else

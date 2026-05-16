@@ -11,11 +11,8 @@ use Modules\School\Http\Requests\Admission\StoreEnrollmentRequest;
 
 class AdmissionController extends BaseController
 {
-    protected AdmissionService $service;
-
-    public function __construct(AdmissionService $service)
+    public function __construct(protected AdmissionService $service)
     {
-        $this->service = $service;
     }
 
     public function index(Request $request): \Illuminate\Http\JsonResponse

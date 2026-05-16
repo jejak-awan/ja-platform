@@ -13,11 +13,8 @@ use Modules\School\Models\Operations\DocumentTemplate;
 
 class StudentPortalController extends BaseController
 {
-    protected \Modules\School\Services\Operations\DocumentService $documentService;
-
-    public function __construct(\Modules\School\Services\Operations\DocumentService $documentService)
+    public function __construct(protected \Modules\School\Services\Operations\DocumentService $documentService)
     {
-        $this->documentService = $documentService;
     }
 
     private function getStudent(): Student
@@ -28,7 +25,6 @@ class StudentPortalController extends BaseController
             abort(401, 'Unauthenticated.');
         }
 
-        /** @var int $userId */
         $userId = (int) $user->id;
 
         /** @var Student|null $student */
@@ -93,20 +89,22 @@ class StudentPortalController extends BaseController
     private function calculateAttendanceRate(int $studentId): float
     {
         $total = Attendance::where('student_id', $studentId)->count();
-        if ($total === 0) return 0.0;
+        if ($total === 0) {
+            return 0.0;
+        }
         
         $present = Attendance::where('student_id', $studentId)
             ->whereIn('status', ['h', 'i', 's']) // Hadir, Izin, Sakit are often counted as non-absent in basic stats
             ->count();
             
-        return (float) round(($present / $total) * 100, 1);
+        return round(($present / $total) * 100, 1);
     }
 
     private function calculateGPA(int $studentId): float
     {
         // Calculate GPA based on E-Rapor final grades
         $avg = Grade::where('student_id', $studentId)->avg('final_grade');
-        return (float) round((float)$avg, 2);
+        return round((float)$avg, 2);
     }
 
     public function graduation(): \Illuminate\Http\JsonResponse

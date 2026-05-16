@@ -20,9 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 class VerifyConnection
 {
     use MaintenanceBypass;
-    protected SecurityService $securityService;
-
-    protected AnomalyDetectionService $anomalyService;
 
     /**
      * Known search engine bot User-Agent patterns.
@@ -39,10 +36,8 @@ class VerifyConnection
         'Applebot' => ['applebot.apple.com'],
     ];
 
-    public function __construct(SecurityService $securityService, AnomalyDetectionService $anomalyService)
+    public function __construct(protected SecurityService $securityService, protected AnomalyDetectionService $anomalyService)
     {
-        $this->securityService = $securityService;
-        $this->anomalyService = $anomalyService;
     }
 
     /**
@@ -140,10 +135,8 @@ class VerifyConnection
 
         if (Setting::get('shield_enable_ip_intelligence', false) || !empty(Setting::get('shield_allowed_countries', []))) {
              // Check Global Blacklist
-            if (Setting::get('shield_enable_ip_intelligence', false)) {
-                if ($this->securityService->isIpInGlobalBlacklist($ip)) {
-                    $this->securityService->recordGlobalBlacklistHit($ip, 'Detected in global blacklist - Challenge required');
-                }
+            if (Setting::get('shield_enable_ip_intelligence', false) && $this->securityService->isIpInGlobalBlacklist($ip)) {
+                $this->securityService->recordGlobalBlacklistHit($ip, 'Detected in global blacklist - Challenge required');
             }
 
             // Check Geolocation
@@ -207,7 +200,7 @@ class VerifyConnection
     protected function isVerifiedSearchBot(Request $request): bool
     {
         $userAgent = (string) $request->userAgent();
-        if (empty($userAgent)) {
+        if ($userAgent === '' || $userAgent === '0') {
             return false;
         }
 
@@ -287,7 +280,7 @@ class VerifyConnection
         $userAgent = (string) $request->userAgent();
 
         // 1. Missing or empty User-Agent (high signal)
-        if (empty($userAgent)) {
+        if ($userAgent === '' || $userAgent === '0') {
             $suspicionScore += 3;
             $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_' . md5($ip);
             $this->anomalyService->trackEvent('suspicious_ua', $ip, $sessionId);
@@ -343,7 +336,7 @@ class VerifyConnection
             if ($request->hasSession()) {
                 $sessionId = $request->session()->getId();
             }
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             // Keep stateless ID
         }
 
@@ -373,7 +366,7 @@ class VerifyConnection
             if ($request->hasSession()) {
                 $sessionId = $request->session()->getId();
             }
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             // Keep stateless ID
         }
 

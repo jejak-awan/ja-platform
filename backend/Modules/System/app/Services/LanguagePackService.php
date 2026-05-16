@@ -334,14 +334,14 @@ class LanguagePackService
             }
 
             // Skip directories
-            if (substr($name, -1) === '/') {
+            if (str_ends_with($name, '/')) {
                 continue;
             }
 
             $fileCount++;
 
             // Check for path traversal attempts
-            if (strpos($name, '..') !== false || strpos($name, '\\') !== false) {
+            if (str_contains($name, '..') || str_contains($name, '\\')) {
                 return ['valid' => false, 'message' => 'Security violation: Path traversal detected'];
             }
 
@@ -440,7 +440,7 @@ class LanguagePackService
     {
         foreach ($data as $key => $value) {
             // Key should be alphanumeric with underscores
-            if (! preg_match('/^[a-zA-Z0-9_]+$/', (string) $key)) {
+            if (! preg_match('/^\w+$/', (string) $key)) {
                 Log::warning("Invalid translation key: {$path}.{$key}");
 
                 return false;

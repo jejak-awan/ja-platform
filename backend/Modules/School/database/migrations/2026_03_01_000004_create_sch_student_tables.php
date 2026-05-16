@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Students
-        Schema::create('sch_std_students', function (Blueprint $table) {
+        Schema::create('sch_std_students', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->onDelete('set null');
@@ -49,7 +49,7 @@ return new class extends Migration
         });
 
         // 2. Achievements
-        Schema::create('sch_std_achievements', function (Blueprint $table) {
+        Schema::create('sch_std_achievements', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('student_id')->onDelete('cascade');
             $table->string('title');
@@ -61,7 +61,7 @@ return new class extends Migration
         });
 
         // 3. Violations (Points system)
-        Schema::create('sch_std_violations', function (Blueprint $table) {
+        Schema::create('sch_std_violations', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('student_id')->onDelete('cascade');
             $table->string('category');
@@ -73,7 +73,7 @@ return new class extends Migration
         });
 
         // 5. Alumni (Basic)
-        Schema::create('sch_std_alumni', function (Blueprint $table) {
+        Schema::create('sch_std_alumni', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('student_id')->onDelete('cascade');
             $table->string('graduation_year');
@@ -83,7 +83,7 @@ return new class extends Migration
         });
 
         // 6. Tracer Study (Alumni Tracking)
-        Schema::create('sch_std_tracer_studies', function (Blueprint $table) {
+        Schema::create('sch_std_tracer_studies', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('alumni_id')->onDelete('cascade');
             $table->string('employment_status'); // working, studying, entrepreneur, searching
@@ -98,7 +98,7 @@ return new class extends Migration
         });
 
         // 7. Counseling Records (BK)
-        Schema::create('sch_std_counseling_records', function (Blueprint $table) {
+        Schema::create('sch_std_counseling_records', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->onDelete('cascade');
@@ -113,7 +113,7 @@ return new class extends Migration
         });
 
         // 8. Graduation Results
-        Schema::create('sch_std_graduation_results', function (Blueprint $table) {
+        Schema::create('sch_std_graduation_results', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('student_id')->onDelete('cascade');
             $table->string('graduation_year');
@@ -125,7 +125,7 @@ return new class extends Migration
         });
 
         // 9. Study Group Members (Pivot)
-        Schema::create('sch_acad_study_group_members', function (Blueprint $table) {
+        Schema::create('sch_acad_study_group_members', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('study_group_id')->onDelete('cascade');
             $table->uuid('student_id')->onDelete('cascade');

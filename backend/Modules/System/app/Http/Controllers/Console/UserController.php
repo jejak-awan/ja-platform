@@ -14,10 +14,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * List users with filters.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $query = User::with(['roles', 'permissions']);
 
@@ -34,14 +32,14 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
         if ($request->has('role')) {
-            $query->whereHas('roles', function ($q) use ($request) {
+            $query->whereHas('roles', function ($q) use ($request): void {
                 $q->where('name', $request->input('role'));
             });
         }
@@ -89,10 +87,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Get user statistics for dashboard cards.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function stats()
+    public function stats(): \Illuminate\Http\JsonResponse
     {
         $total = User::count();
         $verified = User::whereNotNull('email_verified_at')->count();
@@ -125,10 +121,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Create a new user.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $authUser = $request->user();
         /** @var User|null $authUser */
@@ -183,10 +177,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Display the specified user.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(User $user)
+    public function show(User $user): \Illuminate\Http\JsonResponse
     {
         $user->load(['roles']);
         $user->setRelation('permissions', $user->getAllPermissions());
@@ -196,10 +188,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Get the authenticated user's profile.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function profile(Request $request)
+    public function profile(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var User|null $user */
@@ -215,10 +205,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Get the user's login history.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function loginHistory(Request $request)
+    public function loginHistory(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var User|null $user */
@@ -238,10 +226,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Update the authenticated user's profile.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function updateProfile(Request $request)
+    public function updateProfile(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var User|null $user */
@@ -269,10 +255,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Upload user avatar.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function uploadAvatar(Request $request)
+    public function uploadAvatar(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var User|null $user */
@@ -309,10 +293,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Update user password.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function updatePassword(Request $request)
+    public function updatePassword(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var User|null $user */
@@ -341,10 +323,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Get user preferences.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function getPreferences(Request $request)
+    public function getPreferences(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var User|null $user */
@@ -360,10 +340,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Update user preferences.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function updatePreferences(Request $request)
+    public function updatePreferences(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var User|null $user */
@@ -390,10 +368,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Update the specified user.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user): \Illuminate\Http\JsonResponse
     {
         $authUser = $request->user();
         /** @var User|null $authUser */
@@ -476,10 +452,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Remove the specified user.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request, User $user)
+    public function destroy(Request $request, User $user): \Illuminate\Http\JsonResponse
     {
         $authUser = $request->user();
         /** @var User|null $authUser */
@@ -518,10 +492,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Force logout a user from all devices by revoking all their tokens.
      * Admin-only action for security management.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function forceLogout(Request $request, User $user)
+    public function forceLogout(Request $request, User $user): \Illuminate\Http\JsonResponse
     {
         $authUser = $request->user();
         /** @var User|null $authUser */
@@ -566,10 +538,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Verify a user's email manually.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function verify(Request $request, User $user)
+    public function verify(Request $request, User $user): \Illuminate\Http\JsonResponse
     {
         $authUser = $request->user();
         /** @var User|null $authUser */
@@ -598,9 +568,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
      * Restore a soft-deleted user.
      *
      * @param  int|string  $id
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function restore($id)
+    public function restore($id): \Illuminate\Http\JsonResponse
     {
         $user = User::withTrashed()->findOrFail($id);
 
@@ -617,9 +586,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
      * Permanently delete a user.
      *
      * @param  int|string  $id
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function forceDelete(Request $request, $id)
+    public function forceDelete(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $user = User::withTrashed()->findOrFail($id);
 
@@ -659,10 +627,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
     /**
      * Handle bulk actions for users.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function bulkAction(Request $request)
+    public function bulkAction(Request $request): \Illuminate\Http\JsonResponse
     {
         $authUser = $request->user();
         /** @var User|null $authUser */
@@ -685,7 +651,7 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
 
         if ($action === 'delete') {
             // Filter out self-deletion and hierarchy protection
-            $ids = array_filter($ids, function ($id) use ($authUser) {
+            $ids = array_filter($ids, function ($id) use ($authUser): bool {
                 // Self deletion check
                 if ($id == $authUser->id) {
                     return false;
@@ -696,13 +662,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
                 if (! $target instanceof User) {
                     return false;
                 }
-
                 // Rank check
-                if ($authUser->getRoleRank() < 100 && ! $authUser->isHigherThan($target)) {
-                    return false;
-                }
-
-                return true;
+                return !($authUser->getRoleRank() < 100 && ! $authUser->isHigherThan($target));
             });
 
             // Prevent deleting the last super in bulk delete
@@ -720,7 +681,7 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
             $message = $count.' users moved to trash';
         } elseif ($action === 'force_delete') {
             // Filter out self-deletion and hierarchy protection
-            $ids = array_filter($ids, function ($id) use ($authUser) {
+            $ids = array_filter($ids, function ($id) use ($authUser): bool {
                 // Self deletion check
                 if ($id == $authUser->id) {
                     return false;
@@ -731,13 +692,8 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
                 if (! $target instanceof User) {
                     return false;
                 }
-
                 // Rank check
-                if ($authUser->getRoleRank() < 100 && ! $authUser->isHigherThan($target)) {
-                    return false;
-                }
-
-                return true;
+                return !($authUser->getRoleRank() < 100 && ! $authUser->isHigherThan($target));
             });
 
             // Prevent deleting the last super in bulk delete
@@ -765,7 +721,7 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
             $message = "{$count} users restored successfully";
         } elseif ($action === 'force_logout') {
             // Filter out self-logout and hierarchy protection
-            $ids = array_filter($ids, function ($id) use ($authUser) {
+            $ids = array_filter($ids, function ($id) use ($authUser): bool {
                 if ($id == $authUser->id) {
                     return false;
                 }
@@ -775,11 +731,7 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
                 if (! $target instanceof User) {
                     return false;
                 }
-                if ($authUser->getRoleRank() < 100 && ! $authUser->isHigherThan($target)) {
-                    return false;
-                }
-
-                return true;
+                return !($authUser->getRoleRank() < 100 && ! $authUser->isHigherThan($target));
             });
 
             $users = User::whereIn('id', $ids)->get();
@@ -790,7 +742,7 @@ class UserController extends \Modules\System\Http\Controllers\BaseApiController
             $message = "{$count} users force logged out successfully";
         } elseif ($action === 'verify') {
             // Filter hierarchy protection
-            $ids = array_filter($ids, function ($id) use ($authUser) {
+            $ids = array_filter($ids, function ($id) use ($authUser): bool {
                 /** @var User|null $target */
                 $target = User::find(is_scalar($id) ? $id : null);
                 if (! $target instanceof User) {

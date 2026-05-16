@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Visitors & Guest Logs
-        Schema::create('sch_ops_visitors', function (Blueprint $table) {
+        Schema::create('sch_ops_visitors', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->onDelete('cascade');
@@ -30,7 +30,7 @@ return new class extends Migration
         });
 
         // 2. Health (UKS)
-        Schema::create('sch_ops_uks_visits', function (Blueprint $table) {
+        Schema::create('sch_ops_uks_visits', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->index();
@@ -44,7 +44,7 @@ return new class extends Migration
         });
 
         // 3. Library
-        Schema::create('sch_ops_library_books', function (Blueprint $table) {
+        Schema::create('sch_ops_library_books', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->index();
@@ -57,7 +57,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('sch_ops_library_circulations', function (Blueprint $table) {
+        Schema::create('sch_ops_library_circulations', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('book_id')->onDelete('cascade');
@@ -71,7 +71,7 @@ return new class extends Migration
         });
 
         // 4. OSIS (Student Organization)
-        Schema::create('sch_ops_osis_activities', function (Blueprint $table) {
+        Schema::create('sch_ops_osis_activities', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->onDelete('cascade');
@@ -84,7 +84,7 @@ return new class extends Migration
         });
 
         // 5. Graduation Settings
-        Schema::create('sch_grad_settings', function (Blueprint $table) {
+        Schema::create('sch_grad_settings', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->index();
@@ -97,7 +97,7 @@ return new class extends Migration
         });
 
         // 6. Graduation Results
-        Schema::create('sch_grad_results', function (Blueprint $table) {
+        Schema::create('sch_grad_results', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('student_id')->onDelete('cascade');
@@ -110,7 +110,7 @@ return new class extends Migration
         });
 
         // 7. Document Templates
-        Schema::create('sch_ops_document_templates', function (Blueprint $table) {
+        Schema::create('sch_ops_document_templates', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->string('name');

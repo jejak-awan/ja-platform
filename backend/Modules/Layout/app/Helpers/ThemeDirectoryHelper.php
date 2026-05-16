@@ -161,7 +161,7 @@ README;
         // Scan directories
         $directories = File::directories($themePath);
         foreach ($directories as $dir) {
-            $info['directories'][] = basename($dir);
+            $info['directories'][] = basename((string) $dir);
         }
 
         // Scan files

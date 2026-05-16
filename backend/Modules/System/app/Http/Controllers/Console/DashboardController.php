@@ -71,16 +71,14 @@ class DashboardController extends \Modules\System\Http\Controllers\BaseApiContro
 
         $cacheKey = "dashboard_creator_data_{$userId}_{$days}";
 
-        $data = Cache::remember($cacheKey, 300, function () use ($userId, $registry) {
-            return [
-                'stats' => array_merge([
-                    'myMedia' => $this->getMyMediaStats($userId),
-                ], $registry->getAllStats()), // Individual modules should handle userId filtering in their providers if needed
-                'charts' => array_merge([
-                    'mediaTraffic' => [], // Placeholder for media specific traffic if any
-                ], $registry->getAllCharts()),
-            ];
-        });
+        $data = Cache::remember($cacheKey, 300, fn() => [
+            'stats' => array_merge([
+                'myMedia' => $this->getMyMediaStats($userId),
+            ], $registry->getAllStats()), // Individual modules should handle userId filtering in their providers if needed
+            'charts' => array_merge([
+                'mediaTraffic' => [], // Placeholder for media specific traffic if any
+            ], $registry->getAllCharts()),
+        ]);
 
         return $this->success($data);
     }

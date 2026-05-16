@@ -9,11 +9,8 @@ use Modules\System\Contracts\LayoutRegistryInterface;
 
 class WidgetController extends BaseApiController
 {
-    protected LayoutRegistryInterface $registry;
-
-    public function __construct(LayoutRegistryInterface $registry)
+    public function __construct(protected LayoutRegistryInterface $registry)
     {
-        $this->registry = $registry;
     }
 
     public function index(Request $request): \Illuminate\Http\JsonResponse
@@ -97,9 +94,7 @@ class WidgetController extends BaseApiController
         $scope = $request->input('module_scope', 'cms');
         $locations = $this->registry->getWidgetLocations($scope);
 
-        $formatted = array_map(function ($loc) {
-            return ['id' => $loc, 'name' => ucwords(str_replace(['-', '_'], ' ', $loc))];
-        }, $locations);
+        $formatted = array_map(fn($loc) => ['id' => $loc, 'name' => ucwords(str_replace(['-', '_'], ' ', $loc))], $locations);
 
         return $this->success($formatted, 'Widget locations retrieved successfully');
     }

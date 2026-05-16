@@ -10,8 +10,7 @@ class DocumentService
 {
     /**
      * Generate PDF from template.
-     * 
-     * @param DocumentTemplate $template
+     *
      * @param array<string, mixed> $data
      * @return string PDF binary data
      */
@@ -36,10 +35,8 @@ class DocumentService
 
     /**
      * Render template with data using Blade engine.
-     * 
-     * @param DocumentTemplate $template
+     *
      * @param array<string, mixed> $data
-     * @return string
      */
     protected function renderTemplate(DocumentTemplate $template, array $data): string
     {

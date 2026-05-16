@@ -16,7 +16,6 @@ class LogSlowQueries
 
     public function __construct()
     {
-        /** @var mixed $threshold */
         $threshold = config('database.slow_query_threshold', 100);
         $this->threshold = is_numeric($threshold) ? floatval($threshold) : 100.0;
     }
@@ -43,24 +42,20 @@ class LogSlowQueries
 
             // Log if total query time exceeds threshold
             if ($totalTime > $this->threshold) {
-                $slowQueries = array_filter($queries, function ($query) {
-                    return ($query['time'] ?? 0) > $this->threshold;
-                });
+                $slowQueries = array_filter($queries, fn(array $query) => ($query['time'] ?? 0) > $this->threshold);
 
-                if (! empty($slowQueries)) {
+                if ($slowQueries !== []) {
                     // Log to file
                     Log::channel('slow-queries')->warning('Slow queries detected', [
                         'url' => $request->fullUrl(),
                         'method' => $request->method(),
                         'total_queries' => count($queries),
                         'total_time_ms' => round($totalTime, 2),
-                        'slow_queries' => array_map(function ($query) {
-                            return [
-                                'query' => $query['query'],
-                                'time' => $query['time'] ?? 0,
-                                'bindings' => $query['bindings'],
-                            ];
-                        }, $slowQueries),
+                        'slow_queries' => array_map(fn(array $query) => [
+                            'query' => $query['query'],
+                            'time' => $query['time'] ?? 0,
+                            'bindings' => $query['bindings'],
+                        ], $slowQueries),
                     ]);
 
                     // Store in database for analytics

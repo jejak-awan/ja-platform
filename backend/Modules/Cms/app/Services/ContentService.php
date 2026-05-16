@@ -33,11 +33,11 @@ class ContentService
     {
         $cacheKey = 'contents_published_'.md5((string) $request->getQueryString());
 
-        return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($request) {
+        return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($request): array {
             /** @var \Illuminate\Database\Eloquent\Builder<Content> $query */
             $query = Content::with(['author', 'category', 'tags'])
                 ->where('status', 'published')
-                ->where(function (\Illuminate\Database\Eloquent\Builder $q) {
+                ->where(function (\Illuminate\Database\Eloquent\Builder $q): void {
                     $q->whereNull('published_at')
                         ->orWhere('published_at', '<=', Carbon::now());
                 });
@@ -80,13 +80,13 @@ class ContentService
         }
 
         if ($request->has('category')) {
-            $query->whereHas('category', function ($q) use ($request) {
+            $query->whereHas('category', function ($q) use ($request): void {
                 $q->where('slug', $request->input('category'));
             });
         }
 
         if ($request->has('tag')) {
-            $query->whereHas('tags', function ($q) use ($request) {
+            $query->whereHas('tags', function ($q) use ($request): void {
                 $q->where('slug', $request->input('tag'));
             });
         }
@@ -102,14 +102,14 @@ class ContentService
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('title', 'like', "%{$search}%")
                     ->orWhere('body', 'like', "%{$search}%")
                     ->orWhere('excerpt', 'like', "%{$search}%")
-                    ->orWhereHas('category', function ($cq) use ($search) {
+                    ->orWhereHas('category', function ($cq) use ($search): void {
                         $cq->where('name', 'like', "%{$search}%");
                     })
-                    ->orWhereHas('author', function ($aq) use ($search) {
+                    ->orWhereHas('author', function ($aq) use ($search): void {
                         $aq->where('name', 'like', "%{$search}%");
                     });
             });
@@ -152,11 +152,11 @@ class ContentService
             // Get related by tags first
             $relatedByTags = Content::where('status', 'published')
                 ->where('id', '!=', $content->id)
-                ->where(function ($q) {
+                ->where(function ($q): void {
                     $q->whereNull('published_at')
                         ->orWhere('published_at', '<=', Carbon::now());
                 })
-                ->whereHas('tags', function ($q) use ($content) {
+                ->whereHas('tags', function ($q) use ($content): void {
                     $q->whereIn('lib_tags.id', $content->tags->pluck('id'));
                 })
                 ->with(['author', 'category', 'tags'])
@@ -170,7 +170,7 @@ class ContentService
                     ->where('id', '!=', $content->id)
                     ->where('category_id', $content->category_id)
                     ->whereNotIn('id', $relatedByTags->pluck('id'))
-                    ->where(function ($q) {
+                    ->where(function ($q): void {
                         $q->whereNull('published_at')
                             ->orWhere('published_at', '<=', Carbon::now());
                     })
@@ -216,7 +216,6 @@ class ContentService
         $newTagsRaw = $data['new_tags'] ?? [];
         $newTags = is_array($newTagsRaw) ? $newTagsRaw : [];
 
-        /** @var mixed $customFieldsRaw */
         $customFieldsRaw = $data['custom_fields'] ?? null;
         $customFields = is_array($customFieldsRaw) ? $customFieldsRaw : null;
 
@@ -243,7 +242,7 @@ class ContentService
         }
 
         // Sync tags
-        if (! empty($tags)) {
+        if ($tags !== []) {
             $content->tags()->sync($tags);
         }
 
@@ -306,7 +305,6 @@ class ContentService
         $newTagsRaw = $data['new_tags'] ?? [];
         $newTags = is_array($newTagsRaw) ? $newTagsRaw : [];
 
-        /** @var mixed $customFieldsRaw */
         $customFieldsRaw = $data['custom_fields'] ?? null;
         $customFields = is_array($customFieldsRaw) ? $customFieldsRaw : null;
 
@@ -335,7 +333,7 @@ class ContentService
         }
 
         // Sync tags
-        if (! empty($tags)) {
+        if ($tags !== []) {
             $content->tags()->sync($tags);
         }
 
@@ -455,14 +453,10 @@ class ContentService
 
             switch ($action) {
                 case 'publish':
-                    $content->update(['status' => 'published', 'published_at' => $content->published_at ?? now()]);
-                    break;
                 case 'approve':
                     $content->update(['status' => 'published', 'published_at' => $content->published_at ?? now()]);
                     break;
                 case 'reject':
-                    $content->update(['status' => 'draft']);
-                    break;
                 case 'draft':
                     $content->update(['status' => 'draft']);
                     break;

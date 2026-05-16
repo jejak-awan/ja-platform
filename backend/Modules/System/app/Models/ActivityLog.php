@@ -63,18 +63,16 @@ class ActivityLog extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Model|null  $model
      * @param  array<string, mixed>  $changes
-     * @param  User|null  $user
      */
     public static function log(string $action, ?\Illuminate\Database\Eloquent\Model $model = null, array $changes = [], ?User $user = null, ?string $description = null): self
     {
-        $user = $user ?? auth()->user();
+        $user ??= auth()->user();
 
         return self::create([
             'user_id' => $user?->id,
             'action' => $action,
-            'model_type' => $model ? get_class($model) : null,
+            'model_type' => $model instanceof \Illuminate\Database\Eloquent\Model ? $model::class : null,
             'model_id' => $model?->getKey(),
             'description' => $description ?? self::generateDescription($action, $model),
             'changes' => $changes,
@@ -85,7 +83,7 @@ class ActivityLog extends Model
 
     protected static function generateDescription(string $action, ?Model $model = null): string
     {
-        $modelName = $model ? class_basename($model) : 'item';
+        $modelName = $model instanceof \Illuminate\Database\Eloquent\Model ? class_basename($model) : 'item';
 
         return match ($action) {
             'created' => "Created {$modelName}",

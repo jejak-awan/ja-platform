@@ -32,7 +32,7 @@ class RedirectFactory extends Factory
      */
     public function inactive(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'is_active' => false,
         ]);
     }
@@ -42,7 +42,7 @@ class RedirectFactory extends Factory
      */
     public function permanent(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'type' => 301,
         ]);
     }
@@ -52,7 +52,7 @@ class RedirectFactory extends Factory
      */
     public function temporary(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'type' => 302,
         ]);
     }

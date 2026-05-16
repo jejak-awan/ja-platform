@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Ai\Services;
 
 use Modules\Ai\Contracts\AiProviderInterface;
@@ -13,7 +15,6 @@ class AiProviderFactory
     {
         // If no provider specified, get default from settings
         if (! $provider) {
-            /** @var mixed $defaultProvider */
             $defaultProvider = \Modules\System\Models\Setting::get('ai_default_provider', 'gemini');
             $provider = is_string($defaultProvider) ? $defaultProvider : 'gemini';
         }

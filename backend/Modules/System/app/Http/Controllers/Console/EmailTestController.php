@@ -111,7 +111,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
             $message = is_string($messageRaw) ? $messageRaw : 'Test Message';
 
             // Send email
-            Mail::raw($message, function (Message $mail) use ($to, $subject, $config) {
+            Mail::raw($message, function (Message $mail) use ($to, $subject, $config): void {
                 $fromAddressRaw = $config['from_address'] ?? null;
                 $fromAddress = is_string($fromAddressRaw) ? $fromAddressRaw : '';
                 $fromNameRaw = $config['from_name'] ?? null;
@@ -183,7 +183,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
                 try {
                     $redis = app('redis');
                     $status['pending_jobs'] = $redis->llen('queues:default');
-                } catch (\Exception $e) {
+                } catch (\Exception) {
                     // Redis not available or queue name different
                     $status['pending_jobs'] = 'unknown';
                 }
@@ -214,7 +214,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
             $logs = is_array($logsRaw) ? $logsRaw : [];
 
             // Sort by timestamp descending
-            usort($logs, function ($a, $b) {
+            usort($logs, function (array $a, array $b): int {
                 /** @var array{sent_at: string} $a */
                 /** @var array{sent_at: string} $b */
                 return strtotime($b['sent_at']) - strtotime($a['sent_at']);
@@ -224,7 +224,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
             $logs = array_slice($logs, 0, $limit);
 
             $totalCountRaw = Cache::get('email_logs', []);
-            $totalCount = is_array($totalCountRaw) || $totalCountRaw instanceof \Countable ? count($totalCountRaw) : 0;
+            $totalCount = is_countable($totalCountRaw) ? count($totalCountRaw) : 0;
 
             return $this->success([
                 'logs' => $logs,
@@ -275,7 +275,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
                 $warnings[] = 'SMTP encryption is not set (recommended: tls or ssl)';
             }
 
-            $isValid = empty($errors);
+            $isValid = $errors === [];
 
             return $this->success([
                 'valid' => $isValid,

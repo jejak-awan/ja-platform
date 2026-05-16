@@ -54,10 +54,10 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
             if ($request->filled('search')) {
                 $searchRaw = $request->input('search');
                 $search = is_string($searchRaw) ? $searchRaw : '';
-                $query->where(function ($q) use ($search) {
+                $query->where(function ($q) use ($search): void {
                     $q->where('description', 'like', "%{$search}%")
                         ->orWhere('model_type', 'like', "%{$search}%")
-                        ->orWhereHas('user', function ($userQuery) use ($search) {
+                        ->orWhereHas('user', function ($userQuery) use ($search): void {
                             $userQuery->where('name', 'like', "%{$search}%");
                         });
                 });
@@ -95,7 +95,7 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
      *
      * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
-    public function export(Request $request)
+    public function export(Request $request): \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
     {
         try {
             $query = ActivityLog::with('user');
@@ -236,7 +236,7 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
                 ->whereNotNull('user_id')
                 ->groupBy('user_id')
                 ->get()
-                ->map(function ($item) {
+                ->map(function ($item): array {
                     $userId = $item->getAttribute('user_id');
                     $user = (is_scalar($userId) && $userId) ? \Modules\System\Models\User::find(intval($userId)) : null;
 

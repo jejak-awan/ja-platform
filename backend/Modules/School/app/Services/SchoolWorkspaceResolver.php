@@ -19,7 +19,7 @@ class SchoolWorkspaceResolver implements WorkspaceResolver
 
         // 1. Resolve by Domain/Subdomain
         $unit = SchoolUnit::where('is_active', true)
-            ->where(function ($query) use ($host) {
+            ->where(function ($query) use ($host): void {
                 $query->where('domain', $host)
                     ->orWhere('subdomain', $host);
             })

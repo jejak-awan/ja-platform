@@ -28,7 +28,7 @@ class SearchFunctionalityTest extends TestCase
 
         // Create search index entry
         SearchIndex::create([
-            'searchable_type' => get_class($content),
+            'searchable_type' => $content::class,
             'searchable_id' => $content->id,
             'title' => $content->title,
             'content' => $content->body,
@@ -73,7 +73,7 @@ class SearchFunctionalityTest extends TestCase
     {
         // Create different types of content
         $uniqueTitle = 'UniqueTestContent'.uniqid();
-        $content = Content::factory()->published()->create([
+        Content::factory()->published()->create([
             'title' => $uniqueTitle,
             'type' => 'post',
         ]);
@@ -95,7 +95,7 @@ class SearchFunctionalityTest extends TestCase
         ]);
 
         SearchIndex::create([
-            'searchable_type' => get_class($content),
+            'searchable_type' => $content::class,
             'searchable_id' => $content->id,
             'title' => $content->title,
             'content' => $content->body,
@@ -119,9 +119,7 @@ class SearchFunctionalityTest extends TestCase
     public function test_search_is_rate_limited(): void
     {
         // Production limiter is generous (burst + 10‑min window); override for a fast, deterministic check.
-        RateLimiter::for('search-public', function (Request $request) {
-            return Limit::perMinute(5)->by('search-public-test|'.$request->ip());
-        });
+        RateLimiter::for('search-public', fn(Request $request) => Limit::perMinute(5)->by('search-public-test|'.$request->ip()));
 
         for ($i = 0; $i < 6; $i++) {
             $response = $this->getJson('/api/v1/public/search?q=test');
@@ -150,7 +148,7 @@ class SearchFunctionalityTest extends TestCase
         $content2 = Content::factory()->published()->create(['title' => 'Laravel Advanced', 'type' => 'post']);
 
         SearchIndex::create([
-            'searchable_type' => get_class($content1),
+            'searchable_type' => $content1::class,
             'searchable_id' => $content1->id,
             'title' => $content1->title,
             'content' => $content1->body,
@@ -160,7 +158,7 @@ class SearchFunctionalityTest extends TestCase
         ]);
 
         SearchIndex::create([
-            'searchable_type' => get_class($content2),
+            'searchable_type' => $content2::class,
             'searchable_id' => $content2->id,
             'title' => $content2->title,
             'content' => $content2->body,

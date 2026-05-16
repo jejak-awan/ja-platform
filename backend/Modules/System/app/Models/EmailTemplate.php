@@ -81,9 +81,8 @@ class EmailTemplate extends Model
         $siteName = \Modules\System\Models\Setting::get('site_name', 'CMS');
         $template = str_replace('{{ site_name }}', is_string($siteName) ? $siteName : 'CMS', $template);
         $template = str_replace('{{ site_url }}', url('/'), $template);
-        $template = str_replace('{{ current_year }}', date('Y'), $template);
 
-        return $template;
+        return str_replace('{{ current_year }}', date('Y'), $template);
     }
 
     public static function getBySlug(string $slug): ?self

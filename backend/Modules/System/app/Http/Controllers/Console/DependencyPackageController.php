@@ -24,17 +24,17 @@ class DependencyPackageController extends \Modules\System\Http\Controllers\BaseA
         // Apply filters
         if ($request->filled('source')) {
             $source = is_string($request->source) ? $request->source : '';
-            $packages = array_filter($packages, fn ($p) => $p['source'] === $source);
+            $packages = array_filter($packages, fn (array $p): bool => $p['source'] === $source);
         }
 
         if ($request->filled('status')) {
             $status = is_string($request->status) ? $request->status : '';
-            $packages = array_filter($packages, fn ($p) => $p['status'] === $status);
+            $packages = array_filter($packages, fn (array $p): bool => $p['status'] === $status);
         }
 
         if ($request->filled('package')) {
             $search = is_string($request->package) ? strtolower($request->package) : '';
-            $packages = array_filter($packages, fn ($p) => str_contains(strtolower($p['name']), $search));
+            $packages = array_filter($packages, fn (array $p): bool => str_contains(strtolower((string) $p['name']), $search));
         }
 
         // Re-index array after filtering
@@ -70,9 +70,9 @@ class DependencyPackageController extends \Modules\System\Http\Controllers\BaseA
     {
         $packages = $this->getAllPackages();
 
-        $composerPackages = array_filter($packages, fn ($p) => $p['source'] === 'composer');
-        $npmPackages = array_filter($packages, fn ($p) => $p['source'] === 'npm');
-        $vulnerablePackages = array_filter($packages, fn ($p) => $p['status'] === 'vulnerable');
+        $composerPackages = array_filter($packages, fn (array $p): bool => $p['source'] === 'composer');
+        $npmPackages = array_filter($packages, fn (array $p): bool => $p['source'] === 'npm');
+        $vulnerablePackages = array_filter($packages, fn (array $p): bool => $p['status'] === 'vulnerable');
 
         return $this->success([
             'total' => count($packages),
@@ -104,7 +104,7 @@ class DependencyPackageController extends \Modules\System\Http\Controllers\BaseA
             $composerLock = json_decode(File::get($composerLockPath), true);
 
             if (is_array($composerLock)) {
-                $processPackage = function ($package) use (&$packages, $vulnerableMap) {
+                $processPackage = function ($package) use (&$packages, $vulnerableMap): void {
                     if (is_array($package) && isset($package['name'], $package['version'])) {
                         $name = is_string($package['name']) ? $package['name'] : (is_scalar($package['name']) ? (string) $package['name'] : '');
                         $version = is_string($package['version']) ? $package['version'] : (is_scalar($package['version']) ? (string) $package['version'] : '');
@@ -167,7 +167,7 @@ class DependencyPackageController extends \Modules\System\Http\Controllers\BaseA
         }
 
         // Sort by name
-        usort($packages, fn ($a, $b) => strcasecmp($a['name'], $b['name']));
+        usort($packages, fn (array $a, array $b): int => strcasecmp((string) $a['name'], (string) $b['name']));
 
         return $packages;
     }

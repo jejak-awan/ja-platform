@@ -78,7 +78,7 @@ class InstitutionService
         $cacheKey = "school_stats_{$schoolId}_unit_{$unitId}";
 
         /** @var array{stats: array<int, array{title: string, value: string, icon: string}>, personnel: array<int, array{initials: string, name: string, role: string, time: string, statusKey: string}>, alerts: array<int, array{id: int, title: string, status: string, icon: string}>} $result */
-        $result = Cache::remember($cacheKey, 300, function () use ($schoolId, $unitId) {
+        $result = Cache::remember($cacheKey, 300, function () use ($schoolId, $unitId): array {
             $queryStudents = Student::query()->where('school_id', $schoolId);
             $queryStaff = Staff::query()->where('school_id', $schoolId);
             $queryStudyGroups = StudyGroup::query()->where('school_id', $schoolId);
@@ -102,20 +102,18 @@ class InstitutionService
                 // Aggregate counts per unit for the dashboard charts
                 $breakdown = SchoolUnit::where('school_id', $schoolId)
                     ->get()
-                    ->map(function ($unit) {
-                        return [
-                            'unit_id' => $unit->id,
-                            'name' => $unit->name,
-                            'level' => $unit->level,
-                            'student_count' => Student::where('workspace_id', $unit->id)->count(),
-                            'staff_count' => Staff::where('workspace_id', $unit->id)->count(),
-                        ];
-                    })->toArray();
+                    ->map(fn($unit) => [
+                        'unit_id' => $unit->id,
+                        'name' => $unit->name,
+                        'level' => $unit->level,
+                        'student_count' => Student::where('workspace_id', $unit->id)->count(),
+                        'staff_count' => Staff::where('workspace_id', $unit->id)->count(),
+                    ])->toArray();
             }
 
             // Get recent personnel presence
             $personnel = $queryStaff->limit(4)->get()
-                ->map(function (Staff $staff) {
+                ->map(function (Staff $staff): array {
                     $names = explode(' ', $staff->full_name);
                     $firstName = $names[0];
                     $initials = substr($firstName, 0, 1) . substr($names[1] ?? $firstName, 0, 1);
@@ -152,7 +150,7 @@ class InstitutionService
     public function getSetupStatus(int $schoolId): array
     {
         /** @var array{steps: array<string, bool>, is_completed: bool, progress: float|int} $result */
-        $result = Cache::remember("school_setup_{$schoolId}", 300, function () use ($schoolId) {
+        $result = Cache::remember("school_setup_{$schoolId}", 300, function () use ($schoolId): array {
             $school = School::with(['levels', 'activeAcademicYear.semesters'])->findOrFail($schoolId);
             $levelIds = $school->levels->pluck('id');
 
@@ -165,7 +163,7 @@ class InstitutionService
                 'study_groups' => StudyGroup::query()->where('school_id', $schoolId)->count() > 0,
             ];
 
-            $isCompleted = !in_array(false, array_values($status), true);
+            $isCompleted = !in_array(false, $status, true);
             $totalSteps = count($status);
             $completedSteps = count(array_filter($status));
 

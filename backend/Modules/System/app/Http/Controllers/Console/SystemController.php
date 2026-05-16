@@ -34,7 +34,7 @@ class SystemController extends \Modules\System\Http\Controllers\BaseApiControlle
         try {
             Cache::put('health_check_queue', 'test', 10);
             $health['queue'] = ['status' => 'ok', 'message' => 'Queue connection working'];
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $health['queue'] = ['status' => 'error', 'message' => 'Queue connection failed'];
         }
 
@@ -165,19 +165,19 @@ class SystemController extends \Modules\System\Http\Controllers\BaseApiControlle
 
             // Named limiters from AppServiceProvider (ThrottleRequests hashes keys as md5(name . limitKey))
             $namedLimiterKeys = [
-                md5('login'.'login-ip|'.$ip),
-                md5('two-factor-verify'.'2fa-verify|'.$ip),
+                md5('loginlogin-ip|'.$ip),
+                md5('two-factor-verify2fa-verify|'.$ip),
             ];
             if (is_string($email) && $email !== '') {
-                $namedLimiterKeys[] = md5('login'.'login-email|'.sha1(strtolower(trim($email))).'|'.$ip);
+                $namedLimiterKeys[] = md5('loginlogin-email|'.sha1(strtolower(trim($email))).'|'.$ip);
             }
 
             $userIdRaw = $request->input('user_id');
             if (is_numeric($userIdRaw)) {
                 $uid = (string) $userIdRaw;
-                $namedLimiterKeys[] = md5('admin-cms'.'admin-cms|u:'.$uid);
-                $namedLimiterKeys[] = md5('media-upload'.'media-upload|u:'.$uid);
-                $namedLimiterKeys[] = md5('media-upload-multiple'.'media-upload-multi|u:'.$uid);
+                $namedLimiterKeys[] = md5('admin-cmsadmin-cms|u:'.$uid);
+                $namedLimiterKeys[] = md5('media-uploadmedia-upload|u:'.$uid);
+                $namedLimiterKeys[] = md5('media-upload-multiplemedia-upload-multi|u:'.$uid);
             }
 
             foreach ($namedLimiterKeys as $namedKey) {

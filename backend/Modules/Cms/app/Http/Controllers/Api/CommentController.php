@@ -9,12 +9,8 @@ use Modules\System\Http\Controllers\BaseApiController;
 
 class CommentController extends BaseApiController
 {
-    protected \Modules\Cms\Services\CommentSecurityService $securityService;
-
-    public function __construct(\Modules\Cms\Services\CommentSecurityService $securityService)
+    public function __construct(protected \Modules\Cms\Services\CommentSecurityService $securityService)
     {
-        $this->securityService = $securityService;
-
         $this->middleware('auth:sanctum')->except(['index', 'store']);
         $this->middleware('permission:view comments')->only(['adminIndex', 'statistics']);
     }
@@ -24,7 +20,7 @@ class CommentController extends BaseApiController
      */
     public function index(Content $content): \Illuminate\Http\JsonResponse
     {
-        $comments = Comment::with(['user', 'replies' => function ($q) {
+        $comments = Comment::with(['user', 'replies' => function ($q): void {
             $q->where('status', 'approved')->with('user');
         }])
             ->where('content_id', $content->id)
@@ -125,7 +121,7 @@ class CommentController extends BaseApiController
 
         // Multi-tenancy: Authors only see comments on their own content
         if (! $user->can('manage comments')) {
-            $query->whereHas('content', function ($q) use ($user) {
+            $query->whereHas('content', function ($q) use ($user): void {
                 $q->where('author_id', $user->id);
             });
         }
@@ -141,7 +137,7 @@ class CommentController extends BaseApiController
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('body', 'like', "%{$search}%")
                     ->orWhere('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
@@ -170,7 +166,7 @@ class CommentController extends BaseApiController
 
         // Multi-tenancy scoping
         if (! $user->can('manage comments')) {
-            $query->whereHas('content', function ($q) use ($user) {
+            $query->whereHas('content', function ($q) use ($user): void {
                 $q->where('author_id', $user->id);
             });
         }
@@ -199,17 +195,13 @@ class CommentController extends BaseApiController
         }
 
         // Ownership check
-        if (! $user->can('manage comments')) {
-            if ($comment->content->author_id !== $user->id) {
-                return $this->forbidden('You can only moderate comments on your own content');
-            }
+        if (!$user->can('manage comments') && $comment->content->author_id !== $user->id) {
+            return $this->forbidden('You can only moderate comments on your own content');
         }
 
         // Lock check
-        if ($comment->locked_by && $comment->locked_by !== $user->id) {
-            if ($comment->locked_at && $comment->locked_at->diffInMinutes(now()) < 60) {
-                return $this->error('Comment is currently locked by another user', 423);
-            }
+        if ($comment->locked_by && $comment->locked_by !== $user->id && ($comment->locked_at && $comment->locked_at->diffInMinutes(now()) < 60)) {
+            return $this->error('Comment is currently locked by another user', 423);
         }
 
         $comment->update(['status' => 'approved']);
@@ -228,17 +220,13 @@ class CommentController extends BaseApiController
         }
 
         // Ownership check
-        if (! $user->can('manage comments')) {
-            if ($comment->content->author_id !== $user->id) {
-                return $this->forbidden('You can only moderate comments on your own content');
-            }
+        if (!$user->can('manage comments') && $comment->content->author_id !== $user->id) {
+            return $this->forbidden('You can only moderate comments on your own content');
         }
 
         // Lock check
-        if ($comment->locked_by && $comment->locked_by !== $user->id) {
-            if ($comment->locked_at && $comment->locked_at->diffInMinutes(now()) < 60) {
-                return $this->error('Comment is currently locked by another user', 423);
-            }
+        if ($comment->locked_by && $comment->locked_by !== $user->id && ($comment->locked_at && $comment->locked_at->diffInMinutes(now()) < 60)) {
+            return $this->error('Comment is currently locked by another user', 423);
         }
 
         $comment->update(['status' => 'rejected']);
@@ -257,17 +245,13 @@ class CommentController extends BaseApiController
         }
 
         // Ownership check
-        if (! $user->can('manage comments')) {
-            if ($comment->content->author_id !== $user->id) {
-                return $this->forbidden('You can only moderate comments on your own content');
-            }
+        if (!$user->can('manage comments') && $comment->content->author_id !== $user->id) {
+            return $this->forbidden('You can only moderate comments on your own content');
         }
 
         // Lock check
-        if ($comment->locked_by && $comment->locked_by !== $user->id) {
-            if ($comment->locked_at && $comment->locked_at->diffInMinutes(now()) < 60) {
-                return $this->error('Comment is currently locked by another user', 423);
-            }
+        if ($comment->locked_by && $comment->locked_by !== $user->id && ($comment->locked_at && $comment->locked_at->diffInMinutes(now()) < 60)) {
+            return $this->error('Comment is currently locked by another user', 423);
         }
 
         $comment->update(['status' => 'spam']);
@@ -299,10 +283,9 @@ class CommentController extends BaseApiController
 
         foreach ($comments as $comment) {
             // Ownership check
-            if (! $user->can('manage comments')) {
-                if ($comment->content->author_id !== $user->id) {
-                    continue; // Skip
-                }
+            if (!$user->can('manage comments') && $comment->content->author_id !== $user->id) {
+                continue;
+                // Skip
             }
 
             // Lock check
@@ -346,17 +329,13 @@ class CommentController extends BaseApiController
         }
 
         // Ownership check
-        if (! $user->can('manage comments')) {
-            if ($comment->content->author_id !== $user->id) {
-                return $this->forbidden('You can only delete comments on your own content');
-            }
+        if (!$user->can('manage comments') && $comment->content->author_id !== $user->id) {
+            return $this->forbidden('You can only delete comments on your own content');
         }
 
         // Lock check
-        if ($comment->locked_by && $comment->locked_by !== $user->id) {
-            if ($comment->locked_at && $comment->locked_at->diffInMinutes(now()) < 60) {
-                return $this->error('Cannot delete: Comment is currently locked by another user', 423);
-            }
+        if ($comment->locked_by && $comment->locked_by !== $user->id && ($comment->locked_at && $comment->locked_at->diffInMinutes(now()) < 60)) {
+            return $this->error('Cannot delete: Comment is currently locked by another user', 423);
         }
 
         $comment->delete();

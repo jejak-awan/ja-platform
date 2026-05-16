@@ -39,7 +39,7 @@ class FormSubmissionFactory extends Factory
      */
     public function read(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => 'read',
         ]);
     }
@@ -49,7 +49,7 @@ class FormSubmissionFactory extends Factory
      */
     public function archived(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => 'archived',
         ]);
     }

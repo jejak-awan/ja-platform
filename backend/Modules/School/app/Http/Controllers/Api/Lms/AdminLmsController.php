@@ -11,11 +11,8 @@ use Modules\School\Models\Lms\Topic;
 
 class AdminLmsController extends BaseController
 {
-    protected LmsService $service;
-
-    public function __construct(LmsService $service)
+    public function __construct(protected LmsService $service)
     {
-        $this->service = $service;
     }
 
     public function index(Request $request): \Illuminate\Http\JsonResponse
@@ -68,7 +65,7 @@ class AdminLmsController extends BaseController
 
     public function showCourse(int $id): \Illuminate\Http\JsonResponse
     {
-        $course = Course::with(['lessons.topics.topicable' => function ($morph) {
+        $course = Course::with(['lessons.topics.topicable' => function ($morph): void {
             $morph->morphWith([
                 \Modules\School\Models\Lms\TopicContent\Quiz::class => ['questions.options'],
             ]);

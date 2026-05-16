@@ -90,7 +90,7 @@ class SecurityAlertService
      */
     public function getAlerts(): array
     {
-        return Cache::remember('security_alerts', 60, function () {
+        return Cache::remember('security_alerts', 60, function (): array {
             /** @var array<int, array<string, mixed>> $alerts */
             $alerts = [];
             $since = Carbon::now()->subMinutes($this->checkWindowMinutes);
@@ -108,7 +108,7 @@ class SecurityAlertService
             $alerts = array_merge($alerts, $suspicious);
 
             // Sort by severity and time
-            usort($alerts, function ($a, $b) {
+            usort($alerts, function (array $a, array $b): int {
                 $severityOrder = ['critical' => 0, 'warning' => 1, 'info' => 2];
                 $aSev = is_string($a['severity'] ?? null) ? $a['severity'] : 'info';
                 $bSev = is_string($b['severity'] ?? null) ? $b['severity'] : 'info';
@@ -135,7 +135,7 @@ class SecurityAlertService
     {
         $alerts = $this->getAlerts();
 
-        return count(array_filter($alerts, fn ($a) => $a['severity'] !== 'info'));
+        return count(array_filter($alerts, fn (array $a): bool => $a['severity'] !== 'info'));
     }
 
     /**

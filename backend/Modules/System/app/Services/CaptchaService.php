@@ -14,7 +14,6 @@ class CaptchaService
 
     public function __construct()
     {
-        /** @var mixed $methodRaw */
         $methodRaw = Setting::get('captcha_method', 'slider');
         $this->method = is_string($methodRaw) ? $methodRaw : 'slider';
     }
@@ -92,7 +91,6 @@ class CaptchaService
      */
     public static function getMethod(): string
     {
-        /** @var mixed $methodRaw */
         $methodRaw = Setting::get('captcha_method', 'slider');
 
         return is_string($methodRaw) ? $methodRaw : 'slider';
@@ -108,7 +106,7 @@ class CaptchaService
     protected function generateSliderChallenge(): array
     {
         $token = Str::random(32);
-        $targetPosition = rand(15, 75); // Target position 15-75% to fit within bounds on all screens
+        $targetPosition = random_int(15, 75); // Target position 15-75% to fit within bounds on all screens
 
         Cache::put("captcha:{$token}", [
             'method' => 'slider',
@@ -177,8 +175,8 @@ class CaptchaService
         $token = Str::random(32);
 
         // Simplify: only addition, numbers 1-9
-        $a = rand(1, 9);
-        $b = rand(1, 9);
+        $a = random_int(1, 9);
+        $b = random_int(1, 9);
 
         $answer = $a + $b;
 
@@ -254,17 +252,17 @@ class CaptchaService
 
         // Add noise dots
         for ($i = 0; $i < 100; $i++) {
-            imagesetpixel($image, rand(0, $width), rand(0, $height), $noiseColor);
+            imagesetpixel($image, random_int(0, $width), random_int(0, $height), $noiseColor);
         }
 
         // Add lines
         for ($i = 0; $i < 5; $i++) {
             imageline(
                 $image,
-                rand(0, $width),
-                rand(0, $height),
-                rand(0, $width),
-                rand(0, $height),
+                random_int(0, $width),
+                random_int(0, $height),
+                random_int(0, $width),
+                random_int(0, $height),
                 $lineColor
             );
         }
@@ -287,14 +285,14 @@ class CaptchaService
         for ($i = 0; $i < strlen($code); $i++) {
             $char = $code[$i];
 
-            $angle = rand(-15, 15);
-            $color = (int) $textColors[array_rand($textColors)];
+            $angle = random_int(-15, 15);
+            $color = $textColors[array_rand($textColors)];
 
-            $x = $startX + ($i * $charPadding) + rand(-2, 2);
-            $y = ($height / 2) + ($fontSize / 2) + rand(-2, 2); // Baseline position
+            $x = $startX + ($i * $charPadding) + random_int(-2, 2);
+            $y = ($height / 2) + ($fontSize / 2) + random_int(-2, 2); // Baseline position
 
             if ($useTtf) {
-                imagettftext($image, $fontSize, $angle, (int) $x, (int) $y, $color, $fontPath, $char);
+                imagettftext($image, $fontSize, $angle, (int) $x, $y, $color, $fontPath, $char);
             } else {
                 // Legacy fallback (should ideally not happen given our search)
                 // Use built-in font scaled up? No, just center it

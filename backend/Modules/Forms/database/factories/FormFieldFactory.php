@@ -46,7 +46,7 @@ class FormFieldFactory extends Factory
      */
     public function required(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'is_required' => true,
         ]);
     }
@@ -56,7 +56,7 @@ class FormFieldFactory extends Factory
      */
     public function optional(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'is_required' => false,
         ]);
     }
@@ -66,7 +66,7 @@ class FormFieldFactory extends Factory
      */
     public function text(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'type' => 'text',
             'options' => null,
         ]);
@@ -77,7 +77,7 @@ class FormFieldFactory extends Factory
      */
     public function email(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'type' => 'email',
             'options' => null,
         ]);
@@ -88,7 +88,7 @@ class FormFieldFactory extends Factory
      */
     public function select(array $options = []): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'type' => 'select',
             'options' => $options ?: [
                 ['label' => 'Option A', 'value' => 'a'],

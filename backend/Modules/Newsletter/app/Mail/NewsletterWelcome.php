@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Newsletter\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -14,14 +16,11 @@ class NewsletterWelcome extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public NewsletterSubscriber $subscriber;
-
     /**
      * Create a new message instance.
      */
-    public function __construct(NewsletterSubscriber $subscriber)
+    public function __construct(public NewsletterSubscriber $subscriber)
     {
-        $this->subscriber = $subscriber;
     }
 
     /**

@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Settings Table
-        Schema::create('sys_settings', function (Blueprint $table) {
+        Schema::create('sys_settings', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('key')->index();
@@ -24,7 +24,7 @@ return new class extends Migration
         });
 
         // 2. Activity Logs
-        Schema::create('system_activity_logs', function (Blueprint $table) {
+        Schema::create('system_activity_logs', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->nullable()->index();
             $table->string('action')->index();
@@ -39,7 +39,7 @@ return new class extends Migration
         });
 
         // 3. User Login History
-        Schema::create('sys_login_histories', function (Blueprint $table) {
+        Schema::create('sys_login_histories', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
             $table->string('ip_address', 45)->nullable();
@@ -50,7 +50,7 @@ return new class extends Migration
         });
 
         // 4. Plugins Registry
-        Schema::create('sys_plugins', function (Blueprint $table) {
+        Schema::create('sys_plugins', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('slug')->unique();
@@ -67,7 +67,7 @@ return new class extends Migration
         });
 
         // 5. Auth Users
-        Schema::create('srv_auth_users', function (Blueprint $table) {
+        Schema::create('srv_auth_users', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('email')->unique();

@@ -18,7 +18,6 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $perPageInput = $request->input('per_page', 10);
-        /** @var int $perPage */
         $perPage = is_numeric($perPageInput) ? (int) $perPageInput : 10;
 
         $tasks = ScheduledTask::orderBy('name')->paginate($perPage);
@@ -188,7 +187,7 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
             /** @var string $output */
             $output = Artisan::output();
 
-            if (empty(trim($output)) && $exitCode === 0) {
+            if (in_array(trim($output), ['', '0'], true) && $exitCode === 0) {
                 $output = 'Task executed successfully (No output generated).';
             }
 
@@ -214,7 +213,7 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
                 'exit_code' => $exitCode,
             ], 'Task executed successfully');
 
-        } catch (CommandNotFoundException $e) {
+        } catch (CommandNotFoundException) {
             $task->update([
                 'status' => 'failed',
                 'output' => 'Command not found on server.',

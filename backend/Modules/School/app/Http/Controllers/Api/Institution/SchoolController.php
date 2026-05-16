@@ -12,11 +12,8 @@ use Modules\School\Exceptions\SchoolModuleException;
 
 class SchoolController extends BaseController
 {
-    protected InstitutionService $service;
-
-    public function __construct(InstitutionService $service)
+    public function __construct(protected InstitutionService $service)
     {
-        $this->service = $service;
     }
 
     /**

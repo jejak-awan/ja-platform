@@ -59,7 +59,7 @@ class RedisSetting extends Model
         if ($this->is_encrypted && is_string($value)) {
             try {
                 return Crypt::decryptString($value);
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 return $value;
             }
         }
@@ -104,9 +104,7 @@ class RedisSetting extends Model
         /** @var \Illuminate\Database\Eloquent\Collection<int, self> $settings */
         $settings = static::where('group', $group)->get();
 
-        return $settings->mapWithKeys(function ($setting) {
-            return [(string) $setting->key => $setting->getTypedValue()];
-        });
+        return $settings->mapWithKeys(fn($setting) => [(string) $setting->key => $setting->getTypedValue()]);
     }
 
     /**

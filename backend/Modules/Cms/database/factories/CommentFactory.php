@@ -37,7 +37,7 @@ class CommentFactory extends Factory
      */
     public function approved(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => 'approved',
         ]);
     }
@@ -47,7 +47,7 @@ class CommentFactory extends Factory
      */
     public function pending(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => 'pending',
         ]);
     }
@@ -57,7 +57,7 @@ class CommentFactory extends Factory
      */
     public function reply(?Comment $parent = null): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'parent_id' => $parent?->id ?? Comment::factory()->create()->id,
         ]);
     }

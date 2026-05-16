@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\System\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -10,7 +12,7 @@ class SystemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
         return view('system::index');
     }
@@ -18,7 +20,7 @@ class SystemController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
         return view('system::create');
     }
@@ -31,7 +33,7 @@ class SystemController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
         return view('system::show');
     }
@@ -39,7 +41,7 @@ class SystemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
         return view('system::edit');
     }

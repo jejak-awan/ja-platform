@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\Ai\Http\Controllers\AiController;
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::resource('ais', AiController::class)->names('ai');
 });

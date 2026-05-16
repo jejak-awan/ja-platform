@@ -15,11 +15,8 @@ use Modules\School\Http\Requests\Logistics\UpdateMaintenanceTicketRequest;
 
 class SarprasController extends BaseController
 {
-    protected LogisticsService $service;
-
-    public function __construct(LogisticsService $service)
+    public function __construct(protected LogisticsService $service)
     {
-        $this->service = $service;
     }
 
     public function landAssets(): \Illuminate\Http\JsonResponse

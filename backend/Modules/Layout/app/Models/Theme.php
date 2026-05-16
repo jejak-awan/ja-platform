@@ -174,7 +174,7 @@ class Theme extends Model
     {
         // Validate theme before activation (warn but don't block)
         $errors = $this->validate();
-        if (! empty($errors)) {
+        if ($errors !== []) {
             // Log warnings but allow activation
             \Log::warning("Theme '{$this->name}' has validation warnings but will be activated", [
                 'theme_id' => $this->id,
@@ -182,11 +182,9 @@ class Theme extends Model
             ]);
 
             // Only block if critical errors (invalid JSON)
-            $criticalErrors = array_filter($errors, function ($error) {
-                return strpos($error, 'Invalid theme.json format') !== false;
-            });
+            $criticalErrors = array_filter($errors, fn($error) => str_contains((string) $error, 'Invalid theme.json format'));
 
-            if (! empty($criticalErrors)) {
+            if ($criticalErrors !== []) {
                 throw new \Exception("Theme '{$this->name}' is invalid and cannot be activated: ".implode(', ', $criticalErrors));
             }
         }
@@ -379,10 +377,6 @@ class Theme extends Model
      */
     public function hasUpdate(): bool
     {
-        if (! $this->update_url) {
-            return false;
-        }
-
         // TODO: Implement update check logic
         return false;
     }

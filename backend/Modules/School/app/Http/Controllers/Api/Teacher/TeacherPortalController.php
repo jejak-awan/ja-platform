@@ -13,11 +13,8 @@ use Modules\School\Services\Teacher\TeacherService;
 
 class TeacherPortalController extends CommonBaseController
 {
-    protected TeacherService $service;
-
-    public function __construct(TeacherService $service)
+    public function __construct(protected TeacherService $service)
     {
-        $this->service = $service;
     }
 
     /**
@@ -36,13 +33,12 @@ class TeacherPortalController extends CommonBaseController
     public function dashboardStats(): \Illuminate\Http\JsonResponse
     {
         $staff = $this->getStaff();
-        if (!$staff) {
+        if (!$staff instanceof \Modules\School\Models\HR\Staff) {
             return $this->sendError('Staff record not found for this user.', [], 404);
         }
 
         $this->authorize('view', $staff);
         
-        /** @var int $staffId */
         $staffId = (int) $staff->id;
         $stats = $this->service->getDashboardStats($staffId);
 
@@ -57,7 +53,9 @@ class TeacherPortalController extends CommonBaseController
     public function schedules(Request $request): \Illuminate\Http\JsonResponse
     {
         $staff = $this->getStaff();
-        if (!$staff) return $this->sendError('Staff record not found.', [], 404);
+        if (!$staff instanceof \Modules\School\Models\HR\Staff) {
+            return $this->sendError('Staff record not found.', [], 404);
+        }
 
         $this->authorize('view', $staff);
 
@@ -76,7 +74,9 @@ class TeacherPortalController extends CommonBaseController
     public function recentJournals(): \Illuminate\Http\JsonResponse
     {
         $staff = $this->getStaff();
-        if (!$staff) return $this->sendError('Staff record not found.', [], 404);
+        if (!$staff instanceof \Modules\School\Models\HR\Staff) {
+            return $this->sendError('Staff record not found.', [], 404);
+        }
 
         $this->authorize('view', $staff);
 

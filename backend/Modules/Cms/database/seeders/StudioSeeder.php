@@ -215,9 +215,9 @@ class StudioSeeder extends Seeder
             $targetType = null;
 
             if ($type === 'page') {
-                $targetType = 'Modules\Cms\Models\Content';
+                $targetType = \Modules\Cms\Models\Content::class;
             } elseif ($type === 'category') {
-                $targetType = 'Modules\Library\Models\Category';
+                $targetType = \Modules\Library\Models\Category::class;
             }
 
             $menuItem = $menu->items()->create(array_merge($itemData, [

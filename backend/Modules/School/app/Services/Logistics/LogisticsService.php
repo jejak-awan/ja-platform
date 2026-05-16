@@ -31,13 +31,13 @@ class LogisticsService
     {
         return [
             'land_count' => (int) LandAsset::where('school_id', $schoolId)->count(),
-            'building_count' => (int) Building::whereHas('landAsset', function ($q) use ($schoolId) {
+            'building_count' => (int) Building::whereHas('landAsset', function ($q) use ($schoolId): void {
                 $q->where('school_id', $schoolId);
             })->count(),
-            'room_count' => (int) Room::whereHas('building.landAsset', function ($q) use ($schoolId) {
+            'room_count' => (int) Room::whereHas('building.landAsset', function ($q) use ($schoolId): void {
                 $q->where('school_id', $schoolId);
             })->count(),
-            'asset_count' => (int) SchoolAsset::whereHas('room.building.landAsset', function ($q) use ($schoolId) {
+            'asset_count' => (int) SchoolAsset::whereHas('room.building.landAsset', function ($q) use ($schoolId): void {
                 $q->where('school_id', $schoolId);
             })->count(),
         ];
@@ -82,7 +82,7 @@ class LogisticsService
     public function getBuildings(int $schoolId, int $perPage = 20): LengthAwarePaginator
     {
         /** @var LengthAwarePaginator<int, Building> $paginator */
-        $paginator = Building::whereHas('landAsset', function ($q) use ($schoolId) {
+        $paginator = Building::whereHas('landAsset', function ($q) use ($schoolId): void {
             $q->where('school_id', $schoolId);
         })->with('landAsset')->paginate($perPage);
         return $paginator;
@@ -116,7 +116,7 @@ class LogisticsService
     public function getRooms(int $schoolId, int $perPage = 20): LengthAwarePaginator
     {
         /** @var LengthAwarePaginator<int, Room> $paginator */
-        $paginator = Room::whereHas('building.landAsset', function ($q) use ($schoolId) {
+        $paginator = Room::whereHas('building.landAsset', function ($q) use ($schoolId): void {
             $q->where('school_id', $schoolId);
         })->with('building')->paginate($perPage);
         return $paginator;
@@ -150,7 +150,7 @@ class LogisticsService
     public function getAssets(int $schoolId, int $perPage = 20): LengthAwarePaginator
     {
         /** @var LengthAwarePaginator<int, SchoolAsset> $paginator */
-        $paginator = SchoolAsset::whereHas('room.building.landAsset', function ($q) use ($schoolId) {
+        $paginator = SchoolAsset::whereHas('room.building.landAsset', function ($q) use ($schoolId): void {
             $q->where('school_id', $schoolId);
         })->with(['room.building'])->paginate($perPage);
         return $paginator;
@@ -231,7 +231,6 @@ class LogisticsService
             /** @var InventoryItem $item */
             $item = InventoryItem::findOrFail($data['item_id']);
             
-            /** @var int $quantity */
             $quantity = is_numeric($data['quantity']) ? (int) $data['quantity'] : 0;
             if ($data['type'] === 'in' || $data['type'] === 'adjustment') {
                 $item->increment('quantity_on_hand', $quantity);
@@ -329,7 +328,7 @@ class LogisticsService
      */
     public function releaseBed(int $allocationId): void
     {
-        DB::transaction(function () use ($allocationId) {
+        DB::transaction(function () use ($allocationId): void {
             /** @var HostelAllocation $allocation */
             $allocation = HostelAllocation::findOrFail($allocationId);
             $allocation->update([

@@ -19,7 +19,7 @@ class ReportController extends BaseController
         $school = $student->school;
 
         $verificationUrl = $student->getVerificationUrl('profile');
-        $html = view('school::reports.student_profile', compact('student', 'school', 'verificationUrl'))->render();
+        $html = view('school::reports.student_profile', ['student' => $student, 'school' => $school, 'verificationUrl' => $verificationUrl])->render();
 
         $mpdf = new Mpdf([
             'format' => 'A4',
@@ -46,7 +46,7 @@ class ReportController extends BaseController
         $school = $student->school;
 
         $verificationUrl = $student->getVerificationUrl('id_card');
-        $html = view('school::reports.id_card', compact('student', 'school', 'verificationUrl'))->render();
+        $html = view('school::reports.id_card', ['student' => $student, 'school' => $school, 'verificationUrl' => $verificationUrl])->render();
 
         $mpdf = new Mpdf([
             'format' => [86, 54], // ID-1 standard size 85.60 × 53.98 mm
@@ -71,7 +71,7 @@ class ReportController extends BaseController
         $school = $student->school;
 
         $verificationUrl = $student->getVerificationUrl('skl');
-        $html = view('school::reports.graduation_skl', compact('student', 'school', 'verificationUrl'))->render();
+        $html = view('school::reports.graduation_skl', ['student' => $student, 'school' => $school, 'verificationUrl' => $verificationUrl])->render();
 
         $mpdf = new Mpdf([
             'format' => 'A4',

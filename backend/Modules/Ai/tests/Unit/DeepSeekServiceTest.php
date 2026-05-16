@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Ai\Tests\Unit;
 
 use Tests\TestCase;
@@ -17,12 +19,12 @@ class DeepSeekServiceTest extends TestCase
         $this->service = new DeepSeekService('test-api-key');
     }
 
-    public function test_returns_correct_provider_name()
+    public function test_returns_correct_provider_name(): void
     {
         $this->assertEquals('DeepSeek', $this->service->getName());
     }
 
-    public function test_throws_exception_if_api_key_is_missing_during_generation()
+    public function test_throws_exception_if_api_key_is_missing_during_generation(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('DeepSeek API Key is not configured.');
@@ -31,7 +33,7 @@ class DeepSeekServiceTest extends TestCase
         $service->generateText('Test prompt');
     }
 
-    public function test_generates_text_successfully()
+    public function test_generates_text_successfully(): void
     {
         Http::fake([
             'api.deepseek.com/chat/completions' => Http::response([
@@ -47,7 +49,7 @@ class DeepSeekServiceTest extends TestCase
         $this->assertEquals('Generated deepseek content.', $result);
     }
 
-    public function test_throws_exception_on_api_failure_balance()
+    public function test_throws_exception_on_api_failure_balance(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('DeepSeek Validation Failed (Insufficient Balance).');
@@ -61,7 +63,7 @@ class DeepSeekServiceTest extends TestCase
         $this->service->generateText('Hello');
     }
 
-    public function test_throws_exception_on_general_api_failure()
+    public function test_throws_exception_on_general_api_failure(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('DeepSeek API Error: Unknown error');
@@ -75,7 +77,7 @@ class DeepSeekServiceTest extends TestCase
         $this->service->generateText('Hello');
     }
 
-    public function test_gets_models_successfully()
+    public function test_gets_models_successfully(): void
     {
         Http::fake([
             'api.deepseek.com/models' => Http::response([
@@ -96,13 +98,13 @@ class DeepSeekServiceTest extends TestCase
         $this->assertEquals('deepseek-coder', $models[1]['id']);
     }
 
-    public function test_get_models_returns_empty_when_no_api_key()
+    public function test_get_models_returns_empty_when_no_api_key(): void
     {
         $service = new DeepSeekService('');
         $this->assertEmpty($service->getModels());
     }
 
-    public function test_get_models_returns_empty_on_failure()
+    public function test_get_models_returns_empty_on_failure(): void
     {
         Http::fake([
             'api.deepseek.com/models' => Http::response([], 500),
@@ -111,7 +113,7 @@ class DeepSeekServiceTest extends TestCase
         $this->assertEmpty($this->service->getModels());
     }
 
-    public function test_tests_connection_successfully()
+    public function test_tests_connection_successfully(): void
     {
         Http::fake([
             'api.deepseek.com/models' => Http::response(['data' => []], 200),
@@ -120,7 +122,7 @@ class DeepSeekServiceTest extends TestCase
         $this->assertTrue($this->service->testConnection());
     }
 
-    public function test_test_connection_throws_when_no_key()
+    public function test_test_connection_throws_when_no_key(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('API Key is missing.');
@@ -129,7 +131,7 @@ class DeepSeekServiceTest extends TestCase
         $service->testConnection();
     }
 
-    public function test_test_connection_throws_when_invalid_key()
+    public function test_test_connection_throws_when_invalid_key(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid DeepSeek API Key.');

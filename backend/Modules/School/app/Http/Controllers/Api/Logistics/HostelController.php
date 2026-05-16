@@ -15,11 +15,8 @@ use Modules\School\Http\Requests\Logistics\AllocateBedRequest;
 
 class HostelController extends BaseController
 {
-    protected LogisticsService $service;
-
-    public function __construct(LogisticsService $service)
+    public function __construct(protected LogisticsService $service)
     {
-        $this->service = $service;
     }
 
     public function blocks(): \Illuminate\Http\JsonResponse

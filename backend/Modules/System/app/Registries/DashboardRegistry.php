@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\System\Registries;
 
 class DashboardRegistry extends BaseRegistry
 {
     /**
      * Register a dashboard widget.
-     * 
-     * @param string $key
+     *
      * @param array{
      *   title: string,
      *   component: string,

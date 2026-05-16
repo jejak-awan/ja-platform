@@ -130,7 +130,7 @@ class AnalyticsController extends BaseApiController
         // For more accurate date-filtered stats, use subquery or pre-aggregated table
         $cacheEpochRaw = Cache::get('analytics_cache_epoch', 0);
         $cacheEpoch = is_numeric($cacheEpochRaw) ? (int) $cacheEpochRaw : 0;
-        $cacheKey = 'analytics_top_content_'.$cacheEpoch.'_'.((string) $dateFrom).'_'.((string) $dateTo).'_'.((string) $limit);
+        $cacheKey = 'analytics_top_content_'.$cacheEpoch.'_'.($dateFrom).'_'.($dateTo).'_'.($limit);
         $topContent = Cache::remember(
             $cacheKey,
             now()->addMinutes(30),
@@ -144,7 +144,7 @@ class AnalyticsController extends BaseApiController
                     ->get();
 
                 // Extract potential slugs from URLs (basename of /path/to/slug)
-                $slugs = $visitCounts->map(function ($visit) {
+                $slugs = $visitCounts->map(function ($visit): ?string {
                     $url = $visit->url;
                     $path = parse_url($url, PHP_URL_PATH);
                     if ($path) {
@@ -300,7 +300,7 @@ class AnalyticsController extends BaseApiController
             ->orderByDesc('count')
             ->limit($limit)
             ->get()
-            ->map(function ($visit) {
+            ->map(function ($visit): array {
                 /** @var AnalyticsVisit $visit */
                 return [
                     'referer' => (string) $visit->referer_host,
@@ -471,7 +471,7 @@ class AnalyticsController extends BaseApiController
                 'name' => isset($event['name']) && is_scalar($event['name']) ? strval($event['name']) : null,
                 'data' => isset($event['data']) && is_array($event['data']) ? $event['data'] : null,
                 'content_id' => isset($event['content_id']) && is_numeric($event['content_id']) ? (int) $event['content_id'] : null,
-            ], fn ($v) => $v !== null);
+            ], fn (string|int|array|null $v): bool => $v !== null);
         }
 
         $tracked = AnalyticsService::trackBatch($formattedEvents);
@@ -539,7 +539,7 @@ class AnalyticsController extends BaseApiController
         // 1. Single page view session, OR
         // 2. Session with duration < 10 seconds
         $bounceSessions = AnalyticsSession::whereBetween('started_at', [$dateFrom, $dateTo])
-            ->where(function ($query) {
+            ->where(function ($query): void {
                 $query->where('page_views', 1)
                     ->orWhere('duration', '<', 10);
             })
@@ -551,7 +551,7 @@ class AnalyticsController extends BaseApiController
             return 0.0;
         }
 
-        return (float) round(($bounceSessions / $totalSessions) * 100, 2);
+        return round(($bounceSessions / $totalSessions) * 100, 2);
     }
 
     /**
@@ -559,7 +559,7 @@ class AnalyticsController extends BaseApiController
      *
      * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
-    public function export(Request $request)
+    public function export(Request $request): \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
     {
         try {
             $dateFromRaw = $request->input('date_from', now()->subDays(30)->format('Y-m-d'));
@@ -571,16 +571,11 @@ class AnalyticsController extends BaseApiController
 
             $filename = "analytics-{$type}-{$dateFrom}-to-{$dateTo}.csv";
 
-            switch ($type) {
-                case 'events':
-                    $data = $this->exportEvents($dateFrom, $dateTo);
-                    break;
-                case 'sessions':
-                    $data = $this->exportSessions($dateFrom, $dateTo);
-                    break;
-                default:
-                    $data = $this->exportVisits($dateFrom, $dateTo);
-            }
+            $data = match ($type) {
+                'events' => $this->exportEvents($dateFrom, $dateTo),
+                'sessions' => $this->exportSessions($dateFrom, $dateTo),
+                default => $this->exportVisits($dateFrom, $dateTo),
+            };
 
             return response($data, 200, [
                 'Content-Type' => 'text/csv',
@@ -741,7 +736,7 @@ class AnalyticsController extends BaseApiController
         }
 
         try {
-            $deleted = DB::transaction(function () {
+            $deleted = DB::transaction(function (): array {
                 $visits = AnalyticsVisit::query()->delete();
                 $events = AnalyticsEvent::query()->delete();
                 $sessions = AnalyticsSession::query()->delete();

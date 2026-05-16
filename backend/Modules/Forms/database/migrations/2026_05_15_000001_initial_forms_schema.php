@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Forms
-        Schema::create('frm_forms', function (Blueprint $table) {
+        Schema::create('frm_forms', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('author_id')->nullable();
@@ -31,7 +31,7 @@ return new class extends Migration
         });
 
         // 2. Form Fields
-        Schema::create('frm_form_fields', function (Blueprint $table) {
+        Schema::create('frm_form_fields', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('form_id')->index();
@@ -52,7 +52,7 @@ return new class extends Migration
         });
 
         // 3. Form Submissions
-        Schema::create('frm_form_submissions', function (Blueprint $table) {
+        Schema::create('frm_form_submissions', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('form_id')->index();
@@ -68,7 +68,7 @@ return new class extends Migration
         });
 
         // 4. Form Analytics
-        Schema::create('frm_form_analytics', function (Blueprint $table) {
+        Schema::create('frm_form_analytics', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('form_id')->index();

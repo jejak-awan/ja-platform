@@ -149,7 +149,7 @@ class ScheduledTask extends Model
     {
         try {
             return CronExpression::isValidExpression($expression);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
         }
     }
@@ -161,17 +161,13 @@ class ScheduledTask extends Model
      */
     public static function getAllowedCommands(): array
     {
-        $commands = array_map(function ($cmd) {
-            return [
-                'value' => $cmd,
-                'label' => ucfirst(str_replace([':', '-'], [' › ', ' '], $cmd)),
-            ];
-        }, self::ALLOWED_COMMANDS);
+        $commands = array_map(fn(string $cmd) => [
+            'value' => $cmd,
+            'label' => ucfirst(str_replace([':', '-'], [' › ', ' '], $cmd)),
+        ], self::ALLOWED_COMMANDS);
 
         // Sort alphabetically by label
-        usort($commands, function ($a, $b) {
-            return strcasecmp($a['label'], $b['label']);
-        });
+        usort($commands, fn(array $a, array $b) => strcasecmp((string) $a['label'], (string) $b['label']));
 
         return $commands;
     }
@@ -189,7 +185,7 @@ class ScheduledTask extends Model
             $cron = new CronExpression($this->schedule);
 
             return $cron->getNextRunDate();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return null;
         }
     }
@@ -218,7 +214,7 @@ class ScheduledTask extends Model
     public function scopeDue($query): \Illuminate\Database\Eloquent\Builder
     {
         return $query->active()
-            ->where(function ($q) {
+            ->where(function ($q): void {
                 $q->whereNull('last_run_at')
                     ->orWhere('last_run_at', '<', now()->subMinute());
             });

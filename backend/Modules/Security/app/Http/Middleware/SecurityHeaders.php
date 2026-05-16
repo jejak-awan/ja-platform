@@ -107,7 +107,7 @@ class SecurityHeaders
             return;
         }
 
-        $tokens = array_filter(array_map('trim', explode(',', $cacheControl)));
+        $tokens = array_filter(array_map(trim(...), explode(',', $cacheControl)));
         $filtered = [];
         foreach ($tokens as $token) {
             if (strtolower($token) === 'no-store') {
@@ -116,10 +116,10 @@ class SecurityHeaders
             $filtered[] = $token;
         }
 
-        if (! in_array('no-cache', array_map('strtolower', $filtered), true)) {
+        if (! in_array('no-cache', array_map(strtolower(...), $filtered), true)) {
             $filtered[] = 'no-cache';
         }
-        if (! in_array('must-revalidate', array_map('strtolower', $filtered), true)) {
+        if (! in_array('must-revalidate', array_map(strtolower(...), $filtered), true)) {
             $filtered[] = 'must-revalidate';
         }
 
@@ -133,10 +133,6 @@ class SecurityHeaders
     {
         $allowViteDevServer = $this->isLocalDevelopmentContext();
         $unsafeEvalConfig = config('app.csp_allow_unsafe_eval', app()->environment('local'));
-        $allowUnsafeEval = filter_var(
-            is_bool($unsafeEvalConfig) ? ($unsafeEvalConfig ? 'true' : 'false') : (is_string($unsafeEvalConfig) ? $unsafeEvalConfig : 'false'),
-            FILTER_VALIDATE_BOOLEAN
-        );
 
         $directives = [
             "default-src 'self'",
@@ -343,12 +339,7 @@ class SecurityHeaders
         if (str_contains($normalizedPolicy, 'connect-src') && ! str_contains($normalizedPolicy, "'self'")) {
             return false;
         }
-
         // 4. Critical Failure: Policy is too short or missing key directives
-        if (strlen($policy) < 20 || ! str_contains($normalizedPolicy, 'default-src')) {
-            return false;
-        }
-
-        return true;
+        return strlen($policy) >= 20 && str_contains($normalizedPolicy, 'default-src');
     }
 }

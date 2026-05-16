@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\Library\Http\Controllers\Api\TagController;
 use Modules\Library\Http\Controllers\Api\CustomFieldController;
 use Modules\Library\Http\Controllers\Api\FieldGroupController;
 use Modules\Library\Http\Controllers\Api\CategoryController;
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->group(function (): void {
     // Public Library API
-    Route::prefix('public/library')->group(function () {
+    Route::prefix('public/library')->group(function (): void {
         Route::get('tags', [TagController::class, 'index']);
         Route::get('categories', [CategoryController::class, 'index']);
         Route::get('categories/{category}', [CategoryController::class, 'show']);
     });
 
     // Console Management (Library)
-    Route::prefix('manage/library')->middleware(['auth:sanctum', 'bypass_unit_scope'])->group(function () {
+    Route::prefix('manage/library')->middleware(['auth:sanctum', 'bypass_unit_scope'])->group(function (): void {
         Route::get('tags/statistics', [TagController::class, 'statistics'])->middleware('permission:manage tags');
         Route::post('tags/bulk-delete', [TagController::class, 'bulkDelete'])->middleware('permission:manage tags');
         Route::apiResource('tags', TagController::class)->middleware('permission:manage tags');

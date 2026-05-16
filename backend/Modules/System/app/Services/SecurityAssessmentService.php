@@ -26,7 +26,7 @@ class SecurityAssessmentService
      */
     public function calculateScore(): array
     {
-        return Cache::remember('security_health_assessment', 3600, function () {
+        return Cache::remember('security_health_assessment', 3600, function (): array {
             $baseScore = 60; // Start with a decent base
             $factors = [];
 
@@ -134,7 +134,7 @@ class SecurityAssessmentService
      */
     public function getTrendData(): array
     {
-        return Cache::remember('security_attack_trend_24h', 1800, function () {
+        return Cache::remember('security_attack_trend_24h', 1800, function (): array {
             $data = SecurityLog::where('created_at', '>=', now()->subDay())
                 ->whereIn('event_type', ['waf_sql_injection', 'malicious_scanner_blocked', 'shield_honeypot', '404', 'waf_violation'])
                 ->select(DB::raw("TO_CHAR(created_at, 'YYYY-MM-DD HH24:00:00') as hour"), DB::raw('count(*) as count'))

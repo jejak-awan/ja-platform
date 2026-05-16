@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\School\Policies;
 
 use Modules\System\Models\User;
@@ -8,7 +10,7 @@ use Modules\School\Models\Academic\TeachingJournal;
 class AcademicPolicy
 {
     /** @return list<string> */
-    private static function viewPermissions(): array
+    private function viewPermissions(): array
     {
         return [
             'view academic',
@@ -22,7 +24,7 @@ class AcademicPolicy
     }
 
     /** @return list<string> */
-    private static function writePermissions(mixed $model): array
+    private function writePermissions(mixed $model): array
     {
         if ($model instanceof TeachingJournal) {
             return [
@@ -44,7 +46,7 @@ class AcademicPolicy
     }
 
     /** @return list<string> */
-    private static function deletePermissions(mixed $model): array
+    private function deletePermissions(mixed $model): array
     {
         if ($model instanceof TeachingJournal) {
             return [
@@ -64,26 +66,26 @@ class AcademicPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyPermission(self::viewPermissions());
+        return $user->hasAnyPermission($this->viewPermissions());
     }
 
     public function view(User $user, mixed $model): bool
     {
-        return $user->hasAnyPermission(self::viewPermissions());
+        return $user->hasAnyPermission($this->viewPermissions());
     }
 
     public function create(User $user): bool
     {
-        return $user->hasAnyPermission(self::writePermissions(null));
+        return $user->hasAnyPermission($this->writePermissions(null));
     }
 
     public function update(User $user, mixed $model): bool
     {
-        return $user->hasAnyPermission(self::writePermissions($model));
+        return $user->hasAnyPermission($this->writePermissions($model));
     }
 
     public function delete(User $user, mixed $model): bool
     {
-        return $user->hasAnyPermission(self::deletePermissions($model));
+        return $user->hasAnyPermission($this->deletePermissions($model));
     }
 }

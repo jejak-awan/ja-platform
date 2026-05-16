@@ -13,15 +13,8 @@ use Illuminate\Http\JsonResponse;
 
 class GraduationController extends BaseController
 {
-    protected StudentService $studentService;
-    protected \Modules\School\Services\Operations\DocumentService $documentService;
-
-    public function __construct(
-        StudentService $studentService,
-        \Modules\School\Services\Operations\DocumentService $documentService
-    ) {
-        $this->studentService = $studentService;
-        $this->documentService = $documentService;
+    public function __construct(protected StudentService $studentService, protected \Modules\School\Services\Operations\DocumentService $documentService)
+    {
     }
 
     /**
@@ -129,7 +122,7 @@ class GraduationController extends BaseController
             $request->string('dob')->toString()
         );
 
-        if (!$student) {
+        if (!$student instanceof \Modules\School\Models\Student\Student) {
             return $this->sendError('Data siswa tidak ditemukan. Pastikan NISN/NIS dan Tanggal Lahir sudah benar.', [], 404);
         }
 
@@ -256,9 +249,7 @@ class GraduationController extends BaseController
         }
 
         // First row = headers: NISN, Subject1, Subject2, ...
-        $headers = array_map(function ($v) {
-            return is_string($v) ? trim($v) : (is_scalar($v) ? (string) $v : '');
-        }, $rows[0]);
+        $headers = array_map(fn($v) => is_string($v) ? trim($v) : (is_scalar($v) ? (string) $v : ''), $rows[0]);
         array_shift($rows); // Remove header
 
         $updated = 0;
@@ -267,7 +258,9 @@ class GraduationController extends BaseController
         foreach ($rows as $index => $row) {
             $rowZero = $row[0] ?? '';
             $nisn = is_string($rowZero) ? trim($rowZero) : (is_scalar($rowZero) ? trim((string) $rowZero) : '');
-            if (empty($nisn)) continue;
+            if ($nisn === '' || $nisn === '0') {
+                continue;
+            }
 
             $student = Student::where('nisn', $nisn)->first();
             if (!$student) {
@@ -277,7 +270,8 @@ class GraduationController extends BaseController
 
             // Build grades array from columns
             $grades = [];
-            for ($i = 1; $i < count($headers); $i++) {
+            $counter = count($headers);
+            for ($i = 1; $i < $counter; $i++) {
                 $subjectName = $headers[$i];
                 $value = $row[$i] ?? null;
                 if (!empty($subjectName) && $value !== null && $value !== '') {

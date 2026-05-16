@@ -11,11 +11,8 @@ use Modules\Cms\Services\SeoService;
 
 class SeoController extends BaseApiController
 {
-    protected SeoService $seoService;
-
-    public function __construct(SeoService $seoService)
+    public function __construct(protected SeoService $seoService)
     {
-        $this->seoService = $seoService;
     }
 
     public function stats(): \Illuminate\Http\JsonResponse

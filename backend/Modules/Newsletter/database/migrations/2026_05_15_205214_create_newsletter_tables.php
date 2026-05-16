@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nwl_subscribers', function (Blueprint $table) {
+        Schema::create('nwl_subscribers', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('email')->index();
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->unique(['workspace_id', 'email']);
         });
 
-        Schema::create('nwl_campaigns', function (Blueprint $table) {
+        Schema::create('nwl_campaigns', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('subject');

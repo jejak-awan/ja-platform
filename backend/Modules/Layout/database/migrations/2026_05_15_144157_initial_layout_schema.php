@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Menus
-        Schema::create('lay_menus', function (Blueprint $table) {
+        Schema::create('lay_menus', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('slug')->index();
@@ -26,7 +26,7 @@ return new class extends Migration
         });
 
         // 2. Menu Items
-        Schema::create('lay_menu_items', function (Blueprint $table) {
+        Schema::create('lay_menu_items', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('menu_id')->index();
             $table->uuid('parent_id')->nullable()->index();
@@ -47,7 +47,7 @@ return new class extends Migration
         });
 
         // 3. Widgets
-        Schema::create('lay_widgets', function (Blueprint $table) {
+        Schema::create('lay_widgets', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('type')->index(); // html, content_list, form, etc.
@@ -62,7 +62,7 @@ return new class extends Migration
         });
 
         // 4. URL Rewrites (Better version of Redirects)
-        Schema::create('lay_url_rewrites', function (Blueprint $table) {
+        Schema::create('lay_url_rewrites', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('source_path')->index();
             $table->string('target_path');
@@ -78,7 +78,7 @@ return new class extends Migration
         });
 
         // 5. Themes
-        Schema::create('lay_themes', function (Blueprint $table) {
+        Schema::create('lay_themes', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->string('name');

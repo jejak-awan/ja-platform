@@ -37,7 +37,7 @@ class QueryPerformanceService
      */
     public function analyzeQueries(?array $queries = null): array
     {
-        $queries = $queries ?? $this->getQueryLog();
+        $queries ??= $this->getQueryLog();
 
         $analysis = [
             'total_queries' => count($queries),
@@ -83,7 +83,7 @@ class QueryPerformanceService
         }
 
         // Find duplicate queries
-        foreach ($queryHashes as $hash => $data) {
+        foreach ($queryHashes as $data) {
             if ($data['count'] > 1) {
                 $analysis['duplicate_queries'][] = $data;
             }
@@ -123,7 +123,7 @@ class QueryPerformanceService
 
         // Extract table name
         if (preg_match('/from\s+`?(\w+)`?/i', $pattern, $matches)) {
-            return (string) $matches[1];
+            return $matches[1];
         }
 
         return substr($pattern, 0, 50);
@@ -150,7 +150,7 @@ class QueryPerformanceService
             }
         }
 
-        if (! empty($slowQueries)) {
+        if ($slowQueries !== []) {
             Log::warning('Slow queries detected', [
                 'count' => count($slowQueries),
                 'queries' => $slowQueries,
@@ -179,16 +179,16 @@ class QueryPerformanceService
 
         /** @var non-empty-array<int, float> $times */
         $times = array_column($queries, 'time');
-        $totalTime = (float) array_sum($times);
-        $slowQueries = array_filter($queries, fn (array $q) => $q['time'] > 100);
+        $totalTime = array_sum($times);
+        $slowQueries = array_filter($queries, fn (array $q): bool => $q['time'] > 100);
 
         return [
             'total_queries' => count($queries),
             'total_time' => round($totalTime, 2),
             'average_time' => round($totalTime / count($queries), 2),
             'slow_queries_count' => count($slowQueries),
-            'max_time' => round((float) max($times), 2),
-            'min_time' => round((float) min($times), 2),
+            'max_time' => round(max($times), 2),
+            'min_time' => round(min($times), 2),
         ];
     }
 

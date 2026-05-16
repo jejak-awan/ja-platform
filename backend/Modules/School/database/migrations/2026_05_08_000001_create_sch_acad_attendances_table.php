@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('sch_acad_attendances', function (Blueprint $table) {
+        Schema::create('sch_acad_attendances', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('student_id')->cascadeOnDelete();
             $table->uuid('academic_year_id')->cascadeOnDelete();

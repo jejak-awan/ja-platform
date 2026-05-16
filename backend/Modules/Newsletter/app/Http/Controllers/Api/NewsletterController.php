@@ -128,7 +128,7 @@ class NewsletterController extends BaseApiController
             if ($request->has('q')) {
                 $searchRaw = $request->q;
                 $search = is_string($searchRaw) ? $searchRaw : '';
-                $query->where(function ($q) use ($search) {
+                $query->where(function ($q) use ($search): void {
                     $q->where('email', 'like', "%{$search}%")
                         ->orWhere('name', 'like', "%{$search}%");
                 });
@@ -179,7 +179,7 @@ class NewsletterController extends BaseApiController
             $subscriber->delete();
 
             return $this->success(null, 'Subscriber deleted successfully');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return $this->error('Failed to delete subscriber', 500);
         }
     }
@@ -195,7 +195,7 @@ class NewsletterController extends BaseApiController
             $subscriber->restore();
 
             return $this->success(null, 'Subscriber restored successfully');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return $this->error('Failed to restore subscriber', 500);
         }
     }
@@ -211,7 +211,7 @@ class NewsletterController extends BaseApiController
             $subscriber->forceDelete();
 
             return $this->success(null, 'Subscriber permanently deleted');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return $this->error('Failed to permanently delete subscriber', 500);
         }
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\School\Policies;
 
 use Modules\System\Models\User;
@@ -10,7 +12,7 @@ use Modules\System\Models\User;
 class OperationsVisitorPolicy
 {
     /** @return list<string> */
-    private static function permissions(): array
+    private function permissions(): array
     {
         return [
             'view visitors',
@@ -20,26 +22,26 @@ class OperationsVisitorPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyPermission(self::permissions());
+        return $user->hasAnyPermission($this->permissions());
     }
 
     public function view(User $user, mixed $model): bool
     {
-        return $user->hasAnyPermission(self::permissions());
+        return $user->hasAnyPermission($this->permissions());
     }
 
     public function create(User $user): bool
     {
-        return $user->hasAnyPermission(self::permissions());
+        return $user->hasAnyPermission($this->permissions());
     }
 
     public function update(User $user, mixed $model): bool
     {
-        return $user->hasAnyPermission(self::permissions());
+        return $user->hasAnyPermission($this->permissions());
     }
 
     public function delete(User $user, mixed $model): bool
     {
-        return $user->hasAnyPermission(self::permissions());
+        return $user->hasAnyPermission($this->permissions());
     }
 }

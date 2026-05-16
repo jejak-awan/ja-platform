@@ -85,7 +85,6 @@ class AnalyticsEvent extends Model
      */
     public static function track(string $eventType, string $eventName, array $data = [], $contentId = null): self
     {
-        /** @var string $ip */
         $ip = \Modules\System\Helpers\IpHelper::getClientIp(request());
 
         return self::create([

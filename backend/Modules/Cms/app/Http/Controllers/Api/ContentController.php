@@ -15,14 +15,8 @@ use Modules\Cms\Services\CmsCacheService;
  */
 class ContentController extends BaseApiController
 {
-    protected ContentService $contentService;
-    protected CmsCacheService $cacheService;
-
-    public function __construct(ContentService $contentService, CmsCacheService $cacheService)
+    public function __construct(protected ContentService $contentService, protected CmsCacheService $cacheService)
     {
-        $this->contentService = $contentService;
-        $this->cacheService = $cacheService;
-
         $this->middleware('auth:sanctum')->except(['index', 'show', 'related']);
         $this->middleware('permission:view content')->only(['stats', 'revisions']);
         $this->middleware('permission:create content')->only(['store', 'duplicate']);
@@ -142,7 +136,7 @@ class ContentController extends BaseApiController
      */
     public function show(\Illuminate\Http\Request $request, string $slug): \Illuminate\Http\JsonResponse
     {
-        $content = Content::with(['author', 'category', 'tags', 'menuItems.menu', 'comments' => function ($q) {
+        $content = Content::with(['author', 'category', 'tags', 'menuItems.menu', 'comments' => function ($q): void {
             $q->where('status', 'approved')->latest();
         }])
             ->where('slug', $slug)
@@ -220,10 +214,8 @@ class ContentController extends BaseApiController
         }
 
         // Allow preview for draft content if user is the author or admin
-        if ($content->status === 'draft' && $content->author_id !== $user->id) {
-            if (! $user->can('manage content')) {
-                return $this->forbidden('Unauthorized to preview this content');
-            }
+        if ($content->status === 'draft' && $content->author_id !== $user->id && ! $user->can('manage content')) {
+            return $this->forbidden('Unauthorized to preview this content');
         }
 
         $urlPrefix = $content->type === 'post' ? 'blog/' : '';
@@ -285,8 +277,8 @@ class ContentController extends BaseApiController
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function ($q) use ($search) {
-                $searchStr = (string) $search;
+            $query->where(function ($q) use ($search): void {
+                $searchStr = $search;
                 $q->where('title', 'like', "%{$searchStr}%")
                     ->orWhere('body', 'like', "%{$searchStr}%")
                     ->orWhere('excerpt', 'like', "%{$searchStr}%");
@@ -367,7 +359,7 @@ class ContentController extends BaseApiController
         $canManage = $user->can('manage content');
         $cacheKey = "content_stats_{$userId}_".($canManage ? 'all' : 'scoped');
 
-        return Cache::remember($cacheKey, 300, function () use ($canManage, $user) {
+        return Cache::remember($cacheKey, 300, function () use ($canManage, $user): \Illuminate\Http\JsonResponse {
             $query = Content::query();
 
             // Scope stats if not a content manager
@@ -462,10 +454,8 @@ class ContentController extends BaseApiController
         $validated['slug'] = $this->contentService->generateUniqueSlug($validated['slug']);
 
         // Approval Workflow: Authors cannot publish directly
-        if (! $user->can('publish content')) {
-            if ($validated['status'] === 'published') {
-                $validated['status'] = 'pending';
-            }
+        if (!$user->can('publish content') && $validated['status'] === 'published') {
+            $validated['status'] = 'pending';
         }
 
         // Check for manual slug conflict
@@ -507,18 +497,14 @@ class ContentController extends BaseApiController
         }
 
         // Check if content is locked by other
-        if ($content->locked_by && $content->locked_by !== $user->id) {
-            // Check if lock is still valid (60 mins)
-            if ($content->locked_at && $content->locked_at->diffInMinutes(now()) < 60) {
-                return $this->error('This content is currently being edited by another user', 423);
-            }
+        // Check if lock is still valid (60 mins)
+        if ($content->locked_by && $content->locked_by !== $user->id && ($content->locked_at && $content->locked_at->diffInMinutes(now()) < 60)) {
+            return $this->error('This content is currently being edited by another user', 423);
         }
 
         // Basic permission check
-        if ($content->author_id !== $user->id) {
-            if (! $user->hasRole('super') && ! $user->hasRole('admin') && ! $user->can('manage content')) {
-                return $this->forbidden('Unauthorized to update this content');
-            }
+        if ($content->author_id !== $user->id && (! $user->hasRole('super') && ! $user->hasRole('admin') && ! $user->can('manage content'))) {
+            return $this->forbidden('Unauthorized to update this content');
         }
 
         $this->normalizeContentWriteRequest($request);
@@ -567,17 +553,13 @@ class ContentController extends BaseApiController
         }
 
         // Ownership check
-        if (! $user->can('manage content') && ! $user->can('publish content')) {
-            if ($content->author_id !== $user->id) {
-                return $this->forbidden('You can only update your own content');
-            }
+        if (! $user->can('manage content') && !$user->can('publish content') && $content->author_id !== $user->id) {
+            return $this->forbidden('You can only update your own content');
         }
 
         // Approval Workflow: Authors cannot publish directly
-        if (isset($validated['status']) && $validated['status'] === 'published') {
-            if (! $user->can('publish content')) {
-                $validated['status'] = 'pending';
-            }
+        if (isset($validated['status']) && $validated['status'] === 'published' && ! $user->can('publish content')) {
+            $validated['status'] = 'pending';
         }
 
         // Hierarchy Check: Only super-admin or manager can edit if it belongs to someone with higher rank
@@ -589,10 +571,8 @@ class ContentController extends BaseApiController
         }
 
         // Approval check: Cannot move back to draft if already published without manage permission
-        if ($content->status === 'published' && isset($validated['status']) && $validated['status'] !== 'published') {
-            if (! $user->can('manage content')) {
-                return $this->forbidden('Unauthorized to unpublish content');
-            }
+        if ($content->status === 'published' && isset($validated['status']) && $validated['status'] !== 'published' && ! $user->can('manage content')) {
+            return $this->forbidden('Unauthorized to unpublish content');
         }
 
         $createRevision = (bool) ($validated['create_revision'] ?? false);
@@ -676,13 +656,9 @@ class ContentController extends BaseApiController
         }
 
         // Keep published content published on autosave; only new/unpublished content defaults to draft.
-        if ($content && $content->status === 'published') {
-            $validated['status'] = 'published';
-        } else {
-            $validated['status'] = 'draft';
-        }
+        $validated['status'] = $content && $content->status === 'published' ? 'published' : 'draft';
 
-        if ($content) {
+        if ($content instanceof \Modules\Cms\Models\Content) {
             // Update existing content
             // Check if content is locked by another user
             if ($this->contentService->isLockedByOther($content, $user->id)) {
@@ -753,10 +729,8 @@ class ContentController extends BaseApiController
             return $this->unauthorized();
         }
 
-        if ($content->locked_by && $content->locked_by !== $user->id) {
-            if ($content->locked_at && $content->locked_at->diffInMinutes(now()) < 60) {
-                return $this->error('Cannot delete: Content is currently being edited by another user', 423);
-            }
+        if ($content->locked_by && $content->locked_by !== $user->id && ($content->locked_at && $content->locked_at->diffInMinutes(now()) < 60)) {
+            return $this->error('Cannot delete: Content is currently being edited by another user', 423);
         }
 
         $this->contentService->delete($content);
@@ -952,23 +926,20 @@ class ContentController extends BaseApiController
             return $this->unauthorized();
         }
 
-        if ($this->contentService->isLockedByOther($content, (int) $user->id)) {
-            // Allow Admins/Super Admins to steal the lock
-            if (! $user->hasRole('super') && ! $user->hasRole('admin')) {
-                /** @var \Modules\System\Models\User|null $lockedBy */
-                $lockedBy = $content->lockedBy;
-
-                return $this->error(
-                    'Content is currently being edited by '.($lockedBy ? $lockedBy->name : 'another user'),
-                    423,
-                    [],
-                    'CONTENT_LOCKED',
-                    [
-                        'locked_by' => $lockedBy,
-                        'locked_at' => $content->locked_at,
-                    ]
-                );
-            }
+        // Allow Admins/Super Admins to steal the lock
+        if ($this->contentService->isLockedByOther($content, (int) $user->id) && (!$user->hasRole('super') && ! $user->hasRole('admin'))) {
+            /** @var \Modules\System\Models\User|null $lockedBy */
+            $lockedBy = $content->lockedBy;
+            return $this->error(
+                'Content is currently being edited by '.($lockedBy ? $lockedBy->name : 'another user'),
+                423,
+                [],
+                'CONTENT_LOCKED',
+                [
+                    'locked_by' => $lockedBy,
+                    'locked_at' => $content->locked_at,
+                ]
+            );
         }
 
         $this->contentService->lock($content, (int) $user->id);
@@ -1031,10 +1002,8 @@ class ContentController extends BaseApiController
             return $this->unauthorized();
         }
 
-        if ($this->contentService->isLockedByOther($content, (int) $user->id)) {
-            if (! $user->can('manage content')) {
-                return $this->forbidden('You can only unlock content you locked');
-            }
+        if ($this->contentService->isLockedByOther($content, (int) $user->id) && ! $user->can('manage content')) {
+            return $this->forbidden('You can only unlock content you locked');
         }
 
         $this->contentService->unlock($content);

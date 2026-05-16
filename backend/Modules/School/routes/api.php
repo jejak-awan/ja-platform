@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\School\Http\Controllers\Api\Academic\AcademicController;
 use Modules\School\Http\Controllers\Api\Academic\GradeController;
@@ -31,20 +33,20 @@ use Modules\School\Http\Controllers\Api\Lms\AdminLmsController;
 use Modules\School\Http\Controllers\Api\Lms\StudentLmsController;
 use Modules\School\Http\Controllers\Api\Lms\LmsFileController;
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->group(function (): void {
     // Console Management (School)
     Route::prefix('manage/school')->middleware([
         'auth:sanctum',
         'throttle:admin',
         'bypass_unit_scope',
-    ])->group(function () {
-        Route::middleware('permission:view schools|manage schools|create schools|edit schools|delete schools')->group(function () {
+    ])->group(function (): void {
+        Route::middleware('permission:view schools|manage schools|create schools|edit schools|delete schools')->group(function (): void {
             Route::get('school/stats', [SchoolController::class, 'stats']);
             Route::get('school/setup-status', [SchoolController::class, 'checkSetupStatus']);
             Route::get('school/default', [SchoolController::class, 'defaultSchool']);
             Route::apiResource('school', SchoolController::class);
 
-            Route::prefix('institution')->group(function () {
+            Route::prefix('institution')->group(function (): void {
                 Route::get('/', [SchoolController::class, 'index']);
                 Route::put('/', [SchoolController::class, 'updateSingleton']);
                 Route::get('stats', [SchoolController::class, 'stats']);
@@ -55,16 +57,16 @@ Route::prefix('v1')->group(function () {
             });
         });
 
-        Route::middleware('permission:view students|manage students|create students|edit students|delete students')->group(function () {
+        Route::middleware('permission:view students|manage students|create students|edit students|delete students')->group(function (): void {
             Route::apiResource('students', StudentController::class);
         });
 
-        Route::middleware('permission:view staff|manage staff|create staff|edit staff|delete staff')->group(function () {
+        Route::middleware('permission:view staff|manage staff|create staff|edit staff|delete staff')->group(function (): void {
             Route::apiResource('staff', StaffController::class);
         });
 
-        Route::middleware('permission:view academic|manage academic|manage curriculum|manage schedule|grade assignments|input journal|manage question bank')->group(function () {
-            Route::prefix('academic')->group(function () {
+        Route::middleware('permission:view academic|manage academic|manage curriculum|manage schedule|grade assignments|input journal|manage question bank')->group(function (): void {
+            Route::prefix('academic')->group(function (): void {
                 Route::get('departments', [AcademicController::class, 'departments']);
                 Route::post('departments', [AcademicController::class, 'storeDepartment']);
                 Route::put('departments/{id}', [AcademicController::class, 'updateDepartment']);
@@ -115,8 +117,8 @@ Route::prefix('v1')->group(function () {
 
 
         // Operations (split middleware: attendance vs student affairs vs visitors)
-        Route::prefix('operations')->group(function () {
-            Route::middleware('permission:view attendance|manage attendance|view students|manage students')->group(function () {
+        Route::prefix('operations')->group(function (): void {
+            Route::middleware('permission:view attendance|manage attendance|view students|manage students')->group(function (): void {
                 Route::get('attendance/overview', [OperationController::class, 'attendanceOverview']);
                 Route::get('attendance', [OperationController::class, 'attendances']);
                 Route::post('attendance', [OperationController::class, 'storeAttendance']);
@@ -124,7 +126,7 @@ Route::prefix('v1')->group(function () {
                 Route::delete('attendance/{id}', [OperationController::class, 'destroyAttendance']);
             });
 
-            Route::middleware('permission:view student affairs|manage student affairs|view students|manage students')->group(function () {
+            Route::middleware('permission:view student affairs|manage student affairs|view students|manage students')->group(function (): void {
                 Route::get('violations', [OperationController::class, 'violations']);
                 Route::get('violations/points/{studentId}', [OperationController::class, 'studentViolationPoints']);
                 Route::post('violations', [OperationController::class, 'storeViolation']);
@@ -146,17 +148,17 @@ Route::prefix('v1')->group(function () {
                 Route::post('graduation/results', [GraduationController::class, 'updateResult']);
                 Route::post('graduation/batch', [GraduationController::class, 'batchGraduate']);
                 Route::post('graduation/import-grades', [GraduationController::class, 'importGrades']);
-                
+
                 Route::get('graduation/settings', [GraduationSettingsController::class, 'index']);
                 Route::get('graduation/settings/{year}', [GraduationSettingsController::class, 'show']);
                 Route::post('graduation/settings', [GraduationSettingsController::class, 'store']);
                 Route::put('graduation/settings/{year}', [GraduationSettingsController::class, 'update']);
                 Route::delete('graduation/settings/{year}', [GraduationSettingsController::class, 'destroy']);
-                
+
                 Route::apiResource('document-templates', \Modules\School\Http\Controllers\Api\Operations\DocumentTemplateController::class);
             });
 
-            Route::middleware('permission:view visitors|manage visitors')->group(function () {
+            Route::middleware('permission:view visitors|manage visitors')->group(function (): void {
                 Route::get('visitors', [OperationController::class, 'visitors']);
                 Route::post('visitors/check-in', [OperationController::class, 'checkInVisitor']);
                 Route::post('visitors/{id}/check-out', [OperationController::class, 'checkOutVisitor']);
@@ -164,8 +166,8 @@ Route::prefix('v1')->group(function () {
         });
 
         // Sarpras
-        Route::middleware('permission:view sarpras|manage sarpras|manage inventory')->group(function () {
-            Route::prefix('sarpras')->group(function () {
+        Route::middleware('permission:view sarpras|manage sarpras|manage inventory')->group(function (): void {
+            Route::prefix('sarpras')->group(function (): void {
                 Route::get('overview', [FacilityController::class, 'overview']);
 
                 Route::get('land', [FacilityController::class, 'landAssets']);
@@ -195,8 +197,8 @@ Route::prefix('v1')->group(function () {
         });
 
         // OSIS Management
-        Route::middleware('permission:view osis|manage osis')->group(function () {
-            Route::prefix('osis')->group(function () {
+        Route::middleware('permission:view osis|manage osis')->group(function (): void {
+            Route::prefix('osis')->group(function (): void {
                 Route::get('programs', [OsisController::class, 'programs']);
                 Route::post('programs', [OsisController::class, 'storeProgram']);
                 Route::put('programs/{id}', [OsisController::class, 'updateProgram']);
@@ -214,8 +216,8 @@ Route::prefix('v1')->group(function () {
         });
 
         // Admission (PPDB)
-        Route::middleware('permission:view admission|manage admission')->group(function () {
-            Route::prefix('admission')->group(function () {
+        Route::middleware('permission:view admission|manage admission')->group(function (): void {
+            Route::prefix('admission')->group(function (): void {
                 Route::get('enrollments', [AdmissionController::class, 'index']);
                 Route::post('enrollments', [AdmissionController::class, 'store']);
                 Route::get('enrollments/{id}', [AdmissionController::class, 'show']);
@@ -226,16 +228,16 @@ Route::prefix('v1')->group(function () {
         });
 
         // Teacher Portal
-        Route::middleware('permission:view lms|manage lms|view academic|manage academic|grade assignments|input journal')->group(function () {
-            Route::prefix('teacher')->group(function () {
+        Route::middleware('permission:view lms|manage lms|view academic|manage academic|grade assignments|input journal')->group(function (): void {
+            Route::prefix('teacher')->group(function (): void {
                 Route::get('dashboard-stats', [TeacherPortalController::class, 'dashboardStats']);
                 Route::get('schedules', [TeacherPortalController::class, 'schedules']);
                 Route::get('recent-journals', [TeacherPortalController::class, 'recentJournals']);
             });
         });
         // LMS Management
-        Route::middleware('permission:manage lms|view lms')->group(function () {
-            Route::prefix('lms')->group(function () {
+        Route::middleware('permission:manage lms|view lms')->group(function (): void {
+            Route::prefix('lms')->group(function (): void {
                 Route::get('courses', [AdminLmsController::class, 'index']);
                 Route::post('courses', [AdminLmsController::class, 'storeCourse']);
                 Route::get('courses/{id}', [AdminLmsController::class, 'showCourse']);
@@ -246,8 +248,8 @@ Route::prefix('v1')->group(function () {
         });
 
         // Advanced HR (Shifts & Leave)
-        Route::middleware('permission:view staff|manage staff|manage payroll')->group(function () {
-            Route::prefix('hr')->group(function () {
+        Route::middleware('permission:view staff|manage staff|manage payroll')->group(function (): void {
+            Route::prefix('hr')->group(function (): void {
                 Route::get('shifts', [StaffAdvancedController::class, 'shifts']);
                 Route::post('shifts', [StaffAdvancedController::class, 'storeShift']);
                 Route::put('shifts/{id}', [StaffAdvancedController::class, 'updateShift']);
@@ -266,8 +268,8 @@ Route::prefix('v1')->group(function () {
         });
 
         // Reports & Export
-        Route::middleware('permission:view students|manage students')->group(function () {
-            Route::prefix('reports')->group(function () {
+        Route::middleware('permission:view students|manage students')->group(function (): void {
+            Route::prefix('reports')->group(function (): void {
                 Route::get('students/{id}/pdf', [ReportController::class, 'studentProfile']);
 
                 Route::get('students/{id}/id-card', [ReportController::class, 'studentIdCard']);
@@ -275,8 +277,8 @@ Route::prefix('v1')->group(function () {
             });
         });
 
-        Route::middleware('permission:view school extensions|manage school extensions')->group(function () {
-            Route::prefix('extensions')->group(function () {
+        Route::middleware('permission:view school extensions|manage school extensions')->group(function (): void {
+            Route::prefix('extensions')->group(function (): void {
                 Route::get('overview', [AdminExtensionController::class, 'overview']);
                 Route::get('logs', [AuditLogController::class, 'index']);
                 Route::get('logs/{id}', [AuditLogController::class, 'show']);
@@ -314,8 +316,8 @@ Route::prefix('v1')->group(function () {
         });
 
         // Logistics: Hostel
-        Route::middleware('permission:view sarpras|manage sarpras|manage logistics|manage inventory')->group(function () {
-            Route::prefix('logistics/hostel')->group(function () {
+        Route::middleware('permission:view sarpras|manage sarpras|manage logistics|manage inventory')->group(function (): void {
+            Route::prefix('logistics/hostel')->group(function (): void {
                 Route::get('blocks', [HostelController::class, 'blocks']);
                 Route::post('blocks', [HostelController::class, 'storeBlock']);
                 Route::get('blocks/{blockId}/rooms', [HostelController::class, 'rooms']);
@@ -325,7 +327,7 @@ Route::prefix('v1')->group(function () {
                 Route::post('release/{id}', [HostelController::class, 'release']);
             });
 
-            Route::prefix('logistics/transport')->group(function () {
+            Route::prefix('logistics/transport')->group(function (): void {
                 Route::get('vehicles', [TransportController::class, 'vehicles']);
                 Route::post('vehicles', [TransportController::class, 'storeVehicle']);
                 Route::get('routes', [TransportController::class, 'routes']);
@@ -334,7 +336,7 @@ Route::prefix('v1')->group(function () {
                 Route::post('register', [TransportController::class, 'registerStudent']);
             });
 
-            Route::prefix('logistics/inventory')->group(function () {
+            Route::prefix('logistics/inventory')->group(function (): void {
                 Route::get('categories', [InventoryController::class, 'categories']);
                 Route::get('items', [InventoryController::class, 'items']);
                 Route::post('items', [InventoryController::class, 'storeItem']);
@@ -342,7 +344,7 @@ Route::prefix('v1')->group(function () {
                 Route::post('adjust', [InventoryController::class, 'adjustStock']);
             });
 
-            Route::prefix('logistics/career')->group(function () {
+            Route::prefix('logistics/career')->group(function (): void {
                 Route::get('vacancies', [CareerController::class, 'vacancies']);
                 Route::post('vacancies', [CareerController::class, 'storeVacancy']);
                 Route::get('applications', [CareerController::class, 'applications']);
@@ -351,8 +353,8 @@ Route::prefix('v1')->group(function () {
         });
 
         // Analytics
-        Route::middleware('permission:view analytics|view schools|manage schools')->group(function () {
-            Route::prefix('analytics')->group(function () {
+        Route::middleware('permission:view analytics|view schools|manage schools')->group(function (): void {
+            Route::prefix('analytics')->group(function (): void {
                 Route::get('summary', [AnalyticsController::class, 'status']);
                 Route::get('summary-full', [AnalyticsController::class, 'executiveSummary']);
 
@@ -366,7 +368,7 @@ Route::prefix('v1')->group(function () {
     Route::get('public/graduation/certificate/{id}', [GraduationController::class, 'downloadCertificatePublic']);
 
     // Student Portal
-    Route::prefix('student')->middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('student')->middleware(['auth:sanctum'])->group(function (): void {
         Route::get('dashboard', [StudentPortalController::class, 'dashboard']);
         Route::get('attendance', [StudentPortalController::class, 'attendance']);
         Route::get('grades', [StudentPortalController::class, 'grades']);
@@ -375,7 +377,7 @@ Route::prefix('v1')->group(function () {
         Route::get('schedule', [StudentPortalController::class, 'schedule']);
 
         // LMS Learning
-        Route::prefix('lms')->group(function () {
+        Route::prefix('lms')->group(function (): void {
             Route::get('catalog', [StudentLmsController::class, 'catalog']);
             Route::get('my-courses', [StudentLmsController::class, 'myCourses']);
             Route::get('courses/{courseId}/learn', [StudentLmsController::class, 'learn']);
@@ -386,8 +388,8 @@ Route::prefix('v1')->group(function () {
     });
 
     // LMS Secure Files
-    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function (): void {
         Route::get('lms/files/private/{path}', [LmsFileController::class, 'stream'])->where('path', '.*');
     });
-    
+
 });

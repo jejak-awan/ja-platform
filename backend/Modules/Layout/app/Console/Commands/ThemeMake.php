@@ -48,10 +48,8 @@ class ThemeMake extends Command
         $themeService->ensureThemeDirectory();
         $themePath = $themeService->getThemeDirectory()."/{$slug}";
 
-        if (is_dir($themePath)) {
-            if (! $this->confirm('Theme directory already exists. Continue anyway?')) {
-                return Command::FAILURE;
-            }
+        if (is_dir($themePath) && ! $this->confirm('Theme directory already exists. Continue anyway?')) {
+            return Command::FAILURE;
         }
 
         $this->info("Creating theme: {$name} ({$slug})");

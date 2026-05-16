@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Analytics\Database\Seeders;
 
 use Illuminate\Database\Seeder;

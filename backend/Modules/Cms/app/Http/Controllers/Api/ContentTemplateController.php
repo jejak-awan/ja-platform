@@ -16,7 +16,7 @@ class ContentTemplateController extends BaseApiController
 
         // Scope logic
         if ($user && ! $user->can('manage templates')) {
-            $query->where(function ($q) use ($user) {
+            $query->where(function ($q) use ($user): void {
                 $q->whereNull('author_id')->orWhere('author_id', $user->id);
             });
         } elseif (! $user) {
@@ -35,7 +35,7 @@ class ContentTemplateController extends BaseApiController
         if ($request->has('search')) {
             $searchRaw = $request->search;
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%");
             });
@@ -149,10 +149,8 @@ class ContentTemplateController extends BaseApiController
         // Permission/Ownership check?
         // Usually viewing templates is fine if they are visible in index?
         // But let's enforce consistency.
-        if ($user && ! $user->can('manage templates')) {
-            if ($contentTemplate->author_id && $contentTemplate->author_id !== $user->id) {
-                return $this->forbidden('You do not have permission to view this template');
-            }
+        if ($user && !$user->can('manage templates') && ($contentTemplate->author_id && $contentTemplate->author_id !== $user->id)) {
+            return $this->forbidden('You do not have permission to view this template');
         }
 
         return $this->success($contentTemplate->load('category'), 'Content template retrieved successfully');
@@ -247,13 +245,11 @@ class ContentTemplateController extends BaseApiController
         }
 
         // Scope?
-        if (! $user->can('manage templates')) {
-            if ($contentTemplate->author_id && $contentTemplate->author_id !== $user->id) {
-                // But wait, can I use a template if it is Global? YES.
-                // So only forbidden if it's someone ELSE'S private template.
-                // Global (null) is OK.
-                return $this->forbidden('You do not have permission to use this template');
-            }
+        if (!$user->can('manage templates') && ($contentTemplate->author_id && $contentTemplate->author_id !== $user->id)) {
+            // But wait, can I use a template if it is Global? YES.
+            // So only forbidden if it's someone ELSE'S private template.
+            // Global (null) is OK.
+            return $this->forbidden('You do not have permission to use this template');
         }
 
         $dataRaw = $request->input('data', []);

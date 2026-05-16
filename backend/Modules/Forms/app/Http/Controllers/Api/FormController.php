@@ -31,17 +31,15 @@ class FormController extends BaseApiController
             $query->orderBy('sort_order');
         }]);
 
-        $fields = $form->fields->map(static function (FormField $field): array {
-            return [
-                'name' => $field->name,
-                'label' => $field->label,
-                'type' => $field->type,
-                'placeholder' => $field->placeholder,
-                'help_text' => $field->help_text,
-                'options' => is_array($field->options) ? $field->options : [],
-                'is_required' => (bool) $field->is_required,
-            ];
-        })->values()->all();
+        $fields = $form->fields->map(static fn(FormField $field): array => [
+            'name' => $field->name,
+            'label' => $field->label,
+            'type' => $field->type,
+            'placeholder' => $field->placeholder,
+            'help_text' => $field->help_text,
+            'options' => is_array($field->options) ? $field->options : [],
+            'is_required' => (bool) $field->is_required,
+        ])->values()->all();
 
         // Top-level JSON (legacy public clients expect unwrapped body, not BaseApiController envelope)
         return response()->json([
@@ -50,8 +48,8 @@ class FormController extends BaseApiController
             'name' => $form->name,
             'description' => $form->description,
             'success_message' => $form->success_message,
-            'redirect_url' => self::safeRedirectForResponse($form->redirect_url),
-            'settings' => self::publicFormSettings($form),
+            'redirect_url' => $this->safeRedirectForResponse($form->redirect_url),
+            'settings' => $this->publicFormSettings($form),
             'fields' => $fields,
         ]);
     }
@@ -586,7 +584,7 @@ class FormController extends BaseApiController
 
         return $this->success([
             'submission_id' => $submission->id,
-            'redirect_url' => self::safeRedirectForResponse($form->redirect_url),
+            'redirect_url' => $this->safeRedirectForResponse($form->redirect_url),
         ], is_string($form->success_message) ? $form->success_message : 'Form submitted successfully', 201);
     }
 
@@ -704,7 +702,7 @@ class FormController extends BaseApiController
         $out = [];
         foreach ($raw as $item) {
             if (is_string($item)) {
-                $parts = array_map('trim', explode('|', $item, 2));
+                $parts = array_map(trim(...), explode('|', $item, 2));
                 $label = $parts[0];
                 $value = $parts[1] ?? $parts[0];
                 if ($label !== '' || $value !== '') {
@@ -731,7 +729,7 @@ class FormController extends BaseApiController
     /**
      * @return array<string, mixed>
      */
-    private static function publicFormSettings(Form $form): array
+    private function publicFormSettings(Form $form): array
     {
         $settings = is_array($form->settings) ? $form->settings : [];
         $emailNotifications = $settings['email_notifications'] ?? false;
@@ -742,7 +740,7 @@ class FormController extends BaseApiController
         ];
     }
 
-    private static function safeRedirectForResponse(mixed $url): string
+    private function safeRedirectForResponse(mixed $url): string
     {
         if (! is_string($url) || trim($url) === '') {
             return '';
@@ -791,9 +789,9 @@ class FormController extends BaseApiController
         ]);
 
         $titleRaw = $request->input('title');
-        $title = is_string($titleRaw) ? $titleRaw : (string) $form->name.' (Copy)';
+        $title = is_string($titleRaw) ? $titleRaw : $form->name.' (Copy)';
         $slugRaw = $request->input('slug');
-        $slug = is_string($slugRaw) ? $slugRaw : (string) $form->slug.'-copy';
+        $slug = is_string($slugRaw) ? $slugRaw : $form->slug.'-copy';
         $copySubmissions = $request->boolean('copy_submissions');
 
         $except = ['slug', 'name', 'submission_count', 'view_count', 'start_count'];
@@ -824,17 +822,15 @@ class FormController extends BaseApiController
 
         if ($copySubmissions) {
             // Bulk insert for performance
-            $submissionsData = $form->submissions()->get()->map(function (\Modules\Forms\Models\FormSubmission $submission) use ($replicated) {
-                return [
-                    'form_id' => $replicated->id,
-                    'user_id' => $submission->user_id,
-                    'data' => json_encode($submission->data),
-                    'ip_address' => $submission->ip_address,
-                    'user_agent' => $submission->user_agent,
-                    'created_at' => now()->toDateTimeString(),
-                    'updated_at' => now()->toDateTimeString(),
-                ];
-            })->toArray();
+            $submissionsData = $form->submissions()->get()->map(fn(\Modules\Forms\Models\FormSubmission $submission) => [
+                'form_id' => $replicated->id,
+                'user_id' => $submission->user_id,
+                'data' => json_encode($submission->data),
+                'ip_address' => $submission->ip_address,
+                'user_agent' => $submission->user_agent,
+                'created_at' => now()->toDateTimeString(),
+                'updated_at' => now()->toDateTimeString(),
+            ])->toArray();
 
             if (! empty($submissionsData)) {
                 \Modules\Forms\Models\FormSubmission::insert($submissionsData);

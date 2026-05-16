@@ -33,7 +33,9 @@ class LmsFileController extends BaseController
 
             // 3. Permission Check
             $user = auth()->user();
-            if (!$user) return $this->sendError('Unauthorized.', [], 401);
+            if (!$user) {
+                return $this->sendError('Unauthorized.', [], 401);
+            }
 
             // If Admin, allow all
             if ($user->isAtLeastRole('admin')) {

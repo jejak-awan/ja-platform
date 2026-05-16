@@ -20,20 +20,9 @@ use Symfony\Component\HttpFoundation\Response;
 class HoneypotMiddleware
 {
     use MaintenanceBypass;
-    protected HoneypotService $honeypot;
 
-    protected SecurityService $security;
-
-    protected SecurityMaintenanceService $maintenance;
-
-    public function __construct(
-        HoneypotService $honeypot,
-        SecurityService $security,
-        SecurityMaintenanceService $maintenance
-    ) {
-        $this->honeypot = $honeypot;
-        $this->security = $security;
-        $this->maintenance = $maintenance;
+    public function __construct(protected HoneypotService $honeypot, protected SecurityService $security, protected SecurityMaintenanceService $maintenance)
+    {
     }
 
     /**

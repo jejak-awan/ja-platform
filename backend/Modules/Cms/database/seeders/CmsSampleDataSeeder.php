@@ -60,17 +60,17 @@ class CmsSampleDataSeeder extends Seeder
                 array_merge($postData, [
                     'author_id' => $admin->id,
                     'status' => 'published',
-                    'published_at' => now()->subDays(rand(1, 30)),
+                    'published_at' => now()->subDays(random_int(1, 30)),
                 ])
             );
 
             // Attach random tags
             if ($tags->isNotEmpty()) {
-                $content->tags()->sync($tags->random(min($tags->count(), rand(2, 4)))->pluck('id'));
+                $content->tags()->sync($tags->random(min($tags->count(), random_int(2, 4)))->pluck('id'));
             }
 
             // Add sample comments
-            for ($i = 0; $i < rand(1, 4); $i++) {
+            for ($i = 0; $i < random_int(1, 4); $i++) {
                 Comment::create([
                     'content_id' => $content->id,
                     'name' => 'Sample Commenter '.($i + 1),
@@ -88,7 +88,7 @@ class CmsSampleDataSeeder extends Seeder
                 [
                     'name' => "Sample User {$i}",
                     'status' => 'subscribed',
-                    'subscribed_at' => now()->subDays(rand(1, 100)),
+                    'subscribed_at' => now()->subDays(random_int(1, 100)),
                 ]
             );
         }

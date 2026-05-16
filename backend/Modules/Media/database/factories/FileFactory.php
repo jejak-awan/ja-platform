@@ -30,7 +30,7 @@ class FileFactory extends Factory
 
     public function image(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'mime_type' => 'image/jpeg',
             'path' => 'media/' . Str::slug($attributes['name']) . '.jpg',
         ]);
@@ -38,7 +38,7 @@ class FileFactory extends Factory
 
     public function document(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'mime_type' => 'application/pdf',
             'path' => 'media/' . Str::slug($attributes['name']) . '.pdf',
         ]);

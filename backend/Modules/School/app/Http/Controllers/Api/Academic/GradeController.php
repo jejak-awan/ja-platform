@@ -11,11 +11,8 @@ use Illuminate\Support\Facades\Context;
 
 class GradeController extends BaseController
 {
-    protected GradeService $service;
-
-    public function __construct(GradeService $service)
+    public function __construct(protected GradeService $service)
     {
-        $this->service = $service;
     }
 
     /**
@@ -112,7 +109,7 @@ class GradeController extends BaseController
         /** @var array<int, array<string, mixed>> $rawGrades */
         $rawGrades = (array) $request->input('grades');
 
-        $gradesData = array_map(function($g) use ($schoolId, $levelId) {
+        $gradesData = array_map(function(array $g) use ($schoolId, $levelId) {
             /** @var array<string, mixed> $g */
             $g['school_id'] = $schoolId;
             $g['workspace_id'] = $levelId;

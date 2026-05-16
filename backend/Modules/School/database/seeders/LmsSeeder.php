@@ -23,7 +23,9 @@ class LmsSeeder extends Seeder
         $unit = $school ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
         $author = User::whereHas('roles', fn($q) => $q->where('name', 'super_admin'))->first() ?? User::first();
 
-        if (!$school || !$unit || !$author) return;
+        if (!$school || !$unit || !$author) {
+            return;
+        }
 
         $workspaceId = $unit->id;
 
@@ -64,7 +66,7 @@ class LmsSeeder extends Seeder
             ]
         );
 
-        $lesson2 = Lesson::updateOrCreate(
+        Lesson::updateOrCreate(
             ['workspace_id' => $workspaceId, 'section_id' => $section->id, 'course_id' => $course->id, 'title' => 'Styling dengan CSS'],
             ['order' => 2, 'slug' => 'styling-dengan-css', 'workspace_id' => $workspaceId]
         );

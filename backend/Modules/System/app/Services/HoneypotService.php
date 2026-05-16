@@ -15,11 +15,8 @@ use Modules\Security\Services\SecurityService;
  */
 class HoneypotService
 {
-    protected SecurityService $security;
-
-    public function __construct(SecurityService $security)
+    public function __construct(protected SecurityService $security)
     {
-        $this->security = $security;
     }
 
     /**

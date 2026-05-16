@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Ai\Tests\Unit;
 
 use Tests\TestCase;
@@ -16,12 +18,12 @@ class OpenAiServiceTest extends TestCase
         $this->service = new OpenAiService('test-api-key');
     }
 
-    public function test_returns_correct_provider_name()
+    public function test_returns_correct_provider_name(): void
     {
         $this->assertEquals('OpenAI', $this->service->getName());
     }
 
-    public function test_throws_exception_if_api_key_is_missing_during_generation()
+    public function test_throws_exception_if_api_key_is_missing_during_generation(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('OpenAI API Key is not configured.');
@@ -30,7 +32,7 @@ class OpenAiServiceTest extends TestCase
         $service->generateText('Test prompt');
     }
 
-    public function test_tests_connection_successfully_with_valid_response()
+    public function test_tests_connection_successfully_with_valid_response(): void
     {
         Http::fake([
             'api.openai.com/v1/models' => Http::response(['data' => []], 200),
@@ -39,7 +41,7 @@ class OpenAiServiceTest extends TestCase
         $this->assertTrue($this->service->testConnection());
     }
 
-    public function test_throws_exception_on_connection_test_failure()
+    public function test_throws_exception_on_connection_test_failure(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid OpenAI API Key.');
@@ -51,7 +53,7 @@ class OpenAiServiceTest extends TestCase
         $this->service->testConnection();
     }
 
-    public function test_generates_text_successfully()
+    public function test_generates_text_successfully(): void
     {
         Http::fake([
             'api.openai.com/v1/chat/completions' => Http::response([
@@ -67,7 +69,7 @@ class OpenAiServiceTest extends TestCase
         $this->assertEquals('Generated content here.', $result);
     }
 
-    public function test_throws_exception_on_api_failure_quota()
+    public function test_throws_exception_on_api_failure_quota(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('OpenAI Rate Limit / Quota Exceeded.');
@@ -81,7 +83,7 @@ class OpenAiServiceTest extends TestCase
         $this->service->generateText('Hello');
     }
 
-    public function test_gets_models_successfully()
+    public function test_gets_models_successfully(): void
     {
         Http::fake([
             'api.openai.com/v1/models' => Http::response([
@@ -99,13 +101,13 @@ class OpenAiServiceTest extends TestCase
         $this->assertEquals('gpt-4', $models[1]['id']);
     }
 
-    public function test_get_models_returns_empty_when_no_api_key()
+    public function test_get_models_returns_empty_when_no_api_key(): void
     {
         $service = new OpenAiService('');
         $this->assertEmpty($service->getModels());
     }
 
-    public function test_get_models_returns_empty_on_failure()
+    public function test_get_models_returns_empty_on_failure(): void
     {
         Http::fake([
             'api.openai.com/v1/models' => Http::response([], 500),

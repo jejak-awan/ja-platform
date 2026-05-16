@@ -22,15 +22,11 @@ use Illuminate\Support\Facades\Storage;
 class LmsService
 {
     // --- Storage Helpers ---
-
     /**
      * Get the private storage path for a specific course.
      * Stored in storage/app/private/lms/school_{id}/course_{id}/{type}
-     * 
-     * @param int $schoolId
-     * @param int $courseId
+     *
      * @param string $type materials, media, tasks
-     * @return string
      */
     public function getCourseStoragePath(int $schoolId, int $courseId, string $type = 'materials'): string
     {
@@ -40,9 +36,8 @@ class LmsService
     /**
      * Get the public storage path for LMS assets.
      * Stored in storage/app/public/lms/{type}
-     * 
+     *
      * @param string $type covers, thumbnails, icons
-     * @return string
      */
     public function getPublicLmsPath(string $type = 'covers'): string
     {
@@ -51,10 +46,8 @@ class LmsService
 
     /**
      * Upload a file to course storage.
-     * 
+     *
      * @param \Illuminate\Http\UploadedFile $file
-     * @param int $schoolId
-     * @param int $courseId
      * @param string $type materials, media, tasks
      * @param string $visibility 'private' or 'public'
      * @return string The stored path
@@ -76,9 +69,7 @@ class LmsService
     }
 
     // --- Course Management ---
-
     /**
-     * @param int $schoolId
      * @param array<string, mixed> $filters
      * @return Collection<int, Course>
      */
@@ -94,14 +85,13 @@ class LmsService
             ->withCount('lessons')
             ->when($status, fn($q) => $q->where('status', (string)$status))
             ->when($level, fn($q) => $q->where('level', (string)$level))
-            ->when($search, fn($q) => $q->where('title', 'like', '%' . (string)$search . '%'))
+            ->when($search, fn($q) => $q->where('title', 'like', '%' . $search . '%'))
             ->latest()
             ->get();
     }
 
     /**
      * @param array<string, mixed> $data
-     * @return Course
      */
     public function createCourse(array $data): Course
     {
@@ -123,9 +113,7 @@ class LmsService
     }
 
     /**
-     * @param Course $course
      * @param array<string, mixed> $data
-     * @return Course
      */
     public function updateCourse(Course $course, array $data): Course
     {
@@ -134,10 +122,8 @@ class LmsService
     }
 
     // --- Lesson Management ---
-
     /**
      * @param array<string, mixed> $data
-     * @return Lesson
      */
     public function createLesson(array $data): Lesson
     {
@@ -147,9 +133,7 @@ class LmsService
     }
 
     /**
-     * @param Lesson $lesson
      * @param array<string, mixed> $data
-     * @return Lesson
      */
     public function updateLesson(Lesson $lesson, array $data): Lesson
     {
@@ -158,14 +142,12 @@ class LmsService
     }
 
     // --- Topic Management (Polymorphic) ---
-
     /**
      * Create a topic with specific content.
-     * 
+     *
      * @param array<string, mixed> $topicData Basic topic info (lesson_id, title, order, etc.)
      * @param string $contentType 'richtext', 'video', 'pdf', 'quiz'
      * @param array<string, mixed> $contentData Specific data for the content type
-     * @return Topic
      */
     public function createTopic(array $topicData, string $contentType, array $contentData): Topic
     {
@@ -177,7 +159,7 @@ class LmsService
             default => throw new \InvalidArgumentException("Unsupported content type: $contentType"),
         };
 
-        $topicData['topicable_type'] = get_class($content);
+        $topicData['topicable_type'] = $content::class;
         $topicData['topicable_id'] = $content->id;
 
         /** @var Topic $topic */
@@ -186,12 +168,9 @@ class LmsService
     }
 
     // --- Quiz Management ---
-
     /**
-     * @param int $quizId
      * @param array<string, mixed> $questionData
      * @param array<int, array<string, mixed>> $options
-     * @return QuizQuestion
      */
     public function addQuestionToQuiz(int $quizId, array $questionData, array $options = []): QuizQuestion
     {
@@ -201,7 +180,7 @@ class LmsService
 
         foreach ($options as $option) {
             $val = isset($option['value']) && is_scalar($option['value']) ? (string)$option['value'] : '';
-            $isCorrect = isset($option['is_correct']) ? (bool)$option['is_correct'] : false;
+            $isCorrect = isset($option['is_correct']) && (bool)$option['is_correct'];
 
             QuizOption::create([
                 'question_id' => $question->id,
@@ -225,9 +204,7 @@ class LmsService
     }
 
     /**
-     * @param QuizAttempt $attempt
      * @param array<int|string, mixed> $answers
-     * @return QuizAttempt
      */
     public function submitQuizAttempt(QuizAttempt $attempt, array $answers): QuizAttempt
     {
@@ -289,10 +266,7 @@ class LmsService
     }
 
     /**
-     * @param int $topicId
-     * @param int $studentId
      * @param array<string, mixed> $metadata
-     * @return TopicProgress
      */
     public function markTopicAsCompleted(int $topicId, int $studentId, array $metadata = []): TopicProgress
     {
@@ -310,14 +284,13 @@ class LmsService
 
     /**
      * Get the entire course program structure (Lessons -> Topics -> Content).
-     * 
-     * @param int $courseId
+     *
      * @return Collection<int, Lesson>
      */
     public function getCourseProgram(int $courseId): Collection
     {
         /** @var Collection<int, Lesson> */
-        return Lesson::with(['topics.topicable' => function ($morph) {
+        return Lesson::with(['topics.topicable' => function ($morph): void {
             $morph->morphWith([
                 \Modules\School\Models\Lms\TopicContent\Quiz::class => ['questions.options'],
             ]);

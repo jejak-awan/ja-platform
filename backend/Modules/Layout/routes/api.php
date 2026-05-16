@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\Layout\Http\Controllers\Api\MenuController;
 use Modules\Layout\Http\Controllers\Api\WidgetController;
 use Modules\Layout\Http\Controllers\Api\UrlRewriteController;
 use Modules\Layout\Http\Controllers\Api\ThemeController;
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->group(function (): void {
     // Public Layout API (Read only)
-    Route::prefix('public/layout')->group(function () {
+    Route::prefix('public/layout')->group(function (): void {
         Route::get('menus/location/{location}', [MenuController::class, 'getByLocation']);
         Route::get('widgets/location/{location}', [WidgetController::class, 'getByLocation']);
         Route::get('themes/active', [ThemeController::class, 'getActive']);
     });
 
     // Console Management (Layout)
-    Route::prefix('manage/layout')->middleware(['auth:sanctum', 'bypass_unit_scope'])->group(function () {
+    Route::prefix('manage/layout')->middleware(['auth:sanctum', 'bypass_unit_scope'])->group(function (): void {
         // Menus
         Route::get('menus/location/{location}', [MenuController::class, 'getByLocation']);
         Route::post('menus/{menu}/items', [MenuController::class, 'addItem']);

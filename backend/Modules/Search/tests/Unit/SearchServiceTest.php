@@ -22,7 +22,7 @@ class SearchServiceTest extends TestCase
         $this->service = new SearchService;
     }
 
-    public function test_search_strict_and_loose()
+    public function test_search_strict_and_loose(): void
     {
         // Create indexes directly
         SearchIndex::create([
@@ -53,7 +53,7 @@ class SearchServiceTest extends TestCase
         $this->assertTrue($resultLoose['is_loose']);
     }
 
-    public function test_search_with_filters()
+    public function test_search_with_filters(): void
     {
         SearchIndex::create([
             'searchable_type' => 'Post',
@@ -78,7 +78,7 @@ class SearchServiceTest extends TestCase
         $this->assertEquals('post', $result['results'][0]['type']);
     }
 
-    public function test_get_suggestions()
+    public function test_get_suggestions(): void
     {
         SearchIndex::create([
             'searchable_type' => 'Post',
@@ -93,7 +93,7 @@ class SearchServiceTest extends TestCase
         $this->assertEquals('Laravel Guide', $suggestions[0]['text']);
     }
 
-    public function test_reindex_all()
+    public function test_reindex_all(): void
     {
         // One content (creates 1 category)
         Content::factory()->create(['title' => 'Post One', 'status' => 'published']);
@@ -110,13 +110,13 @@ class SearchServiceTest extends TestCase
         $this->assertEquals(1, $counts['cms_tags']);
     }
 
-    public function test_search_empty_query()
+    public function test_search_empty_query(): void
     {
         $result = $this->service->search('');
         $this->assertCount(0, $result['results']);
     }
 
-    public function test_search_by_type()
+    public function test_search_by_type(): void
     {
         SearchIndex::create([
             'searchable_type' => 'Post',

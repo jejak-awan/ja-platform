@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Courses
-        Schema::create('sch_lms_courses', function (Blueprint $table) {
+        Schema::create('sch_lms_courses', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->index();
@@ -38,7 +38,7 @@ return new class extends Migration
         });
 
         // 2. Sections & Lessons
-        Schema::create('sch_lms_sections', function (Blueprint $table) {
+        Schema::create('sch_lms_sections', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('course_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->index();
@@ -48,7 +48,7 @@ return new class extends Migration
         });
 
         // 5. Lessons (Materi / Pertemuan)
-        Schema::create('sch_lms_lessons', function (Blueprint $table) {
+        Schema::create('sch_lms_lessons', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('course_id')->onDelete('cascade'); // Added back for easier query
             $table->uuid('section_id')->onDelete('cascade');
@@ -61,7 +61,7 @@ return new class extends Migration
         });
 
         // 3. Topics (Content)
-        Schema::create('sch_lms_topics', function (Blueprint $table) {
+        Schema::create('sch_lms_topics', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('lesson_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->index();
@@ -76,13 +76,13 @@ return new class extends Migration
         });
 
         // 4. Specific Content Tables
-        Schema::create('sch_lms_topic_richtexts', function (Blueprint $table) {
+        Schema::create('sch_lms_topic_richtexts', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->longText('value');
             $table->timestamps();
         });
 
-        Schema::create('sch_lms_topic_videos', function (Blueprint $table) {
+        Schema::create('sch_lms_topic_videos', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('value');
             $table->string('poster_path')->nullable();
@@ -92,14 +92,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('sch_lms_topic_pdfs', function (Blueprint $table) {
+        Schema::create('sch_lms_topic_pdfs', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('value');
             $table->timestamps();
         });
 
         // 5. Enrollments & Progress
-        Schema::create('sch_lms_enrollments', function (Blueprint $table) {
+        Schema::create('sch_lms_enrollments', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('course_id')->onDelete('cascade');
             $table->uuid('student_id'); // Student ID
@@ -108,7 +108,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('sch_lms_topic_progress', function (Blueprint $table) {
+        Schema::create('sch_lms_topic_progress', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('topic_id')->onDelete('cascade');
             $table->uuid('student_id');
@@ -119,7 +119,7 @@ return new class extends Migration
         });
 
         // 5. Quizzes
-        Schema::create('sch_lms_quizzes', function (Blueprint $table) {
+        Schema::create('sch_lms_quizzes', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('topic_id')->onDelete('cascade');
             $table->string('title');

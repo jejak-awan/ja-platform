@@ -10,10 +10,6 @@ class HandleDomainRedirects
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(Request $request, Closure $next): mixed
     {
@@ -34,10 +30,6 @@ class HandleDomainRedirects
 
     /**
      * Build the target URL for redirection.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Modules\Infra\Models\InfraRedirect  $redirect
-     * @return string
      */
     protected function buildTargetUrl(Request $request, InfraRedirect $redirect): string
     {

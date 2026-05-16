@@ -39,7 +39,7 @@ class CheckMaintenanceMode
                     Setting::set('maintenance_mode', false, 'boolean', 'general');
                     return $next($request);
                 }
-            } catch (\Exception $e) { }
+            } catch (\Exception) { }
         }
 
         // 3. Allow access to specific bypass routes
@@ -68,14 +68,12 @@ class CheckMaintenanceMode
         try {
             foreach (['sanctum', 'web'] as $guard) {
                 $user = \Illuminate\Support\Facades\Auth::guard($guard)->user();
-                if ($user instanceof \Modules\System\Models\User) {
-                    // Bypass maintenance if role rank is 90 or higher (System Admins)
-                    if ($user->getRoleRank() >= 90) {
-                        return true;
-                    }
+                // Bypass maintenance if role rank is 90 or higher (System Admins)
+                if ($user instanceof \Modules\System\Models\User && $user->getRoleRank() >= 90) {
+                    return true;
                 }
             }
-        } catch (\Exception $e) { }
+        } catch (\Exception) { }
         
         return false;
     }

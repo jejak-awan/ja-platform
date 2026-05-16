@@ -47,22 +47,22 @@ class StudentFactory extends Factory
 
     public function active(): static
     {
-        return $this->state(fn() => ['status' => 'active']);
+        return $this->state(fn(): array => ['status' => 'active']);
     }
 
     public function graduated(): static
     {
-        return $this->state(fn() => ['status' => 'graduated']);
+        return $this->state(fn(): array => ['status' => 'graduated']);
     }
 
     public function forSchool(School $school): static
     {
-        return $this->state(fn() => ['school_id' => $school->id]);
+        return $this->state(fn(): array => ['school_id' => $school->id]);
     }
 
     public function forLevel(SchoolUnit $level): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn(): array => [
             'workspace_id' => $level->id,
             'school_id' => $level->school_id,
         ]);

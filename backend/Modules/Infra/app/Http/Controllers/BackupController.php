@@ -8,11 +8,8 @@ use Modules\Infra\Services\BackupService;
 
 class BackupController extends \Modules\System\Http\Controllers\BaseApiController
 {
-    protected BackupService $backupService;
-
-    public function __construct(BackupService $backupService)
+    public function __construct(protected BackupService $backupService)
     {
-        $this->backupService = $backupService;
     }
 
     /**
@@ -126,7 +123,7 @@ class BackupController extends \Modules\System\Http\Controllers\BaseApiControlle
             return $this->notFound('Backup file');
         }
 
-        return response()->download($path, (string) $backup->name.'.sql');
+        return response()->download($path, $backup->name.'.sql');
     }
 
     /**

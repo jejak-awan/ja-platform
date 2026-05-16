@@ -72,7 +72,7 @@ class TwoFactorAuth extends Model
 
         try {
             return Crypt::decryptString($this->secret);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return null;
         }
     }
@@ -116,9 +116,7 @@ class TwoFactorAuth extends Model
      */
     public function setBackupCodes(array $codes): void
     {
-        $hashedCodes = array_map(function ($code) {
-            return password_hash($code, PASSWORD_BCRYPT);
-        }, $codes);
+        $hashedCodes = array_map(fn(string $code) => password_hash($code, PASSWORD_BCRYPT), $codes);
 
         $this->backup_codes = $hashedCodes;
         $this->recovery_codes_generated_at = now();

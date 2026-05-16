@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\School\Policies;
 
 use Modules\System\Models\User;
@@ -10,7 +12,7 @@ use Modules\System\Models\User;
 class OperationsAttendancePolicy
 {
     /** @return list<string> */
-    private static function viewPermissions(): array
+    private function viewPermissions(): array
     {
         return [
             'view attendance',
@@ -21,7 +23,7 @@ class OperationsAttendancePolicy
     }
 
     /** @return list<string> */
-    private static function mutatePermissions(): array
+    private function mutatePermissions(): array
     {
         return [
             'manage attendance',
@@ -31,26 +33,26 @@ class OperationsAttendancePolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyPermission(self::viewPermissions());
+        return $user->hasAnyPermission($this->viewPermissions());
     }
 
     public function view(User $user, mixed $model): bool
     {
-        return $user->hasAnyPermission(self::viewPermissions());
+        return $user->hasAnyPermission($this->viewPermissions());
     }
 
     public function create(User $user): bool
     {
-        return $user->hasAnyPermission(self::mutatePermissions());
+        return $user->hasAnyPermission($this->mutatePermissions());
     }
 
     public function update(User $user, mixed $model): bool
     {
-        return $user->hasAnyPermission(self::mutatePermissions());
+        return $user->hasAnyPermission($this->mutatePermissions());
     }
 
     public function delete(User $user, mixed $model): bool
     {
-        return $user->hasAnyPermission(self::mutatePermissions());
+        return $user->hasAnyPermission($this->mutatePermissions());
     }
 }

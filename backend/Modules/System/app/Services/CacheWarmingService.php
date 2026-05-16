@@ -106,9 +106,7 @@ class CacheWarmingService
 
             foreach ($recentMedia as $media) {
                 $key = self::PREFIX_MEDIA.$media->id;
-                Cache::remember($key, self::TTL_MEDIUM, function () use ($media) {
-                    return $media->load(['folder', 'usages']);
-                });
+                Cache::remember($key, self::TTL_MEDIUM, fn() => $media->load(['folder', 'usages']));
                 $count++;
             }
 

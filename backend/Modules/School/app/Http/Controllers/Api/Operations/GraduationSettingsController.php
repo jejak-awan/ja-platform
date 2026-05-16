@@ -9,9 +9,6 @@ use Modules\School\Models\Operations\GraduationSetting;
 
 class GraduationSettingsController extends Controller
 {
-    /**
-     * @return JsonResponse
-     */
     public function index(): JsonResponse
     {
         $settings = GraduationSetting::orderBy('graduation_year', 'desc')->get();
@@ -23,7 +20,6 @@ class GraduationSettingsController extends Controller
 
     /**
      * @param int|string $year
-     * @return JsonResponse
      */
     public function show($year): JsonResponse
     {
@@ -34,10 +30,6 @@ class GraduationSettingsController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function store(Request $request): JsonResponse
     {
         $request->validate([
@@ -58,9 +50,7 @@ class GraduationSettingsController extends Controller
     }
 
     /**
-     * @param Request $request
      * @param int|string $year
-     * @return JsonResponse
      */
     public function update(Request $request, $year): JsonResponse
     {
@@ -84,7 +74,6 @@ class GraduationSettingsController extends Controller
 
     /**
      * @param int|string $year
-     * @return JsonResponse
      */
     public function destroy($year): JsonResponse
     {

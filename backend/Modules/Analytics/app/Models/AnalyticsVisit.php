@@ -37,9 +37,6 @@ class AnalyticsVisit extends Model
     /** @use HasFactory<\Modules\Analytics\Database\Factories\AnalyticsVisitFactory> */
     use HasFactory;
 
-    /**
-     * @return \Modules\Analytics\Database\Factories\AnalyticsVisitFactory
-     */
     protected static function newFactory(): \Modules\Analytics\Database\Factories\AnalyticsVisitFactory
     {
         return \Modules\Analytics\Database\Factories\AnalyticsVisitFactory::new();

@@ -63,11 +63,8 @@ class AttackCorrelationService
                 continue;
             }
 
-            /** @var int $eventCount */
             $eventCount = (int) $row->event_count;
-            /** @var string $firstSeen */
             $firstSeen = (string) $row->first_seen;
-            /** @var string $lastSeen */
             $lastSeen = (string) $row->last_seen;
 
             if (! isset($ipScores[$ip])) {
@@ -87,9 +84,7 @@ class AttackCorrelationService
         }
 
         // Sort by score descending
-        uasort($ipScores, function (array $a, array $b): int {
-            return $b['score'] <=> $a['score'];
-        });
+        uasort($ipScores, fn(array $a, array $b): int => $b['score'] <=> $a['score']);
 
         // 2. Identify high-risk IPs (score >= 10)
         $highRiskIps = [];
@@ -139,7 +134,7 @@ class AttackCorrelationService
             ->groupBy('ip_address')
             ->having(DB::raw('COUNT(*)'), '>=', 3)
             ->pluck('ip_address')
-            ->filter(fn ($ip) => is_string($ip))
+            ->filter(fn ($ip): bool => is_string($ip))
             ->values()
             ->all();
 
@@ -158,14 +153,14 @@ class AttackCorrelationService
             ->whereNotNull('ip_address')
             ->pluck('ip_address')
             ->unique()
-            ->filter(fn ($ip) => is_string($ip));
+            ->filter(fn ($ip): bool => is_string($ip));
 
         $exploitIps = SecurityLog::where('created_at', '>=', $since)
             ->whereIn('event_type', ['waf_sql_injection', 'waf_xss', 'waf_command_injection', 'login_failed'])
             ->whereNotNull('ip_address')
             ->pluck('ip_address')
             ->unique()
-            ->filter(fn ($ip) => is_string($ip));
+            ->filter(fn ($ip): bool => is_string($ip));
 
         $multiStageAttackers = $multiStageIps->intersect($exploitIps)->values()->all();
 
@@ -186,7 +181,7 @@ class AttackCorrelationService
             ->groupBy('ip_address')
             ->having(DB::raw('COUNT(DISTINCT event_type)'), '>=', 3)
             ->pluck('ip_address')
-            ->filter(fn ($ip) => is_string($ip))
+            ->filter(fn ($ip): bool => is_string($ip))
             ->values()
             ->all();
 

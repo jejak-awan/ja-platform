@@ -190,9 +190,7 @@ class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiCon
 
             // Sort by severity (high first)
             $severityOrder = ['high' => 0, 'medium' => 1, 'low' => 2];
-            usort($alerts, function ($a, $b) use ($severityOrder) {
-                return $severityOrder[$a['severity']] <=> ($severityOrder[$b['severity']]);
-            });
+            usort($alerts, fn(array $a, array $b) => $severityOrder[$a['severity']] <=> ($severityOrder[$b['severity']]));
 
             return $this->success([
                 'alerts' => $alerts,

@@ -28,7 +28,7 @@ class LogController extends \Modules\System\Http\Controllers\BaseApiController
         }
 
         // Sort by modified date desc
-        usort($files, function ($a, $b) {
+        usort($files, function (array $a, array $b): int {
             /** @var array{name: string, size: int|false, modified: int|false} $a */
             /** @var array{name: string, size: int|false, modified: int|false} $b */
             return $b['modified'] <=> $a['modified'];
@@ -119,7 +119,7 @@ class LogController extends \Modules\System\Http\Controllers\BaseApiController
                 if ($file->getExtension() === 'log') {
                     try {
                         File::put($file->getPathname(), '');
-                    } catch (\Exception $e) {
+                    } catch (\Exception) {
                         // Ignore permission errors or read-only files
                         // We continue clearing other files
                         continue;
@@ -176,7 +176,7 @@ class LogController extends \Modules\System\Http\Controllers\BaseApiController
             try {
                 File::delete($file->getPathname());
                 $deletedCount++;
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 // Ignore deletion errors to avoid failing the main clear action.
                 continue;
             }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\System\Http\Controllers\Console;
 
 use Illuminate\Http\Request;
@@ -10,10 +12,8 @@ class FrontendLogController extends \Modules\System\Http\Controllers\BaseApiCont
 {
     /**
      * Handle incoming frontend log entries.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'message' => 'required|string',
@@ -26,8 +26,8 @@ class FrontendLogController extends \Modules\System\Http\Controllers\BaseApiCont
         ]);
 
         $stack = $validated['stack'] ?? null;
-        if ($stack && strlen($stack) > 3000) {
-            $stack = substr($stack, 0, 3000)."\n... (truncated by backend)";
+        if ($stack && strlen((string) $stack) > 3000) {
+            $stack = substr((string) $stack, 0, 3000)."\n... (truncated by backend)";
         }
 
         $authenticatedUserId = $request->user()?->id;

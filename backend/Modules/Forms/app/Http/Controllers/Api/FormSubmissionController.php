@@ -33,12 +33,12 @@ class FormSubmissionController extends BaseApiController
 
         // Multi-tenancy scoping
         if (! $user->can('manage forms')) {
-            $query->whereHas('form', function ($q) use ($user) {
+            $query->whereHas('form', function ($q) use ($user): void {
                 $q->where('author_id', $user->id);
             });
         }
 
-        if ($form) {
+        if ($form instanceof \Modules\Forms\Models\Form) {
             $query->where('form_id', $form->id);
         } elseif ($request->has('form_id')) {
             $formIdRaw = $request->input('form_id');
@@ -65,7 +65,7 @@ class FormSubmissionController extends BaseApiController
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('data', 'like', "%{$search}%")
                     ->orWhere('ip_address', 'like', "%{$search}%");
             });
@@ -194,7 +194,7 @@ class FormSubmissionController extends BaseApiController
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('data', 'like', "%{$search}%")
                     ->orWhere('ip_address', 'like', "%{$search}%");
             });
@@ -256,10 +256,8 @@ class FormSubmissionController extends BaseApiController
 
         if ($format === 'pdf') {
             $submissions = $exportQuery->get();
-            if (empty($fieldKeys)) {
-                $fieldKeys = collect($submissions)->flatMap(function ($s) {
-                    return array_keys($s->data ?? []);
-                })->unique()->values()->toArray();
+            if ($fieldKeys === []) {
+                $fieldKeys = collect($submissions)->flatMap(fn($s) => array_keys($s->data ?? []))->unique()->values()->toArray();
             }
 
             $html = view('pdf.submissions-list', [
@@ -329,12 +327,12 @@ class FormSubmissionController extends BaseApiController
         $query = FormSubmission::query();
 
         if (! $user->can('manage forms')) {
-            $query->whereHas('form', function ($q) use ($user) {
+            $query->whereHas('form', function ($q) use ($user): void {
                 $q->where('author_id', $user->id);
             });
         }
 
-        if ($form) {
+        if ($form instanceof \Modules\Forms\Models\Form) {
             $query->where('form_id', $form->id);
         }
 
@@ -400,16 +398,12 @@ class FormSubmissionController extends BaseApiController
 
         $form->loadMissing('fields');
         $stats['chartable_fields'] = $form->fields
-            ->filter(static function ($f): bool {
-                return in_array($f->type, ['select', 'radio', 'checkbox', 'multiselect', 'boolean'], true);
-            })
-            ->map(static function ($f): array {
-                return [
-                    'id' => $f->id,
-                    'name' => $f->name,
-                    'label' => $f->label,
-                ];
-            })
+            ->filter(static fn($f): bool => in_array($f->type, ['select', 'radio', 'checkbox', 'multiselect', 'boolean'], true))
+            ->map(static fn($f): array => [
+                'id' => $f->id,
+                'name' => $f->name,
+                'label' => $f->label,
+            ])
             ->values()
             ->all();
 
@@ -581,7 +575,7 @@ class FormSubmissionController extends BaseApiController
         $out = [];
         $limit = 0;
         foreach ($buckets as $label => $count) {
-            $out[] = ['label' => (string) $label, 'count' => (int) $count];
+            $out[] = ['label' => (string) $label, 'count' => $count];
             $limit++;
             if ($limit >= 20) {
                 break;

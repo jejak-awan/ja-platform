@@ -58,7 +58,7 @@ class SecurityMaintenanceService
         // Filter to valid modules only
         $modules = array_values(array_intersect($modules, self::MODULES));
 
-        if (empty($modules)) {
+        if ($modules === []) {
             return ['success' => false, 'message' => 'No valid modules specified.'];
         }
 
@@ -169,14 +169,14 @@ class SecurityMaintenanceService
         }
 
         $rawModules = Cache::get(self::CACHE_PREFIX.'modules', []);
-        $modules = is_array($rawModules) ? (array) $rawModules : [];
-        $modules = array_map(fn ($m) => is_scalar($m) ? (string) $m : '', $modules);
+        $modules = is_array($rawModules) ? $rawModules : [];
+        $modules = array_map(fn ($m): string => is_scalar($m) ? (string) $m : '', $modules);
 
         $rawStartedAt = Cache::get(self::CACHE_PREFIX.'started_at');
-        $startedAt = is_string($rawStartedAt) ? (string) $rawStartedAt : null;
+        $startedAt = is_string($rawStartedAt) ? $rawStartedAt : null;
 
         $rawExpiresAt = Cache::get(self::CACHE_PREFIX.'expires_at');
-        $expiresAt = is_string($rawExpiresAt) ? (string) $rawExpiresAt : null;
+        $expiresAt = is_string($rawExpiresAt) ? $rawExpiresAt : null;
 
         return [
             'active' => true,
@@ -219,7 +219,7 @@ class SecurityMaintenanceService
                 'Security maintenance mode ended. Baselines re-synced.',
                 ['action' => 'post_maintenance_resync']
             );
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Silently fail if DB is not available
         }
     }

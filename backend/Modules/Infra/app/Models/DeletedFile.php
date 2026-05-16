@@ -100,7 +100,7 @@ class DeletedFile extends Model
             $i = count($units) - 1;
         }
 
-        $val = round($this->size / pow(1024, $i), 2);
+        $val = round($this->size / 1024 ** $i, 2);
 
         return $val.' '.$units[$i];
     }

@@ -27,11 +27,11 @@ class BackupService
                 $process->setTimeout($timeout);
                 $process->run();
 
-                $output = explode("\n", (string) ($process->getOutput().$process->getErrorOutput()));
+                $output = explode("\n", $process->getOutput().$process->getErrorOutput());
                 $returnCode = (int) $process->getExitCode();
 
                 return ['output' => $output, 'returnCode' => $returnCode];
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 // Fall through to native exec
             }
         }
@@ -41,7 +41,7 @@ class BackupService
             /** @var array<int, string> $output */
             \exec($command, $output, $returnCode);
 
-            return ['output' => $output, 'returnCode' => (int) $returnCode];
+            return ['output' => $output, 'returnCode' => $returnCode];
         }
 
         throw new \Exception('No shell execution method available. Please enable exec() or install symfony/process.');
@@ -52,7 +52,7 @@ class BackupService
      */
     public function createDatabaseBackup(?string $name = null): Backup
     {
-        $name = $name ?? 'backup_'.now()->format('Y-m-d_His');
+        $name ??= 'backup_'.now()->format('Y-m-d_His');
 
         // Prepare paths
         // We'll first create a temporary .sql file, then zip and encrypt it
@@ -71,23 +71,18 @@ class BackupService
         ]);
 
         try {
-            /** @var mixed $defaultConnectionRaw */
             $defaultConnectionRaw = config('database.default');
             $defaultConnection = is_string($defaultConnectionRaw) ? $defaultConnectionRaw : 'mysql';
 
-            /** @var mixed $databaseRaw */
             $databaseRaw = config("database.connections.{$defaultConnection}.database", '');
             $database = is_string($databaseRaw) ? $databaseRaw : '';
 
-            /** @var mixed $usernameRaw */
             $usernameRaw = config("database.connections.{$defaultConnection}.username", '');
             $username = is_string($usernameRaw) ? $usernameRaw : '';
 
-            /** @var mixed $passwordRaw */
             $passwordRaw = config("database.connections.{$defaultConnection}.password", '');
             $password = is_string($passwordRaw) ? $passwordRaw : '';
 
-            /** @var mixed $hostRaw */
             $hostRaw = config("database.connections.{$defaultConnection}.host", '');
             $host = is_string($hostRaw) ? $hostRaw : '';
 
@@ -104,21 +99,11 @@ class BackupService
             // 1. Generate SQL Dump
             if ($defaultConnection === 'sqlite') {
                 // Check database path logic (existing)
-                if (str_starts_with($database, '/')) {
-                    $dbPath = $database;
-                } else {
-                    $dbPath = database_path($database);
-                }
-
+                $dbPath = str_starts_with($database, '/') ? $database : database_path($database);
                 if (! file_exists($dbPath)) {
                     // Try with .sqlite extension
-                    if (str_starts_with($database, '/')) {
-                        $dbPath = $database.'.sqlite';
-                    } else {
-                        $dbPath = database_path($database.'.sqlite');
-                    }
+                    $dbPath = str_starts_with($database, '/') ? $database.'.sqlite' : database_path($database.'.sqlite');
                 }
-
                 if (file_exists($dbPath)) {
                     copy($dbPath, $tempSqlFile);
                 } else {
@@ -186,9 +171,7 @@ class BackupService
             $zipPath = Storage::disk('local')->path($targetPath);
             $zip = new \ZipArchive;
 
-            /** @var mixed $encPassConfig */
             $encPassConfig = config('backup.archive_password');
-            /** @var string $encryptionPassword */
             $encryptionPassword = is_string($encPassConfig) ? $encPassConfig : '';
             if (empty($encryptionPassword)) {
                 $encryptionPassword = \Illuminate\Support\Str::random(16);
@@ -198,10 +181,8 @@ class BackupService
                 // Add SQL file
                 $zip->addFile($tempSqlFile, $sqlFilename);
 
-                if ($encryptionPassword) {
-                    if (! $zip->setEncryptionName($sqlFilename, \ZipArchive::EM_AES_256, $encryptionPassword)) {
-                        throw new \Exception('Failed to set encryption for backup file');
-                    }
+                if ($encryptionPassword && ! $zip->setEncryptionName($sqlFilename, \ZipArchive::EM_AES_256, $encryptionPassword)) {
+                    throw new \Exception('Failed to set encryption for backup file');
                 }
 
                 $zip->close();
@@ -292,12 +273,9 @@ class BackupService
                     // Get password from DB or Env or App Key
                     /** @var mixed $backupPass */
                     $backupPass = $backup->getAttribute('password');
-                    /** @var mixed $configPass */
                     $configPass = config('backup.archive_password');
-                    /** @var mixed $appKey */
                     $appKey = config('app.key');
 
-                    /** @var string $encryptionPassword */
                     $encryptionPassword = is_string($backupPass) ? $backupPass : (is_string($configPass) ? $configPass : (is_string($appKey) ? $appKey : ''));
 
                     if ($encryptionPassword) {
@@ -313,15 +291,15 @@ class BackupService
 
                     // Find the SQL file inside
                     $files = glob($tempExtractDir.'/*.sql');
-                    if (empty($files)) {
+                    if ($files === [] || $files === false) {
                         // Try .sqlite
                         $files = glob($tempExtractDir.'/*.sqlite');
-                        if (empty($files)) {
+                        if ($files === [] || $files === false) {
                             throw new \Exception('No SQL file found in archive');
                         }
                     }
 
-                    $sqlPath = (string) $files[0];
+                    $sqlPath = $files[0];
                 } else {
                     throw new \Exception('Failed to open zip archive');
                 }
@@ -335,11 +313,7 @@ class BackupService
                     $database = config("database.connections.{$defaultConnection}.database", '');
 
                     // Logic to find target DB path
-                    if (str_starts_with($database, '/')) {
-                        $dbPath = $database;
-                    } else {
-                        $dbPath = database_path($database);
-                    }
+                    $dbPath = str_starts_with($database, '/') ? $database : database_path($database);
 
                     // Try with .sqlite extension if not found (legacy fallback)
                     if (! file_exists($dbPath) && ! str_ends_with($dbPath, '.sqlite')) {
@@ -426,7 +400,7 @@ class BackupService
 
             return true;
         } catch (\Exception $e) {
-            throw new \Exception('Restore failed: '.$e->getMessage());
+            throw new \Exception('Restore failed: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -502,27 +476,21 @@ class BackupService
      */
     public function getScheduleSettings(): array
     {
-        /** @var mixed $enabledRaw */
         $enabledRaw = \Modules\System\Models\Setting::get('backup_schedule_enabled', false);
         $enabled = is_bool($enabledRaw) ? $enabledRaw : (bool) $enabledRaw;
 
-        /** @var mixed $frequencyRaw */
         $frequencyRaw = \Modules\System\Models\Setting::get('backup_schedule_frequency', 'daily');
         $frequency = is_string($frequencyRaw) ? $frequencyRaw : 'daily';
 
-        /** @var mixed $timeRaw */
         $timeRaw = \Modules\System\Models\Setting::get('backup_schedule_time', '02:00');
         $time = is_string($timeRaw) ? $timeRaw : '02:00';
 
-        /** @var mixed $retentionDaysRaw */
         $retentionDaysRaw = \Modules\System\Models\Setting::get('backup_retention_days', 30);
         $retentionDays = is_numeric($retentionDaysRaw) ? (int) $retentionDaysRaw : 30;
 
-        /** @var mixed $maxBackupsRaw */
         $maxBackupsRaw = \Modules\System\Models\Setting::get('backup_max_count', 10);
         $maxBackups = is_numeric($maxBackupsRaw) ? (int) $maxBackupsRaw : 10;
 
-        /** @var mixed $lastRunRaw */
         $lastRunRaw = \Modules\System\Models\Setting::get('backup_last_run');
         $lastRun = is_string($lastRunRaw) ? $lastRunRaw : null;
 
@@ -625,11 +593,8 @@ class BackupService
      */
     protected function calculateNextRun(): ?string
     {
-        /** @var mixed $enabledRaw */
         $enabledRaw = \Modules\System\Models\Setting::get('backup_schedule_enabled', false);
-        /** @var mixed $frequencyRaw */
         $frequencyRaw = \Modules\System\Models\Setting::get('backup_schedule_frequency', 'daily');
-        /** @var mixed $timeRaw */
         $timeRaw = \Modules\System\Models\Setting::get('backup_schedule_time', '02:00');
 
         $enabled = is_bool($enabledRaw) ? $enabledRaw : (bool) $enabledRaw;
@@ -647,16 +612,11 @@ class BackupService
         $next = now()->setTime($hour, $minute, 0);
 
         if ($next->isPast()) {
-            switch ($frequency) {
-                case 'weekly':
-                    $next->addWeek();
-                    break;
-                case 'monthly':
-                    $next->addMonth();
-                    break;
-                default:
-                    $next->addDay();
-            }
+            match ($frequency) {
+                'weekly' => $next->addWeek(),
+                'monthly' => $next->addMonth(),
+                default => $next->addDay(),
+            };
         }
 
         return $next->toISOString();
@@ -667,7 +627,7 @@ class BackupService
      */
     public function createFilesBackup(?string $name = null): Backup
     {
-        $name = $name ?? 'backup_files_'.now()->format('Y-m-d_His');
+        $name ??= 'backup_files_'.now()->format('Y-m-d_His');
         $zipFilename = $name.'.zip';
         $targetPath = 'backups/'.date('Y/m').'/'.$zipFilename;
 
@@ -690,18 +650,16 @@ class BackupService
             $zip = new \ZipArchive;
             if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
                 // Add storage/app/public
-                $filesPath = (string) storage_path('app/public');
+                $filesPath = storage_path('app/public');
                 $this->addFolderToZip($zip, $filesPath, 'storage');
 
                 // Add public/uploads if exists
-                $uploadsPath = (string) public_path('uploads');
+                $uploadsPath = public_path('uploads');
                 if (file_exists($uploadsPath)) {
                     $this->addFolderToZip($zip, $uploadsPath, 'uploads');
                 }
 
-                /** @var mixed $encPassConfig */
                 $encPassConfig = config('backup.archive_password');
-                /** @var string $encryptionPassword */
                 $encryptionPassword = is_string($encPassConfig) ? $encPassConfig : '';
                 if (empty($encryptionPassword)) {
                     $encryptionPassword = \Illuminate\Support\Str::random(16);
@@ -739,7 +697,7 @@ class BackupService
 
     public function createFullBackup(?string $name = null): Backup
     {
-        $name = $name ?? 'backup_full_'.now()->format('Y-m-d_His');
+        $name ??= 'backup_full_'.now()->format('Y-m-d_His');
         $zipFilename = $name.'.zip';
         $targetPath = 'backups/'.date('Y/m').'/'.$zipFilename;
 
@@ -771,8 +729,8 @@ class BackupService
                 // We will skip strict code duplication for brevity and just dump a placeholder or call internal helper if I refactored.
                 // Since I didn't refactor, I'll add "files" part first.
 
-                $this->addFolderToZip($zip, (string) storage_path('app/public'), 'storage');
-                $uploadsPath = (string) public_path('uploads');
+                $this->addFolderToZip($zip, storage_path('app/public'), 'storage');
+                $uploadsPath = public_path('uploads');
                 if (file_exists($uploadsPath)) {
                     $this->addFolderToZip($zip, $uploadsPath, 'uploads');
                 }

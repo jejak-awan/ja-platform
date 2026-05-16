@@ -42,16 +42,16 @@ class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiCon
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%");
             });
         }
 
         $paginator = $query->paginate($perPage);
-        $paginator->getCollection()->transform(function (User $user) use ($module) {
+        $paginator->getCollection()->transform(function (User $user) use ($module): \Modules\System\Models\User {
             /** @var \Illuminate\Support\Collection<int, Role> $roles */
             $roles = $user->roles;
-            $scoped = $roles->filter(fn (Role $r) => $this->roleMatchesModule($r, $module))->values();
+            $scoped = $roles->filter(fn (Role $r): bool => $this->roleMatchesModule($r, $module))->values();
             $user->setRelation('roles', $scoped);
             $user->setRelation('permissions', $user->getAllPermissions());
 
@@ -72,13 +72,13 @@ class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiCon
             'roles.*' => 'string',
         ]);
 
-        $requestedNames = array_values(array_filter($validated['roles'], fn ($v) => is_string($v) && $v !== ''));
+        $requestedNames = array_values(array_filter($validated['roles'], fn ($v): bool => is_string($v) && $v !== ''));
 
         $allowed = $this->queryScopedRoles($module)->whereIn('name', $requestedNames)->get()->pluck('name')->all();
 
         // Keep non-module roles intact; replace only module-scoped roles.
-        $existing = $user->getRoleNames()->filter(fn ($name) => is_string($name))->values()->all();
-        $kept = array_values(array_filter($existing, function (string $name) use ($module) {
+        $existing = $user->getRoleNames()->filter(fn ($name): bool => is_string($name))->values()->all();
+        $kept = array_values(array_filter($existing, function (string $name) use ($module): bool {
             $role = Role::where('name', $name)->first();
             if (! $role) {
                 return false;
@@ -87,9 +87,9 @@ class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiCon
         }));
 
         /** @var array<int, string> $kept */
-        $kept = array_values(array_filter($kept, fn ($v) => $v !== ''));
+        $kept = array_values(array_filter($kept, fn ($v): bool => $v !== ''));
         /** @var array<int, string> $allowed */
-        $allowed = array_values(array_filter($allowed, fn ($v) => is_string($v) && $v !== ''));
+        $allowed = array_values(array_filter($allowed, fn ($v): bool => is_string($v) && $v !== ''));
 
         $user->syncRoles(array_values(array_unique(array_merge($kept, $allowed))));
         $user->load('roles');
@@ -108,7 +108,7 @@ class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiCon
         }
 
         // School: legacy role names (no prefix) but must exclude core + cms.
-        return Role::query()->where(function ($q) {
+        return Role::query()->where(function ($q): void {
             $q->where('name', 'not like', 'cms:%')
                 ->whereNotIn('name', [
                     'super',

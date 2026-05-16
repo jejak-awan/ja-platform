@@ -87,9 +87,7 @@ class MenuLocationStandardizationSeeder extends Seeder
             }
 
             /** @var Menu $primary */
-            $primary = $menus->first(function (Menu $m) {
-                return $m->deleted_at === null;
-            }) ?? $menus->first();
+            $primary = $menus->first(fn(Menu $m) => $m->deleted_at === null) ?? $menus->first();
 
             if ($primary && $primary->trashed()) {
                 $primary->restore();

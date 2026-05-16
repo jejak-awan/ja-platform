@@ -12,18 +12,17 @@ use Modules\School\Models\Lms\Lesson;
 
 class StudentLmsController extends BaseController
 {
-    protected LmsService $service;
-
-    public function __construct(LmsService $service)
+    public function __construct(protected LmsService $service)
     {
-        $this->service = $service;
     }
 
     public function myCourses(): \Illuminate\Http\JsonResponse
     {
         /** @var Student|null $student */
         $student = Student::where('user_id', auth()->id())->first();
-        if (!$student) return $this->sendError('Student not found.', [], 404);
+        if (!$student) {
+            return $this->sendError('Student not found.', [], 404);
+        }
 
         $courses = Course::whereHas('enrollments', fn($q) => $q->where('student_id', $student->id))
             ->withCount('lessons')
@@ -49,7 +48,9 @@ class StudentLmsController extends BaseController
     {
         /** @var Student|null $student */
         $student = Student::where('user_id', auth()->id())->first();
-        if (!$student) return $this->sendError('Student not found.', [], 404);
+        if (!$student) {
+            return $this->sendError('Student not found.', [], 404);
+        }
 
         // Check enrollment
         $isEnrolled = Course::where('id', $courseId)
@@ -63,10 +64,10 @@ class StudentLmsController extends BaseController
         $program = $this->service->getCourseProgram($courseId);
         
         // Hide correct answers from student
-        $program->each(function(Lesson $lesson) {
-            $lesson->topics->each(function(Topic $topic) {
+        $program->each(function(Lesson $lesson): void {
+            $lesson->topics->each(function(Topic $topic): void {
                 if ($topic->topicable instanceof \Modules\School\Models\Lms\TopicContent\Quiz) {
-                    $topic->topicable->questions->each(function($question) {
+                    $topic->topicable->questions->each(function($question): void {
                         /** @var \Modules\School\Models\Lms\QuizQuestion $question */
                         /** @var \Illuminate\Database\Eloquent\Collection<int, \Modules\School\Models\Lms\QuizOption> $options */
                         $options = $question->options;
@@ -91,7 +92,9 @@ class StudentLmsController extends BaseController
     {
         /** @var Student|null $student */
         $student = Student::where('user_id', auth()->id())->first();
-        if (!$student) return $this->sendError('Student not found.', [], 404);
+        if (!$student) {
+            return $this->sendError('Student not found.', [], 404);
+        }
 
         $metadata = $request->input('metadata');
         $metadataArray = is_array($metadata) ? $metadata : [];
@@ -104,7 +107,9 @@ class StudentLmsController extends BaseController
     {
         /** @var Student|null $student */
         $student = Student::where('user_id', auth()->id())->first();
-        if (!$student) return $this->sendError('Student not found.', [], 404);
+        if (!$student) {
+            return $this->sendError('Student not found.', [], 404);
+        }
 
         $attempt = $this->service->startQuizAttempt($quizId, (int)$student->id);
         return $this->sendResponse($attempt, 'Quiz attempt started.');

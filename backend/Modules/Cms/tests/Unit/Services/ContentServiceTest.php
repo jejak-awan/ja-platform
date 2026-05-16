@@ -25,7 +25,7 @@ class ContentServiceTest extends TestCase
         $this->service = new ContentService;
     }
 
-    public function test_get_published_cms_contents()
+    public function test_get_published_cms_contents(): void
     {
         Content::factory()->count(3)->state(['status' => 'published'])->create();
         Content::factory()->state(['status' => 'draft'])->create();
@@ -36,7 +36,7 @@ class ContentServiceTest extends TestCase
         $this->assertCount(3, $result['data']);
     }
 
-    public function test_get_related_content()
+    public function test_get_related_content(): void
     {
         $tag = Tag::factory()->create();
         $content1 = Content::factory()->state(['status' => 'published'])->create();
@@ -51,7 +51,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals($content2->id, $related[0]['id']);
     }
 
-    public function test_create_content()
+    public function test_create_content(): void
     {
         $user = User::factory()->create();
         $category = Category::factory()->create();
@@ -71,7 +71,7 @@ class ContentServiceTest extends TestCase
         $this->assertCount(1, $content->revisions);
     }
 
-    public function test_update_content()
+    public function test_update_content(): void
     {
         $user = User::factory()->create();
         $content = Content::factory()->create();
@@ -83,7 +83,7 @@ class ContentServiceTest extends TestCase
         $this->assertCount(1, $updated->revisions);
     }
 
-    public function test_toggle_featured()
+    public function test_toggle_featured(): void
     {
         $content = Content::factory()->create(['is_featured' => false]);
 
@@ -92,7 +92,7 @@ class ContentServiceTest extends TestCase
         $this->assertTrue($content->fresh()->is_featured);
     }
 
-    public function test_bulk_action_publish()
+    public function test_bulk_action_publish(): void
     {
         $c1 = Content::factory()->create(['status' => 'draft']);
         $c2 = Content::factory()->create(['status' => 'draft']);
@@ -103,7 +103,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals('published', $c1->fresh()->status);
     }
 
-    public function test_duplicate_content()
+    public function test_duplicate_content(): void
     {
         $user = User::factory()->create();
         $content = Content::factory()->create(['title' => 'Original']);
@@ -114,7 +114,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals('draft', $duplicate->status);
     }
 
-    public function test_lock_and_unlock()
+    public function test_lock_and_unlock(): void
     {
         $user = User::factory()->create();
         $content = Content::factory()->create();
@@ -128,7 +128,7 @@ class ContentServiceTest extends TestCase
         $this->assertNull($content->fresh()->locked_by);
     }
 
-    public function test_restore_and_force_delete()
+    public function test_restore_and_force_delete(): void
     {
         $content = Content::factory()->create();
         $id = $content->id;
@@ -143,7 +143,7 @@ class ContentServiceTest extends TestCase
         $this->assertDatabaseMissing('cms_contents', ['id' => $id]);
     }
 
-    public function test_apply_filters_and_sorting()
+    public function test_apply_filters_and_sorting(): void
     {
         $category = Category::factory()->create(['slug' => 'news']);
         Content::factory()->create(['category_id' => $category->id, 'status' => 'published', 'type' => 'post', 'is_featured' => true, 'title' => 'A Post']);
@@ -165,16 +165,16 @@ class ContentServiceTest extends TestCase
         $this->assertEquals('A Post', $resultAsc['data'][0]->title);
     }
 
-    public function test_create_with_tags_and_custom_fields()
+    public function test_create_with_tags_and_custom_fields(): void
     {
         $user = User::factory()->create();
         $tag = Tag::factory()->create();
 
         // Manual creation since no factory
-        $fieldGroup = \Modules\Library\Models\FieldGroup::create([
+        \Modules\Library\Models\FieldGroup::create([
             'name' => 'SEO',
         ]);
-        $field = \Modules\Library\Models\CustomField::create([
+        \Modules\Library\Models\CustomField::create([
             'name' => 'SEO Title',
             'key' => 'seo_title',
             'label' => 'SEO Title',
@@ -199,7 +199,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals('Best SEO Title', $content->getCustomFieldValue('seo_title'));
     }
 
-    public function test_bulk_actions_all()
+    public function test_bulk_actions_all(): void
     {
         $c1 = Content::factory()->create(['status' => 'draft']);
         $c2 = Content::factory()->create(['status' => 'pending']);
@@ -226,7 +226,7 @@ class ContentServiceTest extends TestCase
         $this->assertDatabaseMissing('cms_contents', ['id' => $c1->id]);
     }
 
-    public function test_generate_unique_slug_collision()
+    public function test_generate_unique_slug_collision(): void
     {
         Content::factory()->create(['slug' => 'test']);
         Content::factory()->create(['slug' => 'test-1']);
@@ -235,7 +235,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals('test-2', $slug);
     }
 
-    public function test_get_published_cms_contents_with_pagination()
+    public function test_get_published_cms_contents_with_pagination(): void
     {
         Content::factory()->count(15)->state(['status' => 'published'])->create();
 
@@ -246,7 +246,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals(5, $result['data']->perPage());
     }
 
-    public function test_get_published_cms_contents_with_limit()
+    public function test_get_published_cms_contents_with_limit(): void
     {
         Content::factory()->count(10)->state(['status' => 'published'])->create();
 
@@ -257,13 +257,13 @@ class ContentServiceTest extends TestCase
         $this->assertCount(3, $result['data']);
     }
 
-    public function test_get_related_content_with_category_fallback()
+    public function test_get_related_content_with_category_fallback(): void
     {
         $category = Category::factory()->create();
         $content = Content::factory()->create(['category_id' => $category->id, 'status' => 'published']);
 
         // Content with same category but no shared tags
-        $related = Content::factory()->count(2)->create([
+        Content::factory()->count(2)->create([
             'category_id' => $category->id,
             'status' => 'published',
         ]);
@@ -272,7 +272,7 @@ class ContentServiceTest extends TestCase
         $this->assertCount(2, $results);
     }
 
-    public function test_empty_trash()
+    public function test_empty_trash(): void
     {
         Content::factory()->count(3)->create(['deleted_at' => now()]);
         $count = $this->service->emptyTrash();
@@ -280,7 +280,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals(0, Content::onlyTrashed()->count());
     }
 
-    public function test_bulk_action_change_category()
+    public function test_bulk_action_change_category(): void
     {
         $category = Category::factory()->create();
         $content = Content::factory()->create();
@@ -289,7 +289,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals($category->id, $content->fresh()->category_id);
     }
 
-    public function test_update_with_comment_status_bool()
+    public function test_update_with_comment_status_bool(): void
     {
         $content = Content::factory()->create(['comment_status' => 'closed']);
         $user = User::factory()->create();
@@ -301,7 +301,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals('closed', $content->fresh()->comment_status);
     }
 
-    public function test_create_with_string_published_at()
+    public function test_create_with_string_published_at(): void
     {
         $user = User::factory()->create();
         $data = [
@@ -315,7 +315,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals('2025-01-01 10:00:00', $content->published_at->toDateTimeString());
     }
 
-    public function test_track_media_usage_untrack()
+    public function test_track_media_usage_untrack(): void
     {
         $content = Content::factory()->create(['featured_image' => 123]);
         $user = User::factory()->create();
@@ -323,13 +323,13 @@ class ContentServiceTest extends TestCase
         // Update with null image should untrack
         $this->service->update($content, ['featured_image' => null], $user->id);
         $this->assertDatabaseMissing('srv_media_usages', [
-            'model_type' => get_class($content),
+            'model_type' => $content::class,
             'model_id' => $content->id,
             'field_name' => 'featured_image',
         ]);
     }
 
-    public function test_bulk_action_reject_and_draft()
+    public function test_bulk_action_reject_and_draft(): void
     {
         $content = Content::factory()->create(['status' => 'published']);
         $this->service->bulkAction('reject', [$content->id]);
@@ -340,7 +340,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals('draft', $content->fresh()->status);
     }
 
-    public function test_get_published_cms_contents_complex_filters()
+    public function test_get_published_cms_contents_complex_filters(): void
     {
         $category = Category::factory()->create(['slug' => 'cat']);
         $tag = Tag::factory()->create(['slug' => 'tag']);
@@ -364,7 +364,7 @@ class ContentServiceTest extends TestCase
         $this->assertCount(1, $result['data']);
     }
 
-    public function test_create_revision_on_update()
+    public function test_create_revision_on_update(): void
     {
         $user = User::factory()->create();
         $content = Content::factory()->create(['title' => 'Old']);

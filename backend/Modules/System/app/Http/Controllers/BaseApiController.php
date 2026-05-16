@@ -78,7 +78,7 @@ class BaseApiController extends Controller
             'trace_id' => $traceId,
         ];
 
-        if (! empty($errors)) {
+        if ($errors !== []) {
             $response['errors'] = $errors;
         }
 
@@ -189,7 +189,7 @@ class BaseApiController extends Controller
         }
 
         Log::error($logContext.' API error: '.$e->getMessage(), [
-            'exception' => get_class($e),
+            'exception' => $e::class,
             'trace' => $e->getTraceAsString(),
             'file' => $e->getFile(),
             'line' => $e->getLine(),

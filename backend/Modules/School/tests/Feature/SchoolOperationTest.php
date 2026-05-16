@@ -50,7 +50,7 @@ class SchoolOperationTest extends TestCase
     }
 
     #[Test]
-    public function it_can_record_attendance()
+    public function it_can_record_attendance(): void
     {
         $response = $this->actingAsAdmin()->postJson('/api/v1/manage/school/operations/attendance', [
             'school_id' => $this->school->id,
@@ -72,7 +72,7 @@ class SchoolOperationTest extends TestCase
     }
 
     #[Test]
-    public function it_can_record_violation_and_calculate_points()
+    public function it_can_record_violation_and_calculate_points(): void
     {
         // Record first violation
         $this->actingAsAdmin()->postJson('/api/v1/manage/school/operations/violations', [

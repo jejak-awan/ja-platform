@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mbr_members', function (Blueprint $table) {
+        Schema::create('mbr_members', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->unique();
             $table->integer('points')->default(0);

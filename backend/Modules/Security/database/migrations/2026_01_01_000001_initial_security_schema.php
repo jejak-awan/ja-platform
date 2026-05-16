@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Security Logs
-        Schema::create('sec_logs', function (Blueprint $table) {
+        Schema::create('sec_logs', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->nullable()->index();
             $table->string('event_type')->index();
@@ -23,7 +23,7 @@ return new class extends Migration
         });
 
         // 2. IP Lists (Whitelist/Blocklist)
-        Schema::create('sec_ip_lists', function (Blueprint $table) {
+        Schema::create('sec_ip_lists', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('ip_address', 45)->index();
             $table->enum('type', ['whitelist', 'blocklist'])->default('blocklist');
@@ -36,7 +36,7 @@ return new class extends Migration
         });
 
         // 3. CSP Reports
-        Schema::create('sec_csp_reports', function (Blueprint $table) {
+        Schema::create('sec_csp_reports', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('document_uri');
             $table->string('referrer')->nullable();

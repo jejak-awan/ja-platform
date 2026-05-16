@@ -12,11 +12,8 @@ use Modules\School\Services\Osis\OsisService;
 
 class OsisController extends BaseController
 {
-    protected OsisService $service;
-
-    public function __construct(OsisService $service)
+    public function __construct(protected OsisService $service)
     {
-        $this->service = $service;
     }
 
     // --- Programs ---

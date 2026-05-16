@@ -43,7 +43,7 @@ class Usage extends Model
     {
         return self::updateOrCreate(
             [
-                'model_type' => get_class($model),
+                'model_type' => $model::class,
                 'model_id' => $model->getKey(),
                 'field_name' => $fieldName,
             ],
@@ -58,7 +58,7 @@ class Usage extends Model
      */
     public static function untrack(int|string|null $fileId, Model $model, ?string $fieldName = null): void
     {
-        $query = self::where('model_type', get_class($model))
+        $query = self::where('model_type', $model::class)
             ->where('model_id', $model->getKey());
 
         if ($fileId) {

@@ -28,15 +28,13 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(5000)->by($request->user()?->id ?: $request->ip());
-        });
+        RateLimiter::for('api', fn(Request $request) => Limit::perMinute(5000)->by($request->user()?->id ?: $request->ip()));
 
         /**
          * Login: shared NAT (schools/offices) would hit a plain per-IP cap quickly.
          * Keep a high per-IP ceiling and a tighter per-email+IP bucket for credential stuffing.
          */
-        RateLimiter::for('login', function (Request $request) {
+        RateLimiter::for('login', function (Request $request): array {
             $limits = [
                 // Shared public IPv4 at schools — keep generous; brute-force still handled in AuthController / SecurityService
                 Limit::perMinute(400)->by('login-ip|'.$request->ip()),
@@ -77,13 +75,9 @@ class AppServiceProvider extends ServiceProvider
         });
 
         /** 2FA code step: same shared-IP issue as login when many staff authenticate. */
-        RateLimiter::for('two-factor-verify', function (Request $request) {
-            return Limit::perMinute(60)->by('2fa-verify|'.$request->ip());
-        });
+        RateLimiter::for('two-factor-verify', fn(Request $request) => Limit::perMinute(60)->by('2fa-verify|'.$request->ip()));
 
-        RateLimiter::for('admin', function (Request $request) {
-            return Limit::perMinute(2000)->by($request->user()?->id ?: $request->ip());
-        });
+        RateLimiter::for('admin', fn(Request $request) => Limit::perMinute(2000)->by($request->user()?->id ?: $request->ip()));
 
         RateLimiter::for('probe-paths', function (Request $request) {
             $fingerprint = $request->ip().'|'.substr((string) $request->userAgent(), 0, 120);
@@ -95,7 +89,7 @@ class AppServiceProvider extends ServiceProvider
          * Public live-search: frontend usually calls suggestions + full search on each debounced keystroke.
          * Use a per-IP+UA bucket so shared school/public IPs are less likely to starve each other.
          */
-        RateLimiter::for('search-public', function (Request $request) {
+        RateLimiter::for('search-public', function (Request $request): array {
             $fingerprint = 'search-public|'.$request->ip().'|'.substr(sha1((string) $request->userAgent()), 0, 16);
 
             return [
@@ -106,7 +100,7 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
-        RateLimiter::for('search-suggestions', function (Request $request) {
+        RateLimiter::for('search-suggestions', function (Request $request): array {
             $fingerprint = 'search-suggest|'.$request->ip().'|'.substr(sha1((string) $request->userAgent()), 0, 16);
 
             return [
@@ -119,7 +113,7 @@ class AppServiceProvider extends ServiceProvider
          * Public analytics visit tracking from SPA route changes.
          * Count by IP+UA to avoid false 429 in shared school networks.
          */
-        RateLimiter::for('analytics-visit', function (Request $request) {
+        RateLimiter::for('analytics-visit', function (Request $request): array {
             $fingerprint = 'analytics-visit|'.$request->ip().'|'.substr(sha1((string) $request->userAgent()), 0, 16);
 
             return [
@@ -131,7 +125,7 @@ class AppServiceProvider extends ServiceProvider
         /**
          * Public form definition fetch (e.g. contact page mount/re-mount).
          */
-        RateLimiter::for('forms-public', function (Request $request) {
+        RateLimiter::for('forms-public', function (Request $request): array {
             $fingerprint = 'forms-public|'.$request->ip().'|'.substr(sha1((string) $request->userAgent()), 0, 16);
 
             return [
@@ -143,7 +137,7 @@ class AppServiceProvider extends ServiceProvider
         /**
          * Public form engagement tracking (view/start events from frontend forms).
          */
-        RateLimiter::for('forms-track', function (Request $request) {
+        RateLimiter::for('forms-track', function (Request $request): array {
             // Reduce false 429s for legitimate users behind shared IP/proxy.
             $clientIp = (string) ($request->header('CF-Connecting-IP') ?: $request->ip());
             $shieldCookie = $request->cookie('shield_trust');
@@ -156,7 +150,7 @@ class AppServiceProvider extends ServiceProvider
                 ? (string) $formRouteParam->slug
                 : '';
             $fingerprint = 'forms-track|'.$clientIp.'|'.substr(
-                sha1((string) $request->userAgent().'|'.$sessionHint.'|'.$formSlug),
+                sha1($request->userAgent().'|'.$sessionHint.'|'.$formSlug),
                 0,
                 24
             );
@@ -171,7 +165,7 @@ class AppServiceProvider extends ServiceProvider
          * Admin journal clear actions (system/access/activity) can be retried rapidly from UI.
          * Use a generous per-user/per-IP limiter to prevent false 429 while preserving abuse protection.
          */
-        RateLimiter::for('admin-journal-clear', function (Request $request) {
+        RateLimiter::for('admin-journal-clear', function (Request $request): array {
             $authId = $request->user()?->getAuthIdentifier();
             $uid = is_scalar($authId) ? (string) $authId : null;
             $key = $uid !== null ? 'u:'.$uid : 'ip:'.$request->ip();
@@ -183,7 +177,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Backward compatibility for any route still referencing old key.
-        RateLimiter::for('system-journal-clear', function (Request $request) {
+        RateLimiter::for('system-journal-clear', function (Request $request): array {
             $authId = $request->user()?->getAuthIdentifier();
             $uid = is_scalar($authId) ? (string) $authId : null;
             $key = $uid !== null ? 'u:'.$uid : 'ip:'.$request->ip();
@@ -194,8 +188,6 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
-        Gate::define('viewApiDocs', function (User $user) {
-            return $user->isAtLeastRole('admin');
-        });
+        Gate::define('viewApiDocs', fn(User $user) => $user->isAtLeastRole('admin'));
     }
 }

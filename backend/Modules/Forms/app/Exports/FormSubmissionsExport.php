@@ -18,23 +18,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class FormSubmissionsExport implements FromQuery, ShouldAutoSize, WithHeadings, WithMapping, WithStyles
 {
     /**
-     * @var Builder<FormSubmission>
-     */
-    protected $query;
-
-    /**
-     * @var array<int, string>
-     */
-    protected $fieldKeys;
-
-    /**
      * @param  Builder<FormSubmission>  $query
      * @param  array<int, string>  $fieldKeys
      */
-    public function __construct(Builder $query, array $fieldKeys)
+    public function __construct(protected \Illuminate\Database\Eloquent\Builder $query, protected array $fieldKeys)
     {
-        $this->query = $query;
-        $this->fieldKeys = $fieldKeys;
     }
 
     /**

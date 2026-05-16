@@ -20,11 +20,8 @@ use Modules\School\Http\Requests\Operations\StoreTracerStudyRequest;
 
 class AdminExtensionController extends BaseController
 {
-    protected OperationsService $service;
-
-    public function __construct(OperationsService $service)
+    public function __construct(protected OperationsService $service)
     {
-        $this->service = $service;
     }
 
     public function overview(): \Illuminate\Http\JsonResponse

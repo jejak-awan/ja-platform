@@ -22,13 +22,11 @@ class ThemeCacheServiceTest extends TestCase
         $this->service = new ThemeCacheService;
     }
 
-    public function test_get_active_theme()
+    public function test_get_active_theme(): void
     {
         $theme = Theme::factory()->create(['is_active' => true, 'type' => 'frontend']);
 
-        $result = $this->service->getActiveTheme('frontend', function () use ($theme) {
-            return $theme;
-        });
+        $result = $this->service->getActiveTheme('frontend', fn() => $theme);
 
         $this->assertInstanceOf(Theme::class, $result);
         $this->assertEquals($theme->id, $result->id);
@@ -38,51 +36,51 @@ class ThemeCacheServiceTest extends TestCase
         $this->assertEquals($theme->id, $cached->id);
     }
 
-    public function test_remember_methods_no_tags()
+    public function test_remember_methods_no_tags(): void
     {
         // array driver: no tags, no filesystem paths (file cache needs storage/framework/cache)
         Config::set('cache.default', 'array');
         $theme = Theme::factory()->create();
 
         // rememberSettings
-        $result = $this->service->rememberSettings($theme, fn () => ['s' => 1]);
+        $result = $this->service->rememberSettings($theme, fn (): array => ['s' => 1]);
         $this->assertEquals(['s' => 1], $result);
         $this->assertEquals(['s' => 1], Cache::get('theme.settings.'.$theme->id));
 
         // rememberAssets
         $assets = ['css' => ['a.css'], 'js' => []];
-        $result = $this->service->rememberAssets($theme, fn () => $assets);
+        $result = $this->service->rememberAssets($theme, fn (): array => $assets);
         $this->assertEquals($assets, $result);
 
         // rememberManifest
         $manifest = ['name' => 'Test'];
-        $result = $this->service->rememberManifest($theme, fn () => $manifest);
+        $result = $this->service->rememberManifest($theme, fn (): array => $manifest);
         $this->assertEquals($manifest, $result);
 
         // rememberTemplates
         $templates = ['index'];
-        $result = $this->service->rememberTemplates($theme, fn () => $templates);
+        $result = $this->service->rememberTemplates($theme, fn (): array => $templates);
         $this->assertEquals($templates, $result);
 
         // rememberPartials
-        $result = $this->service->rememberPartials($theme, fn () => 'partials');
+        $result = $this->service->rememberPartials($theme, fn (): string => 'partials');
         $this->assertEquals('partials', $result);
 
         // rememberLayouts
-        $result = $this->service->rememberLayouts($theme, fn () => 'layouts');
+        $result = $this->service->rememberLayouts($theme, fn (): string => 'layouts');
         $this->assertEquals('layouts', $result);
     }
 
-    public function test_remember_widget_and_shortcode()
+    public function test_remember_widget_and_shortcode(): void
     {
-        $result = $this->service->rememberWidgetArea('header', fn () => 'widget content');
+        $result = $this->service->rememberWidgetArea('header', fn (): string => 'widget content');
         $this->assertEquals('widget content', $result);
 
-        $result = $this->service->rememberShortcode('test', fn () => 'processed');
+        $result = $this->service->rememberShortcode('test', fn (): string => 'processed');
         $this->assertEquals('processed', $result);
     }
 
-    public function test_clear_theme_cache()
+    public function test_clear_theme_cache(): void
     {
         $theme = Theme::factory()->create();
         Cache::put('theme.settings.'.$theme->id, 'data');
@@ -94,7 +92,7 @@ class ThemeCacheServiceTest extends TestCase
         $this->assertFalse(Cache::has('theme.active.frontend'));
     }
 
-    public function test_clear_all_and_widgets()
+    public function test_clear_all_and_widgets(): void
     {
         Config::set('cache.default', 'array');
         $theme = Theme::factory()->create();
@@ -117,7 +115,7 @@ class ThemeCacheServiceTest extends TestCase
         // Log message expected when tags not supported
     }
 
-    public function test_remember_methods_with_tags()
+    public function test_remember_methods_with_tags(): void
     {
         Config::set('cache.default', 'redis');
         $theme = Theme::factory()->create();
@@ -128,26 +126,26 @@ class ThemeCacheServiceTest extends TestCase
         // If the environment doesn't support Redis, this might fail if not mocked.
         // Let's use a partial mock if needed, but first let's try to just hit the lines.
 
-        $result = $this->service->rememberSettings($theme, fn () => 'tagged_settings');
+        $result = $this->service->rememberSettings($theme, fn (): string => 'tagged_settings');
         $this->assertEquals('tagged_settings', $result);
 
-        $result = $this->service->rememberAssets($theme, fn () => ['css' => [], 'js' => []]);
+        $result = $this->service->rememberAssets($theme, fn (): array => ['css' => [], 'js' => []]);
         $this->assertIsArray($result);
 
-        $result = $this->service->rememberManifest($theme, fn () => ['m' => 1]);
+        $result = $this->service->rememberManifest($theme, fn (): array => ['m' => 1]);
         $this->assertEquals(['m' => 1], $result);
 
-        $result = $this->service->rememberTemplates($theme, fn () => ['t']);
+        $result = $this->service->rememberTemplates($theme, fn (): array => ['t']);
         $this->assertEquals(['t'], $result);
 
-        $result = $this->service->rememberPartials($theme, fn () => 'p');
+        $result = $this->service->rememberPartials($theme, fn (): string => 'p');
         $this->assertEquals('p', $result);
 
-        $result = $this->service->rememberLayouts($theme, fn () => 'l');
+        $result = $this->service->rememberLayouts($theme, fn (): string => 'l');
         $this->assertEquals('l', $result);
     }
 
-    public function test_clear_theme_cache_with_tags()
+    public function test_clear_theme_cache_with_tags(): void
     {
         Config::set('cache.default', 'redis');
         $theme = Theme::factory()->create();
@@ -157,14 +155,14 @@ class ThemeCacheServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function test_clear_all_with_tags()
+    public function test_clear_all_with_tags(): void
     {
         Config::set('cache.default', 'redis');
         $this->service->clearAll();
         $this->assertTrue(true);
     }
 
-    public function test_clear_widgets_with_tags()
+    public function test_clear_widgets_with_tags(): void
     {
         Config::set('cache.default', 'redis');
         $this->service->clearWidgets('header');
@@ -172,7 +170,7 @@ class ThemeCacheServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function test_get_stats()
+    public function test_get_stats(): void
     {
         Config::set('cache.default', 'redis');
         $stats = $this->service->getStats();
@@ -188,23 +186,22 @@ class ThemeCacheServiceTest extends TestCase
         $this->assertFalse($stats['tags_supported']);
     }
 
-    public function test_get_active_theme_with_callback_null()
+    public function test_get_active_theme_with_callback_null(): void
     {
-        $result = $this->service->getActiveTheme('frontend', fn () => null);
+        $result = $this->service->getActiveTheme('frontend', fn (): null => null);
         $this->assertNull($result);
     }
 
-    public function test_tags_supported_memcached()
+    public function test_tags_supported_memcached(): void
     {
         Config::set('cache.default', 'memcached');
         $method = new \ReflectionMethod(ThemeCacheService::class, 'tagsSupported');
-        $method->setAccessible(true);
         $this->assertTrue($method->invoke($this->service));
     }
 
-    public function test_get_stats_unknown_driver()
+    public function test_get_stats_unknown_driver(): void
     {
-        Config::set('cache.default', null);
+        Config::set('cache.default');
         $stats = $this->service->getStats();
         $this->assertEquals('unknown', $stats['driver']);
     }

@@ -39,7 +39,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
             ->groupBy($columnName)
             ->pluck('total', $columnName);
 
-        $roles->getCollection()->transform(function (mixed $role) use ($userCounts) {
+        $roles->getCollection()->transform(function (mixed $role) use ($userCounts): \Modules\System\Models\Role {
             /** @var Role $role */
             $role->setAttribute('users_count', $userCounts[$role->id] ?? 0);
 
@@ -174,7 +174,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
 
     public function permissions(): \Illuminate\Http\JsonResponse
     {
-        $permissions = Permission::orderBy('name')->get()->groupBy(function (Permission $permission) {
+        $permissions = Permission::orderBy('name')->get()->groupBy(function (Permission $permission): string {
             // Group by category (resource name - everything after the first word)
             $nameStr = $permission->name;
             $parts = explode(' ', $nameStr, 2);
@@ -207,7 +207,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
     public function duplicate(Role $role): \Illuminate\Http\JsonResponse
     {
         $newRole = Role::create([
-            'name' => ((string) $role->name).' (copy)',
+            'name' => ($role->name).' (copy)',
             'guard_name' => 'web',
         ]);
 

@@ -41,11 +41,11 @@ class SchoolFactory extends Factory
 
     public function negeri(): static
     {
-        return $this->state(fn() => ['type' => 'negeri', 'status_kepemilikan' => 'Pemerintah Daerah']);
+        return $this->state(fn(): array => ['type' => 'negeri', 'status_kepemilikan' => 'Pemerintah Daerah']);
     }
 
     public function swasta(): static
     {
-        return $this->state(fn() => ['type' => 'swasta', 'status_kepemilikan' => 'Yayasan']);
+        return $this->state(fn(): array => ['type' => 'swasta', 'status_kepemilikan' => 'Yayasan']);
     }
 }

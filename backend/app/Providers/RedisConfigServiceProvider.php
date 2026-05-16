@@ -67,7 +67,7 @@ class RedisConfigServiceProvider extends ServiceProvider
         }
 
         // Build settings array using model accessor (handles decryption)
-        $settings = $redisSettings->mapWithKeys(function ($setting) {
+        $settings = $redisSettings->mapWithKeys(function ($setting): array {
             return [(string) $setting->key => $setting->value]; // This uses getValueAttribute accessor
         });
 
@@ -85,7 +85,7 @@ class RedisConfigServiceProvider extends ServiceProvider
         foreach ($settings as $key => $value) {
             $stringKey = (string) $key;
             // Skip empty or literal 'null' values - use .env defaults
-            if ($value === null || $value === '' || $value === 'null') {
+            if (in_array($value, [null, '', 'null'], true)) {
                 continue;
             }
 

@@ -23,11 +23,7 @@ class CspReportController extends \Modules\System\Http\Controllers\BaseApiContro
             // Fallback for direct JSON or slightly different formats
             if (! $report) {
                 $reportAll = $request->json()->all();
-                if (isset($reportAll['csp-report']) && is_array($reportAll['csp-report'])) {
-                    $report = $reportAll['csp-report'];
-                } else {
-                    $report = $reportAll;
-                }
+                $report = isset($reportAll['csp-report']) && is_array($reportAll['csp-report']) ? $reportAll['csp-report'] : $reportAll;
             }
 
             if (empty($report)) {
@@ -117,17 +113,12 @@ class CspReportController extends \Modules\System\Http\Controllers\BaseApiContro
         $ids = is_array($idsRaw) ? $idsRaw : [];
         $query = CspReport::whereIn('id', $ids);
 
-        switch ($validated['action']) {
-            case 'mark_reviewed':
-                $query->update(['status' => 'reviewed']);
-                break;
-            case 'mark_false_positive':
-                $query->update(['status' => 'false_positive']);
-                break;
-            case 'delete':
-                $query->delete();
-                break;
-        }
+        match ($validated['action']) {
+            'mark_reviewed' => $query->update(['status' => 'reviewed']),
+            'mark_false_positive' => $query->update(['status' => 'false_positive']),
+            'delete' => $query->delete(),
+            default => $this->success(null, 'Bulk action completed successfully'),
+        };
 
         return $this->success(null, 'Bulk action completed successfully');
     }

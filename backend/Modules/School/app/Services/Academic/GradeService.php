@@ -82,8 +82,8 @@ class GradeService
         }
 
         if ($grade->final_grade) {
-            $grade->grade_letter = (string) Grade::getGradeLetter((float)$grade->final_grade);
-            $grade->predicate = (string) Grade::getPredicate((float)$grade->final_grade);
+            $grade->grade_letter = Grade::getGradeLetter((float)$grade->final_grade);
+            $grade->predicate = Grade::getPredicate((float)$grade->final_grade);
         }
 
         $grade->save();

@@ -16,10 +16,8 @@ class GeminiService implements AiProviderInterface
     public function __construct(?string $apiKey = null)
     {
         // Allow passing key explicitly (for testing connection), otherwise use settings
-        /** @var mixed $settingKey */
         $settingKey = \Modules\System\Models\Setting::get('gemini_api_key');
-        /** @var string $defaultKey */
-        $defaultKey = is_string(config('services.gemini.api_key', '')) ? (string) config('services.gemini.api_key', '') : '';
+        $defaultKey = is_string(config('services.gemini.api_key', '')) ? config('services.gemini.api_key', '') : '';
         $this->apiKey = $apiKey ?? (is_string($settingKey) ? $settingKey : $defaultKey);
     }
 
@@ -30,12 +28,11 @@ class GeminiService implements AiProviderInterface
 
     public function generateText(string $prompt, string $context = '', string $model = ''): string
     {
-        if (empty($this->apiKey)) {
+        if (in_array($this->apiKey, [null, '', '0'], true)) {
             throw new \Exception('Gemini API Key is not configured.');
         }
 
         // Use provided model or default to gemini-2.0-flash
-        /** @var mixed $settingModel */
         $settingModel = \Modules\System\Models\Setting::get('gemini_model', '');
         $model = $model ?: (is_string($settingModel) && $settingModel !== '' ? $settingModel : 'gemini-2.0-flash');
 
@@ -67,7 +64,6 @@ class GeminiService implements AiProviderInterface
                 $this->handleError($response);
             }
 
-            /** @var mixed $data */
             $data = $response->json();
 
             if (is_array($data) &&
@@ -82,10 +78,8 @@ class GeminiService implements AiProviderInterface
                 ) {
                     /** @var mixed $textRaw */
                     $textRaw = $candidate['content']['parts'][0]['text'];
-                    /** @var string $text */
-                    $text = is_string($textRaw) ? $textRaw : (is_scalar($textRaw) ? (string) $textRaw : '');
 
-                    return $text;
+                    return is_string($textRaw) ? $textRaw : (is_scalar($textRaw) ? (string) $textRaw : '');
                 }
             }
 
@@ -98,7 +92,7 @@ class GeminiService implements AiProviderInterface
 
     public function getModels(): array
     {
-        if (empty($this->apiKey)) {
+        if (in_array($this->apiKey, [null, '', '0'], true)) {
             return [];
         }
 
@@ -134,7 +128,7 @@ class GeminiService implements AiProviderInterface
 
     public function testConnection(): bool
     {
-        if (empty($this->apiKey)) {
+        if (in_array($this->apiKey, [null, '', '0'], true)) {
             throw new \Exception('API Key is missing.');
         }
 
@@ -168,7 +162,6 @@ class GeminiService implements AiProviderInterface
             'body' => $response->body(),
         ]);
 
-        /** @var mixed $errorMsgRaw */
         $errorMsgRaw = $response->json('error.message', 'Unknown error');
         $errorMsg = is_string($errorMsgRaw) ? $errorMsgRaw : 'Unknown error';
 

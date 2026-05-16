@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('sch_hr_staff', function (Blueprint $table) {
+        Schema::table('sch_hr_staff', function (Blueprint $table): void {
             $table->boolean('is_shared')->default(false)->after('workspace_id');
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('sch_hr_staff', function (Blueprint $table) {
+        Schema::table('sch_hr_staff', function (Blueprint $table): void {
             $table->dropColumn('is_shared');
         });
     }

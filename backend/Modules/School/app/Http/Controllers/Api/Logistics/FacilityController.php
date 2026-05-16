@@ -16,11 +16,8 @@ use Modules\School\Http\Requests\Logistics\StoreAssetRequest;
 
 class FacilityController extends BaseController
 {
-    protected LogisticsService $service;
-
-    public function __construct(LogisticsService $service)
+    public function __construct(protected LogisticsService $service)
     {
-        $this->service = $service;
     }
 
     public function overview(Request $request): \Illuminate\Http\JsonResponse

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('sch_std_students', function (Blueprint $table) {
+        Schema::table('sch_std_students', function (Blueprint $table): void {
             if (! Schema::hasColumn('sch_std_students', 'department_id')) {
                 $table->uuid('department_id')
                     ->nullable()
@@ -39,7 +39,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('sch_std_students', function (Blueprint $table) {
+        Schema::table('sch_std_students', function (Blueprint $table): void {
             if (Schema::hasColumn('sch_std_students', 'department_id')) {
                 $table->dropConstrainedForeignId('department_id');
             }

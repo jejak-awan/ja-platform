@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Academic Years
-        Schema::create('sch_acad_years', function (Blueprint $table) {
+        Schema::create('sch_acad_years', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->onDelete('set null');
@@ -22,7 +22,7 @@ return new class extends Migration
         });
 
         // 2. Semesters
-        Schema::create('sch_acad_semesters', function (Blueprint $table) {
+        Schema::create('sch_acad_semesters', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('academic_year_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->onDelete('set null');
@@ -32,7 +32,7 @@ return new class extends Migration
         });
 
         // 3. Subjects (Mata Pelajaran)
-        Schema::create('sch_acad_subjects', function (Blueprint $table) {
+        Schema::create('sch_acad_subjects', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->onDelete('set null');
@@ -44,7 +44,7 @@ return new class extends Migration
         });
 
         // 4. Study Groups (Rombongan Belajar / Kelas)
-        Schema::create('sch_acad_study_groups', function (Blueprint $table) {
+        Schema::create('sch_acad_study_groups', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->onDelete('cascade');
@@ -56,7 +56,7 @@ return new class extends Migration
         });
 
         // 5. Grades (Penilaian)
-        Schema::create('sch_acad_grades', function (Blueprint $table) {
+        Schema::create('sch_acad_grades', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->onDelete('cascade');
@@ -83,7 +83,7 @@ return new class extends Migration
         });
 
         // 6. Schedules
-        Schema::create('sch_acad_schedules', function (Blueprint $table) {
+        Schema::create('sch_acad_schedules', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->onDelete('cascade');
@@ -101,7 +101,7 @@ return new class extends Migration
         });
 
         // 7. Teaching Journals
-        Schema::create('sch_acad_journals', function (Blueprint $table) {
+        Schema::create('sch_acad_journals', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('schedule_id')->onDelete('cascade');
             $table->date('date');

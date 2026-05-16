@@ -130,9 +130,7 @@ class AcademicService
      */
     public function getSchedules(array $filters): Collection
     {
-        $query = Schedule::with(['subject', 'staff', 'studyGroup' => function($q) {
-            return $q->withCount('students');
-        }, 'room']);
+        $query = Schedule::with(['subject', 'staff', 'studyGroup' => fn($q) => $q->withCount('students'), 'room']);
 
         if (!empty($filters['study_group_id'])) {
             $query->where('study_group_id', $filters['study_group_id']);
@@ -170,13 +168,11 @@ class AcademicService
         if (Schedule::where('staff_id', $data['staff_id'])
             ->where('day', $data['day'])
             ->where('is_active', true)
-            ->where(function ($q) use ($data) {
+            ->where(function ($q) use ($data): void {
                 $q->where('start_time', '<', $data['end_time'])
                   ->where('end_time', '>', $data['start_time']);
             })
-            ->when($excludeId, function($q) use ($excludeId) {
-                return $q->where('id', '!=', $excludeId);
-            })
+            ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
             ->exists()) {
             $collisions[] = 'Guru sudah memiliki jadwal di jam yang sama.';
         }
@@ -195,13 +191,11 @@ class AcademicService
             if (Schedule::where('room_id', $data['room_id'])
                 ->where('day', $data['day'])
                 ->where('is_active', true)
-                ->where(function ($q) use ($data) {
+                ->where(function ($q) use ($data): void {
                     $q->where('start_time', '<', $data['end_time'])
                       ->where('end_time', '>', $data['start_time']);
                 })
-                ->when($excludeId, function($q) use ($excludeId) {
-                    return $q->where('id', '!=', $excludeId);
-                })
+                ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
                 ->exists()) {
                 $collisions[] = 'Ruangan sudah digunakan di jam yang sama.';
             }
@@ -211,13 +205,11 @@ class AcademicService
         if (Schedule::where('study_group_id', $data['study_group_id'])
             ->where('day', $data['day'])
             ->where('is_active', true)
-            ->where(function ($q) use ($data) {
+            ->where(function ($q) use ($data): void {
                 $q->where('start_time', '<', $data['end_time'])
                   ->where('end_time', '>', $data['start_time']);
             })
-            ->when($excludeId, function($q) use ($excludeId) {
-                return $q->where('id', '!=', $excludeId);
-            })
+            ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
             ->exists()) {
             $collisions[] = 'Kelas sudah memiliki jadwal di jam yang sama.';
         }
@@ -267,7 +259,7 @@ class AcademicService
     public function getAttendanceStats(int $schoolId): array
     {
         /** @var array<int, array{status: string, count: int}> $stats */
-        $stats = Attendance::whereHas('student', function ($q) use ($schoolId) {
+        $stats = Attendance::whereHas('student', function ($q) use ($schoolId): void {
             $q->where('school_id', $schoolId);
         })
             ->select('status', DB::raw('count(*) as count'))

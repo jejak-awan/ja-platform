@@ -26,11 +26,11 @@ class AcademicYearFactory extends Factory
 
     public function active(): static
     {
-        return $this->state(fn() => ['is_active' => true]);
+        return $this->state(fn(): array => ['is_active' => true]);
     }
 
     public function forSchool(School $school): static
     {
-        return $this->state(fn() => ['school_id' => $school->id]);
+        return $this->state(fn(): array => ['school_id' => $school->id]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\School\Models\Operations;
 
 use Modules\System\Traits\ScopedByWorkspace;

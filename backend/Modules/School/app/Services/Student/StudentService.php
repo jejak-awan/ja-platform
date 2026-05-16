@@ -23,7 +23,7 @@ class StudentService
 
         if (!empty($filters['search']) && is_string($filters['search'])) {
             $search = $filters['search'];
-            $query->where(function($q) use ($search) {
+            $query->where(function($q) use ($search): void {
                 $q->where('full_name', 'like', "%{$search}%")
                   ->orWhere('nisn', 'like', "%{$search}%")
                   ->orWhere('nis', 'like', "%{$search}%");
@@ -193,7 +193,7 @@ class StudentService
      */
     public function findForGraduationCheck(string $identifier, string $dob): ?Student
     {
-        return Student::where(function($q) use ($identifier) {
+        return Student::where(function($q) use ($identifier): void {
                 $q->where('nisn', $identifier)
                   ->orWhere('nis', $identifier);
             })

@@ -26,9 +26,7 @@ class ThemeService
      */
     public function getActiveTheme(string $type = 'frontend'): ?Theme
     {
-        return $this->cache->getActiveTheme($type, function () use ($type) {
-            return Theme::getActiveTheme($type);
-        });
+        return $this->cache->getActiveTheme($type, fn() => Theme::getActiveTheme($type));
     }
 
     /**
@@ -46,7 +44,7 @@ class ThemeService
         // Check parent theme if exists
         if ($theme->hasParent()) {
             $parent = $theme->getParent();
-            if ($parent) {
+            if ($parent instanceof \Modules\Layout\Models\Theme) {
                 return $this->getMenuLocations($parent);
             }
         }
@@ -69,7 +67,7 @@ class ThemeService
         // Check parent theme if exists
         if ($theme->hasParent()) {
             $parent = $theme->getParent();
-            if ($parent) {
+            if ($parent instanceof \Modules\Layout\Models\Theme) {
                 return $this->getWidgetLocations($parent);
             }
         }
@@ -119,7 +117,7 @@ class ThemeService
         }
 
         // Fire before activation hook
-        if ($this->hooks) {
+        if ($this->hooks instanceof \Modules\Layout\Services\ThemeHooksService) {
             $this->hooks->doAction('theme.before_activate', $theme);
         }
 
@@ -134,11 +132,9 @@ class ThemeService
             ]);
 
             // Only block activation if critical errors (like invalid JSON)
-            $criticalErrors = array_filter($errors, function ($error) {
-                return strpos($error, 'Invalid theme.json format') !== false;
-            });
+            $criticalErrors = array_filter($errors, fn($error) => str_contains((string) $error, 'Invalid theme.json format'));
 
-            if (! empty($criticalErrors)) {
+            if ($criticalErrors !== []) {
                 throw new \Exception('Theme validation failed: '.implode(', ', $criticalErrors));
             }
         }
@@ -157,7 +153,7 @@ class ThemeService
             $theme->activate();
         } catch (\Exception $e) {
             // If activate() throws, check if it's validation error
-            if (strpos($e->getMessage(), 'invalid') !== false) {
+            if (str_contains($e->getMessage(), 'invalid')) {
                 // Allow activation even if validation fails (theme might be created manually)
                 \Log::warning('Theme activation with validation warnings: '.$e->getMessage());
                 // Manually activate
@@ -181,7 +177,7 @@ class ThemeService
         $this->clearThemeCache($theme);
 
         // Fire after activation hook
-        if ($this->hooks) {
+        if ($this->hooks instanceof \Modules\Layout\Services\ThemeHooksService) {
             $this->hooks->doAction('theme.activated', $theme);
         }
 
@@ -217,7 +213,7 @@ class ThemeService
         // Check current theme settings
         $value = $theme->getSetting($key);
         if ($value !== null) {
-            return $this->hooks ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
+            return $this->hooks instanceof \Modules\Layout\Services\ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
         }
 
         // Check parent theme if exists
@@ -226,7 +222,7 @@ class ThemeService
             if ($parent instanceof Theme) {
                 $value = $parent->getSetting($key);
                 if ($value !== null) {
-                    return $this->hooks ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
+                    return $this->hooks instanceof \Modules\Layout\Services\ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
                 }
             }
         }
@@ -240,12 +236,12 @@ class ThemeService
                 if (isset($schema['default'])) {
                     $value = $schema['default'];
 
-                    return $this->hooks ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
+                    return $this->hooks instanceof \Modules\Layout\Services\ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
                 }
             }
         }
 
-        return $this->hooks ? $this->hooks->applyFilter('theme.setting', $default, $theme, $key, $default) : $default;
+        return $this->hooks instanceof \Modules\Layout\Services\ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $default, $theme, $key, $default) : $default;
     }
 
     /**
@@ -260,7 +256,7 @@ class ThemeService
         }
 
         /** @var array{css: array<int, string>, js: array<int, string>} $assets */
-        $assets = $this->cache->rememberAssets($theme, function () use ($theme) {
+        $assets = $this->cache->rememberAssets($theme, function () use ($theme): array {
             $assets = [
                 'css' => [],
                 'js' => [],
@@ -399,7 +395,7 @@ class ThemeService
             if ($parent instanceof Theme) {
                 $parentCustomCss = $parent->getAttribute('custom_css');
                 $parentCss = is_string($parentCustomCss) ? $parentCustomCss : '';
-                if ($parentCss) {
+                if ($parentCss !== '' && $parentCss !== '0') {
                     $css = $parentCss."\n\n".$css;
                 }
             }
@@ -430,7 +426,7 @@ class ThemeService
             }
         }
 
-        if (empty($variables)) {
+        if ($variables === []) {
             return '';
         }
 
@@ -442,7 +438,7 @@ class ThemeService
      */
     public function clearThemeCache(?Theme $theme = null): void
     {
-        if ($theme) {
+        if ($theme instanceof \Modules\Layout\Models\Theme) {
             $this->cache->clearTheme($theme);
         } else {
             $this->cache->clearAll();
@@ -488,7 +484,7 @@ class ThemeService
         $directories = File::directories($themesDir);
 
         foreach ($directories as $dir) {
-            $slug = basename($dir);
+            $slug = basename((string) $dir);
             $manifestPath = "{$dir}/theme.json";
             if (file_exists($manifestPath)) {
                 try {
@@ -648,7 +644,7 @@ class ThemeService
     public function getActiveThemePublicPayload(string $type): ?array
     {
         $theme = $this->getActiveTheme($type);
-        if (! $theme) {
+        if (!$theme instanceof \Modules\Layout\Models\Theme) {
             return null;
         }
 
@@ -658,7 +654,7 @@ class ThemeService
                 ThemeCacheService::TTL_LONG,
                 function () use ($type): array {
                     $fresh = $this->getActiveTheme($type);
-                    if (! $fresh) {
+                    if (!$fresh instanceof \Modules\Layout\Models\Theme) {
                         throw new \LogicException('no_active_theme');
                     }
                     $this->normalizeThemeDataBindings($fresh);

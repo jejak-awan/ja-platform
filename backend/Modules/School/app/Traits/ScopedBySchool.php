@@ -14,7 +14,7 @@ trait ScopedBySchool
 {
     public static function bootScopedBySchool(): void
     {
-        static::addGlobalScope('school', function (Builder $builder) {
+        static::addGlobalScope('school', function (Builder $builder): void {
             $schoolId = Context::get('school_id');
             if ($schoolId) {
                 // Determine the correct table prefix/column
@@ -23,10 +23,10 @@ trait ScopedBySchool
             }
         });
 
-        static::creating(function (Model $model) {
+        static::creating(function (Model $model): void {
             /** @var static $model */
             $schoolId = Context::get('school_id');
-            if (is_numeric($schoolId) && ! isset($model->school_id)) {
+            if (is_numeric($schoolId) && (!property_exists($model, 'school_id') || $model->school_id === null)) {
                 $model->school_id = (int)$schoolId;
             }
         });

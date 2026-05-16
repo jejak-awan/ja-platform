@@ -20,7 +20,7 @@ class SchoolModuleException extends Exception
     public static function unauthorized(string $action = ''): self
     {
         $message = 'You are not authorized to perform this action.';
-        if ($action) {
+        if ($action !== '' && $action !== '0') {
             $message = "You are not authorized to {$action}.";
         }
 

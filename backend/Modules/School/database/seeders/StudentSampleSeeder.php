@@ -31,7 +31,7 @@ class StudentSampleSeeder extends Seeder
         foreach ($studyGroups as $group) {
             for ($i = 1; $i <= 5; $i++) {
                 $studentCount++;
-                $isFemale = ($studentCount % 2 == 0);
+                $isFemale = ($studentCount % 2 === 0);
                 $firstName = $isFemale ? $femaleFirstNames[array_rand($femaleFirstNames)] : $firstNames[array_rand($firstNames)];
                 $lastName = $lastNames[array_rand($lastNames)];
                 $fullName = $firstName . ' ' . $lastName;

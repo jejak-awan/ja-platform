@@ -35,7 +35,7 @@ class BaseController extends Controller
             'message' => $error,
         ];
 
-        if (! empty($errorMessages)) {
+        if ($errorMessages !== []) {
             $response['data'] = $errorMessages;
         }
 

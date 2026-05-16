@@ -13,16 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 class BlockMaliciousBots
 {
     use MaintenanceBypass;
-    protected \Modules\Security\Services\SecurityService $securityService;
 
-    protected \Modules\System\Services\AnomalyDetectionService $anomalyService;
-
-    public function __construct(
-        \Modules\Security\Services\SecurityService $securityService,
-        \Modules\System\Services\AnomalyDetectionService $anomalyService
-    ) {
-        $this->securityService = $securityService;
-        $this->anomalyService = $anomalyService;
+    public function __construct(protected \Modules\Security\Services\SecurityService $securityService, protected \Modules\System\Services\AnomalyDetectionService $anomalyService)
+    {
     }
 
     /**
@@ -84,7 +77,7 @@ class BlockMaliciousBots
 
         // 2. Merge with learned paths from database/cache
         $learnedPaths = \Modules\System\Models\Setting::get('security_learned_scanner_paths', []);
-        if (is_array($learnedPaths) && ! empty($learnedPaths)) {
+        if (is_array($learnedPaths) && $learnedPaths !== []) {
             /** @var array<int, string> $learnedPathStrings */
             $learnedPathStrings = [];
             foreach ($learnedPaths as $learnedPath) {
@@ -116,7 +109,7 @@ class BlockMaliciousBots
                     if ($request->hasSession()) {
                         $safeSessionId = $request->session()->getId();
                     }
-                } catch (\Throwable $e) {}
+                } catch (\Throwable) {}
                 $this->anomalyService->trackEvent('sensitive_path', $ip, $safeSessionId);
 
                 $this->autoBlockIfThresholdReached($ip, $path, 'path');

@@ -18,11 +18,8 @@ use Illuminate\Support\Facades\Storage;
 
 class AcademicController extends BaseController
 {
-    protected AcademicService $service;
-
-    public function __construct(AcademicService $service)
+    public function __construct(protected AcademicService $service)
     {
-        $this->service = $service;
     }
 
     public function overview(): \Illuminate\Http\JsonResponse
@@ -306,7 +303,7 @@ class AcademicController extends BaseController
 
         $schoolIdValue = $request->input('school_id', 1);
         $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : 1;
-        $departments = Department::whereHas('level', function ($q) use ($schoolId) {
+        $departments = Department::whereHas('level', function ($q) use ($schoolId): void {
             $q->where('school_id', $schoolId);
         })->with('level')->get();
 
@@ -375,7 +372,7 @@ class AcademicController extends BaseController
         /** @var array<string, mixed> $validated */
         $validated = $request->validated();
         $collisions = $this->service->detectCollisions($validated);
-        if (!empty($collisions)) {
+        if ($collisions !== []) {
             return $this->sendError('Jadwal bentrok ditemukan.', $collisions, 422);
         }
 
@@ -394,7 +391,7 @@ class AcademicController extends BaseController
         $validated = $request->validated();
 
         $collisions = $this->service->detectCollisions($validated, $id);
-        if (!empty($collisions)) {
+        if ($collisions !== []) {
             return $this->sendError('Jadwal bentrok ditemukan.', $collisions, 422);
         }
 

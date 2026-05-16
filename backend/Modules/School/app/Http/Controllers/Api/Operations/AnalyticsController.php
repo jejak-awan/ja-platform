@@ -8,11 +8,8 @@ use Modules\School\Services\Operations\OperationsService;
 
 class AnalyticsController extends BaseController
 {
-    protected OperationsService $service;
-
-    public function __construct(OperationsService $service)
+    public function __construct(protected OperationsService $service)
     {
-        $this->service = $service;
     }
 
     public function status(): \Illuminate\Http\JsonResponse

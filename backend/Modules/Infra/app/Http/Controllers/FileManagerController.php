@@ -28,11 +28,8 @@ class FileManagerController extends BaseApiController
      */
     protected array $allowedDisks = ['public'];
 
-    protected MediaService $mediaService;
-
-    public function __construct(MediaService $mediaService)
+    public function __construct(protected MediaService $mediaService)
     {
-        $this->mediaService = $mediaService;
     }
 
     /**
@@ -92,10 +89,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * List files and folders in a path.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -185,8 +180,8 @@ class FileManagerController extends BaseApiController
         $type = $request->input('type');
 
         if ($search) {
-            $folders = array_values(array_filter($folders, fn ($f) => stripos((string) $f['name'], (string) $search) !== false));
-            $files = array_values(array_filter($files, fn ($f) => stripos((string) $f['name'], (string) $search) !== false));
+            $folders = array_values(array_filter($folders, fn (array $f): bool => stripos((string) $f['name'], $search) !== false));
+            $files = array_values(array_filter($files, fn (array $f): bool => stripos((string) $f['name'], $search) !== false));
         }
 
         if ($type && $type !== 'all') {
@@ -204,8 +199,8 @@ class FileManagerController extends BaseApiController
                     break;
             }
 
-            if (! empty($extensions)) {
-                $files = array_values(array_filter($files, fn ($f) => in_array(strtolower($f['extension']), $extensions)));
+            if ($extensions !== []) {
+                $files = array_values(array_filter($files, fn (array $f): bool => in_array(strtolower((string) $f['extension']), $extensions)));
             }
         }
 
@@ -213,7 +208,7 @@ class FileManagerController extends BaseApiController
         $sort = $request->input('sort', 'name');
         $direction = $request->input('direction', 'asc');
 
-        $sortFn = function ($a, $b) use ($sort, $direction) {
+        $sortFn = function (array $a, array $b) use ($sort, $direction): int|float {
             $valA = $a[$sort] ?? '';
             $valB = $b[$sort] ?? '';
 
@@ -247,7 +242,7 @@ class FileManagerController extends BaseApiController
         usort($files, $sortFn);
 
         return $this->success([
-            'path' => $path ? '/'.$path : '/',
+            'path' => $path !== '' && $path !== '0' ? '/'.$path : '/',
             'folders' => $folders,
             'files' => $files,
         ], 'Directory contents retrieved successfully');
@@ -290,17 +285,15 @@ class FileManagerController extends BaseApiController
 
     /**
      * Download a folder as ZIP
-     *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
      */
-    protected function downloadFolder(string $path, string $disk)
+    protected function downloadFolder(string $path, string $disk): \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         if (! class_exists('ZipArchive')) {
             return $this->error('Zip extension not installed', 500);
         }
 
         $zipFileName = basename($path).'.zip';
-        $zipPath = (string) storage_path('app/temp/'.$zipFileName);
+        $zipPath = storage_path('app/temp/'.$zipFileName);
 
         // Ensure temp directory exists
         if (! File::exists(dirname($zipPath))) {
@@ -352,10 +345,8 @@ class FileManagerController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      * Upload file to specific path.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function upload(Request $request)
+    public function upload(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -416,18 +407,16 @@ class FileManagerController extends BaseApiController
             }
 
             // Sanitize SVG
-            if ($extension === 'svg' || $file->getMimeType() === 'image/svg+xml') {
-                if (class_exists(\enshrined\svgSanitize\Sanitizer::class)) {
-                    try {
-                        $sanitizer = new \enshrined\svgSanitize\Sanitizer;
-                        $sanitizer->removeRemoteReferences(true);
-                        $sanitized = $sanitizer->sanitize($content);
-                        if (is_string($sanitized)) {
-                            $content = $sanitized;
-                        }
-                    } catch (\Exception $e) {
-                        \Illuminate\Support\Facades\Log::warning('SVG sanitization failed in FileManager: '.$e->getMessage());
+            if (($extension === 'svg' || $file->getMimeType() === 'image/svg+xml') && class_exists(\enshrined\svgSanitize\Sanitizer::class)) {
+                try {
+                    $sanitizer = new \enshrined\svgSanitize\Sanitizer;
+                    $sanitizer->removeRemoteReferences(true);
+                    $sanitized = $sanitizer->sanitize($content);
+                    if (is_string($sanitized)) {
+                        $content = $sanitized;
                     }
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::warning('SVG sanitization failed in FileManager: '.$e->getMessage());
                 }
             }
 
@@ -451,10 +440,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * Move file to trash (soft delete) or delete permanently.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(Request $request)
+    public function delete(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -491,7 +478,7 @@ class FileManagerController extends BaseApiController
 
         if ($permanent) {
             // Find media if any
-            $media = Media::where(function ($q) use ($path) {
+            $media = Media::where(function ($q) use ($path): void {
                 $q->where('path', $path)
                     ->orWhere('path', '/'.$path);
             })->first();
@@ -531,7 +518,7 @@ class FileManagerController extends BaseApiController
         // Sync with Media Library (Delete)
         try {
             // Find valid media
-            $media = Media::where(function ($q) use ($path) {
+            $media = Media::where(function ($q) use ($path): void {
                 $q->where('path', $path)
                     ->orWhere('path', '/'.$path)
                     ->orWhere('path', trim($path, '/'));
@@ -569,10 +556,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * Move folder to trash (soft delete) or delete permanently.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteFolder(Request $request)
+    public function deleteFolder(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -661,7 +646,7 @@ class FileManagerController extends BaseApiController
                 $media->save();
                 $media->delete(); // Soft delete found media too
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // ignore
         }
 
@@ -704,10 +689,8 @@ class FileManagerController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      * Create new folder.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function createFolder(Request $request)
+    public function createFolder(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -746,10 +729,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * Move a file or folder to a new location.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function move(Request $request)
+    public function move(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -781,7 +762,7 @@ class FileManagerController extends BaseApiController
         try {
             // Get the filename/foldername from source
             $name = basename($source);
-            $newPath = $destination ? $destination.'/'.$name : $name;
+            $newPath = $destination !== '' && $destination !== '0' ? $destination.'/'.$name : $name;
 
             // Handle duplicate names
             $newPath = $this->getUniquePath($disk, $newPath);
@@ -815,10 +796,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * Copy a file or folder.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function copy(Request $request)
+    public function copy(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -849,7 +828,7 @@ class FileManagerController extends BaseApiController
 
         try {
             $name = basename($source);
-            $newPath = $destination ? $destination.'/'.$name : $name;
+            $newPath = $destination !== '' && $destination !== '0' ? $destination.'/'.$name : $name;
 
             // Handle duplicate names
             $newPath = $this->getUniquePath($disk, $newPath);
@@ -892,7 +871,7 @@ class FileManagerController extends BaseApiController
         $dir = $dir === '.' ? '' : $dir.'/';
         $filename = pathinfo($path, PATHINFO_FILENAME);
         $extension = pathinfo($path, PATHINFO_EXTENSION);
-        $extString = $extension ? '.'.$extension : '';
+        $extString = $extension !== '' && $extension !== '0' ? '.'.$extension : '';
 
         $counter = 1;
         while (Storage::disk($disk)->exists($dir.$filename.' ('.$counter.')'.$extString)) {
@@ -904,10 +883,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * Rename a file or folder.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function rename(Request $request)
+    public function rename(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -939,7 +916,7 @@ class FileManagerController extends BaseApiController
         try {
             $parentDir = dirname($path);
             $parentDir = $parentDir === '.' ? '' : $parentDir;
-            $newPath = $parentDir ? $parentDir.'/'.$newName : $newName;
+            $newPath = $parentDir !== '' && $parentDir !== '0' ? $parentDir.'/'.$newName : $newName;
 
             if ($type === 'folder') {
                 $sourcePath = Storage::disk($disk)->path($path);
@@ -970,10 +947,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * List all items in trash.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function trash(Request $request)
+    public function trash(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -984,19 +959,17 @@ class FileManagerController extends BaseApiController
         $items = DeletedFile::with('deletedByUser')
             ->orderBy('deleted_at', 'desc')
             ->get()
-            ->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                    'original_path' => $item->original_path,
-                    'type' => $item->type,
-                    'size' => $item->size,
-                    'formatted_size' => $item->formatted_size,
-                    'extension' => $item->extension,
-                    'deleted_at' => $item->deleted_at->toIso8601String(),
-                    'deleted_by' => $item->deletedByUser ? $item->deletedByUser->name : 'Unknown',
-                ];
-            });
+            ->map(fn($item) => [
+                'id' => $item->id,
+                'name' => $item->name,
+                'original_path' => $item->original_path,
+                'type' => $item->type,
+                'size' => $item->size,
+                'formatted_size' => $item->formatted_size,
+                'extension' => $item->extension,
+                'deleted_at' => $item->deleted_at->toIso8601String(),
+                'deleted_by' => $item->deletedByUser ? $item->deletedByUser->name : 'Unknown',
+            ]);
 
         return $this->success([
             'items' => $items,
@@ -1006,10 +979,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * Restore item from trash.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function restore(Request $request)
+    public function restore(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -1045,14 +1016,12 @@ class FileManagerController extends BaseApiController
             if (is_dir(Storage::disk($disk)->path($originalPath))) {
                 $finalOriginalPath = $originalPath.'_restored_'.time();
             }
-        } else {
-            if (Storage::disk($disk)->exists($originalPath)) {
-                $ext = pathinfo($originalPath, PATHINFO_EXTENSION);
-                $name = pathinfo($originalPath, PATHINFO_FILENAME);
-                $dir = dirname($originalPath);
-                $dir = $dir === '.' ? '' : $dir.'/';
-                $finalOriginalPath = $dir.$name.'_restored_'.time().($ext ? '.'.$ext : '');
-            }
+        } elseif (Storage::disk($disk)->exists($originalPath)) {
+            $ext = pathinfo($originalPath, PATHINFO_EXTENSION);
+            $name = pathinfo($originalPath, PATHINFO_FILENAME);
+            $dir = dirname($originalPath);
+            $dir = $dir === '.' ? '' : $dir.'/';
+            $finalOriginalPath = $dir.$name.'_restored_'.time().($ext !== '' && $ext !== '0' ? '.'.$ext : '');
         }
 
         // Restore to original path
@@ -1068,7 +1037,7 @@ class FileManagerController extends BaseApiController
         if ($deletedFile->type === 'file') {
             try {
                 $media = \Modules\Media\Models\File::withTrashed()
-                    ->where(function ($q) use ($trashPath) {
+                    ->where(function ($q) use ($trashPath): void {
                         $q->where('path', $trashPath)
                             ->orWhere('path', '/'.$trashPath);
                     })
@@ -1123,10 +1092,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * Empty entire trash.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function emptyTrash(Request $request)
+    public function emptyTrash(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -1146,7 +1113,7 @@ class FileManagerController extends BaseApiController
             if ($record->type === 'file') {
                 try {
                     $media = \Modules\Media\Models\File::withTrashed()
-                        ->where(function ($q) use ($trashPath) {
+                        ->where(function ($q) use ($trashPath): void {
                             $q->where('path', $trashPath)
                                 ->orWhere('path', '/'.$trashPath);
                         })
@@ -1155,7 +1122,7 @@ class FileManagerController extends BaseApiController
                     if ($media) {
                         $this->mediaService->delete($media, true);
                     }
-                } catch (\Exception $e) {
+                } catch (\Exception) {
                     // ignore
                 }
             } else {
@@ -1170,7 +1137,7 @@ class FileManagerController extends BaseApiController
                     foreach ($mediaItems as $media) {
                         $this->mediaService->delete($media, true);
                     }
-                } catch (\Exception $e) {
+                } catch (\Exception) {
                     // ignore
                 }
             }
@@ -1206,10 +1173,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * Permanently delete single item from trash.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function deletePermanently(Request $request)
+    public function deletePermanently(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -1252,7 +1217,7 @@ class FileManagerController extends BaseApiController
         if ($deletedFile->type === 'file') {
             try {
                 $media = \Modules\Media\Models\File::withTrashed()
-                    ->where(function ($q) use ($trashPath) {
+                    ->where(function ($q) use ($trashPath): void {
                         $q->where('path', $trashPath)
                             ->orWhere('path', '/'.$trashPath);
                     })
@@ -1261,7 +1226,7 @@ class FileManagerController extends BaseApiController
                 if ($media) {
                     $this->mediaService->delete($media, true);
                 }
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 // ignore
             }
         } else {
@@ -1276,7 +1241,7 @@ class FileManagerController extends BaseApiController
                 foreach ($mediaItems as $media) {
                     $this->mediaService->delete($media, true);
                 }
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 // ignore
             }
         }
@@ -1286,10 +1251,8 @@ class FileManagerController extends BaseApiController
             if (Storage::disk($disk)->exists($trashPath)) {
                 Storage::disk($disk)->deleteDirectory($trashPath);
             }
-        } else {
-            if (Storage::disk($disk)->exists($trashPath)) {
-                Storage::disk($disk)->delete($trashPath);
-            }
+        } elseif (Storage::disk($disk)->exists($trashPath)) {
+            Storage::disk($disk)->delete($trashPath);
         }
 
         // Remove from database
@@ -1302,10 +1265,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * Extract archive (zip, tar.gz, tar).
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function extract(Request $request)
+    public function extract(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -1338,7 +1299,7 @@ class FileManagerController extends BaseApiController
         $parentDir = $parentDir === '.' ? '' : $parentDir;
 
         // Create extraction directory
-        $extractDir = $parentDir ? $parentDir.'/'.$fileName : $fileName;
+        $extractDir = $parentDir !== '' && $parentDir !== '0' ? $parentDir.'/'.$fileName : $fileName;
         $extractPath = Storage::disk($disk)->path($extractDir);
 
         // Handle if directory already exists
@@ -1404,10 +1365,8 @@ class FileManagerController extends BaseApiController
 
     /**
      * Compress files/folders to ZIP archive.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function compress(Request $request)
+    public function compress(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
         /** @var \Modules\System\Models\User|null $user */
@@ -1445,7 +1404,7 @@ class FileManagerController extends BaseApiController
         // Determine archive name
         if (! $archiveName) {
             if (count($paths) === 1) {
-                $archiveName = pathinfo(trim((string) $paths[0], '/'), PATHINFO_FILENAME).'.zip';
+                $archiveName = pathinfo(trim($paths[0], '/'), PATHINFO_FILENAME).'.zip';
             } else {
                 $archiveName = 'archive_'.date('Y-m-d_His').'.zip';
             }
@@ -1453,11 +1412,11 @@ class FileManagerController extends BaseApiController
 
         // Ensure .zip extension
         if (! str_ends_with(strtolower((string) $archiveName), '.zip')) {
-            $archiveName = ((string) $archiveName).'.zip';
+            $archiveName .= '.zip';
         }
 
         // Determine output directory (same as first item's parent)
-        $firstPath = trim((string) $paths[0], '/');
+        $firstPath = trim($paths[0], '/');
         $parentDir = dirname($firstPath);
         $parentDir = $parentDir === '.' ? '' : $parentDir;
         $archivePath = $parentDir !== '' ? $parentDir.'/'.$archiveName : $archiveName;

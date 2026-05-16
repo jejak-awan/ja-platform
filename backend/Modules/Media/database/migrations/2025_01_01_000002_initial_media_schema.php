@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Media Folders
-        Schema::create('srv_media_folders', function (Blueprint $table) {
+        Schema::create('srv_media_folders', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('slug')->nullable()->index();
@@ -23,12 +23,12 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('srv_media_folders', function (Blueprint $table) {
+        Schema::table('srv_media_folders', function (Blueprint $table): void {
             $table->foreign('parent_id')->references('id')->on('srv_media_folders')->onDelete('cascade');
         });
 
         // 2. Media Files
-        Schema::create('srv_media_files', function (Blueprint $table) {
+        Schema::create('srv_media_files', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('folder_id')->nullable()->index();
             $table->uuid('workspace_id')->nullable()->index();
@@ -53,7 +53,7 @@ return new class extends Migration
         });
 
         // 3. Deleted files audit (trash tracking)
-        Schema::create('srv_media_deleted_files', function (Blueprint $table) {
+        Schema::create('srv_media_deleted_files', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('original_path');
             $table->string('trash_path')->index();
@@ -69,7 +69,7 @@ return new class extends Migration
         });
 
         // 4. Media Usages
-        Schema::create('srv_media_usages', function (Blueprint $table) {
+        Schema::create('srv_media_usages', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('file_id')->index();
             $table->string('model_type')->index();

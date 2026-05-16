@@ -9,11 +9,8 @@ use Modules\Search\Models\SearchQuery;
 
 class SearchController extends BaseApiController
 {
-    protected SearchService $searchService;
-
-    public function __construct(SearchService $searchService)
+    public function __construct(protected SearchService $searchService)
     {
-        $this->searchService = $searchService;
     }
 
     public function search(Request $request): \Illuminate\Http\JsonResponse

@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Contents (Posts, Pages, etc.)
-        Schema::create('cms_contents', function (Blueprint $table) {
+        Schema::create('cms_contents', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('author_id')->index();
@@ -43,7 +43,7 @@ return new class extends Migration
         });
 
         // 2. Content-Category Pivot
-        Schema::create('cms_content_category', function (Blueprint $table) {
+        Schema::create('cms_content_category', function (Blueprint $table): void {
             $table->uuid('content_id');
             $table->uuid('category_id');
             $table->primary(['content_id', 'category_id']);
@@ -52,7 +52,7 @@ return new class extends Migration
         });
 
         // 4. Revisions
-        Schema::create('cms_content_revisions', function (Blueprint $table) {
+        Schema::create('cms_content_revisions', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('content_id')->index();
@@ -67,7 +67,7 @@ return new class extends Migration
         });
 
         // 5. Comments
-        Schema::create('cms_comments', function (Blueprint $table) {
+        Schema::create('cms_comments', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('content_id')->index();
@@ -86,7 +86,7 @@ return new class extends Migration
         });
 
         // 7. Content Custom Fields
-        Schema::create('cms_content_custom_fields', function (Blueprint $table) {
+        Schema::create('cms_content_custom_fields', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('content_id')->index();

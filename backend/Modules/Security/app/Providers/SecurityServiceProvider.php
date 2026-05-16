@@ -68,8 +68,8 @@ class SecurityServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom($langPath, $this->nameLower);
             $this->loadJsonTranslationsFrom($langPath);
         } else {
-            $this->loadTranslationsFrom(module_path($this->name, 'lang'), $this->nameLower);
-            $this->loadJsonTranslationsFrom(module_path($this->name, 'lang'));
+            $this->loadTranslationsFrom((string) module_path($this->name, 'lang'), $this->nameLower);
+            $this->loadJsonTranslationsFrom((string) module_path($this->name, 'lang'));
         }
     }
 
@@ -78,11 +78,12 @@ class SecurityServiceProvider extends ServiceProvider
      */
     protected function registerConfig(): void
     {
-        $configPath = module_path($this->name, config('modules.paths.generator.config.path'));
+        $configPath = (string) module_path($this->name, (string) config('modules.paths.generator.config.path'));
 
         if (is_dir($configPath)) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
 
+            /** @var \SplFileInfo $file */
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
                     $config = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
@@ -111,10 +112,10 @@ class SecurityServiceProvider extends ServiceProvider
      */
     protected function merge_config_from(string $path, string $key): void
     {
-        $existing = config($key, []);
+        $existing = (array) config($key, []);
         $module_config = require $path;
 
-        config([$key => array_replace_recursive($existing, $module_config)]);
+        config([$key => array_replace_recursive((array) $existing, (array) $module_config)]);
     }
 
     /**
@@ -123,13 +124,13 @@ class SecurityServiceProvider extends ServiceProvider
     public function registerViews(): void
     {
         $viewPath = resource_path('views/modules/'.$this->nameLower);
-        $sourcePath = module_path($this->name, 'resources/views');
+        $sourcePath = (string) module_path($this->name, 'resources/views');
 
         $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower.'-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
 
-        Blade::componentNamespace(config('modules.namespace').'\\' . $this->name . '\\View\\Components', $this->nameLower);
+        Blade::componentNamespace((string) config('modules.namespace').'\\' . $this->name . '\\View\\Components', $this->nameLower);
     }
 
     /**
@@ -143,7 +144,7 @@ class SecurityServiceProvider extends ServiceProvider
     private function getPublishableViewPaths(): array
     {
         $paths = [];
-        foreach (config('view.paths') as $path) {
+        foreach ((array) config('view.paths') as $path) {
             if (is_dir($path.'/modules/'.$this->nameLower)) {
                 $paths[] = $path.'/modules/'.$this->nameLower;
             }

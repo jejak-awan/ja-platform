@@ -15,7 +15,7 @@ trait CoreLogsActivity
 {
     public static function bootCoreLogsActivity(): void
     {
-        static::created(function ($model): void {
+        static::created(function (?\Illuminate\Database\Eloquent\Model $model): void {
             ActivityLog::log(
                 'created',
                 $model,
@@ -23,7 +23,7 @@ trait CoreLogsActivity
             );
         });
 
-        static::updated(function ($model): void {
+        static::updated(function (?\Illuminate\Database\Eloquent\Model $model): void {
             $changes = $model->getChanges();
             unset($changes['updated_at'], $changes['remember_token']);
 
@@ -43,7 +43,7 @@ trait CoreLogsActivity
             );
         });
 
-        static::deleted(function ($model): void {
+        static::deleted(function (?\Illuminate\Database\Eloquent\Model $model): void {
             ActivityLog::log(
                 'deleted',
                 $model,

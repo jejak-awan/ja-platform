@@ -17,7 +17,7 @@ class SearchService
      */
     public function search($query, $filters = [], $limit = 20): array
     {
-        if (empty(trim($query))) {
+        if (in_array(trim($query), ['', '0'], true)) {
             return [
                 'results' => collect(),
                 'total' => 0,
@@ -92,7 +92,7 @@ class SearchService
     {
         if (config('database.default') === 'mysql' || config('database.default') === 'mariadb') {
             $prepared = $this->prepareSearchQuery($query, $strict);
-            if ($prepared) {
+            if ($prepared !== '' && $prepared !== '0') {
                 $queryBuilder->whereRaw(
                     'MATCH(title, content) AGAINST(? IN BOOLEAN MODE)',
                     [$prepared]
@@ -109,7 +109,7 @@ class SearchService
                 $chars = str_split(is_string($normalized) ? $normalized : '');
                 $fuzzyQuery = '%' . implode('%', $chars) . '%';
                 
-                $queryBuilder->where(function ($q) use ($fuzzyQuery, $operator) {
+                $queryBuilder->where(function ($q) use ($fuzzyQuery, $operator): void {
                     $q->where('title', $operator, $fuzzyQuery)
                         ->orWhere('content', $operator, $fuzzyQuery);
                 });
@@ -117,10 +117,10 @@ class SearchService
             }
 
             $terms = explode(' ', $query);
-            $queryBuilder->where(function ($q) use ($terms, $strict, $operator) {
+            $queryBuilder->where(function ($q) use ($terms, $strict, $operator): void {
                 foreach ($terms as $term) {
                     if ($strict) {
-                        $q->where(function ($sub) use ($term, $operator) {
+                        $q->where(function ($sub) use ($term, $operator): void {
                             $sub->where('title', $operator, "%{$term}%")
                                 ->orWhere('content', $operator, "%{$term}%");
                         });
@@ -137,11 +137,11 @@ class SearchService
      * @param  \Illuminate\Database\Eloquent\Builder<SearchIndex>  $queryBuilder
      * @param  array<string, mixed>  $filters
      */
-    protected function applyFilters($queryBuilder, $filters): void
+    protected function applyFilters($queryBuilder, array $filters): void
     {
         if (isset($filters['types']) && is_array($filters['types'])) {
-            $types = array_values(array_filter($filters['types'], fn ($type) => is_string($type) && $type !== ''));
-            if (! empty($types)) {
+            $types = array_values(array_filter($filters['types'], fn ($type): bool => is_string($type) && $type !== ''));
+            if ($types !== []) {
                 $queryBuilder->whereIn('type', $types);
             }
         } elseif (isset($filters['type']) && is_string($filters['type'])) {
@@ -177,7 +177,7 @@ class SearchService
      */
     public function getSuggestions($query, $limit = 5, array $filters = []): array
     {
-        if (empty(trim($query))) {
+        if (in_array(trim($query), ['', '0'], true)) {
             return [];
         }
 
@@ -188,7 +188,7 @@ class SearchService
         if ($driver === 'pgsql') {
             // PostgreSQL: Use ILIKE (native case-insensitive)
             $suggestionQuery = SearchIndex::query();
-            $suggestionQuery->where(function ($q) use ($queryClean) {
+            $suggestionQuery->where(function ($q) use ($queryClean): void {
                 $q->where('title', 'ILIKE', "%{$queryClean}%")
                     ->orWhere('content', 'ILIKE', "%{$queryClean}%");
             });
@@ -202,7 +202,7 @@ class SearchService
             // MySQL/MariaDB: Use LOWER + LIKE
             $queryLower = mb_strtolower($queryClean, 'UTF-8');
             $suggestionQuery = SearchIndex::query();
-            $suggestionQuery->where(function ($q) use ($queryLower) {
+            $suggestionQuery->where(function ($q) use ($queryLower): void {
                 $q->whereRaw('LOWER(title) LIKE ?', ["%{$queryLower}%"])
                     ->orWhereRaw('LOWER(content) LIKE ?', ["%{$queryLower}%"]);
             });
@@ -224,7 +224,7 @@ class SearchService
                 
                 if (count($chars) >= 2) {
                     $suggestionQuery = SearchIndex::query();
-                    $suggestionQuery->where(function ($q) use ($fuzzyQuery) {
+                    $suggestionQuery->where(function ($q) use ($fuzzyQuery): void {
                         $q->where('title', 'ILIKE', $fuzzyQuery)
                             ->orWhere('content', 'ILIKE', $fuzzyQuery);
                     });
@@ -252,7 +252,7 @@ class SearchService
                     $fuzzyQuery = '%'.implode('%', $chars).'%';
                     $queryLower = mb_strtolower($fuzzyQuery, 'UTF-8');
                     $suggestionQuery = SearchIndex::query();
-                    $suggestionQuery->where(function ($q) use ($queryLower) {
+                    $suggestionQuery->where(function ($q) use ($queryLower): void {
                         $q->whereRaw('LOWER(title) LIKE ?', [$queryLower])
                             ->orWhereRaw('LOWER(content) LIKE ?', [$queryLower]);
                     });
@@ -267,7 +267,7 @@ class SearchService
         }
 
         /** @var array<int, array{text: string, type: string, url: string|null}> $result */
-        $result = $suggestions->map(function ($index) {
+        $result = $suggestions->map(function ($index): array {
             /** @var SearchIndex $index */
             return [
                 'text' => (string) $index->title,
@@ -310,7 +310,7 @@ class SearchService
     {
         if ($model instanceof \Modules\Cms\Models\Content) {
             if ($model->status !== 'published') {
-                SearchIndex::where('searchable_type', get_class($model))
+                SearchIndex::where('searchable_type', $model::class)
                     ->where('searchable_id', $model->id)
                     ->delete();
                 return;
@@ -327,7 +327,7 @@ class SearchService
             ]);
         } elseif ($model instanceof \Modules\Library\Models\Category) {
             if (!$model->is_active) {
-                SearchIndex::where('searchable_type', get_class($model))
+                SearchIndex::where('searchable_type', $model::class)
                     ->where('searchable_id', $model->id)
                     ->delete();
                 return;

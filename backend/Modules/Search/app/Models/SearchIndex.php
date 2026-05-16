@@ -63,9 +63,9 @@ class SearchIndex extends Model
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  array<string, mixed>  $data
      */
-    public static function index($model, $data = []): self
+    public static function index($model, array $data = []): self
     {
-        $searchableType = get_class($model);
+        $searchableType = $model::class;
         /** @var int $searchableId */
         $searchableId = $model->getAttribute('id');
         
@@ -107,7 +107,7 @@ class SearchIndex extends Model
      */
     public static function remove($model): ?bool
     {
-        $deleted = self::where('searchable_type', get_class($model))
+        $deleted = self::where('searchable_type', $model::class)
             ->where('searchable_id', $model->getAttribute('id'))
             ->delete();
 
@@ -118,8 +118,7 @@ class SearchIndex extends Model
     {
         $score = 0;
         $score += strlen($title) * 10;
-        $score += strlen($content) * 1;
 
-        return $score;
+        return $score + strlen($content);
     }
 }

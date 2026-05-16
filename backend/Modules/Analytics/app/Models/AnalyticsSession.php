@@ -102,13 +102,9 @@ class AnalyticsSession extends Model
         return $this->hasMany(\Modules\Analytics\Models\AnalyticsEvent::class, 'session_id', 'session_id');
     }
 
-    /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string|null  $sessionId
-     */
     public static function start(\Illuminate\Http\Request $request, ?string $sessionId = null): self
     {
-        $sessionId = $sessionId ?? session()->getId();
+        $sessionId ??= session()->getId();
 
         $userAgent = $request->userAgent();
         $deviceInfo = self::parseUserAgent($userAgent);

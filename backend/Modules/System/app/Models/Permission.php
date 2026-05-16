@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\System\Models;
 
 use Spatie\Permission\Models\Permission as SpatiePermission;

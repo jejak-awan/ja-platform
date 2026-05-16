@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\System\Registries;
 
 abstract class BaseRegistry implements RegistryInterface

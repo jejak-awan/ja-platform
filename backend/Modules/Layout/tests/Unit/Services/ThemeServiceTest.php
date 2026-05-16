@@ -57,14 +57,14 @@ class ThemeServiceTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_get_active_theme()
+    public function test_get_active_theme(): void
     {
         $theme = Theme::factory()->create(['is_active' => true, 'type' => 'frontend', 'status' => 'active', 'slug' => 'test-active']);
         $result = $this->service->getActiveTheme('frontend');
         $this->assertEquals($theme->id, $result->id);
     }
 
-    public function test_get_menu_locations()
+    public function test_get_menu_locations(): void
     {
         $theme = Theme::factory()->create([
             'slug' => 'test-menu',
@@ -80,7 +80,7 @@ class ThemeServiceTest extends TestCase
         $this->assertEquals(['primary'], $locations);
     }
 
-    public function test_get_menu_locations_parent_fallback()
+    public function test_get_menu_locations_parent_fallback(): void
     {
         $parent = Theme::factory()->create(['slug' => 'test-parent']);
         $child = Theme::factory()->create(['slug' => 'test-child', 'parent_theme' => 'test-parent']);
@@ -96,7 +96,7 @@ class ThemeServiceTest extends TestCase
         $this->assertEquals(['main'], $locations);
     }
 
-    public function test_activate_and_deactivate_theme()
+    public function test_activate_and_deactivate_theme(): void
     {
         $theme = Theme::factory()->create(['slug' => 'test-act', 'is_active' => false]);
 
@@ -112,16 +112,16 @@ class ThemeServiceTest extends TestCase
         $this->assertFalse($theme->fresh()->is_active);
     }
 
-    public function test_activate_theme_with_validation_errors()
+    public function test_activate_theme_with_validation_errors(): void
     {
         $theme = Theme::factory()->create(['slug' => 'test-invalid']);
         $this->service->activateTheme($theme);
         $this->assertTrue($theme->fresh()->is_active);
     }
 
-    public function test_get_theme_setting_with_inheritance()
+    public function test_get_theme_setting_with_inheritance(): void
     {
-        $parent = Theme::factory()->create(['slug' => 'test-set-p', 'settings' => ['color' => 'red']]);
+        Theme::factory()->create(['slug' => 'test-set-p', 'settings' => ['color' => 'red']]);
         $child = Theme::factory()->create(['slug' => 'test-set-c', 'parent_theme' => 'test-set-p', 'settings' => []]);
 
         $this->assertEquals('red', $this->service->getThemeSetting($child, 'color'));
@@ -130,7 +130,7 @@ class ThemeServiceTest extends TestCase
         $this->assertEquals('blue', $this->service->getThemeSetting($child, 'color'));
     }
 
-    public function test_get_theme_setting_manifest_fallback()
+    public function test_get_theme_setting_manifest_fallback(): void
     {
         $theme = Theme::factory()->create(['slug' => 'test-manifest', 'settings' => []]);
         $path = $theme->getThemePath();
@@ -144,7 +144,7 @@ class ThemeServiceTest extends TestCase
         $this->assertEquals('16px', $this->service->getThemeSetting($theme, 'font_size'));
     }
 
-    public function test_load_theme_assets()
+    public function test_load_theme_assets(): void
     {
         $theme = Theme::factory()->create(['slug' => 'test-assets', 'path' => 'test-assets']);
         $path = $theme->getThemePath();
@@ -158,7 +158,7 @@ class ThemeServiceTest extends TestCase
         $this->assertContains('themes/test-assets/assets/js/app.js', $assets['js']);
     }
 
-    public function test_load_theme_assets_from_manifest()
+    public function test_load_theme_assets_from_manifest(): void
     {
         $theme = Theme::factory()->create(['slug' => 'test-man-assets', 'path' => 'test-man-assets']);
         $path = $theme->getThemePath();
@@ -174,7 +174,7 @@ class ThemeServiceTest extends TestCase
         $this->assertContains('themes/test-man-assets/custom.css', $assets['css']);
     }
 
-    public function test_check_dependencies()
+    public function test_check_dependencies(): void
     {
         $theme = Theme::factory()->create(['slug' => 'test-dep', 'dependencies' => []]);
         $this->assertTrue($this->service->checkDependencies($theme));
@@ -187,9 +187,9 @@ class ThemeServiceTest extends TestCase
         $this->assertTrue($this->service->checkDependencies($theme));
     }
 
-    public function test_get_theme_custom_css()
+    public function test_get_theme_custom_css(): void
     {
-        $parent = Theme::factory()->create(['slug' => 'test-css-p', 'custom_css' => 'body { color: red; }']);
+        Theme::factory()->create(['slug' => 'test-css-p', 'custom_css' => 'body { color: red; }']);
         $child = Theme::factory()->create(['slug' => 'test-css-c', 'parent_theme' => 'test-css-p', 'custom_css' => 'h1 { font-size: 2em; }']);
 
         $css = $this->service->getThemeCustomCss($child);
@@ -197,7 +197,7 @@ class ThemeServiceTest extends TestCase
         $this->assertStringContainsString('2em', $css);
     }
 
-    public function test_get_theme_css_variables()
+    public function test_get_theme_css_variables(): void
     {
         $theme = Theme::factory()->create(['slug' => 'test-css-var', 'settings' => ['primary_color' => '#fff']]);
         $path = $theme->getThemePath();
@@ -212,7 +212,7 @@ class ThemeServiceTest extends TestCase
         $this->assertStringContainsString('--theme-primary-color: #fff', $css);
     }
 
-    public function test_scan_themes()
+    public function test_scan_themes(): void
     {
         $service = new class extends ThemeService
         {
@@ -234,12 +234,12 @@ class ThemeServiceTest extends TestCase
         $this->assertEquals('new-theme', $themes[0]->slug);
     }
 
-    public function test_ensure_theme_directory()
+    public function test_ensure_theme_directory(): void
     {
         $this->assertTrue($this->service->ensureThemeDirectory());
     }
 
-    public function test_activate_theme_critical_error()
+    public function test_activate_theme_critical_error(): void
     {
         $theme = Theme::factory()->create(['slug' => 'critical']);
         $path = $theme->getThemePath();
@@ -252,7 +252,7 @@ class ThemeServiceTest extends TestCase
         $this->service->activateTheme($theme);
     }
 
-    public function test_check_dependencies_with_plugins()
+    public function test_check_dependencies_with_plugins(): void
     {
         $theme = Theme::factory()->create(['slug' => 'test-plug', 'dependencies' => ['plugins' => ['missing-plugin']]]);
         $this->assertFalse($this->service->checkDependencies($theme));
@@ -267,7 +267,7 @@ class ThemeServiceTest extends TestCase
         $this->assertTrue($this->service->checkDependencies($theme));
     }
 
-    public function test_load_theme_assets_with_parent_merge()
+    public function test_load_theme_assets_with_parent_merge(): void
     {
         $parent = Theme::factory()->create(['slug' => 'p-assets', 'path' => 'p-assets']);
         $child = Theme::factory()->create(['slug' => 'c-assets', 'path' => 'c-assets', 'parent_theme' => 'p-assets']);
@@ -285,13 +285,13 @@ class ThemeServiceTest extends TestCase
         $this->assertContains('themes/c-assets/assets/css/child.css', $assets['css']);
     }
 
-    public function test_clear_theme_cache_all()
+    public function test_clear_theme_cache_all(): void
     {
         $this->service->clearThemeCache();
         $this->assertTrue(true); // No error means success
     }
 
-    public function test_get_default_settings_schema()
+    public function test_get_default_settings_schema(): void
     {
         $schema = $this->service->getDefaultSettingsSchema();
         $this->assertArrayHasKey('primary_color', $schema);

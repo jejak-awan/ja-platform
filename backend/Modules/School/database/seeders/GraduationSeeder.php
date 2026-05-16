@@ -10,7 +10,9 @@ class GraduationSeeder extends Seeder
     public function run(): void
     {
         $school = \Modules\School\Models\Institution\School::first();
-        if (!$school) return;
+        if (!$school) {
+            return;
+        }
 
         GraduationSetting::updateOrCreate(
             ['graduation_year' => 2026, 'workspace_id' => $school->workspace_id],

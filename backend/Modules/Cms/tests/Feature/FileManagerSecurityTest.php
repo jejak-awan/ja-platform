@@ -30,7 +30,7 @@ class FileManagerSecurityTest extends TestCase
         $this->admin->givePermissionTo($permission);
     }
 
-    public function test_cannot_access_unauthorized_disk()
+    public function test_cannot_access_unauthorized_disk(): void
     {
         $response = $this->actingAs($this->admin, 'sanctum')
             ->getJson('/api/v1/manage/infra/file-manager?disk=local');
@@ -40,7 +40,7 @@ class FileManagerSecurityTest extends TestCase
             ->assertJsonValidationErrors(['disk']);
     }
 
-    public function test_cannot_traverse_path_in_list()
+    public function test_cannot_traverse_path_in_list(): void
     {
         $response = $this->actingAs($this->admin, 'sanctum')
             ->getJson('/api/v1/manage/infra/file-manager?path=../private');
@@ -48,7 +48,7 @@ class FileManagerSecurityTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_cannot_upload_to_traversal_path()
+    public function test_cannot_upload_to_traversal_path(): void
     {
         Storage::fake('public');
 
@@ -64,7 +64,7 @@ class FileManagerSecurityTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_cannot_move_files_to_restricted_disk()
+    public function test_cannot_move_files_to_restricted_disk(): void
     {
         Storage::fake('public');
         Storage::put('test.txt', 'content');
@@ -81,7 +81,7 @@ class FileManagerSecurityTest extends TestCase
             ->assertJsonValidationErrors(['disk']);
     }
 
-    public function test_super_admin_can_access_any_disk()
+    public function test_super_admin_can_access_any_disk(): void
     {
         // User ID 1: needs super-admin role so FileManagerController allows any configured disk.
         $superAdmin = User::find(1);

@@ -15,7 +15,6 @@ class OpenAiService implements AiProviderInterface
 
     public function __construct(?string $apiKey = null)
     {
-        /** @var mixed $val */
         $val = \Modules\System\Models\Setting::get('openai_api_key', '');
         $this->apiKey = $apiKey ?? (is_string($val) ? $val : '');
     }
@@ -27,18 +26,17 @@ class OpenAiService implements AiProviderInterface
 
     public function generateText(string $prompt, string $context = '', string $model = ''): string
     {
-        if (empty($this->apiKey)) {
+        if (in_array($this->apiKey, [null, '', '0'], true)) {
             throw new \Exception('OpenAI API Key is not configured.');
         }
 
-        /** @var mixed $val */
         $val = \Modules\System\Models\Setting::get('openai_model', '');
         $model = $model ?: (is_string($val) && $val !== '' ? $val : 'gpt-4o-mini');
 
         try {
             $messages = [
                 ['role' => 'system', 'content' => 'You are a helpful content editor assistant.'],
-                ['role' => 'user', 'content' => $context ? "Context:\n$context\n\nInstruction: $prompt" : $prompt],
+                ['role' => 'user', 'content' => $context !== '' && $context !== '0' ? "Context:\n$context\n\nInstruction: $prompt" : $prompt],
             ];
 
             $response = Http::withToken($this->apiKey)
@@ -70,7 +68,7 @@ class OpenAiService implements AiProviderInterface
      */
     public function getModels(): array
     {
-        if (empty($this->apiKey)) {
+        if (in_array($this->apiKey, [null, '', '0'], true)) {
             return [];
         }
 
@@ -94,7 +92,7 @@ class OpenAiService implements AiProviderInterface
             }
 
             // Sort models alphabetically
-            usort($models, fn ($a, $b) => strcmp($a['id'], $b['id']));
+            usort($models, fn (array $a, array $b): int => strcmp((string) $a['id'], (string) $b['id']));
 
             return $models;
 
@@ -107,7 +105,7 @@ class OpenAiService implements AiProviderInterface
 
     public function testConnection(): bool
     {
-        if (empty($this->apiKey)) {
+        if (in_array($this->apiKey, [null, '', '0'], true)) {
             throw new \Exception('API Key is missing.');
         }
 
@@ -129,7 +127,6 @@ class OpenAiService implements AiProviderInterface
      */
     protected function handleError($response): never
     {
-        /** @var mixed $errorData */
         $errorData = $response->json('error.message', 'Unknown error');
         $errorMsg = is_string($errorData) ? $errorData : 'Unknown error';
 

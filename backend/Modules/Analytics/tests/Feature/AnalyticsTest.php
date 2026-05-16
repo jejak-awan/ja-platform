@@ -134,12 +134,12 @@ class AnalyticsTest extends TestCase
     public function test_admin_can_get_top_content(): void
     {
         // Create some content
-        $content1 = Content::factory()->create([
+        Content::factory()->create([
             'slug' => 'popular-article',
             'status' => 'published',
         ]);
 
-        $content2 = Content::factory()->create([
+        Content::factory()->create([
             'slug' => 'less-popular',
             'status' => 'published',
         ]);

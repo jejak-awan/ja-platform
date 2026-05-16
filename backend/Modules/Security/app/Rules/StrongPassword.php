@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Security\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
@@ -72,7 +74,7 @@ class StrongPassword implements Rule
         }
 
         // Check number requirement
-        if ($this->requireNumber && ! preg_match('/[0-9]/', $value)) {
+        if ($this->requireNumber && ! preg_match('/\d/', $value)) {
             $this->failedChecks[] = 'one number';
         }
 
@@ -81,7 +83,7 @@ class StrongPassword implements Rule
             $this->failedChecks[] = 'one symbol (!@#$%^&*...)';
         }
 
-        return empty($this->failedChecks);
+        return $this->failedChecks === [];
     }
 
     /**
@@ -91,7 +93,7 @@ class StrongPassword implements Rule
      */
     public function message()
     {
-        if (empty($this->failedChecks)) {
+        if ($this->failedChecks === []) {
             return 'The :attribute does not meet the password requirements.';
         }
 

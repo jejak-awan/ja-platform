@@ -101,7 +101,9 @@ class MediaService implements MediaServiceInterface
 
         try {
             $driver = $this->getImageDriver();
-            if (!$driver) return false;
+            if (!$driver instanceof \Intervention\Image\Interfaces\DriverInterface) {
+                return false;
+            }
 
             $manager = new \Intervention\Image\ImageManager($driver);
             $image = $manager->read($fullPath);
@@ -123,11 +125,15 @@ class MediaService implements MediaServiceInterface
      */
     public function convertToWebP(string $fullPath, int $quality = 85): ?string
     {
-        if (!class_exists(\Intervention\Image\ImageManager::class)) return null;
+        if (!class_exists(\Intervention\Image\ImageManager::class)) {
+            return null;
+        }
 
         try {
             $driver = $this->getImageDriver();
-            if (!$driver) return null;
+            if (!$driver instanceof \Intervention\Image\Interfaces\DriverInterface) {
+                return null;
+            }
 
             $manager = new \Intervention\Image\ImageManager($driver);
             $image = $manager->read($fullPath);
@@ -154,8 +160,8 @@ class MediaService implements MediaServiceInterface
      */
     public function generateThumbnail(File $file, ?int $width = null, ?int $height = null): ?string
     {
-        $width = $width ?? (int) Setting::get('media_thumbnail_width', 300);
-        $height = $height ?? (int) Setting::get('media_thumbnail_height', 300);
+        $width ??= (int) Setting::get('media_thumbnail_width', 300);
+        $height ??= (int) Setting::get('media_thumbnail_height', 300);
         $fullPath = Storage::disk($file->disk)->path($file->path);
 
         $pathInfo = pathinfo($file->path);
@@ -190,7 +196,9 @@ class MediaService implements MediaServiceInterface
 
         // Fallback to Intervention
         $driver = $this->getImageDriver();
-        if (!$driver) return null;
+        if (!$driver instanceof \Intervention\Image\Interfaces\DriverInterface) {
+            return null;
+        }
 
         try {
             $manager = new \Intervention\Image\ImageManager($driver);
@@ -216,7 +224,9 @@ class MediaService implements MediaServiceInterface
     public function resize(File $file, int $width, ?int $height = null, int $quality = 85): bool
     {
         $driver = $this->getImageDriver();
-        if (!$driver) return false;
+        if (!$driver instanceof \Intervention\Image\Interfaces\DriverInterface) {
+            return false;
+        }
 
         try {
             $fullPath = Storage::disk($file->disk)->path($file->path);
@@ -288,11 +298,13 @@ class MediaService implements MediaServiceInterface
     public function restore(string $fileId): ?File
     {
         $file = File::onlyTrashed()->find($fileId);
-        if (!$file) return null;
+        if (!$file) {
+            return null;
+        }
 
         $deletedFile = DeletedFile::where('trash_path', $file->path)->first();
         if ($deletedFile) {
-            $originalPath = ltrim($deletedFile->original_path, '/');
+            $originalPath = ltrim((string) $deletedFile->original_path, '/');
             try {
                 if (Storage::disk($file->disk)->exists($file->path)) {
                     Storage::disk($file->disk)->move($file->path, $originalPath);
@@ -321,7 +333,9 @@ class MediaService implements MediaServiceInterface
 
         foreach ($mediaIds as $id) {
             $file = File::withTrashed()->find($id);
-            if (!$file) continue;
+            if (!$file) {
+                continue;
+            }
 
             switch ($action) {
                 case 'delete': $this->delete($file, false); break;
@@ -341,15 +355,21 @@ class MediaService implements MediaServiceInterface
     public function createZip(array $mediaIds): ?string
     {
         $files = File::whereIn('id', $mediaIds)->get();
-        if ($files->isEmpty()) return null;
+        if ($files->isEmpty()) {
+            return null;
+        }
 
         $zipFileName = 'media-' . now()->format('Y-m-d-His') . '.zip';
         $zipPath = storage_path('app/temp/' . $zipFileName);
 
-        if (!is_dir(storage_path('app/temp'))) mkdir(storage_path('app/temp'), 0755, true);
+        if (!is_dir(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
 
         $zip = new \ZipArchive;
-        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) return null;
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            return null;
+        }
 
         foreach ($files as $file) {
             $filePath = Storage::disk($file->disk)->path($file->path);
@@ -374,14 +394,20 @@ class MediaService implements MediaServiceInterface
      */
     protected function getImageDriver(): ?\Intervention\Image\Interfaces\DriverInterface
     {
-        if (extension_loaded('gd')) return new \Intervention\Image\Drivers\Gd\Driver;
-        if (extension_loaded('imagick')) return new \Intervention\Image\Drivers\Imagick\Driver;
+        if (extension_loaded('gd')) {
+            return new \Intervention\Image\Drivers\Gd\Driver;
+        }
+        if (extension_loaded('imagick')) {
+            return new \Intervention\Image\Drivers\Imagick\Driver;
+        }
         return null;
     }
 
     protected function sanitizeSvg(string $filePath): void
     {
-        if (!class_exists(\enshrined\svgSanitize\Sanitizer::class)) return;
+        if (!class_exists(\enshrined\svgSanitize\Sanitizer::class)) {
+            return;
+        }
         try {
             $sanitizer = new \enshrined\svgSanitize\Sanitizer;
             $content = file_get_contents($filePath);
@@ -398,8 +424,10 @@ class MediaService implements MediaServiceInterface
     {
         $tagIds = [];
         foreach ($tags as $tagName) {
-            if (empty(trim($tagName))) continue;
-            $tag = Tag::firstOrCreate(['name' => trim($tagName)], ['slug' => Str::slug($tagName)]);
+            if (in_array(trim((string) $tagName), ['', '0'], true)) {
+                continue;
+            }
+            $tag = Tag::firstOrCreate(['name' => trim((string) $tagName)], ['slug' => Str::slug($tagName)]);
             $tagIds[] = $tag->id;
         }
         

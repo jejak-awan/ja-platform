@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. OSIS Work Programs (Proker)
-        Schema::create('sch_osis_programs', function (Blueprint $table) {
+        Schema::create('sch_osis_programs', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('school_id')->onDelete('cascade');
@@ -29,7 +29,7 @@ return new class extends Migration
         });
 
         // 2. OSIS Members & Structure
-        Schema::create('sch_osis_members', function (Blueprint $table) {
+        Schema::create('sch_osis_members', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('school_id')->onDelete('cascade');
@@ -40,7 +40,7 @@ return new class extends Migration
         });
 
         // 3. OSIS Finances
-        Schema::create('sch_osis_finances', function (Blueprint $table) {
+        Schema::create('sch_osis_finances', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('school_id')->onDelete('cascade');
@@ -53,7 +53,7 @@ return new class extends Migration
         });
 
         // 4. Student Suggestion Box
-        Schema::create('sch_osis_suggestions', function (Blueprint $table) {
+        Schema::create('sch_osis_suggestions', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->uuid('workspace_id')->nullable()->index();
             $table->uuid('school_id')->onDelete('cascade');
