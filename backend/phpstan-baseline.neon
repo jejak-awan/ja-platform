@@ -289,39 +289,57 @@ parameters:
 			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
 
 		-
+			message: '#^Parameter \#1 \$contentId of method Modules\\Cms\\Services\\CmsCacheService\:\:clearContentCaches\(\) expects int\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
 			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$body\.$#'
 			identifier: property.notFound
-			count: 2
+			count: 1
 			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
 
 		-
 			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$excerpt\.$#'
 			identifier: property.notFound
-			count: 3
+			count: 1
 			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
 
 		-
 			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$meta\.$#'
 			identifier: property.notFound
-			count: 2
+			count: 1
 			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
 
 		-
 			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$slug\.$#'
 			identifier: property.notFound
-			count: 3
+			count: 1
 			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
 
 		-
 			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$status\.$#'
 			identifier: property.notFound
-			count: 2
+			count: 1
 			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
 
 		-
 			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$title\.$#'
 			identifier: property.notFound
-			count: 2
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between int and string will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 3
+			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 3
 			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
 
 		-
@@ -511,10 +529,10 @@ parameters:
 			path: Modules/Cms/app/Services/ContentService.php
 
 		-
-			message: '#^Method Modules\\Cms\\Services\\ThemeService\:\:getMenuLocations\(\) should return array\<string, string\> but returns list\<\(int\|string\)\>\.$#'
-			identifier: return.type
-			count: 1
-			path: Modules/Cms/app/Services/ThemeService.php
+			message: '#^Parameter \#1 \$contentId of method Modules\\Cms\\Services\\ContentService\:\:clearContentCaches\(\) expects int\|null, string given\.$#'
+			identifier: argument.type
+			count: 4
+			path: Modules/Cms/app/Services/ContentService.php
 
 		-
 			message: '#^Using nullsafe property access "\?\-\>id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
@@ -529,18 +547,6 @@ parameters:
 			path: Modules/Cms/database/factories/ContentRevisionFactory.php
 
 		-
-			message: '#^Class Modules\\Cms\\Database\\Factories\\MenuFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: Modules/Cms/database/factories/MenuFactory.php
-
-		-
-			message: '#^Class Modules\\Cms\\Database\\Factories\\MenuItemFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: Modules/Cms/database/factories/MenuItemFactory.php
-
-		-
 			message: '#^Class Modules\\Cms\\Database\\Factories\\Redirect not found\.$#'
 			identifier: class.notFound
 			count: 1
@@ -553,24 +559,6 @@ parameters:
 			path: Modules/Cms/database/factories/RedirectFactory.php
 
 		-
-			message: '#^Class Modules\\Cms\\Database\\Factories\\WidgetFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: Modules/Cms/database/factories/WidgetFactory.php
-
-		-
-			message: '#^Class Modules\\Cms\\Models\\Widget not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Modules/Cms/database/factories/WidgetFactory.php
-
-		-
-			message: '#^Property Modules\\Cms\\Database\\Factories\\WidgetFactory\:\:\$model \(class\-string\<Illuminate\\Database\\Eloquent\\Model\>\) does not accept default value of type string\.$#'
-			identifier: property.defaultValue
-			count: 1
-			path: Modules/Cms/database/factories/WidgetFactory.php
-
-		-
 			message: '#^Call to static method create\(\) on an unknown class Modules\\Cms\\Models\\FormSubmission\.$#'
 			identifier: class.notFound
 			count: 1
@@ -581,90 +569,6 @@ parameters:
 			identifier: larastan.noEnvCallsOutsideOfConfig
 			count: 1
 			path: Modules/Cms/database/seeders/CmsSampleDataSeeder.php
-
-		-
-			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
-			count: 1
-			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
-
-		-
-			message: '#^Cannot access offset ''default'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
-
-		-
-			message: '#^Cannot access offset ''settings_schema'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
-
-		-
-			message: '#^Method Modules\\Cms\\Database\\Seeders\\JanariThemeSeeder\:\:seedCategories\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
-
-		-
-			message: '#^Method Modules\\Cms\\Database\\Seeders\\JanariThemeSeeder\:\:seedCategories\(\) has parameter \$user with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
-
-		-
-			message: '#^Method Modules\\Cms\\Database\\Seeders\\JanariThemeSeeder\:\:seedEssentialContent\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
-
-		-
-			message: '#^Method Modules\\Cms\\Database\\Seeders\\JanariThemeSeeder\:\:seedEssentialContent\(\) has parameter \$user with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
-
-		-
-			message: '#^Method Modules\\Cms\\Database\\Seeders\\JanariThemeSeeder\:\:seedThemeSettings\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
-
-		-
-			message: '#^Possibly invalid array key type mixed\.$#'
-			identifier: offsetAccess.invalidOffset
-			count: 2
-			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$deleted_at\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/Cms/database/seeders/MenuLocationStandardizationSeeder.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$is_active\.$#'
-			identifier: property.notFound
-			count: 2
-			path: Modules/Cms/database/seeders/MenuLocationStandardizationSeeder.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$location\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/Cms/database/seeders/MenuLocationStandardizationSeeder.php
-
-		-
-			message: '#^Left side of && is always true\.$#'
-			identifier: booleanAnd.leftAlwaysTrue
-			count: 3
-			path: Modules/Cms/database/seeders/MenuLocationStandardizationSeeder.php
-
-		-
-			message: '#^Strict comparison using \=\=\= between mixed and null will always evaluate to false\.$#'
-			identifier: identical.alwaysFalse
-			count: 1
-			path: Modules/Cms/database/seeders/MenuLocationStandardizationSeeder.php
 
 		-
 			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createAboutPage\(\) has parameter \$user with no type specified\.$#'
@@ -737,12 +641,6 @@ parameters:
 			identifier: argument.templateType
 			count: 1
 			path: Modules/Cms/database/seeders/SampleContentSeeder.php
-
-		-
-			message: '#^Call to static method updateOrCreate\(\) on an unknown class Modules\\Cms\\Models\\FormField\.$#'
-			identifier: class.notFound
-			count: 1
-			path: Modules/Cms/database/seeders/StudioSeeder.php
 
 		-
 			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
@@ -1327,6 +1225,18 @@ parameters:
 			path: Modules/Infra/app/Services/BackupService.php
 
 		-
+			message: '#^Call to method clearThemeCache\(\) on an unknown class Modules\\Cms\\Services\\ThemeService\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Layout/app/Console/Commands/BackfillThemeJanariParentCommand.php
+
+		-
+			message: '#^Parameter \$themeService of method Modules\\Layout\\Console\\Commands\\BackfillThemeJanariParentCommand\:\:handle\(\) has invalid type Modules\\Cms\\Services\\ThemeService\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Layout/app/Console/Commands/BackfillThemeJanariParentCommand.php
+
+		-
 			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$location\.$#'
 			identifier: property.notFound
 			count: 3
@@ -1609,6 +1519,66 @@ parameters:
 			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
 
 		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Layout/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$body\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Layout/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$excerpt\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Layout/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Layout/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Layout/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Cannot access property \$name on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: Modules/Layout/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Cannot call method getAttribute\(\) on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Layout/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Method Modules\\Layout\\Services\\ThemeService\:\:getMenuLocations\(\) should return array\<string, string\> but returns list\<\(int\|string\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: Modules/Layout/app/Services/ThemeService.php
+
+		-
+			message: '#^Class Modules\\Layout\\Database\\Factories\\MenuFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/database/factories/MenuFactory.php
+
+		-
+			message: '#^Class Modules\\Layout\\Database\\Factories\\MenuItemFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/database/factories/MenuItemFactory.php
+
+		-
 			message: '#^Class Modules\\Layout\\Database\\Factories\\ThemeFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
 			identifier: missingType.generics
 			count: 1
@@ -1625,6 +1595,102 @@ parameters:
 			identifier: argument.type
 			count: 2
 			path: Modules/Layout/database/factories/ThemeFactory.php
+
+		-
+			message: '#^Class Modules\\Layout\\Database\\Factories\\WidgetFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/database/factories/WidgetFactory.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$deleted_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Layout/database/seeders/MenuLocationStandardizationSeeder.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$is_active\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/Layout/database/seeders/MenuLocationStandardizationSeeder.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Layout/database/seeders/MenuLocationStandardizationSeeder.php
+
+		-
+			message: '#^Left side of && is always true\.$#'
+			identifier: booleanAnd.leftAlwaysTrue
+			count: 3
+			path: Modules/Layout/database/seeders/MenuLocationStandardizationSeeder.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between mixed and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: Modules/Layout/database/seeders/MenuLocationStandardizationSeeder.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Layout/database/seeders/ThemeSeeder.php
+
+		-
+			message: '#^Cannot access offset ''default'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/Layout/database/seeders/ThemeSeeder.php
+
+		-
+			message: '#^Cannot access offset ''settings_schema'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/Layout/database/seeders/ThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Layout\\Database\\Seeders\\ThemeSeeder\:\:seedCategories\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/database/seeders/ThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Layout\\Database\\Seeders\\ThemeSeeder\:\:seedCategories\(\) has parameter \$user with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Layout/database/seeders/ThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Layout\\Database\\Seeders\\ThemeSeeder\:\:seedEssentialContent\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/database/seeders/ThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Layout\\Database\\Seeders\\ThemeSeeder\:\:seedEssentialContent\(\) has parameter \$user with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Layout/database/seeders/ThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Layout\\Database\\Seeders\\ThemeSeeder\:\:seedThemeSettings\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/database/seeders/ThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Layout\\Database\\Seeders\\ThemeSeeder\:\:seedThemes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/database/seeders/ThemeSeeder.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 2
+			path: Modules/Layout/database/seeders/ThemeSeeder.php
 
 		-
 			message: '#^Parameter \#1 \$ids of method Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<Modules\\Library\\Models\\FieldGroup,Modules\\Library\\Models\\CustomField,Illuminate\\Database\\Eloquent\\Relations\\Pivot,string\>\:\:sync\(\) expects array\|Illuminate\\Database\\Eloquent\\Model\|Illuminate\\Support\\Collection\|int\|string, mixed given\.$#'
@@ -2357,6 +2423,78 @@ parameters:
 			identifier: missingType.generics
 			count: 1
 			path: Modules/School/database/factories/StudentFactory.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:onDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: Modules/School/database/migrations/2026_03_01_000001_create_sch_infrastructure_tables.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:onDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 23
+			path: Modules/School/database/migrations/2026_03_01_000002_create_sch_academic_tables.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:onDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 11
+			path: Modules/School/database/migrations/2026_03_01_000003_create_sch_hr_tables.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:onDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 13
+			path: Modules/School/database/migrations/2026_03_01_000004_create_sch_student_tables.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:onDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 24
+			path: Modules/School/database/migrations/2026_03_01_000005_create_sch_logistics_tables.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:onDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 10
+			path: Modules/School/database/migrations/2026_03_01_000006_create_sch_operations_tables.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:onDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: Modules/School/database/migrations/2026_03_01_000007_create_sch_admission_tables.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:onDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 8
+			path: Modules/School/database/migrations/2026_03_01_000008_create_sch_lms_tables.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:onDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 6
+			path: Modules/School/database/migrations/2026_03_01_000009_create_sch_osis_tables.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:cascadeOnDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: Modules/School/database/migrations/2026_05_08_000001_create_sch_acad_attendances_table.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition\:\:nullOnDelete\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/School/database/migrations/2026_05_08_000002_add_missing_columns_to_sch_std_students.php
+
+		-
+			message: '#^Access to an undefined property Modules\\School\\Models\\Institution\\School\:\:\$workspace_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/School/database/seeders/GraduationSeeder.php
 
 		-
 			message: '#^Class Modules\\School\\database\\seeders\\AcademicInfrastructureSeeder referenced with incorrect case\: Modules\\School\\Database\\Seeders\\AcademicInfrastructureSeeder\.$#'
@@ -3151,48 +3289,6 @@ parameters:
 			path: Modules/System/app/Registries/RegistryInterface.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/System/app/Services/DynamicTagService.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$body\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/System/app/Services/DynamicTagService.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$excerpt\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/System/app/Services/DynamicTagService.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$slug\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/System/app/Services/DynamicTagService.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$title\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/System/app/Services/DynamicTagService.php
-
-		-
-			message: '#^Cannot access property \$name on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: Modules/System/app/Services/DynamicTagService.php
-
-		-
-			message: '#^Cannot call method getAttribute\(\) on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: Modules/System/app/Services/DynamicTagService.php
-
-		-
 			message: '#^Method Modules\\System\\Services\\FileIntegrityService\:\:createBackup\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -3283,7 +3379,7 @@ parameters:
 			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
 
 		-
-			message: '#^Parameter \#1 \$column of method Illuminate\\Database\\Schema\\Blueprint\:\:unsignedBigInteger\(\) expects string, mixed given\.$#'
+			message: '#^Parameter \#1 \$column of method Illuminate\\Database\\Schema\\Blueprint\:\:uuid\(\) expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 9
 			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
@@ -3341,3 +3437,15 @@ parameters:
 			identifier: larastan.noEnvCallsOutsideOfConfig
 			count: 1
 			path: Modules/System/database/seeders/InfrastructureSeeder.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 2
+			path: Modules/System/database/seeders/SystemDatabaseSeeder.php
+
+		-
+			message: '#^Parameter \#1 \$value of static method Illuminate\\Support\\Facades\\Hash\:\:make\(\) expects string, bool\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/System/database/seeders/SystemDatabaseSeeder.php
