@@ -141,7 +141,7 @@ export function useBreadcrumbs() {
         // Build breadcrumbs from path segments
         pathSegments.forEach((segment, index) => {
             // Skip 'admin' as it's already added as home
-            if (segment === 'admin' && index === "0") return;
+            if (segment === 'admin' && index === 0) return;
 
             const path = buildPath(pathSegments, index);
             const label = getLabel(path, route);

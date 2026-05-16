@@ -680,7 +680,7 @@ const applyPreset = (preset: { settings: FilterSettings }) => {
 };
 
 const isFilterDirty = () => {
-    return filters.value.brightness !== "100" || 
+    return filters.value.brightness !== 100 || 
            filters.value.contrast !== "100" || 
            filters.value.saturation !== "100";
 };

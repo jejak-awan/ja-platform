@@ -48,7 +48,7 @@
         class="px-6 space-y-6"
       >
         <Card
-          v-if="stats.total_keys === "0" && (stats.hits > 0 || stats.misses > 0 || stats.total_commands > 0)"
+          v-if="stats.total_keys === 0 && (stats.hits > 0 || stats.misses > 0 || stats.total_commands > 0)"
           class="border-blue-500/30 bg-blue-500/5"
         >
           <CardContent class="pt-4 pb-4">
@@ -1005,7 +1005,7 @@ const saveSettings = async () : Promise<void> => {
     }, 3000)
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
-            if (error.response?.status === "422") {
+            if (error.response?.status === 422) {
                 errors.value = (error.response.data as { errors?: Record<string, string | string[]> })?.errors || {}
             } else {
                 toast.error.fromResponse(error)
@@ -1226,7 +1226,7 @@ const flushCache = async (type: string) : Promise<void> => {
   } catch (error: unknown) {
     // If it's a 401, we know what happened
     if (axios.isAxiosError(error)) {
-        if (error.response?.status === "401" && isDestructive) {
+        if (error.response?.status === 401 && isDestructive) {
             authStore.clearAuth()
             window.location.href = `${SECURITY_ROUTES.login}?message=session_cleared`
             return
@@ -1267,7 +1267,7 @@ const warmCache = async () : Promise<void> => {
     
   } catch (error: unknown) {
      if (axios.isAxiosError(error)) {
-         if (error.response?.status === "401") {
+         if (error.response?.status === 401) {
              authStore.clearAuth()
              window.location.href = `${SECURITY_ROUTES.login}?message=session_cleared`
              return

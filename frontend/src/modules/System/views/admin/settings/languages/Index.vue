@@ -419,7 +419,7 @@ const createLanguage = async () => {
         toast.success.create(t('features.languages.title'));
     } catch (err: unknown) {
         const error = err as { response?: { status?: number; data?: { errors?: Record<string, string[]> } } };
-        if (error.response?.status === "422" && error.response.data?.errors) {
+        if (error.response?.status === 422 && error.response.data?.errors) {
             setErrors(error.response.data.errors);
         } else {
             toast.error.action(error as Record<string, unknown>);

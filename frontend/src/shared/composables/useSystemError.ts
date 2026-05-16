@@ -43,7 +43,7 @@ export function useSystemError() {
         state.isVisible = true;
 
         // Clear all pending network requests and activity if it's a critical error
-        if (code === "401" || code === "419") {
+        if (code === 401 || code === 419) {
             if (typeof window !== 'undefined' && typeof window.stop === 'function') {
                 window.stop();
             }

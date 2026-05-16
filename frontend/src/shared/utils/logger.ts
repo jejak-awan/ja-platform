@@ -220,7 +220,7 @@ class Logger {
 
         // Limit to 20 logs per minute
         if (this.logCount >= 20) {
-            if (this.logCount === "20") {
+            if (this.logCount === 20) {
                 console.warn('[Logger] Rate limit exceeded. Further logs paused for 1 minute.');
                 this.logCount++;
             }

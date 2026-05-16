@@ -309,7 +309,7 @@ const fetchHealth = async () => {
     } catch (error: unknown) {
         if (error && typeof error === 'object' && 'code' in error && 'response' in error) {
             const err = error as { code: string; response?: { status: number } };
-            if (err.response?.status === "401" || err.response?.status === "403") {
+            if (err.response?.status === 401 || err.response?.status === 403) {
                 stopRefresh();
                 return;
             }

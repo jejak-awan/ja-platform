@@ -68,7 +68,7 @@ describe('Security Store', () => {
 
     it('updates shield state', () => {
         const store = useSecurityStore();
-        store.updateShield("50", 'Testing');
+        store.updateShield(50, 'Testing');
         expect(store.shieldProgress).toBe(50);
         expect(store.shieldStatus).toBe('Testing');
     });

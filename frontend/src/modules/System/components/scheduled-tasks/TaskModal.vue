@@ -194,7 +194,7 @@ const handleSubmit = async () => {
         emit('saved');
     } catch (error: unknown) {
         const resp = (error as { response?: { status?: number, data?: { errors?: Record<string, string[]> } } }).response;
-        if (resp?.status === "422") {
+        if (resp?.status === 422) {
             setErrors(resp.data?.errors || {});
         } else {
             toast.error.fromResponse(error);

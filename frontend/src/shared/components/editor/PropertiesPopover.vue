@@ -719,7 +719,7 @@ const emitChanges = () => {
     };
     
     function ensureUnit(val: string | number) {
-        if (!val && val !== "0") return val;
+        if (!val && val !== 0) return val;
         const sVal = String(val).trim();
         return (sVal !== '' && !isNaN(Number(sVal))) ? `${sVal}px` : sVal;
     }

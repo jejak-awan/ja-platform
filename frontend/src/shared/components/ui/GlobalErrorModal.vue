@@ -6,7 +6,7 @@
     <!-- Overlay backdrop clicking should not close critical errors -->
     <div
       class="fixed inset-0 -z-10"
-      @click="state.code !== "401" && state.code !== "419" && hideError()"
+      @click="state.code !== 401 && state.code !== 419 && hideError()"
     />
 
     <div class="max-w-md w-full bg-card/80 backdrop-blur-xl border border-white/20 rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-8 duration-500 ease-out">
@@ -42,7 +42,7 @@
         <!-- Actions -->
         <div class="w-full flex flex-col gap-3 mt-10">
           <button
-            v-if="state.code === "401" || state.code === 419"
+            v-if="state.code === 401 || state.code === 419"
             class="w-full inline-flex items-center justify-center px-6 py-4 border border-transparent text-sm font-semibold rounded-2xl text-warning-foreground bg-warning hover:bg-warning/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-warning transition-colors active:scale-[0.98]"
             @click="handleLogin"
           >
@@ -116,7 +116,7 @@ const title = computed(() => {
 const message = computed(() => {
     if (state.message) return state.message;
     
-    if (state.code === "419" || state.code === "401") {
+    if (state.code === 419 || state.code === 401) {
         if (state.reason === 'concurrent') return t('common.errors.419.concurrent');
         if (state.reason === 'timeout') return t('common.errors.419.timeout');
     }
@@ -169,7 +169,7 @@ const config = computed<ErrorConfig>(() => {
 });
 
 const handleLogin = () => {
-    if (state.code === "419" && state.reason === 'timeout') {
+    if (state.code === 419 && state.reason === 'timeout') {
         hideError();
         authStore.logout();
         window.location.href = '/';

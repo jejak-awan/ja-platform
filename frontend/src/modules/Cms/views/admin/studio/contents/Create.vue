@@ -327,7 +327,7 @@ const {
         // Handle slug conflict from autosave
         if (error && typeof error === 'object' && 'response' in error) {
             const err = error as { response?: { status?: number, data?: { code?: string, data?: { conflict: ConflictDetails } } } };
-            if (err.response?.status === "409" && err.response?.data?.code === 'SLUG_CONFLICT') {
+            if (err.response?.status === 409 && err.response?.data?.code === 'SLUG_CONFLICT') {
                 const conflictData = err.response?.data?.data;
                 if (conflictData) {
                     slugConflict.value = {
@@ -463,9 +463,9 @@ const handleSubmit = async (status: string | null = null) => {
     } catch (error: unknown) {
         if (error && typeof error === 'object' && 'response' in error) {
             const err = error as { response?: { status?: number, data?: { errors?: Record<string, string[]>, code?: string, data?: { conflict: ConflictDetails } } } };
-            if (err.response?.status === "422" && err.response.data) {
+            if (err.response?.status === 422 && err.response.data) {
                 setErrors(err.response.data.errors || {});
-            } else if (err.response?.status === "409" && err.response?.data?.code === 'SLUG_CONFLICT') {
+            } else if (err.response?.status === 409 && err.response?.data?.code === 'SLUG_CONFLICT') {
                 // Handle slug conflict
                 slugConflict.value = {
                     details: err.response?.data?.data?.conflict as ConflictDetails,

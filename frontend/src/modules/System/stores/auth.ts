@@ -171,7 +171,7 @@ export const useAuthStore = defineStore('auth', {
                 const headers = axiosError?.response?.headers || {};
 
                 // Handle rate limiting (429)
-                if (status === "429") {
+                if (status === 429) {
                     // Try to get retry-after from various sources
                     let retryAfter = 60; // Default 60 seconds
 
@@ -197,7 +197,7 @@ export const useAuthStore = defineStore('auth', {
                 }
 
                 // Handle different error statuses
-                if (status === "403") {
+                if (status === 403) {
                     // Email not verified
                     return {
                         success: false,
@@ -254,7 +254,7 @@ export const useAuthStore = defineStore('auth', {
                 const axiosError = isAxiosError(error) ? error : null;
                 const status = axiosError?.response?.status;
 
-                const isSilentError = status === "401" || status === "419" || isCancel(error);
+                const isSilentError = status === 401 || status === 419 || isCancel(error);
 
                 if (!isSilentError) {
                     logger.error('Logout error:', error);
@@ -292,7 +292,7 @@ export const useAuthStore = defineStore('auth', {
                 // If it's a 403 or 503, it might be maintenance mode/WAF block.
                 // We should NOT clear auth immediately, as we want to preserve the isAdmin state 
                 // for the frontend bypass logic.
-                if (status !== "403" && status !== "503") {
+                if (status !== 403 && status !== 503) {
                     this.clearAuth();
                 }
                 

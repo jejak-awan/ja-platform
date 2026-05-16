@@ -269,7 +269,7 @@ const loadAcademicContent = async (): Promise<AcademicPageData | null> => {
         clearMissState();
         return response.data as AcademicPageData;
       } catch (error: any) {
-        if (error?.response?.status !== "404") {
+        if (error?.response?.status !== 404) {
           console.warn(`[Academic] failed to fetch slug "${slug}"`, error);
         }
       }

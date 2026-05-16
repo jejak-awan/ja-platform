@@ -340,7 +340,7 @@ const activeUnitId = computed(() => Number(workspaceStore.activeId));
 
 // Dynamic Dashboard logic that doesn't depend on School/Cms modules directly
 const dashboardLink = computed(() => {
-    if (activeUnitId.value === "0") {
+    if (activeUnitId.value === 0) {
         return workspaceStore.activeContextType === 'system' 
             ? { name: 'core.dashboard' } 
             : { name: 'dashboard' }; // Let the router handle the default landing
@@ -350,7 +350,7 @@ const dashboardLink = computed(() => {
 });
 
 const dashboardLabel = computed(() => {
-    if (activeUnitId.value === "0") {
+    if (activeUnitId.value === 0) {
         return workspaceStore.activeContextType === 'system' 
             ? t('common.navigation.menu.dashboard') 
             : t('common.navigation.menu.foundationDashboard');
@@ -364,7 +364,7 @@ const isDashboardActive = computed(() => {
 });
 
 const sidebarSections = computed<SidebarSection[]>(() => {
-    const isGlobal = activeUnitId.value === "0";
+    const isGlobal = activeUnitId.value === 0;
     const isSuperAdmin = authStore.getRoleRank() >= 100;
     const contextType = workspaceStore.activeContextType;
     
@@ -444,7 +444,7 @@ const isSectionActive = (key: string) => {
 
 const filteredNavigation = computed(() => {
     const filtered: Record<string, NavItem[]> = {};
-    const isGlobal = activeUnitId.value === "0";
+    const isGlobal = activeUnitId.value === 0;
 
     for (const [group, items] of Object.entries(navigationStore.navigationGroups)) {
         filtered[group] = items
