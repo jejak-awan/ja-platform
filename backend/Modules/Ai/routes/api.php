@@ -9,10 +9,4 @@ Route::prefix('v1')->group(function () {
         Route::get('providers', [AiController::class, 'getProviders']);
         Route::post('generate', [AiController::class, 'generate']);
     });
-
-    // Legacy Bridge
-    Route::prefix('admin/core/ai')->middleware(['auth:sanctum'])->group(function () {
-        Route::get('providers', [AiController::class, 'getProviders']);
-        Route::post('generate', [AiController::class, 'generate']);
-    });
 });

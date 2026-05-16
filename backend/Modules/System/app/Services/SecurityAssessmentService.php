@@ -6,7 +6,7 @@ namespace Modules\System\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Modules\System\Models\SecurityLog;
+use Modules\Security\Models\SecurityLog;
 use Modules\System\Models\Setting;
 
 /**

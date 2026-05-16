@@ -4,7 +4,7 @@ namespace Tests\Helpers;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 class TestHelpers
 {

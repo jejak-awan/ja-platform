@@ -3,6 +3,7 @@
 namespace Modules\Infra\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
  * @property int $id
@@ -18,6 +19,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Backup extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'infra_backups';
 
 

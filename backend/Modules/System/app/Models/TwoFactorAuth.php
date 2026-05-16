@@ -3,6 +3,7 @@
 namespace Modules\System\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Crypt;
 
@@ -20,6 +21,11 @@ use Illuminate\Support\Facades\Crypt;
  */
 class TwoFactorAuth extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sys_two_factor_auth';
 
 

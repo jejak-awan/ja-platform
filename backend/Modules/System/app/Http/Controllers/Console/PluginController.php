@@ -5,7 +5,7 @@ namespace Modules\System\Http\Controllers\Console;
 use Illuminate\Http\Request;
 use Modules\System\Models\Plugin;
 
-class PluginController extends BaseApiController
+class PluginController extends \Modules\System\Http\Controllers\BaseApiController
 {
     public function index(): \Illuminate\Http\JsonResponse
     {

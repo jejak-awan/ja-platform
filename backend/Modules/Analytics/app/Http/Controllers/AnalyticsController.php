@@ -417,7 +417,7 @@ class AnalyticsController extends BaseApiController
                 'event_type' => 'required|string|max:50',
                 'event_name' => 'required|string|max:255',
                 'event_data' => 'nullable|array',
-                'content_id' => 'nullable|integer|exists:contents,id',
+                'content_id' => 'nullable|integer|exists:cms_contents,id',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $this->validationError($e->errors());
@@ -688,15 +688,15 @@ class AnalyticsController extends BaseApiController
     public function cleanup(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
-            $daysVisitsRaw = \Modules\Analytics\Models\Setting::get('analytics_retention_days', 90);
+            $daysVisitsRaw = \Modules\System\Models\Setting::get('analytics_retention_days', 90);
             $daysVisits = is_numeric($daysVisitsRaw) ? (int) $daysVisitsRaw : 90;
             $countVisits = AnalyticsVisit::where('visited_at', '<', now()->subDays($daysVisits))->delete();
 
-            $daysEventsRaw = \Modules\Analytics\Models\Setting::get('analytics_event_retention_days', 60);
+            $daysEventsRaw = \Modules\System\Models\Setting::get('analytics_event_retention_days', 60);
             $daysEvents = is_numeric($daysEventsRaw) ? (int) $daysEventsRaw : 60;
             $countEvents = AnalyticsEvent::where('occurred_at', '<', now()->subDays($daysEvents))->delete();
 
-            $daysSessionsRaw = \Modules\Analytics\Models\Setting::get('analytics_visitor_retention_days', 30);
+            $daysSessionsRaw = \Modules\System\Models\Setting::get('analytics_visitor_retention_days', 30);
             $daysSessions = is_numeric($daysSessionsRaw) ? (int) $daysSessionsRaw : 30;
             $countSessions = AnalyticsSession::where('started_at', '<', now()->subDays($daysSessions))->delete();
 

@@ -241,7 +241,6 @@ class LmsService
 
             if ($question->type === 'multiple_choice' || $question->type === 'true_false') {
                 $correctOption = $question->options()->where('is_correct', true)->first();
-                // @phpstan-ignore-next-line
                 $correctId = $correctOption ? (string)$correctOption->id : null;
                 if (is_scalar($studentAnswer) && $correctId === (string)$studentAnswer) {
                     $score += (int)($question->score ?? 0);

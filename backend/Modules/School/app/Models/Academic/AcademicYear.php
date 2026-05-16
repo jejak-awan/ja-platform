@@ -4,6 +4,7 @@ namespace Modules\School\Models\Academic;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\System\Traits\ScopedByWorkspace;
 use Modules\School\Models\Institution\School;
 
@@ -19,6 +20,11 @@ use Modules\School\Models\Institution\School;
  */
 class AcademicYear extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sch_acad_years';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */

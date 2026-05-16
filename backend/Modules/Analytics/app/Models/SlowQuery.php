@@ -3,9 +3,16 @@
 namespace Modules\Analytics\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Modules\System\Models\User;
 
 class SlowQuery extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'srv_analytics_slow_queries';
 
 

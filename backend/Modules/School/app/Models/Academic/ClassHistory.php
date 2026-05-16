@@ -5,6 +5,7 @@ namespace Modules\School\Models\Academic;
 use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
  * @property int $id
@@ -21,6 +22,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ClassHistory extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     use ScopedByWorkspace;
     protected $table = 'sch_acad_class_histories';
 

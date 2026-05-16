@@ -5,6 +5,7 @@ namespace Modules\Cms\Models;
 use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,8 +35,15 @@ use Modules\System\Traits\CoreLogsActivity;
  */
 class Comment extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     /** @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Modules\Cms\Database\Factories\CommentFactory> */
-    use \Illuminate\Database\Eloquent\Factories\HasFactory, LogsActivity, SoftDeletes, ScopedByWorkspace;
+    use \Illuminate\Database\Eloquent\Factories\HasFactory, CoreLogsActivity, SoftDeletes, ScopedByWorkspace;
+
+    protected $table = 'cms_comments';
 
     /**
      * Create a new factory instance for the model.

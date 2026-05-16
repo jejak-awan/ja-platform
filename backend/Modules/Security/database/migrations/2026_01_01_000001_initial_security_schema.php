@@ -10,20 +10,21 @@ return new class extends Migration
     {
         // 1. Security Logs
         Schema::create('sec_logs', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->uuid('id')->primary();
+            $table->uuid('user_id')->nullable()->index();
             $table->string('event_type')->index();
             $table->string('severity')->default('info');
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->string('url')->nullable();
-            $table->json('details')->nullable();
+            $table->text('description')->nullable();
+            $table->json('metadata')->nullable();
             $table->timestamps();
         });
 
         // 2. IP Lists (Whitelist/Blocklist)
         Schema::create('sec_ip_lists', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('ip_address', 45)->index();
             $table->enum('type', ['whitelist', 'blocklist'])->default('blocklist');
             $table->text('reason')->nullable();
@@ -36,7 +37,7 @@ return new class extends Migration
 
         // 3. CSP Reports
         Schema::create('sec_csp_reports', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('document_uri');
             $table->string('referrer')->nullable();
             $table->string('violated_directive');

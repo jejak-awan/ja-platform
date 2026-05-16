@@ -3,10 +3,10 @@
 namespace Modules\Cms\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\Cms\Models\Category;
+use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\ContentRevision;
-use Modules\Cms\Models\Tag;
+use Modules\Library\Models\Tag;
 use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
@@ -22,7 +22,7 @@ class ContentManagementTest extends TestCase
     }
 
     /**
-     * Test admin can list all contents.
+     * Test admin can list all cms_contents.
      */
     public function test_admin_can_list_all_contents(): void
     {
@@ -35,7 +35,7 @@ class ContentManagementTest extends TestCase
         $response = $this->getJson('/api/v1/manage/cms/contents');
 
         TestHelpers::assertApiPaginated($response);
-        // If total contents exceed per_page (usually 10 or 15), this might fail if we assert count + 5
+        // If total cms_contents exceed per_page (usually 10 or 15), this might fail if we assert count + 5
         // Ideally we check total in meta, or just assert we got some data
         // $response->assertJsonCount(min($initialCount + 5, 10), 'data.data'); // Assuming 10 per page
 
@@ -45,7 +45,7 @@ class ContentManagementTest extends TestCase
     }
 
     /**
-     * Test admin can filter contents by status.
+     * Test admin can filter cms_contents by status.
      */
     public function test_admin_can_filter_contents_by_status(): void
     {
@@ -76,7 +76,7 @@ class ContentManagementTest extends TestCase
 
         $contentData = TestHelpers::getContentData([
             'category_id' => $category->id,
-            'tags' => $tags->pluck('id')->toArray(),
+            'lib_tags' => $tags->pluck('id')->toArray(),
         ]);
 
         $response = $this->postJson('/api/v1/manage/cms/contents', $contentData);
@@ -93,7 +93,7 @@ class ContentManagementTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('contents', [
+        $this->assertDatabaseHas('cms_contents', [
             'title' => $contentData['title'],
             'slug' => $contentData['slug'],
             'author_id' => $admin->id,
@@ -157,7 +157,7 @@ class ContentManagementTest extends TestCase
         ));
 
         TestHelpers::assertApiSuccess($response);
-        $this->assertDatabaseHas('contents', [
+        $this->assertDatabaseHas('cms_contents', [
             'id' => $content->id,
             'title' => 'Updated Title',
         ]);
@@ -176,7 +176,7 @@ class ContentManagementTest extends TestCase
         $response = $this->deleteJson("/api/v1/manage/cms/contents/{$content->id}");
 
         TestHelpers::assertApiSuccess($response);
-        $this->assertSoftDeleted('contents', [
+        $this->assertSoftDeleted('cms_contents', [
             'id' => $content->id,
         ]);
     }
@@ -197,13 +197,13 @@ class ContentManagementTest extends TestCase
 
         TestHelpers::assertApiSuccess($response, 201);
 
-        $this->assertDatabaseHas('contents', [
+        $this->assertDatabaseHas('cms_contents', [
             'title' => $content->title.' (Copy)',
         ]);
     }
 
     /**
-     * Test admin can perform bulk actions on contents.
+     * Test admin can perform bulk actions on cms_contents.
      */
     public function test_admin_can_perform_bulk_actions(): void
     {
@@ -220,7 +220,7 @@ class ContentManagementTest extends TestCase
         TestHelpers::assertApiSuccess($response);
 
         foreach ($contents as $content) {
-            $this->assertSoftDeleted('contents', ['id' => $content->id]);
+            $this->assertSoftDeleted('cms_contents', ['id' => $content->id]);
         }
     }
 
@@ -257,7 +257,7 @@ class ContentManagementTest extends TestCase
         ]);
 
         TestHelpers::assertApiSuccess($response, 201);
-        $this->assertDatabaseHas('content_revisions', [
+        $this->assertDatabaseHas('cms_content_revisions', [
             'content_id' => $content->id,
             'author_id' => $admin->id,
             'reason' => 'Test revision',
@@ -267,7 +267,7 @@ class ContentManagementTest extends TestCase
     /**
      * Test admin can list content revisions.
      */
-    public function test_admin_can_list_content_revisions(): void
+    public function test_admin_can_list_cms_content_revisions(): void
     {
         $admin = $this->createAdminUser();
         $this->actingAs($admin, 'sanctum');
@@ -351,7 +351,7 @@ class ContentManagementTest extends TestCase
         $response = $this->deleteJson("/api/v1/manage/cms/contents/{$content->id}/revisions/{$revision->id}");
 
         TestHelpers::assertApiSuccess($response);
-        $this->assertDatabaseMissing('content_revisions', [
+        $this->assertDatabaseMissing('cms_content_revisions', [
             'id' => $revision->id,
         ]);
     }
@@ -452,9 +452,9 @@ class ContentManagementTest extends TestCase
     }
 
     /**
-     * Test admin can filter contents by various parameters.
+     * Test admin can filter cms_contents by various parameters.
      */
-    public function test_admin_can_filter_contents_by_various_params(): void
+    public function test_admin_can_filter_cms_contents_by_various_params(): void
     {
         $admin = $this->createAdminUser();
         $this->actingAs($admin, 'sanctum');
@@ -477,9 +477,9 @@ class ContentManagementTest extends TestCase
     }
 
     /**
-     * Test admin can manage trashed contents.
+     * Test admin can manage trashed cms_contents.
      */
-    public function test_admin_can_manage_trashed_contents(): void
+    public function test_admin_can_manage_trashed_cms_contents(): void
     {
         $admin = $this->createAdminUser();
         $this->actingAs($admin, 'sanctum');
@@ -495,13 +495,13 @@ class ContentManagementTest extends TestCase
         // Restore
         $response = $this->putJson("/api/v1/manage/cms/contents/{$content->id}/restore");
         TestHelpers::assertApiSuccess($response);
-        $this->assertDatabaseHas('contents', ['id' => $content->id, 'deleted_at' => null]);
+        $this->assertDatabaseHas('cms_contents', ['id' => $content->id, 'deleted_at' => null]);
 
         // Force Delete
         $content->delete();
         $response = $this->deleteJson("/api/v1/manage/cms/contents/{$content->id}/force-delete");
         TestHelpers::assertApiSuccess($response);
-        $this->assertDatabaseMissing('contents', ['id' => $content->id]);
+        $this->assertDatabaseMissing('cms_contents', ['id' => $content->id]);
     }
 
     /**
@@ -522,7 +522,7 @@ class ContentManagementTest extends TestCase
         ]);
         TestHelpers::assertApiSuccess($response);
         foreach ($contents as $c) {
-            $this->assertDatabaseHas('contents', ['id' => $c->id, 'deleted_at' => null]);
+            $this->assertDatabaseHas('cms_contents', ['id' => $c->id, 'deleted_at' => null]);
         }
 
         // Bulk Force Delete
@@ -533,7 +533,7 @@ class ContentManagementTest extends TestCase
         ]);
         TestHelpers::assertApiSuccess($response);
         foreach ($contents as $c) {
-            $this->assertDatabaseMissing('contents', ['id' => $c->id]);
+            $this->assertDatabaseMissing('cms_contents', ['id' => $c->id]);
         }
     }
 }

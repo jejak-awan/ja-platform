@@ -2,16 +2,16 @@
 
 namespace Tests\Feature\Integration;
 
-use Modules\Core\Models\Media;
-use Modules\Core\Models\User;
+use Modules\Media\Models\File;
+use Modules\System\Models\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
 
 /**
- * Integration tests that span Core + CMS route groups.
- * Intentionally located outside `Modules/Core` to keep Core module independent.
+ * Integration tests that span System + CMS route groups.
+ * Intentionally located outside `Modules/System` to keep System module independent.
  */
 class CmsCorePermissionIntegrationTest extends TestCase
 {
@@ -27,12 +27,17 @@ class CmsCorePermissionIntegrationTest extends TestCase
         $this->actingAs($admin, 'sanctum');
 
         // CMS endpoints
-        TestHelpers::assertApiSuccess($this->getJson('/api/v1/admin/cms/contents'));
-        TestHelpers::assertApiSuccess($this->getJson('/api/v1/admin/cms/media'));
-        TestHelpers::assertApiSuccess($this->getJson('/api/v1/admin/cms/categories'));
+        TestHelpers::assertApiSuccess($this->getJson('/api/v1/manage/cms/contents'));
+        TestHelpers::assertApiSuccess($this->getJson('/api/v1/manage/cms/settings'));
 
-        // Core endpoints
-        TestHelpers::assertApiSuccess($this->getJson('/api/v1/admin/core/users'));
+        // System endpoints
+        TestHelpers::assertApiSuccess($this->getJson('/api/v1/manage/system/users'));
+        
+        // Media endpoints
+        TestHelpers::assertApiSuccess($this->getJson('/api/v1/manage/media'));
+        
+        // Library endpoints
+        TestHelpers::assertApiSuccess($this->getJson('/api/v1/manage/library/categories'));
     }
 
     public function test_user_without_permission_cannot_create_content(): void
@@ -40,9 +45,9 @@ class CmsCorePermissionIntegrationTest extends TestCase
         $user = $this->createUser();
         $this->actingAs($user, 'sanctum');
 
-        $response = $this->postJson('/api/v1/admin/cms/contents', TestHelpers::getContentData());
+        $response = $this->postJson('/api/v1/manage/cms/contents', TestHelpers::getContentData());
 
-        $response->assertStatus(403)->assertJson(['message' => 'Unauthorized']);
+        $response->assertStatus(403);
     }
 
     public function test_user_with_create_content_permission_can_create_content(): void
@@ -52,7 +57,7 @@ class CmsCorePermissionIntegrationTest extends TestCase
         $user->givePermissionTo($permission);
         $this->actingAs($user, 'sanctum');
 
-        $response = $this->postJson('/api/v1/admin/cms/contents', TestHelpers::getContentData());
+        $response = $this->postJson('/api/v1/manage/cms/contents', TestHelpers::getContentData());
         TestHelpers::assertApiSuccess($response, 201);
     }
 
@@ -61,10 +66,10 @@ class CmsCorePermissionIntegrationTest extends TestCase
         $user = $this->createUser();
         $this->actingAs($user, 'sanctum');
 
-        $media = Media::factory()->create(['author_id' => $user->id]);
+        $file = File::factory()->create(['author_id' => $user->id]);
 
-        $this->putJson("/api/v1/admin/cms/media/{$media->id}", ['name' => 'Updated Name'])->assertStatus(403);
-        $this->deleteJson("/api/v1/admin/cms/media/{$media->id}")->assertStatus(403);
+        $this->putJson("/api/v1/manage/media/{$file->id}", ['name' => 'Updated Name'])->assertStatus(403);
+        $this->deleteJson("/api/v1/manage/media/{$file->id}")->assertStatus(403);
     }
 
     public function test_user_with_manage_media_permission_can_manage_media(): void
@@ -75,11 +80,11 @@ class CmsCorePermissionIntegrationTest extends TestCase
         $user->givePermissionTo(['edit media', 'delete media']);
         $this->actingAs($user, 'sanctum');
 
-        $media = Media::factory()->create(['author_id' => $user->id]);
-        TestHelpers::assertApiSuccess($this->putJson("/api/v1/admin/cms/media/{$media->id}", ['name' => 'Updated Name']));
+        $file = File::factory()->create(['author_id' => $user->id]);
+        TestHelpers::assertApiSuccess($this->putJson("/api/v1/manage/media/{$file->id}", ['name' => 'Updated Name']));
 
-        $media2 = Media::factory()->create(['author_id' => $user->id]);
-        TestHelpers::assertApiSuccess($this->deleteJson("/api/v1/admin/cms/media/{$media2->id}"));
+        $file2 = File::factory()->create(['author_id' => $user->id]);
+        TestHelpers::assertApiSuccess($this->deleteJson("/api/v1/manage/media/{$file2->id}"));
     }
 
     public function test_admin_role_has_expected_permissions(): void

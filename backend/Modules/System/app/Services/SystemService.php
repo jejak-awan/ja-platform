@@ -117,17 +117,17 @@ class SystemService
             $stats = [
                 // Base Core Stats
                 'total_users' => \Modules\System\Models\User::count(),
-                'total_media' => \Modules\System\Models\Media::count(),
+                'total_media' => \Modules\Media\Models\File::count(),
                 'total_visits' => $totalVisits,
                 'users' => [
                     'total' => \Modules\System\Models\User::count(),
                     'verified' => \Modules\System\Models\User::whereNotNull('email_verified_at')->count(),
                 ],
                 'media' => [
-                    'total' => \Modules\System\Models\Media::count(),
-                    'total_size' => \Modules\System\Models\Media::sum('size'),
+                    'total' => \Modules\Media\Models\File::count(),
+                    'total_size' => \Modules\Media\Models\File::sum('size'),
                 ],
-                'tags' => \Modules\Cms\Models\Tag::count(),
+                'tags' => \Modules\Library\Models\Tag::count(),
             ];
 
             // Merge module stats (Flattened)

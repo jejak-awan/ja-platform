@@ -2,12 +2,13 @@
 
 namespace Modules\System\Models;
  
- use Modules\Cms\Models\Category;
+ use Modules\Library\Models\Category;
  use Modules\Cms\Models\Content;
 
 use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\System\Models\User;
@@ -31,10 +32,15 @@ use Modules\System\Models\User;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Modules\System\Models\User|null $author
- * @property-read \Modules\Cms\Models\Category|null $category
+ * @property-read \Modules\Library\Models\Category|null $category
  */
 class ContentTemplate extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sys_content_templates';
 
     use ScopedByWorkspace;

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class StorageMigrationController extends BaseApiController
+class StorageMigrationController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * List all files from local public storage that need migration

@@ -5,6 +5,7 @@ namespace Modules\School\Models\Operations;
 use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\School\Models\Student\Student;
 
 /**
@@ -22,6 +23,11 @@ use Modules\School\Models\Student\Student;
  */
 class GraduationResult extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     use ScopedByWorkspace;
     protected $table = 'sch_grad_results';
 

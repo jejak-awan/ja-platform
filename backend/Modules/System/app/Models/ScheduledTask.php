@@ -4,6 +4,7 @@ namespace Modules\System\Models;
 
 use Cron\CronExpression;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\System\Traits\CoreLogsActivity;
 
 /**
@@ -23,6 +24,11 @@ use Modules\System\Traits\CoreLogsActivity;
  */
 class ScheduledTask extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sys_scheduled_tasks';
 
 

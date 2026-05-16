@@ -5,7 +5,7 @@ namespace Modules\System\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Modules\System\Helpers\IpHelper;
-use Modules\System\Models\SecurityLog;
+use Modules\Security\Models\SecurityLog;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckPermission

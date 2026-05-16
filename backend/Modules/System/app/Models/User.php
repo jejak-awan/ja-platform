@@ -6,9 +6,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Modules\System\Models\Media;
+use Modules\Media\Models\File;
 use Modules\System\Traits\CoreLogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -29,13 +30,18 @@ use Spatie\Permission\Traits\HasRoles;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Media> $media
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, File> $media
  * @property-read \Illuminate\Database\Eloquent\Collection<int, ActivityLog> $activityLogs
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\System\Models\Notification> $notifications
  * @property-read \Modules\System\Models\TwoFactorAuth|null $twoFactorAuth
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'srv_auth_users';
 
     /** @use HasFactory<\Modules\System\Database\Factories\UserFactory> */

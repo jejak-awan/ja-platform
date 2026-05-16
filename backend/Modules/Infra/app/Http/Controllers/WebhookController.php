@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\System\Http\Controllers\Console;
+namespace Modules\Infra\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Modules\System\Models\Webhook;
 
-class WebhookController extends BaseApiController
+class WebhookController extends \Modules\System\Http\Controllers\BaseApiController
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
@@ -29,7 +29,7 @@ class WebhookController extends BaseApiController
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'url' => ['required', 'url', new \Modules\System\Rules\SafeUrl],
+                'url' => ['required', 'url', new \Modules\Security\Rules\SafeUrl],
                 'event' => 'required|string',
                 'method' => 'nullable|in:POST,PUT,PATCH',
                 'headers' => 'nullable|array',
@@ -56,7 +56,7 @@ class WebhookController extends BaseApiController
         try {
             $validated = $request->validate([
                 'name' => 'sometimes|required|string|max:255',
-                'url' => ['sometimes', 'required', 'url', new \Modules\System\Rules\SafeUrl],
+                'url' => ['sometimes', 'required', 'url', new \Modules\Security\Rules\SafeUrl],
                 'event' => 'sometimes|required|string',
                 'method' => 'nullable|in:POST,PUT,PATCH',
                 'headers' => 'nullable|array',

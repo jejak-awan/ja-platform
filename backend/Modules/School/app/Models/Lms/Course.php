@@ -5,6 +5,7 @@ namespace Modules\School\Models\Lms;
 use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,6 +37,11 @@ use Modules\School\Models\Student\Student;
  */
 class Course extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     use ScopedByWorkspace;
     use SoftDeletes;
 

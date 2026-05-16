@@ -3,6 +3,7 @@
 namespace Modules\System\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -22,6 +23,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class LoginHistory extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sys_login_histories';
 
 

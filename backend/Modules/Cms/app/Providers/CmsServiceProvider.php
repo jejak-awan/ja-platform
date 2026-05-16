@@ -28,12 +28,38 @@ class CmsServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        // $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
 
         $this->registerUserModuleIntegrations();
         $this->registerDashboardStats();
         $this->registerModelRelations();
         $this->registerCacheIntegrations();
+        $this->registerLayoutIntegrations();
+    }
+
+    protected function registerLayoutIntegrations(): void
+    {
+        $this->app->booted(function () {
+            if ($this->app->bound(\Modules\System\Contracts\LayoutRegistryInterface::class)) {
+                $registry = $this->app->make(\Modules\System\Contracts\LayoutRegistryInterface::class);
+                $themeService = $this->app->make(\Modules\Layout\Services\ThemeService::class);
+                
+                try {
+                    $activeTheme = $themeService->getActiveTheme('frontend');
+                } catch (\Exception $e) {
+                    $activeTheme = null;
+                }
+
+                if ($activeTheme) {
+                    $registry->registerMenuLocations('cms', $themeService->getMenuLocations($activeTheme));
+                    $registry->registerWidgetLocations('cms', $themeService->getWidgetLocations($activeTheme));
+                } else {
+                    // Fallback defaults
+                    $registry->registerMenuLocations('cms', ['header', 'footer', 'sidebar']);
+                    $registry->registerWidgetLocations('cms', ['sidebar', 'footer_top', 'footer_bottom']);
+                }
+            }
+        });
     }
 
     /**
@@ -55,7 +81,7 @@ class CmsServiceProvider extends ServiceProvider
      */
     protected function registerModelRelations(): void
     {
-        \Modules\Cms\Models\Tag::resolveRelationUsing('contents', function ($tagModel) {
+        \Modules\Library\Models\Tag::resolveRelationUsing('contents', function ($tagModel) {
             return $tagModel->belongsToMany(\Modules\Cms\Models\Content::class, 'content_tag');
         });
 
@@ -84,15 +110,15 @@ class CmsServiceProvider extends ServiceProvider
 
             $registry->registerStatsProvider('cms_info', function () {
                 return [
-                    'categories' => \Modules\Cms\Models\Category::count(),
+                    'categories' => \Modules\Library\Models\Category::count(),
                     'comments' => \Modules\Cms\Models\Comment::count(),
-                    'forms' => \Modules\Cms\Models\Form::count(),
-                    'form_submissions' => \Modules\Cms\Models\FormSubmission::count(),
+                    'forms' => \Modules\Forms\Models\Form::count(),
+                    'form_submissions' => \Modules\Forms\Models\FormSubmission::count(),
                     'total_email_templates' => \Modules\System\Models\EmailTemplate::count(),
-                    'newsletter_subscribers' => \Modules\Cms\Models\NewsletterSubscriber::count(),
+                    'newsletter_subscribers' => \Modules\Newsletter\Models\NewsletterSubscriber::count(),
                     'email' => [
                         'templates' => \Modules\System\Models\EmailTemplate::count(),
-                        'subscribers' => \Modules\Cms\Models\NewsletterSubscriber::count(),
+                        'subscribers' => \Modules\Newsletter\Models\NewsletterSubscriber::count(),
                         'smtp_status' => \Illuminate\Support\Facades\Cache::get('email_smtp_status', 'unknown'),
                     ],
                 ];
@@ -141,8 +167,7 @@ class CmsServiceProvider extends ServiceProvider
     protected function registerCommands(): void
     {
         $this->commands([
-            BackfillThemeJanariParentCommand::class,
-            ThemeMake::class,
+            //
         ]);
     }
 

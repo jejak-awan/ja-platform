@@ -6,6 +6,7 @@ use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
  * @property int $id
@@ -23,6 +24,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class LibraryBook extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sch_ops_library_books';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */

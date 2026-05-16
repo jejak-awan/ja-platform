@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
@@ -30,6 +30,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class File extends Model
 {
     use HasFactory, SoftDeletes, ScopedByWorkspace, HasUuids;
+
+    protected static function newFactory(): \Modules\Media\Database\Factories\FileFactory
+    {
+        return \Modules\Media\Database\Factories\FileFactory::new();
+    }
 
     protected $table = 'srv_media_files';
 
@@ -74,6 +79,22 @@ class File extends Model
     public function usages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Usage::class, 'file_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany<\Modules\Library\Models\Tag, $this>
+     */
+    public function tags(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphToMany(\Modules\Library\Models\Tag::class, 'taggable', 'lib_taggables');
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getTagNamesAttribute(): array
+    {
+        return $this->tags->pluck('name')->toArray();
     }
 
     public function getUrlAttribute(): ?string

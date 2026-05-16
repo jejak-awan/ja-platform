@@ -24,13 +24,13 @@ class RedisConfigServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Only load if core_redis_settings table exists and we're not in console during migration
+        // Only load if sys_redis_settings table exists and we're not in console during migration
         if ($this->app->runningInConsole() && $this->isMigrating()) {
             return;
         }
 
         try {
-            if (! Schema::hasTable('core_redis_settings')) {
+            if (! Schema::hasTable('sys_redis_settings')) {
                 return;
             }
 
@@ -60,7 +60,7 @@ class RedisConfigServiceProvider extends ServiceProvider
     protected function loadRedisSettingsFromDatabase(): void
     {
         // Use model collection to properly apply value accessor (decryption)
-        $redisSettings = \Modules\Core\Models\RedisSetting::all();
+        $redisSettings = \Modules\System\Models\RedisSetting::all();
 
         if ($redisSettings->isEmpty()) {
             return;
@@ -124,8 +124,8 @@ class RedisConfigServiceProvider extends ServiceProvider
         // Sync global cache driver with Performance settings (settings table).
         // PerformanceTab writes `cache_driver` there, but runtime config reads cache.default.
         try {
-            if (Schema::hasTable('core_settings')) {
-                $selectedDriver = \Modules\Core\Models\Setting::get('cache_driver');
+            if (Schema::hasTable('sys_settings')) {
+                $selectedDriver = \Modules\System\Models\Setting::get('cache_driver');
                 if (is_string($selectedDriver) && $selectedDriver !== '') {
                     // `redis_failover` is UI alias; safest runtime fallback is Redis.
                     $resolved = $selectedDriver === 'redis_failover' ? 'redis' : $selectedDriver;

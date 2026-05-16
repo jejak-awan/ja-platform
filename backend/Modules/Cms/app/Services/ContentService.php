@@ -9,9 +9,9 @@ use Illuminate\Support\Str;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\ContentCustomField;
 use Modules\Cms\Models\ContentRevision;
-use Modules\System\Models\MediaUsage;
-use Modules\Cms\Models\Tag;
-use Modules\Cms\Models\SearchIndex;
+use Modules\Media\Models\Usage as MediaUsage;
+use Modules\Library\Models\Tag;
+use Modules\Search\Models\SearchIndex;
 use Modules\System\Models\Webhook;
 use Modules\Cms\Services\CmsCacheService;
 
@@ -157,7 +157,7 @@ class ContentService
                         ->orWhere('published_at', '<=', Carbon::now());
                 })
                 ->whereHas('tags', function ($q) use ($content) {
-                    $q->whereIn('tags.id', $content->tags->pluck('id'));
+                    $q->whereIn('lib_tags.id', $content->tags->pluck('id'));
                 })
                 ->with(['author', 'category', 'tags'])
                 ->latest('published_at')
@@ -503,7 +503,7 @@ class ContentService
     public function saveCustomFields(Content $content, array $customFields): void
     {
         foreach ($customFields as $fieldSlug => $value) {
-            $field = \Modules\Cms\Models\CustomField::where('slug', $fieldSlug)->first();
+            $field = \Modules\Library\Models\CustomField::where('key', $fieldSlug)->first();
             if ($field) {
                 ContentCustomField::updateOrCreate(
                     [

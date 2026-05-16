@@ -3,11 +3,11 @@
 namespace Modules\Cms\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Cms\Models\Category;
+use Modules\Library\Models\Category;
 use Modules\Cms\Models\Comment;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\NewsletterSubscriber;
-use Modules\Cms\Models\Tag;
+use Modules\Newsletter\Models\NewsletterSubscriber;
+use Modules\Library\Models\Tag;
 use Modules\System\Models\User;
 
 class CmsSampleDataSeeder extends Seeder
@@ -94,7 +94,7 @@ class CmsSampleDataSeeder extends Seeder
         }
 
         // 3. Sample Form Submissions
-        $contactForm = \Modules\Cms\Models\Form::where('slug', 'contact-form')->first();
+        $contactForm = \Modules\Forms\Models\Form::where('slug', 'contact-form')->first();
         if ($contactForm) {
             $submissions = [
                 [

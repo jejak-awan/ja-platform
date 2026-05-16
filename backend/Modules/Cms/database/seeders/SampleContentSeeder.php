@@ -4,11 +4,11 @@ namespace Modules\Cms\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use Modules\Cms\Models\Category;
+use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Menu;
-use Modules\Cms\Models\MenuItem;
-use Modules\Cms\Models\Tag;
+use Modules\Layout\Models\Menu;
+use Modules\Layout\Models\MenuItem;
+use Modules\Library\Models\Tag;
 use Modules\System\Models\User;
 
 class SampleContentSeeder extends Seeder
@@ -489,7 +489,7 @@ class SampleContentSeeder extends Seeder
         ];
 
         foreach ($folders as $folder) {
-            \Modules\System\Models\MediaFolder::updateOrCreate(
+            \Modules\Media\Models\Folder::updateOrCreate(
                 ['slug' => $folder['slug']],
                 array_merge($folder, ['author_id' => $user->id])
             );

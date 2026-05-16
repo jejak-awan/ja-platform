@@ -4,13 +4,13 @@ namespace Modules\Cms\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use Modules\Cms\Models\Category;
-use Modules\Cms\Models\Form;
-use Modules\Cms\Models\FormField;
-use Modules\Cms\Models\Menu;
-use Modules\Cms\Models\MenuItem;
+use Modules\Library\Models\Category;
+use Modules\Forms\Models\Form;
+use Modules\Forms\Models\FormField;
+use Modules\Layout\Models\Menu;
+use Modules\Layout\Models\MenuItem;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Tag;
+use Modules\Library\Models\Tag;
 use Modules\System\Models\User;
 
 class StudioSeeder extends Seeder
@@ -217,7 +217,7 @@ class StudioSeeder extends Seeder
             if ($type === 'page') {
                 $targetType = 'Modules\Cms\Models\Content';
             } elseif ($type === 'category') {
-                $targetType = 'Modules\Cms\Models\Category';
+                $targetType = 'Modules\Library\Models\Category';
             }
 
             $menuItem = $menu->items()->create(array_merge($itemData, [

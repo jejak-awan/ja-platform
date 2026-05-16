@@ -25,7 +25,7 @@ class SchoolModuleCrudTest extends TestCase
         $school = School::factory()->create();
 
         // Create
-        $response = $this->actingAsAdmin()->postJson('/api/v1/admin/academic/years', [
+        $response = $this->actingAsAdmin()->postJson('/api/v1/manage/school/academic/years', [
             'school_id' => $school->id,
             'year' => '2023/2024',
             'is_active' => true,
@@ -38,7 +38,7 @@ class SchoolModuleCrudTest extends TestCase
         $yearId = $response->json('data.id');
 
         // Update
-        $response = $this->actingAsAdmin()->putJson("/api/v1/admin/academic/years/{$yearId}", [
+        $response = $this->actingAsAdmin()->putJson("/api/v1/manage/school/academic/years/{$yearId}", [
             'year' => '2023/2024 UPDATED',
             'is_active' => false,
         ]);
@@ -47,7 +47,7 @@ class SchoolModuleCrudTest extends TestCase
             ->assertJsonPath('data.year', '2023/2024 UPDATED');
 
         // Delete
-        $response = $this->actingAsAdmin()->deleteJson("/api/v1/admin/academic/years/{$yearId}");
+        $response = $this->actingAsAdmin()->deleteJson("/api/v1/manage/school/academic/years/{$yearId}");
         $response->assertStatus(200);
 
         $this->assertDatabaseMissing('sch_acad_years', ['id' => $yearId]);
@@ -59,7 +59,7 @@ class SchoolModuleCrudTest extends TestCase
         $school = School::factory()->create();
 
         // Create
-        $response = $this->actingAsAdmin()->postJson('/api/v1/admin/academic/subjects', [
+        $response = $this->actingAsAdmin()->postJson('/api/v1/manage/school/academic/subjects', [
             'school_id' => $school->id,
             'code' => 'MATH101',
             'name' => 'Mathematics',
@@ -72,7 +72,7 @@ class SchoolModuleCrudTest extends TestCase
         $subjectId = $response->json('data.id');
 
         // Update
-        $response = $this->actingAsAdmin()->putJson("/api/v1/admin/academic/subjects/{$subjectId}", [
+        $response = $this->actingAsAdmin()->putJson("/api/v1/manage/school/academic/subjects/{$subjectId}", [
             'code' => 'MATH101-U',
             'name' => 'Mathematics Updated',
         ]);
@@ -81,7 +81,7 @@ class SchoolModuleCrudTest extends TestCase
             ->assertJsonPath('data.code', 'MATH101-U');
 
         // Delete
-        $response = $this->actingAsAdmin()->deleteJson("/api/v1/admin/academic/subjects/{$subjectId}");
+        $response = $this->actingAsAdmin()->deleteJson("/api/v1/manage/school/academic/subjects/{$subjectId}");
         $response->assertStatus(200);
 
         $this->assertDatabaseMissing('sch_acad_subjects', ['id' => $subjectId]);
@@ -95,7 +95,7 @@ class SchoolModuleCrudTest extends TestCase
         $dept = Department::create(['workspace_id' => $level->id, 'name' => 'Science', 'code' => 'SCI']);
 
         // Create
-        $response = $this->actingAsAdmin()->postJson('/api/v1/admin/students', [
+        $response = $this->actingAsAdmin()->postJson('/api/v1/manage/school/students', [
             'school_id' => $school->id,
             'level_id' => $level->id,
             'department_id' => $dept->id,
@@ -110,7 +110,7 @@ class SchoolModuleCrudTest extends TestCase
         $studentId = $response->json('data.id');
 
         // Update
-        $response = $this->actingAsAdmin()->putJson("/api/v1/admin/students/{$studentId}", [
+        $response = $this->actingAsAdmin()->putJson("/api/v1/manage/school/students/{$studentId}", [
             'full_name' => 'John Doe Updated',
             'gender' => 'L',
         ]);
@@ -119,7 +119,7 @@ class SchoolModuleCrudTest extends TestCase
             ->assertJsonPath('data.full_name', 'John Doe Updated');
 
         // Delete
-        $response = $this->actingAsAdmin()->deleteJson("/api/v1/admin/students/{$studentId}");
+        $response = $this->actingAsAdmin()->deleteJson("/api/v1/manage/school/students/{$studentId}");
         $response->assertStatus(200);
 
         $this->assertSoftDeleted('sch_std_students', ['id' => $studentId]);

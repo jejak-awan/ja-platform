@@ -24,9 +24,9 @@ abstract class TestCase extends BaseTestCase
             return;
         }
 
-        foreach (['config.php', 'routes-v7.php', 'routes.php', 'events.php'] as $name) {
-            $path = $dir.DIRECTORY_SEPARATOR.$name;
-            if (is_file($path)) {
+        $files = glob($dir . '/*.php');
+        if (is_array($files)) {
+            foreach ($files as $path) {
                 @unlink($path);
             }
         }
@@ -73,6 +73,7 @@ abstract class TestCase extends BaseTestCase
             'view content templates', 'create content templates', 'edit content templates', 'delete content templates',
             'view categories', 'create categories', 'edit categories', 'delete categories', 'manage categories',
             'view tags', 'create tags', 'edit tags', 'delete tags', 'manage tags',
+            'view seo', 'edit seo', 'manage seo',
             // Media
             'view media', 'upload media', 'edit media', 'delete media', 'manage media',
             'view files', 'upload files', 'edit files', 'delete files', 'manage files',

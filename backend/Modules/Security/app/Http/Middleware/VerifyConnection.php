@@ -100,7 +100,7 @@ class VerifyConnection
         // 4. Admin user bypass
         if (Auth::check()) {
             $authUser = Auth::user();
-            if ($authUser instanceof \Modules\Security\Models\User && ($authUser->hasRole('admin') || $authUser->hasRole('super'))) {
+            if ($authUser instanceof \Modules\System\Models\User && ($authUser->hasRole('admin') || $authUser->hasRole('super'))) {
                 return $next($request);
             }
         }

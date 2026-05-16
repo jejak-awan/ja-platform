@@ -25,6 +25,7 @@ class SchoolUnitFactory extends Factory
             'school_id' => School::factory(),
             'level' => $selected['level'],
             'name' => $selected['name'] . ' ' . $this->faker->company(),
+            'type' => 'formal',
         ];
     }
 

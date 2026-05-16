@@ -5,7 +5,7 @@ namespace Modules\System\Http\Controllers\Console;
 use Illuminate\Http\JsonResponse;
 use Modules\System\Services\CaptchaService;
 
-class CaptchaController extends BaseApiController
+class CaptchaController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * Generate a new captcha challenge.

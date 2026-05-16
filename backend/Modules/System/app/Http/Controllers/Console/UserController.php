@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Modules\System\Helpers\IpHelper;
 use Modules\System\Models\User;
-use Modules\System\Rules\StrongPassword;
+use Modules\Security\Rules\StrongPassword;
 
-class UserController extends BaseApiController
+class UserController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * List users with filters.
@@ -547,7 +547,7 @@ class UserController extends BaseApiController
         $user->tokens()->delete();
 
         // Log this security action
-        \Modules\System\Models\SecurityLog::log(
+        \Modules\Security\Models\SecurityLog::log(
             'force_logout',
             $user,
             IpHelper::getClientIp($request),

@@ -9,11 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Modules\Infra\Helpers\UploadSettingsHelper;
-use Modules\Infra\Services\MediaService;
-use Modules\Infra\Models\ActivityLog;
+use Modules\Media\Helpers\UploadSettingsHelper;
+use Modules\Media\Services\MediaService;
+use Modules\System\Models\ActivityLog;
 use Modules\Infra\Models\DeletedFile;
-use Modules\Infra\Models\User;
+use Modules\System\Models\User;
+use Modules\Media\Models\File as Media;
 
 /**
  * @OA\Tag(name="File Manager")
@@ -97,7 +98,7 @@ class FileManagerController extends BaseApiController
     public function index(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to manage files');
         }
@@ -260,7 +261,7 @@ class FileManagerController extends BaseApiController
     public function download(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to download files');
         }
@@ -357,7 +358,7 @@ class FileManagerController extends BaseApiController
     public function upload(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to upload files');
         }
@@ -456,7 +457,7 @@ class FileManagerController extends BaseApiController
     public function delete(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -490,7 +491,7 @@ class FileManagerController extends BaseApiController
 
         if ($permanent) {
             // Find media if any
-            $media = \Modules\Infra\Models\Media::where(function ($q) use ($path) {
+            $media = Media::where(function ($q) use ($path) {
                 $q->where('path', $path)
                     ->orWhere('path', '/'.$path);
             })->first();
@@ -530,7 +531,7 @@ class FileManagerController extends BaseApiController
         // Sync with Media Library (Delete)
         try {
             // Find valid media
-            $media = \Modules\Infra\Models\Media::where(function ($q) use ($path) {
+            $media = Media::where(function ($q) use ($path) {
                 $q->where('path', $path)
                     ->orWhere('path', '/'.$path)
                     ->orWhere('path', trim($path, '/'));
@@ -574,7 +575,7 @@ class FileManagerController extends BaseApiController
     public function deleteFolder(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -642,7 +643,7 @@ class FileManagerController extends BaseApiController
         try {
             // Find all media items starting with this path
             $searchPath = $path.'/';
-            $mediaItems = \Modules\Infra\Models\Media::where('path', 'like', $searchPath.'%')
+            $mediaItems = Media::where('path', 'like', $searchPath.'%')
                 ->orWhere('path', 'like', '/'.$searchPath.'%')
                 ->get();
 
@@ -709,7 +710,7 @@ class FileManagerController extends BaseApiController
     public function createFolder(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to create folders');
         }
@@ -751,7 +752,7 @@ class FileManagerController extends BaseApiController
     public function move(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to move files or folders');
         }
@@ -820,7 +821,7 @@ class FileManagerController extends BaseApiController
     public function copy(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to copy files or folders');
         }
@@ -909,7 +910,7 @@ class FileManagerController extends BaseApiController
     public function rename(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to rename files or folders');
         }
@@ -975,7 +976,7 @@ class FileManagerController extends BaseApiController
     public function trash(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to view trashed files');
         }
@@ -1011,7 +1012,7 @@ class FileManagerController extends BaseApiController
     public function restore(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to restore files');
         }
@@ -1066,7 +1067,7 @@ class FileManagerController extends BaseApiController
         // Sync with Media Library (Restore)
         if ($deletedFile->type === 'file') {
             try {
-                $media = \Modules\Infra\Models\Media::withTrashed()
+                $media = \Modules\Media\Models\File::withTrashed()
                     ->where(function ($q) use ($trashPath) {
                         $q->where('path', $trashPath)
                             ->orWhere('path', '/'.$trashPath);
@@ -1089,7 +1090,7 @@ class FileManagerController extends BaseApiController
             // Sync with Media Library (Restore items inside folder)
             try {
                 // Find all media items starting with the trash path
-                $mediaItems = \Modules\Infra\Models\Media::withTrashed()
+                $mediaItems = \Modules\Media\Models\File::withTrashed()
                     ->where('path', 'like', $trashPath.'%')
                     ->orWhere('path', 'like', '/'.$trashPath.'%')
                     ->get();
@@ -1128,7 +1129,7 @@ class FileManagerController extends BaseApiController
     public function emptyTrash(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to empty trash');
         }
@@ -1144,7 +1145,7 @@ class FileManagerController extends BaseApiController
             // Sync with Media Library (Force Delete)
             if ($record->type === 'file') {
                 try {
-                    $media = \Modules\Infra\Models\Media::withTrashed()
+                    $media = \Modules\Media\Models\File::withTrashed()
                         ->where(function ($q) use ($trashPath) {
                             $q->where('path', $trashPath)
                                 ->orWhere('path', '/'.$trashPath);
@@ -1161,7 +1162,7 @@ class FileManagerController extends BaseApiController
                 // For folders, find and force delete all media records inside
                 try {
                     $searchPath = $record->trash_path;
-                    $mediaItems = \Modules\Infra\Models\Media::withTrashed()
+                    $mediaItems = \Modules\Media\Models\File::withTrashed()
                         ->where('path', 'like', $searchPath.'%')
                         ->orWhere('path', 'like', '/'.$searchPath.'%')
                         ->get();
@@ -1211,7 +1212,7 @@ class FileManagerController extends BaseApiController
     public function deletePermanently(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -1250,7 +1251,7 @@ class FileManagerController extends BaseApiController
         // Sync with Media Library (Force Delete)
         if ($deletedFile->type === 'file') {
             try {
-                $media = \Modules\Infra\Models\Media::withTrashed()
+                $media = \Modules\Media\Models\File::withTrashed()
                     ->where(function ($q) use ($trashPath) {
                         $q->where('path', $trashPath)
                             ->orWhere('path', '/'.$trashPath);
@@ -1267,7 +1268,7 @@ class FileManagerController extends BaseApiController
             // For folders, find and force delete all media records inside
             try {
                 $searchPath = $deletedFile->trash_path;
-                $mediaItems = \Modules\Infra\Models\Media::withTrashed()
+                $mediaItems = \Modules\Media\Models\File::withTrashed()
                     ->where('path', 'like', $searchPath.'%')
                     ->orWhere('path', 'like', '/'.$searchPath.'%')
                     ->get();
@@ -1307,7 +1308,7 @@ class FileManagerController extends BaseApiController
     public function extract(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to extract archives');
         }
@@ -1409,7 +1410,7 @@ class FileManagerController extends BaseApiController
     public function compress(Request $request)
     {
         $user = $request->user();
-        /** @var \Modules\Infra\Models\User|null $user */
+        /** @var \Modules\System\Models\User|null $user */
         if (! $user || ! $user->can('manage files')) {
             return $this->forbidden('You do not have permission to compress files');
         }

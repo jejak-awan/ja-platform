@@ -42,7 +42,7 @@ class CommentController extends BaseApiController
     public function store(Request $request, Content $content): \Illuminate\Http\JsonResponse
     {
         // Check if comments are enabled for this content
-        if (! $content->comment_status) {
+        if ($content->comment_status !== 'open') {
             return $this->error('Comments are disabled for this content', 403);
         }
 
@@ -51,7 +51,7 @@ class CommentController extends BaseApiController
                 'body' => 'required|string',
                 'name' => 'nullable|string|max:255',
                 'email' => 'nullable|email|max:255',
-                'parent_id' => 'nullable|exists:comments,id',
+                'parent_id' => 'nullable|exists:cms_comments,id',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $this->validationError($e->errors());
@@ -282,7 +282,7 @@ class CommentController extends BaseApiController
     {
         $validated = $request->validate([
             'ids' => 'required|array',
-            'ids.*' => 'exists:comments,id',
+            'ids.*' => 'exists:cms_comments,id',
             'action' => 'required|in:approve,reject,spam,delete',
         ]);
 

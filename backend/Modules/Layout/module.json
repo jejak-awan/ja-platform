@@ -1,0 +1,11 @@
+{
+    "name": "Layout",
+    "alias": "layout",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Layout\\Providers\\LayoutServiceProvider"
+    ],
+    "files": []
+}

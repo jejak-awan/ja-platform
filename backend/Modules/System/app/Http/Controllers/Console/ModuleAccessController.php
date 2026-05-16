@@ -4,7 +4,7 @@ namespace Modules\System\Http\Controllers\Console;
 
 use Illuminate\Http\Request;
 use Modules\System\Models\User;
-use Spatie\Permission\Models\Role;
+use Modules\System\Models\Role;
 
 /**
  * Manage module-scoped access (RBAC) without granting Core governance.
@@ -13,7 +13,7 @@ use Spatie\Permission\Models\Role;
  * - CMS roles must be prefixed: `cms:...`
  * - School roles are treated as "non-core, non-cms" roles (legacy)
  */
-class ModuleAccessController extends BaseApiController
+class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiController
 {
     private const MODULES = ['cms', 'school'];
 

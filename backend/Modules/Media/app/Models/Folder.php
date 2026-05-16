@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Core\Traits\ScopedByWorkspace;
+use Modules\System\Traits\ScopedByWorkspace;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
@@ -24,6 +24,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class Folder extends Model
 {
     use HasFactory, SoftDeletes, ScopedByWorkspace, HasUuids;
+
+    protected static function newFactory(): \Modules\Media\Database\Factories\FolderFactory
+    {
+        return \Modules\Media\Database\Factories\FolderFactory::new();
+    }
 
     protected $table = 'srv_media_folders';
 

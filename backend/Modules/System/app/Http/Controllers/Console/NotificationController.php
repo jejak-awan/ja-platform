@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\System\Models\Notification;
 
-class NotificationController extends BaseApiController
+class NotificationController extends \Modules\System\Http\Controllers\BaseApiController
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {

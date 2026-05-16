@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 
 class AppServiceProvider extends ServiceProvider
 {

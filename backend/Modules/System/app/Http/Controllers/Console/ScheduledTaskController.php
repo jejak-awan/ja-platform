@@ -10,7 +10,7 @@ use Modules\System\Models\ScheduledTask;
 use Modules\System\Models\User;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 
-class ScheduledTaskController extends BaseApiController
+class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * List all scheduled tasks

@@ -4,6 +4,7 @@ namespace Modules\School\Models\Student;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\System\Traits\ScopedByWorkspace;
 use Modules\School\Traits\ScopedBySchool;
@@ -72,6 +73,11 @@ use Modules\School\Models\Operations\UksVisit;
  */
 class Student extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sch_std_students';
 
     /** @use HasFactory<\Modules\School\Database\Factories\StudentFactory> */

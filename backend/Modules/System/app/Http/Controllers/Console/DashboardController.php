@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Media\Models\File as Media;
-use Modules\System\Models\AnalyticsVisit;
+use Modules\Analytics\Models\AnalyticsVisit;
 use Modules\System\Models\User;
 use Modules\System\Registries\DashboardRegistry;
 
 /**
  * @OA\Tag(name="Dashboard")
  */
-class DashboardController extends BaseApiController
+class DashboardController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * @OA\Get(
@@ -129,7 +129,7 @@ class DashboardController extends BaseApiController
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Modules\System\Models\Media>
+     * @return \Illuminate\Database\Eloquent\Collection<int, \Modules\Media\Models\File>
      */
     private function getMediaByType(): \Illuminate\Support\Collection
     {

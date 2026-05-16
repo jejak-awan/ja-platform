@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Modules\System\Models\Setting;
 
-class EmailTestController extends BaseApiController
+class EmailTestController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * Test SMTP connection

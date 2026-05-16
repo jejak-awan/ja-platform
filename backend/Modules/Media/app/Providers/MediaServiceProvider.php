@@ -5,6 +5,9 @@ namespace Modules\Media\Providers;
 use Illuminate\Support\ServiceProvider;
 use Modules\Media\Contracts\MediaServiceInterface;
 use Modules\Media\Services\MediaService;
+use Modules\Media\Models\File;
+use Modules\Media\Policies\FilePolicy;
+use Illuminate\Support\Facades\Gate;
 
 class MediaServiceProvider extends ServiceProvider
 {
@@ -22,8 +25,9 @@ class MediaServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::policy(File::class, FilePolicy::class);
         $this->registerConfig();
-        // Migrations are automatically loaded by the module package
+        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
 
         if ($this->app->runningInConsole()) {
             $this->commands([

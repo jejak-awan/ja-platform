@@ -1,0 +1,152 @@
+<?php
+
+namespace Modules\Ai\Tests\Unit;
+
+use Tests\TestCase;
+use Modules\Ai\Services\Providers\GeminiService;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
+class GeminiServiceTest extends TestCase
+{
+    protected GeminiService $service;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->service = new GeminiService('test-api-key');
+    }
+
+    public function test_returns_correct_provider_name()
+    {
+        $this->assertEquals('Google Gemini', $this->service->getName());
+    }
+
+    public function test_throws_exception_if_api_key_is_missing_during_generation()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Gemini API Key is not configured.');
+        
+        $service = new GeminiService('');
+        $service->generateText('Test prompt');
+    }
+
+    public function test_generates_text_successfully()
+    {
+        Http::fake([
+            'generativelanguage.googleapis.com/*' => Http::response([
+                'candidates' => [
+                    [
+                        'content' => [
+                            'parts' => [
+                                ['text' => 'Generated gemini content.']
+                            ]
+                        ]
+                    ]
+                ]
+            ], 200),
+        ]);
+
+        $result = $this->service->generateText('Hello Gemini');
+        $this->assertEquals('Generated gemini content.', $result);
+    }
+
+    public function test_throws_exception_on_unexpected_response_format()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Unexpected response format from Gemini.');
+
+        Http::fake([
+            'generativelanguage.googleapis.com/*' => Http::response([
+                'invalid' => 'format'
+            ], 200),
+        ]);
+
+        $this->service->generateText('Hello');
+    }
+
+    public function test_throws_exception_on_api_failure_quota()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Gemini Quota Exceeded. Please check billing.');
+
+        Http::fake([
+            'generativelanguage.googleapis.com/*' => Http::response([
+                'error' => ['message' => 'Quota Exceeded']
+            ], 429),
+        ]);
+
+        $this->service->generateText('Hello');
+    }
+
+    public function test_throws_exception_on_general_api_failure()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Gemini API Error: Invalid Request');
+
+        Http::fake([
+            'generativelanguage.googleapis.com/*' => Http::response([
+                'error' => ['message' => 'Invalid Request']
+            ], 400),
+        ]);
+
+        $this->service->generateText('Hello');
+    }
+
+    public function test_gets_models_successfully()
+    {
+        Http::fake([
+            'generativelanguage.googleapis.com/*/models' => Http::response([
+                'models' => [
+                    [
+                        'name' => 'models/gemini-pro',
+                        'displayName' => 'Gemini Pro',
+                        'supportedGenerationMethods' => ['generateContent']
+                    ],
+                    [
+                        'name' => 'models/unsupported',
+                        'supportedGenerationMethods' => ['otherMethod']
+                    ]
+                ]
+            ], 200),
+        ]);
+
+        $models = $this->service->getModels();
+        $this->assertCount(1, $models);
+        $this->assertEquals('gemini-pro', $models[0]['id']);
+        $this->assertEquals('Gemini Pro', $models[0]['name']);
+    }
+
+    public function test_get_models_returns_empty_when_no_api_key()
+    {
+        $service = new GeminiService('');
+        $this->assertEmpty($service->getModels());
+    }
+
+    public function test_get_models_returns_empty_on_failure()
+    {
+        Http::fake([
+            'generativelanguage.googleapis.com/*/models' => Http::response([], 500),
+        ]);
+
+        $this->assertEmpty($this->service->getModels());
+    }
+
+    public function test_tests_connection_successfully()
+    {
+        Http::fake([
+            'generativelanguage.googleapis.com/*/models' => Http::response(['models' => []], 200),
+        ]);
+
+        $this->assertTrue($this->service->testConnection());
+    }
+
+    public function test_test_connection_throws_when_no_key()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('API Key is missing.');
+        
+        $service = new GeminiService('');
+        $service->testConnection();
+    }
+}

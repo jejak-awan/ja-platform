@@ -6,6 +6,7 @@ use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
  * @property int $id
@@ -18,12 +19,18 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Semester extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sch_acad_semesters';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
+        'school_id',
         'academic_year_id',
         'workspace_id',
         'type',

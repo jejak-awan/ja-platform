@@ -4,29 +4,14 @@ namespace Modules\Cms\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Theme;
+use Modules\Layout\Models\Theme;
+use Modules\System\Models\User;
 
 class CmsDatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Create Default Theme
-        Theme::firstOrCreate(
-            ['slug' => 'default-modern'],
-            [
-                'name' => 'Default Modern Theme',
-                'type' => 'frontend',
-                'path' => 'themes/default-modern',
-                'version' => '1.0.0',
-                'is_active' => true,
-                'settings' => [
-                    'primary_color' => '#4F46E5',
-                    'font_family' => 'Inter',
-                ]
-            ]
-        );
-
-        // 2. Create Sample Pages
+        // 1. Create Sample Pages (Themes handled by Layout module)
         $pages = [
             [
                 'title' => 'Welcome to JA-Platform',
@@ -44,11 +29,20 @@ class CmsDatabaseSeeder extends Seeder
             ]
         ];
 
+        $admin = User::first();
+        if (!$admin) return;
+
         foreach ($pages as $page) {
             Content::updateOrCreate(
                 ['slug' => $page['slug'], 'type' => 'page'],
-                array_merge($page, ['author_id' => 1])
+                array_merge($page, ['author_id' => $admin->id])
             );
         }
+
+        // 2. Call Extended Content Seeders
+        $this->call([
+            StudioSeeder::class,
+            SampleContentSeeder::class,
+        ]);
     }
 }

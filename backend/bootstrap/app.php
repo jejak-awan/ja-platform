@@ -12,16 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withProviders([
-        'Modules\System\Providers\SystemServiceProvider',
-        'Modules\Security\Providers\SecurityServiceProvider',
-        'Modules\Analytics\Providers\AnalyticsServiceProvider',
-        'Modules\Infra\Providers\InfraServiceProvider',
-        'Modules\Ai\Providers\AiServiceProvider',
-        'Modules\Media\Providers\MediaServiceProvider',
-        'Modules\Cms\Providers\CmsServiceProvider',
-        'Modules\School\Providers\SchoolServiceProvider',
-    ])
+    ->withProviders()
     ->withMiddleware(function (Middleware $middleware): void {
         // Security Layer: Order matters (TrustProxies first, then Domain enforcement, then WAF, etc.)
         $middleware->prepend(\App\Http\Middleware\CheckIfInstalled::class);
@@ -35,13 +26,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn (Request $request) => ($request->is('api/*') || $request->expectsJson()) ? null : '/');
 
         $middleware->web(prepend: [
+            \Modules\Infra\Http\Middleware\HandleDomainRedirects::class,
             \Modules\System\Http\Middleware\IdentifyWorkspace::class,
             \Modules\Security\Http\Middleware\VerifyConnection::class,
             \Modules\Security\Http\Middleware\BlockMaliciousBots::class,
             \Modules\Security\Http\Middleware\WafMiddleware::class,
             \Modules\Security\Http\Middleware\HoneypotMiddleware::class,
         ], append: [
-            \Modules\Cms\Http\Middleware\HandleRedirects::class,
+            \Modules\Layout\Http\Middleware\ApplyUrlRewrites::class,
             \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Modules\Security\Http\Middleware\SecurityHeaders::class,
             \Modules\Analytics\Http\Middleware\TrackAnalytics::class,
@@ -49,6 +41,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->api(prepend: [
+            \Modules\Infra\Http\Middleware\HandleDomainRedirects::class,
             \Modules\System\Http\Middleware\IdentifyWorkspace::class,
             \Modules\Security\Http\Middleware\VerifyConnection::class,
             \Modules\Security\Http\Middleware\BlockMaliciousBots::class,

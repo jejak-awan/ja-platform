@@ -28,7 +28,7 @@ class SchoolServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerPolicies();
-        // $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
 
         $this->registerUserModuleIntegrations();
     }
@@ -68,6 +68,17 @@ class SchoolServiceProvider extends ServiceProvider
                 'workspace_id'
             );
         });
+
+        // 3. Register Layout Locations
+        if ($this->app->bound(\Modules\System\Contracts\LayoutRegistryInterface::class)) {
+            $registry = $this->app->make(\Modules\System\Contracts\LayoutRegistryInterface::class);
+            $registry->registerMenuLocations('school', [
+                'portal-header', 'portal-footer', 'portal-sidebar',
+            ]);
+            $registry->registerWidgetLocations('school', [
+                'portal-sidebar', 'portal-footer',
+            ]);
+        }
     }
 
     /**

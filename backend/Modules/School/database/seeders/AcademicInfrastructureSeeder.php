@@ -50,12 +50,12 @@ class AcademicInfrastructureSeeder extends Seeder
 
         // 4. Create Study Groups (Classes)
         $classes = [
-            ['name' => 'X TKJ 1', 'dept' => $deptTKJ, 'teacher_id' => 1],
-            ['name' => 'X RPL 1', 'dept' => $deptRPL, 'teacher_id' => 2],
-            ['name' => 'XI TKJ 1', 'dept' => $deptTKJ, 'teacher_id' => 3],
-            ['name' => 'XI RPL 1', 'dept' => $deptRPL, 'teacher_id' => 4],
-            ['name' => 'XII TKJ 1', 'dept' => $deptTKJ, 'teacher_id' => 5],
-            ['name' => 'XII AKL 1', 'dept' => $deptAKL, 'teacher_id' => 1],
+            ['name' => 'X TKJ 1', 'dept' => $deptTKJ, 'teacher_id' => null],
+            ['name' => 'X RPL 1', 'dept' => $deptRPL, 'teacher_id' => null],
+            ['name' => 'XI TKJ 1', 'dept' => $deptTKJ, 'teacher_id' => null],
+            ['name' => 'XI RPL 1', 'dept' => $deptRPL, 'teacher_id' => null],
+            ['name' => 'XII TKJ 1', 'dept' => $deptTKJ, 'teacher_id' => null],
+            ['name' => 'XII AKL 1', 'dept' => $deptAKL, 'teacher_id' => null],
         ];
 
         foreach ($classes as $class) {

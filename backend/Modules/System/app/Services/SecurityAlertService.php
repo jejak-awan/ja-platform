@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Modules\System\Models\LoginHistory;
-use Modules\System\Models\SecurityLog;
+use Modules\Security\Models\SecurityLog;
 
 class SecurityAlertService
 {

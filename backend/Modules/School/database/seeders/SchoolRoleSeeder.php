@@ -3,8 +3,8 @@
 namespace Modules\School\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use Modules\System\Models\Role;
+use Modules\System\Models\Permission;
 
 class SchoolRoleSeeder extends Seeder
 {

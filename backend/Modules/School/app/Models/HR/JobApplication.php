@@ -5,6 +5,7 @@ namespace Modules\School\Models\HR;
 use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -22,6 +23,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class JobApplication extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     use ScopedByWorkspace;
     protected $table = 'sch_hr_job_applications';
 

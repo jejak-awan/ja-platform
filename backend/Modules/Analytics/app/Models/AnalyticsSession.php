@@ -4,9 +4,11 @@ namespace Modules\Analytics\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
+use Modules\System\Models\User;
 use Modules\System\Helpers\IpHelper;
 
 /**
@@ -27,12 +29,17 @@ use Modules\System\Helpers\IpHelper;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Modules\System\Models\User|null $user
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\System\Models\AnalyticsVisit> $visits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Analytics\Models\AnalyticsVisit> $visits
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Analytics\Models\AnalyticsEvent> $events
  */
 class AnalyticsSession extends Model
 {
-    protected $table = 'srv_analytics_analytics_sessions';
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    protected $table = 'srv_analytics_sessions';
 
 
     /** @use HasFactory<\Modules\System\Database\Factories\AnalyticsSessionFactory> */
@@ -41,13 +48,14 @@ class AnalyticsSession extends Model
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\System\Database\Factories\AnalyticsSessionFactory
+    protected static function newFactory(): \Modules\Analytics\Database\Factories\AnalyticsSessionFactory
     {
-        return \Modules\System\Database\Factories\AnalyticsSessionFactory::new();
+        return \Modules\Analytics\Database\Factories\AnalyticsSessionFactory::new();
     }
 
 
     protected $fillable = [
+        'workspace_id',
         'session_id',
         'user_id',
         'ip_address',
@@ -79,11 +87,11 @@ class AnalyticsSession extends Model
     }
 
     /**
-     * @return HasMany<\Modules\System\Models\AnalyticsVisit, $this>
+     * @return HasMany<AnalyticsVisit, $this>
      */
     public function visits(): HasMany
     {
-        return $this->hasMany(\Modules\System\Models\AnalyticsVisit::class, 'session_id', 'session_id');
+        return $this->hasMany(AnalyticsVisit::class, 'session_id', 'session_id');
     }
 
     /**

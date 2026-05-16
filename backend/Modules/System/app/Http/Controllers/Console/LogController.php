@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Modules\System\Helpers\IpHelper;
 
-class LogController extends BaseApiController
+class LogController extends \Modules\System\Http\Controllers\BaseApiController
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {

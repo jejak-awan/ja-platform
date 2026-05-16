@@ -4,7 +4,7 @@ namespace Modules\System\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use Modules\Cms\Models\Tag;
+use Modules\Library\Models\Tag;
 use Modules\System\Models\User;
 
 class InfrastructureSeeder extends Seeder
@@ -37,12 +37,12 @@ class InfrastructureSeeder extends Seeder
 
         // 2. Standard Media Folders
         $folders = [
-            ['name' => 'Logos', 'slug' => 'logos', 'module' => 'Core'],
-            ['name' => 'Documents', 'slug' => 'documents', 'module' => 'Core'],
+            ['name' => 'Logos', 'slug' => 'logos', 'module' => 'system'],
+            ['name' => 'Documents', 'slug' => 'documents', 'module' => 'system'],
         ];
 
         foreach ($folders as $folder) {
-            \Modules\System\Models\MediaFolder::withTrashed()->updateOrCreate(
+            \Modules\Media\Models\Folder::withTrashed()->updateOrCreate(
                 ['slug' => $folder['slug']],
                 array_merge($folder, [
                     'author_id' => $admin->id,

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Modules\System\Models\Translation;
 
-class TranslationController extends BaseApiController
+class TranslationController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * Get translations for a specific entity.
@@ -33,7 +33,7 @@ class TranslationController extends BaseApiController
         $request->validate([
             'translatable_type' => 'required|string',
             'translatable_id' => 'required|integer',
-            'language_code' => ['required', 'string', 'max:10', Rule::exists('languages', 'code')],
+            'language_code' => ['required', 'string', 'max:10', Rule::exists('sys_languages', 'code')],
             'field' => 'required|string|max:255',
             'value' => 'required|string',
         ]);

@@ -7,12 +7,12 @@ namespace Modules\System\Http\Controllers\Console;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Modules\System\Models\DependencyVulnerability;
+use Modules\Security\Models\DependencyVulnerability;
 
 /**
  * Controller for listing all project dependencies (composer + npm)
  */
-class DependencyPackageController extends BaseApiController
+class DependencyPackageController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * List all packages from composer.lock and package-lock.json

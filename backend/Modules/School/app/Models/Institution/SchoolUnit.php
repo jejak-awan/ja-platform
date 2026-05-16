@@ -4,6 +4,7 @@ namespace Modules\School\Models\Institution;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
  * @property int $id
@@ -24,6 +25,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SchoolUnit extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     /** @use HasFactory<\Modules\School\Database\Factories\SchoolUnitFactory> */
     use HasFactory;
 

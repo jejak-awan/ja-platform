@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Modules\System\Helpers\IpHelper;
 use Modules\Security\Models\IpList;
 use Modules\Security\Models\SecurityLog;
-use Modules\Security\Models\User;
+use Modules\System\Models\User;
 
 class SecurityService
 {

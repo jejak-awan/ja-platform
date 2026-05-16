@@ -4,8 +4,10 @@ namespace Modules\Analytics\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
+use Modules\System\Models\User;
 
 
 /**
@@ -28,7 +30,12 @@ use Illuminate\Support\Facades\Auth;
  */
 class AnalyticsEvent extends Model
 {
-    protected $table = 'srv_analytics_analytics_events';
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    protected $table = 'srv_analytics_events';
 
 
     /** @use HasFactory<\Modules\System\Database\Factories\AnalyticsEventFactory> */
@@ -37,13 +44,14 @@ class AnalyticsEvent extends Model
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\System\Database\Factories\AnalyticsEventFactory
+    protected static function newFactory(): \Modules\Analytics\Database\Factories\AnalyticsEventFactory
     {
-        return \Modules\System\Database\Factories\AnalyticsEventFactory::new();
+        return \Modules\Analytics\Database\Factories\AnalyticsEventFactory::new();
     }
 
 
     protected $fillable = [
+        'workspace_id',
         'session_id',
         'user_id',
         'event_type',

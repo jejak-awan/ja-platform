@@ -38,9 +38,4 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    // Legacy Bridge for Frontend compatibility
-    Route::prefix('admin/core/security')->middleware(['auth:sanctum'])->group(function () {
-         Route::get('journal', [SecurityController::class, 'index']);
-         Route::get('stats', [SecurityController::class, 'stats']);
-    });
 });

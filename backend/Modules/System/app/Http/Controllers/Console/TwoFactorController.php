@@ -8,7 +8,7 @@ use Modules\System\Models\TwoFactorAuth;
 use Modules\System\Models\User;
 use PragmaRX\Google2FA\Google2FA;
 
-class TwoFactorController extends BaseApiController
+class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiController
 {
     protected Google2FA $google2fa;
 

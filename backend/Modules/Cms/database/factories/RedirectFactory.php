@@ -3,10 +3,10 @@
 namespace Modules\Cms\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Cms\Models\Redirect;
+use Modules\Layout\Models\UrlRewrite;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Cms\Models\Redirect>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Layout\Models\UrlRewrite>
  */
 class RedirectFactory extends Factory
 {

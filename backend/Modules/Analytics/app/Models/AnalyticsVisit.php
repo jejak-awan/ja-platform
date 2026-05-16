@@ -3,8 +3,10 @@ namespace Modules\Analytics\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
+use Modules\System\Models\User;
 
 /**
  * @property int $id
@@ -24,7 +26,12 @@ use Illuminate\Support\Facades\Auth;
  */
 class AnalyticsVisit extends Model
 {
-    protected $table = 'srv_analytics_analytics_visits';
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    protected $table = 'srv_analytics_visits';
 
 
     /** @use HasFactory<\Modules\Analytics\Database\Factories\AnalyticsVisitFactory> */
@@ -42,6 +49,7 @@ class AnalyticsVisit extends Model
     public $timestamps = true; // DB has created_at/updated_at
 
     protected $fillable = [
+        'workspace_id',
         'session_id',
         'user_id',
         'ip_address',
@@ -78,7 +86,7 @@ class AnalyticsVisit extends Model
         $visit = self::create([
             'session_id' => $sessionId,
             'user_id' => Auth::id(),
-            'ip_address' => \Modules\Analytics\Helpers\IpHelper::getClientIp($request),
+            'ip_address' => \Modules\System\Helpers\IpHelper::getClientIp($request),
             'user_agent' => is_string($userAgent) ? $userAgent : null,
             'referer' => is_string($referer) ? $referer : null,
             'url' => is_string($urlInput = $request->input('url')) ? $urlInput : $request->fullUrl(),

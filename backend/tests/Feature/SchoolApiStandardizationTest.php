@@ -16,9 +16,9 @@ class SchoolApiStandardizationTest extends TestCase
      */
     public function test_school_index_structure(): void
     {
-        $response = $this->actingAsAdmin()->getJson('/api/v1/admin/school');
+        $response = $this->actingAsAdmin()->getJson('/api/v1/manage/school/school');
 
-        $response->assertStatus(200)->dump()
+        $response->assertStatus(200)
             ->assertJsonStructure([
                 'success',
                 'data',

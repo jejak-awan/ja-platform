@@ -12,7 +12,7 @@ class AiController extends BaseApiController
      */
     public function getProviders(): \Illuminate\Http\JsonResponse
     {
-        return $this->success(\Modules\Ai\Services\Ai\AiProviderFactory::getProviders());
+        return $this->success(\Modules\Ai\Services\AiProviderFactory::getProviders());
     }
 
     /**
@@ -27,9 +27,9 @@ class AiController extends BaseApiController
 
             // Factory doesn't accept key in 'make', so we instantiate manually based on provider
             $service = match ($provider) {
-                'openai' => new \Modules\Ai\Services\Ai\OpenAiService($apiKey),
-                'deepseek' => new \Modules\Ai\Services\Ai\DeepSeekService($apiKey),
-                'gemini' => new \Modules\Ai\Services\Ai\GeminiService($apiKey),
+                'openai' => new \Modules\Ai\Services\Providers\OpenAiService($apiKey),
+                'deepseek' => new \Modules\Ai\Services\Providers\DeepSeekService($apiKey),
+                'gemini' => new \Modules\Ai\Services\Providers\GeminiService($apiKey),
                 default => throw new \Exception('Unknown provider'),
             };
 
@@ -58,9 +58,9 @@ class AiController extends BaseApiController
             $apiKey = is_string($apiKeyRaw) ? $apiKeyRaw : null;
 
             $service = match ($provider) {
-                'openai' => new \Modules\Ai\Services\Ai\OpenAiService($apiKey),
-                'deepseek' => new \Modules\Ai\Services\Ai\DeepSeekService($apiKey),
-                'gemini' => new \Modules\Ai\Services\Ai\GeminiService($apiKey),
+                'openai' => new \Modules\Ai\Services\Providers\OpenAiService($apiKey),
+                'deepseek' => new \Modules\Ai\Services\Providers\DeepSeekService($apiKey),
+                'gemini' => new \Modules\Ai\Services\Providers\GeminiService($apiKey),
                 default => throw new \Exception('Unknown provider'),
             };
 
@@ -95,7 +95,7 @@ class AiController extends BaseApiController
             $context = is_string($contextRaw) ? $contextRaw : '';
 
             // Use Factory to get the active service
-            $service = \Modules\Ai\Services\Ai\AiProviderFactory::make($providerName);
+            $service = \Modules\Ai\Services\AiProviderFactory::make($providerName);
 
             $result = $service->generateText(
                 $prompt,

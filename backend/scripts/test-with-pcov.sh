@@ -29,8 +29,8 @@ fi
 echo "[pcov] Enable untuk sesi test ini (auto-disable setelah proses selesai)."
 
 if [ "$#" -eq 0 ]; then
-  exec "$PHP_BIN" "${EXTRA_ARGS[@]}" "${PHP_D_ARGS[@]}" ./vendor/bin/phpunit -c "${PHPUNIT_COV}" --coverage-text
+  exec "$PHP_BIN" "${EXTRA_ARGS[@]}" "${PHP_D_ARGS[@]}" ./vendor/bin/pest -c "${PHPUNIT_COV}" --coverage-text
 else
   # Argumen tambahan (filter path, dll.) diletakkan sebelum --coverage-text.
-  exec "$PHP_BIN" "${EXTRA_ARGS[@]}" "${PHP_D_ARGS[@]}" ./vendor/bin/phpunit -c "${PHPUNIT_COV}" "$@" --coverage-text
+  exec "$PHP_BIN" "${EXTRA_ARGS[@]}" "${PHP_D_ARGS[@]}" ./vendor/bin/pest -c "${PHPUNIT_COV}" "$@" --coverage-text
 fi

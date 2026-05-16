@@ -10,14 +10,14 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Modules\System\Models\User;
 use Modules\System\Notifications\ResetPassword;
-use Modules\System\Rules\StrongPassword;
+use Modules\Security\Rules\StrongPassword;
 use Modules\Security\Services\SecurityService;
-use Spatie\Permission\Models\Role;
+use Modules\System\Models\Role;
 
 /**
  * @OA\Tag(name="Authentication")
  */
-class AuthController extends BaseApiController
+class AuthController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * @OA\Post(
@@ -274,7 +274,7 @@ class AuthController extends BaseApiController
             if ($revokedCount > 0) {
                 $tokens->delete();
 
-                \Modules\System\Models\SecurityLog::log(
+                \Modules\Security\Models\SecurityLog::log(
                     'session_invalidated',
                     $user,
                     $ipAddress,
@@ -309,7 +309,7 @@ class AuthController extends BaseApiController
                 $oldestTokenIds = $activeTokens->take($tokensToRemove)->pluck('id');
                 $user->tokens()->whereIn('id', $oldestTokenIds)->delete();
 
-                \Modules\System\Models\SecurityLog::log(
+                \Modules\Security\Models\SecurityLog::log(
                     'session_limit_reached',
                     $user,
                     $ipAddress,

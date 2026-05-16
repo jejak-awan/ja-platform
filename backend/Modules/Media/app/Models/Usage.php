@@ -35,4 +35,40 @@ class Usage extends Model
     {
         return $this->morphTo();
     }
+
+    /**
+     * Track a file usage.
+     */
+    public static function track(int|string $fileId, Model $model, string $fieldName): self
+    {
+        return self::updateOrCreate(
+            [
+                'model_type' => get_class($model),
+                'model_id' => $model->getKey(),
+                'field_name' => $fieldName,
+            ],
+            [
+                'file_id' => $fileId,
+            ]
+        );
+    }
+
+    /**
+     * Untrack a file usage.
+     */
+    public static function untrack(int|string|null $fileId, Model $model, ?string $fieldName = null): void
+    {
+        $query = self::where('model_type', get_class($model))
+            ->where('model_id', $model->getKey());
+
+        if ($fileId) {
+            $query->where('file_id', $fileId);
+        }
+
+        if ($fieldName) {
+            $query->where('field_name', $fieldName);
+        }
+
+        $query->delete();
+    }
 }

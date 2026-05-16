@@ -7,5 +7,11 @@
     "Security": true,
     "Analytics": true,
     "Infra": true,
-    "Ai": true
+    "Ai": true,
+    "Library": true,
+    "Layout": true,
+    "Forms": true,
+    "Member": true,
+    "Newsletter": true,
+    "Search": true
 }

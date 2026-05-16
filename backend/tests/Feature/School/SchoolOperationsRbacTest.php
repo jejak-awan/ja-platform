@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\School;
 
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -23,9 +23,9 @@ class SchoolOperationsRbacTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('admin-sarpras');
 
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/operations/attendance/overview')->assertForbidden();
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/operations/violations')->assertForbidden();
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/operations/visitors')->assertForbidden();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/operations/attendance/overview')->assertForbidden();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/operations/violations')->assertForbidden();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/operations/visitors')->assertForbidden();
     }
 
     public function test_admin_kesiswaan_can_access_attendance_and_affairs_but_not_visitors(): void
@@ -33,9 +33,9 @@ class SchoolOperationsRbacTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('admin-kesiswaan');
 
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/operations/attendance/overview')->assertOk();
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/operations/violations')->assertOk();
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/operations/visitors')->assertForbidden();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/operations/attendance/overview')->assertOk();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/operations/violations')->assertOk();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/operations/visitors')->assertForbidden();
     }
 
     public function test_user_with_only_visitor_permissions_can_list_visitors_not_attendance(): void
@@ -45,8 +45,8 @@ class SchoolOperationsRbacTest extends TestCase
         $role->syncPermissions(['view visitors', 'manage visitors']);
         $user->assignRole('test-resepsionis');
 
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/operations/visitors')->assertOk();
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/operations/attendance')->assertForbidden();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/operations/visitors')->assertOk();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/operations/attendance')->assertForbidden();
     }
 
     /**
@@ -60,7 +60,7 @@ class SchoolOperationsRbacTest extends TestCase
         $role->syncPermissions(['view academic', 'manage academic']);
         $user->assignRole('test-curriculum-only');
 
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/operations/attendance/overview')->assertForbidden();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/operations/attendance/overview')->assertForbidden();
     }
 }
 

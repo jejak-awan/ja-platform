@@ -12,6 +12,7 @@ class StoreAttendanceRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'school_id' => 'required|exists:sch_ins_schools,id',
             'student_id' => 'required|exists:sch_std_students,id',
             'academic_year_id' => 'required|exists:sch_acad_years,id',
             'semester_id' => 'required|exists:sch_acad_semesters,id',

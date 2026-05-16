@@ -6,8 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Modules\System\Models\User;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Modules\System\Models\Permission;
+use Modules\System\Models\Role;
 use Tests\TestCase;
 
 class FileManagerSecurityTest extends TestCase
@@ -33,7 +33,7 @@ class FileManagerSecurityTest extends TestCase
     public function test_cannot_access_unauthorized_disk()
     {
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->getJson('/api/v1/admin/core/file-manager?disk=local');
+            ->getJson('/api/v1/manage/infra/file-manager?disk=local');
 
         // Should return validation error for 'disk'
         $response->assertStatus(422)
@@ -43,7 +43,7 @@ class FileManagerSecurityTest extends TestCase
     public function test_cannot_traverse_path_in_list()
     {
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->getJson('/api/v1/admin/core/file-manager?path=../private');
+            ->getJson('/api/v1/manage/infra/file-manager?path=../private');
 
         $response->assertStatus(403);
     }
@@ -55,7 +55,7 @@ class FileManagerSecurityTest extends TestCase
         $file = UploadedFile::fake()->image('test.jpg');
 
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->postJson('/api/v1/admin/core/file-manager/upload', [
+            ->postJson('/api/v1/manage/infra/file-manager/upload', [
                 'file' => $file,
                 'path' => '../',
                 'disk' => 'public',
@@ -70,7 +70,7 @@ class FileManagerSecurityTest extends TestCase
         Storage::put('test.txt', 'content');
 
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->postJson('/api/v1/admin/core/file-manager/move', [
+            ->postJson('/api/v1/manage/infra/file-manager/move', [
                 'source' => 'test.txt',
                 'destination' => 'new.txt',
                 'type' => 'file',
@@ -94,7 +94,7 @@ class FileManagerSecurityTest extends TestCase
 
         // Use correct URL for index
         $response = $this->actingAs($superAdmin, 'sanctum')
-            ->getJson('/api/v1/admin/core/file-manager?disk=local');
+            ->getJson('/api/v1/manage/infra/file-manager?disk=local');
 
         // Should NOT be 422.
         $response->assertSuccessful();

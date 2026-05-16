@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Modules\Security\Models\IpList;
 use Modules\System\Models\LoginHistory;
 
-class LoginHistoryController extends BaseApiController
+class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * Get all login history for admin

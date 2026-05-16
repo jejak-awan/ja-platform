@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Security\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
  * File Integrity Baseline model.
@@ -20,6 +21,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class FileIntegrityBaseline extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sec_file_integrity_baselines';
 
 

@@ -3,6 +3,7 @@
 namespace Modules\System\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Facades\Crypt;
 
 /**
@@ -29,6 +30,11 @@ use Illuminate\Support\Facades\Crypt;
  */
 class RedisSetting extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sys_redis_settings';
 
 

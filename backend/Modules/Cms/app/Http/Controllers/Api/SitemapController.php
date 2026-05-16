@@ -4,7 +4,7 @@ namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
-use Modules\Cms\Models\Category;
+use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
 use Illuminate\Routing\Controller;
 

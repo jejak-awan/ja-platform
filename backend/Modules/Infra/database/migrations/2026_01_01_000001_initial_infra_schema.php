@@ -10,7 +10,7 @@ return new class extends Migration
     {
         // 1. Backups Registry
         Schema::create('infra_backups', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('filename');
             $table->string('disk');
             $table->string('path');
@@ -23,7 +23,7 @@ return new class extends Migration
 
         // 2. Deleted Files (Recycle Bin)
         Schema::create('infra_deleted_files', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('original_name');
             $table->string('original_path');
             $table->string('disk');
@@ -37,7 +37,7 @@ return new class extends Migration
 
         // 3. Webhooks Registry
         Schema::create('infra_webhooks', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('url');
             $table->string('event')->index();
@@ -45,10 +45,26 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
+
+        // 4. Domain Redirects
+        Schema::create('infra_redirects', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('workspace_id')->nullable()->index();
+            $table->string('from_domain')->index();
+            $table->string('to_domain');
+            $table->string('target_path')->nullable();
+            $table->integer('status_code')->default(301);
+            $table->boolean('keep_path')->default(true);
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+
+            $table->unique(['workspace_id', 'from_domain']);
+        });
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('infra_redirects');
         Schema::dropIfExists('infra_webhooks');
         Schema::dropIfExists('infra_deleted_files');
         Schema::dropIfExists('infra_backups');

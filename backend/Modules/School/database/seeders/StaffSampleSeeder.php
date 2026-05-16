@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Modules\System\Models\User;
 use Modules\School\Models\HR\Staff;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
+use Modules\System\Models\Role;
 
 class StaffSampleSeeder extends Seeder
 {

@@ -36,6 +36,7 @@ class SchoolOperationTest extends TestCase
             'is_active' => true,
         ]);
         $this->semester = Semester::create([
+            'school_id' => $this->school->id,
             'academic_year_id' => $this->academicYear->id,
             'type' => 'ganjil',
             'is_active' => true,
@@ -52,6 +53,7 @@ class SchoolOperationTest extends TestCase
     public function it_can_record_attendance()
     {
         $response = $this->actingAsAdmin()->postJson('/api/v1/manage/school/operations/attendance', [
+            'school_id' => $this->school->id,
             'student_id' => $this->student->id,
             'academic_year_id' => $this->academicYear->id,
             'semester_id' => $this->semester->id,

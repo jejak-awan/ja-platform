@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 use Modules\System\Models\RedisSetting;
 
-class RedisController extends BaseApiController
+class RedisController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * Get all Redis settings.

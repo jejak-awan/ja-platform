@@ -3,6 +3,8 @@
 namespace Modules\Security\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Modules\System\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\System\Helpers\IpHelper;
 
@@ -17,11 +19,16 @@ use Modules\System\Helpers\IpHelper;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read int|null $count
- * @property-read \Modules\Security\Models\User|null $user
+ * @property-read \Modules\System\Models\User|null $user
  */
 class SecurityLog extends Model
 {
-    protected $table = 'sec_security_logs';
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    protected $table = 'sec_logs';
 
 
     protected $fillable = [

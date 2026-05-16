@@ -3,9 +3,9 @@
 namespace Modules\Cms\Tests\Unit\Models;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\Cms\Models\Category;
+use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Tag;
+use Modules\Library\Models\Tag;
 use Modules\System\Models\User;
 use Tests\TestCase;
 
@@ -89,7 +89,7 @@ class ContentModelTest extends TestCase
 
         $content->delete();
 
-        $this->assertSoftDeleted('contents', ['id' => $contentId]);
+        $this->assertSoftDeleted('cms_contents', ['id' => $contentId]);
     }
 
     /**
@@ -102,7 +102,7 @@ class ContentModelTest extends TestCase
 
         $content->restore();
 
-        $this->assertNotSoftDeleted('contents', ['id' => $content->id]);
+        $this->assertNotSoftDeleted('cms_contents', ['id' => $content->id]);
     }
 
     /**

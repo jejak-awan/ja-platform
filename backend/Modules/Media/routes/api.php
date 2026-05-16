@@ -3,16 +3,22 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Media\Http\Controllers\Api\MediaController;
 use Modules\Media\Http\Controllers\Api\FolderController;
+use Modules\Infra\Http\Controllers\FileManagerController;
 
 Route::prefix('v1/manage')->middleware(['auth:sanctum'])->group(function () {
     // Media Routes
     Route::prefix('media')->group(function () {
         Route::get('/', [MediaController::class, 'index']);
         Route::post('/upload', [MediaController::class, 'upload']);
-        Route::post('/bulk', [MediaController::class, 'bulk']);
+        Route::post('/bulk-action', [MediaController::class, 'bulk']);
+        Route::post('/empty-trash', [MediaController::class, 'emptyTrash']);
         Route::get('/{file}', [MediaController::class, 'show']);
         Route::put('/{file}', [MediaController::class, 'update']);
         Route::delete('/{file}', [MediaController::class, 'destroy']);
+        Route::post('/{id}/restore', [MediaController::class, 'restore']);
+        Route::get('/{file}/usage', [MediaController::class, 'usage']);
+        Route::post('/{file}/thumbnail', [MediaController::class, 'thumbnail']);
+        Route::post('/{file}/resize', [MediaController::class, 'resize']);
     });
 
     // Folder Routes
@@ -21,5 +27,16 @@ Route::prefix('v1/manage')->middleware(['auth:sanctum'])->group(function () {
         Route::post('/', [FolderController::class, 'store']);
         Route::put('/{folder}', [FolderController::class, 'update']);
         Route::delete('/{folder}', [FolderController::class, 'destroy']);
+    });
+
+    // File Manager Routes (from FileManagerController)
+    Route::prefix('infra/file-manager')->group(function () {
+        Route::get('/', [FileManagerController::class, 'index']);
+        Route::post('/upload', [FileManagerController::class, 'upload']);
+        Route::get('/download', [FileManagerController::class, 'download']);
+        Route::post('/delete', [FileManagerController::class, 'delete']);
+        Route::post('/folder/delete', [FileManagerController::class, 'deleteFolder']);
+        Route::post('/folder', [FileManagerController::class, 'createFolder']);
+        Route::post('/move', [FileManagerController::class, 'move']);
     });
 });

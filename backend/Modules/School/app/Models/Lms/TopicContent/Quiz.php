@@ -5,6 +5,7 @@ namespace Modules\School\Models\Lms\TopicContent;
 use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\School\Models\Lms\Topic;
@@ -22,6 +23,11 @@ use Modules\School\Models\Lms\QuizAttempt;
  */
 class Quiz extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     use ScopedByWorkspace;
     protected $table = 'sch_lms_topic_quizzes';
 

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\School;
 
-use Modules\Core\Models\User;
+use Modules\System\Models\User;
 use Modules\School\Models\Institution\School;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -24,7 +24,7 @@ class SchoolModuleRbacTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('admin-sarpras');
 
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/sarpras/overview')->assertOk();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/sarpras/overview')->assertOk();
     }
 
     public function test_admin_kesiswaan_cannot_access_sarpras(): void
@@ -32,6 +32,6 @@ class SchoolModuleRbacTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('admin-kesiswaan');
 
-        $this->actingAs($user, 'sanctum')->getJson('/api/v1/admin/sarpras/overview')->assertForbidden();
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/sarpras/overview')->assertForbidden();
     }
 }

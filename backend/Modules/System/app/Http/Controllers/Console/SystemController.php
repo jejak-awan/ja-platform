@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Modules\System\Services\CacheWarmingService;
 use Modules\System\Services\SystemService;
 
-class SystemController extends BaseApiController
+class SystemController extends \Modules\System\Http\Controllers\BaseApiController
 {
     protected SystemService $systemService;
 

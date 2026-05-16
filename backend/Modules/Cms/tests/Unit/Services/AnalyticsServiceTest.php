@@ -5,7 +5,7 @@ namespace Modules\Cms\Tests\Unit\Services;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Session;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Services\AnalyticsService;
+use Modules\Analytics\Services\AnalyticsService;
 use Modules\Analytics\Models\AnalyticsEvent;
 use Tests\TestCase;
 
@@ -34,12 +34,12 @@ class AnalyticsServiceTest extends TestCase
         $this->assertEquals('Button Click', $event->event_name);
         $this->assertEquals('Buy Now', $event->event_data['button']);
 
-        $this->assertDatabaseHas('analytics_events', [
+        $this->assertDatabaseHas('srv_analytics_events', [
             'event_type' => 'click',
             'event_name' => 'Button Click',
         ]);
 
-        $this->assertDatabaseHas('analytics_sessions', [
+        $this->assertDatabaseHas('srv_analytics_sessions', [
             'session_id' => session()->getId(),
         ]);
     }
@@ -54,7 +54,7 @@ class AnalyticsServiceTest extends TestCase
         $tracked = AnalyticsService::trackBatch($events);
 
         $this->assertCount(2, $tracked);
-        $this->assertDatabaseCount('analytics_events', 2);
+        $this->assertDatabaseCount('srv_analytics_events', 2);
     }
 
     public function test_specialized_tracking_methods()

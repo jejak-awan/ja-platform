@@ -5,6 +5,7 @@ namespace Modules\System\Models;
 use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\System\Traits\CoreLogsActivity;
 
 /**
@@ -22,6 +23,11 @@ use Modules\System\Traits\CoreLogsActivity;
  */
 class EmailTemplate extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sys_email_templates';
     use ScopedByWorkspace;
     use CoreLogsActivity;

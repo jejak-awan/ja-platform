@@ -6,6 +6,7 @@ use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Student\Student;
 
@@ -22,6 +23,11 @@ use Modules\School\Models\Student\Student;
  */
 class OsisMember extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 

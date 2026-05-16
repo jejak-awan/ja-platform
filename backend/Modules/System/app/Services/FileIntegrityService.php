@@ -59,10 +59,10 @@ class FileIntegrityService
                 $hash = hash_file('sha256', $absolutePath);
                 if ($hash === false) { $stats['errors']++; continue; }
 
-                $exists = DB::table('core_file_integrity_baselines')->where('file_path', $relativePath)->exists();
+                $exists = DB::table('sys_file_integrity_baselines')->where('file_path', $relativePath)->exists();
 
                 if ($exists) {
-                    DB::table('core_file_integrity_baselines')->where('file_path', $relativePath)->update([
+                    DB::table('sys_file_integrity_baselines')->where('file_path', $relativePath)->update([
                         'hash' => $hash,
                         'file_size' => filesize($absolutePath) ?: 0,
                         'status' => 'ok',
@@ -71,7 +71,7 @@ class FileIntegrityService
                     ]);
                     $stats['updated']++;
                 } else {
-                    DB::table('core_file_integrity_baselines')->insert([
+                    DB::table('sys_file_integrity_baselines')->insert([
                         'file_path' => $relativePath,
                         'hash' => $hash,
                         'file_size' => filesize($absolutePath) ?: 0,
@@ -122,7 +122,7 @@ class FileIntegrityService
     public function verify(): array
     {
         $stats = ['ok' => 0, 'modified' => [], 'missing' => [], 'new' => [], 'violations' => []];
-        $baselines = DB::table('core_file_integrity_baselines')->get()->keyBy('file_path');
+        $baselines = DB::table('sys_file_integrity_baselines')->get()->keyBy('file_path');
         $currentFiles = $this->getMonitoredFiles();
 
         foreach ($baselines as $path => $baseline) {
@@ -130,7 +130,7 @@ class FileIntegrityService
             if (! file_exists($absolutePath)) {
                 $stats['missing'][] = ['path' => (string) $path, 'detail' => 'File has been deleted'];
                 $stats['violations'][] = ['path' => (string) $path, 'status' => 'missing', 'detail' => 'File has been deleted'];
-                DB::table('core_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'missing', 'checked_at' => now()]);
+                DB::table('sys_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'missing', 'checked_at' => now()]);
                 continue;
             }
 
@@ -138,10 +138,10 @@ class FileIntegrityService
             if ($currentHash !== $baseline->hash) {
                 $stats['modified'][] = ['path' => (string) $path, 'detail' => 'Modified', 'expected' => $baseline->hash, 'actual' => (string) $currentHash];
                 $stats['violations'][] = ['path' => (string) $path, 'status' => 'modified', 'detail' => 'Hash mismatch'];
-                DB::table('core_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'modified', 'checked_at' => now()]);
+                DB::table('sys_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'modified', 'checked_at' => now()]);
             } else {
                 $stats['ok']++;
-                DB::table('core_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'ok', 'checked_at' => now()]);
+                DB::table('sys_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'ok', 'checked_at' => now()]);
             }
         }
 

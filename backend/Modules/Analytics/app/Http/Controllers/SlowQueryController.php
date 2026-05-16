@@ -5,7 +5,7 @@ namespace Modules\Analytics\Http\Controllers;
 use Illuminate\Http\Request;
 use Modules\Analytics\Models\SlowQuery;
 
-class SlowQueryController extends BaseApiController
+class SlowQueryController extends \Modules\System\Http\Controllers\BaseApiController
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {

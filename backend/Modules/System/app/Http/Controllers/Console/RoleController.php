@@ -3,10 +3,10 @@
 namespace Modules\System\Http\Controllers\Console;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Modules\System\Models\Permission;
+use Modules\System\Models\Role;
 
-class RoleController extends BaseApiController
+class RoleController extends \Modules\System\Http\Controllers\BaseApiController
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {

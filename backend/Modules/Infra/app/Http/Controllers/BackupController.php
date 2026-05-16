@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\System\Http\Controllers\Console;
+namespace Modules\Infra\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Modules\Infra\Models\Backup;
-use Modules\System\Services\BackupService;
+use Modules\Infra\Services\BackupService;
 
-class BackupController extends BaseApiController
+class BackupController extends \Modules\System\Http\Controllers\BaseApiController
 {
     protected BackupService $backupService;
 

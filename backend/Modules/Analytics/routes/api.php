@@ -30,6 +30,19 @@ Route::prefix('v1')->group(function () {
     });
 
     // Legacy Bridge
+    Route::prefix('manage/cms/analytics')->middleware(['auth:sanctum', 'permission:view analytics'])->group(function () {
+        Route::get('overview', [AnalyticsController::class, 'overview']);
+        Route::get('visits', [AnalyticsController::class, 'visits']);
+        Route::get('top-pages', [AnalyticsController::class, 'topPages']);
+        Route::get('top-content', [AnalyticsController::class, 'topContent']);
+        Route::get('devices', [AnalyticsController::class, 'devices']);
+        Route::get('browsers', [AnalyticsController::class, 'browsers']);
+        Route::get('countries', [AnalyticsController::class, 'countries']);
+        Route::get('referrers', [AnalyticsController::class, 'referrers']);
+        Route::get('events', [AnalyticsController::class, 'events']);
+        Route::get('event-stats', [AnalyticsController::class, 'eventStats']);
+    });
+
     Route::prefix('admin/cms/analytics')->middleware(['auth:sanctum'])->group(function () {
         Route::get('overview', [AnalyticsController::class, 'overview']);
         Route::get('visits', [AnalyticsController::class, 'visits']);

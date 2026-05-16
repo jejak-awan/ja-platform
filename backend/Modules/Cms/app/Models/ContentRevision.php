@@ -6,6 +6,7 @@ use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\System\Models\User;
 
@@ -25,8 +26,15 @@ use Modules\System\Models\User;
  */
 class ContentRevision extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     /** @use HasFactory<\Modules\Cms\Database\Factories\ContentRevisionFactory> */
     use HasFactory, ScopedByWorkspace;
+
+    protected $table = 'cms_content_revisions';
 
     /**
      * Create a new factory instance for the model.
@@ -37,6 +45,7 @@ class ContentRevision extends Model
     }
 
     protected $fillable = [
+        'workspace_id',
         'content_id',
         'author_id',
         'title',

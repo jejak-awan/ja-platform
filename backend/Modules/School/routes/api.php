@@ -390,9 +390,4 @@ Route::prefix('v1')->group(function () {
         Route::get('lms/files/private/{path}', [LmsFileController::class, 'stream'])->where('path', '.*');
     });
     
-    // Legacy Bridge (School)
-    Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
-        Route::get('school', [SchoolController::class, 'index']);
-        Route::get('school/stats', [SchoolController::class, 'stats']);
-    });
 });

@@ -5,9 +5,9 @@ namespace Modules\Cms\Tests\Unit\Services;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Modules\Cms\Models\Category;
+use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Cms\Models\Tag;
+use Modules\Library\Models\Tag;
 use Modules\Cms\Services\ContentService;
 use Modules\System\Models\User;
 use Tests\TestCase;
@@ -25,7 +25,7 @@ class ContentServiceTest extends TestCase
         $this->service = new ContentService;
     }
 
-    public function test_get_published_contents()
+    public function test_get_published_cms_contents()
     {
         Content::factory()->count(3)->state(['status' => 'published'])->create();
         Content::factory()->state(['status' => 'draft'])->create();
@@ -134,13 +134,13 @@ class ContentServiceTest extends TestCase
         $id = $content->id;
 
         $this->service->delete($content);
-        $this->assertSoftDeleted('contents', ['id' => $id]);
+        $this->assertSoftDeleted('cms_contents', ['id' => $id]);
 
         $this->service->restore($id);
         $this->assertFalse($content->fresh()->trashed());
 
         $this->service->forceDelete($id);
-        $this->assertDatabaseMissing('contents', ['id' => $id]);
+        $this->assertDatabaseMissing('cms_contents', ['id' => $id]);
     }
 
     public function test_apply_filters_and_sorting()
@@ -171,14 +171,12 @@ class ContentServiceTest extends TestCase
         $tag = Tag::factory()->create();
 
         // Manual creation since no factory
-        $fieldGroup = \Modules\Cms\Models\FieldGroup::create([
+        $fieldGroup = \Modules\Library\Models\FieldGroup::create([
             'name' => 'SEO',
-            'slug' => 'seo',
         ]);
-        $field = \Modules\Cms\Models\CustomField::create([
-            'field_group_id' => $fieldGroup->id,
+        $field = \Modules\Library\Models\CustomField::create([
             'name' => 'SEO Title',
-            'slug' => 'seo_title',
+            'key' => 'seo_title',
             'label' => 'SEO Title',
             'type' => 'text',
         ]);
@@ -191,6 +189,7 @@ class ContentServiceTest extends TestCase
             'new_tags' => ['Fresh Tag'],
             'custom_fields' => ['seo_title' => 'Best SEO Title'],
             'published_at' => now()->subDay()->timestamp,
+            'body' => 'Test body',
         ];
 
         $content = $this->service->create($data, $user->id, true);
@@ -224,7 +223,7 @@ class ContentServiceTest extends TestCase
         $this->assertCount(0, Content::onlyTrashed()->get());
 
         $this->service->bulkAction('force_delete', $ids);
-        $this->assertDatabaseMissing('contents', ['id' => $c1->id]);
+        $this->assertDatabaseMissing('cms_contents', ['id' => $c1->id]);
     }
 
     public function test_generate_unique_slug_collision()
@@ -236,7 +235,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals('test-2', $slug);
     }
 
-    public function test_get_published_contents_with_pagination()
+    public function test_get_published_cms_contents_with_pagination()
     {
         Content::factory()->count(15)->state(['status' => 'published'])->create();
 
@@ -247,7 +246,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals(5, $result['data']->perPage());
     }
 
-    public function test_get_published_contents_with_limit()
+    public function test_get_published_cms_contents_with_limit()
     {
         Content::factory()->count(10)->state(['status' => 'published'])->create();
 
@@ -323,7 +322,7 @@ class ContentServiceTest extends TestCase
 
         // Update with null image should untrack
         $this->service->update($content, ['featured_image' => null], $user->id);
-        $this->assertDatabaseMissing('core_media_usages', [
+        $this->assertDatabaseMissing('srv_media_usages', [
             'model_type' => get_class($content),
             'model_id' => $content->id,
             'field_name' => 'featured_image',
@@ -341,7 +340,7 @@ class ContentServiceTest extends TestCase
         $this->assertEquals('draft', $content->fresh()->status);
     }
 
-    public function test_get_published_contents_complex_filters()
+    public function test_get_published_cms_contents_complex_filters()
     {
         $category = Category::factory()->create(['slug' => 'cat']);
         $tag = Tag::factory()->create(['slug' => 'tag']);

@@ -4,6 +4,7 @@ namespace Modules\School\Models\Student;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
@@ -26,6 +27,11 @@ use Modules\System\Traits\ScopedByWorkspace;
  */
 class CounselingRecord extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sch_std_counseling_records';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */

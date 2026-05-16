@@ -3,6 +3,8 @@
 namespace Modules\Infra\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Modules\System\Models\User;
 
 /**
  * @property int $id
@@ -23,6 +25,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DeletedFile extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'infra_deleted_files';
 
 

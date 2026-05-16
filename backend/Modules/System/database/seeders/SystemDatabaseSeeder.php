@@ -6,40 +6,31 @@ use Illuminate\Database\Seeder;
 use Modules\System\Models\User;
 use Modules\System\Models\Setting;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use Modules\System\Models\Role;
+use Modules\System\Models\Permission;
 
 class SystemDatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Create Roles
-        $roles = ['super', 'system-admin', 'admin', 'operator', 'member'];
-        foreach ($roles as $roleName) {
-            Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
-        }
+        // 1. Foundation (Roles, Permissions, Basic Settings, Languages)
+        $this->call(FoundationSeeder::class);
 
         // 2. Create Super Admin
+        $superEmail = env('SUPER_ADMIN_EMAIL', 'super@jejakawan.com');
+        $superPassword = env('SUPER_ADMIN_PASSWORD', 'ChangeMeOnFirstLogin!');
+        
         $superAdmin = User::firstOrCreate(
-            ['email' => 'admin@ja-platform.com'],
+            ['email' => $superEmail],
             [
                 'name' => 'Super Admin',
-                'password' => Hash::make('password'),
+                'password' => Hash::make($superPassword),
                 'email_verified_at' => now(),
             ]
         );
         $superAdmin->assignRole('super');
 
-        // 3. Basic Settings
-        $settings = [
-            'app_name' => ['value' => 'JA-Platform', 'type' => 'string', 'group' => 'general'],
-            'enable_registration' => ['value' => 'true', 'type' => 'boolean', 'group' => 'auth'],
-            'enable_2fa' => ['value' => 'false', 'type' => 'boolean', 'group' => 'security'],
-            'maintenance_mode' => ['value' => 'false', 'type' => 'boolean', 'group' => 'system'],
-        ];
-
-        foreach ($settings as $key => $data) {
-            Setting::set($key, $data['value'], $data['type'], $data['group']);
-        }
+        // 3. Infrastructure (Tags, Media Folders)
+        $this->call(InfrastructureSeeder::class);
     }
 }

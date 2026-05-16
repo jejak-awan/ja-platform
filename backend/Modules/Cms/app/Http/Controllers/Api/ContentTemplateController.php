@@ -116,7 +116,7 @@ class ContentTemplateController extends BaseApiController
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|unique:core_content_templates,slug',
+            'slug' => 'required|string|unique:sys_content_templates,slug',
             'description' => 'nullable|string',
             'type' => 'required|string|in:post,page,custom',
             'title_template' => 'nullable|string',
@@ -124,7 +124,7 @@ class ContentTemplateController extends BaseApiController
             'excerpt_template' => 'nullable|string',
             'default_fields' => 'nullable|array',
             'meta' => 'nullable|array',
-            'category_id' => 'nullable|exists:categories,id',
+            'category_id' => 'nullable|exists:cms_categories,id',
             'is_active' => 'boolean',
             'author_id' => 'nullable|exists:users,id',
         ]);
@@ -179,7 +179,7 @@ class ContentTemplateController extends BaseApiController
 
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            'slug' => 'sometimes|required|string|unique:core_content_templates,slug,'.$contentTemplate->id,
+            'slug' => 'sometimes|required|string|unique:sys_content_templates,slug,'.$contentTemplate->id,
             'description' => 'nullable|string',
             'type' => 'sometimes|required|string|in:post,page,custom',
             'title_template' => 'nullable|string',
@@ -187,7 +187,7 @@ class ContentTemplateController extends BaseApiController
             'excerpt_template' => 'nullable|string',
             'default_fields' => 'nullable|array',
             'meta' => 'nullable|array',
-            'category_id' => 'nullable|exists:categories,id',
+            'category_id' => 'nullable|exists:cms_categories,id',
             'is_active' => 'boolean',
             'author_id' => 'nullable|exists:users,id',
         ]);

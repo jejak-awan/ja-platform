@@ -3,7 +3,7 @@
 namespace Modules\Cms\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Cms\Models\Category;
+use Illuminate\Support\Facades\Log;
 use Modules\Cms\Models\Content;
 
 class CmsCacheService
@@ -14,77 +14,78 @@ class CmsCacheService
     public function clearAll(): void
     {
         $this->clearContentCaches();
-        $this->clearCategoryCaches();
+        $this->clearSeoCaches();
+        Cache::forget('cms_statistics');
     }
 
     /**
-     * Clear content-related caches
+     * Clear content caches
      */
-    public function clearContentCaches(int|string|null $contentId = null): void
+    public function clearContentCaches(?int $contentId = null): void
     {
-        Cache::forget('contents_list');
-        Cache::forget('contents_published');
+        try {
+            // Clear general list caches
+            // Note: We use a wildcard approach if the driver supports tags, otherwise specific keys
+            if ($this->tagsSupported()) {
+                Cache::tags(['cms', 'contents'])->flush();
+            } else {
+                // Manual key clearing for simple drivers
+                Cache::forget('contents_published_list');
+            }
 
-        if ($contentId) {
-            Cache::forget("content_{$contentId}");
-            Cache::forget("content_slug_{$contentId}");
-        }
-
-        Cache::forget('sitemap_index');
-        Cache::forget('sitemap_pages');
-        Cache::forget('sitemap_posts');
-        Cache::forget('sitemap_categories');
-    }
-
-    /**
-     * Clear category-related caches
-     */
-    public function clearCategoryCaches(int|string|null $categoryId = null): void
-    {
-        Cache::forget('categories_list');
-        Cache::forget('categories_tree');
-        Cache::forget('categories_flat');
-
-        if ($categoryId) {
-            Cache::forget("category_{$categoryId}");
+            if ($contentId) {
+                Cache::forget("content_detail_{$contentId}");
+            }
+        } catch (\Exception $e) {
+            Log::warning('Failed to clear CMS content cache: ' . $e->getMessage());
         }
     }
 
     /**
-     * Clear SEO-related caches
+     * Clear SEO related caches
      */
     public function clearSeoCaches(): void
     {
-        Cache::forget('sitemap_index');
-        Cache::forget('sitemap_pages');
-        Cache::forget('sitemap_posts');
-        Cache::forget('sitemap_categories');
-        Cache::forget('robots_txt');
+        try {
+            if ($this->tagsSupported()) {
+                Cache::tags(['cms', 'seo'])->flush();
+            } else {
+                Cache::forget('cms_sitemap');
+            }
+        } catch (\Exception $e) {
+            Log::warning('Failed to clear CMS SEO cache: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Warm up CMS caches
+     * Warm up important CMS caches
      */
     public function warmUp(): int
     {
         $count = 0;
-        
-        // Warm categories
-        $categories = Category::orderBy('sort_order')->get();
-        Cache::put('categories:list', $categories, 86400);
-        $count += count($categories);
+        try {
+            // Pre-cache top 10 published contents
+            $recentContents = Content::where('status', 'published')
+                ->latest('published_at')
+                ->limit(10)
+                ->get();
 
-        // Warm popular content
-        $popularContent = Content::where('status', 'published')
-            ->orderBy('views', 'desc')
-            ->limit(50)
-            ->get();
-        
-        foreach ($popularContent as $content) {
-            Cache::put("content:{$content->id}", $content, 3600);
-            $count++;
+            foreach ($recentContents as $content) {
+                Cache::put("content_detail_{$content->id}", $content, now()->addHours(1));
+                $count++;
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to warm up CMS cache: ' . $e->getMessage());
         }
 
         return $count;
+    }
+
+    /**
+     * Check if cache tags are supported
+     */
+    protected function tagsSupported(): bool
+    {
+        return in_array(config('cache.default'), ['redis', 'memcached']);
     }
 }

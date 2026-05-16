@@ -9,9 +9,13 @@ class GraduationSeeder extends Seeder
 {
     public function run(): void
     {
+        $school = \Modules\School\Models\Institution\School::first();
+        if (!$school) return;
+
         GraduationSetting::updateOrCreate(
-            ['graduation_year' => 2026, 'workspace_id' => 1],
+            ['graduation_year' => 2026, 'workspace_id' => $school->workspace_id],
             [
+                'school_id' => $school->id,
                 'is_open' => true,
                 'announcement_date' => '2026-06-15 10:00:00',
                 'subjects' => [

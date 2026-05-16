@@ -5,7 +5,7 @@ namespace Modules\System\Http\Controllers\Console;
 use Illuminate\Http\Request;
 use Modules\System\Models\Setting;
 
-class SettingController extends BaseApiController
+class SettingController extends \Modules\System\Http\Controllers\BaseApiController
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {

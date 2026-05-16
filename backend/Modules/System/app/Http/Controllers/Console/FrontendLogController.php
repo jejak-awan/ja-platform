@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Modules\System\Helpers\IpHelper;
 
-class FrontendLogController extends BaseApiController
+class FrontendLogController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * Handle incoming frontend log entries.

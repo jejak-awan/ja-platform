@@ -10,7 +10,7 @@ use Modules\System\Models\Setting;
  * Controller for public settings (no auth required)
  * Only exposes non-sensitive settings that the frontend needs before login
  */
-class PublicSettingsController extends BaseApiController
+class PublicSettingsController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * Get public settings for the frontend

@@ -3,6 +3,7 @@
 namespace Modules\School\Models\Operations;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
@@ -27,6 +28,11 @@ use Modules\System\Traits\ScopedByWorkspace;
  */
 class Visitor extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sch_ops_visitors';
 
     use ScopedByWorkspace;

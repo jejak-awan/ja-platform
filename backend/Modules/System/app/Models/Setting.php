@@ -4,6 +4,7 @@ namespace Modules\System\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Facades\Context;
 use Modules\System\Traits\ScopedByWorkspace;
 
@@ -21,6 +22,11 @@ use Modules\System\Traits\ScopedByWorkspace;
  */
 class Setting extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sys_settings';
 
 

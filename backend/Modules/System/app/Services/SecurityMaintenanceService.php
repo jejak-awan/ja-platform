@@ -212,7 +212,7 @@ class SecurityMaintenanceService
 
         // Log maintenance event in security journal
         try {
-            \Modules\System\Models\SecurityLog::log(
+            \Modules\Security\Models\SecurityLog::log(
                 'maintenance_ended',
                 null,
                 null,

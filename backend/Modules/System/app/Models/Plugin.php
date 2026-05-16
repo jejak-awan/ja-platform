@@ -3,6 +3,7 @@
 namespace Modules\System\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
  * @property int $id
@@ -20,6 +21,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Plugin extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sys_plugins';
 
 

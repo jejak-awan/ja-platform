@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\System\Services;
 
 use Illuminate\Support\Facades\DB;
-use Modules\System\Models\SecurityLog;
+use Modules\Security\Models\SecurityLog;
 
 /**
  * Attack Correlation Service.

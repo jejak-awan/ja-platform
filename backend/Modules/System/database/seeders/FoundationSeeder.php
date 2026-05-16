@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\DB;
 use Modules\System\Models\User;
 use Modules\System\Models\RedisSetting;
 use Modules\System\Models\Setting;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Modules\System\Models\Language;
+use Modules\System\Models\Permission;
+use Modules\System\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class FoundationSeeder extends Seeder
@@ -142,7 +143,7 @@ class FoundationSeeder extends Seeder
         ];
 
         foreach ($languages as $language) {
-            DB::table('core_languages')->updateOrInsert(['code' => $language['code']], $language);
+            Language::updateOrCreate(['code' => $language['code']], $language);
         }
     }
 
@@ -154,8 +155,8 @@ class FoundationSeeder extends Seeder
     protected function seedRedisSettings(): void
     {
         $settings = [
-            ['key' => 'redis_host', 'value' => env('REDIS_HOST', '127.0.0.1'), 'type' => 'string', 'group' => 'connection'],
-            ['key' => 'redis_port', 'value' => env('REDIS_PORT', '6379'), 'type' => 'integer', 'group' => 'connection'],
+            ['key' => 'redis_host', 'value' => env('REDIS_HOST', '127.0.0.1')],
+            ['key' => 'redis_port', 'value' => env('REDIS_PORT', '6379')],
         ];
 
         foreach ($settings as $setting) {

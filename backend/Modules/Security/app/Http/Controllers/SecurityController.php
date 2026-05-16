@@ -12,7 +12,7 @@ use Modules\Security\Models\SecurityLog;
 use Modules\System\Services\SecurityAlertService;
 use Modules\Security\Services\SecurityService;
 
-class SecurityController extends BaseApiController
+class SecurityController extends \Modules\System\Http\Controllers\BaseApiController
 {
     protected SecurityService $securityService;
 
@@ -22,7 +22,7 @@ class SecurityController extends BaseApiController
 
     protected \Modules\System\Services\FileIntegrityService $fileIntegrityService;
 
-    protected \Modules\System\Services\SecurityNotificationService $notificationService;
+    protected \Modules\Security\Services\SecurityNotificationService $notificationService;
 
     protected \Modules\System\Services\SecurityAssessmentService $assessmentService;
 
@@ -31,7 +31,7 @@ class SecurityController extends BaseApiController
         SecurityAlertService $alertService,
         \Modules\System\Services\AttackCorrelationService $correlationService,
         \Modules\System\Services\FileIntegrityService $fileIntegrityService,
-        \Modules\System\Services\SecurityNotificationService $notificationService,
+        \Modules\Security\Services\SecurityNotificationService $notificationService,
         \Modules\System\Services\SecurityAssessmentService $assessmentService
     ) {
         $this->securityService = $securityService;
@@ -715,7 +715,7 @@ class SecurityController extends BaseApiController
             'test_notification',
             'Sistem Keamanan Aktif 🛡️',
             'Ini adalah notifikasi uji coba dari sistem keamanan JA-Platform. Koneksi Anda berhasil dikonfigurasi!',
-            \Modules\System\Services\SecurityNotificationService::SEVERITY_INFO,
+            \Modules\Security\Services\SecurityNotificationService::SEVERITY_INFO,
             [
                 'server' => gethostname(),
                 'ip' => IpHelper::getClientIp(request()),

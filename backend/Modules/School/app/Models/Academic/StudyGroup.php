@@ -4,6 +4,7 @@ namespace Modules\School\Models\Academic;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\School\Models\Student\Student;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
@@ -30,6 +31,11 @@ use Modules\System\Traits\ScopedByWorkspace;
  */
 class StudyGroup extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sch_acad_study_groups';
 
     /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */

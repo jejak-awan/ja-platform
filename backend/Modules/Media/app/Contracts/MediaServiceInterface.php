@@ -12,7 +12,7 @@ interface MediaServiceInterface
      */
     public function upload(
         UploadedFile $file,
-        ?int $folderId = null,
+        ?string $folderId = null,
         bool $optimize = true,
         ?int $authorId = null,
         bool $isShared = false,
@@ -49,22 +49,28 @@ interface MediaServiceInterface
     /**
      * Restore a soft-deleted media item.
      */
-    public function restore(int $mediaId): ?File;
+    public function restore(string $fileId): ?File;
 
     /**
      * Perform bulk action on media.
-     * 
+     *
+     * @param  array<int, string>  $mediaIds
+     * @param  array<int, string>  $folderIds
      * @return array{media_count: int, folder_count: int}
      */
-    public function bulkAction(string $action, array $mediaIds, ?int $folderId = null, ?string $altText = null, array $folderIds = []): array;
+    public function bulkAction(string $action, array $mediaIds, ?string $folderId = null, ?string $altText = null, array $folderIds = []): array;
 
     /**
      * Create ZIP download from multiple media.
+     *
+     * @param  array<int, string>  $mediaIds
      */
     public function createZip(array $mediaIds): ?string;
 
     /**
      * Get usage information for media.
+     *
+     * @return array<int, mixed>
      */
     public function getUsageInfo(File $file): array;
 }

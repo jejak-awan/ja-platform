@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Modules\System\Models\ActivityLog;
 
-class ActivityLogController extends BaseApiController
+class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * Display a listing of the resource.

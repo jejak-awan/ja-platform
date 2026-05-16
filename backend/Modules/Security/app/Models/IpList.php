@@ -4,10 +4,17 @@ namespace Modules\Security\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Modules\System\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class IpList extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = 'sec_ip_lists';
 
 

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Modules\System\Helpers\IpHelper;
 use Modules\Security\Models\CspReport;
 
-class CspReportController extends BaseApiController
+class CspReportController extends \Modules\System\Http\Controllers\BaseApiController
 {
     /**
      * Receive CSP violation reports from browsers

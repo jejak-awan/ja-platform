@@ -12,8 +12,8 @@ use Modules\Media\Models\File;
 use Modules\Media\Models\Folder;
 use Modules\Media\Models\Usage;
 use Modules\Media\Models\DeletedFile;
-use Modules\Core\Models\Setting; // Temporary, will be Modules\System\Models\Setting
-use Modules\Core\Models\Tag;     // Temporary, will be Modules\Library\Models\Tag
+use Modules\System\Models\Setting;
+use Modules\Library\Models\Tag;
 
 class MediaService implements MediaServiceInterface
 {
@@ -22,7 +22,7 @@ class MediaService implements MediaServiceInterface
      */
     public function upload(
         UploadedFile $file,
-        ?int $folderId = null,
+        ?string $folderId = null,
         bool $optimize = true,
         ?int $authorId = null,
         bool $isShared = false,
@@ -285,7 +285,7 @@ class MediaService implements MediaServiceInterface
     /**
      * Restore a soft-deleted media item.
      */
-    public function restore(int $fileId): ?File
+    public function restore(string $fileId): ?File
     {
         $file = File::onlyTrashed()->find($fileId);
         if (!$file) return null;
@@ -314,7 +314,7 @@ class MediaService implements MediaServiceInterface
     /**
      * Perform bulk action on media.
      */
-    public function bulkAction(string $action, array $mediaIds, ?int $folderId = null, ?string $altText = null, array $folderIds = []): array
+    public function bulkAction(string $action, array $mediaIds, ?string $folderId = null, ?string $altText = null, array $folderIds = []): array
     {
         $affectedMedia = 0;
         $affectedFolders = 0;
@@ -394,15 +394,16 @@ class MediaService implements MediaServiceInterface
         }
     }
 
-    protected function syncTags(File $file, array $tags): void
+    public function syncTags(File $file, array $tags): void
     {
         $tagIds = [];
         foreach ($tags as $tagName) {
+            if (empty(trim($tagName))) continue;
             $tag = Tag::firstOrCreate(['name' => trim($tagName)], ['slug' => Str::slug($tagName)]);
             $tagIds[] = $tag->id;
         }
-        // Assuming relationship exists, though we'll need to define it in the File model
-        // For now, let's skip or implement a basic sync if many-to-many is set up
+        
+        $file->tags()->sync($tagIds);
     }
 
     protected function forceDelete(File $file): void

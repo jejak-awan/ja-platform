@@ -1,0 +1,3343 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Ai\\Providers\\AiServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Ai\\Providers\\AiServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Ai/app/Providers/AiServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Analytics/app/Http/Controllers/AnalyticsController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Analytics/app/Http/Controllers/AnalyticsController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Analytics/app/Http/Controllers/AnalyticsController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int,array\<string, mixed\>\>\:\:sortByDesc\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: Modules/Analytics/app/Http/Controllers/AnalyticsController.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: Modules/Analytics/app/Http/Controllers/AnalyticsController.php
+
+		-
+			message: '#^Return type of call to function collect contains unresolvable type\.$#'
+			identifier: function.unresolvableReturnType
+			count: 1
+			path: Modules/Analytics/app/Http/Controllers/AnalyticsController.php
+
+		-
+			message: '#^Return type of call to method Illuminate\\Support\\Collection\<int,array\<string, mixed\>\>\:\:values\(\) contains unresolvable type\.$#'
+			identifier: method.unresolvableReturnType
+			count: 1
+			path: Modules/Analytics/app/Http/Controllers/AnalyticsController.php
+
+		-
+			message: '#^PHPDoc tag @use has invalid type Modules\\System\\Database\\Factories\\AnalyticsEventFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Analytics/app/Models/AnalyticsEvent.php
+
+		-
+			message: '#^Type Modules\\System\\Database\\Factories\\AnalyticsEventFactory in generic type Illuminate\\Database\\Eloquent\\Factories\\HasFactory\<Modules\\System\\Database\\Factories\\AnalyticsEventFactory\> in PHPDoc tag @use is not subtype of template type TFactory of Illuminate\\Database\\Eloquent\\Factories\\Factory of trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory\.$#'
+			identifier: generics.notSubtype
+			count: 1
+			path: Modules/Analytics/app/Models/AnalyticsEvent.php
+
+		-
+			message: '#^PHPDoc tag @use has invalid type Modules\\System\\Database\\Factories\\AnalyticsSessionFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Analytics/app/Models/AnalyticsSession.php
+
+		-
+			message: '#^Type Modules\\System\\Database\\Factories\\AnalyticsSessionFactory in generic type Illuminate\\Database\\Eloquent\\Factories\\HasFactory\<Modules\\System\\Database\\Factories\\AnalyticsSessionFactory\> in PHPDoc tag @use is not subtype of template type TFactory of Illuminate\\Database\\Eloquent\\Factories\\Factory of trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory\.$#'
+			identifier: generics.notSubtype
+			count: 1
+			path: Modules/Analytics/app/Models/AnalyticsSession.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Analytics\\Providers\\AnalyticsServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Analytics\\Providers\\AnalyticsServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Analytics/app/Providers/AnalyticsServiceProvider.php
+
+		-
+			message: '#^Class Modules\\Analytics\\Database\\Factories\\AnalyticsEventFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Analytics/database/factories/AnalyticsEventFactory.php
+
+		-
+			message: '#^Class Modules\\Analytics\\Database\\Factories\\AnalyticsSessionFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Analytics/database/factories/AnalyticsSessionFactory.php
+
+		-
+			message: '#^Class Modules\\Analytics\\Database\\Factories\\AnalyticsVisitFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Analytics/database/factories/AnalyticsVisitFactory.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$author_id\.$#'
+			identifier: property.notFound
+			count: 5
+			path: Modules/Cms/app/Http/Controllers/Api/CommentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$comment_status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/CommentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$author_id\.$#'
+			identifier: property.notFound
+			count: 5
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$lock_status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$locked_at\.$#'
+			identifier: property.notFound
+			count: 7
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$locked_by\.$#'
+			identifier: property.notFound
+			count: 5
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$published_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 7
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/ContentController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$body\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$excerpt\.$#'
+			identifier: property.notFound
+			count: 3
+			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$meta\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 3
+			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/Cms/app/Http/Controllers/Api/ContentRevisionController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/SeoController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/SitemapController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Http/Controllers/Api/SitemapController.php
+
+		-
+			message: '#^Call to static method where\(\) on an unknown class Modules\\Cms\\Http\\Middleware\\Redirect\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Cms/app/Http/Middleware/HandleRedirects.php
+
+		-
+			message: '#^Method Modules\\Cms\\Http\\Middleware\\HandleRedirects\:\:handle\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns Illuminate\\Http\\RedirectResponse\|Illuminate\\Routing\\Redirector\.$#'
+			identifier: return.type
+			count: 1
+			path: Modules/Cms/app/Http/Middleware/HandleRedirects.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$value\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Class Modules\\Cms\\Models\\Content uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Method Modules\\Cms\\Models\\Content\:\:allComments\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Method Modules\\Cms\\Models\\Content\:\:author\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Method Modules\\Cms\\Models\\Content\:\:category\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Method Modules\\Cms\\Models\\Content\:\:comments\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Method Modules\\Cms\\Models\\Content\:\:customFields\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Method Modules\\Cms\\Models\\Content\:\:lockedBy\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Method Modules\\Cms\\Models\\Content\:\:menuItems\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Method Modules\\Cms\\Models\\Content\:\:revisions\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Method Modules\\Cms\\Models\\Content\:\:tags\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/app/Models/Content.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$author_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$body\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$category_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$excerpt\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$is_featured\.$#'
+			identifier: property.notFound
+			count: 3
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$locked_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$locked_by\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$published_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 3
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$views\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Cannot access property \$name on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: Modules/Cms/app/Services/ContentService.php
+
+		-
+			message: '#^Method Modules\\Cms\\Services\\ThemeService\:\:getMenuLocations\(\) should return array\<string, string\> but returns list\<\(int\|string\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: Modules/Cms/app/Services/ThemeService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: Modules/Cms/database/factories/CommentFactory.php
+
+		-
+			message: '#^Class Modules\\Cms\\Database\\Factories\\ContentRevisionFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/database/factories/ContentRevisionFactory.php
+
+		-
+			message: '#^Class Modules\\Cms\\Database\\Factories\\MenuFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/database/factories/MenuFactory.php
+
+		-
+			message: '#^Class Modules\\Cms\\Database\\Factories\\MenuItemFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/database/factories/MenuItemFactory.php
+
+		-
+			message: '#^Class Modules\\Cms\\Database\\Factories\\Redirect not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Cms/database/factories/RedirectFactory.php
+
+		-
+			message: '#^Property Modules\\Cms\\Database\\Factories\\RedirectFactory\:\:\$model \(class\-string\<Modules\\Layout\\Models\\UrlRewrite\>\) does not accept default value of type string\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: Modules/Cms/database/factories/RedirectFactory.php
+
+		-
+			message: '#^Class Modules\\Cms\\Database\\Factories\\WidgetFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Cms/database/factories/WidgetFactory.php
+
+		-
+			message: '#^Class Modules\\Cms\\Models\\Widget not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Cms/database/factories/WidgetFactory.php
+
+		-
+			message: '#^Property Modules\\Cms\\Database\\Factories\\WidgetFactory\:\:\$model \(class\-string\<Illuminate\\Database\\Eloquent\\Model\>\) does not accept default value of type string\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: Modules/Cms/database/factories/WidgetFactory.php
+
+		-
+			message: '#^Call to static method create\(\) on an unknown class Modules\\Cms\\Models\\FormSubmission\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Cms/database/seeders/CmsSampleDataSeeder.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: Modules/Cms/database/seeders/CmsSampleDataSeeder.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
+
+		-
+			message: '#^Cannot access offset ''default'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
+
+		-
+			message: '#^Cannot access offset ''settings_schema'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\JanariThemeSeeder\:\:seedCategories\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\JanariThemeSeeder\:\:seedCategories\(\) has parameter \$user with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\JanariThemeSeeder\:\:seedEssentialContent\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\JanariThemeSeeder\:\:seedEssentialContent\(\) has parameter \$user with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\JanariThemeSeeder\:\:seedThemeSettings\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 2
+			path: Modules/Cms/database/seeders/JanariThemeSeeder.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$deleted_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/database/seeders/MenuLocationStandardizationSeeder.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$is_active\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/Cms/database/seeders/MenuLocationStandardizationSeeder.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Cms/database/seeders/MenuLocationStandardizationSeeder.php
+
+		-
+			message: '#^Left side of && is always true\.$#'
+			identifier: booleanAnd.leftAlwaysTrue
+			count: 3
+			path: Modules/Cms/database/seeders/MenuLocationStandardizationSeeder.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between mixed and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: Modules/Cms/database/seeders/MenuLocationStandardizationSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createAboutPage\(\) has parameter \$user with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createBlogPosts\(\) has parameter \$categories with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createBlogPosts\(\) has parameter \$tags with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createBlogPosts\(\) has parameter \$user with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createCategories\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createComments\(\) has parameter \$user with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createContactPage\(\) has parameter \$user with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createLandingPage\(\) has parameter \$user with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createMediaFolders\(\) has parameter \$user with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\SampleContentSeeder\:\:createTags\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: Modules/Cms/database/seeders/SampleContentSeeder.php
+
+		-
+			message: '#^Call to static method updateOrCreate\(\) on an unknown class Modules\\Cms\\Models\\FormField\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Cms/database/seeders/StudioSeeder.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: Modules/Cms/database/seeders/StudioSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\StudioSeeder\:\:seedMenuItems\(\) has parameter \$items with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Cms/database/seeders/StudioSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\StudioSeeder\:\:seedMenuItems\(\) has parameter \$menu with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/StudioSeeder.php
+
+		-
+			message: '#^Method Modules\\Cms\\Database\\Seeders\\StudioSeeder\:\:seedMenuItems\(\) has parameter \$parentId with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Cms/database/seeders/StudioSeeder.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:create\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:destroy\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:edit\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:edit\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:show\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:show\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Method Modules\\Forms\\Http\\Controllers\\FormsController\:\:update\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Forms/app/Http/Controllers/FormsController.php
+
+		-
+			message: '#^Class Modules\\Forms\\Models\\FormField uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Forms/app/Models/FormField.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Forms\\Providers\\FormsServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Forms\\Providers\\FormsServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Forms/app/Providers/FormsServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, array\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Forms/database/factories/FormFactory.php
+
+		-
+			message: '#^Method Modules\\Forms\\Database\\Factories\\FormFieldFactory\:\:select\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Forms/database/factories/FormFieldFactory.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Infra\\Models\\InfraRedirect\:\:\$is_active\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/Api/InfraRedirectController.php
+
+		-
+			message: '#^Call to an undefined method Modules\\Infra\\Http\\Controllers\\Api\\InfraRedirectController\:\:authorize\(\)\.$#'
+			identifier: method.notFound
+			count: 6
+			path: Modules/Infra/app/Http/Controllers/Api/InfraRedirectController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\Api\\InfraRedirectController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/Api/InfraRedirectController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\Api\\InfraRedirectController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/Api/InfraRedirectController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\Api\\InfraRedirectController\:\:show\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/Api/InfraRedirectController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\Api\\InfraRedirectController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/Api/InfraRedirectController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\Api\\InfraRedirectController\:\:toggle\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/Api/InfraRedirectController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\Api\\InfraRedirectController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/Api/InfraRedirectController.php
+
+		-
+			message: '#^Parameter \#1 \$perPage of method Illuminate\\Database\\Eloquent\\Builder\<Modules\\Infra\\Models\\InfraRedirect\>\:\:paginate\(\) expects int\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/Api/InfraRedirectController.php
+
+		-
+			message: '#^Part \$search \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: Modules/Infra/app/Http/Controllers/Api/InfraRedirectController.php
+
+		-
+			message: '#^Access to property \$error_message on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/BackupController.php
+
+		-
+			message: '#^Access to property \$status on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/BackupController.php
+
+		-
+			message: '#^Parameter \#1 \$backup of method Modules\\Infra\\Services\\BackupService\:\:deleteBackup\(\) expects Modules\\System\\Models\\Backup, Modules\\Infra\\Models\\Backup given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/BackupController.php
+
+		-
+			message: '#^Parameter \#1 \$backup of method Modules\\Infra\\Services\\BackupService\:\:restoreDatabaseBackup\(\) expects Modules\\System\\Models\\Backup, Modules\\Infra\\Models\\Backup given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/BackupController.php
+
+		-
+			message: '#^Call to an undefined method Modules\\Media\\Services\\MediaService\:\:moveVariantsFromTrash\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: Modules/Infra/app/Http/Controllers/FileManagerController.php
+
+		-
+			message: '#^Call to an undefined method Modules\\Media\\Services\\MediaService\:\:moveVariantsToTrash\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: Modules/Infra/app/Http/Controllers/FileManagerController.php
+
+		-
+			message: '#^Call to an undefined static method Modules\\Media\\Helpers\\UploadSettingsHelper\:\:isExtensionAllowed\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/FileManagerController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:create\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:destroy\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:edit\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:edit\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:show\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:show\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Method Modules\\Infra\\Http\\Controllers\\InfraController\:\:update\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/InfraController.php
+
+		-
+			message: '#^Call to an undefined method Modules\\System\\Models\\Webhook\:\:trigger\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/Infra/app/Http/Controllers/WebhookController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Infra\\Models\\InfraRedirect\:\:\$keep_path\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Infra/app/Http/Middleware/HandleDomainRedirects.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Infra\\Models\\InfraRedirect\:\:\$status_code\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Infra/app/Http/Middleware/HandleDomainRedirects.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Infra\\Models\\InfraRedirect\:\:\$to_domain\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Infra/app/Http/Middleware/HandleDomainRedirects.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Infra\\Providers\\InfraServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Infra\\Providers\\InfraServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Infra/app/Providers/InfraServiceProvider.php
+
+		-
+			message: '#^Access to property \$disk on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Access to property \$id on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 3
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Access to property \$name on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 3
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Access to property \$path on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Access to property \$type on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Call to method delete\(\) on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Call to method getAttribute\(\) on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Call to method isCompleted\(\) on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Call to method update\(\) on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 4
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Call to static method count\(\) on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Call to static method create\(\) on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 3
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Call to static method query\(\) on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Call to static method where\(\) on an unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 7
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Method Modules\\Infra\\Services\\BackupService\:\:createDatabaseBackup\(\) has invalid return type Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Method Modules\\Infra\\Services\\BackupService\:\:createFilesBackup\(\) has invalid return type Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Method Modules\\Infra\\Services\\BackupService\:\:createFullBackup\(\) has invalid return type Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Method Modules\\Infra\\Services\\BackupService\:\:getBackupStats\(\) has invalid return type Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Method Modules\\Infra\\Services\\BackupService\:\:listBackups\(\) has invalid return type Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Method Modules\\Infra\\Services\\BackupService\:\:runScheduledBackup\(\) has invalid return type Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$backup contains unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 2
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$backups contains unknown class Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Parameter \$backup of method Modules\\Infra\\Services\\BackupService\:\:deleteBackup\(\) has invalid type Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Parameter \$backup of method Modules\\Infra\\Services\\BackupService\:\:restoreDatabaseBackup\(\) has invalid type Modules\\System\\Models\\Backup\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Type Modules\\System\\Models\\Backup in generic type Illuminate\\Database\\Eloquent\\Collection\<int, Modules\\System\\Models\\Backup\> in PHPDoc tag @return is not subtype of template type TModel of Illuminate\\Database\\Eloquent\\Model of class Illuminate\\Database\\Eloquent\\Collection\.$#'
+			identifier: generics.notSubtype
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Type Modules\\System\\Models\\Backup in generic type Illuminate\\Database\\Eloquent\\Collection\<int, Modules\\System\\Models\\Backup\> in PHPDoc tag @var for variable \$backups is not subtype of template type TModel of Illuminate\\Database\\Eloquent\\Model of class Illuminate\\Database\\Eloquent\\Collection\.$#'
+			identifier: generics.notSubtype
+			count: 1
+			path: Modules/Infra/app/Services/BackupService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Layout\\Models\\Menu\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 3
+			path: Modules/Layout/app/Http/Controllers/Api/MenuController.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/Api/MenuController.php
+
+		-
+			message: '#^Cannot access offset ''id'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/Api/MenuController.php
+
+		-
+			message: '#^Cannot access offset ''parent_id'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/Api/MenuController.php
+
+		-
+			message: '#^Cannot access offset ''sort_order'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/Api/MenuController.php
+
+		-
+			message: '#^Parameter \#1 \$module of method Modules\\System\\Contracts\\LayoutRegistryInterface\:\:getMenuLocations\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/Api/MenuController.php
+
+		-
+			message: '#^Part \$search \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: Modules/Layout/app/Http/Controllers/Api/MenuController.php
+
+		-
+			message: '#^Part \$search \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: Modules/Layout/app/Http/Controllers/Api/UrlRewriteController.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/Api/WidgetController.php
+
+		-
+			message: '#^Cannot access offset ''id'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/Api/WidgetController.php
+
+		-
+			message: '#^Cannot access offset ''sort_order'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/Api/WidgetController.php
+
+		-
+			message: '#^Parameter \#1 \$module of method Modules\\System\\Contracts\\LayoutRegistryInterface\:\:getWidgetLocations\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/Api/WidgetController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:create\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:destroy\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:edit\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:edit\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:show\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:show\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Method Modules\\Layout\\Http\\Controllers\\LayoutController\:\:update\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Layout/app/Http/Controllers/LayoutController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Layout\\Models\\UrlRewrite\:\:\$status_code\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Layout/app/Http/Middleware/ApplyUrlRewrites.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Layout\\Models\\UrlRewrite\:\:\$target_path\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Layout/app/Http/Middleware/ApplyUrlRewrites.php
+
+		-
+			message: '#^Class Modules\\Layout\\Models\\Menu uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/app/Models/Menu.php
+
+		-
+			message: '#^Method Modules\\Layout\\Models\\Menu\:\:items\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/app/Models/Menu.php
+
+		-
+			message: '#^Method Modules\\Layout\\Models\\Menu\:\:parentItems\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/app/Models/Menu.php
+
+		-
+			message: '#^Class Modules\\Layout\\Models\\MenuItem uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/app/Models/MenuItem.php
+
+		-
+			message: '#^Method Modules\\Layout\\Models\\MenuItem\:\:children\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/app/Models/MenuItem.php
+
+		-
+			message: '#^Method Modules\\Layout\\Models\\MenuItem\:\:menu\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/app/Models/MenuItem.php
+
+		-
+			message: '#^Method Modules\\Layout\\Models\\MenuItem\:\:parent\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/app/Models/MenuItem.php
+
+		-
+			message: '#^Method Modules\\Layout\\Models\\MenuItem\:\:target\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/app/Models/MenuItem.php
+
+		-
+			message: '#^Class Modules\\Layout\\Models\\Theme uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/app/Models/Theme.php
+
+		-
+			message: '#^The @use tag of class Modules\\Layout\\Models\\Theme describes Modules\\Layout\\Models\\HasFactory but the class uses Illuminate\\Database\\Eloquent\\Factories\\HasFactory, Modules\\System\\Traits\\ScopedByWorkspace\.$#'
+			identifier: generics.wrongParent
+			count: 1
+			path: Modules/Layout/app/Models/Theme.php
+
+		-
+			message: '#^Class Modules\\Layout\\Models\\Widget uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/app/Models/Widget.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Layout\\Providers\\LayoutServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Layout\\Providers\\LayoutServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Layout/app/Providers/LayoutServiceProvider.php
+
+		-
+			message: '#^Class Modules\\Layout\\Database\\Factories\\ThemeFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Layout/database/factories/ThemeFactory.php
+
+		-
+			message: '#^Parameter \#1 \$string of function ucwords expects string, array\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Layout/database/factories/ThemeFactory.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, array\|string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: Modules/Layout/database/factories/ThemeFactory.php
+
+		-
+			message: '#^Parameter \#1 \$ids of method Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<Modules\\Library\\Models\\FieldGroup,Modules\\Library\\Models\\CustomField,Illuminate\\Database\\Eloquent\\Relations\\Pivot,string\>\:\:sync\(\) expects array\|Illuminate\\Database\\Eloquent\\Model\|Illuminate\\Support\\Collection\|int\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: Modules/Library/app/Http/Controllers/Api/CustomFieldController.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 2
+			path: Modules/Library/app/Http/Controllers/Api/FieldGroupController.php
+
+		-
+			message: '#^Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Relations\\HasOneOrMany\<Modules\\Library\\Models\\FieldGroupAssignment,Modules\\Library\\Models\\FieldGroup,Illuminate\\Database\\Eloquent\\Collection\<int, Modules\\Library\\Models\\FieldGroupAssignment\>\>\:\:create\(\) expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: Modules/Library/app/Http/Controllers/Api/FieldGroupController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:create\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:destroy\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:edit\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:edit\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:show\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:show\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Method Modules\\Library\\Http\\Controllers\\LibraryController\:\:update\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Library/app/Http/Controllers/LibraryController.php
+
+		-
+			message: '#^Class Modules\\Library\\Models\\CustomField uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Library/app/Models/CustomField.php
+
+		-
+			message: '#^Class Modules\\Library\\Models\\FieldGroup uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Library/app/Models/FieldGroup.php
+
+		-
+			message: '#^Class Modules\\Library\\Models\\Tag uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Library/app/Models/Tag.php
+
+		-
+			message: '#^Method Modules\\Library\\Models\\Tag\:\:taggables\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Library/app/Models/Tag.php
+
+		-
+			message: '#^Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:morphedByMany\(\) expects class\-string\<Illuminate\\Database\\Eloquent\\Model\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Library/app/Models/Tag.php
+
+		-
+			message: '#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\Database\\Eloquent\\Model\:\:morphedByMany\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: Modules/Library/app/Models/Tag.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Library\\Providers\\LibraryServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Library\\Providers\\LibraryServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Library/app/Providers/LibraryServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, array\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Library/database/factories/CategoryFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: Modules/Library/database/factories/CategoryFactory.php
+
+		-
+			message: '#^Class Modules\\Library\\Database\\Factories\\TagFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Library/database/factories/TagFactory.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, array\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Library/database/factories/TagFactory.php
+
+		-
+			message: '#^Method Modules\\Media\\Console\\MigrateLegacyMedia\:\:handle\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Console/MigrateLegacyMedia.php
+
+		-
+			message: '#^Method Modules\\Media\\Contracts\\MediaServiceInterface\:\:upload\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Media/app/Contracts/MediaServiceInterface.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: Modules/Media/app/Helpers/UploadSettingsHelper.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: Modules/Media/app/Helpers/UploadSettingsHelper.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\FolderController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/FolderController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\FolderController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/FolderController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\FolderController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/FolderController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\FolderController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/FolderController.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/FolderController.php
+
+		-
+			message: '#^Call to an undefined method Modules\\Media\\Contracts\\MediaServiceInterface\:\:syncTags\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 3
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\MediaController\:\:bulk\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\MediaController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\MediaController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\MediaController\:\:resize\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\MediaController\:\:restore\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\MediaController\:\:show\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\MediaController\:\:thumbnail\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\MediaController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Method Modules\\Media\\Http\\Controllers\\Api\\MediaController\:\:upload\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Parameter \#1 \$action of method Modules\\Media\\Contracts\\MediaServiceInterface\:\:bulkAction\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Parameter \#1 \$perPage of method Illuminate\\Database\\Eloquent\\Builder\<Modules\\Media\\Models\\File\>\:\:paginate\(\) expects int\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Parameter \#2 \$folderId of method Modules\\Media\\Contracts\\MediaServiceInterface\:\:upload\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Parameter \#2 \$mediaIds of method Modules\\Media\\Contracts\\MediaServiceInterface\:\:bulkAction\(\) expects array\<int, string\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Parameter \#3 \$folderId of method Modules\\Media\\Contracts\\MediaServiceInterface\:\:bulkAction\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Parameter \#4 \$authorId of method Modules\\Media\\Contracts\\MediaServiceInterface\:\:upload\(\) expects int\|null, int\|string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Parameter \#8 \$module of method Modules\\Media\\Contracts\\MediaServiceInterface\:\:upload\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Part \$mimeType \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Part \$search \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 3
+			path: Modules/Media/app/Http/Controllers/Api/MediaController.php
+
+		-
+			message: '#^Call to function property_exists\(\) with static\(Modules\\Media\\Models\\File\) and ''isSharedScoped'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Modules/Media/app/Models/File.php
+
+		-
+			message: '#^Class Modules\\Media\\Models\\File uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Media/app/Models/File.php
+
+		-
+			message: '#^Method Modules\\Media\\Models\\File\:\:getTagNamesAttribute\(\) should return array\<int, string\> but returns array\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: Modules/Media/app/Models/File.php
+
+		-
+			message: '#^Call to function property_exists\(\) with static\(Modules\\Media\\Models\\Folder\) and ''isSharedScoped'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Modules/Media/app/Models/Folder.php
+
+		-
+			message: '#^Class Modules\\Media\\Models\\Folder uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Media/app/Models/Folder.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Media\\Models\\DeletedFile\:\:\$original_path\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Media/app/Services/MediaService.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 4
+			path: Modules/Media/app/Services/MediaService.php
+
+		-
+			message: '#^Method Modules\\Media\\Services\\MediaService\:\:syncTags\(\) has parameter \$tags with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Media/app/Services/MediaService.php
+
+		-
+			message: '#^Method Modules\\Media\\Services\\MediaService\:\:upload\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Media/app/Services/MediaService.php
+
+		-
+			message: '#^Offset ''dirname'' might not exist on array\{dirname\?\: string, basename\: string, extension\?\: string, filename\: string\}\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: Modules/Media/app/Services/MediaService.php
+
+		-
+			message: '#^Class Modules\\Media\\Database\\Factories\\FileFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Media/database/factories/FileFactory.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, array\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Media/database/factories/FileFactory.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: Modules/Media/database/factories/FileFactory.php
+
+		-
+			message: '#^Class Modules\\Media\\Database\\Factories\\FolderFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Media/database/factories/FolderFactory.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, array\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Media/database/factories/FolderFactory.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: Modules/Member/app/Http/Controllers/LoginController.php
+
+		-
+			message: '#^Method Modules\\Member\\Models\\Member\:\:user\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/Member/app/Models/Member.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Member\\Providers\\MemberServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Member\\Providers\\MemberServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Member/app/Providers/MemberServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:create\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:destroy\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:edit\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:edit\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:show\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:show\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Http\\Controllers\\NewsletterController\:\:update\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Newsletter/app/Http/Controllers/NewsletterController.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Providers\\NewsletterServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Newsletter\\Providers\\NewsletterServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Newsletter/app/Providers/NewsletterServiceProvider.php
+
+		-
+			message: '#^Class Modules\\School\\Database\\Factories\\AcademicYearFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/School/database/factories/AcademicYearFactory.php
+
+		-
+			message: '#^Class Modules\\School\\Database\\Factories\\SchoolFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/School/database/factories/SchoolFactory.php
+
+		-
+			message: '#^Binary operation "\." between mixed and '' '' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/School/database/factories/SchoolUnitFactory.php
+
+		-
+			message: '#^Cannot access offset ''level'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/School/database/factories/SchoolUnitFactory.php
+
+		-
+			message: '#^Cannot access offset ''name'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/School/database/factories/SchoolUnitFactory.php
+
+		-
+			message: '#^Class Modules\\School\\Database\\Factories\\SchoolUnitFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/School/database/factories/SchoolUnitFactory.php
+
+		-
+			message: '#^Class Modules\\School\\Database\\Factories\\StaffFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/School/database/factories/StaffFactory.php
+
+		-
+			message: '#^Class Modules\\School\\Database\\Factories\\StudentFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/School/database/factories/StudentFactory.php
+
+		-
+			message: '#^Class Modules\\School\\database\\seeders\\AcademicInfrastructureSeeder referenced with incorrect case\: Modules\\School\\Database\\Seeders\\AcademicInfrastructureSeeder\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: Modules/School/database/seeders/SchoolDatabaseSeeder.php
+
+		-
+			message: '#^Class Modules\\School\\database\\seeders\\StudentSampleSeeder referenced with incorrect case\: Modules\\School\\Database\\Seeders\\StudentSampleSeeder\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: Modules/School/database/seeders/SchoolDatabaseSeeder.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: Modules/School/database/seeders/SchoolSampleUserSeeder.php
+
+		-
+			message: '#^Parameter \#1 \$value of static method Illuminate\\Support\\Facades\\Hash\:\:make\(\) expects string, bool\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/School/database/seeders/SchoolSampleUserSeeder.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: Modules/School/database/seeders/StaffSampleSeeder.php
+
+		-
+			message: '#^Parameter \#1 \$value of static method Illuminate\\Support\\Facades\\Hash\:\:make\(\) expects string, bool\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/School/database/seeders/StaffSampleSeeder.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: Modules/School/database/seeders/StudentSampleSeeder.php
+
+		-
+			message: '#^Parameter \#1 \$string of function str_pad expects string, int\<1, 5\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/School/database/seeders/StudentSampleSeeder.php
+
+		-
+			message: '#^Parameter \#1 \$string of function str_pad expects string, int\<1, max\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/School/database/seeders/StudentSampleSeeder.php
+
+		-
+			message: '#^Parameter \#1 \$value of static method Illuminate\\Support\\Facades\\Hash\:\:make\(\) expects string, bool\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/School/database/seeders/StudentSampleSeeder.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:create\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:destroy\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:edit\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:edit\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:show\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:show\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Http\\Controllers\\SearchController\:\:update\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Search/app/Http/Controllers/SearchController.php
+
+		-
+			message: '#^Method Modules\\Search\\Listeners\\SearchIndexingListener\:\:handle\(\) has parameter \$event with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Search/app/Listeners/SearchIndexingListener.php
+
+		-
+			message: '#^Method Modules\\Search\\Listeners\\SearchIndexingListener\:\:onModelDeleted\(\) has parameter \$event with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Search/app/Listeners/SearchIndexingListener.php
+
+		-
+			message: '#^Method Modules\\Search\\Listeners\\SearchIndexingListener\:\:onModelSaved\(\) has parameter \$event with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Search/app/Listeners/SearchIndexingListener.php
+
+		-
+			message: '#^Expression on left side of \?\? is always null\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: Modules/Search/app/Models/SearchIndex.php
+
+		-
+			message: '#^Property Modules\\Search\\Providers\\EventServiceProvider\:\:\$subscribe type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Search/app/Providers/EventServiceProvider.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Search\\Providers\\SearchServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Search\\Providers\\SearchServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Search/app/Providers/SearchServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$excerpt\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Search/app/Services/SearchService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/Search/app/Services/SearchService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Search/app/Services/SearchService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Search/app/Services/SearchService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Search/app/Services/SearchService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Library\\Models\\Tag\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Search/app/Services/SearchService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Library\\Models\\Tag\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/Search/app/Services/SearchService.php
+
+		-
+			message: '#^Method Modules\\Search\\Services\\SearchService\:\:reindexAll\(\) should return array\{contents\: int, categories\: int, tags\: int\} but returns array\{cms_contents\: int\<0, max\>, cms_categories\: int\<0, max\>, cms_tags\: int\<0, max\>\}\.$#'
+			identifier: return.type
+			count: 1
+			path: Modules/Search/app/Services/SearchService.php
+
+		-
+			message: '#^Method Modules\\Search\\Services\\SearchService\:\:sync\(\) has parameter \$model with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/Search/app/Services/SearchService.php
+
+		-
+			message: '#^Call to static method new\(\) on an unknown class Modules\\System\\Database\\Factories\\IpListFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Security/app/Models/IpList.php
+
+		-
+			message: '#^Method Modules\\Security\\Models\\IpList\:\:newFactory\(\) has invalid return type Modules\\System\\Database\\Factories\\IpListFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Security/app/Models/IpList.php
+
+		-
+			message: '#^PHPDoc tag @use has invalid type Modules\\System\\Database\\Factories\\IpListFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/Security/app/Models/IpList.php
+
+		-
+			message: '#^Type Modules\\System\\Database\\Factories\\IpListFactory in generic type Illuminate\\Database\\Eloquent\\Factories\\HasFactory\<Modules\\System\\Database\\Factories\\IpListFactory\> in PHPDoc tag @use is not subtype of template type TFactory of Illuminate\\Database\\Eloquent\\Factories\\Factory of trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory\.$#'
+			identifier: generics.notSubtype
+			count: 1
+			path: Modules/Security/app/Models/IpList.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Security\\Providers\\SecurityServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Method Modules\\Security\\Providers\\SecurityServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/Security/app/Providers/SecurityServiceProvider.php
+
+		-
+			message: '#^Method Modules\\System\\Contracts\\LayoutRegistryInterface\:\:getMenuLocations\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Contracts/LayoutRegistryInterface.php
+
+		-
+			message: '#^Method Modules\\System\\Contracts\\LayoutRegistryInterface\:\:getWidgetLocations\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Contracts/LayoutRegistryInterface.php
+
+		-
+			message: '#^Method Modules\\System\\Contracts\\LayoutRegistryInterface\:\:getWidgetTypes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Contracts/LayoutRegistryInterface.php
+
+		-
+			message: '#^Method Modules\\System\\Contracts\\LayoutRegistryInterface\:\:registerMenuLocations\(\) has parameter \$locations with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Contracts/LayoutRegistryInterface.php
+
+		-
+			message: '#^Method Modules\\System\\Contracts\\LayoutRegistryInterface\:\:registerWidgetLocations\(\) has parameter \$locations with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Contracts/LayoutRegistryInterface.php
+
+		-
+			message: '#^Method Modules\\System\\Contracts\\LayoutRegistryInterface\:\:registerWidgetTypes\(\) has parameter \$types with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Contracts/LayoutRegistryInterface.php
+
+		-
+			message: '#^Instantiated class Modules\\System\\Notifications\\ResetPassword not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/System/app/Http/Controllers/Console/AuthController.php
+
+		-
+			message: '#^Call to an undefined method Modules\\System\\Registries\\DashboardRegistry\:\:getAllCharts\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: Modules/System/app/Http/Controllers/Console/DashboardController.php
+
+		-
+			message: '#^Call to an undefined method Modules\\System\\Registries\\DashboardRegistry\:\:getAllStats\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: Modules/System/app/Http/Controllers/Console/DashboardController.php
+
+		-
+			message: '#^Parameter \#3 \$callback of static method Illuminate\\Cache\\Repository\:\:remember\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: Modules/System/app/Http/Controllers/Console/DashboardController.php
+
+		-
+			message: '#^Return type of call to static method Illuminate\\Cache\\Repository\:\:remember\(\) contains unresolvable type\.$#'
+			identifier: staticMethod.unresolvableReturnType
+			count: 1
+			path: Modules/System/app/Http/Controllers/Console/DashboardController.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Modules/System/app/Http/Controllers/Console/UserController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:create\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:destroy\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:edit\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:edit\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:show\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:show\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Method Modules\\System\\Http\\Controllers\\SystemController\:\:update\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/System/app/Http/Controllers/SystemController.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: Modules/System/app/Http/Middleware/IdentifyWorkspace.php
+
+		-
+			message: '#^Call to an undefined method Modules\\Cms\\Models\\Content\:\:setCustomFieldValue\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/System/app/Models/ContentTemplate.php
+
+		-
+			message: '#^Instantiated class Modules\\System\\Events\\PluginActivated not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/System/app/Models/Plugin.php
+
+		-
+			message: '#^Instantiated class Modules\\System\\Events\\PluginDeactivated not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/System/app/Models/Plugin.php
+
+		-
+			message: '#^Call to static method new\(\) on an unknown class Modules\\System\\Database\\Factories\\SettingFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/System/app/Models/Setting.php
+
+		-
+			message: '#^Method Modules\\System\\Models\\Setting\:\:newFactory\(\) has invalid return type Modules\\System\\Database\\Factories\\SettingFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/System/app/Models/Setting.php
+
+		-
+			message: '#^PHPDoc tag @use has invalid type Modules\\System\\Database\\Factories\\SettingFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/System/app/Models/Setting.php
+
+		-
+			message: '#^Type Modules\\System\\Database\\Factories\\SettingFactory in generic type Illuminate\\Database\\Eloquent\\Factories\\HasFactory\<Modules\\System\\Database\\Factories\\SettingFactory\> in PHPDoc tag @use is not subtype of template type TFactory of Illuminate\\Database\\Eloquent\\Factories\\Factory of trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory\.$#'
+			identifier: generics.notSubtype
+			count: 1
+			path: Modules/System/app/Models/Setting.php
+
+		-
+			message: '#^Class Modules\\System\\Models\\User has PHPDoc tag @property for property \$preferences with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Models/User.php
+
+		-
+			message: '#^Instantiated class Modules\\System\\Notifications\\VerifyEmail not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/System/app/Models/User.php
+
+		-
+			message: '#^Method Modules\\System\\Models\\User\:\:activityLogs\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/System/app/Models/User.php
+
+		-
+			message: '#^Method Modules\\System\\Models\\User\:\:getRoleRankMap\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Models/User.php
+
+		-
+			message: '#^Method Modules\\System\\Models\\User\:\:media\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/System/app/Models/User.php
+
+		-
+			message: '#^Method Modules\\System\\Models\\User\:\:notifications\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/System/app/Models/User.php
+
+		-
+			message: '#^Method Modules\\System\\Models\\User\:\:twoFactorAuth\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/System/app/Models/User.php
+
+		-
+			message: '#^Property Modules\\System\\Models\\User\:\:\$preferences \(array\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: Modules/System/app/Models/User.php
+
+		-
+			message: '#^Method Modules\\System\\Models\\Webhook\:\:triggerForEvent\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Models/Webhook.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/modules/'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\\\\'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and array\<string\>\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Cannot call method getExtension\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Cannot call method getPathname\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Cannot call method isFile\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Method Modules\\System\\Providers\\SystemServiceProvider\:\:getPublishableViewPaths\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Method Modules\\System\\Providers\\SystemServiceProvider\:\:provides\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_replace_recursive expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$config of method Modules\\System\\Registries\\DashboardRegistry\:\:register\(\) expects array\{title\: string, component\: string, width\: string, permissions\?\: array\<string\>, data_callback\: \(callable\(\)\: mixed\)\|string\}, array\{title\: ''Media Library'', component\: ''MediaStatsWidget'', width\: ''1/2'', data_callback\: array\{''Modules\\\\System\\\\Http\\\\Controllers\\\\Console\\\\DashboardController'', ''getMediaStats''\}\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$config of method Modules\\System\\Registries\\DashboardRegistry\:\:register\(\) expects array\{title\: string, component\: string, width\: string, permissions\?\: array\<string\>, data_callback\: \(callable\(\)\: mixed\)\|string\}, array\{title\: ''User Management'', component\: ''UserStatsWidget'', width\: ''1/2'', data_callback\: array\{''Modules\\\\System\\\\Http\\\\Controllers\\\\Console\\\\DashboardController'', ''getUserStats''\}\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$path of function module_path expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/System/app/Providers/SystemServiceProvider.php
+
+		-
+			message: '#^Method Modules\\System\\Registries\\BaseRegistry\:\:all\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/BaseRegistry.php
+
+		-
+			message: '#^Property Modules\\System\\Registries\\BaseRegistry\:\:\$items type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/BaseRegistry.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: Modules/System/app/Registries/HookRegistry.php
+
+		-
+			message: '#^Cannot access offset ''callback'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/System/app/Registries/HookRegistry.php
+
+		-
+			message: '#^Method Modules\\System\\Registries\\HookRegistry\:\:run\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: Modules/System/app/Registries/HookRegistry.php
+
+		-
+			message: '#^Method Modules\\System\\Registries\\HookRegistry\:\:run\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/HookRegistry.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Container\\Container\:\:call\(\) expects \(callable\(\)\: mixed\)\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/System/app/Registries/HookRegistry.php
+
+		-
+			message: '#^Parameter \#2 \$parameters of method Illuminate\\Container\\Container\:\:call\(\) expects array\<string, mixed\>, array\<int\|string, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/System/app/Registries/HookRegistry.php
+
+		-
+			message: '#^Method Modules\\System\\Registries\\LayoutRegistry\:\:getMenuLocations\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/LayoutRegistry.php
+
+		-
+			message: '#^Method Modules\\System\\Registries\\LayoutRegistry\:\:getWidgetLocations\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/LayoutRegistry.php
+
+		-
+			message: '#^Method Modules\\System\\Registries\\LayoutRegistry\:\:getWidgetTypes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/LayoutRegistry.php
+
+		-
+			message: '#^Method Modules\\System\\Registries\\LayoutRegistry\:\:registerMenuLocations\(\) has parameter \$locations with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/LayoutRegistry.php
+
+		-
+			message: '#^Method Modules\\System\\Registries\\LayoutRegistry\:\:registerWidgetLocations\(\) has parameter \$locations with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/LayoutRegistry.php
+
+		-
+			message: '#^Method Modules\\System\\Registries\\LayoutRegistry\:\:registerWidgetTypes\(\) has parameter \$types with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/LayoutRegistry.php
+
+		-
+			message: '#^Property Modules\\System\\Registries\\LayoutRegistry\:\:\$menuLocations type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/LayoutRegistry.php
+
+		-
+			message: '#^Property Modules\\System\\Registries\\LayoutRegistry\:\:\$widgetLocations type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/LayoutRegistry.php
+
+		-
+			message: '#^Property Modules\\System\\Registries\\LayoutRegistry\:\:\$widgetTypes type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/LayoutRegistry.php
+
+		-
+			message: '#^Method Modules\\System\\Registries\\RegistryInterface\:\:all\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Registries/RegistryInterface.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/System/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$body\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/System/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$excerpt\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/System/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/System/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Cms\\Models\\Content\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/System/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Cannot access property \$name on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: Modules/System/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Cannot call method getAttribute\(\) on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Modules/System/app/Services/DynamicTagService.php
+
+		-
+			message: '#^Method Modules\\System\\Services\\FileIntegrityService\:\:createBackup\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Services/FileIntegrityService.php
+
+		-
+			message: '#^Method Modules\\System\\Services\\FileIntegrityService\:\:generateBaseline\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Services/FileIntegrityService.php
+
+		-
+			message: '#^Method Modules\\System\\Services\\FileIntegrityService\:\:getMonitoredFiles\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Services/FileIntegrityService.php
+
+		-
+			message: '#^Method Modules\\System\\Services\\FileIntegrityService\:\:verify\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Modules/System/app/Services/FileIntegrityService.php
+
+		-
+			message: '#^Class Modules\\System\\Database\\Factories\\LanguageFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/System/database/factories/LanguageFactory.php
+
+		-
+			message: '#^Class Modules\\System\\Database\\Factories\\UserFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: Modules/System/database/factories/UserFactory.php
+
+		-
+			message: '#^Cannot access offset ''model_has_permissions'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Cannot access offset ''model_has_roles'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Cannot access offset ''model_morph_key'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 8
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Cannot access offset ''permission_pivot_key'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Cannot access offset ''permissions'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Cannot access offset ''role_has_permissions'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Cannot access offset ''role_pivot_key'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Cannot access offset ''roles'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Cannot access offset ''team_foreign_key'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 10
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Parameter \#1 \$column of method Illuminate\\Database\\Schema\\Blueprint\:\:unsignedBigInteger\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 9
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Parameter \#1 \$columns of method Illuminate\\Database\\Schema\\Blueprint\:\:foreign\(\) expects array\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Parameter \#1 \$columns of method Illuminate\\Database\\Schema\\Blueprint\:\:index\(\) expects array\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Parameter \#1 \$key of method Illuminate\\Contracts\\Cache\\Repository\:\:forget\(\) expects string\|UnitEnum, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Parameter \#1 \$name of method Illuminate\\Cache\\CacheManager\:\:store\(\) expects string\|UnitEnum\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Parameter \#1 \$table of method Illuminate\\Database\\Schema\\ForeignKeyDefinition\:\:on\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Parameter \#1 \$table of static method Illuminate\\Support\\Facades\\Schema\:\:create\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 5
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Parameter \#1 \$table of static method Illuminate\\Support\\Facades\\Schema\:\:dropIfExists\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 5
+			path: Modules/System/database/migrations/2026_05_15_073807_create_permission_tables.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 2
+			path: Modules/System/database/seeders/FoundationSeeder.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: Modules/System/database/seeders/InfrastructureSeeder.php

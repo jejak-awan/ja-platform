@@ -5,6 +5,7 @@ namespace Modules\School\Models\Logistics;
 use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -19,6 +20,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class InventoryCategory extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     use ScopedByWorkspace;
     protected $table = 'sch_log_inventory_categories';
 

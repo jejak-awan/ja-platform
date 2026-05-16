@@ -3,8 +3,8 @@
 namespace Modules\Cms\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Modules\Cms\Models\Theme;
-use Modules\Cms\Services\ThemeService;
+use Modules\Layout\Models\Theme;
+use Modules\Layout\Services\ThemeService;
 use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Setting;
 

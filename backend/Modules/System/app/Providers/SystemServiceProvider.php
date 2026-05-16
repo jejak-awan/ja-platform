@@ -61,7 +61,7 @@ class SystemServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        // $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
     }
 
     /**
@@ -74,6 +74,7 @@ class SystemServiceProvider extends ServiceProvider
 
         $this->app->singleton(\Modules\System\Registries\DashboardRegistry::class);
         $this->app->singleton(\Modules\System\Registries\HookRegistry::class);
+        $this->app->singleton(\Modules\System\Contracts\LayoutRegistryInterface::class, \Modules\System\Registries\LayoutRegistry::class);
     }
 
     /**

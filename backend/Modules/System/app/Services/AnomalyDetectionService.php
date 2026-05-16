@@ -126,7 +126,7 @@ class AnomalyDetectionService
         $thresholds = [25, 50, 75];
         foreach ($thresholds as $t) {
             if ($oldScore < $t && $newScore >= $t) {
-                \Modules\System\Models\SecurityLog::log(
+                \Modules\Security\Models\SecurityLog::log(
                     'suspicious_behavior',
                     null,
                     $ip,

@@ -5,6 +5,7 @@ namespace Modules\School\Models\Admission;
 use Modules\System\Traits\ScopedByWorkspace;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
  * @property int $id
@@ -17,6 +18,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DocumentVerification extends Model
 {
+    use HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     use ScopedByWorkspace;
     protected $table = 'sch_adm_verifications';
 

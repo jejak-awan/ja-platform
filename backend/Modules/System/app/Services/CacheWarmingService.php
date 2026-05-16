@@ -5,8 +5,8 @@ namespace Modules\System\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Modules\System\Models\Media;
-use Modules\Cms\Models\Tag;
+use Modules\Media\Models\File as Media;
+use Modules\Library\Models\Tag;
 use Modules\System\Models\Language;
 
 /**
@@ -154,7 +154,7 @@ class CacheWarmingService
             $stats = [
                 'total_tags' => Tag::count(),
                 'total_media' => Media::count(),
-                'total_users' => DB::table('core_users')->count(),
+                'total_users' => DB::table('srv_auth_users')->count(),
             ];
 
             Cache::put(self::PREFIX_STATISTICS.'overview', $stats, self::TTL_SHORT);

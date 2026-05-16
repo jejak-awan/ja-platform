@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Modules\System\Models\Language;
 use Modules\System\Services\LanguagePackService;
 
-class LanguageController extends BaseApiController
+class LanguageController extends \Modules\System\Http\Controllers\BaseApiController
 {
     protected LanguagePackService $languagePackService;
 
