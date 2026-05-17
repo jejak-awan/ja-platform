@@ -36,7 +36,6 @@ class SchoolOperationTest extends TestCase
             'is_active' => true,
         ]);
         $this->semester = Semester::create([
-            'school_id' => $this->school->id,
             'academic_year_id' => $this->academicYear->id,
             'type' => 'ganjil',
             'is_active' => true,

@@ -14,9 +14,9 @@ class AnalyticsService
      * @param  string  $eventType  Type of event (e.g., 'click', 'form_submit', 'download')
      * @param  string  $eventName  Name of the event (e.g., 'Button Click: Subscribe')
      * @param  array<string, mixed>  $data  Additional event data
-     * @param  int|null  $contentId  Related content ID (optional)
+     * @param  string|null  $contentId  Related content ID (optional)
      */
-    public static function trackEvent(string $eventType, string $eventName, array $data = [], ?int $contentId = null): AnalyticsEvent
+    public static function trackEvent(string $eventType, string $eventName, array $data = [], ?string $contentId = null): AnalyticsEvent
     {
         try {
             $sessionId = session()->getId();
@@ -41,7 +41,7 @@ class AnalyticsService
     /**
      * Track multiple events in batch
      *
-     * @param  array<int, array{type?: string, name?: string, data?: array<string, mixed>, content_id?: int|null}>  $events  Array of events [['type' => 'click', 'name' => 'Button', 'data' => []]]
+     * @param  array<int, array{type?: string, name?: string, data?: array<string, mixed>, content_id?: string|null}>  $events  Array of events [['type' => 'click', 'name' => 'Button', 'data' => []]]
      * @return array<int, AnalyticsEvent>
      */
     public static function trackBatch(array $events): array
@@ -62,11 +62,11 @@ class AnalyticsService
     /**
      * Track content interaction
      *
-     * @param  int  $contentId  Content ID
+     * @param  string  $contentId  Content ID
      * @param  string  $action  Action type (view, like, share, comment)
      * @param  array<string, mixed>  $data  Additional data
      */
-    public static function trackContentInteraction(int $contentId, string $action, array $data = []): AnalyticsEvent
+    public static function trackContentInteraction(string $contentId, string $action, array $data = []): AnalyticsEvent
     {
         return self::trackEvent(
             'content_interaction',
@@ -96,9 +96,9 @@ class AnalyticsService
      *
      * @param  string  $fileName  File name
      * @param  string  $fileType  File type/extension
-     * @param  int|null  $mediaId  Media ID if applicable
+     * @param  string|null  $mediaId  Media ID if applicable
      */
-    public static function trackDownload(string $fileName, string $fileType, ?int $mediaId = null): AnalyticsEvent
+    public static function trackDownload(string $fileName, string $fileType, ?string $mediaId = null): AnalyticsEvent
     {
         return self::trackEvent(
             'download',
@@ -127,9 +127,9 @@ class AnalyticsService
      * Track video play
      *
      * @param  string  $videoTitle  Video title
-     * @param  int|null  $contentId  Content ID
+     * @param  string|null  $contentId  Content ID
      */
-    public static function trackVideoPlay(string $videoTitle, ?int $contentId = null): AnalyticsEvent
+    public static function trackVideoPlay(string $videoTitle, ?string $contentId = null): AnalyticsEvent
     {
         return self::trackEvent(
             'video_play',

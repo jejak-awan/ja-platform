@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Context;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string $key
  * @property string|null $value
  * @property string $type

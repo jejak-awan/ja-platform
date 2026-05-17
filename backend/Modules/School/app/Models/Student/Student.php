@@ -18,12 +18,12 @@ use Modules\School\Models\Operations\UksVisit;
 
 
 /**
- * @property int $id
- * @property int $school_id
- * @property int $workspace_id
- * @property int|null $user_id
+ * @property string $id
+ * @property string $school_id
+ * @property string $workspace_id
+ * @property string|null $user_id
  * @property string $status
- * @property int|null $department_id
+ * @property string|null $department_id
  * @property string|null $nisn
  * @property string|null $nis
  * @property string|null $nik

@@ -12,15 +12,15 @@ use Modules\School\Models\Logistics\Room;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
- * @property int $id
- * @property int $school_id
- * @property int $workspace_id
- * @property int $academic_year_id
- * @property int $semester_id
- * @property int $study_group_id
- * @property int $subject_id
- * @property int $staff_id
- * @property int|null $room_id
+ * @property string $id
+ * @property string $school_id
+ * @property string $workspace_id
+ * @property string $academic_year_id
+ * @property string $semester_id
+ * @property string $study_group_id
+ * @property string $subject_id
+ * @property string $staff_id
+ * @property string|null $room_id
  * @property string $day
  * @property string $start_time
  * @property string $end_time

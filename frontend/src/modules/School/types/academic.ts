@@ -44,7 +44,7 @@ export interface Schedule {
     day: number;
     start_time: string;
     end_time: string;
-    room_id?: number;
+    room_id?: string;
     created_at?: string;
     updated_at?: string;
 }

@@ -29,7 +29,7 @@ class SampleContentSeeder extends Seeder
         $tags = $this->createTags();
 
         // Create menus
-        // $this->createMenus();
+        $this->createMenus();
 
         // Create pages
         $this->createLandingPage($user);

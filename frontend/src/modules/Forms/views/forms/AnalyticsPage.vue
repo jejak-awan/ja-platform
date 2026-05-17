@@ -486,7 +486,7 @@ interface AnalyticsStatistics {
     range_views_total?: number;
     range_starts_total?: number;
     field_distribution?: Record<string, unknown>[];
-    chartable_fields?: { name: string, label: string, id?: string | number }[];
+    chartable_fields?: { name: string, label: string, id?: string }[];
     hourly_stats?: Record<string, unknown>[];
     weekly_stats?: Record<string, unknown>[];
 }

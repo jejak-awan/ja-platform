@@ -373,8 +373,8 @@ const isIdentityEditRestricted = computed(() => {
 const activeTab = ref('identity');
 const savingUnit = ref(false);
 const showUnitDialog = ref(false);
-const editingUnitId = ref<string | number | null>(null);
-const selectedUnitId = ref<string | number | null>(null);
+const editingUnitId = ref<string | null>(null);
+const selectedUnitId = ref<string | null>(null);
 const showDeleteConfirm = ref(false);
 const deleteConfirmName = ref('');
 const isDeleting = ref(false);
@@ -435,7 +435,7 @@ onMounted(async () => {
       Object.assign(identityForm.value, school.value);
       const firstLevel = levels.value[0];
       if (firstLevel?.id != null) {
-        selectedUnitId.value = firstLevel.id;
+        selectedUnitId.value = String(firstLevel.id);
       }
     } else {
         // Fallback for direct deep links if AdminLayout hasn't finished
@@ -444,10 +444,10 @@ onMounted(async () => {
         const freshSchool = schoolStore.schools.length > 0 ? schoolStore.schools[0] : null;
         if (freshSchool) {
             Object.assign(identityForm.value, freshSchool);
-            await unitStore.fetchUnits(freshSchool.id);
+            await unitStore.fetchUnits(String(freshSchool.id));
             const firstLevel = levels.value[0];
             if (firstLevel?.id != null) {
-                selectedUnitId.value = firstLevel.id;
+                selectedUnitId.value = String(firstLevel.id);
             }
         }
     }
@@ -495,7 +495,7 @@ const handleAddLevel = () => {
 };
 
 const handleEditLevel = (lv: SchoolUnit) => {
-  editingUnitId.value = lv.id!;
+  editingUnitId.value = String(lv.id);
   unitForm.value = {
     ...lv,
     settings: { ...lv.settings }
@@ -518,16 +518,16 @@ const handleSaveLevel = async () => {
   try {
     const schoolId = school.value?.id ?? 1;
     if (editingUnitId.value) {
-      await unitStore.updateUnit(editingUnitId.value, { ...unitForm.value, school_id: schoolId } as any);
+      await unitStore.updateUnit(String(editingUnitId.value), { ...unitForm.value, school_id: schoolId } as any);
       toast.success.save();
     } else {
       unitForm.value.school_id = schoolId;
       await unitStore.createUnit(unitForm.value as any);
       toast.success.save();
     }
-    await unitStore.fetchUnits(schoolId);
+    await unitStore.fetchUnits(String(schoolId));
     closeUnitDialog();
-    if (levels.value[0]?.id != null) selectedUnitId.value = levels.value[0].id;
+    if (levels.value[0]?.id != null) selectedUnitId.value = String(levels.value[0].id);
   } catch (e: any) {
     toast.error.fromResponse(e);
   }
@@ -554,7 +554,7 @@ const handleSetDefaultUnit = async (unit: SchoolUnit) => {
           ...(l.settings || {}), 
           is_default: isTarget 
         };
-        return unitStore.updateUnit(l.id!, { settings: updatedSettings });
+        return unitStore.updateUnit(String(l.id), { settings: updatedSettings });
       }
       return null;
     }).filter(p => p !== null);
@@ -574,7 +574,7 @@ const saveLevelData = async () => {
   if (!selectedUnitId.value || !selectedUnit.value) return;
   savingUnit.value = true;
   try {
-    await unitStore.updateUnit(selectedUnitId.value, { ...selectedUnit.value, school_id: school.value?.id });
+    await unitStore.updateUnit(String(selectedUnitId.value), { ...selectedUnit.value, school_id: school.value?.id });
     toast.success.action(t('modules.school.units.updateSuccess'));
   } catch (e: any) {
     toast.error.fromResponse(e);
@@ -626,10 +626,10 @@ const executeDeleteLevel = async () => {
   isDeletingLevel.value = true;
   try {
     const deletedId = unitToDelete.value.id!;
-    await unitStore.deleteUnit(deletedId);
+    await unitStore.deleteUnit(String(deletedId));
     toast.success.delete();
-    await unitStore.fetchUnits(school.value?.id);
-    if (selectedUnitId.value === deletedId) selectedUnitId.value = levels.value[0]?.id ?? null;
+    await unitStore.fetchUnits(String(school.value?.id));
+    if (selectedUnitId.value === String(deletedId)) selectedUnitId.value = levels.value[0]?.id ? String(levels.value[0].id) : null;
     showLevelDeleteConfirm.value = false;
   } catch (e: any) {
     toast.error.fromResponse(e);

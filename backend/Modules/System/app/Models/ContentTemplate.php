@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\System\Models\User;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string $slug
  * @property string|null $description

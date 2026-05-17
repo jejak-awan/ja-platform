@@ -191,7 +191,7 @@ class ContentService
      *
      * @param  array<string, mixed>  $data
      */
-    public function create(array $data, int $userId, bool $createRevision = false): Content
+    public function create(array $data, string $userId, bool $createRevision = false): Content
     {
         $data['author_id'] = $userId;
 
@@ -284,7 +284,7 @@ class ContentService
      *
      * @param  array<string, mixed>  $data
      */
-    public function update(Content $content, array $data, int $userId, bool $createRevision = false, ?string $revisionNote = null): Content
+    public function update(Content $content, array $data, string $userId, bool $createRevision = false, ?string $revisionNote = null): Content
     {
         // Create revision before update if requested
         if ($createRevision) {
@@ -386,7 +386,7 @@ class ContentService
     protected function trackMediaUsage(Content $content, string $fieldName): void
     {
         $idValue = $content->getAttribute($fieldName);
-        $mediaId = is_numeric($idValue) ? (int) $idValue : null;
+        $mediaId = is_numeric($idValue) ? (string) $idValue : null;
         if ($mediaId) {
             MediaUsage::track($mediaId, $content, $fieldName);
         } else {
@@ -415,7 +415,7 @@ class ContentService
     /**
      * Duplicate content
      */
-    public function duplicate(Content $content, int $userId): Content
+    public function duplicate(Content $content, string $userId): Content
     {
         $newContent = $content->replicate();
         $newContent->title = $content->title.' (Copy)';
@@ -440,7 +440,7 @@ class ContentService
      *
      * @param  array<int, int|string>  $contentIds
      */
-    public function bulkAction(string $action, array $contentIds, ?int $categoryId = null): int
+    public function bulkAction(string $action, array $contentIds, ?string $categoryId = null): int
     {
         $contents = Content::withTrashed()->whereIn('id', $contentIds)->get();
 
@@ -513,7 +513,7 @@ class ContentService
     /**
      * Create content revision
      */
-    public function createRevision(Content $content, int $userId, string $note = ''): ContentRevision
+    public function createRevision(Content $content, string $userId, string $note = ''): ContentRevision
     {
         // Prepare standard revision metadata
         $meta = $content->meta ?? [];
@@ -554,7 +554,7 @@ class ContentService
     /**
      * Check if content is locked by another user
      */
-    public function isLockedByOther(Content $content, int $userId): bool
+    public function isLockedByOther(Content $content, string $userId): bool
     {
         return $content->locked_by && $content->locked_by !== $userId;
     }
@@ -562,7 +562,7 @@ class ContentService
     /**
      * Lock content for editing
      */
-    public function lock(Content $content, int $userId): void
+    public function lock(Content $content, string $userId): void
     {
         $content->update([
             'locked_by' => $userId,
@@ -584,7 +584,7 @@ class ContentService
     /**
      * Clear content-related caches
      */
-    protected function clearContentCaches(?int $contentId = null): void
+    protected function clearContentCaches(?string $contentId = null): void
     {
         $this->cacheService->clearContentCaches($contentId);
         $this->cacheService->clearSeoCaches();
@@ -593,7 +593,7 @@ class ContentService
     /**
      * Generate unique slug
      */
-    public function generateUniqueSlug(string $title, ?int $excludeId = null): string
+    public function generateUniqueSlug(string $title, ?string $excludeId = null): string
     {
         $slug = Str::slug($title);
         $baseSlug = $slug;
@@ -609,7 +609,7 @@ class ContentService
     /**
      * Restore trashed content
      */
-    public function restore(int $id): bool
+    public function restore(string $id): bool
     {
         $content = Content::withTrashed()->findOrFail($id);
         if ($content->trashed()) {
@@ -626,7 +626,7 @@ class ContentService
     /**
      * Force delete content
      */
-    public function forceDelete(int $id): bool
+    public function forceDelete(string $id): bool
     {
         $content = Content::withTrashed()->findOrFail($id);
         SearchIndex::remove($content);

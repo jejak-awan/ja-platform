@@ -42,7 +42,7 @@ class FormSubmissionController extends BaseApiController
             $query->where('form_id', $form->id);
         } elseif ($request->has('form_id')) {
             $formIdRaw = $request->input('form_id');
-            $formId = is_numeric($formIdRaw) ? (int) $formIdRaw : 0;
+            $formId = is_string($formIdRaw) ? $formIdRaw : 0;
             $query->where('form_id', $formId);
         }
 
@@ -154,9 +154,9 @@ class FormSubmissionController extends BaseApiController
     /**
      * Restore the specified resource from storage.
      *
-     * @param  string|int  $id
+     * @param  string  $id
      */
-    public function restore($id): \Illuminate\Http\JsonResponse
+    public function restore(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var FormSubmission $submission */
         $submission = FormSubmission::withTrashed()->findOrFail($id);
@@ -169,9 +169,9 @@ class FormSubmissionController extends BaseApiController
     /**
      * Permanently remove the specified resource from storage.
      *
-     * @param  string|int  $id
+     * @param  string  $id
      */
-    public function forceDelete($id): \Illuminate\Http\JsonResponse
+    public function forceDelete(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var FormSubmission $submission */
         $submission = FormSubmission::withTrashed()->findOrFail($id);
@@ -479,7 +479,7 @@ class FormSubmissionController extends BaseApiController
      * @param  array<int, array{period: string, visits: int}>  $dailySubmissionStats
      * @return array<int, array{period: string, visits: int}>
      */
-    private function buildDailyFormAnalyticsSeries(int $formId, Carbon $from, Carbon $to, array $dailySubmissionStats, string $metric): array
+    private function buildDailyFormAnalyticsSeries(string $formId, Carbon $from, Carbon $to, array $dailySubmissionStats, string $metric): array
     {
         $allowed = ['views', 'starts', 'submissions'];
         if (! in_array($metric, $allowed, true)) {

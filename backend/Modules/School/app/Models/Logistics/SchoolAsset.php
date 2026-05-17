@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
- * @property int $id
- * @property int $room_id
+ * @property string $id
+ * @property string $room_id
  * @property string $name
  * @property string|null $code
  * @property string|null $category

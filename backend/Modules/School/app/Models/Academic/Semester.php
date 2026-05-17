@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
- * @property int $id
- * @property int $academic_year_id
+ * @property string $id
+ * @property string $academic_year_id
  * @property string $type
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -30,7 +30,6 @@ class Semester extends Model
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
-        'school_id',
         'academic_year_id',
         'workspace_id',
         'type',

@@ -567,7 +567,7 @@ interface Log {
     id: string;
     event_type: string;
     ip_address: string;
-    user_id?: number | null;
+    user_id?: string | null;
     user?: User | null;
     details: string;
     created_at: string;

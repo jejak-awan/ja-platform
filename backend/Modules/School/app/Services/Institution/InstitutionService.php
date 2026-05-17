@@ -71,7 +71,7 @@ class InstitutionService
      *
      * @return array{stats: array<int, array{title: string, value: string, icon: string}>, personnel: array<int, array{initials: string, name: string, role: string, time: string, statusKey: string}>, alerts: array<int, array{id: int, title: string, status: string, icon: string}>}
      */
-    public function getSchoolStats(int $schoolId): array
+    public function getSchoolStats(string $schoolId): array
     {
         $rawUnitId = \Illuminate\Support\Facades\Context::get('workspace_id');
         $unitId = is_numeric($rawUnitId) ? (int) $rawUnitId : 0;
@@ -147,7 +147,7 @@ class InstitutionService
      *
      * @return array{steps: array<string, bool>, is_completed: bool, progress: float|int}
      */
-    public function getSetupStatus(int $schoolId): array
+    public function getSetupStatus(string $schoolId): array
     {
         /** @var array{steps: array<string, bool>, is_completed: bool, progress: float|int} $result */
         $result = Cache::remember("school_setup_{$schoolId}", 300, function () use ($schoolId): array {

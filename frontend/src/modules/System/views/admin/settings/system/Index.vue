@@ -297,7 +297,7 @@ interface SystemInfo {
     environment: string;
     debug_mode: boolean;
     server_software: string;
-    memory_usage: string | number;
+    memory_usage: string;
     memory_usage_percent: number;
     disk_usage: DiskUsage | string;
     disk_usage_percent: number;

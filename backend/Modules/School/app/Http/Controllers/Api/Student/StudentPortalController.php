@@ -25,7 +25,7 @@ class StudentPortalController extends BaseController
             abort(401, 'Unauthenticated.');
         }
 
-        $userId = (int) $user->id;
+        $userId = (string) $user->id;
 
         /** @var Student|null $student */
         $student = Student::where('user_id', $userId)->first();
@@ -42,8 +42,8 @@ class StudentPortalController extends BaseController
         return $this->sendResponse([
             'student' => $student->only(['full_name', 'nisn', 'nis']),
             'summary' => [
-                'attendance_rate' => $this->calculateAttendanceRate((int)$student->id),
-                'gpa' => $this->calculateGPA((int)$student->id),
+                'attendance_rate' => $this->calculateAttendanceRate((string)$student->id),
+                'gpa' => $this->calculateGPA((string)$student->id),
             ]
         ], 'Dashboard data retrieved.');
     }
@@ -75,7 +75,7 @@ class StudentPortalController extends BaseController
     public function schedule(): \Illuminate\Http\JsonResponse
     {
         $student = $this->getStudent();
-        /** @var \Illuminate\Support\Collection<int, int> $groupIds */
+        /** @var \Illuminate\Support\Collection<int, string> $groupIds */
         $groupIds = $student->studyGroups()->pluck('sch_acad_study_groups.id');
         
         $schedule = Schedule::with(['subject', 'staff', 'room'])
@@ -86,7 +86,7 @@ class StudentPortalController extends BaseController
         return $this->sendResponse($schedule, 'Weekly schedule retrieved.');
     }
 
-    private function calculateAttendanceRate(int $studentId): float
+    private function calculateAttendanceRate(string $studentId): float
     {
         $total = Attendance::where('student_id', $studentId)->count();
         if ($total === 0) {
@@ -100,7 +100,7 @@ class StudentPortalController extends BaseController
         return round(($present / $total) * 100, 1);
     }
 
-    private function calculateGPA(int $studentId): float
+    private function calculateGPA(string $studentId): float
     {
         // Calculate GPA based on E-Rapor final grades
         $avg = Grade::where('student_id', $studentId)->avg('final_grade');

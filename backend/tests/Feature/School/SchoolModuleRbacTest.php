@@ -4,7 +4,7 @@ namespace Tests\Feature\School;
 
 use Modules\System\Models\User;
 use Modules\School\Models\Institution\School;
-use Spatie\Permission\Models\Role;
+use Modules\System\Models\Role;
 use Tests\TestCase;
 
 /**

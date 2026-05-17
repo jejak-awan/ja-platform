@@ -162,7 +162,7 @@ import {
 const toast = useToast();
 
 const props = defineProps<{
-    folderId?: string | number | null;
+    folderId?: string | null;
 }>();
 
 const emit = defineEmits<{

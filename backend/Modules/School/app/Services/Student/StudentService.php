@@ -86,7 +86,7 @@ class StudentService
             ->paginate($perPage);
     }
 
-    public function getViolationPoints(int $studentId): int
+    public function getViolationPoints(string $studentId): int
     {
         return (int) Violation::where('student_id', $studentId)->sum('points');
     }
@@ -180,7 +180,7 @@ class StudentService
     /**
      * Batch update students status to graduated.
      * 
-     * @param array<int> $studentIds
+     * @param array<string> $studentIds
      */
     public function batchGraduate(array $studentIds): int
     {

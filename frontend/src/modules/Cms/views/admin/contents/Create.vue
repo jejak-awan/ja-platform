@@ -272,7 +272,7 @@ const toApiPublishedAt = (value: string | undefined | null): string | null | und
 };
 
 /** Tag ids only (omit new tags without id) — avoids 422 on tags.* validation. */
-const selectedPersistedTagIds = (): (string | number)[] =>
+const selectedPersistedTagIds = (): (string)[] =>
     selectedTags.value
         .filter((t: Tag) => t.id != null)
         .map((t: Tag) => t.id);

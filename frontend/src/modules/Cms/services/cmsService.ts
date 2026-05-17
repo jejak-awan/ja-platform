@@ -23,7 +23,7 @@ export const CmsService = {
         return api.get(cmsPaths.contents, { params });
     },
 
-    manageContent(id: string | number): Promise<AxiosResponse> {
+    manageContent(id: string): Promise<AxiosResponse> {
         return api.get(cmsPaths.content(id));
     },
 };

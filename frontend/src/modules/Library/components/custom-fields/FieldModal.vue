@@ -110,7 +110,7 @@
           </Label>
           <Select 
             :model-value="form.field_group_id ? String(form.field_group_id) : 'none'"
-            @update:model-value="(val) => form.field_group_id = val === 'none' ? null : (isNaN(Number(val)) ? val : Number(val))"
+            @update:model-value="(val) => form.field_group_id = val === 'none' ? null : val"
           >
             <SelectTrigger id="field_group_id">
               <SelectValue :placeholder="t('features.developer.custom_fields.fields.modal.group_none')" />

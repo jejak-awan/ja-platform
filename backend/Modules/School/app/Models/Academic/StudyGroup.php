@@ -13,11 +13,11 @@ use Modules\School\Models\HR\Staff;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
- * @property int $id
- * @property int $school_id
- * @property int $workspace_id
- * @property int|null $department_id
- * @property int $academic_year_id
+ * @property string $id
+ * @property string $school_id
+ * @property string $workspace_id
+ * @property string|null $department_id
+ * @property string $academic_year_id
  * @property int|null $homeroom_teacher_id
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at

@@ -1,6 +1,6 @@
 export interface ThemeOption {
     label: string;
-    value: string | number | boolean;
+    value: string | boolean;
 }
 
 export interface ThemeSetting {
@@ -27,7 +27,7 @@ export interface ThemeSetting {
 export interface ThemeManifest {
     settings_schema?: Record<string, ThemeSetting>;
     menus?: Record<string, string>;
-    supports?: Record<string, boolean | string | number>;
+    supports?: Record<string, boolean | string>;
     [key: string]: unknown;
 }
 
@@ -36,7 +36,7 @@ export interface Theme {
     name: string;
     slug: string;
     manifest?: ThemeManifest;
-    supports?: Record<string, boolean | string | number>;
+    supports?: Record<string, boolean | string>;
     settings?: Record<string, unknown>;
     custom_css?: string;
     css_variables?: string;

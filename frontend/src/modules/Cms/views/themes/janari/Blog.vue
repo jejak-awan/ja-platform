@@ -398,7 +398,7 @@ const mapSearchResultToArticle = (item: any, idx: number): Article => {
     const itemType = String(item.type || 'post').toLowerCase()
 
     return {
-        id: Number(item.searchable_id || item.id) || idx + 1,
+        id: String(item.searchable_id || item.id || idx + 1),
         title,
         slug: '',
         excerpt,

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @property int $id
+ * @property string $id
  * @property int $vacancy_id
  * @property int|null $student_id
  * @property string|null $resume_path

@@ -88,16 +88,16 @@ export const LogisticsService = {
         return api.get('admin/logistics/hostel/blocks');
     },
 
-    async getHostelRooms(blockId: number | string | Record<string, any>): Promise<AxiosResponse<HostelRoom[]>> {
+    async getHostelRooms(blockId: string | Record<string, any>): Promise<AxiosResponse<HostelRoom[]>> {
         const id = typeof blockId === 'object' ? (blockId.block_id || '') : blockId;
         return api.get(`admin/logistics/hostel/blocks/${id}/rooms`);
     },
 
-    async getHostelBeds(roomId: number | string): Promise<AxiosResponse<HostelBed[]>> {
+    async getHostelBeds(roomId: string): Promise<AxiosResponse<HostelBed[]>> {
         return api.get(`admin/logistics/hostel/rooms/${roomId}/beds`);
     },
 
-    async releaseBed(allocationId: number | string): Promise<AxiosResponse<void>> {
+    async releaseBed(allocationId: string): Promise<AxiosResponse<void>> {
         return api.post(`admin/logistics/hostel/release/${allocationId}`);
     },
 

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
- * @property int $id
+ * @property string $id
  * @property int $graduation_year
  * @property bool $is_open
  * @property \Illuminate\Support\Carbon|null $announcement_date

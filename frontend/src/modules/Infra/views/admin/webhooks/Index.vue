@@ -231,7 +231,7 @@ const { confirm } = useConfirm();
 const toast = useToast();
 
 interface Webhook {
-    id: string | number;
+    id: string;
     name: string;
     url: string;
     events: string[];

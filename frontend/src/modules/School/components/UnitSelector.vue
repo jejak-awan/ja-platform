@@ -289,7 +289,7 @@ const getUnitIcon = (type: string | undefined) => {
   }
 };
 
-const resolveContextPath = (id: string | number, type: 'system' | 'foundation' | 'authority' | 'unit') => {
+const resolveContextPath = (id: string, type: 'system' | 'foundation' | 'authority' | 'unit') => {
   if (id === '0') {
     if (type === 'system') return '/dash';
     return '/dash/school';
@@ -297,7 +297,7 @@ const resolveContextPath = (id: string | number, type: 'system' | 'foundation' |
   return '/dash/school-dashboard';
 };
 
-const handleSelect = async (id: string | number, type: 'system' | 'foundation' | 'authority' | 'unit') => {
+const handleSelect = async (id: string, type: 'system' | 'foundation' | 'authority' | 'unit') => {
   if (unitStore.switchingContext) return;
   if (unitStore.activeUnitId === id && unitStore.activeContextType === type) {
     showSelector.value = false;

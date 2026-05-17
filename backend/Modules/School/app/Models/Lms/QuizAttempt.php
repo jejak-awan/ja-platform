@@ -11,9 +11,9 @@ use Modules\School\Models\Student\Student;
 use Modules\School\Models\Lms\TopicContent\Quiz;
 
 /**
- * @property int $id
- * @property int $quiz_id
- * @property int $student_id
+ * @property string $id
+ * @property string $quiz_id
+ * @property string $student_id
  * @property int|null $score
  * @property \Illuminate\Support\Carbon|null $started_at
  * @property \Illuminate\Support\Carbon|null $finished_at

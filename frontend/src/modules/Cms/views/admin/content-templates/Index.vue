@@ -358,7 +358,7 @@ const fetchTemplates = async (page: number | string = 1) => {
 const createFromTemplate = async (template: Template) => {
     try {
         const response = await api.post(`/manage/cms/content-templates/${template.id}/create-content`);
-        const content = parseSingleResponse<{ id: string | number }>(response);
+        const content = parseSingleResponse<{ id: string }>(response);
         if (content && content.id) {
             toast.success.createFromTemplate();
             router.push({ name: 'contents.edit', params: { id: content.id } });

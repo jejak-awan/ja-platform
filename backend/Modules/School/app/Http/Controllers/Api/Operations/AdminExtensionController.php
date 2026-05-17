@@ -55,7 +55,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($book, 'Library book created successfully.', 201);
     }
 
-    public function updateLibraryBook(StoreLibraryBookRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateLibraryBook(StoreLibraryBookRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var LibraryBook $book */
         $book = LibraryBook::findOrFail($id);
@@ -67,7 +67,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($book, 'Library book updated successfully.');
     }
 
-    public function destroyLibraryBook(int $id): \Illuminate\Http\JsonResponse
+    public function destroyLibraryBook(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var LibraryBook $book */
         $book = LibraryBook::findOrFail($id);
@@ -92,7 +92,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($circulation, 'Book borrowed successfully.', 201);
     }
 
-    public function updateLibraryCirculation(Request $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateLibraryCirculation(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var LibraryCirculation $circulation */
         $circulation = LibraryCirculation::findOrFail($id);
@@ -109,7 +109,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($circulation, 'Circulation record updated successfully.');
     }
 
-    public function destroyLibraryCirculation(int $id): \Illuminate\Http\JsonResponse
+    public function destroyLibraryCirculation(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var LibraryCirculation $circulation */
         $circulation = LibraryCirculation::findOrFail($id);
@@ -136,7 +136,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($visit, 'UKS visit recorded successfully.', 201);
     }
 
-    public function updateUksVisit(StoreUksVisitRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateUksVisit(StoreUksVisitRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var UksVisit $visit */
         $visit = UksVisit::findOrFail($id);
@@ -148,7 +148,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($visit, 'UKS visit updated successfully.');
     }
 
-    public function destroyUksVisit(int $id): \Illuminate\Http\JsonResponse
+    public function destroyUksVisit(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var UksVisit $visit */
         $visit = UksVisit::findOrFail($id);
@@ -175,7 +175,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($log, 'Guest log recorded successfully.', 201);
     }
 
-    public function updateGuestLog(StoreGuestLogRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateGuestLog(StoreGuestLogRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var GuestLog $log */
         $log = GuestLog::findOrFail($id);
@@ -187,7 +187,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($log, 'Guest log updated successfully.');
     }
 
-    public function destroyGuestLog(int $id): \Illuminate\Http\JsonResponse
+    public function destroyGuestLog(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var GuestLog $log */
         $log = GuestLog::findOrFail($id);
@@ -214,7 +214,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($alumnus, 'Alumni record created successfully.', 201);
     }
 
-    public function updateAlumni(StoreAlumniRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateAlumni(StoreAlumniRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Alumni $alumnus */
         $alumnus = Alumni::findOrFail($id);
@@ -226,7 +226,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($alumnus, 'Alumni record updated successfully.');
     }
 
-    public function destroyAlumni(int $id): \Illuminate\Http\JsonResponse
+    public function destroyAlumni(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Alumni $alumnus */
         $alumnus = Alumni::findOrFail($id);
@@ -251,7 +251,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($study, 'Tracer study recorded successfully.', 201);
     }
 
-    public function updateTracerStudy(StoreTracerStudyRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateTracerStudy(StoreTracerStudyRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var TracerStudy $study */
         $study = TracerStudy::findOrFail($id);
@@ -263,7 +263,7 @@ class AdminExtensionController extends BaseController
         return $this->sendResponse($study, 'Tracer study updated successfully.');
     }
 
-    public function destroyTracerStudy(int $id): \Illuminate\Http\JsonResponse
+    public function destroyTracerStudy(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var TracerStudy $study */
         $study = TracerStudy::findOrFail($id);

@@ -1,5 +1,5 @@
 export interface Tag {
-    id: string | number;
+    id: string;
     name: string;
     slug: string;
     type?: string;

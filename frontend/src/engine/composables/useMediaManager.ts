@@ -119,7 +119,7 @@ export function useMediaManager() {
     const fetchStatistics = async () => {
         try {
             const response = await MediaService.statistics();
-            statistics.value = response.data;
+            statistics.value = response.data?.data || null;
         } catch {
             // logger.error('Failed to fetch media statistics:', error);
         }

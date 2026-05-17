@@ -6,6 +6,7 @@ import { useConfirm } from '@/shared/composables/useConfirm';
 import { useSystemStore } from '@/modules/System/stores/system';
 import { storeToRefs } from 'pinia';
 import api from '@/engine/api/client';
+import { infraPaths, mediaPaths } from '@/engine/api/paths';
 import { parseSingleResponse, getResponseObject } from '@/shared/utils/responseParser';
 import type { FileItem, FolderItem, TrashItem } from '@/modules/Media/types/file-manager';
 
@@ -225,7 +226,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
         // Advanced Filter Logic
         if (authorFilter.value !== 'all') {
-            result = result.filter(f => f.folder_id === Number(authorFilter.value)); // Assuming folder_id maps to something relevant or adjust if author_id exists in FileItem
+            result = result.filter(f => String(String(f.folder_id)) === String(authorFilter.value)); // Assuming folder_id maps to something relevant or adjust if author_id exists in FileItem
         }
         if (minSizeFilter.value) {
             result = result.filter(f => (f.size / 1024) >= Number(minSizeFilter.value));
@@ -316,7 +317,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
     const fetchCurrentPath = async () => {
         loading.value = true;
         try {
-            const response = await api.get('/manage/media/file-manager', {
+            const response = await api.get(infraPaths.fileManager, {
                 params: {
                     path: currentPath.value,
                     page: currentPage.value,
@@ -350,7 +351,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         if (scannedPaths.value.has(path) && !recursive) return;
 
         try {
-            const response = await api.get('/manage/media/file-manager', {
+            const response = await api.get(infraPaths.fileManager, {
                 params: { path },
             });
             const data = parseSingleResponse<{ folders: FolderItem[] }>(response) || { folders: [] };
@@ -376,7 +377,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const fetchFilters = async () => {
         try {
-            const response = await api.get('/manage/media/filters'); // Using media filters endpoint for authors as it's shared
+            const response = await api.get(mediaPaths.filters); // Using media filters endpoint for authors as it's shared
             const filters = getResponseObject<{ authors?: { id: string | string; name: string }[] }>(response.data);
             const authors = filters?.authors;
             availableFilters.value = {
@@ -455,7 +456,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         if (!confirmed) return;
 
         try {
-            const url = isFolder ? '/manage/media/file-manager/folder/delete' : '/manage/media/file-manager/delete';
+            const url = isFolder ? infraPaths.fileManagerFolder + '/delete' : infraPaths.fileManagerDelete;
             await api.post(url, { path: item.path.replace(/^\//, '') });
 
             if (isFolder) {
@@ -485,7 +486,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         try {
             for (const item of selectedItems.value) {
                 const isFolder = 'children' in item || !('extension' in item);
-                const url = isFolder ? '/manage/media/file-manager/folder/delete' : '/manage/media/file-manager/delete';
+                const url = isFolder ? infraPaths.fileManagerFolder + '/delete' : infraPaths.fileManagerDelete;
                 await api.post(url, { path: item.path.replace(/^\//, '') });
                 if (isFolder) {
                     const folderPath = item.path.endsWith('/') ? item.path : item.path + '/';
@@ -517,7 +518,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         if (clipboard.value.items.length === 0) return;
         loading.value = true;
         try {
-            const endpoint = clipboard.value.action === 'move' ? '/manage/media/file-manager/move' : '/manage/media/file-manager/copy';
+            const endpoint = clipboard.value.action === 'move' ? infraPaths.fileManagerMove : '/manage/media/file-manager/copy';
             for (const item of clipboard.value.items) {
                 await api.post(endpoint, {
                     source: item.path.replace(/^\//, ''),
@@ -539,7 +540,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const moveItem = async (sourcePath: string, destinationPath: string, type: 'file' | 'folder') => {
         try {
-            await api.post('/manage/media/file-manager/move', {
+            await api.post(infraPaths.fileManagerMove, {
                 source: sourcePath.replace(/^\//, ''),
                 destination: destinationPath === '/' ? '' : destinationPath.replace(/^\//, ''),
                 type
@@ -556,7 +557,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
     const fetchTrash = async () => {
         trashLoading.value = true;
         try {
-            const response = await api.get('/manage/media/file-manager/trash');
+            const response = await api.get(infraPaths.fileManagerTrash);
             trashItems.value = response.data?.data?.items || [];
         } catch (error) {
             logger.error('Failed to fetch trash:', error);
@@ -567,7 +568,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
 
     const restoreTrashItem = async (item: TrashItem) => {
         try {
-            await api.post('/manage/media/file-manager/restore', { id: item.id });
+            await api.post(infraPaths.fileManagerRestore, { id: item.id });
             await fetchTrash();
             allFolders.value = [];
             await fetchAllFolders();
@@ -587,7 +588,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         });
         if (!confirmed) return;
         try {
-            await api.post('/manage/media/file-manager/trash/empty');
+            await api.post(infraPaths.fileManagerTrashEmpty);
             toast.success.action(t('modules.system.file_manager.messages.trashEmptied'));
             fetchTrash();
         } catch (error) {
@@ -604,7 +605,7 @@ export function useFileManager(options: { rootPath?: string } = {}) {
         });
         if (!confirmed) return;
         try {
-            await api.post('/manage/media/file-manager/trash/permanent', { id: item.id });
+            await api.post(infraPaths.fileManagerTrashPermanent, { id: item.id });
             toast.success.action(t('modules.system.file_manager.messages.deleteSuccess'));
             fetchTrash();
         } catch (error) {

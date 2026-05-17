@@ -45,7 +45,7 @@ const toast = useToast();
 const { confirm } = useConfirm();
 
 const emit = defineEmits<{
-    (e: 'select-menu', id: string | number): void;
+    (e: 'select-menu', id: string): void;
     (e: 'create-menu'): void;
 }>();
 

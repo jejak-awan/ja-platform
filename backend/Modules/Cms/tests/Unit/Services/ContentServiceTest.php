@@ -122,7 +122,7 @@ class ContentServiceTest extends TestCase
         $this->service->lock($content, $user->id);
         $this->assertEquals($user->id, $content->fresh()->locked_by);
 
-        $this->assertTrue($this->service->isLockedByOther($content, $user->id + 1));
+        $this->assertTrue($this->service->isLockedByOther($content, 'other-user-id'));
 
         $this->service->unlock($content);
         $this->assertNull($content->fresh()->locked_by);

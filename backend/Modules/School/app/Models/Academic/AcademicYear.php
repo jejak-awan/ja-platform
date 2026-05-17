@@ -9,8 +9,8 @@ use Modules\System\Traits\ScopedByWorkspace;
 use Modules\School\Models\Institution\School;
 
 /**
- * @property int $id
- * @property int $school_id
+ * @property string $id
+ * @property string $school_id
  * @property string $year
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at

@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\School\Models\Student\Student;
 
 /**
- * @property int $id
- * @property int $student_id
- * @property int $academic_year_id
- * @property int $semester_id
+ * @property string $id
+ * @property string $student_id
+ * @property string $academic_year_id
+ * @property string $semester_id
  * @property string $date
  * @property string $status
  * @property string|null $notes
@@ -37,7 +37,6 @@ class Attendance extends Model
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
-        'school_id',
         'workspace_id',
         'student_id',
         'academic_year_id',

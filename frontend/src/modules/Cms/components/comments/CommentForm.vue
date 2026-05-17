@@ -94,14 +94,14 @@ interface CommentForm {
     name: string;
     email: string;
     body: string;
-    parent_id: string | number | null;
+    parent_id: string | null;
     captcha_token: string;
     captcha_input: string;
 }
 
 const props = defineProps<{
-    contentId: number | string;
-    parentId?: number | string | null;
+    contentId: string;
+    parentId?: string | null;
 }>();
 
 const emit = defineEmits<{

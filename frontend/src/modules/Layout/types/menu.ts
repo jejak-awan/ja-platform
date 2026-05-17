@@ -15,13 +15,13 @@ export interface Menu {
 export type PropertyValue = string | number | boolean | null | undefined | unknown[] | Record<string, unknown>;
 
 export interface MenuItem {
-    id?: number | string | null;
+    id?: string | null;
     _temp_id?: string;
-    parent_id?: number | string | null;
-    menu_id?: number | string | null;
+    parent_id?: string | null;
+    menu_id?: string | null;
     title?: string;
     type?: string; // 'custom', 'post', 'page', 'category', 'system'
-    target_id?: number | null;
+    target_id?: string | null;
     url?: string | null;
     target?: string;
     order?: number;
@@ -53,13 +53,13 @@ export interface MenuItem {
 }
 
 export interface MenuItemDTO {
-    id?: number | string | null;
-    parent_id?: number | string | null;
-    menu_id?: number | string | null;
+    id?: string | null;
+    parent_id?: string | null;
+    menu_id?: string | null;
     sort_order?: number;
     title: string;
     type: string;
-    target_id?: number | null;
+    target_id?: string | null;
     url?: string;
     icon?: string | null;
     css_class?: string | null;
@@ -86,7 +86,7 @@ export interface MenuItemSetting {
     default?: unknown;
     placeholder?: string;
     description?: string;
-    options?: { label: string; value: string | number | boolean | null }[];
+    options?: { label: string; value: string | boolean | null }[];
     group?: 'appearance' | 'mega_menu' | 'badge' | string;
     min?: number;
     max?: number;

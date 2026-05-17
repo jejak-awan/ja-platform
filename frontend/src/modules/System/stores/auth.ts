@@ -10,9 +10,9 @@ import { userModelSchema, authResponseSchema } from '@/shared/schemas';
 interface ApiErrorResponse {
     message?: string;
     errors?: Record<string, string[]>;
-    retry_after?: string | number;
+    retry_after?: string;
     requires_verification?: boolean;
-    user_id?: number | string;
+    user_id?: string;
     requires_two_factor?: boolean;
 }
 
@@ -136,7 +136,7 @@ export const useAuthStore = defineStore('auth', {
                 // Ensure CSRF cookie is fresh before login
                 await getCsrfCookie();
 
-                const response: AxiosResponse<{ data?: unknown; user?: User; requires_two_factor?: boolean; user_id?: number | string; message?: string }> = await api.post('/public/system/auth/login', credentials, {
+                const response: AxiosResponse<{ data?: unknown; user?: User; requires_two_factor?: boolean; user_id?: string; message?: string }> = await api.post('/public/system/auth/login', credentials, {
                     _schema: authResponseSchema
                 } as ApiRequestConfig);
                 // Handle different response structures

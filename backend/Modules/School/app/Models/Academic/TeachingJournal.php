@@ -10,9 +10,9 @@ use Modules\School\Models\Institution\SchoolUnit;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
- * @property int $id
- * @property int $school_id
- * @property int $workspace_id
+ * @property string $id
+ * @property string $school_id
+ * @property string $workspace_id
  * @property int $schedule_id
  * @property \Illuminate\Support\Carbon $date
  * @property string $topic

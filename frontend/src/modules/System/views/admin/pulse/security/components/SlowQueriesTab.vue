@@ -145,7 +145,7 @@ interface SlowQuery {
     id: string;
     route: string | null;
     duration: number;
-    user_id?: number | null;
+    user_id?: string | null;
     user?: User | null;
     query: string;
     created_at: string;
@@ -166,7 +166,7 @@ interface PaginationInfo {
 
 interface SlowQueryFilters {
     route: string;
-    min_duration: string | number;
+    min_duration: string;
     date_from: string;
     date_to: string;
     page: number;

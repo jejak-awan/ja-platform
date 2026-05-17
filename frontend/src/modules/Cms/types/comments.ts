@@ -4,9 +4,9 @@ export type CommentStatus = 'pending' | 'approved' | 'rejected' | 'spam';
 
 export interface Comment {
     id: string;
-    parent_id?: number | null;
+    parent_id?: string | null;
     content_id: string;
-    user_id?: number | null;
+    user_id?: string | null;
     name?: string | null;
     email?: string | null;
     body: string;

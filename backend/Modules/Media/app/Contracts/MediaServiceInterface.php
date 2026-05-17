@@ -16,7 +16,7 @@ interface MediaServiceInterface
         UploadedFile $file,
         ?string $folderId = null,
         bool $optimize = true,
-        ?int $authorId = null,
+        ?string $authorId = null,
         bool $isShared = false,
         array $metadata = [],
         ?string $subPath = null,
@@ -75,4 +75,11 @@ interface MediaServiceInterface
      * @return array<int, mixed>
      */
     public function getUsageInfo(File $file): array;
+
+    /**
+     * Get media statistics.
+     *
+     * @return array{total_count: int, total_size: int, types: array<int, mixed>, trash_count: int}
+     */
+    public function getStatistics(): array;
 }

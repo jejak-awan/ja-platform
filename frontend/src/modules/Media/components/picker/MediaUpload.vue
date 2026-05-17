@@ -99,7 +99,7 @@ import { useToast } from '@/shared/composables/useToast';
 import type { MediaConstraints, Media } from '@/modules/Media/types/media';
 
 const props = defineProps<{
-    folderId?: number | string | null;
+    folderId?: string | null;
     constraints?: Partial<MediaConstraints>;
     path?: string;
     module?: string;

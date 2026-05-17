@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @property int $id
+ * @property string $id
  * @property int $category_id
- * @property int $school_id
+ * @property string $school_id
  * @property string $sku
  * @property string $name
  * @property string|null $description

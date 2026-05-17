@@ -455,7 +455,7 @@ const {
     saveHistory,
     recordSettingChange,
 } = useThemeCustomizer(slug, t)
-const availableMenus = ref<{ value: string | number; label: string }[]>([])
+const availableMenus = ref<{ value: string; label: string }[]>([])
 const previewTheme = computed<Theme>(() => {
     const base = (theme.value || {}) as Theme
     const baseSettings = (base.settings || {}) as Record<string, unknown>

@@ -1115,7 +1115,7 @@ async function submitForm(): Promise<void> {
 
         const url = `/public/forms/${encodeURIComponent(formDefinition.value.slug)}/submit`
         const useMultipart = formHasFileFields()
-        let res: { data: { submission_id?: number; redirect_url?: string } }
+        let res: { data: { submission_id?: string; redirect_url?: string } }
 
         if (useMultipart) {
             const fd = new FormData()
@@ -1125,12 +1125,12 @@ async function submitForm(): Promise<void> {
                     fd.append(name, file)
                 }
             }
-            res = await api.post<{ submission_id?: number; redirect_url?: string }>(url, fd)
+            res = await api.post<{ submission_id?: string; redirect_url?: string }>(url, fd)
         } else {
-            res = await api.post<{ submission_id?: number; redirect_url?: string }>(url, body)
+            res = await api.post<{ submission_id?: string; redirect_url?: string }>(url, body)
         }
 
-        const inner = res.data as { submission_id?: number; redirect_url?: string }
+        const inner = res.data as { submission_id?: string; redirect_url?: string }
         const msg =
             formDefinition.value.success_message?.trim() ||
             'Terima kasih, pesan Anda telah terkirim.'

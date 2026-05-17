@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
- * @property int $id
- * @property int $room_id
+ * @property string $id
+ * @property string $room_id
  * @property string $bed_number
  * @property bool $is_available
  * @property \Illuminate\Support\Carbon|null $created_at

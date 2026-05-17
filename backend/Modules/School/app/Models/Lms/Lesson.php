@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property int $id
- * @property int $course_id
+ * @property string $id
+ * @property string $course_id
  * @property int $section_id
  * @property string $title
  * @property string $slug

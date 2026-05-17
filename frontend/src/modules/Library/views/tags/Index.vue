@@ -368,9 +368,8 @@ const changePage = (page: number) => {
     }
 };
 
-const changePerPage = (_value: string | number) => {
-    // pagination is computed from store, so we can't directly mutate it here easily
-    // but the store might need a way to set per_page
+const changePerPage = (perPage: number) => {
+    pagination.value.per_page = perPage;
     fetchTags(1);
 };
 

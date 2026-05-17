@@ -287,7 +287,7 @@ defineEmits<{
 }>();
 
 const activeStyle = ref<string>('header');
-const expandedMobile = ref<(number | string)[]>([]);
+const expandedMobile = ref<(string)[]>([]);
 
 const previewStyles = [
     { value: 'header', label: 'Header', icon: Monitor },

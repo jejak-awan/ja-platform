@@ -18,7 +18,7 @@ class GradeController extends BaseController
     /**
      * Get student's grades for a specific academic year
      */
-    public function getStudentGrades(Request $request, int $studentId): \Illuminate\Http\JsonResponse
+    public function getStudentGrades(Request $request, string $studentId): \Illuminate\Http\JsonResponse
     {
         $this->authorize('view academic', Grade::class);
 
@@ -28,11 +28,10 @@ class GradeController extends BaseController
         ]);
 
         try {
-            $ayIdValue = $request->input('academic_year_id');
-            $ayId = is_numeric($ayIdValue) ? (int)$ayIdValue : 0;
+            $ayId = (string) $request->string('academic_year_id');
             
-            $semIdValue = $request->input('semester_id');
-            $semId = is_numeric($semIdValue) ? (int)$semIdValue : null;
+            $semIdValue = (string) $request->string('semester_id');
+            $semId = $semIdValue !== '' ? $semIdValue : null;
 
             $grades = $this->service->getStudentGrades(
                 $studentId,
@@ -103,8 +102,8 @@ class GradeController extends BaseController
         $contextSchoolId = Context::get('school_id');
         $contextLevelId = Context::get('workspace_id');
         
-        $schoolId = is_numeric($contextSchoolId) ? (int)$contextSchoolId : 1;
-        $levelId = is_numeric($contextLevelId) ? (int)$contextLevelId : 1;
+        $schoolId = is_numeric($contextSchoolId) ? (int)$contextSchoolId : '1';
+        $levelId = is_numeric($contextLevelId) ? (int)$contextLevelId : '1';
         
         /** @var array<int, array<string, mixed>> $rawGrades */
         $rawGrades = (array) $request->input('grades');

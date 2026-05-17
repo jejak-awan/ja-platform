@@ -175,18 +175,17 @@ class SchoolController extends BaseController
     /**
      * Resolve the school ID from the request context.
      */
-    protected function resolveSchoolId(Request $request): ?int
+    protected function resolveSchoolId(Request $request): ?string
     {
-        $schoolId = $request->input('school_id')
-            ?? $request->header('X-School-Id');
+        $schoolId = $request->input('school_id') ?? $request->header('X-School-Id');
 
-        if ($schoolId !== null && is_numeric($schoolId)) {
-            return (int) $schoolId;
+        if (is_scalar($schoolId) && $schoolId !== '') {
+            return (string) $schoolId;
         }
 
         /** @var School|null $defaultSchool */
         $defaultSchool = School::first();
         
-        return $defaultSchool ? (int) $defaultSchool->id : null;
+        return $defaultSchool ? (string) $defaultSchool->id : null;
     }
 }

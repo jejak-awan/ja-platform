@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
- * @property int $id
+ * @property string $id
  * @property int $item_id
  * @property int|null $student_id
- * @property int $school_id
+ * @property string $school_id
  * @property string $type
  * @property int $quantity
  * @property string|null $reference_number

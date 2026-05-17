@@ -13,7 +13,7 @@ class ReportService
      * Get student profile data for PDF report.
      * @return array{student: Student, attendance_stats: array<string, int>}
      */
-    public function getStudentProfileData(int $studentId): array
+    public function getStudentProfileData(string $studentId): array
     {
         /** @var Student $student */
         $student = Student::with([
@@ -46,7 +46,7 @@ class ReportService
      * Get student ID card data.
      * @return array{student: Student, verification_url: string}
      */
-    public function getStudentIdCardData(int $studentId): array
+    public function getStudentIdCardData(string $studentId): array
     {
         /** @var Student $student */
         $student = Student::with(['school', 'level', 'department'])->findOrFail($studentId);
@@ -61,7 +61,7 @@ class ReportService
      * Get graduation certificate (SKL) data.
      * @return array{student: Student, verification_url: string}
      */
-    public function getGraduationCertificateData(int $studentId): array
+    public function getGraduationCertificateData(string $studentId): array
     {
         /** @var Student $student */
         $student = Student::with(['school', 'level', 'department'])->findOrFail($studentId);
@@ -76,7 +76,7 @@ class ReportService
      * Get attendance report data for a period.
      * @return array{total_records: int, stats: array<string, int>}
      */
-    public function getAttendanceReport(int $schoolId, ?string $startDate = null, ?string $endDate = null): array
+    public function getAttendanceReport(string $schoolId, ?string $startDate = null, ?string $endDate = null): array
     {
         $query = Attendance::with('student')
             ->whereHas('student', fn($q) => $q->where('school_id', $schoolId));

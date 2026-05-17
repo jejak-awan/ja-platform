@@ -17,7 +17,7 @@ export const useUnitStore = defineStore('unit', () => {
     const activeContextType = computed(() => workspaceStore.activeContextType);
     const switchingContext = computed(() => workspaceStore.switching);
 
-    async function fetchUnits(schoolId?: string | number, silent = true) {
+    async function fetchUnits(schoolId?: string, silent = true) {
         if (fetchPromise.value) return fetchPromise.value;
 
         fetchPromise.value = (async () => {
@@ -50,7 +50,7 @@ export const useUnitStore = defineStore('unit', () => {
         return fetchPromise.value;
     }
 
-    async function setActiveLevel(id: string | number, type: WorkspaceContextType = 'unit', silent = false, name: string | null = null) {
+    async function setActiveLevel(id: string, type: WorkspaceContextType = 'unit', silent = false, name: string | null = null) {
         await workspaceStore.setWorkspaceContext(id, type, name, silent);
     }
 
@@ -65,7 +65,7 @@ export const useUnitStore = defineStore('unit', () => {
         }
     }
 
-    async function updateUnit(id: string | number, data: Partial<SchoolUnit>) {
+    async function updateUnit(id: string, data: Partial<SchoolUnit>) {
         loading.value = true;
         try {
             const response = await InstitutionService.updateUnit(id, data);
@@ -76,7 +76,7 @@ export const useUnitStore = defineStore('unit', () => {
         }
     }
 
-    async function deleteUnit(id: string | number) {
+    async function deleteUnit(id: string) {
         loading.value = true;
         try {
             const response = await InstitutionService.deleteUnit(id);

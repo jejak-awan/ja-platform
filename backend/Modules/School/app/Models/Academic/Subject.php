@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
- * @property int $id
- * @property int $school_id
+ * @property string $id
+ * @property string $school_id
  * @property string $code
  * @property string $name
  * @property string|null $group

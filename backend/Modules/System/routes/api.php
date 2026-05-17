@@ -18,6 +18,7 @@ use Modules\System\Http\Controllers\Console\EmailTestController;
 use Modules\System\Http\Controllers\Console\LogController;
 use Modules\System\Http\Controllers\Console\TranslationController;
 use Modules\System\Http\Controllers\Console\EmailTemplateController;
+use Modules\System\Http\Controllers\Console\TwoFactorController;
 
 Route::prefix('v1')->group(function (): void {
     // Auth & Public (Surface canonical)
@@ -30,9 +31,28 @@ Route::prefix('v1')->group(function (): void {
     Route::get('public/system/settings', [PublicSettingsController::class, 'index']);
     Route::get('public/system/languages', [LanguageController::class, 'index']);
 
+    // Two Factor Authentication
+    Route::prefix('two-factor')->middleware(['auth:sanctum'])->group(function (): void {
+        Route::get('status', [TwoFactorController::class, 'status']);
+        Route::post('generate', [TwoFactorController::class, 'generate']);
+        Route::post('verify', [TwoFactorController::class, 'verify']);
+        Route::post('disable', [TwoFactorController::class, 'disable']);
+        Route::post('regenerate-backup-codes', [TwoFactorController::class, 'regenerateBackupCodes']);
+        Route::post('verify-code', [TwoFactorController::class, 'verifyCode']);
+    });
+
     // Manage API (Canonical)
     Route::prefix('manage/system')->middleware(['auth:sanctum'])->group(function (): void {
         Route::get('dashboard', [DashboardController::class, 'admin']);
+
+        // Profile Management
+        Route::get('profile', [UserController::class, 'profile']);
+        Route::put('profile', [UserController::class, 'updateProfile']);
+        Route::post('profile/avatar', [UserController::class, 'uploadAvatar']);
+        Route::put('profile/password', [UserController::class, 'updatePassword']);
+        Route::get('profile/preferences', [UserController::class, 'getPreferences']);
+        Route::put('profile/preferences', [UserController::class, 'updatePreferences']);
+        Route::get('profile/login-history', [UserController::class, 'loginHistory']);
 
         Route::get('users/stats', [UserController::class, 'stats']);
         Route::apiResource('users', UserController::class);

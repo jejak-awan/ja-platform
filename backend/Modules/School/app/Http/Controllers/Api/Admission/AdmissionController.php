@@ -42,7 +42,7 @@ class AdmissionController extends BaseController
         }
     }
 
-    public function show(int $id): \Illuminate\Http\JsonResponse
+    public function show(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Enrollment $enrollment */
         $enrollment = Enrollment::with(['documents', 'academicYear'])->findOrFail($id);
@@ -51,7 +51,7 @@ class AdmissionController extends BaseController
         return $this->sendResponse($enrollment, 'Enrollment retrieved successfully.');
     }
 
-    public function updateStatus(Request $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateStatus(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Enrollment $enrollment */
         $enrollment = Enrollment::findOrFail($id);
@@ -66,7 +66,7 @@ class AdmissionController extends BaseController
         return $this->sendResponse($enrollment, 'Status updated successfully.');
     }
 
-    public function verifyDocument(Request $request, int $id): \Illuminate\Http\JsonResponse
+    public function verifyDocument(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var EnrollmentDocument $document */
         $document = EnrollmentDocument::findOrFail($id);
@@ -84,7 +84,7 @@ class AdmissionController extends BaseController
         return $this->sendResponse($document, 'Document verification updated.');
     }
 
-    public function admit(int $id): \Illuminate\Http\JsonResponse
+    public function admit(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Enrollment $enrollment */
         $enrollment = Enrollment::findOrFail($id);

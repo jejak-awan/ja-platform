@@ -11,10 +11,10 @@ use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\HR\Staff;
 
 /**
- * @property int $id
- * @property int $school_id
- * @property int $workspace_id
- * @property int $school_asset_id
+ * @property string $id
+ * @property string $school_id
+ * @property string $workspace_id
+ * @property string $school_asset_id
  * @property int $reported_by
  * @property \Illuminate\Support\Carbon $date_reported
  * @property string $issue_description

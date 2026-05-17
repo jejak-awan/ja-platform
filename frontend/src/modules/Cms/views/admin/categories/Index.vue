@@ -191,7 +191,7 @@ const categories = ref<Category[]>([]); // Raw tree data
 const search = ref('');
 const statusFilter = ref('all');
 const selectedIds = ref<string[]>([]);
-const expandedIds = ref<(string | number)[]>([]); // Track expanded nodes
+const expandedIds = ref<(string)[]>([]); // Track expanded nodes
 const pagination = ref<PaginationData>({
     current_page: 1,
     last_page: 1,
@@ -208,7 +208,7 @@ const editingCategory = ref<Category | null>(null);
 const { confirm } = useConfirm();
 
 // Toggle expand/collapse
-const toggleExpand = (id: string | number) => {
+const toggleExpand = (id: string) => {
     const index = expandedIds.value.indexOf(id);
     if (index > -1) {
         expandedIds.value.splice(index, 1);
@@ -224,8 +224,8 @@ const hasChildren = (category: Category): boolean => {
 };
 
 // Helper to collect all parent IDs for auto-expansion
-const getAllParentIds = (nodes: Category[]): (string | number)[] => {
-    let ids: (string | number)[] = [];
+const getAllParentIds = (nodes: Category[]): (string)[] => {
+    let ids: (string)[] = [];
     nodes.forEach(node => {
         const children = node.all_children || node.children;
         if (children && children.length > 0) {
@@ -437,7 +437,7 @@ const changePage = (page: number) => {
     }
 };
 
-const changePerPage = (perPage: string | number) => {
+const changePerPage = (perPage: number | string) => {
     pagination.value.per_page = typeof perPage === 'string' ? parseInt(perPage) : perPage;
     fetchCategories(1);
 };

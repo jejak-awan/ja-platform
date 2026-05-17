@@ -470,7 +470,7 @@ watch(showModal, (val) => {
 
 // State
 const viewMode = ref<'grid' | 'list'>('grid'); // 'grid' | 'list'
-const currentFolderId = ref<string | number | null>(null);
+const currentFolderId = ref<string | null>(null);
 const breadcrumbs = ref<MediaFolder[]>([]);
 const folders = ref<MediaFolder[]>([]);
 const mediaList = ref<Media[]>([]);

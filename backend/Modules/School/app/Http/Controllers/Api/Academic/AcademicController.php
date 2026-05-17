@@ -58,7 +58,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($year, 'Academic year created successfully.', 201);
     }
 
-    public function updateYear(Request $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateYear(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var AcademicYear $year */
         $year = AcademicYear::findOrFail($id);
@@ -75,7 +75,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($year, 'Academic year updated successfully.');
     }
 
-    public function destroyYear(int $id): \Illuminate\Http\JsonResponse
+    public function destroyYear(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var AcademicYear $year */
         $year = AcademicYear::findOrFail($id);
@@ -90,8 +90,7 @@ class AcademicController extends BaseController
     public function semesters(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('viewAny', Semester::class);
-        $ayIdValue = $request->input('academic_year_id');
-        $ayId = is_numeric($ayIdValue) ? (int)$ayIdValue : 0;
+        $ayId = (string) $request->string('academic_year_id');
         $semesters = $this->service->getSemesters($ayId);
         return $this->sendResponse($semesters, 'Semesters retrieved successfully.');
     }
@@ -114,7 +113,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($semester, 'Semester created successfully.', 201);
     }
 
-    public function updateSemester(Request $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateSemester(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Semester $semester */
         $semester = Semester::findOrFail($id);
@@ -131,7 +130,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($semester, 'Semester updated successfully.');
     }
 
-    public function destroySemester(int $id): \Illuminate\Http\JsonResponse
+    public function destroySemester(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Semester $semester */
         $semester = Semester::findOrFail($id);
@@ -168,7 +167,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($subject, 'Subject created successfully.', 201);
     }
 
-    public function updateSubject(Request $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateSubject(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Subject $subject */
         $subject = Subject::findOrFail($id);
@@ -187,7 +186,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($subject, 'Subject updated successfully.');
     }
 
-    public function destroySubject(int $id): \Illuminate\Http\JsonResponse
+    public function destroySubject(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Subject $subject */
         $subject = Subject::findOrFail($id);
@@ -227,7 +226,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($group, 'Study group created successfully.', 201);
     }
 
-    public function updateStudyGroup(Request $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateStudyGroup(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var StudyGroup $group */
         $group = StudyGroup::findOrFail($id);
@@ -247,7 +246,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($group, 'Study group updated successfully.');
     }
 
-    public function destroyStudyGroup(int $id): \Illuminate\Http\JsonResponse
+    public function destroyStudyGroup(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var StudyGroup $group */
         $group = StudyGroup::findOrFail($id);
@@ -259,7 +258,7 @@ class AcademicController extends BaseController
 
     // --- Study Group Members ---
 
-    public function groupMembers(int $groupId): \Illuminate\Http\JsonResponse
+    public function groupMembers(string $groupId): \Illuminate\Http\JsonResponse
     {
         /** @var StudyGroup $group */
         $group = StudyGroup::with('students')->findOrFail($groupId);
@@ -268,7 +267,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($group->students, 'Study group members retrieved successfully.');
     }
 
-    public function addGroupMember(Request $request, int $groupId): \Illuminate\Http\JsonResponse
+    public function addGroupMember(Request $request, string $groupId): \Illuminate\Http\JsonResponse
     {
         /** @var StudyGroup $group */
         $group = StudyGroup::findOrFail($groupId);
@@ -279,12 +278,12 @@ class AcademicController extends BaseController
             'student_id' => 'required|exists:sch_std_students,id',
         ]);
 
-        $group->students()->syncWithoutDetaching([(int)$validated['student_id']]);
+        $group->students()->syncWithoutDetaching([(string)$validated['student_id']]);
 
         return $this->sendResponse([], 'Student added to study group successfully.');
     }
 
-    public function removeGroupMember(Request $request, int $groupId, int $studentId): \Illuminate\Http\JsonResponse
+    public function removeGroupMember(Request $request, string $groupId, string $studentId): \Illuminate\Http\JsonResponse
     {
         /** @var StudyGroup $group */
         $group = StudyGroup::findOrFail($groupId);
@@ -302,7 +301,7 @@ class AcademicController extends BaseController
         $this->authorize('viewAny', Department::class);
 
         $schoolIdValue = $request->input('school_id', 1);
-        $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : 1;
+        $schoolId = is_scalar($schoolIdValue) ? (string) $schoolIdValue : '1';
         $departments = Department::whereHas('level', function ($q) use ($schoolId): void {
             $q->where('school_id', $schoolId);
         })->with('level')->get();
@@ -327,7 +326,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($department, 'Department created successfully.', 201);
     }
 
-    public function updateDepartment(Request $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateDepartment(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Department $department */
         $department = Department::findOrFail($id);
@@ -346,7 +345,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($department, 'Department updated successfully.');
     }
 
-    public function destroyDepartment(int $id): \Illuminate\Http\JsonResponse
+    public function destroyDepartment(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Department $department */
         $department = Department::findOrFail($id);
@@ -381,7 +380,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($schedule, 'Schedule created successfully.', 201);
     }
 
-    public function updateSchedule(StoreScheduleRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateSchedule(StoreScheduleRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Schedule $schedule */
         $schedule = Schedule::findOrFail($id);
@@ -400,7 +399,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($schedule, 'Schedule updated successfully.');
     }
 
-    public function destroySchedule(int $id): \Illuminate\Http\JsonResponse
+    public function destroySchedule(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Schedule $schedule */
         $schedule = Schedule::findOrFail($id);
@@ -418,8 +417,8 @@ class AcademicController extends BaseController
         $query = TeachingJournal::with('schedule.subject', 'schedule.staff');
 
         if ($request->has('schedule_id')) {
-            $schIdValue = $request->input('schedule_id');
-            $query->where('schedule_id', is_numeric($schIdValue) ? (int)$schIdValue : 0);
+            $schIdValue = (string) $request->string('schedule_id');
+            $query->where('schedule_id', $schIdValue);
         }
         if ($request->has('date')) {
             $dateValue = $request->input('date');
@@ -441,7 +440,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($journal, 'Teaching journal created successfully.', 201);
     }
 
-    public function updateJournal(StoreJournalRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateJournal(StoreJournalRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var TeachingJournal $journal */
         $journal = TeachingJournal::findOrFail($id);
@@ -456,7 +455,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($journal, 'Teaching journal updated successfully.');
     }
 
-    public function destroyJournal(int $id): \Illuminate\Http\JsonResponse
+    public function destroyJournal(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var TeachingJournal $journal */
         $journal = TeachingJournal::findOrFail($id);

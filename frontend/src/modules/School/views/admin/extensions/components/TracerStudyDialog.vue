@@ -169,7 +169,7 @@ import { parseResponse } from '@/shared/utils/responseParser';
 
 interface Graduate {
   id: string | string;
-  graduation_year: string | number;
+  graduation_year: string;
   student?: {
     full_name: string;
   };

@@ -13,31 +13,31 @@ export const MediaService = {
         });
     },
 
-    update(id: string | number, payload: Record<string, unknown>): Promise<AxiosResponse> {
+    update(id: string, payload: Record<string, unknown>): Promise<AxiosResponse> {
         return api.put(mediaPaths.file(id), payload);
     },
 
-    delete(id: string | number, params: Record<string, unknown> = {}): Promise<AxiosResponse> {
+    delete(id: string, params: Record<string, unknown> = {}): Promise<AxiosResponse> {
         return api.delete(mediaPaths.file(id), { params });
     },
 
-    restore(id: string | number): Promise<AxiosResponse> {
+    restore(id: string): Promise<AxiosResponse> {
         return api.post(mediaPaths.restore(id));
     },
 
-    usage(id: string | number): Promise<AxiosResponse> {
+    usage(id: string): Promise<AxiosResponse> {
         return api.get(mediaPaths.usage(id));
     },
 
-    thumbnail(id: string | number): Promise<AxiosResponse> {
+    thumbnail(id: string): Promise<AxiosResponse> {
         return api.post(mediaPaths.thumbnail(id));
     },
 
-    resize(id: string | number, payload: Record<string, unknown>): Promise<AxiosResponse> {
+    resize(id: string, payload: Record<string, unknown>): Promise<AxiosResponse> {
         return api.post(mediaPaths.resize(id), payload);
     },
 
-    edit(id: string | number, formData: FormData): Promise<AxiosResponse> {
+    edit(id: string, formData: FormData): Promise<AxiosResponse> {
         return api.post(mediaPaths.edit(id), formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });
@@ -67,15 +67,15 @@ export const MediaService = {
         return api.get(mediaPaths.folders, { params });
     },
 
-    deleteFolder(id: string | number): Promise<AxiosResponse> {
+    deleteFolder(id: string): Promise<AxiosResponse> {
         return api.delete(mediaPaths.folder(id));
     },
 
-    restoreFolder(id: string | number): Promise<AxiosResponse> {
+    restoreFolder(id: string): Promise<AxiosResponse> {
         return api.post(`${mediaPaths.folder(id)}/restore`);
     },
 
-    forceDeleteFolder(id: string | number): Promise<AxiosResponse> {
+    forceDeleteFolder(id: string): Promise<AxiosResponse> {
         return api.delete(`${mediaPaths.folder(id)}/force-delete`);
     },
 };

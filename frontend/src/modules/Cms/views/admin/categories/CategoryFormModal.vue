@@ -224,13 +224,13 @@ interface CategoryForm {
     slug: string;
     description: string;
     image: string | null;
-    parent_id: string | number | null;
+    parent_id: string | null;
     is_active: boolean;
     sort_order: number;
 }
 
 interface FlattenedCategory {
-    id: string | number;
+    id: string;
     label: string;
     raw: Category;
 }

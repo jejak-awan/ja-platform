@@ -59,7 +59,7 @@ export const HRService = {
         return api.get('admin/hr/payrolls', { params });
     },
 
-    async getSalaryStructures(staffId: number | string): Promise<AxiosResponse<SalaryStructure[]>> {
+    async getSalaryStructures(staffId: string): Promise<AxiosResponse<SalaryStructure[]>> {
         return api.get('admin/hr/salary-structures', { params: { staff_id: staffId } });
     },
     */

@@ -3,11 +3,11 @@ import type { Tag } from '@/modules/Library/types/taxonomy';
 export type { Tag };
 
 export interface Category {
-    id: string | number;
+    id: string;
     name: string;
     slug: string;
     description?: string;
-    parent_id?: string | number | null;
+    parent_id?: string | null;
     created_at?: string;
     updated_at?: string;
     posts_count?: number;

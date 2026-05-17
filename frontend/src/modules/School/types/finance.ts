@@ -22,7 +22,7 @@ export interface StudentBill {
     student_id: string;
     fee_type_id: string;
     academic_year_id: string;
-    semester_id?: number;
+    semester_id?: string;
     month?: number;
     amount: number;
     paid_amount: number;

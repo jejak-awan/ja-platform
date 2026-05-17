@@ -269,7 +269,7 @@ import type { SchoolUnit } from '@/modules/School/types';
 
 const props = defineProps<{
   units: SchoolUnit[];
-  selectedUnitId: string | number | null;
+  selectedUnitId: string | null;
   selectedUnit: SchoolUnit | null;
   school: any;
   canAddMore: boolean;

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * @property int $id
+ * @property string $id
  * @property int|null $user_id
  * @property string $action
  * @property string|null $model_type

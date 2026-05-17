@@ -15,7 +15,7 @@ class TranslationController extends \Modules\System\Http\Controllers\BaseApiCont
     {
         $request->validate([
             'translatable_type' => 'required|string',
-            'translatable_id' => 'required|integer',
+            'translatable_id' => 'required|string',
         ]);
 
         $translations = Translation::where('translatable_type', $request->input('translatable_type'))
@@ -32,7 +32,7 @@ class TranslationController extends \Modules\System\Http\Controllers\BaseApiCont
     {
         $request->validate([
             'translatable_type' => 'required|string',
-            'translatable_id' => 'required|integer',
+            'translatable_id' => 'required|string',
             'language_code' => ['required', 'string', 'max:10', Rule::exists('sys_languages', 'code')],
             'field' => 'required|string|max:255',
             'value' => 'required|string',

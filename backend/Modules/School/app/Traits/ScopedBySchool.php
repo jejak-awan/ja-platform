@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Context;
 
 /**
- * @property int $school_id
+ * @property string $school_id
  * @mixin \Illuminate\Database\Eloquent\Model
  */
 trait ScopedBySchool
@@ -26,8 +26,8 @@ trait ScopedBySchool
         static::creating(function (Model $model): void {
             /** @var static $model */
             $schoolId = Context::get('school_id');
-            if (is_numeric($schoolId) && (!property_exists($model, 'school_id') || $model->school_id === null)) {
-                $model->school_id = (int)$schoolId;
+            if (is_string($schoolId) && (!property_exists($model, 'school_id') || $model->school_id === null)) {
+                $model->school_id = $schoolId;
             }
         });
     }

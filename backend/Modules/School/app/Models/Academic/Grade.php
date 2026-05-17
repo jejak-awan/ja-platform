@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
- * @property int $id
- * @property int $school_id
- * @property int $workspace_id
- * @property int $student_id
- * @property int $subject_id
- * @property int $academic_year_id
- * @property int $semester_id
- * @property int $study_group_id
- * @property int $staff_id
+ * @property string $id
+ * @property string $school_id
+ * @property string $workspace_id
+ * @property string $student_id
+ * @property string $subject_id
+ * @property string $academic_year_id
+ * @property string $semester_id
+ * @property string $study_group_id
+ * @property string $staff_id
  * @property float|null $daily_score
  * @property float|null $mid_score
  * @property float|null $final_score

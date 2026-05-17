@@ -54,7 +54,7 @@ class CareerController extends BaseController
 
         $canManageLogistics = $user->can('manage logistics');
         if ($canManageLogistics) {
-            $requestStudentId = $request->input('student_id');
+            $requestStudentId = (string) $request->string('student_id');
             if (! is_numeric($requestStudentId)) {
                 return $this->sendError('student_id is required for privileged apply action.', [], 422);
             }

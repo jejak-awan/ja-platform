@@ -263,16 +263,16 @@ export function useMenu(menuId?: Ref<number | string | null>) {
     /**
      * Flatten tree to array for API
      */
-    const flattenTree = (treeItems: MenuItem[], parentId: number | null = null): MenuItemDTO[] => {
+    const flattenTree = (treeItems: MenuItem[], parentId: string | null = null): MenuItemDTO[] => {
         let result: MenuItemDTO[] = [];
         treeItems.forEach((item, index) => {
             result.push({
-                id: item.id as number | null,
-                parent_id: parentId as number | null,
+                id: item.id as string | null,
+                parent_id: parentId as string | null,
                 sort_order: index,
                 title: (item.title as string) || '',
                 type: (item.type as 'custom' | 'page' | 'post' | 'category' | 'tag' | 'external') || 'custom',
-                target_id: item.target_id as number | null,
+                target_id: item.target_id as string | null,
                 url: item.url as string | undefined,
                 icon: item.icon || null,
                 css_class: item.css_class || null,
@@ -288,11 +288,11 @@ export function useMenu(menuId?: Ref<number | string | null>) {
                 hide_label: item.hide_label || false,
                 heading: item.heading || null,
                 show_heading_line: item.show_heading_line || false,
-                menu_id: Number(menuId?.value || 0),
+                menu_id: String(menuId?.value || ''),
                 is_active: item.is_active ? 1 : 0,
             });
             if (item.children && item.children.length > 0) {
-                result = result.concat(flattenTree(item.children, item.id as number | null));
+                result = result.concat(flattenTree(item.children, item.id as string | null));
             }
         });
         return result;
@@ -538,14 +538,14 @@ export function useMenu(menuId?: Ref<number | string | null>) {
     /**
      * Recursively save new items (items without real IDs)
      */
-    const saveNewItems = async (itemsList: MenuItem[], parentId: number | null) => {
+    const saveNewItems = async (itemsList: MenuItem[], parentId: string | null) => {
         for (let i = 0; i < itemsList.length; i++) {
             const item = itemsList[i];
             if (!item) continue;
 
             if (!item.id || item.id.toString().startsWith('temp_')) {
                 const payload: MenuItemDTO = {
-                    menu_id: Number(menuId?.value || 0),
+                    menu_id: String(menuId?.value || ''),
                     parent_id: parentId,
                     title: item.title || '',
                     type: item.type || 'custom',
@@ -576,7 +576,7 @@ export function useMenu(menuId?: Ref<number | string | null>) {
             }
 
             if (item.children && item.children.length > 0) {
-                await saveNewItems(item.children, item.id as number);
+                await saveNewItems(item.children, item.id as string | null);
             }
         }
     };

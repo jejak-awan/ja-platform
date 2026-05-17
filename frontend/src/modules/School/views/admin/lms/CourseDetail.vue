@@ -191,7 +191,7 @@ const submitting = ref(false);
 
 const showAddLessonModal = ref(false);
 const showAddTopicModal = ref(false);
-const activeLessonId = ref<string | number | null>(null);
+const activeLessonId = ref<string | null>(null);
 
 const lessonForm = ref({ title: '', order: 0 });
 const topicForm = ref({
@@ -208,7 +208,7 @@ const topicForm = ref({
 const fetchData = async () => {
   loading.value = true;
   try {
-    const res = await LmsService.getCourseDetails(courseId);
+    const res = await LmsService.getCourseDetails(String(courseId));
     course.value = res.data;
   } catch (err) {
     console.error(err);
@@ -224,7 +224,7 @@ const createLesson = async () => {
   }
   submitting.value = true;
   try {
-    await LmsService.createLesson(courseId, lessonForm.value);
+    await LmsService.createLesson(String(courseId), lessonForm.value);
     await fetchData();
     showAddLessonModal.value = false;
     lessonForm.value = { title: '', order: 0 };
@@ -236,7 +236,7 @@ const createLesson = async () => {
 };
 
 const openAddTopicModal = (lessonId: string | number) => {
-  activeLessonId.value = lessonId;
+  activeLessonId.value = String(lessonId);
   showAddTopicModal.value = true;
 };
 
@@ -253,7 +253,7 @@ const createTopic = async () => {
   
   submitting.value = true;
   try {
-    await LmsService.createTopic(activeLessonId.value, topicForm.value);
+    await LmsService.createTopic(String(activeLessonId.value), topicForm.value);
     await fetchData();
     showAddTopicModal.value = false;
     topicForm.value = { 

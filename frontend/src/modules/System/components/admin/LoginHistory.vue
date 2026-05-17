@@ -133,7 +133,7 @@ interface PaginatedHistory {
     data: LoginEntry[];
     current_page: number;
     total: number;
-    per_page: number | string;
+    per_page: string;
     [key: string]: unknown;
 }
 

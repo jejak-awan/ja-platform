@@ -11,16 +11,16 @@ export const LayoutService = {
         return api.post(layoutPaths.menus, payload);
     },
 
-    getMenu(id: string | number): Promise<AxiosResponse> {
+    getMenu(id: string): Promise<AxiosResponse> {
         return api.get(layoutPaths.menu(id));
     },
 
-    deleteMenu(id: string | number, force = false): Promise<AxiosResponse> {
+    deleteMenu(id: string, force = false): Promise<AxiosResponse> {
         const url = force ? layoutPaths.menuForceDelete(id) : layoutPaths.menu(id);
         return api.delete(url);
     },
 
-    restoreMenu(id: string | number): Promise<AxiosResponse> {
+    restoreMenu(id: string): Promise<AxiosResponse> {
         return api.post(layoutPaths.menuRestore(id));
     },
 
@@ -32,11 +32,11 @@ export const LayoutService = {
         return api.get(layoutPaths.widgets, { params });
     },
 
-    updateWidget(id: string | number, payload: Record<string, unknown>): Promise<AxiosResponse> {
+    updateWidget(id: string, payload: Record<string, unknown>): Promise<AxiosResponse> {
         return api.put(layoutPaths.widget(id), payload);
     },
 
-    deleteWidget(id: string | number): Promise<AxiosResponse> {
+    deleteWidget(id: string): Promise<AxiosResponse> {
         return api.delete(layoutPaths.widget(id));
     },
 

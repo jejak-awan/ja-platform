@@ -23,8 +23,8 @@ class FacilityController extends BaseController
     public function overview(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('viewAny', LandAsset::class);
-        $schoolIdValue = $request->header('X-School-Id') ?? $request->input('school_id');
-        $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : 1;
+        $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
+        $schoolId = (string)$schoolIdValue;
         $overview = $this->service->getFacilityOverview($schoolId);
 
         return $this->sendResponse($overview, 'Facility overview retrieved successfully.');
@@ -35,8 +35,8 @@ class FacilityController extends BaseController
     public function landAssets(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('viewAny', LandAsset::class);
-        $schoolIdValue = $request->header('X-School-Id') ?? $request->input('school_id');
-        $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : 1;
+        $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
+        $schoolId = (string)$schoolIdValue;
         
         $perPageValue = $request->input('per_page', 20);
         $perPage = is_numeric($perPageValue) ? (int)$perPageValue : 20;
@@ -56,7 +56,7 @@ class FacilityController extends BaseController
         return $this->sendResponse($land, 'Land asset created successfully.', 201);
     }
 
-    public function updateLand(StoreLandRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateLand(StoreLandRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var LandAsset $land */
         $land = LandAsset::findOrFail($id);
@@ -74,8 +74,8 @@ class FacilityController extends BaseController
     public function buildings(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('viewAny', Building::class);
-        $schoolIdValue = $request->header('X-School-Id') ?? $request->input('school_id');
-        $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : 1;
+        $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
+        $schoolId = (string)$schoolIdValue;
         
         $perPageValue = $request->input('per_page', 20);
         $perPage = is_numeric($perPageValue) ? (int)$perPageValue : 20;
@@ -95,7 +95,7 @@ class FacilityController extends BaseController
         return $this->sendResponse($building, 'Building created successfully.', 201);
     }
 
-    public function updateBuilding(StoreBuildingRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateBuilding(StoreBuildingRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Building $building */
         $building = Building::findOrFail($id);
@@ -113,8 +113,8 @@ class FacilityController extends BaseController
     public function rooms(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('viewAny', Room::class);
-        $schoolIdValue = $request->header('X-School-Id') ?? $request->input('school_id');
-        $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : 1;
+        $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
+        $schoolId = (string)$schoolIdValue;
         
         $perPageValue = $request->input('per_page', 20);
         $perPage = is_numeric($perPageValue) ? (int)$perPageValue : 20;
@@ -134,7 +134,7 @@ class FacilityController extends BaseController
         return $this->sendResponse($room, 'Room created successfully.', 201);
     }
 
-    public function updateRoom(StoreRoomRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateRoom(StoreRoomRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Room $room */
         $room = Room::findOrFail($id);
@@ -152,8 +152,8 @@ class FacilityController extends BaseController
     public function assets(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('viewAny', SchoolAsset::class);
-        $schoolIdValue = $request->header('X-School-Id') ?? $request->input('school_id');
-        $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : 1;
+        $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
+        $schoolId = (string)$schoolIdValue;
         
         $perPageValue = $request->input('per_page', 20);
         $perPage = is_numeric($perPageValue) ? (int)$perPageValue : 20;
@@ -173,7 +173,7 @@ class FacilityController extends BaseController
         return $this->sendResponse($asset, 'Asset created successfully.', 201);
     }
 
-    public function updateAsset(StoreAssetRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateAsset(StoreAssetRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var SchoolAsset $asset */
         $asset = SchoolAsset::findOrFail($id);
@@ -186,7 +186,7 @@ class FacilityController extends BaseController
         return $this->sendResponse($asset, 'Asset updated successfully.');
     }
 
-    public function destroy(string $type, int $id): \Illuminate\Http\JsonResponse
+    public function destroy(string $type, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var \Illuminate\Database\Eloquent\Model|null $model */
         $model = match ($type) {

@@ -187,7 +187,7 @@ const handleAddMember = async () => {
     }
 }
 
-const handleRemoveMember = async (studentId: number) => {
+const handleRemoveMember = async (studentId: string) => {
     try {
         await AcademicService.removeStudyGroupMember(props.group.id, studentId);
         toast.success.action(t('modules.school.academic.messages.studentRemoveSuccess'));

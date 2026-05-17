@@ -24,7 +24,7 @@ class AuditLogController extends BaseController
         return $this->sendResponse($logs, 'Audit logs retrieved successfully.');
     }
 
-    public function show(int $id): \Illuminate\Http\JsonResponse
+    public function show(string $id): \Illuminate\Http\JsonResponse
     {
         $this->authorize('view', Activity::class);
         /** @var Activity $log */

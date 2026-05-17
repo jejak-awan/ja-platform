@@ -769,8 +769,8 @@ const syncMatrixFromRoles = () => {
     initialData.value.matrixPermissions = JSON.parse(JSON.stringify(matrix));
 };
 
-const getRole = (id: string | number) => roles.value.find(r => r && String(r.id) === String(id));
-const roleIdToNum = (id: string | number) => String(id);
+const getRole = (id: string) => roles.value.find(r => r && String(r.id) === String(id));
+const roleIdToNum = (id: string) => String(id);
 
 // Permission Handlers
 const togglePermission = (name: string) => {

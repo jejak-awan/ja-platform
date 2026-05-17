@@ -5,7 +5,7 @@ import { AnalyticsService } from '@/shared/services/analyticsService';
  * Analytics tracking composable for frontend event tracking
  */
 export function useAnalytics() {
-    const trackEvent = async (eventType: string, eventName: string, data: Record<string, unknown> = {}, contentId: number | null = null): Promise<void> => {
+    const trackEvent = async (eventType: string, eventName: string, data: Record<string, unknown> = {}, contentId: string | number | null = null): Promise<void> => {
         try {
             await AnalyticsService.trackEvent({
                 event_type: eventType,
@@ -25,7 +25,7 @@ export function useAnalytics() {
         });
     };
 
-    const trackDownload = (fileName: string, fileType: string | null = null, mediaId: number | null = null) => {
+    const trackDownload = (fileName: string, fileType: string | null = null, mediaId: string | number | null = null) => {
         return trackEvent('download', `Download: ${fileName}`, {
             file_name: fileName,
             file_type: fileType,
@@ -54,7 +54,7 @@ export function useAnalytics() {
         });
     };
 
-    const trackBatch = async (events: Array<{ type: string; name: string; data: unknown; content_id?: number }>): Promise<void> => {
+    const trackBatch = async (events: Array<{ type: string; name: string; data: unknown; content_id?: string | number }>): Promise<void> => {
         if (!events || events.length === 0) return;
 
         try {

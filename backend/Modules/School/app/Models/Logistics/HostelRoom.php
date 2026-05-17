@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @property int $id
- * @property int $block_id
+ * @property string $id
+ * @property string $block_id
  * @property string $room_number
  * @property int $capacity
  * @property array<string, mixed>|null $features

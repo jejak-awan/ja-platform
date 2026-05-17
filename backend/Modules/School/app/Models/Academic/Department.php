@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\School\Models\Institution\SchoolUnit;
 
 /**
- * @property int $id
- * @property int $workspace_id
+ * @property string $id
+ * @property string $workspace_id
  * @property string $name
  * @property string $code
  * @property string|null $description

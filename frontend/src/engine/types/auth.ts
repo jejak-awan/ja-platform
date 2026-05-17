@@ -54,7 +54,7 @@ export interface AuthResponse {
     requiresVerification?: boolean;
     rateLimited?: boolean;
     retryAfter?: number;
-    userId?: number | string;
+    userId?: string;
 }
 
 export interface RegisterData {

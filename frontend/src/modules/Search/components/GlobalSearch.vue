@@ -192,13 +192,13 @@ import UserCircle from 'lucide-vue-next/dist/esm/icons/circle-user.js';
 import PlusCircle from 'lucide-vue-next/dist/esm/icons/circle-plus.js';
 
 interface SearchItem {
-    id?: number | string;
+    id?: string;
     type: string;
     title: string;
     description?: string;
     url?: string;
     route?: RouteLocationRaw;
-    searchable_id?: number | string;
+    searchable_id?: string;
     score?: number;
     keywords?: string;
     icon?: Component;

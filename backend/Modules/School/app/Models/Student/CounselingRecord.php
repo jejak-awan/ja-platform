@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
- * @property int $id
- * @property int $school_id
- * @property int $workspace_id
- * @property int $student_id
- * @property int $staff_id
+ * @property string $id
+ * @property string $school_id
+ * @property string $workspace_id
+ * @property string $student_id
+ * @property string $staff_id
  * @property \Illuminate\Support\Carbon $date
  * @property string $type
  * @property string $problem

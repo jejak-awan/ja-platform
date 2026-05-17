@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\School\Models\Student\Student;
 
 /**
- * @property int $id
- * @property int $topic_id
- * @property int $student_id
+ * @property string $id
+ * @property string $topic_id
+ * @property string $student_id
  * @property bool $is_completed
  * @property \Illuminate\Support\Carbon|null $completed_at
  * @property array<string, mixed>|null $metadata

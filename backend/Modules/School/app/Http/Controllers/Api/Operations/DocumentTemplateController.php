@@ -54,7 +54,7 @@ class DocumentTemplateController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
         $template = DocumentTemplate::findOrFail($id);
         
@@ -83,7 +83,7 @@ class DocumentTemplateController extends BaseController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
         $template = DocumentTemplate::findOrFail($id);
         $template->delete();
@@ -94,21 +94,20 @@ class DocumentTemplateController extends BaseController
     /**
      * Resolve the school ID from the request context.
      */
-    protected function resolveSchoolId(Request $request): int
+    protected function resolveSchoolId(Request $request): string
     {
-        $schoolId = $request->input('school_id')
-            ?? $request->header('X-School-Id');
+        $schoolId = $request->input('school_id') ?? $request->header('X-School-Id');
 
-        if ($schoolId !== null && is_numeric($schoolId)) {
-            return (int) $schoolId;
+        if (is_scalar($schoolId) && $schoolId !== '') {
+            return (string) $schoolId;
         }
 
         /** @var \Modules\School\Models\Institution\School|null $defaultSchool */
         $defaultSchool = \Modules\School\Models\Institution\School::first();
         if (!$defaultSchool) {
-            return 0;
+            return '1';
         }
 
-        return (int) $defaultSchool->id;
+        return (string) $defaultSchool->id;
     }
 }

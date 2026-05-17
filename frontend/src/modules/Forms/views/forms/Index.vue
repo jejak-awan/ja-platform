@@ -513,7 +513,7 @@ import type { Form } from '@/modules/Forms/types/forms';
 
 interface FormFilters {
     trashed?: string;
-    [key: string]: string | number | undefined;
+    [key: string]: string | undefined;
 }
 
 const { t } = useI18n();

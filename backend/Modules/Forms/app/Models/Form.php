@@ -14,9 +14,9 @@ use Modules\System\Models\User;
 
 
 /**
- * @property int $id
- * @property int|null $workspace_id
- * @property int|null $author_id
+ * @property string $id
+ * @property string|null $workspace_id
+ * @property string|null $author_id
  * @property string $name
  * @property string $slug
  * @property string|null $description

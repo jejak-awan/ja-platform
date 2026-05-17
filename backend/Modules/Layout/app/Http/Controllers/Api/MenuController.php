@@ -148,7 +148,7 @@ class MenuController extends BaseApiController
 
         $menu = Cache::remember($cacheKey, 3600, fn() => Menu::where('location', $location)
             ->where('is_active', true)
-            ->with(['items'])
+            ->with(['parentItems.children'])
             ->first());
 
         if (! $menu) {

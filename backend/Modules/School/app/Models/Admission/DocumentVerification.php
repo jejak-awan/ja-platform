@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string $hash
  * @property string $document_type
  * @property int $document_id

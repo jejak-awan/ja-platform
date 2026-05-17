@@ -356,7 +356,7 @@ import ArrowLeft from 'lucide-vue-next/dist/esm/icons/arrow-left.js';
 import MenuSquare from 'lucide-vue-next/dist/esm/icons/square-menu.js';
 
 interface Props {
-    menuId: string | number;
+    menuId: string;
     menus?: Menu[];
     trashedFilter?: string;
     isTrashed?: boolean;

@@ -50,8 +50,8 @@ export interface TransportRoute {
     school_id: string;
     name: string;
     description?: string;
-    vehicle_id?: number;
-    staff_id?: number;
+    vehicle_id?: string;
+    staff_id?: string;
     created_at?: string;
     updated_at?: string;
 }

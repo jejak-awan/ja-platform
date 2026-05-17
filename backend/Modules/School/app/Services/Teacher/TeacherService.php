@@ -14,7 +14,7 @@ class TeacherService
     /**
      * Get the staff record for the authenticated user.
      */
-    public function getStaffByUserId(int $userId): ?Staff
+    public function getStaffByUserId(string $userId): ?Staff
     {
         /** @var Staff|null $staff */
         $staff = Staff::where('user_id', $userId)->first();
@@ -25,22 +25,22 @@ class TeacherService
      * Get dashboard statistics for a teacher.
      * @return array{total_schedules: int, today_schedules: int, journal_count_this_month: int, total_students: int}
      */
-    public function getDashboardStats(int $staffId, ?int $schoolId = null): array
+    public function getDashboardStats(string $staffId, ?string $schoolId = null): array
     {
-        $scheduleCount = (int) Schedule::where('staff_id', $staffId)
+        $scheduleCount = Schedule::where('staff_id', $staffId)
             ->where('is_active', true)
             ->count();
 
-        $todaySchedules = (int) Schedule::where('staff_id', $staffId)
+        $todaySchedules = Schedule::where('staff_id', $staffId)
             ->where('day', strtolower(now()->format('l')))
             ->where('is_active', true)
             ->count();
 
-        $journalCount = (int) TeachingJournal::where('staff_id', $staffId)
+        $journalCount = TeachingJournal::where('staff_id', $staffId)
             ->whereMonth('created_at', (int)now()->month)
             ->count();
 
-        $totalStudents = (int) DB::table('sch_acad_schedules as s')
+        $totalStudents = DB::table('sch_acad_schedules as s')
             ->join('sch_acad_study_group_members as sgm', 's.study_group_id', '=', 'sgm.study_group_id')
             ->where('s.staff_id', $staffId)
             ->where('s.is_active', true)
@@ -59,7 +59,7 @@ class TeacherService
      * Get teacher's schedule list.
      * @return Collection<int, Schedule>
      */
-    public function getSchedules(int $staffId): Collection
+    public function getSchedules(string $staffId): Collection
     {
         /** @var Collection<int, Schedule> $schedules */
         $schedules = Schedule::with(['subject', 'studyGroup', 'room'])
@@ -75,7 +75,7 @@ class TeacherService
      * Get recent teaching journals for a teacher.
      * @return Collection<int, TeachingJournal>
      */
-    public function getRecentJournals(int $staffId, int $limit = 10): Collection
+    public function getRecentJournals(string $staffId, int $limit = 10): Collection
     {
         /** @var Collection<int, TeachingJournal> $journals */
         $journals = TeachingJournal::with(['schedule.subject', 'schedule.studyGroup'])

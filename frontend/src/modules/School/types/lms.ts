@@ -45,7 +45,7 @@ export interface Question {
     type: 'multiple_choice' | 'essay';
     content: string;
     options?: Record<string, unknown> | unknown[];
-    answer?: string | number | string[] | number[];
+    answer?: string | string[] | number[];
     points: number;
 }
 

@@ -91,7 +91,7 @@
                     <label class="text-[10px] font-bold text-muted-foreground uppercase">{{ t('common.labels.category') }}</label>
                     <Select
                       :model-value="String(getSlotConfig(selectedItem.bindingComponent.id, slot.id).categoryFilter || 'all')"
-                      @update:model-value="(val: string) => updateBinding(activeBindingComponentId, slot.id, 'categoryFilter', val)"
+                      @update:model-value="(val: string | number) => updateBinding(activeBindingComponentId, slot.id, 'categoryFilter', val)"
                     >
                       <SelectTrigger class="w-full h-8 text-xs bg-background">
                         <SelectValue :placeholder="t('common.placeholders.select')" />
@@ -131,7 +131,7 @@
                       <label class="text-[10px] font-bold text-muted-foreground uppercase">{{ t('common.labels.sort') }}</label>
                       <Select
                         :model-value="String(getSlotConfig(selectedItem.bindingComponent.id, slot.id).orderBy || 'published_at')"
-                        @update:model-value="(val: string) => updateBinding(activeBindingComponentId, slot.id, 'orderBy', val)"
+                        @update:model-value="(val: string | number) => updateBinding(activeBindingComponentId, slot.id, 'orderBy', val)"
                       >
                         <SelectTrigger class="w-full h-8 text-xs bg-background">
                           <SelectValue :placeholder="t('features.theme_customizer.editor.bindings.sort_options.latest')" />
@@ -159,7 +159,7 @@
                   <label class="text-[10px] font-bold text-muted-foreground uppercase">{{ t('common.labels.page') }}</label>
                   <Select
                     :model-value="String(getSlotConfig(selectedItem.bindingComponent.id, slot.id).pageSlug || '')"
-                    @update:model-value="(val: string) => updateBinding(activeBindingComponentId, slot.id, 'pageSlug', val)"
+                    @update:model-value="(val: string | number) => updateBinding(activeBindingComponentId, slot.id, 'pageSlug', val)"
                   >
                     <SelectTrigger class="w-full h-8 text-xs bg-background">
                       <SelectValue :placeholder="t('common.placeholders.select')" />

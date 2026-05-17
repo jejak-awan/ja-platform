@@ -1,5 +1,5 @@
 export interface Media {
-    id: string | number;
+    id: string;
     name: string;
     file_name: string;
     mime_type: string;
@@ -7,7 +7,7 @@ export interface Media {
     url: string;
     thumbnail_url?: string;
     path: string;
-    folder_id?: string | number | null;
+    folder_id?: string | null;
     created_at: string;
     updated_at: string;
     is_trashed?: boolean;
@@ -18,16 +18,16 @@ export interface Media {
     tag_names?: string[];
     caption?: string | null;
     folder?: {
-        id: string | number;
+        id: string;
         name: string;
         path: string;
     } | null;
 }
 
 export interface MediaFolder {
-    id: string | number;
+    id: string;
     name: string;
-    parent_id: string | number | null;
+    parent_id: string | null;
     path: string;
     is_shared?: boolean;
     is_trashed?: boolean;

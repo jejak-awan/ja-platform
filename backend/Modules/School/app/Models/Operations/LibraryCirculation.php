@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
- * @property int $id
+ * @property string $id
  * @property int $library_book_id
  * @property int $borrower_id
  * @property string $borrower_type

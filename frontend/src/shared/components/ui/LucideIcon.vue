@@ -21,8 +21,8 @@ const props = withDefaults(defineProps<{
   color?: string;
   class?: HTMLAttributes['class'];
 }>(), {
-  size: 16,
-  strokeWidth: 2,
+  size: '16',
+  strokeWidth: '2',
   color: 'currentColor',
   class: '',
 });

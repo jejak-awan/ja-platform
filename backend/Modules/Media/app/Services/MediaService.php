@@ -24,7 +24,7 @@ class MediaService implements MediaServiceInterface
         UploadedFile $file,
         ?string $folderId = null,
         bool $optimize = true,
-        ?int $authorId = null,
+        ?string $authorId = null,
         bool $isShared = false,
         array $metadata = [],
         ?string $subPath = null,
@@ -387,6 +387,28 @@ class MediaService implements MediaServiceInterface
     public function getUsageInfo(File $file): array
     {
         return Usage::where('file_id', $file->id)->get()->toArray();
+    }
+
+    /**
+     * Get media statistics.
+     */
+    public function getStatistics(): array
+    {
+        return [
+            'total_count' => File::count(),
+            'total_size' => (int) File::sum('size'),
+            'types' => File::selectRaw('mime_type as type, count(*) as count, sum(size) as size')
+                ->groupBy('mime_type')
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'type' => is_scalar($item->getAttribute('type')) ? explode('/', (string) $item->getAttribute('type'))[0] : 'unknown',
+                        'count' => is_numeric($item->getAttribute('count')) ? (int) $item->getAttribute('count') : 0,
+                        'size' => is_numeric($item->getAttribute('size')) ? (int) $item->getAttribute('size') : 0,
+                    ];
+                })->toArray(),
+            'trash_count' => File::onlyTrashed()->count(),
+        ];
     }
 
     /**

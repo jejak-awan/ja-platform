@@ -2,7 +2,7 @@
 
 export const cmsPaths = {
     contents: '/manage/cms/contents',
-    content: (id: string | number) => `/manage/cms/contents/${id}`,
+    content: (id: string) => `/manage/cms/contents/${id}`,
     publicContents: '/public/cms/contents',
     publicContent: (slug: string) => `/public/cms/contents/${slug}`,
     publicCategories: '/public/cms/categories',
@@ -15,26 +15,26 @@ export const cmsPaths = {
 export const libraryPaths = {
     tags: '/manage/library/tags',
     tagStatistics: '/manage/library/tags/statistics',
-    tag: (id: string | number) => `/manage/library/tags/${id}`,
+    tag: (id: string) => `/manage/library/tags/${id}`,
     customFields: '/manage/library/custom-fields',
-    customField: (id: string | number) => `/manage/library/custom-fields/${id}`,
+    customField: (id: string) => `/manage/library/custom-fields/${id}`,
     fieldGroups: '/manage/library/field-groups',
-    fieldGroup: (id: string | number) => `/manage/library/field-groups/${id}`,
+    fieldGroup: (id: string) => `/manage/library/field-groups/${id}`,
     categories: '/manage/library/categories',
-    category: (id: string | number) => `/manage/library/categories/${id}`,
+    category: (id: string) => `/manage/library/categories/${id}`,
 } as const;
 
 export const layoutPaths = {
     menus: '/manage/layout/menus',
-    menu: (id: string | number) => `/manage/layout/menus/${id}`,
-    menuRestore: (id: string | number) => `/manage/layout/menus/${id}/restore`,
-    menuForceDelete: (id: string | number) => `/manage/layout/menus/${id}/force-delete`,
+    menu: (id: string) => `/manage/layout/menus/${id}`,
+    menuRestore: (id: string) => `/manage/layout/menus/${id}/restore`,
+    menuForceDelete: (id: string) => `/manage/layout/menus/${id}/force-delete`,
     publicMenuByLocation: (location: string) => `/public/layout/menus/location/${location}`,
     widgets: '/manage/layout/widgets',
-    widget: (id: string | number) => `/manage/layout/widgets/${id}`,
+    widget: (id: string) => `/manage/layout/widgets/${id}`,
     publicWidgetsByLocation: (location: string) => `/public/layout/widgets/location/${location}`,
     urlRewrites: '/manage/layout/url-rewrites',
-    urlRewrite: (id: string | number) => `/manage/layout/url-rewrites/${id}`,
+    urlRewrite: (id: string) => `/manage/layout/url-rewrites/${id}`,
     themes: '/manage/layout/themes',
     themeLocations: '/manage/layout/themes/active/locations',
     publicThemeActive: '/public/layout/themes/active',
@@ -47,20 +47,20 @@ export const mediaPaths = {
     filters: '/manage/media/filters',
     bulk: '/manage/media/bulk',
     emptyTrash: '/manage/media/empty-trash',
-    file: (id: string | number) => `/manage/media/${id}`,
-    restore: (id: string | number) => `/manage/media/${id}/restore`,
-    usage: (id: string | number) => `/manage/media/${id}/usage`,
-    thumbnail: (id: string | number) => `/manage/media/${id}/thumbnail`,
-    resize: (id: string | number) => `/manage/media/${id}/resize`,
-    edit: (id: string | number) => `/manage/media/${id}/edit`,
+    file: (id: string) => `/manage/media/${id}`,
+    restore: (id: string) => `/manage/media/${id}/restore`,
+    usage: (id: string) => `/manage/media/${id}/usage`,
+    thumbnail: (id: string) => `/manage/media/${id}/thumbnail`,
+    resize: (id: string) => `/manage/media/${id}/resize`,
+    edit: (id: string) => `/manage/media/${id}/edit`,
     folders: '/manage/folders',
-    folder: (id: string | number) => `/manage/folders/${id}`,
+    folder: (id: string) => `/manage/folders/${id}`,
 } as const;
 
 export const formsPaths = {
     index: '/manage/forms',
     bulkAction: '/manage/forms/bulk-action',
-    form: (id: string | number) => `/manage/forms/${id}`,
+    form: (id: string) => `/manage/forms/${id}`,
     formFields: (formId: string | number) => `/manage/forms/${formId}/fields`,
     formField: (formId: string | number, fieldId: string | number) => `/manage/forms/${formId}/fields/${fieldId}`,
     reorderFields: (formId: string | number) => `/manage/forms/${formId}/reorder-fields`,
@@ -70,16 +70,16 @@ export const formsPaths = {
 } as const;
 
 export const formSubmissionPaths = {
-    submission: (id: string | number) => `/manage/form-submissions/${id}`,
-    exportPdf: (id: string | number) => `/manage/form-submissions/${id}/export-pdf`,
+    submission: (id: string) => `/manage/form-submissions/${id}`,
+    exportPdf: (id: string) => `/manage/form-submissions/${id}/export-pdf`,
 } as const;
 
 export const newsletterPaths = {
     subscribe: '/public/newsletter/subscribe',
     subscribers: '/manage/newsletter/subscribers',
-    subscriber: (id: string | number) => `/manage/newsletter/subscribers/${id}`,
-    subscriberForce: (id: string | number) => `/manage/newsletter/subscribers/${id}/force`,
-    subscriberRestore: (id: string | number) => `/manage/newsletter/subscribers/${id}/restore`,
+    subscriber: (id: string) => `/manage/newsletter/subscribers/${id}`,
+    subscriberForce: (id: string) => `/manage/newsletter/subscribers/${id}/force`,
+    subscriberRestore: (id: string) => `/manage/newsletter/subscribers/${id}/restore`,
     subscribersExport: '/manage/newsletter/subscribers/export',
     subscribersBulk: '/manage/newsletter/subscribers/bulk',
 } as const;
@@ -111,7 +111,7 @@ export const analyticsPaths = {
 
 export const systemPaths = {
     emailTemplates: '/manage/system/email-templates',
-    emailTemplate: (id: string | number) => `/manage/system/email-templates/${id}`,
+    emailTemplate: (id: string) => `/manage/system/email-templates/${id}`,
     settings: '/manage/system/settings',
     settingsGroup: (group: string) => `/manage/system/settings/group/${group}`,
     testStorage: '/manage/system/settings/test-storage',
@@ -121,4 +121,17 @@ export const aiPaths = {
     providers: '/manage/ai/providers',
     models: (provider: string) => `/manage/ai/models/${provider}`,
     generate: '/manage/ai/generate',
+} as const;
+
+export const infraPaths = {
+    fileManager: '/manage/infra/file-manager',
+    fileManagerUpload: '/manage/infra/file-manager/upload',
+    fileManagerDownload: '/manage/infra/file-manager/download',
+    fileManagerDelete: '/manage/infra/file-manager/delete',
+    fileManagerFolder: '/manage/infra/file-manager/folder',
+    fileManagerMove: '/manage/infra/file-manager/move',
+    fileManagerTrash: '/manage/infra/file-manager/trash',
+    fileManagerRestore: '/manage/infra/file-manager/restore',
+    fileManagerTrashEmpty: '/manage/infra/file-manager/trash/empty',
+    fileManagerTrashPermanent: '/manage/infra/file-manager/trash/permanent',
 } as const;

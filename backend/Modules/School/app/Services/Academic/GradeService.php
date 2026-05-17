@@ -12,7 +12,7 @@ class GradeService
      *
      * @return Collection<int, Grade>
      */
-    public function getStudentGrades(int $studentId, int $academicYearId, ?int $semesterId = null): Collection
+    public function getStudentGrades(string $studentId, string $academicYearId, ?string $semesterId = null): Collection
     {
         $query = Grade::with(['subject', 'teacher'])
             ->where('student_id', $studentId)
@@ -32,7 +32,7 @@ class GradeService
      *
      * @return Collection<int, Grade>
      */
-    public function getClassGrades(int $studyGroupId, int $subjectId, int $academicYearId, int $semesterId): Collection
+    public function getClassGrades(string $studyGroupId, string $subjectId, string $academicYearId, string $semesterId): Collection
     {
         /** @var Collection<int, Grade> $result */
         $result = Grade::with('student')

@@ -140,6 +140,8 @@ class TagController extends BaseApiController
 
         $stats = [
             'total_tags' => $query->count(),
+            'used_tags' => (clone $query)->where('usage_count', '>', 0)->count(),
+            'total_usage' => (clone $query)->sum('usage_count'),
             'types' => (clone $query)->select('type', \Illuminate\Support\Facades\DB::raw('count(*) as count'))->groupBy('type')->get(),
         ];
 

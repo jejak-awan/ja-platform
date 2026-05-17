@@ -10,10 +10,10 @@ export interface Course {
   level: 'beginner' | 'intermediate' | 'advanced';
   status: 'draft' | 'published' | 'archived';
   lessons_count?: number;
-  academic_year_id?: number;
-  semester_id?: number;
-  department_id?: number;
-  grade_id?: number;
+  academic_year_id?: string;
+  semester_id?: string;
+  department_id?: string;
+  grade_id?: string;
   academic_year?: { id: string, year: string };
   semester?: { id: string, semester: string };
   department?: { id: string, name: string };
@@ -49,15 +49,15 @@ const LmsService = {
     return api.post('/admin/lms/courses', data);
   },
 
-  createLesson(courseId: string | number, data: any) {
+  createLesson(courseId: string, data: any) {
     return api.post(`/admin/lms/courses/${courseId}/lessons`, data);
   },
 
-  createTopic(lessonId: string | number, data: any) {
+  createTopic(lessonId: string, data: any) {
     return api.post(`/admin/lms/lessons/${lessonId}/topics`, data);
   },
 
-  addQuestion(quizId: string | number, data: any) {
+  addQuestion(quizId: string, data: any) {
     return api.post(`/admin/lms/quizzes/${quizId}/questions`, data);
   },
 
@@ -70,19 +70,19 @@ const LmsService = {
     return api.get('/student/lms/my-courses');
   },
 
-  getLearningData(courseId: string | number) {
+  getLearningData(courseId: string) {
     return api.get(`/student/lms/courses/${courseId}/learn`);
   },
 
-  completeTopic(topicId: string | number, metadata: any = {}) {
+  completeTopic(topicId: string, metadata: any = {}) {
     return api.post(`/student/lms/topics/${topicId}/complete`, { metadata });
   },
 
-  startQuiz(quizId: string | number) {
+  startQuiz(quizId: string) {
     return api.post(`/student/lms/quizzes/${quizId}/start`);
   },
 
-  submitQuiz(attemptId: string | number, answers: any) {
+  submitQuiz(attemptId: string, answers: any) {
     return api.post(`/student/lms/attempts/${attemptId}/submit`, { answers });
   }
 };

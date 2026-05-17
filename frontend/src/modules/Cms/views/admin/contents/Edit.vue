@@ -319,7 +319,7 @@ const slugify = (text: string) => {
 };
 
 /** Tag ids only (omit new tags without id) — avoids 422 on tags.* validation. */
-const selectedPersistedTagIds = (): (string | number)[] =>
+const selectedPersistedTagIds = (): (string)[] =>
     selectedTags.value
         .filter((t: Tag) => t.id != null)
         .map((t: Tag) => t.id);
@@ -346,7 +346,7 @@ const {
     lastSaved,
     saveStatus: autoSaveStatus,
     startAutoSave,
-} = useAutoSave(formWithTags as Ref<Record<string, unknown>>, contentId as string | number, {
+} = useAutoSave(formWithTags as Ref<Record<string, unknown>>, contentId as string, {
     interval: computed(() => autoSaveIntervalMs.value),
     enabled: computed(() => autoSaveEnabled.value),
 });

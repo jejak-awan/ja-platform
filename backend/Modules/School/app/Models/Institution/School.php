@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // use Modules\School\Database\Factories\SchoolFactory;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string $type
  * @property bool $is_multi_unit

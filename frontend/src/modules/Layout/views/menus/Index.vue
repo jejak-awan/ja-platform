@@ -139,7 +139,7 @@ const openCreateModal = () => {
     showCreateModal.value = true;
 };
 
-const handleMenuCreated = async (newMenu: { id?: string | number }) => {
+const handleMenuCreated = async (newMenu: { id?: string }) => {
     showCreateModal.value = false;
     await fetchMenus();
     if (newMenu && newMenu.id) {
@@ -148,7 +148,7 @@ const handleMenuCreated = async (newMenu: { id?: string | number }) => {
     }
 };
 
-const handleSelectMenu = (menuId: string | number) => {
+const handleSelectMenu = (menuId: string) => {
     selectedMenuId.value = String(menuId);
     viewMode.value = 'builder';
 };

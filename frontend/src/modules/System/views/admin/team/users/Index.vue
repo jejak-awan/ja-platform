@@ -460,7 +460,7 @@ const table = useVueTable({
 watch(rowSelection, (newSelection) => {
     selectedIds.value = Object.keys(newSelection)
         .filter(key => newSelection[key])
-        .map(id => Number(id));
+        .map(id => String(id));
 }, { deep: true });
 
 // Clear selection when users change (pagination/filter)
@@ -742,7 +742,7 @@ const forceDeleteUser = async (user: User) => {
     }
 };
 
-const selectedIds = ref<number[]>([]);
+const selectedIds = ref<string[]>([]);
 
 
 const bulkActionSelection = ref('');

@@ -10,14 +10,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * @property int $id
- * @property int $lesson_id
+ * @property string $id
+ * @property string $lesson_id
  * @property string $title
  * @property int $order
  * @property bool $is_active
  * @property bool $preview
  * @property string $topicable_type
- * @property int $topicable_id
+ * @property string $topicable_id
  * @property-read \Modules\School\Models\Lms\Lesson $lesson
  * @property-read \Illuminate\Database\Eloquent\Model $topicable
  */

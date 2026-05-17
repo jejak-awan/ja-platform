@@ -809,7 +809,7 @@ const selectTag = (tag: Tag) => {
 };
 
 // Remove tag (support both id and name for new tags)
-const removeTag = (tagIdOrName: string | number | null) => {
+const removeTag = (tagIdOrName: string | null) => {
     emit('update:selectedTags', props.selectedTags.filter(t => 
         t.id ? t.id !== tagIdOrName : t.name !== tagIdOrName
     ));
@@ -831,7 +831,7 @@ const handleMenuChange = (val: string) => {
     fetchMenuParentItems(val);
 };
 
-const fetchMenuParentItems = async (menuId: string | number) => {
+const fetchMenuParentItems = async (menuId: string) => {
     if (!menuId) {
         menuParentItems.value = [];
         return;
@@ -855,7 +855,7 @@ const fetchMenuParentItems = async (menuId: string | number) => {
     }
 };
 
-const buildTree = (items: MenuItem[], parentId: number | string | null = null): MenuItem[] => {
+const buildTree = (items: MenuItem[], parentId: string | null = null): MenuItem[] => {
     return items
         .filter(item => item.parent_id === parentId)
         .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))

@@ -11,9 +11,9 @@ use Modules\School\Traits\ScopedBySchool;
 use Modules\School\Models\Institution\School;
 
 /**
- * @property int $id
- * @property int $school_id
- * @property int $user_id
+ * @property string $id
+ * @property string $school_id
+ * @property string $user_id
  * @property string $nuptk
  * @property string $nik
  * @property string $full_name

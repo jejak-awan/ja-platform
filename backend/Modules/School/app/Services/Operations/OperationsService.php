@@ -100,7 +100,7 @@ class OperationsService
     /**
      * @return array{students: array{total: int, active: int, graduated: int}, admission: array{total_applicants: int, admitted: int, conversion_rate: float}, staff: array{total: int, attendance_today: int}}
      */
-    public function getExecutiveSummary(int $schoolId): array
+    public function getExecutiveSummary(string $schoolId): array
     {
         return [
             'students' => [

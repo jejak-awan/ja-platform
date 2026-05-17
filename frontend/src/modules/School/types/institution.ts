@@ -1,5 +1,5 @@
 export interface School {
-    id: string | number;
+    id: string;
     npsn?: string;
     name: string;
     type: 'public' | 'private';
@@ -19,8 +19,8 @@ export interface School {
 }
 
 export interface SchoolUnit {
-    id: string | number;
-    school_id: string | number;
+    id: string;
+    school_id: string;
     name: string; // e.g., Grade 1, Grade 2
     level: string;
     code: string;

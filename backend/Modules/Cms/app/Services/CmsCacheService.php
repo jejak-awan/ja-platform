@@ -21,7 +21,7 @@ class CmsCacheService
     /**
      * Clear content caches
      */
-    public function clearContentCaches(?int $contentId = null): void
+    public function clearContentCaches(?string $contentId = null): void
     {
         try {
             // Clear general list caches

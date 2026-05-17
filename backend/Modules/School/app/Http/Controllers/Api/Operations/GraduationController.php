@@ -162,7 +162,7 @@ class GraduationController extends BaseController
     /**
      * Download certificate public.
      */
-    public function downloadCertificatePublic(int $studentId): mixed
+    public function downloadCertificatePublic(string $studentId): mixed
     {
         $student = Student::findOrFail($studentId);
         $result = GraduationResult::where('student_id', $studentId)

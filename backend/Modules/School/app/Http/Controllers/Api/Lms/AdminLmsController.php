@@ -22,7 +22,7 @@ class AdminLmsController extends BaseController
         $schoolId = $request->header('X-School-Id');
         if (!$schoolId) {
             $school = \Modules\School\Models\Institution\School::first();
-            $schoolId = $school ? $school->id : 1;
+            $schoolId = $school ? $school->id : '1';
         }
 
         \Illuminate\Support\Facades\Log::info('LMS Index Request', [
@@ -31,7 +31,7 @@ class AdminLmsController extends BaseController
             'user_id' => auth()->id()
         ]);
 
-        $courses = $this->service->getCourses((int)$schoolId, $request->all());
+        $courses = $this->service->getCourses((string)$schoolId, $request->all());
         return $this->sendResponse($courses, 'Courses retrieved successfully.');
     }
 
@@ -44,26 +44,26 @@ class AdminLmsController extends BaseController
             'summary' => 'nullable|string',
             'level' => 'required|in:beginner,intermediate,advanced',
             'status' => 'required|in:draft,published,archived',
-            'academic_year_id' => 'nullable|integer|exists:sch_acad_years,id',
-            'semester_id' => 'nullable|integer|exists:sch_acad_semesters,id',
-            'department_id' => 'nullable|integer|exists:sch_acad_departments,id',
-            'grade_id' => 'nullable|integer|exists:sch_acad_grades,id',
+            'academic_year_id' => 'nullable|string|exists:sch_acad_years,id',
+            'semester_id' => 'nullable|string|exists:sch_acad_semesters,id',
+            'department_id' => 'nullable|string|exists:sch_acad_departments,id',
+            'grade_id' => 'nullable|string|exists:sch_acad_grades,id',
         ]);
 
         $schoolId = $request->header('X-School-Id');
         if (!$schoolId) {
             $school = \Modules\School\Models\Institution\School::first();
-            $schoolId = $school ? $school->id : 1;
+            $schoolId = $school ? $school->id : '1';
         }
 
-        $validated['school_id'] = (int) $schoolId;
-        $validated['author_id'] = (int) auth()->id();
+        $validated['school_id'] = (string) $schoolId;
+        $validated['author_id'] = (string) auth()->id();
 
         $course = $this->service->createCourse($validated);
         return $this->sendResponse($course, 'Course created successfully.', 201);
     }
 
-    public function showCourse(int $id): \Illuminate\Http\JsonResponse
+    public function showCourse(string $id): \Illuminate\Http\JsonResponse
     {
         $course = Course::with(['lessons.topics.topicable' => function ($morph): void {
             $morph->morphWith([
@@ -75,7 +75,7 @@ class AdminLmsController extends BaseController
         return $this->sendResponse($course, 'Course details retrieved.');
     }
 
-    public function storeLesson(Request $request, int $courseId): \Illuminate\Http\JsonResponse
+    public function storeLesson(Request $request, string $courseId): \Illuminate\Http\JsonResponse
     {
         $course = Course::findOrFail($courseId);
         $this->authorize('update', $course);
@@ -91,7 +91,7 @@ class AdminLmsController extends BaseController
         return $this->sendResponse($lesson, 'Lesson created successfully.', 201);
     }
 
-    public function storeTopic(Request $request, int $lessonId): \Illuminate\Http\JsonResponse
+    public function storeTopic(Request $request, string $lessonId): \Illuminate\Http\JsonResponse
     {
         $lesson = Lesson::findOrFail($lessonId);
         $this->authorize('update', $lesson->course);
@@ -128,7 +128,7 @@ class AdminLmsController extends BaseController
         return $this->sendResponse($topic, 'Topic created successfully.', 201);
     }
 
-    public function storeQuestion(Request $request, int $quizId): \Illuminate\Http\JsonResponse
+    public function storeQuestion(Request $request, string $quizId): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'type' => 'required|in:multiple_choice,true_false,short_answer',

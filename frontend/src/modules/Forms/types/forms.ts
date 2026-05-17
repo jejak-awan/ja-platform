@@ -5,7 +5,7 @@ import type { User } from '@/engine/types/auth';
  * Standard form field interface used for traditional forms.
  */
 export interface FormField {
-    id?: string | number;
+    id?: string;
     name: string;
     type: string;
     label: string;
@@ -46,7 +46,7 @@ export interface FormSubmission {
     ip_address?: string;
     user_agent?: string;
     status: 'new' | 'read' | 'archived';
-    user_id?: number | null;
+    user_id?: string | null;
     user?: User | null;
     created_at: string;
     updated_at: string;

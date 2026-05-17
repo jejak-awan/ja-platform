@@ -110,7 +110,7 @@ const { t } = useI18n();
 const toast = useToast();
 
 interface Plugin {
-    id: string | number;
+    id: string;
     name: string;
     version?: string;
     is_active: boolean;

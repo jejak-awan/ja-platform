@@ -16,7 +16,7 @@ class SchoolUnitController extends BaseController
     {
         $this->authorize('viewAny', SchoolUnit::class);
         $schoolIdValue = $request->input('school_id', 1);
-        $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : 1;
+        $schoolId = is_scalar($schoolIdValue) ? (string) $schoolIdValue : '1';
         $levels = SchoolUnit::where('school_id', $schoolId)->get();
 
         return $this->sendResponse($levels, 'School levels retrieved successfully.');

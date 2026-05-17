@@ -24,7 +24,7 @@ export interface PaginationInfo {
 }
 export interface AuditLog {
     id: string;
-    user_id?: number;
+    user_id?: string;
     user_name?: string;
     event: string;
     auditable_type: string;

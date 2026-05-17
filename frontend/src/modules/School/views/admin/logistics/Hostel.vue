@@ -246,7 +246,7 @@ const handleAllocate = (bed: any) => {
     dialogs.value.allocation = true;
 }
 
-const handleRelease = async (allocationId: number) => {
+const handleRelease = async (allocationId: string) => {
     if (await confirm({ 
         title: t('modules.school.logistics.hostel.actions.releaseStudent'), 
         description: t('modules.school.logistics.hostel.messages.releaseConfirm'), 

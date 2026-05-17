@@ -355,7 +355,7 @@ const createItem = (type: string, sourceItem: unknown) => {
     const si = sourceItem as Record<string, unknown>;
     const item = menuItemRegistry.createInstance(type, {
         title: (si.title as string) || (si.name as string),
-        target_id: si.id as number,
+        target_id: String(si.id),
         url: (si.url as string) || undefined
     });
     return item;

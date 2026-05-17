@@ -255,7 +255,7 @@ class ThemeCacheService
                 // Clear specific theme caches using tags
                 Cache::tags(["theme.{$theme->id}"])->flush();
             } else {
-                $this->forgetThemeScopedKeys((int) $theme->id);
+                $this->forgetThemeScopedKeys((string) $theme->id);
             }
         } catch (\Exception $e) {
             Log::warning('Failed to clear theme cache: '.$e->getMessage());
@@ -281,7 +281,7 @@ class ThemeCacheService
                 Cache::tags(['theme'])->flush();
             } else {
                 foreach (Theme::query()->cursor() as $t) {
-                    $this->forgetThemeScopedKeys((int) $t->id);
+                    $this->forgetThemeScopedKeys((string) $t->id);
                 }
             }
         } catch (\Exception $e) {
@@ -316,7 +316,7 @@ class ThemeCacheService
     /**
      * Forget per-theme cache keys (non–tag-aware drivers).
      */
-    protected function forgetThemeScopedKeys(int $themeId): void
+    protected function forgetThemeScopedKeys(string $themeId): void
     {
         try {
             Cache::forget(self::PREFIX_SETTINGS.$themeId);

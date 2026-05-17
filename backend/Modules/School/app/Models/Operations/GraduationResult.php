@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\School\Models\Student\Student;
 
 /**
- * @property int $id
- * @property int $student_id
+ * @property string $id
+ * @property string $student_id
  * @property string $status
  * @property int $graduation_year
  * @property array<string, mixed>|null $grades

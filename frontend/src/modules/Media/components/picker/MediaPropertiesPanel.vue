@@ -294,7 +294,7 @@ const isDirty = computed(() => {
 
 const canManageMedia = authStore.hasPermission('manage media');
 
-const getFolderName = (id?: string | number | null) => {
+const getFolderName = (id?: string | null) => {
     if (!id) return t('modules.system.media.modals.edit.noFolder');
     const folder = folders.value.find(f => f.id === id);
     return folder ? folder.name : t('modules.system.media.modals.edit.noFolder');

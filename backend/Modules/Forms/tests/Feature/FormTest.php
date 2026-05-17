@@ -166,7 +166,7 @@ class FormTest extends TestCase
         ]);
 
         TestHelpers::assertApiSuccess($response, 201);
-        $newId = (int) $response->json('data.id');
+        $newId = (string) $response->json('data.id');
         $this->assertNotSame($form->id, $newId);
         $this->assertSame(2, Form::query()->findOrFail($newId)->fields()->count());
     }
@@ -187,7 +187,7 @@ class FormTest extends TestCase
             'is_required' => false,
         ]);
         TestHelpers::assertApiSuccess($a, 201);
-        $idA = (int) $a->json('data.id');
+        $idA = (string) $a->json('data.id');
 
         $b = $this->postJson("/api/v1/manage/forms/{$form->id}/fields", [
             'label' => 'Second',
@@ -195,7 +195,7 @@ class FormTest extends TestCase
             'is_required' => true,
         ]);
         TestHelpers::assertApiSuccess($b, 201);
-        $idB = (int) $b->json('data.id');
+        $idB = (string) $b->json('data.id');
 
         $reorder = $this->postJson("/api/v1/manage/forms/{$form->id}/reorder-fields", [
             'order' => [$idB, $idA],

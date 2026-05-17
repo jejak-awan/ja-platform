@@ -62,15 +62,15 @@ export const AcademicService = {
         return api.get('admin/academic/departments');
     },
 
-    async getStudyGroupMembers(groupId: number | string): Promise<AxiosResponse<StudyGroupMember[]>> {
+    async getStudyGroupMembers(groupId: string): Promise<AxiosResponse<StudyGroupMember[]>> {
         return api.get(`admin/academic/study-groups/${groupId}/members`);
     },
 
-    async addStudyGroupMember(groupId: number | string, studentId: number | string): Promise<AxiosResponse<StudyGroupMember>> {
+    async addStudyGroupMember(groupId: string, studentId: string): Promise<AxiosResponse<StudyGroupMember>> {
         return api.post(`admin/academic/study-groups/${groupId}/members`, { student_id: studentId });
     },
 
-    async removeStudyGroupMember(groupId: number | string, studentId: number | string): Promise<AxiosResponse<void>> {
+    async removeStudyGroupMember(groupId: string, studentId: string): Promise<AxiosResponse<void>> {
         return api.delete(`admin/academic/study-groups/${groupId}/members/${studentId}`);
     },
 

@@ -60,9 +60,9 @@ class ContentController extends BaseApiController
         if (is_array($tagsInput)) {
             $ids = [];
             foreach ($tagsInput as $id) {
-                if (is_int($id) || (is_string($id) && ctype_digit($id))) {
-                    $n = (int) $id;
-                    if ($n > 0) {
+                if (is_scalar($id)) {
+                    $n = (string) $id;
+                    if ($n !== "") {
                         $ids[] = $n;
                     }
                 }
@@ -429,7 +429,7 @@ class ContentController extends BaseApiController
                 'type' => 'required|in:post,page,custom,layout',
                 'category_id' => 'nullable|exists:lib_categories,id',
                 'tags' => 'nullable|array',
-                'tags.*' => 'integer|exists:lib_tags,id',
+                'tags.*' => 'string|exists:lib_tags,id',
                 'published_at' => 'nullable|date',
                 'meta' => 'nullable|array',
                 'meta_title' => 'nullable|string|max:255',
@@ -465,7 +465,7 @@ class ContentController extends BaseApiController
         }
 
         $createRevision = (bool) ($validated['create_revision'] ?? false);
-        $content = $this->contentService->create($validated, (int) $user->id, $createRevision);
+        $content = $this->contentService->create($validated, (string) $user->id, $createRevision);
 
         $content->load(['author', 'category', 'tags']);
         $content->setRelation('permissions', $user->getAllPermissions()); // for convenience
@@ -524,7 +524,7 @@ class ContentController extends BaseApiController
                 'type' => 'sometimes|required|in:post,page,custom,layout',
                 'category_id' => 'nullable|exists:lib_categories,id',
                 'tags' => 'nullable|array',
-                'tags.*' => 'integer|exists:lib_tags,id',
+                'tags.*' => 'string|exists:lib_tags,id',
                 'published_at' => 'nullable|date',
                 'meta' => 'nullable|array',
                 'meta_title' => 'nullable|string|max:255',
@@ -578,7 +578,7 @@ class ContentController extends BaseApiController
         $createRevision = (bool) ($validated['create_revision'] ?? false);
         $revisionNoteRaw = $request->input('revision_note');
         $revisionNote = is_string($revisionNoteRaw) ? $revisionNoteRaw : null;
-        $content = $this->contentService->update($content, $validated, (int) $user->id, $createRevision, $revisionNote);
+        $content = $this->contentService->update($content, $validated, (string) $user->id, $createRevision, $revisionNote);
 
         $content->load(['author', 'category', 'tags']);
 
@@ -642,7 +642,7 @@ class ContentController extends BaseApiController
                 'type' => 'sometimes|in:post,page,custom,layout',
                 'category_id' => 'nullable|exists:lib_categories,id',
                 'tags' => 'nullable|array',
-                'tags.*' => 'integer|exists:lib_tags,id',
+                'tags.*' => 'string|exists:lib_tags,id',
                 'meta' => 'nullable|array',
                 'meta_title' => 'nullable|string|max:255',
                 'meta_description' => 'nullable|string|max:500',
@@ -676,7 +676,7 @@ class ContentController extends BaseApiController
             }
 
             // Use service update but without revisions
-            $this->contentService->update($content, $validated, (int) $user->id, false);
+            $this->contentService->update($content, $validated, (string) $user->id, false);
 
             return $this->success([
                 'id' => $content->id,
@@ -700,7 +700,7 @@ class ContentController extends BaseApiController
             }
 
             // Use service create
-            $content = $this->contentService->create($validated, (int) $user->id, false);
+            $content = $this->contentService->create($validated, (string) $user->id, false);
 
             return $this->success([
                 'id' => $content->id,
@@ -758,7 +758,7 @@ class ContentController extends BaseApiController
             return $this->unauthorized();
         }
 
-        $newContent = $this->contentService->duplicate($content, (int) $user->id);
+        $newContent = $this->contentService->duplicate($content, (string) $user->id);
 
         return $this->success($newContent->load(['author', 'category', 'tags']), 'Content duplicated successfully', 201);
     }
@@ -870,7 +870,7 @@ class ContentController extends BaseApiController
             $validated = $request->validate([
                 'action' => 'required|in:publish,approve,reject,draft,archive,delete,change_category,restore,force_delete',
                 'content_ids' => 'required|array',
-                'content_ids.*' => 'integer',
+                'content_ids.*' => 'string',
                 'category_id' => 'required_if:action,change_category|exists:lib_categories,id',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -894,7 +894,7 @@ class ContentController extends BaseApiController
         /** @var array<int, int|string> $contentIds */
         $contentIds = $query->pluck('id')->toArray();
         $categoryIdRaw = $validated['category_id'] ?? null;
-        $categoryId = is_numeric($categoryIdRaw) ? (int) $categoryIdRaw : null;
+        $categoryId = is_string($categoryIdRaw) ? $categoryIdRaw : null;
         $action = is_string($validated['action']) ? $validated['action'] : '';
 
         $affected = $this->contentService->bulkAction(
@@ -927,7 +927,7 @@ class ContentController extends BaseApiController
         }
 
         // Allow Admins/Super Admins to steal the lock
-        if ($this->contentService->isLockedByOther($content, (int) $user->id) && (!$user->hasRole('super') && ! $user->hasRole('admin'))) {
+        if ($this->contentService->isLockedByOther($content, (string) $user->id) && (!$user->hasRole('super') && ! $user->hasRole('admin'))) {
             /** @var \Modules\System\Models\User|null $lockedBy */
             $lockedBy = $content->lockedBy;
             return $this->error(
@@ -942,7 +942,7 @@ class ContentController extends BaseApiController
             );
         }
 
-        $this->contentService->lock($content, (int) $user->id);
+        $this->contentService->lock($content, (string) $user->id);
 
         $content->refresh()->load('lockedBy');
 
@@ -1002,7 +1002,7 @@ class ContentController extends BaseApiController
             return $this->unauthorized();
         }
 
-        if ($this->contentService->isLockedByOther($content, (int) $user->id) && ! $user->can('manage content')) {
+        if ($this->contentService->isLockedByOther($content, (string) $user->id) && ! $user->can('manage content')) {
             return $this->forbidden('You can only unlock content you locked');
         }
 
@@ -1028,7 +1028,7 @@ class ContentController extends BaseApiController
             return $this->forbidden('You do not have permission to restore content');
         }
 
-        $this->contentService->restore((int) $id);
+        $this->contentService->restore((string) $id);
 
         return $this->success(null, 'Content restored successfully');
     }
@@ -1050,7 +1050,7 @@ class ContentController extends BaseApiController
             return $this->forbidden('You do not have permission to permanently delete content');
         }
 
-        $this->contentService->forceDelete((int) $id);
+        $this->contentService->forceDelete((string) $id);
 
         return $this->success(null, 'Content permanently deleted');
     }

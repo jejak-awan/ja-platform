@@ -4,7 +4,7 @@ namespace Modules\Layout\Console\Commands;
 
 use Illuminate\Console\Command;
 use Modules\Layout\Models\Theme;
-use Modules\Cms\Services\ThemeService;
+use Modules\Layout\Services\ThemeService;
 use Modules\Layout\Support\ThemeViews;
 
 /**

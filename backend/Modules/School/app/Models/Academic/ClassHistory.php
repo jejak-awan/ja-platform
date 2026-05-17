@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
- * @property int $id
- * @property int $student_id
- * @property int $study_group_id
- * @property int $academic_year_id
+ * @property string $id
+ * @property string $student_id
+ * @property string $study_group_id
+ * @property string $academic_year_id
  * @property string $status
  * @property string|null $notes
  * @property \Illuminate\Support\Carbon|null $created_at

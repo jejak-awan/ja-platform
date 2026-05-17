@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Facades\Crypt;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string $key
  * @property string|null $value
  * @property string $type
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Crypt;
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
 /**
- * @property int $id
+ * @property string $id
  * @property string $key
  * @property string|null $value
  * @property string $type

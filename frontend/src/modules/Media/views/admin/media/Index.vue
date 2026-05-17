@@ -165,7 +165,7 @@
     <!-- Modals -->
     <MediaUploadModal
       v-if="showUploadModal"
-      :folder-id="selectedFolder"
+      :folder-id="selectedFolder ? String(selectedFolder) : null"
       @close="showUploadModal = false"
       @uploaded="handleMediaUploaded"
     />

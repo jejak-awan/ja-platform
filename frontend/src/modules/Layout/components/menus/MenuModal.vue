@@ -96,7 +96,7 @@ const { validateWithZod, setErrors, clearErrors } = useFormValidation(menuSchema
 
 const emit = defineEmits<{
     (e: 'close'): void;
-    (e: 'saved', menu: { id?: string | number }): void;
+    (e: 'saved', menu: { id?: string }): void;
 }>();
 
 const saving = ref(false);

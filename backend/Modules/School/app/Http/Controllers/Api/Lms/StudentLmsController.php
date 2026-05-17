@@ -37,14 +37,14 @@ class StudentLmsController extends BaseController
         
         if (!$schoolId) {
             $school = \Modules\School\Models\Institution\School::first();
-            $schoolId = $school ? $school->id : 1;
+            $schoolId = $school ? $school->id : '1';
         }
 
-        $courses = $this->service->getCourses((int)$schoolId, ['status' => 'published']);
+        $courses = $this->service->getCourses((string)$schoolId, ['status' => 'published']);
         return $this->sendResponse($courses, 'Published courses catalog.');
     }
 
-    public function learn(int $courseId): \Illuminate\Http\JsonResponse
+    public function learn(string $courseId): \Illuminate\Http\JsonResponse
     {
         /** @var Student|null $student */
         $student = Student::where('user_id', auth()->id())->first();
@@ -88,7 +88,7 @@ class StudentLmsController extends BaseController
         ], 'Learning data retrieved.');
     }
 
-    public function completeTopic(Request $request, int $topicId): \Illuminate\Http\JsonResponse
+    public function completeTopic(Request $request, string $topicId): \Illuminate\Http\JsonResponse
     {
         /** @var Student|null $student */
         $student = Student::where('user_id', auth()->id())->first();
@@ -99,11 +99,11 @@ class StudentLmsController extends BaseController
         $metadata = $request->input('metadata');
         $metadataArray = is_array($metadata) ? $metadata : [];
 
-        $progress = $this->service->markTopicAsCompleted($topicId, (int)$student->id, $metadataArray);
+        $progress = $this->service->markTopicAsCompleted($topicId, $student->id, $metadataArray);
         return $this->sendResponse($progress, 'Topic marked as completed.');
     }
 
-    public function startQuiz(int $quizId): \Illuminate\Http\JsonResponse
+    public function startQuiz(string $quizId): \Illuminate\Http\JsonResponse
     {
         /** @var Student|null $student */
         $student = Student::where('user_id', auth()->id())->first();
@@ -111,11 +111,11 @@ class StudentLmsController extends BaseController
             return $this->sendError('Student not found.', [], 404);
         }
 
-        $attempt = $this->service->startQuizAttempt($quizId, (int)$student->id);
+        $attempt = $this->service->startQuizAttempt($quizId, $student->id);
         return $this->sendResponse($attempt, 'Quiz attempt started.');
     }
 
-    public function submitQuiz(Request $request, int $attemptId): \Illuminate\Http\JsonResponse
+    public function submitQuiz(Request $request, string $attemptId): \Illuminate\Http\JsonResponse
     {
         /** @var \Modules\School\Models\Lms\QuizAttempt $attempt */
         $attempt = \Modules\School\Models\Lms\QuizAttempt::findOrFail($attemptId);
@@ -123,7 +123,7 @@ class StudentLmsController extends BaseController
         // Ensure student owns the attempt
         /** @var Student|null $student */
         $student = Student::where('user_id', auth()->id())->first();
-        if (!$student || (int)$attempt->student_id !== (int)$student->id) {
+        if (!$student || $attempt->student_id !== $student->id) {
             return $this->sendError('Unauthorized.', [], 403);
         }
 

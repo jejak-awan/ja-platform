@@ -13,7 +13,7 @@ use Modules\School\Models\Lms\QuizQuestion;
 use Modules\School\Models\Lms\QuizAttempt;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string|null $value
  * @property int|null $max_attempts
  * @property int|null $max_time

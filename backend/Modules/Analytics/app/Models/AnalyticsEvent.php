@@ -11,15 +11,15 @@ use Modules\System\Models\User;
 
 
 /**
- * @property int $id
+ * @property string $id
  * @property string $session_id
- * @property int|null $user_id
+ * @property string|null $user_id
  * @property string $event_type
  * @property string $event_name
  * @property string|null $event_category
  * @property array<string, mixed>|null $event_data
  * @property string|null $url
- * @property int|null $content_id
+ * @property string|null $content_id
  * @property string|null $ip_address
  * @property \Illuminate\Support\Carbon|null $occurred_at
  * @property \Illuminate\Support\Carbon|null $created_at

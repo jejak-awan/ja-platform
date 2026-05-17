@@ -418,7 +418,7 @@ class AnalyticsTest extends TestCase
 
     public function test_public_can_track_visit(): void
     {
-        $response = $this->postJson('/api/v1/analytics/track-visit', [
+        $response = $this->postJson('/api/v1/public/analytics/track-visit', [
             'url' => 'https://example.com/test-page',
             'referer' => 'https://google.com',
             'session_id' => 'test-session-123',
@@ -433,7 +433,7 @@ class AnalyticsTest extends TestCase
 
     public function test_public_can_track_event(): void
     {
-        $response = $this->postJson('/api/v1/analytics/track', [
+        $response = $this->postJson('/api/v1/public/analytics/track', [
             'event_type' => 'click',
             'event_name' => 'Join Newsletter',
             'url' => 'https://example.com/home',

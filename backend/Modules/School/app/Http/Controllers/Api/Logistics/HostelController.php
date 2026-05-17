@@ -82,7 +82,7 @@ class HostelController extends BaseController
         }
     }
 
-    public function release(int $id): \Illuminate\Http\JsonResponse
+    public function release(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var HostelAllocation $allocation */
         $allocation = HostelAllocation::findOrFail($id);

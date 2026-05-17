@@ -67,7 +67,7 @@ class AcademicService
     /**
      * @return Collection<int, Semester>
      */
-    public function getSemesters(?int $academicYearId = null): Collection
+    public function getSemesters(?string $academicYearId = null): Collection
     {
         $query = Semester::with('academicYear');
         if ($academicYearId) {
@@ -117,7 +117,7 @@ class AcademicService
         return $group;
     }
 
-    public function addGroupMember(StudyGroup $group, int $studentId): void
+    public function addGroupMember(StudyGroup $group, string $studentId): void
     {
         $group->students()->syncWithoutDetaching([$studentId]);
     }
@@ -256,7 +256,7 @@ class AcademicService
     /**
      * @return array<int, array{status: string, count: int}>
      */
-    public function getAttendanceStats(int $schoolId): array
+    public function getAttendanceStats(string $schoolId): array
     {
         /** @var array<int, array{status: string, count: int}> $stats */
         $stats = Attendance::whereHas('student', function ($q) use ($schoolId): void {

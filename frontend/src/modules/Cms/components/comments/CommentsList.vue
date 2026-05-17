@@ -156,13 +156,13 @@ interface Comment {
 }
 
 const props = defineProps<{
-    contentId: number | string;
+    contentId: string;
 }>();
 
 useI18n();
 const comments = ref<Comment[]>([]);
 const loading = ref(true);
-const activeReplyId = ref<number | string | null>(null);
+const activeReplyId = ref<string | null>(null);
 
 const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {

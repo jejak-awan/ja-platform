@@ -14,8 +14,8 @@ use Modules\School\Models\Institution\School;
 use Modules\School\Models\Student\Student;
 
 /**
- * @property int $id
- * @property int $school_id
+ * @property string $id
+ * @property string $school_id
  * @property string $title
  * @property string $slug
  * @property string|null $summary
@@ -27,11 +27,11 @@ use Modules\School\Models\Student\Student;
  * @property string $status
  * @property string $level
  * @property array<string, mixed>|null $metadata
- * @property int $author_id
- * @property int|null $academic_year_id
- * @property int|null $semester_id
- * @property int|null $department_id
- * @property int|null $grade_id
+ * @property string $author_id
+ * @property string|null $academic_year_id
+ * @property string|null $semester_id
+ * @property string|null $department_id
+ * @property string|null $grade_id
  * @property bool $is_global
  * @property-read \Illuminate\Support\Collection<int, \Modules\School\Models\Lms\Lesson> $lessons
  */

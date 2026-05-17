@@ -9,7 +9,7 @@ export interface ThemeManifest {
     version?: string;
     author?: string;
     /** Feature flags for runtime (e.g. janari_canvas for layout + accent pipeline). */
-    supports?: Record<string, boolean | string | number>;
+    supports?: Record<string, boolean | string>;
     settings_schema?: Record<string, ThemeSettingSchema>;
     [key: string]: unknown;
 }
@@ -44,7 +44,7 @@ export interface Theme {
     };
     custom_css?: string;
     /** DB column merged into API payload; mirrors manifest.supports for some installs */
-    supports?: Record<string, boolean | string | number>;
+    supports?: Record<string, boolean | string>;
     /** When present (API), used to detect theme row updates without deep-comparing manifest */
     updated_at?: string;
     parent_theme?: string | null;

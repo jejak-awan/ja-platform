@@ -28,7 +28,7 @@ class LmsService
      *
      * @param string $type materials, media, tasks
      */
-    public function getCourseStoragePath(int $schoolId, int $courseId, string $type = 'materials'): string
+    public function getCourseStoragePath(string $schoolId, string $courseId, string $type = 'materials'): string
     {
         return "lms/school_{$schoolId}/course_{$courseId}/{$type}";
     }
@@ -52,7 +52,7 @@ class LmsService
      * @param string $visibility 'private' or 'public'
      * @return string The stored path
      */
-    public function uploadCourseFile($file, int $schoolId, int $courseId, string $type = 'materials', string $visibility = 'private'): string
+    public function uploadCourseFile($file, string $schoolId, string $courseId, string $type = 'materials', string $visibility = 'private'): string
     {
         $path = $visibility === 'private' 
             ? $this->getCourseStoragePath($schoolId, $courseId, $type)
@@ -73,7 +73,7 @@ class LmsService
      * @param array<string, mixed> $filters
      * @return Collection<int, Course>
      */
-    public function getCourses(int $schoolId, array $filters = []): Collection
+    public function getCourses(string $schoolId, array $filters = []): Collection
     {
         $status = isset($filters['status']) && is_string($filters['status']) ? $filters['status'] : null;
         $level = isset($filters['level']) && is_string($filters['level']) ? $filters['level'] : null;
@@ -172,7 +172,7 @@ class LmsService
      * @param array<string, mixed> $questionData
      * @param array<int, array<string, mixed>> $options
      */
-    public function addQuestionToQuiz(int $quizId, array $questionData, array $options = []): QuizQuestion
+    public function addQuestionToQuiz(string $quizId, array $questionData, array $options = []): QuizQuestion
     {
         $questionData['quiz_id'] = $quizId;
         /** @var QuizQuestion $question */
@@ -192,7 +192,7 @@ class LmsService
         return $question;
     }
 
-    public function startQuizAttempt(int $quizId, int $studentId): QuizAttempt
+    public function startQuizAttempt(string $quizId, string $studentId): QuizAttempt
     {
         /** @var QuizAttempt $attempt */
         $attempt = QuizAttempt::create([
@@ -239,7 +239,7 @@ class LmsService
                 ->first();
             
             if ($topic) {
-                $studentId = (int)$attempt->student_id;
+                $studentId = $attempt->student_id;
                 $this->markTopicAsCompleted($topic->id, $studentId, [
                     'attempt_id' => $attempt->id,
                     'score' => $attempt->score
@@ -252,7 +252,7 @@ class LmsService
 
     // --- Enrollment & Progress ---
 
-    public function enrollStudent(int $courseId, int $studentId): Enrollment
+    public function enrollStudent(string $courseId, string $studentId): Enrollment
     {
         /** @var Enrollment $enrollment */
         $enrollment = Enrollment::firstOrCreate([
@@ -268,7 +268,7 @@ class LmsService
     /**
      * @param array<string, mixed> $metadata
      */
-    public function markTopicAsCompleted(int $topicId, int $studentId, array $metadata = []): TopicProgress
+    public function markTopicAsCompleted(string $topicId, string $studentId, array $metadata = []): TopicProgress
     {
         /** @var TopicProgress $progress */
         $progress = TopicProgress::updateOrCreate([
@@ -287,7 +287,7 @@ class LmsService
      *
      * @return Collection<int, Lesson>
      */
-    public function getCourseProgram(int $courseId): Collection
+    public function getCourseProgram(string $courseId): Collection
     {
         /** @var Collection<int, Lesson> */
         return Lesson::with(['topics.topicable' => function ($morph): void {

@@ -226,12 +226,11 @@ class CmsServiceProvider extends ServiceProvider
      */
     protected function merge_config_from(string $path, string $key): void
     {
+        /** @var array<string, mixed> $existing */
         $existing = (array) config($key, []);
-        $existing = is_array($existing) ? $existing : [];
         $module_config = require $path;
         $module_config = is_array($module_config) ? $module_config : [];
-
-        config([$key => array_replace_recursive((array) $existing, (array) $module_config)]);
+        config([$key => array_replace_recursive($existing, $module_config)]);
     }
 
     /**

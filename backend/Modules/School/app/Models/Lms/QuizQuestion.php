@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\School\Models\Lms\TopicContent\Quiz;
 
 /**
- * @property int $id
- * @property int $quiz_id
+ * @property string $id
+ * @property string $quiz_id
  * @property string $type
  * @property string $value
  * @property int $score

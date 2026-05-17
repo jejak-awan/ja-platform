@@ -11,7 +11,7 @@ use Mpdf\Mpdf;
 
 class ReportController extends BaseController
 {
-    public function studentProfile(int $id): \Illuminate\Http\Response
+    public function studentProfile(string $id): \Illuminate\Http\Response
     {
         $this->authorize('view', Student::class);
         /** @var Student $student */
@@ -38,7 +38,7 @@ class ReportController extends BaseController
 
 
 
-    public function studentIdCard(int $id): \Illuminate\Http\Response
+    public function studentIdCard(string $id): \Illuminate\Http\Response
     {
         $this->authorize('view', Student::class);
         /** @var Student $student */
@@ -63,7 +63,7 @@ class ReportController extends BaseController
             ->header('Content-Disposition', 'inline; filename="id_card.pdf"');
     }
 
-    public function graduationCertificate(int $id): \Illuminate\Http\Response
+    public function graduationCertificate(string $id): \Illuminate\Http\Response
     {
         $this->authorize('view', Student::class);
         /** @var Student $student */

@@ -16,7 +16,7 @@ export interface ContentForm {
     featured_image_title?: string;
     featured_image_caption?: string;
     featured_image_position?: 'hero' | 'inline-top' | 'full-bleed' | string;
-    category_id?: string | number | null;
+    category_id?: string | null;
     published_at?: string;
     meta_title?: string;
     meta_description?: string;
@@ -30,8 +30,8 @@ export interface ContentForm {
 }
 
 export interface Content extends ContentForm {
-    id: string | number;
-    author_id?: string | number;
+    id: string;
+    author_id?: string;
     author?: {
         id: string;
         name: string;
@@ -43,7 +43,7 @@ export interface Content extends ContentForm {
     deleted_at: string | null;
     lock_status?: {
         is_locked: boolean;
-        locked_by?: number;
+        locked_by?: string;
         locked_at?: string;
     } | null;
 }
@@ -51,7 +51,7 @@ export interface Content extends ContentForm {
 export interface CMSState {
     contents: Content[];
     categories: Category[];
-    settings: Record<string, string | number | boolean | null>;
+    settings: Record<string, string | boolean | null>;
     currentContent: Content | null;
     loading: boolean;
     loadingGroups: Record<string, boolean>;

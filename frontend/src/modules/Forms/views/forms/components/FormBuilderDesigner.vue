@@ -264,7 +264,7 @@ import ImageIcon from 'lucide-vue-next/dist/esm/icons/image.js';
 
 export interface AdminFormFieldRow {
     id: string;
-    form_id?: number;
+    form_id?: string;
     name: string;
     label: string;
     type: string;
@@ -278,7 +278,7 @@ export interface AdminFormFieldRow {
 }
 
 const props = defineProps<{
-    formId: string | number;
+    formId: string;
 }>();
 
 const { t } = useI18n();

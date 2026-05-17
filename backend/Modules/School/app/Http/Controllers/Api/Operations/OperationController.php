@@ -30,8 +30,8 @@ class OperationController extends BaseController
     public function attendanceOverview(Request $request): \Illuminate\Http\JsonResponse
     {
         $this->authorize('viewAny', Attendance::class);
-        $schoolIdValue = $request->header('X-School-Id') ?? $request->input('school_id');
-        $schoolId = is_numeric($schoolIdValue) ? (int)$schoolIdValue : 1;
+        $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
+        $schoolId = is_numeric($schoolIdValue) ? (string)$schoolIdValue : "1";
         
         $stats = $this->academicService->getAttendanceStats($schoolId);
 
@@ -62,7 +62,7 @@ class OperationController extends BaseController
         return $this->sendResponse($attendance, 'Attendance recorded successfully.', 201);
     }
 
-    public function updateAttendance(UpdateAttendanceRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateAttendance(UpdateAttendanceRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Attendance $attendance */
         $attendance = Attendance::findOrFail($id);
@@ -75,7 +75,7 @@ class OperationController extends BaseController
         return $this->sendResponse($attendance, 'Attendance updated successfully.');
     }
 
-    public function destroyAttendance(int $id): \Illuminate\Http\JsonResponse
+    public function destroyAttendance(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Attendance $attendance */
         $attendance = Attendance::findOrFail($id);
@@ -101,7 +101,7 @@ class OperationController extends BaseController
         return $this->sendResponse($violations, 'Violations retrieved successfully.');
     }
 
-    public function studentViolationPoints(int $studentId): \Illuminate\Http\JsonResponse
+    public function studentViolationPoints(string $studentId): \Illuminate\Http\JsonResponse
     {
         $this->authorize('viewAny', Violation::class);
         $totalPoints = $this->studentService->getViolationPoints($studentId);
@@ -119,7 +119,7 @@ class OperationController extends BaseController
         return $this->sendResponse($violation, 'Violation recorded successfully.', 201);
     }
 
-    public function updateViolation(StoreViolationRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateViolation(StoreViolationRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Violation $violation */
         $violation = Violation::findOrFail($id);
@@ -132,7 +132,7 @@ class OperationController extends BaseController
         return $this->sendResponse($violation, 'Violation updated successfully.');
     }
 
-    public function destroyViolation(int $id): \Illuminate\Http\JsonResponse
+    public function destroyViolation(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Violation $violation */
         $violation = Violation::findOrFail($id);
@@ -168,7 +168,7 @@ class OperationController extends BaseController
         return $this->sendResponse($achievement, 'Achievement recorded successfully.', 201);
     }
 
-    public function updateAchievement(StoreAchievementRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateAchievement(StoreAchievementRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Achievement $achievement */
         $achievement = Achievement::findOrFail($id);
@@ -181,7 +181,7 @@ class OperationController extends BaseController
         return $this->sendResponse($achievement, 'Achievement updated successfully.');
     }
 
-    public function destroyAchievement(int $id): \Illuminate\Http\JsonResponse
+    public function destroyAchievement(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var Achievement $achievement */
         $achievement = Achievement::findOrFail($id);
@@ -217,7 +217,7 @@ class OperationController extends BaseController
         return $this->sendResponse($record, 'Counseling record added successfully.', 201);
     }
 
-    public function updateCounselingRecord(StoreCounselingRecordRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateCounselingRecord(StoreCounselingRecordRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var CounselingRecord $record */
         $record = CounselingRecord::findOrFail($id);
@@ -230,7 +230,7 @@ class OperationController extends BaseController
         return $this->sendResponse($record, 'Counseling record updated successfully.');
     }
 
-    public function destroyCounselingRecord(int $id): \Illuminate\Http\JsonResponse
+    public function destroyCounselingRecord(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var CounselingRecord $record */
         $record = CounselingRecord::findOrFail($id);
@@ -273,7 +273,7 @@ class OperationController extends BaseController
         }
     }
 
-    public function checkOutVisitor(int $id): \Illuminate\Http\JsonResponse
+    public function checkOutVisitor(string $id): \Illuminate\Http\JsonResponse
     {
         try {
             /** @var Visitor $visitor */

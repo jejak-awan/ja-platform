@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Modules\School\Models\Lms\Topic;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string $value
  */
 class RichText extends Model

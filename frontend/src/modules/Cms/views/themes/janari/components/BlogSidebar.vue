@@ -211,7 +211,7 @@ interface Category {
 }
 
 interface SearchSuggestionItem {
-  id: string | number;
+  id: string;
   title: string;
   type: string;
   url: string | null;

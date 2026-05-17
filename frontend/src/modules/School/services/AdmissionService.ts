@@ -15,7 +15,7 @@ export const AdmissionService = {
         return api.get('admin/admission/enrollments', { params });
     },
 
-    async getEnrollment(id: string | number): Promise<AxiosResponse<Enrollment>> {
+    async getEnrollment(id: string): Promise<AxiosResponse<Enrollment>> {
         return api.get(`admin/admission/enrollments/${id}`);
     },
 

@@ -22,7 +22,7 @@ class TeacherPortalController extends CommonBaseController
      */
     private function getStaff(): ?Staff
     {
-        /** @var int|null $userId */
+        /** @var string|null $userId */
         $userId = Auth::id();
         if (!$userId) {
             return null;
@@ -39,7 +39,7 @@ class TeacherPortalController extends CommonBaseController
 
         $this->authorize('view', $staff);
         
-        $staffId = (int) $staff->id;
+        $staffId = (string) $staff->id;
         $stats = $this->service->getDashboardStats($staffId);
 
         return $this->sendResponse([

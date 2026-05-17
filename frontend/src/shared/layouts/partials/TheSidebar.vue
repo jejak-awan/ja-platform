@@ -374,6 +374,13 @@ const sidebarSections = computed<SidebarSection[]>(() => {
     const sections: SidebarSection[] = [
         { key: 'school', labelKey: 'common.navigation.sections.school', icon: getIcon('package') },
         { key: 'cms', labelKey: 'common.navigation.sections.cms', icon: getIcon('layers') },
+        { key: 'media', labelKey: 'common.navigation.sections.content_studio', icon: getIcon('image') },
+        { key: 'forms', labelKey: 'common.navigation.menu.forms', icon: getIcon('clipboard-list') },
+        { key: 'newsletter', labelKey: 'common.navigation.menu.newsletter', icon: getIcon('mail') },
+        { key: 'layout', labelKey: 'common.navigation.sections.design_config', icon: getIcon('layout') },
+        { key: 'library', labelKey: 'common.navigation.sections.advanced', icon: getIcon('book') },
+        { key: 'search', labelKey: 'modules.cms.navigation.menu.search', icon: getIcon('search') },
+        { key: 'infra', labelKey: 'common.navigation.sections.infrastructure', icon: getIcon('settings') },
     ];
 
     if (isSuperAdmin && isGlobal && contextType === 'system') {

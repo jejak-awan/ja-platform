@@ -17,7 +17,7 @@ export interface CustomField {
     description?: string | null;
     placeholder?: string | null;
     default_value?: unknown;
-    options?: (string | number | Record<string, unknown>)[];
+    options?: (string | Record<string, unknown>)[];
     validation_rules?: string | Record<string, unknown>;
     is_required?: boolean;
     order?: number;

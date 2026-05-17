@@ -90,7 +90,7 @@ import api from '@/engine/api/client';
 interface Category {
     id: string | string;
     name: string;
-    parent_id?: number | string | null;
+    parent_id?: string | null;
     [key: string]: unknown;
 }
 
@@ -109,7 +109,7 @@ const emit = defineEmits<{
 }>();
 
 const saving = ref(false);
-const selectedParentId = ref<number | string | null>(null);
+const selectedParentId = ref<string | null>(null);
 
 const availableParents = computed(() => {
     const cats = props.categories || [];

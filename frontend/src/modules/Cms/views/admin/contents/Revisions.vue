@@ -258,7 +258,7 @@ import toast from '@/shared/services/legacy-toast';
 interface Revision {
     id: string;
     version: number;
-    author_id?: number;
+    author_id?: string;
     author?: {
         id: string;
         name: string;

@@ -103,8 +103,8 @@ import { useToast } from '@/shared/composables/useToast';
 import { parseResponse } from '@/shared/utils/responseParser';
 
 interface AttendanceRecord {
-  id?: string | number;
-  student_id: string | number;
+  id?: string;
+  student_id: string;
   student_name: string;
   status: string;
   notes: string;
@@ -215,7 +215,7 @@ const handleSave = async () => {
                 'A': 'absent'
             };
             const data = {
-                student_id: record.student_id,
+                student_id: String(record.student_id),
                 date: selectedDate.value,
                 status: statusMap[record.status] || 'present',
                 notes: record.notes,
@@ -224,7 +224,7 @@ const handleSave = async () => {
                 semester_id: "1", // Should be dynamic
             };
             if (record.id) {
-                return OperationsService.updateAttendance(record.id, data);
+                return OperationsService.updateAttendance(String(record.id), data);
             } else {
                 return OperationsService.storeAttendance(data);
             }

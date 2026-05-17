@@ -3,7 +3,7 @@
 namespace Tests\Feature\School;
 
 use Modules\System\Models\User;
-use Spatie\Permission\Models\Role;
+use Modules\System\Models\Role;
 use Tests\TestCase;
 
 /**

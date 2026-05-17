@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Modules\System\Traits\CoreLogsActivity;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string $slug
  * @property string|null $subject

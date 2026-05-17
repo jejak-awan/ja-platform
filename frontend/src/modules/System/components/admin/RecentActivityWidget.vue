@@ -116,7 +116,7 @@ import ZapOff from 'lucide-vue-next/dist/esm/icons/zap-off.js';
 
 interface Activity {
     id: string;
-    user_id?: number | null;
+    user_id?: string | null;
     user?: {
         name: string;
         [key: string]: unknown;
@@ -188,14 +188,14 @@ const getUserInitials = (name?: string) => {
     if (!name) return '?';
     return name
         .split(' ')
-        .map(n => n[0])
+        .map(n => String(n))
         .slice(0, 2)
         .join('')
         .toUpperCase();
 };
 
 const getUserAvatarClass = (activity: Activity) => {
-    const id = activity.user_id || 0;
+    const id = activity.user_id || '0';
     const colors = [
         'bg-primary/10 text-primary',
         'bg-success/10 text-success',
@@ -203,7 +203,14 @@ const getUserAvatarClass = (activity: Activity) => {
         'bg-warning/10 text-warning',
         'bg-destructive/10 text-destructive',
     ];
-    return colors[id % colors.length];
+    // Simple hash for string id to pick a color
+    let hash = 0;
+    const strId = String(id);
+    for (let i = 0; i < strId.length; i++) {
+        hash = ((hash << 5) - hash) + strId.charCodeAt(i);
+        hash |= 0;
+    }
+    return colors[Math.abs(hash % colors.length)];
 };
 
 const getActionBadgeClass = (action?: string) => {

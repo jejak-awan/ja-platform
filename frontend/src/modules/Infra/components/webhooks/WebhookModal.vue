@@ -129,7 +129,7 @@ import {
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
 interface Webhook {
-    id: string | number;
+    id: string;
     name: string;
     url: string;
     events: string[];

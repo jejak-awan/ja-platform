@@ -11,9 +11,9 @@ use Modules\School\Models\Institution\School;
 use Modules\School\Models\Student\Student;
 
 /**
- * @property int $id
- * @property int $school_id
- * @property int $student_id
+ * @property string $id
+ * @property string $school_id
+ * @property string $student_id
  * @property string $subject
  * @property string $content
  * @property string $status

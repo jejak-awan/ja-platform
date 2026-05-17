@@ -69,7 +69,7 @@ class FormController extends BaseApiController
 
         // Multi-tenancy scoping
         if (! $user->can('manage forms')) {
-            $userId = (int) $user->id;
+            $userId = (string) $user->id;
             $query->where('author_id', $userId);
         }
 
@@ -113,7 +113,7 @@ class FormController extends BaseApiController
             'is_active' => 'boolean',
         ]);
 
-        $validated['author_id'] = (int) $user->id;
+        $validated['author_id'] = (string) $user->id;
 
         /** @var Form $form */
         $form = Form::create($validated);
@@ -232,7 +232,7 @@ class FormController extends BaseApiController
             return $this->forbidden('You do not have permission to update this form');
         }
 
-        if ((int) $formField->form_id !== (int) $form->id) {
+        if ((string) $formField->form_id !== (string) $form->id) {
             return $this->error('Field does not belong to this form', 404);
         }
 
@@ -289,7 +289,7 @@ class FormController extends BaseApiController
             return $this->forbidden('You do not have permission to update this form');
         }
 
-        if ((int) $formField->form_id !== (int) $form->id) {
+        if ((string) $formField->form_id !== (string) $form->id) {
             return $this->error('Field does not belong to this form', 404);
         }
 
@@ -315,15 +315,15 @@ class FormController extends BaseApiController
 
         $validated = $request->validate([
             'order' => 'required|array',
-            'order.*' => 'integer|exists:frm_form_fields,id',
+            'order.*' => 'string|exists:frm_form_fields,id',
         ]);
 
-        /** @var array<int, int> $order */
+        /** @var array<int, string> $order */
         $order = array_values(array_map(
-            static fn ($id): int => is_numeric($id) ? (int) $id : 0,
+            static fn ($id): string => is_scalar($id) ? (string) $id : '',
             $validated['order']
         ));
-        $order = array_values(array_filter($order, static fn (int $id): bool => $id > 0));
+        $order = array_values(array_filter($order, static fn ($id): bool => $id !== ""));
 
         if ($order === []) {
             return $this->success($form->fields()->orderBy('sort_order')->get(), 'Field order unchanged');
@@ -332,8 +332,8 @@ class FormController extends BaseApiController
         $ids = $form->fields()
             ->whereIn('id', $order)
             ->pluck('id')
-            ->map(static fn ($id): int => is_numeric($id) ? (int) $id : 0)
-            ->filter(static fn (int $id): bool => $id > 0)
+            ->map(static fn ($id): string => is_scalar($id) ? (string) $id : '')
+            ->filter(static fn (string $id): bool => $id !== "")
             ->values()
             ->all();
 
@@ -800,7 +800,7 @@ class FormController extends BaseApiController
         $replicated->name = $title;
         $replicated->slug = $slug;
         $replicated->is_active = false;
-        $replicated->author_id = (int) $user->id;
+        $replicated->author_id = (string) $user->id;
         $replicated->submission_count = 0;
         $replicated->view_count = 0;
         $replicated->start_count = 0;

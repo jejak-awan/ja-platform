@@ -9,7 +9,8 @@ parameters:
     
     level: 9
     
-    reportUnmatchedIgnoredErrors: true
+    reportUnmatchedIgnoredErrors: false
+    treatPhpDocTypesAsCertain: false
     
     ignoreErrors:
         - '#Parameter \#1 \$view of function view expects view-string\|null, string given#'

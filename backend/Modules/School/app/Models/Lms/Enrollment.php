@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\School\Models\Student\Student;
 
 /**
- * @property int $id
- * @property int $course_id
- * @property int $student_id
+ * @property string $id
+ * @property string $course_id
+ * @property string $student_id
  * @property \Illuminate\Support\Carbon|null $enrolled_at
  * @property \Illuminate\Support\Carbon|null $expired_at
  * @property bool $is_active

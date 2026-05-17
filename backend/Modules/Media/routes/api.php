@@ -11,6 +11,7 @@ Route::prefix('v1/manage')->middleware(['auth:sanctum'])->group(function (): voi
     // Media Routes
     Route::prefix('media')->group(function (): void {
         Route::get('/', [MediaController::class, 'index']);
+        Route::get('/statistics', [MediaController::class, 'statistics']);
         Route::post('/upload', [MediaController::class, 'upload']);
         Route::post('/bulk-action', [MediaController::class, 'bulk']);
         Route::post('/empty-trash', [MediaController::class, 'emptyTrash']);
@@ -40,5 +41,13 @@ Route::prefix('v1/manage')->middleware(['auth:sanctum'])->group(function (): voi
         Route::post('/folder/delete', [FileManagerController::class, 'deleteFolder']);
         Route::post('/folder', [FileManagerController::class, 'createFolder']);
         Route::post('/move', [FileManagerController::class, 'move']);
+        Route::post('/copy', [FileManagerController::class, 'copy']);
+        Route::post('/rename', [FileManagerController::class, 'rename']);
+        Route::get('/trash', [FileManagerController::class, 'trash']);
+        Route::post('/restore', [FileManagerController::class, 'restore']);
+        Route::post('/trash/empty', [FileManagerController::class, 'emptyTrash']);
+        Route::post('/trash/permanent', [FileManagerController::class, 'deletePermanently']);
+        Route::post('/extract', [FileManagerController::class, 'extract']);
+        Route::post('/compress', [FileManagerController::class, 'compress']);
     });
 });

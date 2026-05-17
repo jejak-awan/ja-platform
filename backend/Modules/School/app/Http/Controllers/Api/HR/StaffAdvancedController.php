@@ -107,7 +107,7 @@ class StaffAdvancedController extends BaseController
         $query = SalaryStructure::with('staff');
 
         if ($request->has('staff_id')) {
-            $query->where('staff_id', $request->input('staff_id'));
+            $query->where('staff_id', (string) $request->string('staff_id');
         }
 
         return $this->sendResponse($query->get(), 'Salary structures retrieved successfully.');
@@ -141,10 +141,10 @@ class StaffAdvancedController extends BaseController
         $query = Payroll::with('staff');
 
         if ($request->has('period')) {
-            $query->where('period', $request->input('period'));
+            $query->where('period', $request->input('period');
         }
         if ($request->has('staff_id')) {
-            $query->where('staff_id', $request->input('staff_id'));
+            $query->where('staff_id', (string) $request->string('staff_id');
         }
 
         return $this->sendResponse($query->latest()->paginate(20), 'Payrolls retrieved successfully.');

@@ -80,7 +80,7 @@ class MediaController extends Controller
             $file,
             $request->input('folder_id'),
             true, // optimize
-            Auth::id(),
+            is_scalar(Auth::id()) ? (string) Auth::id() : null,
             $request->boolean('is_shared', false),
             [
                 'caption' => $request->input('caption'),
@@ -279,6 +279,21 @@ class MediaController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Trash emptied successfully'
+        ]);
+    }
+
+    /**
+     * Get media statistics.
+     */
+    public function statistics(): \Illuminate\Http\JsonResponse
+    {
+        $this->authorize('viewAny', File::class);
+        $stats = $this->mediaService->getStatistics();
+
+        return response()->json([
+            'success' => true,
+            'data' => $stats,
+            'message' => 'Statistics retrieved successfully'
         ]);
     }
 }

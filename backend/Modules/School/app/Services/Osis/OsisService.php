@@ -17,7 +17,7 @@ class OsisService
     /**
      * @return Collection<int, OsisProgram>
      */
-    public function getPrograms(?int $schoolId = null): Collection
+    public function getPrograms(?string $schoolId = null): Collection
     {
         /** @var Collection<int, OsisProgram> $programs */
         $programs = OsisProgram::when($schoolId, fn($q) => $q->where('school_id', $schoolId))
@@ -55,7 +55,7 @@ class OsisService
     /**
      * @return Collection<int, OsisMember>
      */
-    public function getMembers(?int $schoolId = null): Collection
+    public function getMembers(?string $schoolId = null): Collection
     {
         /** @var Collection<int, OsisMember> $members */
         $members = OsisMember::with('student')
@@ -80,7 +80,7 @@ class OsisService
     /**
      * @return Collection<int, OsisFinance>
      */
-    public function getFinances(?int $schoolId = null): Collection
+    public function getFinances(?string $schoolId = null): Collection
     {
         /** @var Collection<int, OsisFinance> $finances */
         $finances = OsisFinance::when($schoolId, fn($q) => $q->where('school_id', $schoolId))
@@ -104,7 +104,7 @@ class OsisService
     /**
      * @return Collection<int, OsisSuggestion>
      */
-    public function getSuggestions(?int $schoolId = null): Collection
+    public function getSuggestions(?string $schoolId = null): Collection
     {
         /** @var Collection<int, OsisSuggestion> $suggestions */
         $suggestions = OsisSuggestion::with('student')

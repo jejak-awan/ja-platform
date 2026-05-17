@@ -157,7 +157,7 @@ interface ConfigValidation {
 interface ConnectionResult {
     connected: boolean;
     host?: string;
-    port?: number | string;
+    port?: string;
 }
 
 interface Props {

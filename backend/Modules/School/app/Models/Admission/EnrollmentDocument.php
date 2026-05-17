@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
- * @property int $id
+ * @property string $id
  * @property int $enrollment_id
  * @property string $name
  * @property string $file_path

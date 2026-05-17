@@ -25,7 +25,7 @@ export const useSchoolStore = defineStore('school', {
             return this.fetchSchool();
         },
 
-        async fetchSchool(_id?: string | number) {
+        async fetchSchool(_id?: string) {
             this.loading = true;
             try {
                 const response = await InstitutionService.getInstitution();
@@ -71,11 +71,11 @@ export const useSchoolStore = defineStore('school', {
             }
         },
 
-        async updateSchool(_id: string | number, data: School) {
+        async updateSchool(_id: string, data: School) {
             return this.saveInstitution(data);
         },
 
-        async deleteSchool(id: string | number) {
+        async deleteSchool(id: string) {
             this.loading = true;
             try {
                 await InstitutionService.deleteInstitution(id);

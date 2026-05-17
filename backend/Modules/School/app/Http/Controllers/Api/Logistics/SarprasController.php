@@ -73,7 +73,7 @@ class SarprasController extends BaseController
         return $this->sendResponse($ticket, 'Maintenance ticket created successfully.', 201);
     }
 
-    public function updateTicket(UpdateMaintenanceTicketRequest $request, int $id): \Illuminate\Http\JsonResponse
+    public function updateTicket(UpdateMaintenanceTicketRequest $request, string $id): \Illuminate\Http\JsonResponse
     {
         /** @var MaintenanceTicket $ticket */
         $ticket = MaintenanceTicket::findOrFail($id);
@@ -85,7 +85,7 @@ class SarprasController extends BaseController
         return $this->sendResponse($ticket, 'Maintenance ticket updated successfully.');
     }
 
-    public function destroyTicket(int $id): \Illuminate\Http\JsonResponse
+    public function destroyTicket(string $id): \Illuminate\Http\JsonResponse
     {
         /** @var MaintenanceTicket $ticket */
         $ticket = MaintenanceTicket::findOrFail($id);

@@ -8,7 +8,7 @@ export interface FileItem {
     type: string;
     updated_at: string;
     is_trashed?: boolean;
-    folder_id?: number | null;
+    folder_id?: string | null;
 }
 
 export interface FolderItem {
@@ -18,7 +18,7 @@ export interface FolderItem {
     children?: FolderItem[];
     updated_at: string;
     is_trashed?: boolean;
-    folder_id?: number | null;
+    folder_id?: string | null;
 }
 
 export interface TrashItem {

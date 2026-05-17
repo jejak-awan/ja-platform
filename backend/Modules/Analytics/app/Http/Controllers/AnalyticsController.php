@@ -417,7 +417,7 @@ class AnalyticsController extends BaseApiController
                 'event_type' => 'required|string|max:50',
                 'event_name' => 'required|string|max:255',
                 'event_data' => 'nullable|array',
-                'content_id' => 'nullable|integer|exists:cms_contents,id',
+                'content_id' => 'nullable|string|exists:cms_contents,id',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $this->validationError($e->errors());
@@ -426,7 +426,7 @@ class AnalyticsController extends BaseApiController
         $eventDataRaw = $validated['event_data'] ?? [];
         $eventData = is_array($eventDataRaw) ? $eventDataRaw : [];
         $contentIdRaw = $validated['content_id'] ?? null;
-        $contentId = is_numeric($contentIdRaw) ? (int) $contentIdRaw : null;
+        $contentId = is_scalar($contentIdRaw) ? (string) $contentIdRaw : null;
 
         $event = AnalyticsService::trackEvent(
             (string) $validated['event_type'],
@@ -449,7 +449,7 @@ class AnalyticsController extends BaseApiController
                 'events.*.type' => 'required|string|max:50',
                 'events.*.name' => 'required|string|max:255',
                 'events.*.data' => 'nullable|array',
-                'events.*.content_id' => 'nullable|integer|exists:contents,id',
+                'events.*.content_id' => 'nullable|string|exists:cms_contents,id',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $this->validationError($e->errors());
@@ -459,7 +459,7 @@ class AnalyticsController extends BaseApiController
         /** @var array<int, mixed> $events */
         $events = is_array($eventsRaw) ? $eventsRaw : [];
 
-        /** @var array<int, array{type?: string, name?: string, data?: array<string, mixed>, content_id?: int|null}> $formattedEvents */
+        /** @var array<int, array{type?: string, name?: string, data?: array<string, mixed>, content_id?: string|null}> $formattedEvents */
         $formattedEvents = [];
         foreach ($events as $event) {
             if (! is_array($event)) {
@@ -470,8 +470,8 @@ class AnalyticsController extends BaseApiController
                 'type' => isset($event['type']) && is_scalar($event['type']) ? strval($event['type']) : null,
                 'name' => isset($event['name']) && is_scalar($event['name']) ? strval($event['name']) : null,
                 'data' => isset($event['data']) && is_array($event['data']) ? $event['data'] : null,
-                'content_id' => isset($event['content_id']) && is_numeric($event['content_id']) ? (int) $event['content_id'] : null,
-            ], fn (string|int|array|null $v): bool => $v !== null);
+                'content_id' => isset($event['content_id']) && is_scalar($event['content_id']) ? (string) $event['content_id'] : null,
+            ], fn (string|array|null $v): bool => $v !== null);
         }
 
         $tracked = AnalyticsService::trackBatch($formattedEvents);

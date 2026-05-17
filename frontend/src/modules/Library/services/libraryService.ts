@@ -15,11 +15,11 @@ export const LibraryService = {
         return api.post(libraryPaths.tags, payload);
     },
 
-    updateTag(id: string | number, payload: Record<string, unknown>): Promise<AxiosResponse> {
+    updateTag(id: string, payload: Record<string, unknown>): Promise<AxiosResponse> {
         return api.put(libraryPaths.tag(String(id)), payload);
     },
 
-    deleteTag(id: string | number): Promise<AxiosResponse> {
+    deleteTag(id: string): Promise<AxiosResponse> {
         return api.delete(libraryPaths.tag(String(id)));
     },
 

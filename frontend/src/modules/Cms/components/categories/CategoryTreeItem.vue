@@ -101,7 +101,7 @@ interface Category {
     image?: string;
     description?: string;
     is_active: boolean;
-    parent_id?: number | string | null;
+    parent_id?: string | null;
     children?: Category[];
     [key: string]: unknown;
 }
