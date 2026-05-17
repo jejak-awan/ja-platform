@@ -14,8 +14,9 @@ class InfraRedirectController extends BaseApiController
 
         $redirects = InfraRedirect::query()
             ->when($request->search, function ($query, $search): void {
-                $query->where('from_domain', 'like', "%{$search}%")
-                    ->orWhere('to_domain', 'like', "%{$search}%");
+                $searchStr = strtolower(is_string($search) ? $search : '');
+                $query->where(\Illuminate\Support\Facades\DB::raw('lower(from_domain)'), 'like', "%{$searchStr}%")
+                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(to_domain)'), 'like', "%{$searchStr}%");
             })
             ->latest()
             ->paginate($request->per_page ?? 15);

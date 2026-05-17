@@ -94,6 +94,7 @@
         "maintenance_message": "Pesan yang ditampilkan di halaman maintenance.",
         "maintenance_countdown_enabled": "Tampilkan penghitung waktu mundur langsung hingga situs online kembali.",
         "shield_protection_mode": "Lapisan keamanan Proof-of-Work (PoW) untuk menghalangi AI scraper dan bot. Mode 'Hanya Lalu Lintas Mencurigakan' meminimalkan hambatan bagi pengguna sah.",
+        "admin_dashboard_slug": "Sesuaikan awalan (prefix) URL dasar dasbor Anda (misal: ja-dash, control) untuk meningkatkan keamanan dengan menyembunyikan jalur dasbor standar.",
         "shield_protection_difficulty": "Jumlah nol di depan yang diperlukan dalam hash pembuktian. Nilai yang lebih tinggi meningkatkan penggunaan CPU bot. Direkomendasikan Normal (4).",
         "shield_log_verification_success": "Jika diaktifkan, percoban verifikasi yang berhasil akan dicatat di Jurnal Keamanan. Default: Nonaktif untuk mengurangi volume log.",
         "shield_enable_ip_intelligence": "Otomatis cek pengunjung terhadap database blacklist global (Spamhaus ZEN). IP berbahaya akan diblokir permanen.",

@@ -12,7 +12,7 @@ export const CmsModule: JanariModule = {
         {
             id: 'cms-creator',
             priority: 40,
-            routeName: 'studio',
+            routeName: 'contents.index',
             condition: (_user, auth) => auth.hasPermission('create content') || auth.hasPermission('edit content') || auth.hasPermission('upload media'),
             component: defineAsyncComponent(() => import('./components/dashboard/CreatorDashboard.vue'))
         },

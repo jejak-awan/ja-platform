@@ -43,7 +43,10 @@ class SecurityServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        $this->commands([
+            \Modules\Security\Console\Commands\CleanupCspReports::class,
+            \Modules\Security\Console\Commands\UpdateCloudflareIps::class,
+        ]);
     }
 
     /**

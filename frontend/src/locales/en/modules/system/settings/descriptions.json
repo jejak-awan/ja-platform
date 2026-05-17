@@ -102,6 +102,7 @@
         "maintenance_countdown_enabled": "Show a live countdown timer until the site becomes live again.",
         "maintenance_end_time": "When the maintenance is scheduled to end. The site will automatically become live after this time.",
         "shield_protection_mode": "Proof-of-Work (PoW) security layer to deter AI scrapers and bots. 'Suspicious Traffic Only' mode minimizes friction for legitimate users.",
+        "admin_dashboard_slug": "Customize the base URL prefix for the dashboard (e.g. ja-dash, control) to improve security by hiding standard dashboard paths.",
         "shield_protection_difficulty": "Number of leading zeros required in the proof hash. Higher values increase bot CPU usage. Normal (4) is recommended.",
         "shield_log_verification_success": "If enabled, successful verification attempts will be logged in the Security Journal. Default: Disabled to reduce log volume.",
         "shield_enable_ip_intelligence": "Automatically check visitors against global blacklists (Spamhaus ZEN). Malicious IPs are blocked permanently.",

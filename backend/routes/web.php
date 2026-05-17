@@ -78,15 +78,25 @@ Route::middleware('throttle:probe-paths')->any('/{path}', function (Request $req
     abort(404);
 })->whereIn('path', $probePaths);
 
-Route::get('/auth/{any?}', function () {
-    if (file_exists(public_path('index.html'))) {
-        return file_get_contents(public_path('index.html'));
+Route::fallback(function () {
+    $path = request()->path();
+    $segments = explode('/', $path);
+    $firstSegment = $segments[0] ?? '';
+
+    // Retrieve dynamic admin dashboard slug from settings
+    $adminSlug = 'dash';
+    try {
+        $adminSlug = \Modules\System\Models\Setting::get('admin_dashboard_slug', 'dash');
+    } catch (\Throwable $e) {
+        // Fallback
     }
 
-    return response()->json(['message' => 'Resource not found'], 404);
-})->where('any', '.*');
+    if ($firstSegment === $adminSlug || $firstSegment === 'auth') {
+        if (file_exists(public_path('admin.html'))) {
+            return file_get_contents(public_path('admin.html'));
+        }
+    }
 
-Route::fallback(function () {
     if (file_exists(public_path('index.html'))) {
         return file_get_contents(public_path('index.html'));
     }

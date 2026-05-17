@@ -63,6 +63,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('key')->unique();
             $table->text('value')->nullable();
+            $table->string('type')->default('string');
+            $table->string('group')->default('connection');
+            $table->text('description')->nullable();
+            $table->boolean('is_encrypted')->default(false);
             $table->timestamps();
         });
 

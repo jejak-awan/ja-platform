@@ -12,6 +12,7 @@
         "media": "Media",
         "page": "Page",
         "tag": "Tag",
+        "post": "Post",
         "user": "User"
     }
 }

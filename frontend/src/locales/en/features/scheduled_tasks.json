@@ -46,7 +46,9 @@
         "completed": "Completed",
         "failed": "Failed",
         "pending": "Pending",
-        "running": "Running"
+        "running": "Running",
+        "inactive": "Inactive",
+        "active": "Active"
     },
     "table": {
         "actions": "Actions",

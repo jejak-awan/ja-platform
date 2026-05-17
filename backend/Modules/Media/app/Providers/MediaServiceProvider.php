@@ -34,6 +34,7 @@ class MediaServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Modules\Media\Console\MigrateLegacyMedia::class,
+                \Modules\Media\Console\Commands\CleanupTempMedia::class,
             ]);
         }
     }

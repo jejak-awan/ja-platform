@@ -37,6 +37,7 @@ export interface SystemState {
     publicSettingsPromise: Promise<any> | null;
     themeMode: 'light' | 'dark' | 'system';
     isDarkMode: boolean;
+    adminDashboardSlug: string;
 }
 
 // siteSettings moved back to CmsStore as per user request (CMS is public web authority)
@@ -73,6 +74,7 @@ export const useSystemStore = defineStore('system', {
         publicSettingsPromise: null,
         themeMode: 'system', // 'light', 'dark', 'system'
         isDarkMode: false,
+        adminDashboardSlug: 'dash',
     }),
 
     actions: {
@@ -120,7 +122,7 @@ export const useSystemStore = defineStore('system', {
 
             this.publicSettingsPromise = (async () => {
                 try {
-                    const response = await api.get('/public/system/settings');
+                    const response = await api.get('/public/system/settings', { params: { _t: Date.now() } });
                     const data = response.data || {};
                     
                     // Sync Site Settings
@@ -153,6 +155,13 @@ export const useSystemStore = defineStore('system', {
                         countdown_enabled: !!data.maintenance_countdown_enabled,
                         end_time: data.maintenance_end_time || '',
                     };
+                    
+                    this.adminDashboardSlug = data.admin_dashboard_slug || 'dash';
+                    try {
+                        localStorage.setItem('admin_dashboard_slug', this.adminDashboardSlug);
+                    } catch (e) {
+                        // Silent fail
+                    }
                     
 
 

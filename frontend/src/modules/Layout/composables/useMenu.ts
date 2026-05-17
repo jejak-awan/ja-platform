@@ -81,8 +81,12 @@ const fetchMenuByLocation = async (location: string) => {
     try {
         const response = await api.get(`/public/layout/menus/location/${location}`);
         const menu = parseSingleResponse(response) as Menu;
-        if (menu && Array.isArray(menu.items)) {
-            menu.items = buildTree(menu.items);
+        if (menu) {
+            if (menu.parent_items) {
+                menu.items = menu.parent_items;
+            } else if (Array.isArray(menu.items)) {
+                menu.items = buildTree(menu.items);
+            }
         }
         menus.value[location] = menu;
     } catch (err) {
@@ -104,8 +108,12 @@ const fetchMenuByIdentifier = async (identifier: string | number, cacheKey?: str
         const endpoint = isNumericId ? `/public/layout/menus/${raw}` : `/public/layout/menus/location/${raw}`;
         const response = await api.get(endpoint);
         const menu = parseSingleResponse(response) as Menu;
-        if (menu && Array.isArray(menu.items)) {
-            menu.items = buildTree(menu.items);
+        if (menu) {
+            if (menu.parent_items) {
+                menu.items = menu.parent_items;
+            } else if (Array.isArray(menu.items)) {
+                menu.items = buildTree(menu.items);
+            }
         }
         menus.value[targetKey] = menu;
     } catch (err) {

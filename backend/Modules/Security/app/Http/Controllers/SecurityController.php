@@ -546,14 +546,14 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
             $clearHistory = $request->boolean('clear_history', true);
 
             $baselineStats = $this->fileIntegrityService->generateBaseline();
-            $deletedMissingBaselines = \Illuminate\Support\Facades\DB::table('file_integrity_baselines')
+            $deletedMissingBaselines = \Illuminate\Support\Facades\DB::table('sec_file_integrity_baselines')
                 ->get()
                 ->filter(static fn (object $row): bool => ! file_exists(base_path((string) $row->file_path)))
                 ->pluck('file_path')
                 ->values()
                 ->all();
             if ($deletedMissingBaselines !== []) {
-                \Illuminate\Support\Facades\DB::table('file_integrity_baselines')
+                \Illuminate\Support\Facades\DB::table('sec_file_integrity_baselines')
                     ->whereIn('file_path', $deletedMissingBaselines)
                     ->delete();
             }

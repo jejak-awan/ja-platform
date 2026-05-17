@@ -216,10 +216,10 @@ const actionRoutes: Record<string, RouteLocationRaw> = {
   'create-post': { name: 'contents.create', query: { type: 'post' } },
   'create-page': { name: 'contents.create', query: { type: 'page' } },
   'upload-media': { name: 'media' },
-  'create-category': { name: 'categories' },
+  'create-category': { name: 'categories.index' },
   'create-tag': { name: 'tags' },
   'manage-users': { name: 'users.index' },
-  'view-comments': { name: 'comments' },
+  'view-comments': { name: 'comments.index' },
   'settings': { name: 'settings' },
   'command-runner': { name: 'scheduled-tasks', query: { action: 'run_command' } },
 };

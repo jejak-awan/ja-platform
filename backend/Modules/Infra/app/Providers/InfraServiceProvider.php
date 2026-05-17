@@ -43,7 +43,9 @@ class InfraServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        $this->commands([
+            \Modules\Infra\Console\Commands\CreateBackup::class,
+        ]);
     }
 
     /**

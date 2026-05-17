@@ -71,6 +71,7 @@ class SystemServiceProvider extends ServiceProvider
         $this->app->register(RouteServiceProvider::class);
 
         $this->app->singleton(\Modules\System\Registries\DashboardRegistry::class);
+        $this->app->singleton(\Modules\System\Services\DashboardRegistry::class);
         $this->app->singleton(\Modules\System\Registries\HookRegistry::class);
         $this->app->singleton(\Modules\System\Contracts\LayoutRegistryInterface::class, \Modules\System\Registries\LayoutRegistry::class);
     }
@@ -80,7 +81,9 @@ class SystemServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        $this->commands([
+            \Modules\System\Console\Commands\CleanupOldLogs::class,
+        ]);
     }
 
     /**

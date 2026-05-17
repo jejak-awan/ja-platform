@@ -17,6 +17,8 @@
     "description": "Kelola konfigurasi, identitas, diskusi, dan performa CMS",
     "reset": "Reset Pengaturan",
     "save": "Simpan Pengaturan",
+    "enabled": "Aktif",
+    "disabled": "Nonaktif",
     "groups": {
         "siteInfo": {
             "title": "Informasi Situs",
@@ -40,6 +42,14 @@
         "discussion": {
             "title": "Pengaturan Diskusi",
             "description": "Konfigurasi sistem komentar"
+        },
+        "meta": {
+            "title": "Tag Meta SEO",
+            "description": "Konfigurasi default metadata dan kata kunci untuk SEO"
+        },
+        "searchEngines": {
+            "title": "Mesin Pencari & Perayapan",
+            "description": "Konfigurasi integrasi dengan Google Search Console, peta situs, dan robots.txt"
         }
     },
     "labels": {
@@ -49,6 +59,42 @@
         "site_description": "Deskripsi Situs",
         "site_url": "URL Situs",
         "admin_email": "Email Admin",
+        "brand_logo": "Logo Brand",
+        "brand_favicon": "Favicon Brand",
+        "branding_display": "Mode Tampilan Branding",
+
+        "meta_title": "Meta Title Bawaan",
+        "meta_description": "Meta Description Bawaan",
+        "meta_keywords": "Meta Keywords Bawaan",
+        "google_analytics_id": "Google Analytics Measurement ID",
+        "google_search_console": "Token Verifikasi Google Search Console",
+        "enable_sitemap": "Aktifkan Peta Situs (Sitemap.xml)",
+        "enable_robots_txt": "Aktifkan Editor Robots.txt",
+
+        "analytics_retention_days": "Retensi Log Pengunjung (Hari)",
+        "analytics_event_retention_days": "Retensi Log Kunjungan Event (Hari)",
+        "analytics_visitor_retention_days": "Retensi Log Kunjungan Sesi (Hari)",
+
+        "mail_driver": "Driver / Protokol Email",
+        "mail_host": "Host Server SMTP",
+        "mail_port": "Port Server SMTP",
+        "mail_username": "Username Server SMTP",
+        "mail_password": "Password Server SMTP",
+        "mail_encryption": "Tipe Enkripsi Email",
+        "mail_from_address": "Alamat Email Pengirim",
+        "mail_from_name": "Nama Tampilan Pengirim",
+
+        "activity_log_retention_days": "Retensi Log Aktivitas Sistem (Hari)",
+        "security_log_retention_days": "Retensi Audit Keamanan & WAF (Hari)",
+        "login_history_retention_days": "Retensi Log Riwayat Login (Hari)",
+        "security_alert_failed_login_threshold": "Batas Peringatan Kegagalan Login",
+        "backup_retention_days": "Retensi Backup Database (Hari)",
+
+        "ai_enabled": "Aktifkan Fitur Platform AI",
+        "ai_default_provider": "Provider LLM Bawaan",
+        "gemini_api_key": "API Key Gemini LLM",
+        "gemini_model": "Varian Model Gemini",
+
         "comments": {
             "security": {
                 "enable_reply": "Aktifkan Balasan",
@@ -67,6 +113,42 @@
         "site_description": "Penjelasan singkat tentang situs Anda untuk keperluan SEO",
         "site_url": "URL utama aplikasi CMS Anda",
         "admin_email": "Email kontak untuk keperluan administratif situs CMS",
+        "brand_logo": "Logo korporasi/brand yang ditampilkan di panel admin",
+        "brand_favicon": "Favicon khusus panel admin",
+        "branding_display": "Menentukan apakah panel menampilkan logo, nama aplikasi, atau keduanya",
+
+        "meta_title": "Judul utama bawaan ketika konten tidak memiliki judul spesifik",
+        "meta_description": "Deskripsi default yang disajikan ke laba-laba perayap mesin pencari",
+        "meta_keywords": "Kata kunci terpisah koma yang mewakili taksonomi situs",
+        "google_analytics_id": "ID Pelacakan Integrasi (contoh: G-XXXXXX)",
+        "google_search_console": "Token verifikasi HTML untuk konsol kinerja pencarian Google",
+        "enable_sitemap": "Hasilkan sitemap.xml secara dinamis untuk memudahkan indeksasi",
+        "enable_robots_txt": "Tampilkan konfigurasi robots.txt secara dinamis",
+
+        "analytics_retention_days": "Pertahankan statistik jejak pengunjung umum",
+        "analytics_event_retention_days": "Pertahankan riwayat log pencarian/interaksi detail frontend",
+        "analytics_visitor_retention_days": "Pertahankan sesi pelacakan pengunjung unik",
+
+        "mail_driver": "Driver protokol pengiriman (biasanya SMTP)",
+        "mail_host": "FQDN atau IP server relai email Anda",
+        "mail_port": "Port relai email (biasanya 587 atau 2525)",
+        "mail_username": "Username otentikasi untuk pengiriman email",
+        "mail_password": "Password otentikasi untuk pengiriman email",
+        "mail_encryption": "Mode enkripsi TLS atau SSL untuk keamanan pengiriman",
+        "mail_from_address": "Alamat email pengirim keluar yang muncul di email penerima",
+        "mail_from_name": "Nama tampilan pengirim keluar",
+
+        "activity_log_retention_days": "Interval penghapusan otomatis untuk log audit aktivitas",
+        "security_log_retention_days": "Interval penghapusan otomatis untuk kejadian pemblokiran WAF",
+        "login_history_retention_days": "Jendela pencatatan log riwayat percobaan login",
+        "security_alert_failed_login_threshold": "Peringatkan admin jika ada IP gagal login sebanyak ini",
+        "backup_retention_days": "Jendela retensi untuk file ZIP cadangan database",
+
+        "ai_enabled": "Aktifkan alat bantu pembuatan konten dan obrolan AI secara global",
+        "ai_default_provider": "Penyedia Model Bahasa Besar utama pilihan Anda",
+        "gemini_api_key": "Kunci otentikasi resmi dari Google AI Studio",
+        "gemini_model": "Varian model target (contoh: gemini-2.5-flash)",
+
         "comments": {
             "security": {
                 "enable_reply": "Izinkan pengguna untuk membalas komentar lain",

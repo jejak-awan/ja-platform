@@ -180,6 +180,54 @@ class FoundationSeeder extends Seeder
             ['key' => 'timezone', 'value' => 'Asia/Jakarta', 'group' => 'general', 'type' => 'string'],
             ['key' => 'log_retention_days', 'value' => '90', 'group' => 'monitoring', 'type' => 'integer'],
 
+            // General / Identity (Site Settings)
+            ['key' => 'site_name', 'value' => 'JA-Platform', 'group' => 'general', 'type' => 'string'],
+            ['key' => 'site_logo', 'value' => '/logo.png', 'group' => 'general', 'type' => 'image'],
+            ['key' => 'site_favicon', 'value' => '/favicon.ico', 'group' => 'general', 'type' => 'image'],
+            ['key' => 'site_description', 'value' => 'JA-Platform Modern Portal', 'group' => 'general', 'type' => 'string'],
+            ['key' => 'site_url', 'value' => 'http://localhost', 'group' => 'general', 'type' => 'string'],
+            ['key' => 'admin_email', 'value' => 'admin@janari.com', 'group' => 'brand', 'type' => 'string'],
+            ['key' => 'brand_logo', 'value' => '', 'group' => 'brand', 'type' => 'image'],
+            ['key' => 'brand_favicon', 'value' => '', 'group' => 'brand', 'type' => 'image'],
+            ['key' => 'branding_display', 'value' => 'logo', 'group' => 'brand', 'type' => 'string'],
+
+            // SEO Settings
+            ['key' => 'meta_title', 'value' => 'JA-Platform', 'group' => 'seo', 'type' => 'string'],
+            ['key' => 'meta_description', 'value' => 'Modern Platform', 'group' => 'seo', 'type' => 'text'],
+            ['key' => 'meta_keywords', 'value' => 'ja-platform, school, portal', 'group' => 'seo', 'type' => 'string'],
+            ['key' => 'google_analytics_id', 'value' => '', 'group' => 'seo', 'type' => 'string'],
+            ['key' => 'google_search_console', 'value' => '', 'group' => 'seo', 'type' => 'string'],
+            ['key' => 'enable_sitemap', 'value' => '1', 'group' => 'seo', 'type' => 'boolean'],
+            ['key' => 'enable_robots_txt', 'value' => '1', 'group' => 'seo', 'type' => 'boolean'],
+
+            // Analytics
+            ['key' => 'analytics_retention_days', 'value' => '90', 'group' => 'analytics', 'type' => 'integer'],
+            ['key' => 'analytics_event_retention_days', 'value' => '30', 'group' => 'analytics', 'type' => 'integer'],
+            ['key' => 'analytics_visitor_retention_days', 'value' => '365', 'group' => 'analytics', 'type' => 'integer'],
+
+            // Email Settings
+            ['key' => 'mail_driver', 'value' => 'smtp', 'group' => 'email', 'type' => 'string'],
+            ['key' => 'mail_host', 'value' => 'smtp.mailtrap.io', 'group' => 'email', 'type' => 'string'],
+            ['key' => 'mail_port', 'value' => '2525', 'group' => 'email', 'type' => 'integer'],
+            ['key' => 'mail_username', 'value' => '', 'group' => 'email', 'type' => 'string'],
+            ['key' => 'mail_password', 'value' => '', 'group' => 'email', 'type' => 'password'],
+            ['key' => 'mail_encryption', 'value' => 'tls', 'group' => 'email', 'type' => 'string'],
+            ['key' => 'mail_from_address', 'value' => 'hello@janari.com', 'group' => 'email', 'type' => 'string'],
+            ['key' => 'mail_from_name', 'value' => 'Janari App', 'group' => 'email', 'type' => 'string'],
+
+            // Monitoring Settings
+            ['key' => 'activity_log_retention_days', 'value' => '90', 'group' => 'monitoring', 'type' => 'integer'],
+            ['key' => 'security_log_retention_days', 'value' => '180', 'group' => 'monitoring', 'type' => 'integer'],
+            ['key' => 'login_history_retention_days', 'value' => '30', 'group' => 'monitoring', 'type' => 'integer'],
+            ['key' => 'security_alert_failed_login_threshold', 'value' => '5', 'group' => 'monitoring', 'type' => 'integer'],
+            ['key' => 'backup_retention_days', 'value' => '30', 'group' => 'monitoring', 'type' => 'integer'],
+
+            // AI Settings
+            ['key' => 'ai_enabled', 'value' => '1', 'group' => 'ai', 'type' => 'boolean'],
+            ['key' => 'ai_default_provider', 'value' => 'gemini', 'group' => 'ai', 'type' => 'string'],
+            ['key' => 'gemini_api_key', 'value' => '', 'group' => 'ai', 'type' => 'password'],
+            ['key' => 'gemini_model', 'value' => '', 'group' => 'ai', 'type' => 'string'],
+
             // Security
             ['key' => 'enable_registration', 'value' => '0', 'group' => 'security', 'type' => 'boolean'],
             ['key' => 'require_email_verification', 'value' => '1', 'group' => 'security', 'type' => 'boolean'],
@@ -238,8 +286,86 @@ class FoundationSeeder extends Seeder
     protected function seedRedisSettings(): void
     {
         $settings = [
-            ['key' => 'redis_host', 'value' => env('REDIS_HOST', '127.0.0.1')],
-            ['key' => 'redis_port', 'value' => env('REDIS_PORT', '6379')],
+            [
+                'key' => 'redis_host',
+                'value' => env('REDIS_HOST', '127.0.0.1'),
+                'type' => 'string',
+                'group' => 'connection',
+                'description' => 'Redis server host address',
+                'is_encrypted' => false,
+            ],
+            [
+                'key' => 'redis_port',
+                'value' => env('REDIS_PORT', '6379'),
+                'type' => 'integer',
+                'group' => 'connection',
+                'description' => 'Redis server port',
+                'is_encrypted' => false,
+            ],
+            [
+                'key' => 'redis_username',
+                'value' => env('REDIS_USERNAME', ''),
+                'type' => 'string',
+                'group' => 'connection',
+                'description' => 'Redis ACL username',
+                'is_encrypted' => false,
+            ],
+            [
+                'key' => 'redis_password',
+                'value' => env('REDIS_PASSWORD', ''),
+                'type' => 'string',
+                'group' => 'connection',
+                'description' => 'Redis server password',
+                'is_encrypted' => true,
+            ],
+            [
+                'key' => 'redis_database',
+                'value' => env('REDIS_DB', '0'),
+                'type' => 'integer',
+                'group' => 'connection',
+                'description' => 'Redis database index (0-15)',
+                'is_encrypted' => false,
+            ],
+            [
+                'key' => 'redis_cache_database',
+                'value' => env('REDIS_CACHE_DB', '1'),
+                'type' => 'integer',
+                'group' => 'connection',
+                'description' => 'Redis cache database index (0-15)',
+                'is_encrypted' => false,
+            ],
+            [
+                'key' => 'cache_enabled',
+                'value' => 'true',
+                'type' => 'boolean',
+                'group' => 'cache',
+                'description' => 'Enable Redis for caching',
+                'is_encrypted' => false,
+            ],
+            [
+                'key' => 'cache_prefix',
+                'value' => env('REDIS_PREFIX', 'ja_apps_'),
+                'type' => 'string',
+                'group' => 'cache',
+                'description' => 'Cache key prefix',
+                'is_encrypted' => false,
+            ],
+            [
+                'key' => 'session_enabled',
+                'value' => env('SESSION_DRIVER') === 'redis' ? 'true' : 'false',
+                'type' => 'boolean',
+                'group' => 'session',
+                'description' => 'Use Redis for sessions',
+                'is_encrypted' => false,
+            ],
+            [
+                'key' => 'queue_enabled',
+                'value' => env('QUEUE_CONNECTION') === 'redis' ? 'true' : 'false',
+                'type' => 'boolean',
+                'group' => 'queue',
+                'description' => 'Use Redis for queue jobs',
+                'is_encrypted' => false,
+            ],
         ];
 
         foreach ($settings as $setting) {

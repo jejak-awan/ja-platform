@@ -46,7 +46,9 @@
         "completed": "Selesai",
         "failed": "Gagal",
         "pending": "Menunggu",
-        "running": "Berjalan"
+        "running": "Berjalan",
+        "inactive": "Tidak Aktif",
+        "active": "Aktif"
     },
     "table": {
         "actions": "Aksi",

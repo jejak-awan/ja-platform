@@ -203,7 +203,9 @@ class LogisticsService
             ->when(!empty($filters['search']) && is_string($filters['search']), function ($q) use ($filters) {
                 /** @var string $search */
                 $search = $filters['search'];
-                return $q->where('name', 'like', "%{$search}%")->orWhere('sku', 'like', "%{$search}%");
+                $searchStr = strtolower($search);
+                return $q->where(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%")
+                         ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(sku)'), 'like', "%{$searchStr}%");
             })
             ->get();
         return $items;

@@ -12,6 +12,7 @@ Route::prefix('v1/manage')->middleware(['auth:sanctum'])->group(function (): voi
     Route::prefix('media')->group(function (): void {
         Route::get('/', [MediaController::class, 'index']);
         Route::get('/statistics', [MediaController::class, 'statistics']);
+        Route::get('/filters', [MediaController::class, 'filters']);
         Route::post('/upload', [MediaController::class, 'upload']);
         Route::post('/bulk-action', [MediaController::class, 'bulk']);
         Route::post('/empty-trash', [MediaController::class, 'emptyTrash']);

@@ -74,6 +74,7 @@ class FileIntegrityService
                     $stats['updated']++;
                 } else {
                     DB::table('sec_file_integrity_baselines')->insert([
+                        'id' => \Illuminate\Support\Str::uuid()->toString(),
                         'file_path' => $relativePath,
                         'hash' => $hash,
                         'file_size' => filesize($absolutePath) ?: 0,

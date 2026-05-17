@@ -36,8 +36,9 @@ class ContentTemplateController extends BaseApiController
             $searchRaw = $request->search;
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
+                $searchStr = strtolower($search);
+                $q->where(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%")
+                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(description)'), 'like', "%{$searchStr}%");
             });
         }
 

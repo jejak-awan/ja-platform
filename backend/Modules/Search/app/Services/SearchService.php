@@ -51,6 +51,41 @@ class SearchService
                 ->limit($limit)
                 ->get();
 
+            // 2.5 Smart Levenshtein similarity fallback for search results (Database-independent)
+            if ($results->isEmpty()) {
+                $allIndexQuery = SearchIndex::query();
+                $this->applyFilters($allIndexQuery, $filters);
+                $allIndexes = $allIndexQuery->get();
+                
+                $scored = [];
+                $queryLower = mb_strtolower($query, 'UTF-8');
+                
+                foreach ($allIndexes as $index) {
+                    $titleLower = mb_strtolower($index->title, 'UTF-8');
+                    $contentLower = mb_strtolower($index->content ?? '', 'UTF-8');
+                    
+                    // Title distance
+                    $distTitle = levenshtein($titleLower, $queryLower);
+                    $maxLenTitle = max(strlen($titleLower), strlen($queryLower));
+                    $simTitle = $maxLenTitle > 0 ? (1 - $distTitle / $maxLenTitle) : 0;
+                    
+                    // Boost score if title or content has substring match
+                    if (str_contains($titleLower, $queryLower) || str_contains($contentLower, $queryLower)) {
+                        $simTitle = max($simTitle, 0.6);
+                    }
+                    
+                    if ($simTitle >= 0.4) {
+                        $scored[] = [
+                            'index' => $index,
+                            'score' => $simTitle
+                        ];
+                    }
+                }
+                
+                usort($scored, fn($a, $b) => $b['score'] <=> $a['score']);
+                $results = collect(array_column(array_slice($scored, 0, $limit), 'index'));
+            }
+
             // 3. If still empty, get suggestions
             if ($results->isEmpty()) {
                 $suggestions = $this->getSuggestions($query, 5, $filters);
@@ -71,7 +106,7 @@ class SearchService
                     'excerpt' => is_scalar($index->excerpt) ? (string) $index->excerpt : null,
                     'url' => is_scalar($index->url) ? (string) $index->url : null,
                     'searchable_type' => (string) $index->searchable_type,
-                    'searchable_id' => (int) $index->searchable_id,
+                    'searchable_id' => (string) $index->searchable_id,
                     'relevance_score' => $index->getAttribute('relevance_score'),
                 ];
 
@@ -264,6 +299,42 @@ class SearchService
                         ->get();
                 }
             }
+        }
+
+        // 2.5 Smart Levenshtein similarity fallback (Database-independent)
+        if ($suggestions->isEmpty()) {
+            $allTitlesQuery = SearchIndex::query();
+            $this->applyFilters($allTitlesQuery, $filters);
+            $allTitles = $allTitlesQuery->select('title', 'type', 'url')
+                ->distinct()
+                ->get();
+            
+            $scored = [];
+            $queryLower = mb_strtolower($queryClean, 'UTF-8');
+            
+            foreach ($allTitles as $item) {
+                $titleLower = mb_strtolower($item->title, 'UTF-8');
+                
+                // Levenshtein distance
+                $dist = levenshtein($titleLower, $queryLower);
+                $maxLen = max(strlen($titleLower), strlen($queryLower));
+                $similarity = $maxLen > 0 ? (1 - $dist / $maxLen) : 0;
+                
+                // Boost for substring match
+                if (str_contains($titleLower, $queryLower) || str_contains($queryLower, $titleLower)) {
+                    $similarity = max($similarity, 0.7);
+                }
+                
+                if ($similarity >= 0.4) {
+                    $scored[] = [
+                        'item' => $item,
+                        'score' => $similarity
+                    ];
+                }
+            }
+            
+            usort($scored, fn($a, $b) => $b['score'] <=> $a['score']);
+            $suggestions = collect(array_column(array_slice($scored, 0, $limit), 'item'));
         }
 
         /** @var array<int, array{text: string, type: string, url: string|null}> $result */

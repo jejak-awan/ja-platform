@@ -108,8 +108,6 @@ class SchoolModuleCrudTest extends TestCase
             ->assertJsonPath('success', true);
 
         $studentId = $response->json('data.id');
-
-        // Update
         $response = $this->actingAsAdmin()->putJson("/api/v1/manage/school/students/{$studentId}", [
             'full_name' => 'John Doe Updated',
             'gender' => 'L',

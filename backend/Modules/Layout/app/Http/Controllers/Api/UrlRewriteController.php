@@ -17,10 +17,12 @@ class UrlRewriteController extends BaseApiController
         }
 
         if ($request->filled('search')) {
-            $search = $request->input('search');
+            $searchRaw = $request->input('search');
+            $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
-                $q->where('source_path', 'like', "%{$search}%")
-                    ->orWhere('target_path', 'like', "%{$search}%");
+                $searchStr = strtolower($search);
+                $q->where(\Illuminate\Support\Facades\DB::raw('lower(source_path)'), 'like', "%{$searchStr}%")
+                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(target_path)'), 'like', "%{$searchStr}%");
             });
         }
 

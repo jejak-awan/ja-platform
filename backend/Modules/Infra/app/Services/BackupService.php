@@ -4,7 +4,7 @@ namespace Modules\Infra\Services;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Modules\System\Models\Backup;
+use Modules\Infra\Models\Backup;
 use Symfony\Component\Process\Process;
 
 class BackupService

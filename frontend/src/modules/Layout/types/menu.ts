@@ -8,6 +8,7 @@ export interface Menu {
     locale?: string;
     is_active?: boolean;
     items?: MenuItem[];
+    parent_items?: MenuItem[];
     created_at?: string;
     updated_at?: string;
 }

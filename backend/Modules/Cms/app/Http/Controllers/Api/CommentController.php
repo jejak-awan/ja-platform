@@ -138,9 +138,10 @@ class CommentController extends BaseApiController
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
-                $q->where('body', 'like', "%{$search}%")
-                    ->orWhere('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
+                $searchStr = strtolower($search);
+                $q->where(\Illuminate\Support\Facades\DB::raw('lower(body)'), 'like', "%{$searchStr}%")
+                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%")
+                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(email)'), 'like', "%{$searchStr}%");
             });
         }
 

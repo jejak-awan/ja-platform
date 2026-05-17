@@ -481,6 +481,8 @@ import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useTheme } from '@/modules/Cms/composables/useTheme';
 import { useMenu } from '@/modules/Layout/composables/useMenu';
 import { useSystemStore } from '@/modules/System/stores/system';
+import { useAuthStore } from '@/modules/System/stores/auth';
+import { useI18n } from 'vue-i18n';
 import { useResponsiveDevice } from '@/shared/composables/useResponsiveDevice';
 import { useThemeMotion } from '@/modules/Cms/composables/useThemeMotion';
 import { useRoute } from 'vue-router';
@@ -513,6 +515,8 @@ const device = useResponsiveDevice();
 const { motion } = useThemeMotion();
 const route = useRoute();
 const { isDark, toggleMode } = useDarkMode('frontend');
+const authStore = useAuthStore();
+const { locale } = useI18n();
 
 const isOpen = ref(false);
 const mobileOpenSubmenus = ref<Set<string>>(new Set());
@@ -660,9 +664,50 @@ const currentMenuLocation = computed(() => {
     return normalizeMenuSetting(getSetting('menu_location_header', 'header'), 'header');
 });
 
+const filterMenuItems = (items: MenuItem[]): MenuItem[] => {
+    if (!Array.isArray(items)) return [];
+    return items
+        .filter(item => {
+            const meta = item.metadata as Record<string, any> | undefined;
+            if (meta) {
+                if (meta.requires_auth && !authStore.isAuthenticated) {
+                    return false;
+                }
+                if (meta.required_permission && (!authStore.isAuthenticated || !authStore.hasPermission(meta.required_permission))) {
+                    return false;
+                }
+            }
+            return true;
+        })
+        .map(item => {
+            let title = item.title;
+            const meta = item.metadata as Record<string, any> | undefined;
+            if (meta) {
+                const currentLang = locale.value;
+                if (currentLang === 'en' && meta.title_en) {
+                    title = String(meta.title_en);
+                } else if (currentLang === 'id' && meta.title_id) {
+                    title = String(meta.title_id);
+                }
+            }
+
+            const mappedItem = {
+                ...item,
+                title
+            };
+
+            if (item.children && item.children.length > 0) {
+                mappedItem.children = filterMenuItems(item.children);
+            }
+
+            return mappedItem;
+        });
+};
+
 const navItems = computed<MenuItem[]>(() => {
     const menu = menus.value.header || menus.value[currentMenuLocation.value];
-    return (menu?.items || []) as MenuItem[];
+    const rawItems = (menu?.items || []) as MenuItem[];
+    return filterMenuItems(rawItems);
 });
 
 const toggleMenu = () => {

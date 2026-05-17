@@ -27,8 +27,9 @@ class AdmissionService
         if (!empty($filters['search']) && is_string($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search): void {
-                $q->where('full_name', 'like', '%' . $search . '%')
-                  ->orWhere('registration_number', 'like', '%' . $search . '%');
+                $searchStr = strtolower($search);
+                $q->where(\Illuminate\Support\Facades\DB::raw('lower(full_name)'), 'like', '%' . $searchStr . '%')
+                  ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(registration_number)'), 'like', '%' . $searchStr . '%');
             });
         }
 

@@ -43,7 +43,10 @@ class AnalyticsServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        $this->commands([
+            \Modules\Analytics\Console\Commands\CleanupSlowQueryLogs::class,
+            \Modules\Analytics\Console\Commands\CleanupAnalytics::class,
+        ]);
     }
 
     /**

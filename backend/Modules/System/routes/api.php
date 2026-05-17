@@ -19,6 +19,7 @@ use Modules\System\Http\Controllers\Console\LogController;
 use Modules\System\Http\Controllers\Console\TranslationController;
 use Modules\System\Http\Controllers\Console\EmailTemplateController;
 use Modules\System\Http\Controllers\Console\TwoFactorController;
+use Modules\System\Http\Controllers\Console\SystemController;
 
 Route::prefix('v1')->group(function (): void {
     // Auth & Public (Surface canonical)
@@ -30,6 +31,13 @@ Route::prefix('v1')->group(function (): void {
 
     Route::get('public/system/settings', [PublicSettingsController::class, 'index']);
     Route::get('public/system/languages', [LanguageController::class, 'index']);
+
+    // Dashboard routes
+    Route::prefix('dashboard')->middleware(['auth:sanctum'])->group(function (): void {
+        Route::get('admin', [DashboardController::class, 'admin']);
+        Route::get('creator', [DashboardController::class, 'creator']);
+        Route::get('viewer', [DashboardController::class, 'viewer']);
+    });
 
     // Two Factor Authentication
     Route::prefix('two-factor')->middleware(['auth:sanctum'])->group(function (): void {
@@ -44,6 +52,18 @@ Route::prefix('v1')->group(function (): void {
     // Manage API (Canonical)
     Route::prefix('manage/system')->middleware(['auth:sanctum'])->group(function (): void {
         Route::get('dashboard', [DashboardController::class, 'admin']);
+
+        // System Info, Health, Statistics, and Cache
+        Route::get('info', [SystemController::class, 'info']);
+        Route::get('health', [SystemController::class, 'health']);
+        Route::get('health/detailed', [SystemController::class, 'systemHealth']);
+        Route::get('statistics', [SystemController::class, 'statistics']);
+        Route::get('cache-status', [SystemController::class, 'cacheStatus']);
+        Route::post('cache/clear', [SystemController::class, 'clearCache']);
+        Route::post('cache/warm', [SystemController::class, 'warmCache']);
+        Route::get('cache-warming-stats', [SystemController::class, 'cacheWarmingStats']);
+        Route::get('system-health', [SystemController::class, 'systemHealth']);
+        Route::post('clear-rate-limit', [SystemController::class, 'clearRateLimit']);
 
         // Profile Management
         Route::get('profile', [UserController::class, 'profile']);
@@ -61,6 +81,7 @@ Route::prefix('v1')->group(function (): void {
 
         Route::get('settings/group/{group}', [SettingController::class, 'getGroup']);
         Route::post('settings/test-storage', [SettingController::class, 'testStorage']);
+        Route::post('settings/bulk-update', [SettingController::class, 'bulkUpdate']);
         Route::apiResource('settings', SettingController::class);
 
         Route::apiResource('plugins', PluginController::class);
@@ -89,5 +110,25 @@ Route::prefix('v1')->group(function (): void {
         Route::get('logs', [LogController::class, 'index']);
         Route::get('logs/{filename}', [LogController::class, 'show']);
         Route::delete('logs/{filename}', [LogController::class, 'destroy']);
+    });
+
+    // System Journal routes for frontend compatibility (registered as api/v1/manage/system-journal)
+    Route::prefix('manage/system-journal')->middleware(['auth:sanctum'])->group(function (): void {
+        Route::get('', [LogController::class, 'index']);
+        Route::get('{filename}', [LogController::class, 'show']);
+        Route::get('{filename}/download', [LogController::class, 'download']);
+        Route::post('clear', [LogController::class, 'clear']);
+        Route::delete('{filename}', [LogController::class, 'destroy']);
+    });
+
+    // Redis Management routes
+    Route::prefix('manage/redis')->middleware(['auth:sanctum'])->group(function (): void {
+        Route::get('settings', [\Modules\System\Http\Controllers\Console\RedisController::class, 'index']);
+        Route::put('settings', [\Modules\System\Http\Controllers\Console\RedisController::class, 'update']);
+        Route::post('test-connection', [\Modules\System\Http\Controllers\Console\RedisController::class, 'testConnection']);
+        Route::get('info', [\Modules\System\Http\Controllers\Console\RedisController::class, 'info']);
+        Route::post('flush-cache', [\Modules\System\Http\Controllers\Console\RedisController::class, 'flushCache']);
+        Route::post('warm-cache', [\Modules\System\Http\Controllers\Console\RedisController::class, 'warmCache']);
+        Route::get('cache-stats', [\Modules\System\Http\Controllers\Console\RedisController::class, 'cacheStats']);
     });
 });

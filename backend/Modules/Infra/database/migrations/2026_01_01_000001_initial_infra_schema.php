@@ -11,13 +11,15 @@ return new class extends Migration
         // 1. Backups Registry
         Schema::create('infra_backups', function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->string('filename');
+            $table->string('name');
             $table->string('disk');
             $table->string('path');
-            $table->unsignedBigInteger('size');
+            $table->unsignedBigInteger('size')->default(0);
             $table->string('type')->default('full'); // full, database, files
             $table->string('status')->default('success');
-            $table->text('error')->nullable();
+            $table->text('error_message')->nullable();
+            $table->timestamp('completed_at')->nullable();
+            $table->text('password')->nullable();
             $table->timestamps();
         });
 

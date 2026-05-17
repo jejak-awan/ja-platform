@@ -103,14 +103,15 @@ class ContentService
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('body', 'like', "%{$search}%")
-                    ->orWhere('excerpt', 'like', "%{$search}%")
-                    ->orWhereHas('category', function ($cq) use ($search): void {
-                        $cq->where('name', 'like', "%{$search}%");
+                $searchStr = strtolower($search);
+                $q->where(\Illuminate\Support\Facades\DB::raw('lower(title)'), 'like', "%{$searchStr}%")
+                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(body)'), 'like', "%{$searchStr}%")
+                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(excerpt)'), 'like', "%{$searchStr}%")
+                    ->orWhereHas('category', function ($cq) use ($searchStr): void {
+                        $cq->where(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%");
                     })
-                    ->orWhereHas('author', function ($aq) use ($search): void {
-                        $aq->where('name', 'like', "%{$search}%");
+                    ->orWhereHas('author', function ($aq) use ($searchStr): void {
+                        $aq->where(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%");
                     });
             });
         }

@@ -54,12 +54,33 @@
 
     <div
       v-else-if="results.length === 0 && query"
-      class="text-center py-12"
+      class="text-center py-12 space-y-6"
     >
-      <Search class="mx-auto h-12 w-12 text-muted-foreground" />
-      <p class="mt-4 text-muted-foreground">
-        {{ t('features.search.empty') }}
-      </p>
+      <div class="space-y-2">
+        <Search class="mx-auto h-12 w-12 text-muted-foreground" />
+        <p class="text-muted-foreground">
+          {{ t('features.search.empty') }}
+        </p>
+      </div>
+
+      <div
+        v-if="suggestions.length > 0"
+        class="inline-block bg-muted/40 border border-muted px-6 py-4 rounded-xl text-left max-w-md mx-auto"
+      >
+        <span class="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
+          Did you mean?
+        </span>
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="sug in suggestions"
+            :key="sug.text"
+            class="px-3 py-1.5 bg-background hover:bg-primary/10 hover:text-primary border border-border hover:border-primary/20 rounded-lg text-sm font-medium transition-all"
+            @click="applySuggestion(sug.text)"
+          >
+            {{ sug.text }}
+          </button>
+        </div>
+      </div>
     </div>
 
     <div
@@ -127,24 +148,26 @@ import ChevronRight from 'lucide-vue-next/dist/esm/icons/chevron-right.js';
 import { SearchService } from '@/modules/Search/services/searchService';
 
 const { t } = useI18n();
-import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
+import { ensureArray } from '@/shared/utils/responseParser';
 
 const route = useRoute();
 const router = useRouter();
 
 interface SearchResult {
-    id: string | string;
+    id: string;
     type: string;
     title: string;
     description?: string;
     created_at?: string;
     author?: string;
     url?: string;
+    searchable_id?: string;
 }
 
 const query = ref(route.query.q || '');
 const searchQuery = ref(route.query.q || '');
 const results = ref<SearchResult[]>([]);
+const suggestions = ref<any[]>([]);
 const loading = ref(false);
 const typeFilters = ref<string[]>([]);
 
@@ -179,17 +202,24 @@ const performSearch = async () => {
     
     try {
         const response = await SearchService.search({ q: query.value });
-        const { data } = parseResponse(response);
-        results.value = ensureArray(data);
+        const responseData = response.data as any;
+        results.value = ensureArray(responseData?.results || responseData || []);
+        suggestions.value = ensureArray(responseData?.suggestions || []);
         
         // Update URL
         router.replace({ query: { q: query.value } });
     } catch (error: unknown) {
         logger.error('Failed to search:', error);
         results.value = [];
+        suggestions.value = [];
     } finally {
         loading.value = false;
     }
+};
+
+const applySuggestion = (text: string) => {
+    searchQuery.value = text;
+    performSearch();
 };
 
 const toggleTypeFilter = (type: string) => {
@@ -203,14 +233,16 @@ const toggleTypeFilter = (type: string) => {
 
 const handleResultClick = (result: SearchResult) => {
     // Navigate based on result type
-    if (result.type === 'content') {
-        router.push({ name: 'contents.edit', params: { id: result.id } });
-    } else if (result.type === 'category') {
-        router.push({ name: 'categories.edit', params: { id: result.id } });
-    } else if (result.type === 'user') {
-        router.push({ name: 'users.edit', params: { id: result.id } });
-    } else if (result.type === 'media') {
-        router.push({ name: 'media', query: { id: result.id } });
+    const resourceId = result.searchable_id || result.id;
+    
+    if ((result.type === 'post' || result.type === 'page' || result.type === 'content') && resourceId) {
+        router.push({ name: 'contents.edit', params: { id: resourceId } });
+    } else if (result.type === 'category' && resourceId) {
+        router.push({ name: 'categories.edit', params: { id: resourceId } });
+    } else if (result.type === 'user' && resourceId) {
+        router.push({ name: 'users.edit', params: { id: resourceId } });
+    } else if (result.type === 'media' && resourceId) {
+        router.push({ name: 'media', query: { id: resourceId } });
     } else if (result.url) {
         router.push(result.url);
     }

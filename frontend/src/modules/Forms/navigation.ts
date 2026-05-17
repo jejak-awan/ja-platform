@@ -1,7 +1,17 @@
 import type { NavItem } from '@/shared/utils/navigation';
 
 export const formsNavigation: NavItem[] = [
-    { name: 'forms', to: '/dash/forms', label: 'Forms', labelKey: 'modules.cms.navigation.menu.forms', permission: 'view forms', icon: 'clipboard-list' },
+    { 
+        name: 'forms', 
+        to: '/dash/forms', 
+        label: 'Forms', 
+        labelKey: 'modules.cms.navigation.menu.forms', 
+        permission: 'view forms', 
+        icon: 'clipboard-list',
+        context: 'both',
+        group: 'studio',
+        priority: 80
+    },
 ];
 
 export default formsNavigation;

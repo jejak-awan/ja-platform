@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Modules\Media\Models\File as Media;
 use Modules\Analytics\Models\AnalyticsVisit;
 use Modules\System\Models\User;
-use Modules\System\Registries\DashboardRegistry;
+use Modules\System\Services\DashboardRegistry;
 
 /**
  * @OA\Tag(name="Dashboard")

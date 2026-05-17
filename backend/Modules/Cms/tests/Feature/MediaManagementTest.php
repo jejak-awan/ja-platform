@@ -515,4 +515,33 @@ class MediaManagementTest extends TestCase
         $this->assertIsArray($tagNames);
         $this->assertContains('TestTag', $tagNames);
     }
+
+    /**
+     * Test admin can get media filters.
+     */
+    public function test_admin_can_get_media_filters(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        Media::factory()->create(['author_id' => $admin->id]);
+
+        $response = $this->getJson('/api/v1/manage/media/filters');
+
+        TestHelpers::assertApiSuccess($response);
+        $response->assertJsonStructure([
+            'success',
+            'authors' => [
+                '*' => [
+                    'id',
+                    'name',
+                ]
+            ],
+            'message',
+        ]);
+        $response->assertJsonFragment([
+            'id' => $admin->id,
+            'name' => $admin->name,
+        ]);
+    }
 }

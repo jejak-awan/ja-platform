@@ -11,5 +11,5 @@ interface WorkspaceResolver
     /**
      * Resolve the active workspace ID from the request.
      */
-    public function resolve(Request $request): ?int;
+    public function resolve(Request $request): ?string;
 }

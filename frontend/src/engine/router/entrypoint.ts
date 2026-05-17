@@ -40,6 +40,18 @@ export const resolveIsAdminEntrypoint = (pathname: string): boolean => {
         return typeof window !== 'undefined' && window.__JA_GATE__ === 'admin';
     }
 
+    // Dynamic Admin Dashboard Slug Check
+    let customSlug = 'dash';
+    try {
+        customSlug = localStorage.getItem('admin_dashboard_slug') || 'dash';
+    } catch {
+        // Fallback
+    }
+    const dynamicPrefix = `/${customSlug}`;
+    if (cleanPath === dynamicPrefix || cleanPath.startsWith(`${dynamicPrefix}/`)) {
+        return true;
+    }
+
     return ADMIN_ENTRYPOINT_PATHS.some((prefix) => (
         cleanPath === prefix || cleanPath.startsWith(`${prefix}/`)
     ));

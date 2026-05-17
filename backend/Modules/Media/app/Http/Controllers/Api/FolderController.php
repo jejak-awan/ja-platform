@@ -17,6 +17,12 @@ class FolderController extends Controller
     {
         $query = Folder::query();
 
+        if ($request->input('trashed') === 'only') {
+            $query->onlyTrashed();
+        } elseif ($request->input('trashed') === 'with') {
+            $query->withTrashed();
+        }
+
         if ($request->has('parent_id')) {
             $parentId = $request->input('parent_id');
             if ($parentId === 'null' || $parentId === null) {

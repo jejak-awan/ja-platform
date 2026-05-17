@@ -275,11 +275,116 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
             $prefix = is_string($prefixRaw) ? $prefixRaw : null;
             $totalKeys = $this->getDatabaseSize($redis);
 
+            // Scan and build live Top Keys by Size
+            $keysRaw = [];
+            try {
+                $keysRaw = $redis->keys('*');
+            } catch (\Exception) {
+                // Keep keysRaw empty if failed
+            }
+
+            $topKeys = [];
+            if (is_array($keysRaw) && count($keysRaw) > 0) {
+                $tempKeys = [];
+                foreach ($keysRaw as $keyName) {
+                    $keyNameStr = is_string($keyName) ? $keyName : '';
+                    if (empty($keyNameStr)) {
+                        continue;
+                    }
+
+                    // Query exact MEMORY USAGE in bytes
+                    $bytes = 0;
+                    try {
+                        $usage = $redis->executeRaw(['MEMORY', 'USAGE', $keyNameStr]);
+                        $bytes = is_numeric($usage) ? (int) $usage : 0;
+                    } catch (\Exception) {
+                        try {
+                            $val = $redis->get($keyNameStr);
+                            $bytes = is_string($val) ? strlen($val) : 0;
+                        } catch (\Exception) {
+                            $bytes = 0;
+                        }
+                    }
+
+                    // Query TTL
+                    $ttlSec = -1;
+                    try {
+                        $ttlSec = $redis->ttl($keyNameStr);
+                        $ttlSec = is_numeric($ttlSec) ? (int) $ttlSec : -1;
+                    } catch (\Exception) {
+                        $ttlSec = -1;
+                    }
+
+                    // Remove prefix if present in keyNameStr
+                    $cleanKey = $keyNameStr;
+                    if (!empty($prefix)) {
+                        while (str_starts_with($cleanKey, $prefix)) {
+                            $cleanKey = substr($cleanKey, strlen($prefix));
+                        }
+                    }
+
+                    $tempKeys[] = [
+                        'key' => $cleanKey,
+                        'size_bytes' => $bytes,
+                        'ttl_sec' => $ttlSec,
+                    ];
+                }
+
+                // Sort keys by size descending
+                usort($tempKeys, function ($a, $b) {
+                    return $b['size_bytes'] <=> $a['size_bytes'];
+                });
+
+                // Take top 10 keys
+                $topKeysRaw = array_slice($tempKeys, 0, 10);
+
+                // Format sizes and TTLs
+                foreach ($topKeysRaw as $item) {
+                    $formattedSize = '0 B';
+                    $units = ['B', 'KB', 'MB', 'GB'];
+                    $sizeVal = $item['size_bytes'];
+                    $unit = 0;
+                    while ($sizeVal >= 1024 && $unit < count($units) - 1) {
+                        $sizeVal /= 1024;
+                        $unit++;
+                    }
+                    $formattedSize = round($sizeVal, 2) . ' ' . $units[$unit];
+
+                    $formattedTtl = 'Persistent';
+                    if ($item['ttl_sec'] === -2) {
+                        $formattedTtl = 'Expired';
+                    } elseif ($item['ttl_sec'] > 0) {
+                        $secs = $item['ttl_sec'];
+                        if ($secs >= 86400) {
+                            $days = floor($secs / 86400);
+                            $hours = floor(($secs % 86400) / 3600);
+                            $formattedTtl = "{$days}d {$hours}h";
+                        } elseif ($secs >= 3600) {
+                            $hours = floor($secs / 3600);
+                            $mins = floor(($secs % 3600) / 60);
+                            $formattedTtl = "{$hours}h {$mins}m";
+                        } elseif ($secs >= 60) {
+                            $mins = floor($secs / 60);
+                            $secRem = $secs % 60;
+                            $formattedTtl = "{$mins}m {$secRem}s";
+                        } else {
+                            $formattedTtl = "{$secs}s";
+                        }
+                    }
+
+                    $topKeys[] = [
+                        'key' => $item['key'],
+                        'size' => $formattedSize,
+                        'ttl' => $formattedTtl,
+                    ];
+                }
+            }
+
             $stats = [
                 'total_keys' => $totalKeys,
                 'cache_size' => 'Estimated via Redis INFO only',
                 'expired_keys' => $this->getExpiredKeysCount($redis),
-                'top_keys' => [],
+                'top_keys' => $topKeys,
                 'key_prefix' => $prefix,
             ];
 

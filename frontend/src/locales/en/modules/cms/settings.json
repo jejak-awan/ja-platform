@@ -17,6 +17,8 @@
     "description": "Manage CMS configuration, identity, discussion, and performance",
     "reset": "Reset Settings",
     "save": "Save Settings",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
     "groups": {
         "siteInfo": {
             "title": "Site Information",
@@ -40,6 +42,14 @@
         "discussion": {
             "title": "Discussion Settings",
             "description": "Configure comment system behavior"
+        },
+        "meta": {
+            "title": "Meta Tags",
+            "description": "Configure default metadata and keywords for SEO"
+        },
+        "searchEngines": {
+            "title": "Search Engines & Crawling",
+            "description": "Configure integration with Google search console, sitemap, and robots.txt"
         }
     },
     "labels": {
@@ -49,6 +59,42 @@
         "site_description": "Site Description",
         "site_url": "Site URL",
         "admin_email": "Admin Email",
+        "brand_logo": "Brand Logo",
+        "brand_favicon": "Brand Favicon",
+        "branding_display": "Branding Display Mode",
+        
+        "meta_title": "Default Meta Title",
+        "meta_description": "Default Meta Description",
+        "meta_keywords": "Default Meta Keywords",
+        "google_analytics_id": "Google Analytics Measurement ID",
+        "google_search_console": "Google Search Console Verification Token",
+        "enable_sitemap": "Enable Sitemap Generation",
+        "enable_robots_txt": "Enable Robots.txt Editor",
+
+        "analytics_retention_days": "Visitor Log Retention (Days)",
+        "analytics_event_retention_days": "Event History Retention (Days)",
+        "analytics_visitor_retention_days": "Session Log Retention (Days)",
+
+        "mail_driver": "Mail Driver / Protocol",
+        "mail_host": "SMTP Server Host",
+        "mail_port": "SMTP Server Port",
+        "mail_username": "SMTP Server Username",
+        "mail_password": "SMTP Server Password",
+        "mail_encryption": "Mail Encryption Type",
+        "mail_from_address": "Sender Email Address",
+        "mail_from_name": "Sender Name Display",
+
+        "activity_log_retention_days": "System Activity Log Retention (Days)",
+        "security_log_retention_days": "WAF & Security Audit Retention (Days)",
+        "login_history_retention_days": "User Login History Retention (Days)",
+        "security_alert_failed_login_threshold": "Failed Logins Warning Threshold",
+        "backup_retention_days": "Database Backup Retention (Days)",
+
+        "ai_enabled": "Enable AI Platform Features",
+        "ai_default_provider": "Default LLM Provider",
+        "gemini_api_key": "Gemini LLM API Key",
+        "gemini_model": "Gemini Model Variant",
+        
         "comments": {
             "security": {
                 "enable_reply": "Enable Replies",
@@ -67,6 +113,42 @@
         "site_description": "A brief description of your site for SEO purposes",
         "site_url": "The main URL of your CMS application",
         "admin_email": "Contact email for administrative purposes",
+        "brand_logo": "Corporate/Brand logo displayed in admin panels",
+        "brand_favicon": "Admin panel favicon icon asset",
+        "branding_display": "Determine if branding displays logo, app name, or both",
+
+        "meta_title": "Primary default title used when no specific content title is set",
+        "meta_description": "Default description served to search engine crawl spiders",
+        "meta_keywords": "Comma separated keywords representing core site taxonomy",
+        "google_analytics_id": "Integration tracking ID (e.g. G-XXXXXX)",
+        "google_search_console": "HTML verification token for search performance console",
+        "enable_sitemap": "Generate sitemap.xml dynamically to ease indexing",
+        "enable_robots_txt": "Expose robots.txt configuration dynamically",
+
+        "analytics_retention_days": "Retain general visitor trace statistics (kpi counters)",
+        "analytics_event_retention_days": "Retain granular frontend search / interaction events log",
+        "analytics_visitor_retention_days": "Retain unique tracking sessions",
+
+        "mail_driver": "Transmission protocol driver (usually SMTP)",
+        "mail_host": "FQDN or IP of your mail relay mail server",
+        "mail_port": "Port mapped to the mail relay (typically 587 or 2525)",
+        "mail_username": "Authentication username credential for mail delivery",
+        "mail_password": "Authentication password credential for mail delivery",
+        "mail_encryption": "TLS or SSL tunnel encapsulation mode for security",
+        "mail_from_address": "Outgoing envelope sender address shown in emails",
+        "mail_from_name": "Display name prefix mapped to sender address",
+
+        "activity_log_retention_days": "Automated purge interval for audit logs",
+        "security_log_retention_days": "Automated purge interval for WAF blockage events",
+        "login_history_retention_days": "Trace logs window for login attempts",
+        "security_alert_failed_login_threshold": "Warn admin if an IP fails authentication this many times",
+        "backup_retention_days": "Retention window for ZIP backups of DB + files",
+
+        "ai_enabled": "Enable unified AI generation and chat tools globally",
+        "ai_default_provider": "Preferred primary Large Language Model provider",
+        "gemini_api_key": "Authentication key from Google AI Studio",
+        "gemini_model": "Target model variant (e.g., gemini-2.5-flash)",
+
         "comments": {
             "security": {
                 "enable_reply": "Allow users to reply to other comments",

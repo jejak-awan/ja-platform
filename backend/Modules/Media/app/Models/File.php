@@ -63,7 +63,7 @@ class File extends Model
         'is_shared' => 'boolean',
     ];
 
-    protected $appends = ['url', 'thumbnail_url'];
+    protected $appends = ['url', 'thumbnail_url', 'is_trashed'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\Media\Models\Folder, $this>
@@ -134,5 +134,10 @@ class File extends Model
         }
 
         return $this->url;
+    }
+
+    public function getIsTrashedAttribute(): bool
+    {
+        return $this->trashed();
     }
 }

@@ -85,7 +85,10 @@ class LmsService
             ->withCount('lessons')
             ->when($status, fn($q) => $q->where('status', (string)$status))
             ->when($level, fn($q) => $q->where('level', (string)$level))
-            ->when($search, fn($q) => $q->where('title', 'like', '%' . $search . '%'))
+            ->when($search, function ($q) use ($search) {
+                $searchStr = strtolower($search);
+                return $q->where(\Illuminate\Support\Facades\DB::raw('lower(title)'), 'like', '%' . $searchStr . '%');
+            })
             ->latest()
             ->get();
     }

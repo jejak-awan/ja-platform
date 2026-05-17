@@ -110,7 +110,7 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
         return $this->success($setting, 'Setting updated successfully');
     }
 
-    public function bulkUpdate(Request $request, \Modules\System\app\Services\LicenseService $licenseService): \Illuminate\Http\JsonResponse
+    public function bulkUpdate(Request $request, \Modules\System\Services\LicenseService $licenseService): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'settings' => 'required|array',

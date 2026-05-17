@@ -85,7 +85,7 @@ const baseRoutes: Array<RouteRecordRaw> = [
 
 // Dashboard wrapper with dynamic children
 const dashboardRoute: RouteRecordRaw = {
-    path: adminPath,
+    path: '/:dashboard_slug?/:workspace_uuid(system|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?',
     component: () => import('@/modules/System/layouts/AdminLayout.vue'),
     meta: { auth: true },
     children: [
@@ -93,7 +93,7 @@ const dashboardRoute: RouteRecordRaw = {
         {
             path: 'dashboard',
             name: 'system.dashboard',
-            component: () => import('@/modules/System/views/admin/Dashboard.vue'),
+            component: () => import('@/modules/System/views/Dashboard.vue'),
             meta: { permission: 'view dashboard' },
         },
         // 2. Central Redirect Handler (Dynamic Resolution)

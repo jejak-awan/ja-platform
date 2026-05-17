@@ -20,10 +20,11 @@ class HRService
         if (!empty($filters['search']) && is_string($filters['search'])) {
             $search = $filters['search'];
             $query->where(function($q) use ($search): void {
-                $q->where('full_name', 'like', "%{$search}%")
-                  ->orWhere('nik', 'like', "%{$search}%")
-                  ->orWhere('nip', 'like', "%{$search}%")
-                  ->orWhere('nuptk', 'like', "%{$search}%");
+                $searchStr = strtolower($search);
+                $q->where(\Illuminate\Support\Facades\DB::raw('lower(full_name)'), 'like', "%{$searchStr}%")
+                  ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(nik)'), 'like', "%{$searchStr}%")
+                  ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(nip)'), 'like', "%{$searchStr}%")
+                  ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(nuptk)'), 'like', "%{$searchStr}%");
             });
         }
 

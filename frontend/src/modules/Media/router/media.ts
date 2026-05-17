@@ -4,7 +4,7 @@ const mediaRoutes: RouteRecordRaw[] = [
     {
         path: 'file-manager',
         name: 'file-manager',
-        component: () => import('@/modules/Media/views/admin/file-manager/Index.vue'),
+        component: () => import('@/modules/Media/views/file-manager/Index.vue'),
         meta: { permission: 'manage files' },
     },
 ];

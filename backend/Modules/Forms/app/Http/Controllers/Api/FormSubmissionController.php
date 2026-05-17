@@ -66,8 +66,9 @@ class FormSubmissionController extends BaseApiController
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
-                $q->where('data', 'like', "%{$search}%")
-                    ->orWhere('ip_address', 'like', "%{$search}%");
+                $searchStr = strtolower($search);
+                $q->where(\Illuminate\Support\Facades\DB::raw('lower(cast(data as text))'), 'like', "%{$searchStr}%")
+                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(ip_address)'), 'like', "%{$searchStr}%");
             });
         }
 
@@ -195,8 +196,9 @@ class FormSubmissionController extends BaseApiController
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
-                $q->where('data', 'like', "%{$search}%")
-                    ->orWhere('ip_address', 'like', "%{$search}%");
+                $searchStr = strtolower($search);
+                $q->where(\Illuminate\Support\Facades\DB::raw('lower(cast(data as text))'), 'like', "%{$searchStr}%")
+                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(ip_address)'), 'like', "%{$searchStr}%");
             });
         }
 

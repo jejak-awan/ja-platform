@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\System\app\Services;
+namespace Modules\System\Services;
 
 use Modules\System\Models\Setting;
 

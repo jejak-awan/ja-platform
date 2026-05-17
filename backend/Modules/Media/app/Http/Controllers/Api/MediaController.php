@@ -26,6 +26,10 @@ class MediaController extends Controller
         $this->authorize('viewAny', File::class);
         $query = File::with(['folder']);
 
+        if ($request->input('trashed') === 'only') {
+            $query->onlyTrashed();
+        }
+
         if ($request->has('folder_id')) {
             $folderId = $request->input('folder_id');
             if ($folderId === 'null' || $folderId === null) {
@@ -41,11 +45,13 @@ class MediaController extends Controller
         }
 
         if ($request->has('search')) {
-            $search = $request->input('search');
+            $searchRaw = $request->input('search');
+            $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function($q) use ($search): void {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('file_name', 'like', "%{$search}%")
-                  ->orWhere('alt', 'like', "%{$search}%");
+                $searchStr = strtolower($search);
+                $q->where(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%")
+                  ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(file_name)'), 'like', "%{$searchStr}%")
+                  ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(alt)'), 'like', "%{$searchStr}%");
             });
         }
 
@@ -294,6 +300,28 @@ class MediaController extends Controller
             'success' => true,
             'data' => $stats,
             'message' => 'Statistics retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Get media filters.
+     */
+    public function filters(): \Illuminate\Http\JsonResponse
+    {
+        $this->authorize('viewAny', File::class);
+
+        $authorIds = File::whereNotNull('author_id')
+            ->distinct()
+            ->pluck('author_id');
+
+        $authors = \Modules\System\Models\User::whereIn('id', $authorIds)
+            ->select('id', 'name')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'authors' => $authors,
+            'message' => 'Filters retrieved successfully'
         ]);
     }
 }

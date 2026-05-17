@@ -88,7 +88,8 @@ class OperationsService
             ->when(!empty($filters['search']) && is_string($filters['search']), function ($q) use ($filters) {
                 /** @var string $search */
                 $search = $filters['search'];
-                return $q->where('description', 'like', '%' . $search . '%');
+                $searchStr = strtolower($search);
+                return $q->where(\Illuminate\Support\Facades\DB::raw('lower(description)'), 'like', '%' . $searchStr . '%');
             })
             ->latest()
             ->paginate($perPage);

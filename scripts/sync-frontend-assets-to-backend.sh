@@ -39,6 +39,7 @@ rsync -a --delete \
   --exclude='.htaccess' \
   --exclude='robots.txt' \
   --exclude='.well-known' \
+  --exclude='storage' \
   "$SRC_DIST" "$DST_PUBLIC"
 
 echo "OK: synced $SRC_DIST → $DST_PUBLIC"

@@ -2,22 +2,73 @@ import type { NavItem } from '@/shared/utils/navigation';
 
 export const systemNavigation: NavItem[] = [
     {
-        label: 'Users & Access', labelKey: 'modules.system.navigation.sections.users_access', icon: 'users', context: 'system', children: [
+        label: 'Users & Access', labelKey: 'modules.system.navigation.sections.users_access', icon: 'users', context: 'system', group: 'operations', priority: 100, children: [
             { name: 'users.index', to: '/dash/users', label: 'Users', labelKey: 'modules.system.navigation.menu.users', permission: 'view users' },
             { name: 'roles', to: '/dash/roles', label: 'Roles & Permissions', labelKey: 'modules.system.navigation.menu.roles', permission: 'view roles' },
         ]
     },
     {
-        label: 'Monitoring', labelKey: 'modules.system.navigation.sections.monitoring', icon: 'activity', context: 'system', role: 'super', children: [
-            { name: 'journal-dashboard', to: '/dash/journal-dashboard', label: 'Journal Dashboard', labelKey: 'modules.system.navigation.menu.journalDashboard', permission: 'view logs' },
-            { name: 'activity-journal', to: '/dash/activity-journal', label: 'Activity Journal', labelKey: 'modules.system.navigation.menu.activityJournal', permission: 'view activity logs' },
-            { name: 'security-journal', to: '/dash/security-journal', label: 'Security Journal', labelKey: 'modules.system.navigation.menu.securityJournal', permission: 'view security logs' },
-            { name: 'system-journal', to: '/dash/system-journal', label: 'System Journal', labelKey: 'modules.system.navigation.menu.systemJournal', permission: 'view system' },
-            { name: 'access-journal', to: '/dash/access-journal', label: 'Access History', labelKey: 'modules.system.navigation.menu.accessJournal', permission: 'view users' },
-        ]
+        name: 'journal-dashboard',
+        to: '/dash/journal-dashboard',
+        label: 'Journal Dashboard',
+        labelKey: 'modules.system.navigation.menu.journalDashboard',
+        permission: 'view logs',
+        icon: 'journal-dashboard',
+        context: 'system',
+        role: 'super',
+        group: 'monitoring',
+        priority: 100
     },
     {
-        label: 'Infrastructure', labelKey: 'modules.system.navigation.sections.infrastructure', icon: 'settings', context: 'system', children: [
+        name: 'activity-journal',
+        to: '/dash/activity-journal',
+        label: 'Activity Journal',
+        labelKey: 'modules.system.navigation.menu.activityJournal',
+        permission: 'view activity logs',
+        icon: 'activity-journal',
+        context: 'system',
+        role: 'super',
+        group: 'monitoring',
+        priority: 90
+    },
+    {
+        name: 'security-journal',
+        to: '/dash/security-journal',
+        label: 'Security Journal',
+        labelKey: 'modules.system.navigation.menu.securityJournal',
+        permission: 'view security logs',
+        icon: 'security-journal',
+        context: 'system',
+        role: 'super',
+        group: 'monitoring',
+        priority: 80
+    },
+    {
+        name: 'system-journal',
+        to: '/dash/system-journal',
+        label: 'System Journal',
+        labelKey: 'modules.system.navigation.menu.systemJournal',
+        permission: 'view system',
+        icon: 'system-journal',
+        context: 'system',
+        role: 'super',
+        group: 'monitoring',
+        priority: 70
+    },
+    {
+        name: 'access-journal',
+        to: '/dash/access-journal',
+        label: 'Access History',
+        labelKey: 'modules.system.navigation.menu.accessJournal',
+        permission: 'view users',
+        icon: 'access-journal',
+        context: 'system',
+        role: 'super',
+        group: 'monitoring',
+        priority: 60
+    },
+    {
+        label: 'Infrastructure', labelKey: 'modules.system.navigation.sections.infrastructure', icon: 'settings', context: 'system', group: 'operations', priority: 90, children: [
             { name: 'system', to: '/dash/system', label: 'System Info', labelKey: 'modules.system.navigation.menu.systemInfo', permission: 'view system', role: 'super' },
             { name: 'settings', to: '/dash/settings', label: 'System Settings', labelKey: 'modules.system.navigation.menu.settings', permission: 'view settings' },
             { name: 'system-notifications', to: '/dash/system/notifications', label: 'Notifications', labelKey: 'modules.system.navigation.menu.systemNotifications', permission: 'manage system' },
@@ -28,7 +79,7 @@ export const systemNavigation: NavItem[] = [
         ]
     },
     {
-        label: 'Developer', labelKey: 'modules.system.navigation.sections.developer', icon: 'code', context: 'system', role: 'super', children: [
+        label: 'Developer', labelKey: 'modules.system.navigation.sections.developer', icon: 'code', context: 'system', role: 'super', group: 'operations', priority: 70, children: [
             { name: 'plugins', to: '/dash/plugins', label: 'Plugins', labelKey: 'modules.system.navigation.menu.plugins', permission: 'view plugins' },
         ]
     },

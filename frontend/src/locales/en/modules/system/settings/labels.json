@@ -99,6 +99,7 @@
         "maintenance_countdown_enabled": "Enable Countdown Timer",
         "maintenance_end_time": "Maintenance End Time",
         "shield_protection_mode": "Bot Shield Mode",
+        "admin_dashboard_slug": "Dashboard Custom URL Slug",
         "shield_protection_difficulty": "PoW Difficulty Level",
         "shield_log_verification_success": "Log Successful Verifications",
         "shield_enable_ip_intelligence": "Global Blacklist (IP Intelligence)",

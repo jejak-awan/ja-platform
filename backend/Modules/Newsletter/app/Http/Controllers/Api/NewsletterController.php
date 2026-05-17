@@ -129,8 +129,9 @@ class NewsletterController extends BaseApiController
                 $searchRaw = $request->q;
                 $search = is_string($searchRaw) ? $searchRaw : '';
                 $query->where(function ($q) use ($search): void {
-                    $q->where('email', 'like', "%{$search}%")
-                        ->orWhere('name', 'like', "%{$search}%");
+                    $searchStr = strtolower($search);
+                    $q->where(\Illuminate\Support\Facades\DB::raw('lower(email)'), 'like', "%{$searchStr}%")
+                        ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%");
                 });
             }
 

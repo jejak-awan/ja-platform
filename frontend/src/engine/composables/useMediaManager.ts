@@ -5,7 +5,7 @@ import { useToast } from '@/shared/composables/useToast';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { MediaService } from '@/modules/Media/services/mediaService';
 import { LibraryService } from '@/modules/Library/services/libraryService';
-import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
+import { parseResponse, ensureArray, parseSingleResponse } from '@/shared/utils/responseParser';
 import type { Media, MediaFolder, MediaStats } from '@/modules/Media/types/media';
 import type { Tag } from '@/modules/Library/types/taxonomy';
 import type { PaginationData } from '@/shared/utils/responseParser';
@@ -119,7 +119,7 @@ export function useMediaManager() {
     const fetchStatistics = async () => {
         try {
             const response = await MediaService.statistics();
-            statistics.value = response.data?.data || null;
+            statistics.value = parseSingleResponse<MediaStats>(response);
         } catch {
             // logger.error('Failed to fetch media statistics:', error);
         }

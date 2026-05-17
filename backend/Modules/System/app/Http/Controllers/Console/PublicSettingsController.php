@@ -27,6 +27,7 @@ class PublicSettingsController extends \Modules\System\Http\Controllers\BaseApiC
             'site_version' => config('app.version'),
             'site_logo' => Setting::get('site_logo', '/logo.png'),
             'site_favicon' => Setting::get('site_favicon', '/favicon.ico'),
+            'admin_dashboard_slug' => Setting::get('admin_dashboard_slug', 'dash'),
             
             // App Branding (Core)
             'app_name' => Setting::get('app_name', 'Janari App'),
@@ -53,22 +54,10 @@ class PublicSettingsController extends \Modules\System\Http\Controllers\BaseApiC
             'maintenance_end_time' => Setting::get('maintenance_end_time', ''),
         ];
 
-        $etagSource = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $etag = '"'.sha1(is_string($etagSource) ? $etagSource : '').'"';
-        $ifNoneMatch = $request->headers->get('If-None-Match');
-
-        if (is_string($ifNoneMatch) && trim($ifNoneMatch) === $etag) {
-            return response()->json(null, 304, [
-                'ETag' => $etag,
-                'Cache-Control' => 'public, max-age=60, stale-while-revalidate=300',
-                'Vary' => 'Accept-Encoding',
-            ]);
-        }
-
         $response = $this->success($payload, 'Public settings retrieved successfully');
-        $response->headers->set('ETag', $etag);
-        $response->headers->set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
-        $response->headers->set('Vary', 'Accept-Encoding');
+        $response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
 
         return $response;
     }

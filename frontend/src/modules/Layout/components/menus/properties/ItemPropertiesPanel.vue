@@ -102,10 +102,77 @@
 
         <!-- Grouped Fields -->
         <Accordion
-          v-if="groupedSettings.length > 0"
+          v-if="groupedSettings.length > 0 || selectedItem"
           type="multiple"
           class="w-full"
         >
+          <!-- Visibility & Security Group -->
+          <AccordionItem
+            value="visibility_security"
+          >
+            <AccordionTrigger class="py-2 text-sm font-bold">
+              {{ t('modules.cms.menus.form.groups.visibility') || 'Visibility & Security' }}
+            </AccordionTrigger>
+            <AccordionContent class="pt-2 pb-4 space-y-4">
+              <div class="flex items-center gap-2 pt-1">
+                <Checkbox 
+                  id="requires_auth"
+                  :checked="Boolean(getMetadata('requires_auth'))"
+                  @update:checked="updateMetadataField('requires_auth', $event)"
+                />
+                <Label
+                  for="requires_auth"
+                  class="text-xs font-normal cursor-pointer"
+                >
+                  {{ t('modules.cms.menus.form.requiresAuth') || 'Requires Authentication' }}
+                </Label>
+              </div>
+
+              <div class="space-y-1.5">
+                <Label class="text-xs">{{ t('modules.cms.menus.form.requiredPermission') || 'Required Permission' }}</Label>
+                <Input 
+                  :model-value="String(getMetadata('required_permission', ''))"
+                  placeholder="e.g. view dashboard"
+                  class="h-8"
+                  @update:model-value="updateMetadataField('required_permission', $event)"
+                />
+                <p class="text-[10px] text-muted-foreground">
+                  Hide this menu item if the user does not have this permission.
+                </p>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          <!-- Translations / Localization Group -->
+          <AccordionItem
+            value="localization"
+          >
+            <AccordionTrigger class="py-2 text-sm font-bold">
+              {{ t('modules.cms.menus.form.groups.localization') || 'Translations / Localization' }}
+            </AccordionTrigger>
+            <AccordionContent class="pt-2 pb-4 space-y-4">
+              <div class="space-y-1.5">
+                <Label class="text-xs">{{ t('modules.cms.menus.form.titleEn') || 'Title (English)' }}</Label>
+                <Input 
+                  :model-value="String(getMetadata('title_en', ''))"
+                  placeholder="e.g. Home"
+                  class="h-8"
+                  @update:model-value="updateMetadataField('title_en', $event)"
+                />
+              </div>
+
+              <div class="space-y-1.5">
+                <Label class="text-xs">{{ t('modules.cms.menus.form.titleId') || 'Title (Indonesian)' }}</Label>
+                <Input 
+                  :model-value="String(getMetadata('title_id', ''))"
+                  placeholder="e.g. Beranda"
+                  class="h-8"
+                  @update:model-value="updateMetadataField('title_id', $event)"
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
           <AccordionItem
             v-for="group in groupedSettings"
             :key="group.name"
@@ -176,7 +243,9 @@ import {
     SelectValue,
     SelectContent,
     SelectItem,
-    Label
+    Label,
+    Checkbox,
+    Input
 } from '@/shared/components/ui';
 import ItemPropertyField from './ItemPropertyField.vue';
 
@@ -297,6 +366,23 @@ const formatGroupName = (name: string) => {
     const translated = t(key);
     if (translated !== key) return translated;
     return name.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+};
+
+const getMetadata = (key: string, fallback: any = null) => {
+    if (!selectedItem.value) return fallback;
+    const meta = selectedItem.value.metadata as Record<string, any> | undefined;
+    return meta && meta[key] !== undefined ? meta[key] : fallback;
+};
+
+const updateMetadataField = (key: string, value: any) => {
+    if (!selectedItem.value) return;
+    const itemId = selectedItem.value.id || selectedItem.value._temp_id!;
+    const currentMeta = (selectedItem.value.metadata as Record<string, any>) || {};
+    const newMeta = {
+        ...currentMeta,
+        [key]: value
+    };
+    menuContext.updateItem(itemId, { metadata: newMeta });
 };
 
 const updateField = (key: string, value: PropertyValue) => {

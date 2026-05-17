@@ -128,6 +128,11 @@ class SystemService
                     'total_size' => \Modules\Media\Models\File::sum('size'),
                 ],
                 'tags' => \Modules\Library\Models\Tag::count(),
+                'email' => [
+                    'templates' => class_exists(\Modules\System\Models\EmailTemplate::class) ? \Modules\System\Models\EmailTemplate::count() : 0,
+                    'subscribers' => class_exists(\Modules\Newsletter\Models\NewsletterSubscriber::class) ? \Modules\Newsletter\Models\NewsletterSubscriber::count() : 0,
+                    'smtp_status' => strtoupper(is_string($statusVal = Cache::get('email_smtp_status', 'active')) ? $statusVal : 'active'),
+                ],
             ];
 
             // Merge module stats (Flattened)

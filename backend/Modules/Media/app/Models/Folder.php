@@ -49,6 +49,8 @@ class Folder extends Model
         'is_shared' => 'boolean',
     ];
 
+    protected $appends = ['is_trashed'];
+
     /**
      * @return BelongsTo<Folder, $this>
      */
@@ -84,5 +86,10 @@ class Folder extends Model
         }
 
         return implode(' / ', $path);
+    }
+
+    public function getIsTrashedAttribute(): bool
+    {
+        return $this->trashed();
     }
 }

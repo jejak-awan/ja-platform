@@ -13,7 +13,7 @@ class SchoolWorkspaceResolver implements WorkspaceResolver
     /**
      * Resolve the active workspace ID.
      */
-    public function resolve(Request $request): ?int
+    public function resolve(Request $request): ?string
     {
         $host = $request->getHost();
 
@@ -27,7 +27,7 @@ class SchoolWorkspaceResolver implements WorkspaceResolver
 
         if ($unit) {
             $this->setSchoolDomainContext($unit);
-            return (int) $unit->id;
+            return (string) $unit->id;
         }
 
         // 2. Auto-resolve for Single-Unit installations
@@ -35,7 +35,7 @@ class SchoolWorkspaceResolver implements WorkspaceResolver
             $unit = SchoolUnit::where('is_active', true)->first();
             if ($unit) {
                 $this->setSchoolDomainContext($unit);
-                return (int) $unit->id;
+                return (string) $unit->id;
             }
         }
 
@@ -48,7 +48,7 @@ class SchoolWorkspaceResolver implements WorkspaceResolver
     protected function setSchoolDomainContext(SchoolUnit $unit): void
     {
         // Still need school_id for ScopedBySchool to work
-        Context::add('school_id', (int) $unit->school_id);
+        Context::add('school_id', (string) $unit->school_id);
         
         // Share with views if needed
         view()->share('activeUnit', $unit);

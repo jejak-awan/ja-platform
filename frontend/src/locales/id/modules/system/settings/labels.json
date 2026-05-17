@@ -95,6 +95,7 @@
         "maintenance_message": "Pesan Maintenance",
         "maintenance_countdown_enabled": "Aktifkan Penghitung Waktu Mundur",
         "shield_protection_mode": "Mode Bot Shield",
+        "admin_dashboard_slug": "Slug URL Kustom Dasbor",
         "shield_protection_difficulty": "Tingkat Kesulitan PoW",
         "shield_log_verification_success": "Catat Verifikasi Berhasil",
         "shield_enable_ip_intelligence": "Blacklist Global (IP Intelligence)",

@@ -43,7 +43,9 @@ class SearchServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        $this->commands([
+            \Modules\Search\Console\Commands\ReindexSearch::class,
+        ]);
     }
 
     /**

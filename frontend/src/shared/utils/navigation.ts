@@ -13,4 +13,6 @@ export interface NavItem {
     context?: 'system' | 'foundation' | 'authority' | 'unit' | 'both';
     type?: 'item' | 'divider';
     children?: NavItem[];
+    group?: 'academic' | 'studio' | 'design' | 'operations' | 'monitoring';
+    priority?: number;
 }

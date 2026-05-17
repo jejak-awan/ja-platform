@@ -4,179 +4,179 @@ const schoolRoutes: RouteRecordRaw[] = [
     {
         path: 'school-dashboard',
         name: 'schools.dashboard',
-        component: () => import('@/modules/School/views/admin/Dashboard.vue'),
+        component: () => import('@/modules/School/views/Dashboard.vue'),
         meta: { permission: 'view schools' },
     },
     {
         path: 'foundation-dashboard',
         name: 'foundation.dashboard',
-        component: () => import('@/modules/School/views/admin/FoundationDashboard.vue'),
+        component: () => import('@/modules/School/views/FoundationDashboard.vue'),
         meta: { permission: 'view schools' },
     },
     {
         path: 'schools',
         name: 'schools.index',
-        component: () => import('@/modules/School/views/admin/institution/Institution.vue'),
+        component: () => import('@/modules/School/views/institution/Institution.vue'),
         meta: { permission: 'view schools' },
     },
     {
         path: 'schools/create',
         name: 'schools.create',
-        component: () => import('@/modules/School/views/admin/institution/InstitutionCreate.vue'),
+        component: () => import('@/modules/School/views/institution/InstitutionCreate.vue'),
         meta: { permission: 'create schools', requiresSuperAdmin: true },
     },
     {
         path: 'schools/:id/edit',
         name: 'schools.edit',
-        component: () => import('@/modules/School/views/admin/institution/InstitutionEdit.vue'),
+        component: () => import('@/modules/School/views/institution/InstitutionEdit.vue'),
         meta: { permission: 'edit schools', requiresSuperAdmin: true },
     },
 
     {
         path: 'schools/organization',
         name: 'schools.organization',
-        component: () => import('@/modules/School/views/admin/institution/OrganizationStructure.vue'),
+        component: () => import('@/modules/School/views/institution/OrganizationStructure.vue'),
         meta: { permission: 'view schools' },
     },
     {
         path: 'students',
         name: 'students.index',
-        component: () => import('@/modules/School/views/admin/students/Index.vue'),
+        component: () => import('@/modules/School/views/students/Index.vue'),
         meta: { permission: 'view students' },
     },
     {
         path: 'students/create',
         name: 'students.create',
-        component: () => import('@/modules/School/views/admin/students/Create.vue'),
+        component: () => import('@/modules/School/views/students/Create.vue'),
         meta: { permission: 'create students' },
     },
     {
         path: 'students/:id/edit',
         name: 'students.edit',
-        component: () => import('@/modules/School/views/admin/students/Edit.vue'),
+        component: () => import('@/modules/School/views/students/Edit.vue'),
         meta: { permission: 'edit students' },
     },
     {
         path: 'students/:id',
         name: 'students.show',
-        component: () => import('@/modules/School/views/admin/students/Show.vue'),
+        component: () => import('@/modules/School/views/students/Show.vue'),
         meta: { permission: 'view students' },
     },
     {
         path: 'staff',
         name: 'staff.index',
-        component: () => import('@/modules/School/views/admin/hr/staff/Index.vue'),
+        component: () => import('@/modules/School/views/hr/staff/Index.vue'),
         meta: { permission: 'view staff' },
     },
     {
         path: 'staff/create',
         name: 'staff.create',
-        component: () => import('@/modules/School/views/admin/hr/staff/Create.vue'),
+        component: () => import('@/modules/School/views/hr/staff/Create.vue'),
         meta: { permission: 'create staff' },
     },
     {
         path: 'staff/:id/edit',
         name: 'staff.edit',
-        component: () => import('@/modules/School/views/admin/hr/staff/Edit.vue'),
+        component: () => import('@/modules/School/views/hr/staff/Edit.vue'),
         meta: { permission: 'edit staff' },
     },
     {
         path: 'staff/:id',
         name: 'staff.show',
-        component: () => import('@/modules/School/views/admin/hr/staff/Show.vue'),
+        component: () => import('@/modules/School/views/hr/staff/Show.vue'),
         meta: { permission: 'view staff' },
     },
     {
         path: 'sarpras',
         name: 'sarpras.index',
-        component: () => import('@/modules/School/views/admin/logistics/assets/Index.vue'),
+        component: () => import('@/modules/School/views/logistics/assets/Index.vue'),
         meta: { permission: 'view sarpras' },
     },
     {
         path: 'academic',
         name: 'academic.index',
-        component: () => import('@/modules/School/views/admin/academic/Index.vue'),
+        component: () => import('@/modules/School/views/academic/Index.vue'),
         meta: { permission: 'view academic' },
     },
     {
         path: 'attendance',
         name: 'attendance.index',
-        component: () => import('@/modules/School/views/admin/students/operations/Attendance.vue'),
+        component: () => import('@/modules/School/views/students/operations/Attendance.vue'),
         meta: { permission: 'view attendance' },
     },
     {
         path: 'visitors',
         name: 'visitors.index',
-        component: () => import('@/modules/School/views/admin/students/operations/VisitorLog.vue'),
+        component: () => import('@/modules/School/views/students/operations/VisitorLog.vue'),
         meta: { permission: 'view visitors' },
     },
     {
         path: 'student-affairs',
         name: 'student-affairs.index',
-        component: () => import('@/modules/School/views/admin/students/operations/StudentAffairs.vue'),
+        component: () => import('@/modules/School/views/students/operations/StudentAffairs.vue'),
         meta: { permission: 'view student affairs' },
     },
     {
         path: 'graduation',
         name: 'students.graduation',
-        component: () => import('@/modules/School/views/admin/students/operations/Graduation.vue'),
+        component: () => import('@/modules/School/views/students/operations/Graduation.vue'),
         meta: { permission: 'edit students' },
     },
     {
         path: 'document-templates',
         name: 'settings.document-templates',
-        component: () => import('@/modules/School/views/admin/settings/DocumentTemplates.vue'),
+        component: () => import('@/modules/School/views/settings/DocumentTemplates.vue'),
         meta: { permission: 'manage settings' },
     },
     // LMS Management
     {
         path: 'lms/courses',
         name: 'admin-lms-courses',
-        component: () => import('@/modules/School/views/admin/lms/CourseManagement.vue'),
+        component: () => import('@/modules/School/views/lms/CourseManagement.vue'),
         meta: { title: 'Manajemen Kursus', permission: 'manage lms' },
     },
     {
         path: 'lms/courses/:id',
         name: 'admin-lms-course-detail',
-        component: () => import('@/modules/School/views/admin/lms/CourseDetail.vue'),
+        component: () => import('@/modules/School/views/lms/CourseDetail.vue'),
         meta: { title: 'Detail Kursus', permission: 'manage lms' },
     },
 
     {
         path: 'extensions',
         name: 'extensions.index',
-        component: () => import('@/modules/School/views/admin/extensions/Index.vue'),
+        component: () => import('@/modules/School/views/extensions/Index.vue'),
         meta: { permission: 'view school extensions' },
     },
 
       {
         path: 'admission',
         name: 'admission.index',
-        component: () => import('@/modules/School/views/admin/admission/Index.vue'),
+        component: () => import('@/modules/School/views/admission/Index.vue'),
         meta: { title: 'PPDB Dashboard', permission: 'view admission' }
       },
       {
         path: 'admission/:id',
         name: 'admission.show',
-        component: () => import('@/modules/School/views/admin/admission/Show.vue'),
+        component: () => import('@/modules/School/views/admission/Show.vue'),
         meta: { title: 'Detail Pendaftar', permission: 'view admission' }
       },
       {
         path: 'hr',
         name: 'hr.index',
-        component: () => import('@/modules/School/views/admin/hr/Index.vue'),
+        component: () => import('@/modules/School/views/hr/Index.vue'),
         meta: { title: 'Manajemen HR', permission: 'view staff' }
       },
       {
         path: 'settings/institution',
         name: 'settings.institution',
-        component: () => import('@/modules/School/views/admin/settings/InstitutionSettings.vue'),
+        component: () => import('@/modules/School/views/settings/InstitutionSettings.vue'),
         meta: { title: 'Pengaturan Institusi', permission: 'manage settings' }
       },
       {
         path: 'settings/logs',
         name: 'settings.logs',
-        component: () => import('@/modules/School/views/admin/settings/AuditLogs.vue'),
+        component: () => import('@/modules/School/views/settings/AuditLogs.vue'),
         meta: { title: 'Audit Logs', permission: 'view logs' }
       },
       {
@@ -188,19 +188,19 @@ const schoolRoutes: RouteRecordRaw[] = [
       {
         path: 'logistics',
         name: 'logistics.index',
-        component: () => import('@/modules/School/views/admin/logistics/LogisticsTabs.vue'),
+        component: () => import('@/modules/School/views/logistics/LogisticsTabs.vue'),
         meta: { title: 'Logistik Sekolah', permission: 'view sarpras' }
       },
       {
         path: 'osis',
         name: 'osis.index',
-        component: () => import('@/modules/School/views/admin/osis/Index.vue'),
+        component: () => import('@/modules/School/views/osis/Index.vue'),
         meta: { title: 'Manajemen OSIS', permission: 'view osis' }
       },
       {
         path: 'alumni',
         name: 'alumni.index',
-        component: () => import('@/modules/School/views/admin/alumni/Index.vue'),
+        component: () => import('@/modules/School/views/alumni/Index.vue'),
         meta: { title: 'Manajemen Alumni', permission: 'view students' }
       },
       

@@ -26,6 +26,11 @@ Route::prefix('v1')->group(function (): void {
             Route::post('test-notification', [SecurityController::class, 'testNotification']);
             Route::get('csp-reports', [CspReportController::class, 'index']);
             Route::post('csp-reports/bulk-action', [CspReportController::class, 'bulkAction']);
+
+            // Bot Shield
+            Route::get('shield/journal', [SecurityController::class, 'shieldJournal']);
+            Route::get('shield/stats', [SecurityController::class, 'shieldStats']);
+            Route::post('shield/clear', [SecurityController::class, 'clearShieldLogs']);
         });
 
         Route::middleware('permission:manage security ip-lists|manage security operations')->group(function (): void {
@@ -37,6 +42,7 @@ Route::prefix('v1')->group(function (): void {
         Route::middleware('permission:manage security integrity|manage security operations')->group(function (): void {
             Route::get('threat-analysis', [SecurityController::class, 'threatAnalysis']);
             Route::get('file-integrity', [SecurityController::class, 'fileIntegrityStatus']);
+            Route::post('file-integrity/resync', [SecurityController::class, 'resyncFileIntegrity']);
             Route::post('run-integrity-check', [SecurityController::class, 'runIntegrityCheck']);
         });
     });

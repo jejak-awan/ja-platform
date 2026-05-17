@@ -179,6 +179,8 @@ import { logger } from '@/shared/utils/logger';
 import { ref, computed, watch, onMounted, onUnmounted, type Component } from 'vue';
 import { useRouter, type RouteLocationRaw } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/modules/System/stores/auth';
+import { useWorkspaceStore } from '@/engine/stores/workspace';
 import { SearchService } from '@/modules/Search/services/searchService';
 import { Dialog, DialogContent } from '@/shared/components/ui';
 import Search from 'lucide-vue-next/dist/esm/icons/search.js';
@@ -190,6 +192,18 @@ import Home from 'lucide-vue-next/dist/esm/icons/house.js';
 import Settings from 'lucide-vue-next/dist/esm/icons/settings.js';
 import UserCircle from 'lucide-vue-next/dist/esm/icons/circle-user.js';
 import PlusCircle from 'lucide-vue-next/dist/esm/icons/circle-plus.js';
+import Cpu from 'lucide-vue-next/dist/esm/icons/cpu.js';
+import Webhook from 'lucide-vue-next/dist/esm/icons/webhook.js';
+import Layers from 'lucide-vue-next/dist/esm/icons/layers.js';
+import HardDrive from 'lucide-vue-next/dist/esm/icons/hard-drive.js';
+import Activity from 'lucide-vue-next/dist/esm/icons/activity.js';
+import MessageSquare from 'lucide-vue-next/dist/esm/icons/message-square.js';
+import ListTodo from 'lucide-vue-next/dist/esm/icons/list-todo.js';
+import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
+import Monitor from 'lucide-vue-next/dist/esm/icons/monitor.js';
+import Calendar from 'lucide-vue-next/dist/esm/icons/calendar.js';
+import Globe from 'lucide-vue-next/dist/esm/icons/globe.js';
+import Database from 'lucide-vue-next/dist/esm/icons/database.js';
 
 interface SearchItem {
     id?: string;
@@ -222,6 +236,8 @@ const emit = defineEmits<{
 // Utils
 const router = useRouter();
 const { t } = useI18n();
+const authStore = useAuthStore();
+const workspaceStore = useWorkspaceStore();
 
 // State
 const open = ref(false);
@@ -252,25 +268,50 @@ const applySuggestion = (text: string) => {
 // Static Actions (Nav Items) - Comprehensive list of admin shortcuts
 const staticActions = computed<SearchItem[]>(() => [
     // Core Navigation
-    { title: t('common.navigation.menu.dashboard'), icon: Home, route: { name: 'dashboard' }, type: 'action', keywords: 'home overview' },
-    { title: t('modules.cms.content.list.createNew'), icon: PlusCircle, route: { name: 'contents.create' }, type: 'action', keywords: 'new post article write' },
-    { title: t('common.labels.myProfile'), icon: UserCircle, route: { name: 'profile' }, type: 'action', keywords: 'account me user' },
-    { title: t('common.labels.settings'), icon: Settings, route: { name: 'settings' }, type: 'action', keywords: 'config preferences options' },
+    { title: t('common.navigation.menu.dashboard'), icon: Home, route: { name: 'dashboard' }, type: 'action', keywords: 'home overview dashboard' },
+    { title: t('modules.cms.content.list.createNew'), icon: PlusCircle, route: { name: 'contents.create' }, type: 'action', keywords: 'new post article write', permission: 'manage content' },
+    { title: t('common.labels.myProfile'), icon: UserCircle, route: { name: 'profile' }, type: 'action', keywords: 'account me user profile' },
+    { title: t('modules.system.navigation.menu.settings'), icon: Settings, route: { name: 'settings' }, type: 'action', keywords: 'system settings general config preferences options', permission: 'manage settings' },
     
-    // Content Management
-    { title: t('common.navigation.menu.contents'), icon: FileText, route: { name: 'contents' }, type: 'action', keywords: 'posts articles pages blogs' },
-    { title: t('common.navigation.menu.categories'), icon: Folder, route: { name: 'categories' }, type: 'action', keywords: 'taxonomy classify organize' },
-    { title: t('common.navigation.menu.tags'), icon: Tag, route: { name: 'tags' }, type: 'action', keywords: 'labels keywords' },
-    { title: t('common.navigation.menu.media'), icon: FileText, route: { name: 'media' }, type: 'action', keywords: 'images files upload gallery' },
+    // Content & Media Management
+    { title: t('modules.cms.navigation.menu.studio'), icon: FileText, route: { name: 'contents.index' }, type: 'action', keywords: 'posts articles pages blogs content', permission: 'view content' },
+    { title: t('modules.cms.navigation.menu.mediaLibrary'), icon: HardDrive, route: { name: 'media' }, type: 'action', keywords: 'media library images files upload gallery filemanager', permission: 'manage media' },
+    { title: t('modules.cms.navigation.menu.comments'), icon: MessageSquare, route: { name: 'comments.index' }, type: 'action', keywords: 'comments discussion feedback moderation', permission: 'view comments' },
+    { title: t('modules.cms.navigation.menu.forms'), icon: ListTodo, route: { name: 'forms' }, type: 'action', keywords: 'forms submissions contact questionnaires fields', permission: 'manage content' },
+    { title: t('modules.cms.navigation.menu.newsletter'), icon: Mail, route: { name: 'newsletter' }, type: 'action', keywords: 'newsletter subscribers emails campaigns broadcast', permission: 'manage content' },
+    { title: t('modules.cms.navigation.menu.emailTemplates'), icon: Mail, route: { name: 'email-templates' }, type: 'action', keywords: 'email templates notification mail', permission: 'manage settings' },
+    { title: t('modules.cms.navigation.menu.customFields'), icon: Layers, route: { name: 'custom-fields' }, type: 'action', keywords: 'custom fields metadata models fieldgroups', permission: 'manage content' },
+    { title: t('common.navigation.menu.tags'), icon: Tag, route: { name: 'tags' }, type: 'action', keywords: 'labels keywords tags', permission: 'manage content' },
     
-    // User Management
-    { title: t('common.navigation.menu.users'), icon: User, route: { name: 'users.index' }, type: 'action', keywords: 'members accounts people' },
-    { title: t('common.navigation.menu.roles'), icon: Settings, route: { name: 'roles' }, type: 'action', keywords: 'permissions access rbac' },
+    // Design & Config
+    { title: t('modules.cms.navigation.menu.themes'), icon: Settings, route: { name: 'theme-customizer' }, type: 'action', keywords: 'theme customizer design config appearance styling', permission: 'manage settings' },
+    { title: t('modules.cms.navigation.menu.menus'), icon: Folder, route: { name: 'menus' }, type: 'action', keywords: 'menus navigation links headers footer', permission: 'manage settings' },
+    { title: t('modules.cms.navigation.menu.widgets'), icon: Folder, route: { name: 'widgets' }, type: 'action', keywords: 'widgets blocks dashboard layout', permission: 'manage settings' },
+    
+    // Users & Access
+    { title: t('modules.system.navigation.menu.users'), icon: User, route: { name: 'users.index' }, type: 'action', keywords: 'members accounts people users', permission: 'view users' },
+    { title: t('modules.system.navigation.menu.roles'), icon: Settings, route: { name: 'roles' }, type: 'action', keywords: 'permissions access rbac roles', permission: 'view roles' },
     
     // SEO & Analytics
-    { title: t('common.navigation.menu.seoTools'), icon: Search, route: { name: 'seo' }, type: 'action', keywords: 'search engine optimize meta robots sitemap' },
-    { title: t('common.navigation.menu.analytics'), icon: FileText, route: { name: 'analytics' }, type: 'action', keywords: 'stats visitors traffic' },
-    { title: t('common.navigation.menu.redirects'), icon: FileText, route: { name: 'redirects' }, type: 'action', keywords: '301 302 url forward' },
+    { title: t('modules.cms.navigation.menu.seoTools'), icon: Search, route: { name: 'seo' }, type: 'action', keywords: 'seo search engine optimize meta robots sitemap', permission: 'manage settings' },
+    { title: t('modules.cms.navigation.menu.analytics'), icon: FileText, route: { name: 'analytics' }, type: 'action', keywords: 'stats visitors traffic analytics', permission: 'manage settings' },
+    { title: t('modules.cms.navigation.menu.redirects'), icon: FileText, route: { name: 'redirects' }, type: 'action', keywords: '301 302 url forward redirects', permission: 'manage settings' },
+    
+    // Infrastructure
+    { title: t('modules.system.navigation.menu.systemInfo'), icon: Monitor, route: { name: 'system' }, type: 'action', keywords: 'system info server environment specs specs check health', permission: 'view system', role: 'super', context: 'foundation' },
+    { title: t('modules.system.navigation.menu.systemNotifications'), icon: Settings, route: { name: 'system-notifications' }, type: 'action', keywords: 'notifications settings alerts system', permission: 'manage system' },
+    { title: t('modules.system.navigation.menu.backups'), icon: Database, route: { name: 'backups' }, type: 'action', keywords: 'backups database files restore export backup', permission: 'view backups', role: 'super', context: 'foundation' },
+    { title: t('modules.system.navigation.menu.redis'), icon: Cpu, route: { name: 'redis' }, type: 'action', keywords: 'redis cache system performance memory infrastructure', permission: 'manage settings', role: 'super', context: 'foundation' },
+    { title: t('modules.system.navigation.menu.scheduledTasks'), icon: Calendar, route: { name: 'scheduled-tasks' }, type: 'action', keywords: 'scheduled tasks cron background jobs schedules', permission: 'view scheduled tasks', role: 'super', context: 'foundation' },
+    { title: t('modules.system.navigation.menu.languages'), icon: Globe, route: { name: 'languages' }, type: 'action', keywords: 'languages translate locale localization', permission: 'view settings' },
+    { title: t('modules.infra.navigation.menu.webhooks'), icon: Webhook, route: { name: 'webhooks' }, type: 'action', keywords: 'webhooks api integrations events webhook infrastructure', permission: 'manage webhooks', context: 'foundation' },
+    
+    // Monitoring & Journals
+    { title: t('modules.system.navigation.menu.journalDashboard'), icon: Activity, route: { name: 'journal-dashboard' }, type: 'action', keywords: 'monitoring dashboard logs summary journals', permission: 'view logs', role: 'super', context: 'foundation' },
+    { title: t('modules.system.navigation.menu.activityJournal'), icon: Activity, route: { name: 'activity-journal' }, type: 'action', keywords: 'activity journal logs audit history monitoring security events', permission: 'view activity logs', role: 'super', context: 'foundation' },
+    { title: t('modules.system.navigation.menu.securityJournal'), icon: Activity, route: { name: 'security-journal' }, type: 'action', keywords: 'security journal logs login history lockouts monitoring', permission: 'view security logs', role: 'super', context: 'foundation' },
+    { title: t('modules.system.navigation.menu.systemJournal'), icon: Activity, route: { name: 'system-journal' }, type: 'action', keywords: 'system journal backend logs errors warnings', permission: 'view system', role: 'super', context: 'foundation' },
+    { title: t('modules.system.navigation.menu.accessJournal'), icon: Activity, route: { name: 'access-journal' }, type: 'action', keywords: 'access journal session history logins visits', permission: 'view users', role: 'super', context: 'foundation' }
 ]);
 
 // Computed
@@ -283,7 +324,7 @@ const filterActions = computed<SearchItem[]>(() => {
             type: 'action',
             title: t('common.actions.searchIn') + ' ' + t('common.labels.posts'),
             icon: FileText,
-            route: { name: 'contents', query: { q: searchQuery.value } },
+            route: { name: 'contents.index', query: { q: searchQuery.value } },
             group: 'filters'
         },
         {
@@ -299,7 +340,7 @@ const filterActions = computed<SearchItem[]>(() => {
             type: 'action',
             title: t('common.actions.searchIn') + ' ' + t('common.labels.categories'),
             icon: Folder,
-            route: { name: 'categories', query: { q: searchQuery.value } },
+            route: { name: 'categories.index', query: { q: searchQuery.value } },
             group: 'filters'
         },
         {
@@ -380,8 +421,27 @@ const MATCH_THRESHOLD = 0.3;
 const matchingStaticActions = computed<SearchItem[]>(() => {
     if (!searchQuery.value || searchQuery.value.length < 2) return [];
     
-    // Score all static actions against title AND keywords, take the best
+    const isGlobal = workspaceStore.activeId === 0 || workspaceStore.activeId === '0';
+    
+    // Score and filter all static actions against title AND keywords, checking role, permissions, and context
     return staticActions.value
+        .filter(action => {
+            // 1. Role check
+            const role = (action as any).role;
+            if (role && !authStore.isAtLeastRole(role)) return false;
+            
+            // 2. Permission check
+            const permission = (action as any).permission;
+            if (permission && !authStore.hasPermission(permission)) return false;
+            
+            // 3. Workspace context check
+            const context = (action as any).context;
+            if (context) {
+                if (context === 'foundation' && !isGlobal) return false;
+                if (context === 'unit' && isGlobal) return false;
+            }
+            return true;
+        })
         .map(action => {
             const titleScore = fuzzyMatch(searchQuery.value, action.title);
             const keywordScore = action.keywords ? fuzzyMatch(searchQuery.value, action.keywords) : 0;
