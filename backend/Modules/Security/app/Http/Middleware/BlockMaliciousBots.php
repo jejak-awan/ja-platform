@@ -128,7 +128,7 @@ class BlockMaliciousBots
             if (in_array($ip, $whitelist, true)) {
                 return $next($request);
             }
-            if (str_starts_with($path, 'api/v1/admin/core/system-journal/')) {
+            if (str_starts_with($path, 'api/v1/admin/core/system-journal/') || str_starts_with($path, 'api/v1/manage/system-journal/')) {
                 return $next($request);
             }
 
