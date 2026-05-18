@@ -85,10 +85,12 @@ class Setting extends Model
         return static::castValue($setting->value, (string) $setting->type);
     }
 
-    public static function set(string $key, mixed $value, string $type = 'string', string $group = 'general', ?int $workspaceId = null): self
+    public static function set(string $key, mixed $value, string $type = 'string', string $group = 'general', ?string $workspaceId = null): self
     {
-        return static::updateOrCreate(
-            ['key' => $key, 'workspace_id' => $workspaceId],
+        $id = $workspaceId ?? Context::get('workspace_id');
+        
+        return static::withoutGlobalScope('workspace')->updateOrCreate(
+            ['key' => $key, 'workspace_id' => $id],
             [
                 'value' => is_array($value) ? json_encode($value) : $value,
                 'type' => $type,
