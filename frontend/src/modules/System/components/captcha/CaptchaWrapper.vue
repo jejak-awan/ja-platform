@@ -58,7 +58,9 @@ const method = ref('slider')
 const fetchSettings = async () => {
     try {
         const response = await api.get('/captcha/settings')
-        const data = response.data
+        const responseData = response.data
+        // Unwrap data envelope if it exists (legacy API client used to do this automatically)
+        const data = (responseData as any)?.data || responseData
         
         if (props.action === 'login') {
             enabled.value = data.enabled_login
