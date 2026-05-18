@@ -20,9 +20,9 @@
         contain-intrinsic-size: 900px;
     }
 
-    /* ─── Neutral canvas (light): surfaces stay achromatic ─── */
+    /* ─── MODERN BOLD Canvas: clean white with strong typography & vibrant accents ─── */
     .theme-janari {
-        --background: 0 0% 100%;
+        --background: 0 0% 99.5%;
         --foreground: 0 0% 7%;
         background-color: hsl(var(--background)) !important;
         color: hsl(var(--foreground)) !important;
@@ -30,14 +30,14 @@
         --card-foreground: 0 0% 7%;
         --popover: 0 0% 100%;
         --popover-foreground: 0 0% 7%;
-        --muted: 0 0% 96%;
-        --muted-foreground: 0 0% 40%;
-        --border: 0 0% 90%;
-        --input: 0 0% 90%;
-        --secondary: 0 0% 97%;
-        --secondary-foreground: 0 0% 9%;
-        --accent: 0 0% 96%;
-        --accent-foreground: 0 0% 9%;
+        --muted: 0 0% 92%;
+        --muted-foreground: 0 0% 50%;
+        --border: 0 0% 85%;
+        --input: 0 0% 85%;
+        --secondary: 0 0% 95%;
+        --secondary-foreground: 0 0% 12%;
+        --accent: 0 0% 92%;
+        --accent-foreground: 0 0% 12%;
         --destructive: 0 0% 18%;
         --destructive-foreground: 0 0% 100%;
         --success: 0 0% 22%;
@@ -46,15 +46,15 @@
         --warning-foreground: 0 0% 100%;
         --info: 0 0% 26%;
         --info-foreground: 0 0% 100%;
-        /* Accent channel → --primary / --ring (presets override --janari-accent-hsl) */
-        --janari-accent-hsl: var(--janari-accent-hsl-inline, 0 0% 0%);
+        /* VIBRANT electric blue accent (builder.io style) */
+        --janari-accent-hsl: var(--janari-accent-hsl-inline, 213 100% 48%);
         --primary: var(--janari-accent-hsl);
         --primary-foreground: 0 0% 100%;
         --ring: var(--janari-accent-hsl);
-        /* Synced customizer knobs */
-        --janari-surface-tint-alpha: 0.02;
-        --janari-border-tint-alpha: 0.1;
-        --janari-shadow-alpha: 0.08;
+        /* Intensity: balanced + stronger shadows & borders */
+        --janari-surface-tint-alpha: 0.06;
+        --janari-border-tint-alpha: 0.2;
+        --janari-shadow-alpha: 0.15;
         --janari-texture-opacity: 0;
         --janari-texture-dot-size: 12px;
         --janari-texture-grain-size: 5px;
@@ -680,18 +680,21 @@
 
     .theme-janari button.bg-primary,
     .theme-janari .btn-primary {
-        background: hsl(var(--primary)) !important;
+        background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.9)) !important;
         border: none !important;
         color: hsl(var(--primary-foreground)) !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.5px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.8px !important;
+        font-size: 0.875rem !important;
+        padding: 12px 28px !important;
+        box-shadow: 0 4px 16px hsl(var(--primary) / 0.25) !important;
     }
 
     .theme-janari button.bg-primary:hover,
     .theme-janari .btn-primary:hover {
-        filter: brightness(1.08);
-        transform: translateY(-2px);
-        box-shadow: 0 12px 28px hsl(var(--primary) / 0.35) !important;
+        filter: brightness(1.12) saturate(1.1);
+        transform: translateY(-3px);
+        box-shadow: 0 16px 40px hsl(var(--primary) / 0.4) !important;
     }
 
     /* ═══════════════════════════════════════════════════════
@@ -798,9 +801,9 @@
 
     .theme-janari .card:hover,
     .theme-janari section .border.border-border:hover {
-        border-color: hsl(var(--primary) / 0.28) !important;
-        box-shadow: 0 12px 36px hsl(var(--primary) / 0.08);
-        transform: translateY(-2px);
+        border-color: hsl(var(--primary) / 0.35) !important;
+        box-shadow: 0 16px 48px hsl(var(--primary) / 0.15), 0 0 1px hsl(var(--primary) / 0.1);
+        transform: translateY(-4px);
     }
 
     /* ─── Grid Card Hover: the major cards that flip bg ─── */
