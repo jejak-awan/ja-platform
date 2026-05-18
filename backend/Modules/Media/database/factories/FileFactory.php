@@ -14,14 +14,14 @@ class FileFactory extends Factory
     {
         $name = $this->faker->words(2, true);
         $extension = $this->faker->fileExtension();
-        $filename = Str::slug($name) . '.' . $extension;
+        $filename = Str::slug($name).'.'.$extension;
 
         return [
             'name' => $name,
             'file_name' => $filename,
             'mime_type' => $this->faker->mimeType(),
             'disk' => 'public',
-            'path' => 'media/' . $filename,
+            'path' => 'media/'.$filename,
             'size' => $this->faker->numberBetween(100, 1000000),
             'workspace_id' => null,
             'author_id' => null,
@@ -32,7 +32,7 @@ class FileFactory extends Factory
     {
         return $this->state(fn (array $attributes): array => [
             'mime_type' => 'image/jpeg',
-            'path' => 'media/' . Str::slug($attributes['name']) . '.jpg',
+            'path' => 'media/'.Str::slug($attributes['name']).'.jpg',
         ]);
     }
 
@@ -40,7 +40,7 @@ class FileFactory extends Factory
     {
         return $this->state(fn (array $attributes): array => [
             'mime_type' => 'application/pdf',
-            'path' => 'media/' . Str::slug($attributes['name']) . '.pdf',
+            'path' => 'media/'.Str::slug($attributes['name']).'.pdf',
         ]);
     }
 }

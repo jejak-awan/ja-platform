@@ -3,8 +3,10 @@
 namespace Modules\System\Models;
 
 use Cron\CronExpression;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Modules\System\Traits\CoreLogsActivity;
 
 /**
@@ -16,24 +18,23 @@ use Modules\System\Traits\CoreLogsActivity;
  * @property float|int|null $workspace_id
  * @property bool $is_active
  * @property array<string, mixed>|null $options
- * @property \Illuminate\Support\Carbon|null $last_run_at
+ * @property Carbon|null $last_run_at
  * @property string|null $status
  * @property string|null $output
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class ScheduledTask extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_scheduled_tasks';
 
-
     use CoreLogsActivity;
-
 
     protected $fillable = [
         'name',
@@ -161,13 +162,13 @@ class ScheduledTask extends Model
      */
     public static function getAllowedCommands(): array
     {
-        $commands = array_map(fn(string $cmd) => [
+        $commands = array_map(fn (string $cmd) => [
             'value' => $cmd,
             'label' => ucfirst(str_replace([':', '-'], [' › ', ' '], $cmd)),
         ], self::ALLOWED_COMMANDS);
 
         // Sort alphabetically by label
-        usort($commands, fn(array $a, array $b) => strcasecmp((string) $a['label'], (string) $b['label']));
+        usort($commands, fn (array $a, array $b) => strcasecmp((string) $a['label'], (string) $b['label']));
 
         return $commands;
     }
@@ -191,27 +192,27 @@ class ScheduledTask extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<static>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<static>
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
-    public function scopeActive($query): \Illuminate\Database\Eloquent\Builder
+    public function scopeActive($query): Builder
     {
         return $query->where('is_active', true);
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<static>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<static>
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
-    public function scopeDue($query): \Illuminate\Database\Eloquent\Builder
+    public function scopeDue($query): Builder
     {
         return $query->active()
             ->where(function ($q): void {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Search\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Modules\Search\Listeners\SearchIndexingListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -21,7 +22,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
-        \Modules\Search\Listeners\SearchIndexingListener::class,
+        SearchIndexingListener::class,
     ];
 
     /**

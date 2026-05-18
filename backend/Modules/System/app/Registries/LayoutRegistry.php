@@ -7,7 +7,9 @@ use Modules\System\Contracts\LayoutRegistryInterface;
 class LayoutRegistry implements LayoutRegistryInterface
 {
     protected array $menuLocations = [];
+
     protected array $widgetLocations = [];
+
     protected array $widgetTypes = [];
 
     public function registerMenuLocations(string $module, array $locations): void

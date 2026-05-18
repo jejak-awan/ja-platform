@@ -2,12 +2,20 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\RedisSetting;
 use Modules\System\Models\Setting;
+use Modules\System\Models\User;
+use Modules\System\Services\LicenseService;
 
-class SettingController extends \Modules\System\Http\Controllers\BaseApiController
+class SettingController extends BaseApiController
 {
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = Setting::query();
 
@@ -30,10 +38,10 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
         return $this->success($settings, 'Settings retrieved successfully');
     }
 
-    public function getGroup(string $group): \Illuminate\Http\JsonResponse
+    public function getGroup(string $group): JsonResponse
     {
         $user = request()->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -72,14 +80,14 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
         return $this->success($settings, 'Settings retrieved successfully');
     }
 
-    public function show(string $key): \Illuminate\Http\JsonResponse
+    public function show(string $key): JsonResponse
     {
         $setting = Setting::where('key', $key)->firstOrFail();
 
         return $this->success($setting, 'Setting retrieved successfully');
     }
 
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'key' => 'required|string|unique:settings,key',
@@ -95,7 +103,7 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
         return $this->success($setting, 'Setting created successfully', 201);
     }
 
-    public function update(Request $request, Setting $setting): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Setting $setting): JsonResponse
     {
         $validated = $request->validate([
             'value' => 'nullable',
@@ -110,7 +118,7 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
         return $this->success($setting, 'Setting updated successfully');
     }
 
-    public function bulkUpdate(Request $request, \Modules\System\Services\LicenseService $licenseService): \Illuminate\Http\JsonResponse
+    public function bulkUpdate(Request $request, LicenseService $licenseService): JsonResponse
     {
         $validated = $request->validate([
             'settings' => 'required|array',
@@ -126,9 +134,9 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
         foreach ($settings as $settingData) {
             if (is_array($settingData) && isset($settingData['key'])) {
                 $sKey = is_scalar($settingData['key']) ? (string) $settingData['key'] : '';
-                
+
                 // Security Check: White Label Protection
-                if ($licenseService->isProtectedKey($sKey) && !$hasWhiteLabel) {
+                if ($licenseService->isProtectedKey($sKey) && ! $hasWhiteLabel) {
                     continue; // Skip protected keys if no white label license
                 }
 
@@ -145,7 +153,7 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
                 // Sync with Redis Settings if cache driver is changed to Redis-based
                 if ($sKey === 'cache_driver' && in_array($sValue, ['redis', 'failover'])) {
                     try {
-                        \Modules\System\Models\RedisSetting::setValue('enable_redis', true);
+                        RedisSetting::setValue('enable_redis', true);
                     } catch (\Throwable) {
                         // Silent fail if RedisSetting not available
                     }
@@ -155,7 +163,7 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
 
         // Clear config cache to apply changes immediately
         try {
-            \Illuminate\Support\Facades\Artisan::call('config:clear');
+            Artisan::call('config:clear');
         } catch (\Throwable) {
             // Silent fail
         }
@@ -163,7 +171,7 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
         return $this->success(null, 'Settings updated successfully');
     }
 
-    public function destroy(Setting $setting): \Illuminate\Http\JsonResponse
+    public function destroy(Setting $setting): JsonResponse
     {
         $setting->delete();
 
@@ -173,7 +181,7 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
     /**
      * Test storage connection dynamically
      */
-    public function testStorage(Request $request): \Illuminate\Http\JsonResponse
+    public function testStorage(Request $request): JsonResponse
     {
         $driverRaw = $request->input('driver');
         $driver = is_string($driverRaw) ? $driverRaw : '';
@@ -238,11 +246,11 @@ class SettingController extends \Modules\System\Http\Controllers\BaseApiControll
         }
 
         // Set dynamic config
-        \Illuminate\Support\Facades\Config::set("filesystems.disks.test_{$driver}", $diskConfig);
+        Config::set("filesystems.disks.test_{$driver}", $diskConfig);
 
         try {
             // Attempt to list contents
-            \Illuminate\Support\Facades\Storage::disk("test_{$driver}")->listContents('/');
+            Storage::disk("test_{$driver}")->listContents('/');
 
             return $this->success(null, 'Connection successful! Storage is accessible.');
         } catch (\Throwable $e) {

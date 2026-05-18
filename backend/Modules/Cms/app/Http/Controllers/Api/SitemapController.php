@@ -2,11 +2,13 @@
 
 namespace Modules\Cms\Http\Controllers\Api;
 
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
-use Illuminate\Routing\Controller;
+use Modules\Library\Models\Category;
 
 class SitemapController extends Controller
 {
@@ -81,7 +83,7 @@ class SitemapController extends Controller
             $urls = [];
 
             foreach ($categories as $category) {
-                /** @var \Illuminate\Support\Carbon $updatedAt */
+                /** @var Carbon $updatedAt */
                 $updatedAt = $category->updated_at ?? now();
                 $urls[] = [
                     'loc' => url('/category/'.$category->slug),
@@ -98,14 +100,14 @@ class SitemapController extends Controller
     }
 
     /**
-     * @param  \Illuminate\Support\Collection<int, Content>  $items
+     * @param  Collection<int, Content>  $items
      */
     protected function generateSitemap($items): \Illuminate\Http\Response
     {
         $urls = [];
 
         foreach ($items as $item) {
-            /** @var \Illuminate\Support\Carbon $updatedAt */
+            /** @var Carbon $updatedAt */
             $updatedAt = $item->updated_at ?? now();
             $urls[] = [
                 'loc' => url('/content/'.$item->slug),

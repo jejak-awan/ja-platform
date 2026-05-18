@@ -5,6 +5,7 @@ namespace Modules\Layout\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Modules\Layout\Helpers\ThemeDirectoryHelper;
+use Modules\Layout\Models\Theme;
 use Modules\Layout\Services\ThemeService;
 
 class ThemeMake extends Command
@@ -81,7 +82,7 @@ class ThemeMake extends Command
         }
 
         // Create theme in database
-        $theme = \Modules\Layout\Models\Theme::create([
+        $theme = Theme::create([
             'name' => $name,
             'slug' => $slug,
             'type' => $type,

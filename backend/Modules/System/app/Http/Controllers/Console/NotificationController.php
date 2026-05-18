@@ -3,18 +3,22 @@
 namespace Modules\System\Http\Controllers\Console;
 
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Jobs\SendBroadcastNotification;
 use Modules\System\Models\Notification;
+use Modules\System\Models\User;
 
-class NotificationController extends \Modules\System\Http\Controllers\BaseApiController
+class NotificationController extends BaseApiController
 {
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
             $user = $request->user();
-            /** @var \Modules\System\Models\User|null $user */
+            /** @var User|null $user */
             if (! $user) {
                 return $this->unauthorized('Unauthenticated');
             }
@@ -39,7 +43,7 @@ class NotificationController extends \Modules\System\Http\Controllers\BaseApiCon
             if ($limit > 0 && $limit < 100) {
                 $notifications = $query->latest()->limit($limit)->get();
                 // Return as paginated response for consistency
-                $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+                $paginator = new LengthAwarePaginator(
                     $notifications,
                     $notifications->count(),
                     $limit,
@@ -63,10 +67,10 @@ class NotificationController extends \Modules\System\Http\Controllers\BaseApiCon
         }
     }
 
-    public function unreadCount(Request $request): \Illuminate\Http\JsonResponse
+    public function unreadCount(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->success(['count' => 0], 'Unread count retrieved');
         }
@@ -78,10 +82,10 @@ class NotificationController extends \Modules\System\Http\Controllers\BaseApiCon
         return $this->success(['count' => $count], 'Unread count retrieved');
     }
 
-    public function markAsRead(Request $request, Notification $notification): \Illuminate\Http\JsonResponse
+    public function markAsRead(Request $request, Notification $notification): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -95,10 +99,10 @@ class NotificationController extends \Modules\System\Http\Controllers\BaseApiCon
         return $this->success($notification, 'Notification marked as read');
     }
 
-    public function markAllAsRead(Request $request): \Illuminate\Http\JsonResponse
+    public function markAllAsRead(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -113,15 +117,15 @@ class NotificationController extends \Modules\System\Http\Controllers\BaseApiCon
         return $this->success(null, 'All notifications marked as read');
     }
 
-    public function indexSystem(Request $request): \Illuminate\Http\JsonResponse
+    public function indexSystem(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
 
-        if (!$user->hasRole('super') && ! $user->can('manage system')) {
+        if (! $user->hasRole('super') && ! $user->can('manage system')) {
             return $this->forbidden('Unauthorized');
         }
 
@@ -137,10 +141,10 @@ class NotificationController extends \Modules\System\Http\Controllers\BaseApiCon
         return $this->paginated($notifications, 'System notifications retrieved');
     }
 
-    public function revokeSystem(Request $request): \Illuminate\Http\JsonResponse
+    public function revokeSystem(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -173,10 +177,10 @@ class NotificationController extends \Modules\System\Http\Controllers\BaseApiCon
         return $this->success(['count' => $count], "Broadcast revoked. {$countStr} notifications removed.");
     }
 
-    public function bulkRevokeSystem(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkRevokeSystem(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -225,10 +229,10 @@ class NotificationController extends \Modules\System\Http\Controllers\BaseApiCon
         return $this->success(['count' => $totalDeleted], "Bulk revocation complete. {$totalDeletedStr} notifications removed.");
     }
 
-    public function broadcast(Request $request): \Illuminate\Http\JsonResponse
+    public function broadcast(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -259,21 +263,21 @@ class NotificationController extends \Modules\System\Http\Controllers\BaseApiCon
 
         // Fallback to sync if queue driver is sync or user explicitly requested it
         if ($isAsync && config('queue.default') !== 'sync') {
-            \Modules\System\Jobs\SendBroadcastNotification::dispatch($payload);
+            SendBroadcastNotification::dispatch($payload);
 
             return $this->success(null, 'Broadcast notification queued for delivery');
         } else {
             // Direct delivery (sync)
-            \Modules\System\Jobs\SendBroadcastNotification::dispatchSync($payload);
+            SendBroadcastNotification::dispatchSync($payload);
 
             return $this->success(null, 'Broadcast notification delivered successfully');
         }
     }
 
-    public function destroy(Request $request, Notification $notification): \Illuminate\Http\JsonResponse
+    public function destroy(Request $request, Notification $notification): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }

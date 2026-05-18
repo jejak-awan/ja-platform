@@ -2,8 +2,10 @@
 
 namespace Modules\System\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Crypt;
 
 /**
@@ -14,8 +16,8 @@ use Illuminate\Support\Facades\Crypt;
  * @property string $group
  * @property string|null $description
  * @property bool $is_encrypted
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 /**
  * @property string $id
@@ -25,18 +27,18 @@ use Illuminate\Support\Facades\Crypt;
  * @property string $group
  * @property string|null $description
  * @property bool $is_encrypted
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class RedisSetting extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_redis_settings';
-
 
     protected $fillable = [
         'key',
@@ -97,14 +99,14 @@ class RedisSetting extends Model
     /**
      * Get settings by group.
      *
-     * @return \Illuminate\Support\Collection<string, mixed>
+     * @return Collection<string, mixed>
      */
-    public static function getByGroup(string $group): \Illuminate\Support\Collection
+    public static function getByGroup(string $group): Collection
     {
         /** @var \Illuminate\Database\Eloquent\Collection<int, self> $settings */
         $settings = static::where('group', $group)->get();
 
-        return $settings->mapWithKeys(fn($setting) => [(string) $setting->key => $setting->getTypedValue()]);
+        return $settings->mapWithKeys(fn ($setting) => [(string) $setting->key => $setting->getTypedValue()]);
     }
 
     /**

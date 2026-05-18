@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use Modules\Layout\Http\Controllers\Api\MenuController;
-use Modules\Layout\Http\Controllers\Api\WidgetController;
-use Modules\Layout\Http\Controllers\Api\UrlRewriteController;
 use Modules\Layout\Http\Controllers\Api\ThemeController;
+use Modules\Layout\Http\Controllers\Api\UrlRewriteController;
+use Modules\Layout\Http\Controllers\Api\WidgetController;
 
 Route::prefix('v1')->group(function (): void {
     // Public Layout API (Read only)
@@ -40,7 +40,7 @@ Route::prefix('v1')->group(function (): void {
         Route::post('themes/{theme}/activate', [ThemeController::class, 'activate']);
         Route::post('themes/scan', [ThemeController::class, 'scan']);
         Route::post('themes/install', [ThemeController::class, 'install']);
-        
+
         // Theme Customization & Metadata API Endpoints
         Route::match(['put', 'patch'], 'themes/{theme}/customization', [ThemeController::class, 'updateCustomization']);
         Route::match(['put', 'patch'], 'themes/{theme}/settings', [ThemeController::class, 'updateSettings']);
@@ -49,7 +49,7 @@ Route::prefix('v1')->group(function (): void {
         Route::get('themes/{theme}/config', [ThemeController::class, 'getConfig']);
         Route::get('themes/{theme}/composables', [ThemeController::class, 'getComposables']);
         Route::post('themes/{theme}/validate', [ThemeController::class, 'validate']);
-        
+
         Route::apiResource('themes', ThemeController::class);
     });
 });

@@ -4,9 +4,9 @@ namespace Modules\System\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Modules\Security\Models\SecurityLog;
 use Modules\System\Models\ActivityLog;
 use Modules\System\Models\LoginHistory;
-use Modules\Security\Models\SecurityLog;
 use Modules\System\Models\Setting;
 
 class CleanupOldLogs extends Command
@@ -33,6 +33,7 @@ class CleanupOldLogs extends Command
 
         if ($retentionDays <= 0) {
             $this->info('Log retention is set to keep forever (0 days). No cleanup performed.');
+
             return 0;
         }
 
@@ -52,7 +53,7 @@ class CleanupOldLogs extends Command
         if (! $dryRun && $activityCount > 0) {
             ActivityLog::where('created_at', '<', $cutoffDate)->delete();
         }
-        $this->line("  Activity Logs: {$activityCount} records" . ($dryRun ? ' (would be deleted)' : ' deleted'));
+        $this->line("  Activity Logs: {$activityCount} records".($dryRun ? ' (would be deleted)' : ' deleted'));
         $totalDeleted += $activityCount;
 
         // Security Logs
@@ -60,7 +61,7 @@ class CleanupOldLogs extends Command
         if (! $dryRun && $securityCount > 0) {
             SecurityLog::where('created_at', '<', $cutoffDate)->delete();
         }
-        $this->line("  Security Logs: {$securityCount} records" . ($dryRun ? ' (would be deleted)' : ' deleted'));
+        $this->line("  Security Logs: {$securityCount} records".($dryRun ? ' (would be deleted)' : ' deleted'));
         $totalDeleted += $securityCount;
 
         // Login History
@@ -68,11 +69,11 @@ class CleanupOldLogs extends Command
         if (! $dryRun && $loginCount > 0) {
             LoginHistory::where('created_at', '<', $cutoffDate)->delete();
         }
-        $this->line("  Login History: {$loginCount} records" . ($dryRun ? ' (would be deleted)' : ' deleted'));
+        $this->line("  Login History: {$loginCount} records".($dryRun ? ' (would be deleted)' : ' deleted'));
         $totalDeleted += $loginCount;
 
         $this->newLine();
-        $this->info("Total: {$totalDeleted} records " . ($dryRun ? 'would be' : '') . ' cleaned up');
+        $this->info("Total: {$totalDeleted} records ".($dryRun ? 'would be' : '').' cleaned up');
 
         if (! $dryRun && $totalDeleted > 0) {
             Log::info("Log cleanup completed: {$totalDeleted} records deleted", [

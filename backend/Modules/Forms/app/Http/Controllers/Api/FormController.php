@@ -2,6 +2,7 @@
 
 namespace Modules\Forms\Http\Controllers\Api;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -9,9 +10,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Modules\Forms\Models\Form;
 use Modules\Forms\Models\FormField;
+use Modules\Forms\Models\FormSubmission;
 use Modules\Forms\Rules\FormRedirectUrl;
-use Modules\System\Http\Controllers\BaseApiController;
 use Modules\Security\Rules\SafeUrl;
+use Modules\System\Helpers\IpHelper;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\User;
+use Modules\System\Models\Webhook;
+use Modules\System\Services\CaptchaService;
 
 class FormController extends BaseApiController
 {
@@ -21,6 +27,7 @@ class FormController extends BaseApiController
         $this->middleware('permission:view forms')->only(['index', 'show', 'stats']);
         $this->middleware('permission:manage forms')->except(['publicShow', 'submit', 'track', 'index', 'show', 'stats']);
     }
+
     /**
      * Public embed: active form definition without sensitive builder metadata.
      */
@@ -31,7 +38,7 @@ class FormController extends BaseApiController
             $query->orderBy('sort_order');
         }]);
 
-        $fields = $form->fields->map(static fn(FormField $field): array => [
+        $fields = $form->fields->map(static fn (FormField $field): array => [
             'name' => $field->name,
             'label' => $field->label,
             'type' => $field->type,
@@ -57,10 +64,10 @@ class FormController extends BaseApiController
     /**
      * List forms.
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -95,10 +102,10 @@ class FormController extends BaseApiController
     /**
      * Create new form.
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -124,10 +131,10 @@ class FormController extends BaseApiController
     /**
      * Display the specified form.
      */
-    public function show(Request $request, Form $form): \Illuminate\Http\JsonResponse
+    public function show(Request $request, Form $form): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -149,7 +156,7 @@ class FormController extends BaseApiController
     public function addField(Request $request, Form $form): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -223,7 +230,7 @@ class FormController extends BaseApiController
     public function updateField(Request $request, Form $form, FormField $formField): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -280,7 +287,7 @@ class FormController extends BaseApiController
     public function deleteField(Request $request, Form $form, FormField $formField): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -304,7 +311,7 @@ class FormController extends BaseApiController
     public function reorderFields(Request $request, Form $form): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -323,7 +330,7 @@ class FormController extends BaseApiController
             static fn ($id): string => is_scalar($id) ? (string) $id : '',
             $validated['order']
         ));
-        $order = array_values(array_filter($order, static fn ($id): bool => $id !== ""));
+        $order = array_values(array_filter($order, static fn ($id): bool => $id !== ''));
 
         if ($order === []) {
             return $this->success($form->fields()->orderBy('sort_order')->get(), 'Field order unchanged');
@@ -333,7 +340,7 @@ class FormController extends BaseApiController
             ->whereIn('id', $order)
             ->pluck('id')
             ->map(static fn ($id): string => is_scalar($id) ? (string) $id : '')
-            ->filter(static fn (string $id): bool => $id !== "")
+            ->filter(static fn (string $id): bool => $id !== '')
             ->values()
             ->all();
 
@@ -355,10 +362,10 @@ class FormController extends BaseApiController
     /**
      * Update the specified form.
      */
-    public function update(Request $request, Form $form): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Form $form): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -386,10 +393,10 @@ class FormController extends BaseApiController
     /**
      * Remove the specified form.
      */
-    public function destroy(Request $request, Form $form): \Illuminate\Http\JsonResponse
+    public function destroy(Request $request, Form $form): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -408,10 +415,10 @@ class FormController extends BaseApiController
      *
      * @param  int|string  $id
      */
-    public function restore(Request $request, $id): \Illuminate\Http\JsonResponse
+    public function restore(Request $request, $id): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -436,10 +443,10 @@ class FormController extends BaseApiController
      *
      * @param  int|string  $id
      */
-    public function forceDelete(Request $request, $id): \Illuminate\Http\JsonResponse
+    public function forceDelete(Request $request, $id): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -463,7 +470,7 @@ class FormController extends BaseApiController
     /**
      * Track form event.
      */
-    public function track(Request $request, Form $form): \Illuminate\Http\JsonResponse
+    public function track(Request $request, Form $form): JsonResponse
     {
         if (! $form->is_active) {
             return $this->validationError(['form' => ['Form is not active']], 'Form is not active');
@@ -488,7 +495,7 @@ class FormController extends BaseApiController
     /**
      * Handle form submission.
      */
-    public function submit(Request $request, Form $form): \Illuminate\Http\JsonResponse
+    public function submit(Request $request, Form $form): JsonResponse
     {
         if (! $form->is_active) {
             return $this->validationError(['form' => ['Form is not active']], 'Form is not active');
@@ -506,13 +513,13 @@ class FormController extends BaseApiController
         }
 
         // Check for captcha if enabled for contact forms
-        if (\Modules\System\Services\CaptchaService::isEnabled('contact')) {
+        if (CaptchaService::isEnabled('contact')) {
             $request->validate([
                 'captcha_token' => 'required|string',
                 'captcha_answer' => 'required|string',
             ]);
 
-            $captchaService = new \Modules\System\Services\CaptchaService;
+            $captchaService = new CaptchaService;
             $captchaTokenRaw = $request->input('captcha_token');
             $captchaAnswerRaw = $request->input('captcha_answer');
             $captchaToken = is_string($captchaTokenRaw) ? $captchaTokenRaw : '';
@@ -552,17 +559,17 @@ class FormController extends BaseApiController
         }
 
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
 
         // Create submission
         $submissionData = [
             'user_id' => $user?->id,
             'data' => $submissionPayload,
-            'ip_address' => \Modules\System\Helpers\IpHelper::getClientIp($request),
+            'ip_address' => IpHelper::getClientIp($request),
             'user_agent' => is_string($request->userAgent()) ? $request->userAgent() : '',
         ];
 
-        /** @var \Modules\Forms\Models\FormSubmission $submission */
+        /** @var FormSubmission $submission */
         $submission = $form->submissions()->create($submissionData);
 
         // Increment submission count
@@ -575,7 +582,7 @@ class FormController extends BaseApiController
         }
 
         // Trigger webhook
-        \Modules\System\Models\Webhook::triggerForEvent('form.submitted', [
+        Webhook::triggerForEvent('form.submitted', [
             'form_id' => $form->id,
             'form_name' => (string) $form->name,
             'submission_id' => $submission->id,
@@ -591,7 +598,7 @@ class FormController extends BaseApiController
     /**
      * Send form submission notification.
      */
-    protected function sendFormNotification(Form $form, \Modules\Forms\Models\FormSubmission $submission): void
+    protected function sendFormNotification(Form $form, FormSubmission $submission): void
     {
         // Email notification logic
         // This can be enhanced with actual email sending
@@ -604,10 +611,10 @@ class FormController extends BaseApiController
     /**
      * Extract validation rules from form fields.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection<int, \Modules\Forms\Models\FormField>  $fields
+     * @param  Collection<int, FormField>  $fields
      * @return array<string, array<int, string>>
      */
-    private function extractRulesFromFields(\Illuminate\Database\Eloquent\Collection $fields): array
+    private function extractRulesFromFields(Collection $fields): array
     {
         /** @var array<string, array<int, string>> $rules */
         $rules = [];
@@ -735,7 +742,7 @@ class FormController extends BaseApiController
         $emailNotifications = $settings['email_notifications'] ?? false;
 
         return [
-            'captcha_required' => \Modules\System\Services\CaptchaService::isEnabled('contact'),
+            'captcha_required' => CaptchaService::isEnabled('contact'),
             'email_notifications' => is_bool($emailNotifications) ? $emailNotifications : (bool) $emailNotifications,
         ];
     }
@@ -770,10 +777,10 @@ class FormController extends BaseApiController
     /**
      * Duplicate the specified form.
      */
-    public function duplicate(Request $request, Form $form): \Illuminate\Http\JsonResponse
+    public function duplicate(Request $request, Form $form): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -822,7 +829,7 @@ class FormController extends BaseApiController
 
         if ($copySubmissions) {
             // Bulk insert for performance
-            $submissionsData = $form->submissions()->get()->map(fn(\Modules\Forms\Models\FormSubmission $submission) => [
+            $submissionsData = $form->submissions()->get()->map(fn (FormSubmission $submission) => [
                 'form_id' => $replicated->id,
                 'user_id' => $submission->user_id,
                 'data' => json_encode($submission->data),
@@ -833,7 +840,7 @@ class FormController extends BaseApiController
             ])->toArray();
 
             if (! empty($submissionsData)) {
-                \Modules\Forms\Models\FormSubmission::insert($submissionsData);
+                FormSubmission::insert($submissionsData);
                 $replicated->submission_count = count($submissionsData);
                 $replicated->save();
             }
@@ -845,10 +852,10 @@ class FormController extends BaseApiController
     /**
      * Bulk actions for forms.
      */
-    public function bulkAction(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkAction(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }

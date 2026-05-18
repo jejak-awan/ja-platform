@@ -4,6 +4,8 @@ namespace Modules\Analytics\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Modules\Analytics\Models\AnalyticsSession;
+use Modules\Analytics\Models\AnalyticsVisit;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrackAnalytics
@@ -11,7 +13,7 @@ class TrackAnalytics
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -34,10 +36,10 @@ class TrackAnalytics
                 $sessionId = session()->getId();
 
                 // Start or get session (this always returns a session)
-                $session = \Modules\Analytics\Models\AnalyticsSession::start($request, $sessionId);
+                $session = AnalyticsSession::start($request, $sessionId);
 
                 // Track visit
-                \Modules\Analytics\Models\AnalyticsVisit::trackVisit($request);
+                AnalyticsVisit::trackVisit($request);
 
                 // Update session
                 // Update session
@@ -58,7 +60,8 @@ class TrackAnalytics
         if (str_starts_with($path, 'admin') || str_starts_with($path, 'api')) {
             return false;
         }
+
         // Don't track static assets
-        return !preg_match('/\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot)$/i', $path);
+        return ! preg_match('/\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot)$/i', $path);
     }
 }

@@ -83,11 +83,12 @@ class MenuLocationStandardizationSeeder extends Seeder
                     'description' => 'Auto-generated standard menu location.',
                 ]);
                 Cache::forget("menu_location_{$location}");
+
                 continue;
             }
 
             /** @var Menu $primary */
-            $primary = $menus->first(fn(Menu $m) => $m->deleted_at === null) ?? $menus->first();
+            $primary = $menus->first(fn (Menu $m) => $m->deleted_at === null) ?? $menus->first();
 
             if ($primary && $primary->trashed()) {
                 $primary->restore();
@@ -129,4 +130,3 @@ class MenuLocationStandardizationSeeder extends Seeder
         $activeTheme->update(['settings' => $settings]);
     }
 }
-

@@ -2,8 +2,8 @@
 
 namespace Modules\School\Traits;
 
-use Modules\School\Models\Admission\DocumentVerification;
 use Illuminate\Support\Str;
+use Modules\School\Models\Admission\DocumentVerification;
 
 trait HasVerificationHash
 {
@@ -13,7 +13,7 @@ trait HasVerificationHash
             ->where('document_id', $this->id)
             ->first();
 
-        if (!$verification) {
+        if (! $verification) {
             $verification = DocumentVerification::create([
                 'hash' => Str::random(32),
                 'document_type' => $type,
@@ -27,6 +27,7 @@ trait HasVerificationHash
     public function getVerificationUrl(string $type): string
     {
         $hash = $this->getOrGenerateVerificationHash($type);
+
         return url("/api/v1/public/verify/{$hash}");
     }
 }

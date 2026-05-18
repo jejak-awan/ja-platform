@@ -3,9 +3,9 @@
 namespace Modules\Cms\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\ContentRevision;
+use Modules\Library\Models\Category;
 use Modules\Library\Models\Tag;
 use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
@@ -513,7 +513,9 @@ class ContentManagementTest extends TestCase
         $this->actingAs($admin, 'sanctum');
 
         $contents = Content::factory()->count(2)->create();
-        foreach ($contents as $c) $c->delete();
+        foreach ($contents as $c) {
+            $c->delete();
+        }
 
         // Bulk Restore
         $response = $this->postJson('/api/v1/manage/cms/contents/bulk-action', [
@@ -526,7 +528,9 @@ class ContentManagementTest extends TestCase
         }
 
         // Bulk Force Delete
-        foreach ($contents as $c) $c->delete();
+        foreach ($contents as $c) {
+            $c->delete();
+        }
         $response = $this->postJson('/api/v1/manage/cms/contents/bulk-action', [
             'action' => 'force_delete',
             'content_ids' => $contents->pluck('id')->toArray(),
@@ -551,7 +555,7 @@ class ContentManagementTest extends TestCase
         ]);
 
         $uuid = $content->id; // Format: 019e3699-78f2-72c6-9d31-f945474fd69d
-        
+
         // 1. Search by exact UUID
         $response = $this->getJson("/api/v1/manage/cms/contents?search={$uuid}");
         TestHelpers::assertApiPaginated($response);

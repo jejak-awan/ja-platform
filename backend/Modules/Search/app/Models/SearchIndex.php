@@ -2,8 +2,10 @@
 
 namespace Modules\Search\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Context;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
@@ -18,20 +20,19 @@ use Modules\System\Traits\ScopedByWorkspace;
  * @property string|null $type
  * @property int $relevance_score
  * @property int|null $workspace_id
- * @property-read \Illuminate\Database\Eloquent\Model $searchable
+ * @property-read Model $searchable
  */
 class SearchIndex extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'srch_indexes';
 
-
     use ScopedByWorkspace;
-
 
     protected $fillable = [
         'workspace_id',
@@ -52,15 +53,15 @@ class SearchIndex extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Illuminate\Database\Eloquent\Model, $this>
+     * @return MorphTo<Model, $this>
      */
-    public function searchable(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    public function searchable(): MorphTo
     {
         return $this->morphTo();
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  Model  $model
      * @param  array<string, mixed>  $data
      */
     public static function index($model, array $data = []): self
@@ -68,9 +69,9 @@ class SearchIndex extends Model
         $searchableType = $model::class;
         /** @var int $searchableId */
         $searchableId = $model->getAttribute('id');
-        
+
         // Get workspace ID from model if available, otherwise from context
-        $workspaceId = $model->getAttribute('workspace_id') ?? $model->getAttribute('workspace_id') ?? \Illuminate\Support\Facades\Context::get('workspace_id');
+        $workspaceId = $model->getAttribute('workspace_id') ?? $model->getAttribute('workspace_id') ?? Context::get('workspace_id');
 
         // Build searchable content
         /** @var string $title */
@@ -103,7 +104,7 @@ class SearchIndex extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  Model  $model
      */
     public static function remove($model): ?bool
     {

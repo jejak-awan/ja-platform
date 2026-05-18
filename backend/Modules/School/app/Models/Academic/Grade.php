@@ -2,9 +2,14 @@
 
 namespace Modules\School\Models\Academic;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Modules\School\Models\HR\Staff;
+use Modules\School\Models\Student\Student;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
@@ -29,23 +34,24 @@ use Modules\System\Traits\ScopedByWorkspace;
  * @property string|null $grade_letter
  * @property string|null $predicate
  * @property string|null $description
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\School\Models\Student\Student $student
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Student $student
  * @property-read Subject $subject
  * @property-read AcademicYear $academicYear
  * @property-read Semester $semester
  * @property-read StudyGroup $studyGroup
- * @property-read \Modules\School\Models\HR\Staff $teacher
+ * @property-read Staff $teacher
  */
 class Grade extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $table = 'sch_acad_grades';
@@ -86,51 +92,51 @@ class Grade extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Student\Student, $this>
+     * @return BelongsTo<Student, $this>
      */
-    public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function student(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Student\Student::class);
+        return $this->belongsTo(Student::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Subject, $this>
+     * @return BelongsTo<Subject, $this>
      */
-    public function subject(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function subject(): BelongsTo
     {
         return $this->belongsTo(Subject::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<AcademicYear, $this>
+     * @return BelongsTo<AcademicYear, $this>
      */
-    public function academicYear(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function academicYear(): BelongsTo
     {
         return $this->belongsTo(AcademicYear::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Semester, $this>
+     * @return BelongsTo<Semester, $this>
      */
-    public function semester(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function semester(): BelongsTo
     {
         return $this->belongsTo(Semester::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<StudyGroup, $this>
+     * @return BelongsTo<StudyGroup, $this>
      */
-    public function studyGroup(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function studyGroup(): BelongsTo
     {
         return $this->belongsTo(StudyGroup::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\HR\Staff, $this>
+     * @return BelongsTo<Staff, $this>
      */
-    public function teacher(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function teacher(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\HR\Staff::class, 'staff_id');
+        return $this->belongsTo(Staff::class, 'staff_id');
     }
 
     /**
@@ -154,7 +160,7 @@ class Grade extends Model
             $this->practice_score,
             $this->project_score,
             $this->portfolio_score,
-        ], fn(?float $s): bool => $s !== null);
+        ], fn (?float $s): bool => $s !== null);
 
         if ($scores === []) {
             return 0;

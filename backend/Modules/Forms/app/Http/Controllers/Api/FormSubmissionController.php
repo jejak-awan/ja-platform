@@ -3,13 +3,21 @@
 namespace Modules\Forms\Http\Controllers\Api;
 
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\Forms\Exports\FormSubmissionsExport;
 use Modules\Forms\Models\Form;
 use Modules\Forms\Models\FormAnalytics;
 use Modules\Forms\Models\FormSubmission;
 use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\User;
+use Mpdf\Mpdf;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class FormSubmissionController extends BaseApiController
 {
@@ -18,13 +26,14 @@ class FormSubmissionController extends BaseApiController
         $this->middleware('auth:sanctum')->except(['store']);
         $this->middleware('permission:view forms')->except(['store']);
     }
+
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, ?Form $form = null): \Illuminate\Http\JsonResponse
+    public function index(Request $request, ?Form $form = null): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -38,7 +47,7 @@ class FormSubmissionController extends BaseApiController
             });
         }
 
-        if ($form instanceof \Modules\Forms\Models\Form) {
+        if ($form instanceof Form) {
             $query->where('form_id', $form->id);
         } elseif ($request->has('form_id')) {
             $formIdRaw = $request->input('form_id');
@@ -67,8 +76,8 @@ class FormSubmissionController extends BaseApiController
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
                 $searchStr = strtolower($search);
-                $q->where(\Illuminate\Support\Facades\DB::raw('lower(cast(data as text))'), 'like', "%{$searchStr}%")
-                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(ip_address)'), 'like', "%{$searchStr}%");
+                $q->where(DB::raw('lower(cast(data as text))'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(ip_address)'), 'like', "%{$searchStr}%");
             });
         }
 
@@ -108,7 +117,7 @@ class FormSubmissionController extends BaseApiController
     /**
      * Display the specified resource.
      */
-    public function show(FormSubmission $formSubmission): \Illuminate\Http\JsonResponse
+    public function show(FormSubmission $formSubmission): JsonResponse
     {
         $this->checkOwnership($formSubmission);
 
@@ -118,7 +127,7 @@ class FormSubmissionController extends BaseApiController
     /**
      * Mark the specified resource as read.
      */
-    public function markAsRead(FormSubmission $formSubmission): \Illuminate\Http\JsonResponse
+    public function markAsRead(FormSubmission $formSubmission): JsonResponse
     {
         $this->checkOwnership($formSubmission);
         $formSubmission->markAsRead();
@@ -131,7 +140,7 @@ class FormSubmissionController extends BaseApiController
     /**
      * Archive the specified resource.
      */
-    public function archive(FormSubmission $formSubmission): \Illuminate\Http\JsonResponse
+    public function archive(FormSubmission $formSubmission): JsonResponse
     {
         $this->checkOwnership($formSubmission);
         $formSubmission->archive();
@@ -144,7 +153,7 @@ class FormSubmissionController extends BaseApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(FormSubmission $formSubmission): \Illuminate\Http\JsonResponse
+    public function destroy(FormSubmission $formSubmission): JsonResponse
     {
         $this->checkOwnership($formSubmission);
         $formSubmission->delete();
@@ -154,10 +163,8 @@ class FormSubmissionController extends BaseApiController
 
     /**
      * Restore the specified resource from storage.
-     *
-     * @param  string  $id
      */
-    public function restore(string $id): \Illuminate\Http\JsonResponse
+    public function restore(string $id): JsonResponse
     {
         /** @var FormSubmission $submission */
         $submission = FormSubmission::withTrashed()->findOrFail($id);
@@ -169,10 +176,8 @@ class FormSubmissionController extends BaseApiController
 
     /**
      * Permanently remove the specified resource from storage.
-     *
-     * @param  string  $id
      */
-    public function forceDelete(string $id): \Illuminate\Http\JsonResponse
+    public function forceDelete(string $id): JsonResponse
     {
         /** @var FormSubmission $submission */
         $submission = FormSubmission::withTrashed()->findOrFail($id);
@@ -185,7 +190,7 @@ class FormSubmissionController extends BaseApiController
     /**
      * Export the resource.
      *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @return BinaryFileResponse|Response|JsonResponse
      */
     public function export(Request $request, Form $form)
     {
@@ -197,8 +202,8 @@ class FormSubmissionController extends BaseApiController
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
                 $searchStr = strtolower($search);
-                $q->where(\Illuminate\Support\Facades\DB::raw('lower(cast(data as text))'), 'like', "%{$searchStr}%")
-                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(ip_address)'), 'like', "%{$searchStr}%");
+                $q->where(DB::raw('lower(cast(data as text))'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(ip_address)'), 'like', "%{$searchStr}%");
             });
         }
 
@@ -249,7 +254,7 @@ class FormSubmissionController extends BaseApiController
         @ini_set('memory_limit', '512M');
         @set_time_limit(120);
 
-        /** @var \Illuminate\Database\Eloquent\Builder<\Modules\Forms\Models\FormSubmission> $exportQuery */
+        /** @var Builder<FormSubmission> $exportQuery */
         $exportQuery = $query->getQuery();
 
         if ($format === 'csv') {
@@ -259,7 +264,7 @@ class FormSubmissionController extends BaseApiController
         if ($format === 'pdf') {
             $submissions = $exportQuery->get();
             if ($fieldKeys === []) {
-                $fieldKeys = collect($submissions)->flatMap(fn($s) => array_keys($s->data ?? []))->unique()->values()->toArray();
+                $fieldKeys = collect($submissions)->flatMap(fn ($s) => array_keys($s->data ?? []))->unique()->values()->toArray();
             }
 
             $html = view('pdf.submissions-list', [
@@ -268,7 +273,7 @@ class FormSubmissionController extends BaseApiController
                 'headers' => $fieldKeys,
             ])->render();
 
-            $mpdf = new \Mpdf\Mpdf([
+            $mpdf = new Mpdf([
                 'format' => 'A4-L',
                 'margin_left' => 10,
                 'margin_right' => 10,
@@ -287,7 +292,7 @@ class FormSubmissionController extends BaseApiController
     /**
      * Export the resource as PDF.
      */
-    public function exportPdf(FormSubmission $formSubmission): \Illuminate\Http\Response
+    public function exportPdf(FormSubmission $formSubmission): Response
     {
         $this->checkOwnership($formSubmission);
         @ini_set('memory_limit', '512M');
@@ -300,7 +305,7 @@ class FormSubmissionController extends BaseApiController
             'data' => $formSubmission->data,
         ])->render();
 
-        $mpdf = new \Mpdf\Mpdf([
+        $mpdf = new Mpdf([
             'format' => 'A4',
             'margin_left' => 15,
             'margin_right' => 15,
@@ -319,7 +324,7 @@ class FormSubmissionController extends BaseApiController
      * Without date filters: returns all-time totals (Submissions list).
      * With `days`, `date_from`/`date_to`, or `aggregate_field`: adds range-scoped metrics + charts (Analytics page).
      */
-    public function statistics(Request $request, ?Form $form = null): \Illuminate\Http\JsonResponse
+    public function statistics(Request $request, ?Form $form = null): JsonResponse
     {
         $user = $request->user();
         if (! $user) {
@@ -334,7 +339,7 @@ class FormSubmissionController extends BaseApiController
             });
         }
 
-        if ($form instanceof \Modules\Forms\Models\Form) {
+        if ($form instanceof Form) {
             $query->where('form_id', $form->id);
         }
 
@@ -400,8 +405,8 @@ class FormSubmissionController extends BaseApiController
 
         $form->loadMissing('fields');
         $stats['chartable_fields'] = $form->fields
-            ->filter(static fn($f): bool => in_array($f->type, ['select', 'radio', 'checkbox', 'multiselect', 'boolean'], true))
-            ->map(static fn($f): array => [
+            ->filter(static fn ($f): bool => in_array($f->type, ['select', 'radio', 'checkbox', 'multiselect', 'boolean'], true))
+            ->map(static fn ($f): array => [
                 'id' => $f->id,
                 'name' => $f->name,
                 'label' => $f->label,
@@ -422,7 +427,7 @@ class FormSubmissionController extends BaseApiController
     }
 
     /**
-     * @return array{0: \Carbon\Carbon, 1: \Carbon\Carbon}
+     * @return array{0: Carbon, 1: Carbon}
      */
     private function resolveStatisticsDateRange(Request $request): array
     {
@@ -447,10 +452,10 @@ class FormSubmissionController extends BaseApiController
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<FormSubmission>  $rangeQuery
+     * @param  Builder<FormSubmission>  $rangeQuery
      * @return array<int, array{period: string, visits: int}>
      */
-    private function buildDailySubmissionStats(\Illuminate\Database\Eloquent\Builder $rangeQuery, Carbon $from, Carbon $to): array
+    private function buildDailySubmissionStats(Builder $rangeQuery, Carbon $from, Carbon $to): array
     {
         $counts = [];
         $cursor = $from->copy()->startOfDay();
@@ -510,10 +515,10 @@ class FormSubmissionController extends BaseApiController
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<FormSubmission>  $rangeQuery
+     * @param  Builder<FormSubmission>  $rangeQuery
      * @return array<int, array{hour: string, count: int}>
      */
-    private function buildHourlySubmissionStats(\Illuminate\Database\Eloquent\Builder $rangeQuery): array
+    private function buildHourlySubmissionStats(Builder $rangeQuery): array
     {
         $bins = array_fill(0, 24, 0);
         foreach ($rangeQuery->select('created_at')->cursor() as $row) {
@@ -535,10 +540,10 @@ class FormSubmissionController extends BaseApiController
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<FormSubmission>  $rangeQuery
+     * @param  Builder<FormSubmission>  $rangeQuery
      * @return array<int, array{day: string, count: int}>
      */
-    private function buildWeeklySubmissionStats(\Illuminate\Database\Eloquent\Builder $rangeQuery): array
+    private function buildWeeklySubmissionStats(Builder $rangeQuery): array
     {
         $labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         $bins = array_fill(0, 7, 0);
@@ -558,10 +563,10 @@ class FormSubmissionController extends BaseApiController
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<FormSubmission>  $rangeQuery
+     * @param  Builder<FormSubmission>  $rangeQuery
      * @return array<int, array{label: string, count: int}>
      */
-    private function buildFieldDistribution(\Illuminate\Database\Eloquent\Builder $rangeQuery, string $fieldName): array
+    private function buildFieldDistribution(Builder $rangeQuery, string $fieldName): array
     {
         $buckets = [];
         foreach ($rangeQuery->select('data')->cursor() as $row) {
@@ -621,7 +626,7 @@ class FormSubmissionController extends BaseApiController
     /**
      * Check if the authenticated user owns the form for this submission.
      *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     protected function checkOwnership(FormSubmission $submission): void
     {

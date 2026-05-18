@@ -2,13 +2,15 @@
 
 namespace Modules\Library\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Library\Models\CustomField;
 use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\User;
 
 class CustomFieldController extends BaseApiController
 {
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = CustomField::with('groups');
 
@@ -21,7 +23,7 @@ class CustomFieldController extends BaseApiController
         return $this->success($fields, 'Custom fields retrieved successfully');
     }
 
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -37,7 +39,7 @@ class CustomFieldController extends BaseApiController
             'sort_order' => 'integer',
         ]);
 
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         $user = $request->user();
         if ($user) {
             $validated['author_id'] = $user->id;
@@ -52,12 +54,12 @@ class CustomFieldController extends BaseApiController
         return $this->success($field->load('groups'), 'Custom field created successfully', 201);
     }
 
-    public function show(CustomField $customField): \Illuminate\Http\JsonResponse
+    public function show(CustomField $customField): JsonResponse
     {
         return $this->success($customField->load('groups'), 'Custom field retrieved successfully');
     }
 
-    public function update(Request $request, CustomField $customField): \Illuminate\Http\JsonResponse
+    public function update(Request $request, CustomField $customField): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
@@ -82,9 +84,10 @@ class CustomFieldController extends BaseApiController
         return $this->success($customField->load('groups'), 'Custom field updated successfully');
     }
 
-    public function destroy(CustomField $customField): \Illuminate\Http\JsonResponse
+    public function destroy(CustomField $customField): JsonResponse
     {
         $customField->delete();
+
         return $this->success(null, 'Custom field deleted successfully');
     }
 }

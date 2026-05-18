@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace Modules\System\Services;
 
 use Illuminate\Support\Facades\Session;
+use Modules\System\Models\User;
 
 class SessionManager
 {
     /**
      * Set session lifetime based on user role
      *
-     * @param  \Modules\System\Models\User|null  $user
+     * @param  User|null  $user
      */
     public static function setLifetimeForUser($user): void
     {
-        if (! $user instanceof \Modules\System\Models\User) {
+        if (! $user instanceof User) {
             return;
         }
 

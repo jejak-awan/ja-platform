@@ -35,7 +35,7 @@ class FolderController extends Controller
         return response()->json([
             'success' => true,
             'data' => $query->orderBy('sort_order')->orderBy('name')->get(),
-            'message' => 'Folders retrieved successfully'
+            'message' => 'Folders retrieved successfully',
         ]);
     }
 
@@ -63,7 +63,7 @@ class FolderController extends Controller
         return response()->json([
             'success' => true,
             'data' => $folder,
-            'message' => 'Folder created successfully'
+            'message' => 'Folder created successfully',
         ], 201);
     }
 
@@ -88,7 +88,7 @@ class FolderController extends Controller
         return response()->json([
             'success' => true,
             'data' => $folder,
-            'message' => 'Folder updated successfully'
+            'message' => 'Folder updated successfully',
         ]);
     }
 
@@ -103,7 +103,7 @@ class FolderController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Folder moved to trash'
+            'message' => 'Folder moved to trash',
         ]);
     }
 }

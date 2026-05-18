@@ -2,17 +2,23 @@
 
 namespace Modules\Analytics\Http\Controllers;
 
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
-use Modules\Cms\Models\Content;
-use Modules\Analytics\Services\AnalyticsService;
-use Modules\System\Http\Controllers\BaseApiController;
+use Illuminate\Validation\ValidationException;
 use Modules\Analytics\Models\AnalyticsEvent;
 use Modules\Analytics\Models\AnalyticsSession;
 use Modules\Analytics\Models\AnalyticsVisit;
+use Modules\Analytics\Services\AnalyticsService;
+use Modules\Cms\Models\Content;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\Setting;
 
 class AnalyticsController extends BaseApiController
 {
@@ -22,6 +28,7 @@ class AnalyticsController extends BaseApiController
         $this->middleware('permission:view analytics')->except(['trackVisit', 'trackEvent', 'trackBatch']);
         $this->middleware('permission:manage settings')->only(['cleanup', 'purgeAll']);
     }
+
     /**
      * Get properly formatted date range for queries
      * Ensures end date includes the entire day (23:59:59)
@@ -44,7 +51,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get analytics overview.
      */
-    public function overview(Request $request): \Illuminate\Http\JsonResponse
+    public function overview(Request $request): JsonResponse
     {
         [$dateFrom, $dateTo] = $this->getDateRange($request);
 
@@ -67,7 +74,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get analytics visits.
      */
-    public function visits(Request $request): \Illuminate\Http\JsonResponse
+    public function visits(Request $request): JsonResponse
     {
         [$dateFrom, $dateTo] = $this->getDateRange($request);
         $groupByRaw = $request->input('group_by', 'day'); // day, week, month
@@ -101,7 +108,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get top pages.
      */
-    public function topPages(Request $request): \Illuminate\Http\JsonResponse
+    public function topPages(Request $request): JsonResponse
     {
         [$dateFrom, $dateTo] = $this->getDateRange($request);
         $limitRaw = $request->input('limit', 10);
@@ -120,7 +127,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get top content data.
      */
-    public function topContent(Request $request): \Illuminate\Http\JsonResponse
+    public function topContent(Request $request): JsonResponse
     {
         [$dateFrom, $dateTo] = $this->getDateRange($request);
         $limitRaw = $request->input('limit', 10);
@@ -203,7 +210,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get device analytics.
      */
-    public function devices(Request $request): \Illuminate\Http\JsonResponse
+    public function devices(Request $request): JsonResponse
     {
         try {
             [$dateFrom, $dateTo] = $this->getDateRange($request);
@@ -225,7 +232,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get browser analytics.
      */
-    public function browsers(Request $request): \Illuminate\Http\JsonResponse
+    public function browsers(Request $request): JsonResponse
     {
         try {
             [$dateFrom, $dateTo] = $this->getDateRange($request);
@@ -248,7 +255,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get country analytics.
      */
-    public function countries(Request $request): \Illuminate\Http\JsonResponse
+    public function countries(Request $request): JsonResponse
     {
         try {
             [$dateFrom, $dateTo] = $this->getDateRange($request);
@@ -276,7 +283,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get referrer analytics.
      */
-    public function referrers(Request $request): \Illuminate\Http\JsonResponse
+    public function referrers(Request $request): JsonResponse
     {
         [$dateFrom, $dateTo] = $this->getDateRange($request);
         $limitRaw = $request->input('limit', 10);
@@ -314,7 +321,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get analytics events.
      */
-    public function events(Request $request): \Illuminate\Http\JsonResponse
+    public function events(Request $request): JsonResponse
     {
         [$dateFrom, $dateTo] = $this->getDateRange($request);
         $eventTypeRaw = $request->input('event_type');
@@ -326,7 +333,7 @@ class AnalyticsController extends BaseApiController
             $query->where('event_type', $eventType);
         }
 
-        /** @var \Illuminate\Pagination\LengthAwarePaginator<int, \Modules\Analytics\Models\AnalyticsEvent> $events */
+        /** @var LengthAwarePaginator<int, AnalyticsEvent> $events */
         $events = $query->with(['user', 'content'])
             ->latest('occurred_at')
             ->paginate(50);
@@ -337,7 +344,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get event statistics.
      */
-    public function eventStats(Request $request): \Illuminate\Http\JsonResponse
+    public function eventStats(Request $request): JsonResponse
     {
         [$dateFrom, $dateTo] = $this->getDateRange($request);
 
@@ -353,7 +360,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Track a page visit
      */
-    public function trackVisit(Request $request): \Illuminate\Http\JsonResponse
+    public function trackVisit(Request $request): JsonResponse
     {
         try {
             // Filter out bot/scanner traffic
@@ -410,7 +417,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Track a custom event
      */
-    public function trackEvent(Request $request): \Illuminate\Http\JsonResponse
+    public function trackEvent(Request $request): JsonResponse
     {
         try {
             $validated = $request->validate([
@@ -419,7 +426,7 @@ class AnalyticsController extends BaseApiController
                 'event_data' => 'nullable|array',
                 'content_id' => 'nullable|string|exists:cms_contents,id',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
@@ -441,7 +448,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Track multiple events in batch
      */
-    public function trackBatch(Request $request): \Illuminate\Http\JsonResponse
+    public function trackBatch(Request $request): JsonResponse
     {
         try {
             $validated = $request->validate([
@@ -451,7 +458,7 @@ class AnalyticsController extends BaseApiController
                 'events.*.data' => 'nullable|array',
                 'events.*.content_id' => 'nullable|string|exists:cms_contents,id',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
@@ -485,7 +492,7 @@ class AnalyticsController extends BaseApiController
     /**
      * Get real-time analytics.
      */
-    public function realTime(): \Illuminate\Http\JsonResponse
+    public function realTime(): JsonResponse
     {
         try {
             // Check if tables exist
@@ -557,9 +564,9 @@ class AnalyticsController extends BaseApiController
     /**
      * Export analytics data to CSV
      *
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @return Response|JsonResponse
      */
-    public function export(Request $request): \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+    public function export(Request $request): ResponseFactory|Response|JsonResponse
     {
         try {
             $dateFromRaw = $request->input('date_from', now()->subDays(30)->format('Y-m-d'));
@@ -680,23 +687,23 @@ class AnalyticsController extends BaseApiController
     /**
      * Run analytics cleanup manually
      */
-    public function cleanup(Request $request): \Illuminate\Http\JsonResponse
+    public function cleanup(Request $request): JsonResponse
     {
         try {
-            $daysVisitsRaw = \Modules\System\Models\Setting::get('analytics_retention_days', 90);
+            $daysVisitsRaw = Setting::get('analytics_retention_days', 90);
             $daysVisits = is_numeric($daysVisitsRaw) ? (int) $daysVisitsRaw : 90;
             $countVisits = AnalyticsVisit::where('visited_at', '<', now()->subDays($daysVisits))->delete();
 
-            $daysEventsRaw = \Modules\System\Models\Setting::get('analytics_event_retention_days', 60);
+            $daysEventsRaw = Setting::get('analytics_event_retention_days', 60);
             $daysEvents = is_numeric($daysEventsRaw) ? (int) $daysEventsRaw : 60;
             $countEvents = AnalyticsEvent::where('occurred_at', '<', now()->subDays($daysEvents))->delete();
 
-            $daysSessionsRaw = \Modules\System\Models\Setting::get('analytics_visitor_retention_days', 30);
+            $daysSessionsRaw = Setting::get('analytics_visitor_retention_days', 30);
             $daysSessions = is_numeric($daysSessionsRaw) ? (int) $daysSessionsRaw : 30;
             $countSessions = AnalyticsSession::where('started_at', '<', now()->subDays($daysSessions))->delete();
 
-            $totalDeleted = (is_numeric($countVisits) ? (int) $countVisits : 0) + 
-                            (is_numeric($countEvents) ? (int) $countEvents : 0) + 
+            $totalDeleted = (is_numeric($countVisits) ? (int) $countVisits : 0) +
+                            (is_numeric($countEvents) ? (int) $countEvents : 0) +
                             (is_numeric($countSessions) ? (int) $countSessions : 0);
 
             Log::info('Analytics manual cleanup triggered via UI', [
@@ -728,7 +735,7 @@ class AnalyticsController extends BaseApiController
      * Delete all analytics visits, events, and sessions (full reset).
      * Requires JSON body: { "confirmation": "RESET_ALL_ANALYTICS" }.
      */
-    public function purgeAll(Request $request): \Illuminate\Http\JsonResponse
+    public function purgeAll(Request $request): JsonResponse
     {
         $confirmation = $request->input('confirmation');
         if ($confirmation !== 'RESET_ALL_ANALYTICS') {

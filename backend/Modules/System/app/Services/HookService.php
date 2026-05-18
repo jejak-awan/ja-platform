@@ -22,7 +22,7 @@ class HookService
         ];
 
         // Sort by priority
-        usort(self::$hooks[$hookName], fn(array $a, array $b) => $a['priority'] <=> $b['priority']);
+        usort(self::$hooks[$hookName], fn (array $a, array $b) => $a['priority'] <=> $b['priority']);
     }
 
     /**
@@ -78,7 +78,7 @@ class HookService
 
         self::$hooks[$hookName] = array_filter(
             self::$hooks[$hookName],
-            fn(array $hook) => $hook['callback'] !== $callback
+            fn (array $hook) => $hook['callback'] !== $callback
         );
     }
 }

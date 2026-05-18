@@ -21,9 +21,7 @@ class FormSubmissionsExport implements FromQuery, ShouldAutoSize, WithHeadings, 
      * @param  Builder<FormSubmission>  $query
      * @param  array<int, string>  $fieldKeys
      */
-    public function __construct(protected \Illuminate\Database\Eloquent\Builder $query, protected array $fieldKeys)
-    {
-    }
+    public function __construct(protected Builder $query, protected array $fieldKeys) {}
 
     /**
      * @return Builder<FormSubmission>

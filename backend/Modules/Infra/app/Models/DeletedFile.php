@@ -2,8 +2,11 @@
 
 namespace Modules\Infra\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Modules\System\Models\User;
 
 /**
@@ -17,10 +20,10 @@ use Modules\System\Models\User;
  * @property string $extension
  * @property string $mime_type
  * @property int|null $deleted_by
- * @property \Illuminate\Support\Carbon $deleted_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\System\Models\User|null $deletedByUser
+ * @property Carbon $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User|null $deletedByUser
  * @property-read string $formatted_size
  */
 class DeletedFile extends Model
@@ -28,10 +31,10 @@ class DeletedFile extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'infra_deleted_files';
-
 
     protected $fillable = [
         'original_path',
@@ -54,9 +57,9 @@ class DeletedFile extends Model
     /**
      * Get the user who deleted this file
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this>
+     * @return BelongsTo<User, $this>
      */
-    public function deletedByUser(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function deletedByUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
@@ -64,8 +67,8 @@ class DeletedFile extends Model
     /**
      * Scope for files only
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     public function scopeFiles($query)
     {
@@ -75,8 +78,8 @@ class DeletedFile extends Model
     /**
      * Scope for folders only
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     public function scopeFolders($query)
     {

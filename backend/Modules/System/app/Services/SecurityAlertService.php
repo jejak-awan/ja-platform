@@ -3,10 +3,12 @@
 namespace Modules\System\Services;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Modules\System\Models\LoginHistory;
 use Modules\Security\Models\SecurityLog;
+use Modules\System\Models\LoginHistory;
+use Modules\System\Models\Setting;
 
 class SecurityAlertService
 {
@@ -63,12 +65,12 @@ class SecurityAlertService
         $env = app()->environment();
         $settingEnvKey = $baseKey.'_'.$env;
 
-        $envScoped = \Modules\System\Models\Setting::get($settingEnvKey);
+        $envScoped = Setting::get($settingEnvKey);
         if (is_numeric($envScoped)) {
             return max($min, (int) $envScoped);
         }
 
-        $baseSetting = \Modules\System\Models\Setting::get($baseKey);
+        $baseSetting = Setting::get($baseKey);
         if (is_numeric($baseSetting)) {
             return max($min, (int) $baseSetting);
         }
@@ -150,7 +152,7 @@ class SecurityAlertService
 
         try {
             // Group failed logins by IP
-            /** @var \Illuminate\Database\Eloquent\Collection<int, SecurityLog> $failedByIp */
+            /** @var Collection<int, SecurityLog> $failedByIp */
             $failedByIp = SecurityLog::where('created_at', '>=', $since)
                 ->where('event_type', 'login_failed')
                 ->selectRaw('ip_address, COUNT(*) as count')
@@ -190,7 +192,7 @@ class SecurityAlertService
         $alerts = [];
 
         try {
-            /** @var \Illuminate\Database\Eloquent\Collection<int, SecurityLog> $blockedIps */
+            /** @var Collection<int, SecurityLog> $blockedIps */
             $blockedIps = SecurityLog::where('created_at', '>=', $since)
                 ->whereIn('event_type', ['ip_blocked', 'ip_blocked_temp', 'ip_blocked_permanent'])
                 ->selectRaw('ip_address, COUNT(*) as count, MAX(created_at) as latest')
@@ -233,7 +235,7 @@ class SecurityAlertService
 
         try {
             // Check for unusual login patterns (same user from multiple IPs)
-            /** @var \Illuminate\Database\Eloquent\Collection<int, LoginHistory> $multipleIpLogins */
+            /** @var Collection<int, LoginHistory> $multipleIpLogins */
             $multipleIpLogins = LoginHistory::where('created_at', '>=', $since)
                 ->where('status', 'success')
                 ->selectRaw('user_id, COUNT(DISTINCT ip_address) as ip_count')
@@ -260,7 +262,7 @@ class SecurityAlertService
             }
 
             // Check for brute force attempts (many failed logins to same user)
-            /** @var \Illuminate\Database\Eloquent\Collection<int, SecurityLog> $bruteForce */
+            /** @var Collection<int, SecurityLog> $bruteForce */
             $bruteForce = LoginHistory::where('created_at', '>=', $since)
                 ->where('status', 'failed')
                 ->whereNotNull('user_id')
@@ -284,7 +286,7 @@ class SecurityAlertService
             }
 
             // Detect repeated permission denied bursts by IP (possible privilege probing).
-            /** @var \Illuminate\Database\Eloquent\Collection<int, SecurityLog> $permissionDenied */
+            /** @var Collection<int, SecurityLog> $permissionDenied */
             $permissionDenied = SecurityLog::where('created_at', '>=', $since)
                 ->where('event_type', 'permission_denied')
                 ->selectRaw('ip_address, COUNT(*) as count')

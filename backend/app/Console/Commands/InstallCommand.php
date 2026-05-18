@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
@@ -28,15 +27,16 @@ class InstallCommand extends Command
      */
     public function handle(): int
     {
-        if (File::exists(storage_path('installed')) && !$this->option('force')) {
+        if (File::exists(storage_path('installed')) && ! $this->option('force')) {
             $this->error('❌ JA-Platform is already installed.');
             $this->info('Use --force to reinstall, but BE CAREFUL as it may overwrite your data.');
+
             return 1;
         }
 
         $this->info('🚀 Starting JA-Platform Installation...');
 
-        if (!$this->checkRequirements()) {
+        if (! $this->checkRequirements()) {
             return 1;
         }
 
@@ -50,13 +50,14 @@ class InstallCommand extends Command
         $this->finalizeInstallation();
 
         $this->info('✅ JA-Platform has been installed successfully!');
+
         return 0;
     }
 
     protected function finalizeInstallation(): void
     {
         $this->comment('🏁 Finalizing installation...');
-        
+
         // 1. Create Default Super User
         $this->comment('👤 Creating super administrator account...');
         try {
@@ -73,23 +74,23 @@ class InstallCommand extends Command
                 );
             }
         } catch (\Exception $e) {
-            $this->error('❌ Failed to create super user: ' . $e->getMessage());
+            $this->error('❌ Failed to create super user: '.$e->getMessage());
         }
 
         // 2. Create Lock File
-        File::put(storage_path('installed'), 'Installation completed at: ' . now());
-        
+        File::put(storage_path('installed'), 'Installation completed at: '.now());
+
         // 3. Set Installed Flag in Env
         $this->updateEnv(['APP_INSTALLED' => 'true']);
-        
+
         $this->info('✅ Installation lock created.');
 
-        $this->info("\n" . str_repeat('=', 40));
+        $this->info("\n".str_repeat('=', 40));
         $this->info('  DEFAULT CREDENTIALS');
         $this->info(str_repeat('=', 40));
-        $this->line("  Username : <fg=green>super</>");
-        $this->line("  Password : <fg=green>Senja@jejakawan</>");
-        $this->info(str_repeat('=', 40) . "\n");
+        $this->line('  Username : <fg=green>super</>');
+        $this->line('  Password : <fg=green>Senja@jejakawan</>');
+        $this->info(str_repeat('=', 40)."\n");
     }
 
     protected function checkRequirements(): bool
@@ -98,19 +99,22 @@ class InstallCommand extends Command
 
         // Check for Node
         $nodeCheck = $this->runExternalCommand('node -v');
-        if (!$nodeCheck) {
+        if (! $nodeCheck) {
             $this->error('❌ Node.js is not installed.');
+
             return false;
         }
 
         // Check for NPM
         $npmCheck = $this->runExternalCommand('npm -v');
-        if (!$npmCheck) {
+        if (! $npmCheck) {
             $this->error('❌ NPM is not installed.');
+
             return false;
         }
 
         $this->info('✅ System requirements met.');
+
         return true;
     }
 
@@ -118,7 +122,7 @@ class InstallCommand extends Command
     {
         $this->comment('📝 Setting up environment variables...');
 
-        if (!File::exists(base_path('.env'))) {
+        if (! File::exists(base_path('.env'))) {
             File::copy(base_path('.env.example'), base_path('.env'));
             $this->info('✅ Created .env from .example');
         }
@@ -167,7 +171,7 @@ class InstallCommand extends Command
             $pathDefault = database_path('database.sqlite');
             $pathRaw = $this->ask('Database Path (absolute)', $pathDefault);
             $path = is_string($pathRaw) ? $pathRaw : $pathDefault;
-            if (!File::exists($path)) {
+            if (! File::exists($path)) {
                 File::put($path, '');
                 $this->info("✅ Created SQLite database at $path");
             }
@@ -206,7 +210,7 @@ class InstallCommand extends Command
                 'DB_USERNAME' => $username,
                 'DB_PASSWORD' => $password,
             ]);
-            
+
             // Temporary update for migration check
             config(["database.connections.$connection.host" => $host]);
             config(["database.connections.$connection.port" => $port]);
@@ -222,7 +226,7 @@ class InstallCommand extends Command
 
     protected function setupRedis(): void
     {
-        if (!$this->confirm('Do you want to configure Redis?', false)) {
+        if (! $this->confirm('Do you want to configure Redis?', false)) {
             return;
         }
 
@@ -246,13 +250,13 @@ class InstallCommand extends Command
             'REDIS_PASSWORD' => $password === '' ? 'null' : $password,
             'REDIS_PORT' => $port,
         ]);
-        
+
         $this->info('✅ Redis configured.');
     }
 
     protected function setupMail(): void
     {
-        if (!$this->confirm('Do you want to configure Mail settings?', false)) {
+        if (! $this->confirm('Do you want to configure Mail settings?', false)) {
             return;
         }
 
@@ -265,9 +269,10 @@ class InstallCommand extends Command
             $first = $mailerRaw[0] ?? 'smtp';
             $mailer = is_string($first) ? $first : 'smtp';
         }
-        
+
         if ($mailer === 'log') {
             $this->updateEnv(['MAIL_MAILER' => 'log']);
+
             return;
         }
 
@@ -324,7 +329,7 @@ class InstallCommand extends Command
     }
 
     /**
-     * @param array<string, string> $data
+     * @param  array<string, string>  $data
      */
     protected function updateEnv(array $data): void
     {
@@ -335,7 +340,7 @@ class InstallCommand extends Command
             foreach ($data as $key => $value) {
                 if (str_contains($existing, "{$key}=")) {
                     // Check if value contains spaces, if so wrap in quotes if not already
-                    if (str_contains($value, ' ') && !str_contains($value, '"')) {
+                    if (str_contains($value, ' ') && ! str_contains($value, '"')) {
                         $value = "\"$value\"";
                     }
                     $updated = preg_replace(
@@ -359,7 +364,7 @@ class InstallCommand extends Command
     {
         $process = Process::fromShellCommandline($command, $cwd);
         $process->setTimeout(null);
-        
+
         $process->run(function ($type, string|iterable $buffer): void {
             $this->output->write($buffer);
         });

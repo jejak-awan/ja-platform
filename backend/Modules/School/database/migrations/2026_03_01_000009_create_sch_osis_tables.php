@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Antigravity: Consolidated OSIS Tables Migration (Level 9)
  */

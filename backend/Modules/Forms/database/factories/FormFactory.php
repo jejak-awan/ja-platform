@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Modules\Forms\Models\Form;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Forms\Models\Form>
+ * @extends Factory<Form>
  */
 class FormFactory extends Factory
 {

@@ -3,6 +3,7 @@
 namespace Modules\School\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Modules\School\Models\Academic\Subject;
 
 class SubjectSeeder extends Seeder
@@ -12,9 +13,13 @@ class SubjectSeeder extends Seeder
      */
     public function run(): void
     {
-        $school = \Illuminate\Support\Facades\DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
-        $unit = $school ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
-        if (!$school || !$unit) { $this->command->warn('No school/unit found. Skipping SubjectSeeder.'); return; }
+        $school = DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        $unit = $school ? DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
+        if (! $school || ! $unit) {
+            $this->command->warn('No school/unit found. Skipping SubjectSeeder.');
+
+            return;
+        }
         $schoolId = $school->id;
         $unitId = $unit->id;
 

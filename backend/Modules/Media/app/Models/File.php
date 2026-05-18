@@ -2,12 +2,17 @@
 
 namespace Modules\Media\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Modules\Library\Models\Tag;
+use Modules\Media\Database\Factories\FileFactory;
 use Modules\System\Traits\ScopedByWorkspace;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
  * @property string $id
@@ -29,11 +34,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  */
 class File extends Model
 {
-    use HasFactory, SoftDeletes, ScopedByWorkspace, HasUuids;
+    use HasFactory, HasUuids, ScopedByWorkspace, SoftDeletes;
 
-    protected static function newFactory(): \Modules\Media\Database\Factories\FileFactory
+    protected static function newFactory(): FileFactory
     {
-        return \Modules\Media\Database\Factories\FileFactory::new();
+        return FileFactory::new();
     }
 
     protected $table = 'srv_media_files';
@@ -66,27 +71,27 @@ class File extends Model
     protected $appends = ['url', 'thumbnail_url', 'is_trashed'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\Media\Models\Folder, $this>
+     * @return BelongsTo<Folder, $this>
      */
-    public function folder(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function folder(): BelongsTo
     {
         return $this->belongsTo(Folder::class, 'folder_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\Media\Models\Usage, $this>
+     * @return HasMany<Usage, $this>
      */
-    public function usages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function usages(): HasMany
     {
         return $this->hasMany(Usage::class, 'file_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany<\Modules\Library\Models\Tag, $this>
+     * @return MorphToMany<Tag, $this>
      */
-    public function tags(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    public function tags(): MorphToMany
     {
-        return $this->morphToMany(\Modules\Library\Models\Tag::class, 'taggable', 'lib_taggables');
+        return $this->morphToMany(Tag::class, 'taggable', 'lib_taggables');
     }
 
     /**
@@ -130,6 +135,7 @@ class File extends Model
             if ($this->disk === 'public') {
                 return '/storage/'.ltrim($thumbnailPath, '/');
             }
+
             return Storage::disk($this->disk)->url($thumbnailPath);
         }
 

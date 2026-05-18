@@ -2,14 +2,21 @@
 
 namespace Modules\Cms\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Modules\Cms\Models\Comment;
 use Modules\Cms\Models\Content;
+use Modules\Cms\Services\CommentSecurityService;
 use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\Setting;
+use Modules\System\Models\User;
+use Modules\System\Services\CaptchaService;
 
 class CommentController extends BaseApiController
 {
-    public function __construct(protected \Modules\Cms\Services\CommentSecurityService $securityService)
+    public function __construct(protected CommentSecurityService $securityService)
     {
         $this->middleware('auth:sanctum')->except(['index', 'store']);
         $this->middleware('permission:view comments')->only(['adminIndex', 'statistics']);
@@ -18,7 +25,7 @@ class CommentController extends BaseApiController
     /**
      * Display a listing of the resource.
      */
-    public function index(Content $content): \Illuminate\Http\JsonResponse
+    public function index(Content $content): JsonResponse
     {
         $comments = Comment::with(['user', 'replies' => function ($q): void {
             $q->where('status', 'approved')->with('user');
@@ -35,7 +42,7 @@ class CommentController extends BaseApiController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function store(Request $request, Content $content): JsonResponse
     {
         // Check if comments are enabled for this content
         if ($content->comment_status !== 'open') {
@@ -49,12 +56,12 @@ class CommentController extends BaseApiController
                 'email' => 'nullable|email|max:255',
                 'parent_id' => 'nullable|exists:cms_comments,id',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         $authorEmail = '';
 
         // If user is authenticated, use user data
@@ -63,7 +70,7 @@ class CommentController extends BaseApiController
             $authorEmail = (string) $user->email;
         } else {
             // Check if guests are allowed
-            if (! \Modules\System\Models\Setting::get('comments.security.allow_guests', true)) {
+            if (! Setting::get('comments.security.allow_guests', true)) {
                 return $this->error('Guest comments are disabled', 403);
             }
 
@@ -74,8 +81,8 @@ class CommentController extends BaseApiController
             ]);
 
             // Captcha Validation for Guests
-            if (\Modules\System\Models\Setting::get('comments.security.guest_captcha', true)) {
-                $captchaService = app(\Modules\System\Services\CaptchaService::class);
+            if (Setting::get('comments.security.guest_captcha', true)) {
+                $captchaService = app(CaptchaService::class);
                 $captchaTokenRaw = $request->input('captcha_token');
                 $captchaToken = is_string($captchaTokenRaw) ? $captchaTokenRaw : '';
                 $captchaInputRaw = $request->input('captcha_input');
@@ -109,10 +116,10 @@ class CommentController extends BaseApiController
     /**
      * Display a listing of the resource for admin.
      */
-    public function adminIndex(Request $request): \Illuminate\Http\JsonResponse
+    public function adminIndex(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -139,9 +146,9 @@ class CommentController extends BaseApiController
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
                 $searchStr = strtolower($search);
-                $q->where(\Illuminate\Support\Facades\DB::raw('lower(body)'), 'like', "%{$searchStr}%")
-                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%")
-                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(email)'), 'like', "%{$searchStr}%");
+                $q->where(DB::raw('lower(body)'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(name)'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(email)'), 'like', "%{$searchStr}%");
             });
         }
 
@@ -155,10 +162,10 @@ class CommentController extends BaseApiController
     /**
      * Get comment statistics.
      */
-    public function statistics(Request $request): \Illuminate\Http\JsonResponse
+    public function statistics(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -188,7 +195,7 @@ class CommentController extends BaseApiController
     /**
      * Approve the specified comment.
      */
-    public function approve(Request $request, Comment $comment): \Illuminate\Http\JsonResponse
+    public function approve(Request $request, Comment $comment): JsonResponse
     {
         $user = $request->user();
         if (! $user) {
@@ -196,7 +203,7 @@ class CommentController extends BaseApiController
         }
 
         // Ownership check
-        if (!$user->can('manage comments') && $comment->content->author_id !== $user->id) {
+        if (! $user->can('manage comments') && $comment->content->author_id !== $user->id) {
             return $this->forbidden('You can only moderate comments on your own content');
         }
 
@@ -213,7 +220,7 @@ class CommentController extends BaseApiController
     /**
      * Reject the specified comment.
      */
-    public function reject(Request $request, Comment $comment): \Illuminate\Http\JsonResponse
+    public function reject(Request $request, Comment $comment): JsonResponse
     {
         $user = $request->user();
         if (! $user) {
@@ -221,7 +228,7 @@ class CommentController extends BaseApiController
         }
 
         // Ownership check
-        if (!$user->can('manage comments') && $comment->content->author_id !== $user->id) {
+        if (! $user->can('manage comments') && $comment->content->author_id !== $user->id) {
             return $this->forbidden('You can only moderate comments on your own content');
         }
 
@@ -238,7 +245,7 @@ class CommentController extends BaseApiController
     /**
      * Mark the specified comment as spam.
      */
-    public function markAsSpam(Request $request, Comment $comment): \Illuminate\Http\JsonResponse
+    public function markAsSpam(Request $request, Comment $comment): JsonResponse
     {
         $user = $request->user();
         if (! $user) {
@@ -246,7 +253,7 @@ class CommentController extends BaseApiController
         }
 
         // Ownership check
-        if (!$user->can('manage comments') && $comment->content->author_id !== $user->id) {
+        if (! $user->can('manage comments') && $comment->content->author_id !== $user->id) {
             return $this->forbidden('You can only moderate comments on your own content');
         }
 
@@ -263,7 +270,7 @@ class CommentController extends BaseApiController
     /**
      * Bulk action on multiple comments.
      */
-    public function bulkAction(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkAction(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'ids' => 'required|array',
@@ -284,7 +291,7 @@ class CommentController extends BaseApiController
 
         foreach ($comments as $comment) {
             // Ownership check
-            if (!$user->can('manage comments') && $comment->content->author_id !== $user->id) {
+            if (! $user->can('manage comments') && $comment->content->author_id !== $user->id) {
                 continue;
                 // Skip
             }
@@ -322,7 +329,7 @@ class CommentController extends BaseApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, Comment $comment): \Illuminate\Http\JsonResponse
+    public function destroy(Request $request, Comment $comment): JsonResponse
     {
         $user = $request->user();
         if (! $user) {
@@ -330,7 +337,7 @@ class CommentController extends BaseApiController
         }
 
         // Ownership check
-        if (!$user->can('manage comments') && $comment->content->author_id !== $user->id) {
+        if (! $user->can('manage comments') && $comment->content->author_id !== $user->id) {
             return $this->forbidden('You can only delete comments on your own content');
         }
 

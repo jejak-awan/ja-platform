@@ -2,8 +2,19 @@
 
 namespace Modules\System\Providers;
 
+use Illuminate\Foundation\AliasLoader;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+use Modules\System\Console\Commands\CleanupOldLogs;
+use Modules\System\Contracts\LayoutRegistryInterface;
+use Modules\System\Facades\Hook;
+use Modules\System\Http\Controllers\Console\DashboardController;
+use Modules\System\Registries\DashboardRegistry;
+use Modules\System\Registries\HookRegistry;
+use Modules\System\Registries\LayoutRegistry;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -22,26 +33,27 @@ class SystemServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Super Admin Gate
-        \Illuminate\Support\Facades\Gate::before(fn($user, $capability) => $user->hasRole('super') ? true : null);
+        Gate::before(fn ($user, $capability) => $user->hasRole('super') ? true : null);
 
         // Register Request Macro for CSP Nonce
-        \Illuminate\Http\Request::macro('cspNonce', function () {
+        Request::macro('cspNonce', function () {
             if (! $this->has('__csp_nonce')) {
-                $this->attributes->set('__csp_nonce', \Illuminate\Support\Str::random(32));
+                $this->attributes->set('__csp_nonce', Str::random(32));
             }
+
             return $this->attributes->get('__csp_nonce');
         });
 
         $this->app->booted(function (): void {
-            if ($this->app->bound(\Modules\System\Registries\DashboardRegistry::class)) {
-                $registry = $this->app->make(\Modules\System\Registries\DashboardRegistry::class);
-                
+            if ($this->app->bound(DashboardRegistry::class)) {
+                $registry = $this->app->make(DashboardRegistry::class);
+
                 // Register Media Stats
                 $registry->register('media', [
                     'title' => 'Media Library',
                     'component' => 'MediaStatsWidget',
                     'width' => '1/2',
-                    'data_callback' => [\Modules\System\Http\Controllers\Console\DashboardController::class, 'getMediaStats']
+                    'data_callback' => [DashboardController::class, 'getMediaStats'],
                 ]);
 
                 // Register User Stats
@@ -49,7 +61,7 @@ class SystemServiceProvider extends ServiceProvider
                     'title' => 'User Management',
                     'component' => 'UserStatsWidget',
                     'width' => '1/2',
-                    'data_callback' => [\Modules\System\Http\Controllers\Console\DashboardController::class, 'getUserStats']
+                    'data_callback' => [DashboardController::class, 'getUserStats'],
                 ]);
             }
         });
@@ -59,7 +71,7 @@ class SystemServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
     }
 
     /**
@@ -70,10 +82,15 @@ class SystemServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
 
-        $this->app->singleton(\Modules\System\Registries\DashboardRegistry::class);
+        $this->app->singleton(DashboardRegistry::class);
         $this->app->singleton(\Modules\System\Services\DashboardRegistry::class);
-        $this->app->singleton(\Modules\System\Registries\HookRegistry::class);
-        $this->app->singleton(\Modules\System\Contracts\LayoutRegistryInterface::class, \Modules\System\Registries\LayoutRegistry::class);
+        $this->app->singleton(HookRegistry::class);
+        $this->app->singleton(LayoutRegistryInterface::class, LayoutRegistry::class);
+
+        // Register Global Hook Facade Alias
+        if (class_exists(AliasLoader::class)) {
+            AliasLoader::getInstance()->alias('Hook', Hook::class);
+        }
     }
 
     /**
@@ -82,7 +99,7 @@ class SystemServiceProvider extends ServiceProvider
     protected function registerCommands(): void
     {
         $this->commands([
-            \Modules\System\Console\Commands\CleanupOldLogs::class,
+            CleanupOldLogs::class,
         ]);
     }
 
@@ -93,7 +110,7 @@ class SystemServiceProvider extends ServiceProvider
     {
         // $this->app->booted(function () {
         //     $schedule = $this->app->make(Schedule::class);
-         //     $schedule->command('inspire')->hourly();
+        //     $schedule->command('inspire')->hourly();
         // });
     }
 
@@ -170,7 +187,7 @@ class SystemServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
 
-        Blade::componentNamespace((string) config('modules.namespace').'\\' . $this->name . '\\View\\Components', $this->nameLower);
+        Blade::componentNamespace((string) config('modules.namespace').'\\'.$this->name.'\\View\\Components', $this->nameLower);
     }
 
     /**

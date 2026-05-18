@@ -2,11 +2,15 @@
 
 namespace Modules\School\Models\Operations;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
+use Modules\School\Models\Institution\School;
+use Modules\School\Models\Institution\SchoolUnit;
 
 /**
  * @property string $id
@@ -17,22 +21,23 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $complaint
  * @property string $treatment
  * @property string|null $medicine_given
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\School\Models\Institution\School $school
- * @property-read \Modules\School\Models\Institution\SchoolUnit $level
- * @property-read \Illuminate\Database\Eloquent\Relations\MorphTo<\Illuminate\Database\Eloquent\Model, $this> $patient
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read School $school
+ * @property-read SchoolUnit $level
+ * @property-read MorphTo<Model, $this> $patient
  */
 class UksVisit extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_ops_uks_visits';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, \Modules\System\Traits\ScopedByWorkspace;
 
     protected $fillable = [
@@ -46,25 +51,25 @@ class UksVisit extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Institution\School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\School::class);
+        return $this->belongsTo(School::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Institution\SchoolUnit, $this>
+     * @return BelongsTo<SchoolUnit, $this>
      */
-    public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function level(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'workspace_id');
+        return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Illuminate\Database\Eloquent\Model, $this>
+     * @return MorphTo<Model, $this>
      */
-    public function patient(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    public function patient(): MorphTo
     {
         return $this->morphTo();
     }

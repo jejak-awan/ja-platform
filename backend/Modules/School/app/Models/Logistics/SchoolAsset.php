@@ -2,11 +2,13 @@
 
 namespace Modules\School\Models\Logistics;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -16,8 +18,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string|null $category
  * @property int $quantity
  * @property string $condition
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Room $room
  */
 class SchoolAsset extends Model
@@ -25,11 +27,12 @@ class SchoolAsset extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_log_assets';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -42,9 +45,9 @@ class SchoolAsset extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Room, $this>
+     * @return BelongsTo<Room, $this>
      */
-    public function room(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
     }

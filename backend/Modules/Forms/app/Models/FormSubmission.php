@@ -2,14 +2,15 @@
 
 namespace Modules\Forms\Models;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Modules\Forms\Database\Factories\FormSubmissionFactory;
 use Modules\System\Models\User;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
@@ -19,32 +20,33 @@ use Modules\System\Models\User;
  * @property string|null $ip_address
  * @property string|null $user_agent
  * @property string $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read int|null $count
  * @property-read string|null $label
- * @property-read \Modules\Forms\Models\Form $form
- * @property-read \Modules\System\Models\User|null $user
+ * @property-read Form $form
+ * @property-read User|null $user
  */
 class FormSubmission extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    /** @use HasFactory<\Modules\Forms\Database\Factories\FormSubmissionFactory> */
-    use HasFactory, SoftDeletes, ScopedByWorkspace;
+    /** @use HasFactory<FormSubmissionFactory> */
+    use HasFactory, ScopedByWorkspace, SoftDeletes;
 
     protected $table = 'frm_form_submissions';
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Forms\Database\Factories\FormSubmissionFactory
+    protected static function newFactory(): FormSubmissionFactory
     {
-        return \Modules\Forms\Database\Factories\FormSubmissionFactory::new();
+        return FormSubmissionFactory::new();
     }
 
     protected $fillable = [

@@ -20,7 +20,7 @@ return new class extends Migration
         });
 
         // 2. Cleanup School (sch_ins_schools) - Optional data migration
-        // We keep 'kurikulum' in sch_ins_schools for now to avoid data loss, 
+        // We keep 'kurikulum' in sch_ins_schools for now to avoid data loss,
         // but we'll prioritize the one in sch_ins_levels.
     }
 

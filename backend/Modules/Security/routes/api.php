@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Modules\Security\Http\Controllers\SecurityController;
 use Modules\Security\Http\Controllers\CspReportController;
+use Modules\Security\Http\Controllers\SecurityController;
 
 Route::prefix('v1')->group(function (): void {
     // Security Public (Infrastructure Layer)

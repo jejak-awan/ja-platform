@@ -57,8 +57,8 @@ class SchoolSampleUserSeeder extends Seeder
                     'email_verified_at' => now(),
                 ]
             );
-            
-            if (!$user->hasRole($userData['role'])) {
+
+            if (! $user->hasRole($userData['role'])) {
                 $user->assignRole($userData['role']);
             }
         }

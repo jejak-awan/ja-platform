@@ -4,7 +4,6 @@ namespace Modules\Cms\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\Cms\Models\Content;
-use Modules\Layout\Models\Theme;
 use Modules\System\Models\User;
 
 class CmsDatabaseSeeder extends Seeder
@@ -26,11 +25,11 @@ class CmsDatabaseSeeder extends Seeder
                 'body' => '<h1>About</h1><p>We are a modular platform.</p>',
                 'type' => 'page',
                 'status' => 'published',
-            ]
+            ],
         ];
 
         $admin = User::first();
-        if (!$admin) {
+        if (! $admin) {
             return;
         }
 

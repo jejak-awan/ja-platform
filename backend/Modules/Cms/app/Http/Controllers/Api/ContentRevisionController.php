@@ -2,15 +2,18 @@
 
 namespace Modules\Cms\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\ContentRevision;
 use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\User;
 
 class ContentRevisionController extends BaseApiController
 {
-    public function index(Content $content): \Illuminate\Http\JsonResponse
+    public function index(Content $content): JsonResponse
     {
         try {
             $revisions = $content->revisions()->with('user')->latest()->paginate(20);
@@ -23,8 +26,8 @@ class ContentRevisionController extends BaseApiController
             ]);
 
             // Return empty paginated response instead of error
-            /** @var \Illuminate\Pagination\LengthAwarePaginator<int, ContentRevision> $paginator */
-            $paginator = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
+            /** @var LengthAwarePaginator<int, ContentRevision> $paginator */
+            $paginator = new LengthAwarePaginator([], 0, 20);
 
             return $this->paginated(
                 $paginator,
@@ -33,7 +36,7 @@ class ContentRevisionController extends BaseApiController
         }
     }
 
-    public function show(Content $content, ContentRevision $revision): \Illuminate\Http\JsonResponse
+    public function show(Content $content, ContentRevision $revision): JsonResponse
     {
         if ($revision->content_id !== $content->id) {
             return $this->notFound('Revision');
@@ -42,10 +45,10 @@ class ContentRevisionController extends BaseApiController
         return $this->success($revision->load('user'), 'Content revision retrieved successfully');
     }
 
-    public function store(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function store(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -80,10 +83,10 @@ class ContentRevisionController extends BaseApiController
         return $this->success($revision->load('author'), 'Content revision created successfully', 201);
     }
 
-    public function restore(Request $request, Content $content, ContentRevision $revision): \Illuminate\Http\JsonResponse
+    public function restore(Request $request, Content $content, ContentRevision $revision): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized('Unauthenticated');
         }
@@ -130,7 +133,7 @@ class ContentRevisionController extends BaseApiController
         ], 'Content restored successfully');
     }
 
-    public function destroy(Content $content, ContentRevision $revision): \Illuminate\Http\JsonResponse
+    public function destroy(Content $content, ContentRevision $revision): JsonResponse
     {
         if ($revision->content_id !== $content->id) {
             return $this->notFound('Revision');

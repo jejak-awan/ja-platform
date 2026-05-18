@@ -2,12 +2,13 @@
 
 namespace Modules\System\Http\Controllers;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Modules\System\Helpers\IpHelper;
-use Illuminate\Routing\Controller;
 
 /**
  * Base API Controller
@@ -157,10 +158,10 @@ class BaseApiController extends Controller
      *
      * @template TValue
      *
-     * @param  \Illuminate\Contracts\Pagination\LengthAwarePaginator<int, TValue>  $paginator
+     * @param  LengthAwarePaginator<int, TValue>  $paginator
      * @param  string  $message  Success message
      */
-    protected function paginated(\Illuminate\Contracts\Pagination\LengthAwarePaginator $paginator, string $message = 'Data retrieved successfully'): JsonResponse
+    protected function paginated(LengthAwarePaginator $paginator, string $message = 'Data retrieved successfully'): JsonResponse
     {
         return $this->success([
             'data' => $paginator->items(),

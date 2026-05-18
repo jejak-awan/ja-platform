@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->onDelete('set null');
             $table->uuid('user_id')->nullable()->onDelete('set null');
-            
+
             // Basic Info
             $table->string('nuptk', 16)->unique()->nullable();
             $table->string('nik', 16)->nullable();
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->enum('gender', ['L', 'P'])->nullable();
             $table->string('religion')->nullable();
-            
+
             // Employment details
             $table->string('employment_status')->nullable(); // PNS, PPPK, GTY, Honorer
             $table->string('ptk_type')->nullable(); // Guru Mapel, Guru Kelas, Tendik
@@ -34,15 +34,15 @@ return new class extends Migration
             $table->date('tmt_pengangkatan')->nullable();
             $table->string('sk_penugasan')->nullable();
             $table->date('tmt_penugasan')->nullable();
-            
+
             // Education
             $table->string('last_education')->nullable();
             $table->string('major')->nullable();
             $table->boolean('certification_status')->default(false);
-            
+
             // Flex data
             $table->json('metadata')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

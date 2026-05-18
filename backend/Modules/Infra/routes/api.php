@@ -5,8 +5,8 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 use Modules\Infra\Http\Controllers\Api\InfraRedirectController;
 use Modules\Infra\Http\Controllers\BackupController;
-use Modules\Infra\Http\Controllers\WebhookController;
 use Modules\Infra\Http\Controllers\FileManagerController;
+use Modules\Infra\Http\Controllers\WebhookController;
 
 Route::prefix('v1')->group(function (): void {
     // Console Management

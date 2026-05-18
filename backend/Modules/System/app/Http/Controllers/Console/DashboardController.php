@@ -2,18 +2,22 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Modules\Media\Models\File as Media;
 use Modules\Analytics\Models\AnalyticsVisit;
+use Modules\Media\Models\File;
+use Modules\Media\Models\File as Media;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\User;
 use Modules\System\Services\DashboardRegistry;
 
 /**
  * @OA\Tag(name="Dashboard")
  */
-class DashboardController extends \Modules\System\Http\Controllers\BaseApiController
+class DashboardController extends BaseApiController
 {
     /**
      * @OA\Get(
@@ -25,7 +29,7 @@ class DashboardController extends \Modules\System\Http\Controllers\BaseApiContro
      *     security={{"sanctum":{}}}
      * )
      */
-    public function admin(Request $request, DashboardRegistry $registry): \Illuminate\Http\JsonResponse
+    public function admin(Request $request, DashboardRegistry $registry): JsonResponse
     {
         $daysRaw = $request->input('days', 30);
         $days = is_numeric($daysRaw) ? max(1, min(366, (int) $daysRaw)) : 30;
@@ -57,10 +61,10 @@ class DashboardController extends \Modules\System\Http\Controllers\BaseApiContro
      *     security={{"sanctum":{}}}
      * )
      */
-    public function creator(Request $request, DashboardRegistry $registry): \Illuminate\Http\JsonResponse
+    public function creator(Request $request, DashboardRegistry $registry): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -71,7 +75,7 @@ class DashboardController extends \Modules\System\Http\Controllers\BaseApiContro
 
         $cacheKey = "dashboard_creator_data_{$userId}_{$days}";
 
-        $data = Cache::remember($cacheKey, 300, fn() => [
+        $data = Cache::remember($cacheKey, 300, fn () => [
             'stats' => array_merge([
                 'myMedia' => $this->getMyMediaStats($userId),
             ], $registry->getAllStats()), // Individual modules should handle userId filtering in their providers if needed
@@ -93,14 +97,14 @@ class DashboardController extends \Modules\System\Http\Controllers\BaseApiContro
      *     security={{"sanctum":{}}}
      * )
      */
-    public function viewer(Request $request, DashboardRegistry $registry): \Illuminate\Http\JsonResponse
+    public function viewer(Request $request, DashboardRegistry $registry): JsonResponse
     {
         // Viewer dashboard data is primarily module-specific (e.g. Latest Content)
         return $this->success($registry->getAllStats()['viewer'] ?? []);
     }
 
     // Helper methods (Core Only)
-    
+
     /**
      * @return array{total: int, images: int, videos: int, documents: int}
      */
@@ -127,9 +131,9 @@ class DashboardController extends \Modules\System\Http\Controllers\BaseApiContro
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Modules\Media\Models\File>
+     * @return \Illuminate\Database\Eloquent\Collection<int, File>
      */
-    private function getMediaByType(): \Illuminate\Support\Collection
+    private function getMediaByType(): Collection
     {
         $driver = DB::connection()->getDriverName();
         $typeExpr = match ($driver) {
@@ -169,15 +173,15 @@ class DashboardController extends \Modules\System\Http\Controllers\BaseApiContro
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Modules\System\Models\User>
+     * @return \Illuminate\Database\Eloquent\Collection<int, User>
      */
-    private function getUserActivity(int $days = 30): \Illuminate\Support\Collection
+    private function getUserActivity(int $days = 30): Collection
     {
         $days = max(1, min(366, $days));
         $driver = DB::connection()->getDriverName();
         $dateExpr = match ($driver) {
             'pgsql' => 'DATE(created_at)',
-            'sqlite' => "DATE(created_at)",
+            'sqlite' => 'DATE(created_at)',
             default => 'DATE(created_at)',
         };
 

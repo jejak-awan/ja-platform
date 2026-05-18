@@ -2,12 +2,11 @@
 
 namespace Modules\School\Services\Teacher;
 
-use Modules\School\Models\HR\Staff;
-use Modules\School\Models\HR\StaffAttendance;
-use Modules\School\Models\Academic\Schedule;
-use Modules\School\Models\Academic\TeachingJournal;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Modules\School\Models\Academic\Schedule;
+use Modules\School\Models\Academic\TeachingJournal;
+use Modules\School\Models\HR\Staff;
 
 class TeacherService
 {
@@ -18,11 +17,13 @@ class TeacherService
     {
         /** @var Staff|null $staff */
         $staff = Staff::where('user_id', $userId)->first();
+
         return $staff;
     }
 
     /**
      * Get dashboard statistics for a teacher.
+     *
      * @return array{total_schedules: int, today_schedules: int, journal_count_this_month: int, total_students: int}
      */
     public function getDashboardStats(string $staffId, ?string $schoolId = null): array
@@ -37,7 +38,7 @@ class TeacherService
             ->count();
 
         $journalCount = TeachingJournal::where('staff_id', $staffId)
-            ->whereMonth('created_at', (int)now()->month)
+            ->whereMonth('created_at', (int) now()->month)
             ->count();
 
         $totalStudents = DB::table('sch_acad_schedules as s')
@@ -57,6 +58,7 @@ class TeacherService
 
     /**
      * Get teacher's schedule list.
+     *
      * @return Collection<int, Schedule>
      */
     public function getSchedules(string $staffId): Collection
@@ -68,11 +70,13 @@ class TeacherService
             ->orderByRaw("FIELD(day, 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')")
             ->orderBy('start_time')
             ->get();
+
         return $schedules;
     }
 
     /**
      * Get recent teaching journals for a teacher.
+     *
      * @return Collection<int, TeachingJournal>
      */
     public function getRecentJournals(string $staffId, int $limit = 10): Collection
@@ -83,6 +87,7 @@ class TeacherService
             ->latest()
             ->limit($limit)
             ->get();
+
         return $journals;
     }
 }

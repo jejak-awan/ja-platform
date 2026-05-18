@@ -2,9 +2,13 @@
 
 namespace Modules\Infra\Services;
 
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Modules\Infra\Models\Backup;
+use Modules\System\Models\Setting;
 use Symfony\Component\Process\Process;
 
 class BackupService
@@ -174,7 +178,7 @@ class BackupService
             $encPassConfig = config('backup.archive_password');
             $encryptionPassword = is_string($encPassConfig) ? $encPassConfig : '';
             if (empty($encryptionPassword)) {
-                $encryptionPassword = \Illuminate\Support\Str::random(16);
+                $encryptionPassword = Str::random(16);
             }
 
             if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
@@ -246,7 +250,7 @@ class BackupService
         try {
             $disk = strval($backup->disk ?? 'local');
             $path = strval($backup->path);
-            /** @var \Illuminate\Contracts\Filesystem\Filesystem $adapter */
+            /** @var Filesystem $adapter */
             $adapter = Storage::disk($disk);
             $fullPath = $adapter->path($path);
 
@@ -436,9 +440,9 @@ class BackupService
     /**
      * List backups
      *
-     * @return \Illuminate\Database\Eloquent\Collection<int, Backup>
+     * @return Collection<int, Backup>
      */
-    public function listBackups(?string $type = null): \Illuminate\Database\Eloquent\Collection
+    public function listBackups(?string $type = null): Collection
     {
         $query = Backup::query();
 
@@ -446,7 +450,7 @@ class BackupService
             $query->where('type', $type);
         }
 
-        /** @var \Illuminate\Database\Eloquent\Collection<int, Backup> $backups */
+        /** @var Collection<int, Backup> $backups */
         $backups = $query->orderBy('created_at', 'desc')->get();
 
         return $backups;
@@ -476,22 +480,22 @@ class BackupService
      */
     public function getScheduleSettings(): array
     {
-        $enabledRaw = \Modules\System\Models\Setting::get('backup_schedule_enabled', false);
+        $enabledRaw = Setting::get('backup_schedule_enabled', false);
         $enabled = is_bool($enabledRaw) ? $enabledRaw : (bool) $enabledRaw;
 
-        $frequencyRaw = \Modules\System\Models\Setting::get('backup_schedule_frequency', 'daily');
+        $frequencyRaw = Setting::get('backup_schedule_frequency', 'daily');
         $frequency = is_string($frequencyRaw) ? $frequencyRaw : 'daily';
 
-        $timeRaw = \Modules\System\Models\Setting::get('backup_schedule_time', '02:00');
+        $timeRaw = Setting::get('backup_schedule_time', '02:00');
         $time = is_string($timeRaw) ? $timeRaw : '02:00';
 
-        $retentionDaysRaw = \Modules\System\Models\Setting::get('backup_retention_days', 30);
+        $retentionDaysRaw = Setting::get('backup_retention_days', 30);
         $retentionDays = is_numeric($retentionDaysRaw) ? (int) $retentionDaysRaw : 30;
 
-        $maxBackupsRaw = \Modules\System\Models\Setting::get('backup_max_count', 10);
+        $maxBackupsRaw = Setting::get('backup_max_count', 10);
         $maxBackups = is_numeric($maxBackupsRaw) ? (int) $maxBackupsRaw : 10;
 
-        $lastRunRaw = \Modules\System\Models\Setting::get('backup_last_run');
+        $lastRunRaw = Setting::get('backup_last_run');
         $lastRun = is_string($lastRunRaw) ? $lastRunRaw : null;
 
         return [
@@ -523,7 +527,7 @@ class BackupService
 
         foreach ($settings as $key => $value) {
             if (isset($typeMap[$key])) {
-                \Modules\System\Models\Setting::set($key, $value, $typeMap[$key], 'backup');
+                Setting::set($key, $value, $typeMap[$key], 'backup');
             }
         }
 
@@ -545,7 +549,7 @@ class BackupService
         $backup = $this->createDatabaseBackup('scheduled_'.now()->format('Y-m-d_His'));
 
         // Update last run time
-        \Modules\System\Models\Setting::set('backup_last_run', now()->toISOString(), 'string', 'backup');
+        Setting::set('backup_last_run', now()->toISOString(), 'string', 'backup');
 
         // Cleanup old backups
         $this->cleanupOldBackups($settings['retention_days'], $settings['max_backups']);
@@ -593,9 +597,9 @@ class BackupService
      */
     protected function calculateNextRun(): ?string
     {
-        $enabledRaw = \Modules\System\Models\Setting::get('backup_schedule_enabled', false);
-        $frequencyRaw = \Modules\System\Models\Setting::get('backup_schedule_frequency', 'daily');
-        $timeRaw = \Modules\System\Models\Setting::get('backup_schedule_time', '02:00');
+        $enabledRaw = Setting::get('backup_schedule_enabled', false);
+        $frequencyRaw = Setting::get('backup_schedule_frequency', 'daily');
+        $timeRaw = Setting::get('backup_schedule_time', '02:00');
 
         $enabled = is_bool($enabledRaw) ? $enabledRaw : (bool) $enabledRaw;
         $frequency = is_string($frequencyRaw) ? $frequencyRaw : 'daily';
@@ -662,7 +666,7 @@ class BackupService
                 $encPassConfig = config('backup.archive_password');
                 $encryptionPassword = is_string($encPassConfig) ? $encPassConfig : '';
                 if (empty($encryptionPassword)) {
-                    $encryptionPassword = \Illuminate\Support\Str::random(16);
+                    $encryptionPassword = Str::random(16);
                 }
 
                 // Encrypt if supported/needed (Note: ZipArchive encryption of entire zip might vary, usually per file)

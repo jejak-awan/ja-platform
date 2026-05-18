@@ -28,6 +28,6 @@ class CacheResponse
 
         $key = 'response_cache_'.md5($request->fullUrl());
 
-        return Cache::remember($key, now()->addMinutes($minutes), fn() => $next($request));
+        return Cache::remember($key, now()->addMinutes($minutes), fn () => $next($request));
     }
 }

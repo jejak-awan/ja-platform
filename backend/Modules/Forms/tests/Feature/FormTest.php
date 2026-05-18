@@ -2,6 +2,7 @@
 
 namespace Modules\Forms\Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Modules\Forms\Models\Form;
@@ -10,8 +11,6 @@ use Modules\Forms\Models\FormSubmission;
 use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
-
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FormTest extends TestCase
 {

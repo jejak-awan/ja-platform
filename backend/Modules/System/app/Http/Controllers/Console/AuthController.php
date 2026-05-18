@@ -2,22 +2,36 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Carbon\Carbon;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
-use Modules\System\Models\User;
-use Modules\System\Notifications\ResetPassword;
+use Modules\Security\Models\SecurityLog;
 use Modules\Security\Rules\StrongPassword;
 use Modules\Security\Services\SecurityService;
+use Modules\System\Helpers\IpHelper;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\ActivityLog;
+use Modules\System\Models\LoginHistory;
 use Modules\System\Models\Role;
+use Modules\System\Models\Setting;
+use Modules\System\Models\User;
+use Modules\System\Notifications\ResetPassword;
+use Modules\System\Services\CaptchaService;
+use Modules\System\Services\SessionManager;
+use PragmaRX\Google2FA\Google2FA;
 
 /**
  * @OA\Tag(name="Authentication")
  */
-class AuthController extends \Modules\System\Http\Controllers\BaseApiController
+class AuthController extends BaseApiController
 {
     /**
      * @OA\Post(
@@ -70,7 +84,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
      * )
      * User login.
      */
-    public function login(Request $request): \Illuminate\Http\JsonResponse
+    public function login(Request $request): JsonResponse
     {
         try {
             $request->validate([
@@ -88,10 +102,10 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
 
         // Verify Captcha - Skip if two_factor_code is present (step 2 of login)
         // This avoids 422 errors because the captcha token is consumed during the first attempt.
-        if (\Modules\System\Models\Setting::get('enable_captcha', false) &&
-            \Modules\System\Models\Setting::get('captcha_on_login', true) &&
+        if (Setting::get('enable_captcha', false) &&
+            Setting::get('captcha_on_login', true) &&
             ! $request->has('two_factor_code')) {
-            $captchaService = new \Modules\System\Services\CaptchaService;
+            $captchaService = new CaptchaService;
 
             $request->validate([
                 'captcha_token' => 'required|string',
@@ -111,7 +125,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
         $securityService = app(SecurityService::class);
 
         // Use IpHelper to get real client IP (handles proxies/CDN properly)
-        $ipAddress = \Modules\System\Helpers\IpHelper::getClientIp($request);
+        $ipAddress = IpHelper::getClientIp($request);
 
         // Check if IP is blocked (auto-expires via cache TTL)
         if ($securityService->isIpBlocked($ipAddress)) {
@@ -151,7 +165,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
 
             // Record failed login history if user exists
             if ($user) {
-                \Modules\System\Models\LoginHistory::create([
+                LoginHistory::create([
                     'user_id' => $user->id,
                     'ip_address' => $ipAddress,
                     'user_agent' => is_string($request->userAgent()) ? $request->userAgent() : '',
@@ -195,7 +209,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
         ]);
 
         // Record login history
-        \Modules\System\Models\LoginHistory::create([
+        LoginHistory::create([
             'user_id' => $user->id,
             'ip_address' => $ipAddress,
             'user_agent' => is_string($request->userAgent()) ? $request->userAgent() : '',
@@ -220,7 +234,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
 
             $secret = $twoFactorAuth ? $twoFactorAuth->getDecryptedSecret() : null;
 
-            $google2fa = new \PragmaRX\Google2FA\Google2FA;
+            $google2fa = new Google2FA;
             $valid = false;
             if ($secret) {
                 $valid = $google2fa->verifyKey($secret, $twoFactorCode, 2);
@@ -235,7 +249,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
                 // Record failed login
                 $securityService->recordFailedLogin($email, $ipAddress);
 
-                \Modules\System\Models\LoginHistory::create([
+                LoginHistory::create([
                     'user_id' => $user->id,
                     'ip_address' => $ipAddress,
                     'user_agent' => is_string($request->userAgent()) ? $request->userAgent() : '',
@@ -252,16 +266,16 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
 
         // Log activity (optional - skip if ActivityLog doesn't exist)
         try {
-            if (class_exists(\Modules\System\Models\ActivityLog::class)) {
-                \Modules\System\Models\ActivityLog::log('login', null, [], $user, 'User logged in');
+            if (class_exists(ActivityLog::class)) {
+                ActivityLog::log('login', null, [], $user, 'User logged in');
             }
         } catch (\Exception $e) {
             // ActivityLog not available, skip
         }
 
         // Handle concurrent login control
-        $singleSession = \Modules\System\Models\Setting::get('single_session_enabled', false);
-        $maxSessionsRaw = \Modules\System\Models\Setting::get('max_concurrent_sessions', 0);
+        $singleSession = Setting::get('single_session_enabled', false);
+        $maxSessionsRaw = Setting::get('max_concurrent_sessions', 0);
         $maxSessions = is_numeric($maxSessionsRaw) ? (int) $maxSessionsRaw : 0;
 
         if ($singleSession) {
@@ -269,12 +283,12 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
             $tokens = $user->tokens();
             $revokedCount = $tokens->count();
 
-            \Illuminate\Support\Facades\Log::info("Single Session: User {$user->email} has {$revokedCount} tokens. Revoking...");
+            Log::info("Single Session: User {$user->email} has {$revokedCount} tokens. Revoking...");
 
             if ($revokedCount > 0) {
                 $tokens->delete();
 
-                \Modules\Security\Models\SecurityLog::log(
+                SecurityLog::log(
                     'session_invalidated',
                     $user,
                     $ipAddress,
@@ -286,18 +300,18 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
             // Note: This requires the AuthenticateSession middleware to be active
             try {
                 // Create web session for Sanctum SPA (stateful)
-                \Illuminate\Support\Facades\Auth::login($user, $request->boolean('remember'));
+                Auth::login($user, $request->boolean('remember'));
                 if ($request->hasSession()) {
                     $request->session()->regenerate();
                 }
 
                 // Set tiered session lifetime based on user role
-                \Modules\System\Services\SessionManager::setLifetimeForUser($user);
+                SessionManager::setLifetimeForUser($user);
 
-                \Illuminate\Support\Facades\Auth::logoutOtherDevices($password);
-                \Illuminate\Support\Facades\Log::info("Single Session: logoutOtherDevices called for {$user->email}");
+                Auth::logoutOtherDevices($password);
+                Log::info("Single Session: logoutOtherDevices called for {$user->email}");
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Single Session Error: '.$e->getMessage());
+                Log::error('Single Session Error: '.$e->getMessage());
             }
         } elseif ($maxSessions > 0) {
             // Limit concurrent sessions (token based)
@@ -309,7 +323,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
                 $oldestTokenIds = $activeTokens->take($tokensToRemove)->pluck('id');
                 $user->tokens()->whereIn('id', $oldestTokenIds)->delete();
 
-                \Modules\Security\Models\SecurityLog::log(
+                SecurityLog::log(
                     'session_limit_reached',
                     $user,
                     $ipAddress,
@@ -323,8 +337,8 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
 
         // Ensure session is started if it wasn't handled by single-session logic above
         // Only regenerate session if one exists (supports both SPA and pure API clients)
-        if (! \Illuminate\Support\Facades\Auth::check()) {
-            \Illuminate\Support\Facades\Auth::login($user, $request->boolean('remember'));
+        if (! Auth::check()) {
+            Auth::login($user, $request->boolean('remember'));
             if ($request->hasSession()) {
                 $request->session()->regenerate();
             }
@@ -377,18 +391,18 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
      * )
      * User registration.
      */
-    public function register(Request $request): \Illuminate\Http\JsonResponse
+    public function register(Request $request): JsonResponse
     {
         // Check if registration is enabled in settings
-        $registrationEnabled = \Modules\System\Models\Setting::get('enable_registration', true);
+        $registrationEnabled = Setting::get('enable_registration', true);
         if (! $registrationEnabled) {
             return $this->error('Registration is currently disabled.', 403, [], 'REGISTRATION_DISABLED');
         }
 
         try {
             // Verify Captcha
-            if (\Modules\System\Models\Setting::get('enable_captcha', false) && \Modules\System\Models\Setting::get('captcha_on_register', true)) {
-                $captchaService = new \Modules\System\Services\CaptchaService;
+            if (Setting::get('enable_captcha', false) && Setting::get('captcha_on_register', true)) {
+                $captchaService = new CaptchaService;
 
                 $request->validate([
                     'captcha_token' => 'required|string',
@@ -401,7 +415,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
                 $captchaAnswer = is_string($captchaAnswerRaw) ? $captchaAnswerRaw : '';
 
                 if (! $captchaService->verify($captchaToken, $captchaAnswer)) {
-                    throw \Illuminate\Validation\ValidationException::withMessages([
+                    throw ValidationException::withMessages([
                         'captcha' => ['Invalid captcha verification. Please try again.'],
                     ]);
                 }
@@ -443,14 +457,14 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * User logout.
      */
-    public function logout(Request $request): \Illuminate\Http\JsonResponse
+    public function logout(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
 
         // Log activity
         if ($user) {
-            \Modules\System\Models\ActivityLog::log('logout', null, [], $user, 'User logged out');
+            ActivityLog::log('logout', null, [], $user, 'User logged out');
         }
 
         // Pure session-based logout - invalidate session only
@@ -460,8 +474,8 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
         }
 
         // Logout from web guard if authenticated
-        if (\Illuminate\Support\Facades\Auth::guard('web')->check()) {
-            \Illuminate\Support\Facades\Auth::guard('web')->logout();
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
         }
 
         return $this->success(null, 'Logged out successfully');
@@ -470,10 +484,10 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Get authenticated user.
      */
-    public function user(Request $request): \Illuminate\Http\JsonResponse
+    public function user(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -487,10 +501,10 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Resend verification email.
      */
-    public function resendVerificationEmail(Request $request): \Illuminate\Http\JsonResponse
+    public function resendVerificationEmail(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -510,7 +524,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
      * @param  int|string  $id
      * @param  string  $hash
      */
-    public function verifyEmail(Request $request, $id, $hash): \Illuminate\Http\JsonResponse
+    public function verifyEmail(Request $request, $id, $hash): JsonResponse
     {
         $user = User::findOrFail($id);
         /** @var User $user */
@@ -523,7 +537,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
         }
 
         if ($user->markEmailAsVerified()) {
-            event(new \Illuminate\Auth\Events\Verified($user));
+            event(new Verified($user));
         }
 
         return $this->success(null, 'Email verified successfully');
@@ -532,7 +546,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Verify email address (API version).
      */
-    public function verifyEmailApi(Request $request): \Illuminate\Http\JsonResponse
+    public function verifyEmailApi(Request $request): JsonResponse
     {
         try {
             $request->validate([
@@ -567,7 +581,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
         }
 
         if ($user->markEmailAsVerified()) {
-            event(new \Illuminate\Auth\Events\Verified($user));
+            event(new Verified($user));
 
             return $this->success(null, 'Email verified successfully');
         }
@@ -578,7 +592,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Resend verification email (API version).
      */
-    public function resendVerificationEmailApi(Request $request): \Illuminate\Http\JsonResponse
+    public function resendVerificationEmailApi(Request $request): JsonResponse
     {
         try {
             $request->validate([
@@ -610,7 +624,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Handle forgot password request.
      */
-    public function forgotPassword(Request $request): \Illuminate\Http\JsonResponse
+    public function forgotPassword(Request $request): JsonResponse
     {
         try {
             $request->validate(['email' => 'required|email']);
@@ -646,7 +660,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Handle password reset request.
      */
-    public function resetPassword(Request $request): \Illuminate\Http\JsonResponse
+    public function resetPassword(Request $request): JsonResponse
     {
         try {
             $request->validate([
@@ -674,7 +688,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
         }
 
         // Check if token is expired (60 minutes)
-        if (\Carbon\Carbon::parse((string) $passwordReset->created_at)->addMinutes(60)->isPast()) {
+        if (Carbon::parse((string) $passwordReset->created_at)->addMinutes(60)->isPast()) {
             DB::table('password_reset_tokens')->where('email', $email)->delete();
 
             return $this->error('Reset token has expired', 400, [], 'TOKEN_EXPIRED');
@@ -687,7 +701,7 @@ class AuthController extends \Modules\System\Http\Controllers\BaseApiController
         DB::table('password_reset_tokens')->where('email', $email)->delete();
 
         // Log activity
-        \Modules\System\Models\ActivityLog::log('password_reset', null, [], $user, 'Password reset via email');
+        ActivityLog::log('password_reset', null, [], $user, 'Password reset via email');
 
         return $this->success(null, 'Password reset successfully');
     }

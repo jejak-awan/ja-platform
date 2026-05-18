@@ -109,7 +109,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-        
+
         Schema::table('lib_categories', function (Blueprint $table): void {
             $table->foreign('parent_id')->references('id')->on('lib_categories')->onDelete('set null');
         });

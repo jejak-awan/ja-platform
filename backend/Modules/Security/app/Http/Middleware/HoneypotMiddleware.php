@@ -6,10 +6,10 @@ namespace Modules\Security\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Modules\Security\Services\SecurityService;
 use Modules\System\Helpers\IpHelper;
 use Modules\System\Services\HoneypotService;
 use Modules\System\Services\SecurityMaintenanceService;
-use Modules\Security\Services\SecurityService;
 use Modules\System\Traits\MaintenanceBypass;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,9 +21,7 @@ class HoneypotMiddleware
 {
     use MaintenanceBypass;
 
-    public function __construct(protected HoneypotService $honeypot, protected SecurityService $security, protected SecurityMaintenanceService $maintenance)
-    {
-    }
+    public function __construct(protected HoneypotService $honeypot, protected SecurityService $security, protected SecurityMaintenanceService $maintenance) {}
 
     /**
      * Handle an incoming request.
@@ -31,7 +29,7 @@ class HoneypotMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $ip = IpHelper::getClientIp($request);
-        
+
         // Bypass for OPTIONS requests (Preflight)
         if ($request->isMethod('OPTIONS')) {
             return $next($request);

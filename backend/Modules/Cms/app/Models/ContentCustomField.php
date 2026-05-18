@@ -2,8 +2,8 @@
 
 namespace Modules\Cms\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Library\Models\CustomField;
 use Modules\System\Traits\ScopedByWorkspace;
@@ -13,6 +13,7 @@ class ContentCustomField extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;

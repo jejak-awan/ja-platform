@@ -2,16 +2,17 @@
 
 namespace Modules\Forms\Models;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Modules\Forms\Database\Factories\FormFactory;
 use Modules\System\Models\User;
-
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -27,32 +28,33 @@ use Modules\System\Models\User;
  * @property int $submission_count
  * @property int $view_count
  * @property int $start_count
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Modules\System\Models\User|null $author
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Forms\Models\FormField> $fields
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Forms\Models\FormSubmission> $submissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Forms\Models\FormAnalytics> $analytics
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User|null $author
+ * @property-read Collection<int, FormField> $fields
+ * @property-read Collection<int, FormSubmission> $submissions
+ * @property-read Collection<int, FormAnalytics> $analytics
  */
 class Form extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    /** @use HasFactory<\Modules\Forms\Database\Factories\FormFactory> */
-    use HasFactory, SoftDeletes, ScopedByWorkspace;
+    /** @use HasFactory<FormFactory> */
+    use HasFactory, ScopedByWorkspace, SoftDeletes;
 
     protected $table = 'frm_forms';
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Forms\Database\Factories\FormFactory
+    protected static function newFactory(): FormFactory
     {
-        return \Modules\Forms\Database\Factories\FormFactory::new();
+        return FormFactory::new();
     }
 
     protected $fillable = [
@@ -95,7 +97,7 @@ class Form extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\Forms\Models\FormSubmission, $this>
+     * @return HasMany<FormSubmission, $this>
      */
     public function submissions(): HasMany
     {

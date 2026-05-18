@@ -2,20 +2,21 @@
 
 namespace Modules\Infra\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Infra\Models\Backup;
 use Modules\Infra\Services\BackupService;
+use Modules\System\Http\Controllers\BaseApiController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class BackupController extends \Modules\System\Http\Controllers\BaseApiController
+class BackupController extends BaseApiController
 {
-    public function __construct(protected BackupService $backupService)
-    {
-    }
+    public function __construct(protected BackupService $backupService) {}
 
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $typeRaw = $request->input('type');
         $type = is_string($typeRaw) ? $typeRaw : null;
@@ -27,7 +28,7 @@ class BackupController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'name' => 'nullable|string|max:255',
@@ -73,7 +74,7 @@ class BackupController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Display the specified resource.
      */
-    public function show(Backup $backup): \Illuminate\Http\JsonResponse
+    public function show(Backup $backup): JsonResponse
     {
         return $this->success($backup, 'Backup retrieved successfully');
     }
@@ -81,7 +82,7 @@ class BackupController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Restore the specified backup.
      */
-    public function restore(Request $request, Backup $backup): \Illuminate\Http\JsonResponse
+    public function restore(Request $request, Backup $backup): JsonResponse
     {
         if (! $backup->isCompleted()) {
             return $this->validationError(['backup' => ['Cannot restore incomplete backup']], 'Cannot restore incomplete backup');
@@ -99,7 +100,7 @@ class BackupController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Backup $backup): \Illuminate\Http\JsonResponse
+    public function destroy(Backup $backup): JsonResponse
     {
         $this->backupService->deleteBackup($backup);
 
@@ -109,7 +110,7 @@ class BackupController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Download the specified backup.
      *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     * @return BinaryFileResponse|JsonResponse
      */
     public function download(Backup $backup)
     {
@@ -129,7 +130,7 @@ class BackupController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Get backup statistics.
      */
-    public function stats(): \Illuminate\Http\JsonResponse
+    public function stats(): JsonResponse
     {
         $stats = $this->backupService->getBackupStats();
 
@@ -139,7 +140,7 @@ class BackupController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Get or update backup schedule.
      */
-    public function schedule(Request $request): \Illuminate\Http\JsonResponse
+    public function schedule(Request $request): JsonResponse
     {
         if ($request->isMethod('GET')) {
             $schedule = $this->backupService->getScheduleSettings();
@@ -164,7 +165,7 @@ class BackupController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Cleanup old backups.
      */
-    public function cleanup(Request $request): \Illuminate\Http\JsonResponse
+    public function cleanup(Request $request): JsonResponse
     {
         $retentionDaysRaw = $request->input('retention_days', 30);
         $retentionDays = is_numeric($retentionDaysRaw) ? (int) $retentionDaysRaw : 30;

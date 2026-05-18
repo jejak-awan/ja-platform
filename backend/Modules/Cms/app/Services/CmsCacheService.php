@@ -37,7 +37,7 @@ class CmsCacheService
                 Cache::forget("content_detail_{$contentId}");
             }
         } catch (\Exception $e) {
-            Log::warning('Failed to clear CMS content cache: ' . $e->getMessage());
+            Log::warning('Failed to clear CMS content cache: '.$e->getMessage());
         }
     }
 
@@ -53,7 +53,7 @@ class CmsCacheService
                 Cache::forget('cms_sitemap');
             }
         } catch (\Exception $e) {
-            Log::warning('Failed to clear CMS SEO cache: ' . $e->getMessage());
+            Log::warning('Failed to clear CMS SEO cache: '.$e->getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ class CmsCacheService
                 $count++;
             }
         } catch (\Exception $e) {
-            Log::error('Failed to warm up CMS cache: ' . $e->getMessage());
+            Log::error('Failed to warm up CMS cache: '.$e->getMessage());
         }
 
         return $count;

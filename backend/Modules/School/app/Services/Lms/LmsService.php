@@ -2,22 +2,23 @@
 
 namespace Modules\School\Services\Lms;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Modules\School\Models\Lms\Course;
-use Modules\School\Models\Lms\Lesson;
-use Modules\School\Models\Lms\Topic;
 use Modules\School\Models\Lms\Enrollment;
-use Modules\School\Models\Lms\TopicProgress;
+use Modules\School\Models\Lms\Lesson;
+use Modules\School\Models\Lms\QuizAttempt;
+use Modules\School\Models\Lms\QuizOption;
+use Modules\School\Models\Lms\QuizQuestion;
+use Modules\School\Models\Lms\Topic;
+use Modules\School\Models\Lms\TopicContent\Pdf;
+use Modules\School\Models\Lms\TopicContent\Quiz;
 use Modules\School\Models\Lms\TopicContent\RichText;
 use Modules\School\Models\Lms\TopicContent\Video;
-use Modules\School\Models\Lms\TopicContent\Pdf;
-
-use Modules\School\Models\Lms\TopicContent\Quiz;
-use Modules\School\Models\Lms\QuizQuestion;
-use Modules\School\Models\Lms\QuizOption;
-use Modules\School\Models\Lms\QuizAttempt;
-use Illuminate\Support\Facades\Storage;
+use Modules\School\Models\Lms\TopicProgress;
 
 class LmsService
 {
@@ -26,7 +27,7 @@ class LmsService
      * Get the private storage path for a specific course.
      * Stored in storage/app/private/lms/school_{id}/course_{id}/{type}
      *
-     * @param string $type materials, media, tasks
+     * @param  string  $type  materials, media, tasks
      */
     public function getCourseStoragePath(string $schoolId, string $courseId, string $type = 'materials'): string
     {
@@ -37,7 +38,7 @@ class LmsService
      * Get the public storage path for LMS assets.
      * Stored in storage/app/public/lms/{type}
      *
-     * @param string $type covers, thumbnails, icons
+     * @param  string  $type  covers, thumbnails, icons
      */
     public function getPublicLmsPath(string $type = 'covers'): string
     {
@@ -47,30 +48,30 @@ class LmsService
     /**
      * Upload a file to course storage.
      *
-     * @param \Illuminate\Http\UploadedFile $file
-     * @param string $type materials, media, tasks
-     * @param string $visibility 'private' or 'public'
+     * @param  UploadedFile  $file
+     * @param  string  $type  materials, media, tasks
+     * @param  string  $visibility  'private' or 'public'
      * @return string The stored path
      */
     public function uploadCourseFile($file, string $schoolId, string $courseId, string $type = 'materials', string $visibility = 'private'): string
     {
-        $path = $visibility === 'private' 
+        $path = $visibility === 'private'
             ? $this->getCourseStoragePath($schoolId, $courseId, $type)
             : $this->getPublicLmsPath($type);
-            
+
         $disk = $visibility === 'private' ? 'local' : 'public';
-        
+
         $storedPath = $file->store($path, $disk);
         if ($storedPath === false) {
             throw new \RuntimeException("Failed to store file in {$disk} disk at {$path}");
         }
-        
+
         return $storedPath;
     }
 
     // --- Course Management ---
     /**
-     * @param array<string, mixed> $filters
+     * @param  array<string, mixed>  $filters
      * @return Collection<int, Course>
      */
     public function getCourses(string $schoolId, array $filters = []): Collection
@@ -83,18 +84,19 @@ class LmsService
         return Course::where('school_id', $schoolId)
             ->with(['academicYear', 'semester', 'department', 'grade'])
             ->withCount('lessons')
-            ->when($status, fn($q) => $q->where('status', (string)$status))
-            ->when($level, fn($q) => $q->where('level', (string)$level))
+            ->when($status, fn ($q) => $q->where('status', (string) $status))
+            ->when($level, fn ($q) => $q->where('level', (string) $level))
             ->when($search, function ($q) use ($search) {
                 $searchStr = strtolower($search);
-                return $q->where(\Illuminate\Support\Facades\DB::raw('lower(title)'), 'like', '%' . $searchStr . '%');
+
+                return $q->where(DB::raw('lower(title)'), 'like', '%'.$searchStr.'%');
             })
             ->latest()
             ->get();
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function createCourse(array $data): Course
     {
@@ -105,42 +107,46 @@ class LmsService
             $counter = 1;
 
             while (Course::where('slug', $slug)->exists()) {
-                $slug = $baseSlug . '-' . $counter++;
+                $slug = $baseSlug.'-'.$counter++;
             }
             $data['slug'] = $slug;
         }
-        
+
         /** @var Course $course */
         $course = Course::create($data);
+
         return $course;
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function updateCourse(Course $course, array $data): Course
     {
         $course->update($data);
+
         return $course;
     }
 
     // --- Lesson Management ---
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function createLesson(array $data): Lesson
     {
         /** @var Lesson $lesson */
         $lesson = Lesson::create($data);
+
         return $lesson;
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function updateLesson(Lesson $lesson, array $data): Lesson
     {
         $lesson->update($data);
+
         return $lesson;
     }
 
@@ -148,9 +154,9 @@ class LmsService
     /**
      * Create a topic with specific content.
      *
-     * @param array<string, mixed> $topicData Basic topic info (lesson_id, title, order, etc.)
-     * @param string $contentType 'richtext', 'video', 'pdf', 'quiz'
-     * @param array<string, mixed> $contentData Specific data for the content type
+     * @param  array<string, mixed>  $topicData  Basic topic info (lesson_id, title, order, etc.)
+     * @param  string  $contentType  'richtext', 'video', 'pdf', 'quiz'
+     * @param  array<string, mixed>  $contentData  Specific data for the content type
      */
     public function createTopic(array $topicData, string $contentType, array $contentData): Topic
     {
@@ -167,13 +173,14 @@ class LmsService
 
         /** @var Topic $topic */
         $topic = Topic::create($topicData);
+
         return $topic;
     }
 
     // --- Quiz Management ---
     /**
-     * @param array<string, mixed> $questionData
-     * @param array<int, array<string, mixed>> $options
+     * @param  array<string, mixed>  $questionData
+     * @param  array<int, array<string, mixed>>  $options
      */
     public function addQuestionToQuiz(string $quizId, array $questionData, array $options = []): QuizQuestion
     {
@@ -182,8 +189,8 @@ class LmsService
         $question = QuizQuestion::create($questionData);
 
         foreach ($options as $option) {
-            $val = isset($option['value']) && is_scalar($option['value']) ? (string)$option['value'] : '';
-            $isCorrect = isset($option['is_correct']) && (bool)$option['is_correct'];
+            $val = isset($option['value']) && is_scalar($option['value']) ? (string) $option['value'] : '';
+            $isCorrect = isset($option['is_correct']) && (bool) $option['is_correct'];
 
             QuizOption::create([
                 'question_id' => $question->id,
@@ -203,11 +210,12 @@ class LmsService
             'student_id' => $studentId,
             'started_at' => now(),
         ]);
+
         return $attempt;
     }
 
     /**
-     * @param array<int|string, mixed> $answers
+     * @param  array<int|string, mixed>  $answers
      */
     public function submitQuizAttempt(QuizAttempt $attempt, array $answers): QuizAttempt
     {
@@ -216,14 +224,14 @@ class LmsService
         $quiz = $attempt->quiz;
 
         foreach ($quiz->questions as $question) {
-            $totalPossible += (int)($question->score ?? 0);
+            $totalPossible += (int) ($question->score ?? 0);
             $studentAnswer = $answers[$question->id] ?? null;
 
             if ($question->type === 'multiple_choice' || $question->type === 'true_false') {
                 $correctOption = $question->options()->where('is_correct', true)->first();
-                $correctId = $correctOption ? (string)$correctOption->id : null;
-                if (is_scalar($studentAnswer) && $correctId === (string)$studentAnswer) {
-                    $score += (int)($question->score ?? 0);
+                $correctId = $correctOption ? (string) $correctOption->id : null;
+                if (is_scalar($studentAnswer) && $correctId === (string) $studentAnswer) {
+                    $score += (int) ($question->score ?? 0);
                 }
             }
         }
@@ -231,21 +239,21 @@ class LmsService
         $percentage = $totalPossible > 0 ? ($score / $totalPossible) * 100 : 0;
 
         $attempt->update([
-            'score' => (int)round($percentage),
+            'score' => (int) round($percentage),
             'finished_at' => now(),
             'answers' => $answers,
         ]);
 
-        if ($percentage >= (int)($quiz->pass_score ?? 0)) {
+        if ($percentage >= (int) ($quiz->pass_score ?? 0)) {
             $topic = Topic::where('topicable_type', Quiz::class)
                 ->where('topicable_id', $quiz->id)
                 ->first();
-            
+
             if ($topic) {
                 $studentId = $attempt->student_id;
                 $this->markTopicAsCompleted($topic->id, $studentId, [
                     'attempt_id' => $attempt->id,
-                    'score' => $attempt->score
+                    'score' => $attempt->score,
                 ]);
             }
         }
@@ -265,11 +273,12 @@ class LmsService
             'enrolled_at' => now(),
             'is_active' => true,
         ]);
+
         return $enrollment;
     }
 
     /**
-     * @param array<string, mixed> $metadata
+     * @param  array<string, mixed>  $metadata
      */
     public function markTopicAsCompleted(string $topicId, string $studentId, array $metadata = []): TopicProgress
     {
@@ -282,6 +291,7 @@ class LmsService
             'completed_at' => now(),
             'metadata' => $metadata,
         ]);
+
         return $progress;
     }
 
@@ -295,7 +305,7 @@ class LmsService
         /** @var Collection<int, Lesson> */
         return Lesson::with(['topics.topicable' => function ($morph): void {
             $morph->morphWith([
-                \Modules\School\Models\Lms\TopicContent\Quiz::class => ['questions.options'],
+                Quiz::class => ['questions.options'],
             ]);
         }])
             ->where('course_id', $courseId)

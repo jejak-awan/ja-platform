@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Modules\Layout\Models\Theme;
 use Modules\Layout\Services\ThemeHooksService;
 use Modules\Layout\Services\ThemeService;
+use Modules\System\Models\Plugin;
 use Tests\TestCase;
 
 class ThemeServiceTest extends TestCase
@@ -40,7 +41,7 @@ class ThemeServiceTest extends TestCase
 
         // Clean up any themes created in real themes dir by tests
         $realThemesDir = base_path('../frontend/src/modules/Cms/views/themes');
-        
+
         $testThemes = array_merge(
             glob($realThemesDir.'/test-*') ?: [],
             glob($realThemesDir.'/c-assets') ?: [],
@@ -257,7 +258,7 @@ class ThemeServiceTest extends TestCase
         $theme = Theme::factory()->create(['slug' => 'test-plug', 'dependencies' => ['plugins' => ['missing-plugin']]]);
         $this->assertFalse($this->service->checkDependencies($theme));
 
-        \Modules\System\Models\Plugin::create([
+        Plugin::create([
             'slug' => 'active-plug',
             'name' => 'Active',
             'main_file' => 'plugin.php',

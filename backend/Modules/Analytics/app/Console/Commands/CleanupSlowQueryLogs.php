@@ -3,8 +3,8 @@
 namespace Modules\Analytics\Console\Commands;
 
 use Illuminate\Console\Command;
-use Modules\System\Models\Setting;
 use Modules\Analytics\Models\SlowQuery;
+use Modules\System\Models\Setting;
 
 class CleanupSlowQueryLogs extends Command
 {

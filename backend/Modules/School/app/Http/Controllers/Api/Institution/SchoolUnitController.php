@@ -2,6 +2,7 @@
 
 namespace Modules\School\Http\Controllers\Api\Institution;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
 use Modules\School\Models\Institution\School;
@@ -12,7 +13,7 @@ class SchoolUnitController extends BaseController
     /**
      * Display a listing of levels for a specific school.
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $this->authorize('viewAny', SchoolUnit::class);
         $schoolIdValue = $request->input('school_id', 1);
@@ -25,7 +26,7 @@ class SchoolUnitController extends BaseController
     /**
      * Store a newly created level.
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->authorize('create', SchoolUnit::class);
         /** @var array<string, mixed> $validated */
@@ -47,16 +48,17 @@ class SchoolUnitController extends BaseController
     /**
      * Display the specified level.
      */
-    public function show(SchoolUnit $level): \Illuminate\Http\JsonResponse
+    public function show(SchoolUnit $level): JsonResponse
     {
         $this->authorize('view', $level);
+
         return $this->sendResponse($level, 'School level retrieved successfully.');
     }
 
     /**
      * Update the specified level.
      */
-    public function update(Request $request, SchoolUnit $level): \Illuminate\Http\JsonResponse
+    public function update(Request $request, SchoolUnit $level): JsonResponse
     {
         $this->authorize('update', $level);
         /** @var array<string, mixed> $validated */
@@ -76,31 +78,32 @@ class SchoolUnitController extends BaseController
     /**
      * Switch the active unit context for the current session.
      */
-    public function select(string $id, Request $request): \Illuminate\Http\JsonResponse
+    public function select(string $id, Request $request): JsonResponse
     {
         // Only allow super-admin or admin to switch context
         $user = $request->user();
-        if (!$user || (!$user->hasRole('super') && !$user->hasRole('admin'))) {
+        if (! $user || (! $user->hasRole('super') && ! $user->hasRole('admin'))) {
             return $this->sendError('Unauthorized', [], 403);
         }
 
-        $unitId = (int)$id;
+        $unitId = (int) $id;
 
         if ($unitId === 0) {
             session(['active_workspace_id' => 0]);
+
             return $this->sendResponse(null, 'Switched to Global/Foundation context.');
         }
 
         $level = SchoolUnit::findOrFail($unitId);
         session(['active_workspace_id' => $level->id]);
 
-        return $this->sendResponse($level, 'Switched to unit: ' . $level->name);
+        return $this->sendResponse($level, 'Switched to unit: '.$level->name);
     }
 
     /**
      * Remove the specified level.
      */
-    public function destroy(SchoolUnit $level): \Illuminate\Http\JsonResponse
+    public function destroy(SchoolUnit $level): JsonResponse
     {
         $this->authorize('delete', $level);
         $level->delete();

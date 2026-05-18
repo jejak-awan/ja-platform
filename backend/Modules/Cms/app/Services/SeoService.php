@@ -3,6 +3,8 @@
 namespace Modules\Cms\Services;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Modules\Cms\Models\Content;
 
 class SeoService
 {
@@ -118,13 +120,13 @@ class SeoService
     /**
      * Generate JSON-LD schema for a model.
      *
-     * @param string $type Default schema type
+     * @param  string  $type  Default schema type
      * @return array<string, mixed>
      */
     public function generateSchema(Model $model, string $type = 'Article'): array
     {
         // Ensure relationships are loaded for Content model if it's a CMS content
-        if ($model instanceof \Modules\Cms\Models\Content) {
+        if ($model instanceof Content) {
             $model->loadMissing(['category', 'author']);
         }
 
@@ -139,14 +141,14 @@ class SeoService
             '@type' => $type,
             'headline' => is_scalar($headline) ? (string) $headline : '',
             'description' => is_scalar($description) ? (string) $description : '',
-            'datePublished' => ($publishedAt instanceof \Illuminate\Support\Carbon) ? $publishedAt->toIso8601String() : null,
-            'dateModified' => ($updatedAt instanceof \Illuminate\Support\Carbon) ? $updatedAt->toIso8601String() : null,
+            'datePublished' => ($publishedAt instanceof Carbon) ? $publishedAt->toIso8601String() : null,
+            'dateModified' => ($updatedAt instanceof Carbon) ? $updatedAt->toIso8601String() : null,
         ];
 
         // Author handle
         if ($model->relationLoaded('author') || $model->getAttribute('author_id')) {
             $author = $model->getAttribute('author');
-            if ($author instanceof \Illuminate\Database\Eloquent\Model) {
+            if ($author instanceof Model) {
                 $authorName = $author->getAttribute('name') ?? 'Unknown';
                 $schema['author'] = [
                     '@type' => 'Person',
@@ -166,7 +168,7 @@ class SeoService
 
         // Category handle
         $category = $model->getAttribute('category');
-        if ($category instanceof \Illuminate\Database\Eloquent\Model) {
+        if ($category instanceof Model) {
             $catName = $category->getAttribute('name');
             $schema['articleSection'] = is_scalar($catName) ? (string) $catName : '';
         }
@@ -196,6 +198,7 @@ class SeoService
         if ($percentage >= 50) {
             return 'D';
         }
+
         return 'F';
     }
 }

@@ -2,33 +2,35 @@
 
 namespace Modules\School\Models\Lms;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Modules\School\Models\Student\Student;
+use Illuminate\Support\Carbon;
 use Modules\School\Models\Lms\TopicContent\Quiz;
+use Modules\School\Models\Student\Student;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
  * @property string $quiz_id
  * @property string $student_id
  * @property int|null $score
- * @property \Illuminate\Support\Carbon|null $started_at
- * @property \Illuminate\Support\Carbon|null $finished_at
+ * @property Carbon|null $started_at
+ * @property Carbon|null $finished_at
  * @property array<string, mixed>|null $answers
- * @property-read \Modules\School\Models\Lms\TopicContent\Quiz $quiz
- * @property-read \Modules\School\Models\Student\Student $student
+ * @property-read Quiz $quiz
+ * @property-read Student $student
  */
 class QuizAttempt extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
+
     protected $table = 'sch_lms_quiz_attempts';
 
     protected $fillable = [

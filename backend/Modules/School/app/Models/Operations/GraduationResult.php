@@ -2,11 +2,12 @@
 
 namespace Modules\School\Models\Operations;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Modules\School\Models\Student\Student;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -15,20 +16,21 @@ use Modules\School\Models\Student\Student;
  * @property int $graduation_year
  * @property array<string, mixed>|null $grades
  * @property string|null $certificate_number
- * @property \Illuminate\Support\Carbon|null $published_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * 
- * @property \Modules\School\Models\Student\Student $student
+ * @property Carbon|null $published_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Student $student
  */
 class GraduationResult extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
+
     protected $table = 'sch_grad_results';
 
     protected $fillable = [
@@ -46,9 +48,9 @@ class GraduationResult extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, $this>
+     * @return BelongsTo<Student, $this>
      */
-    public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
     }

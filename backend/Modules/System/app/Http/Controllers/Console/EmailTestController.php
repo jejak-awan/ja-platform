@@ -2,6 +2,7 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Cache;
@@ -10,15 +11,16 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Setting;
 
-class EmailTestController extends \Modules\System\Http\Controllers\BaseApiController
+class EmailTestController extends BaseApiController
 {
     /**
      * Test SMTP connection
      * Attempts to connect to the SMTP server using current configuration
      */
-    public function testConnection(Request $request): \Illuminate\Http\JsonResponse
+    public function testConnection(Request $request): JsonResponse
     {
         try {
             $config = $this->getEmailConfig($request);
@@ -87,7 +89,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
      * Send test email
      * Sends a test email to the specified address
      */
-    public function sendTestEmail(Request $request): \Illuminate\Http\JsonResponse
+    public function sendTestEmail(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'to' => 'required|email',
@@ -160,7 +162,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
      * Get email queue status
      * Returns information about pending email jobs in the queue
      */
-    public function getQueueStatus(): \Illuminate\Http\JsonResponse
+    public function getQueueStatus(): JsonResponse
     {
         try {
             $queueConnectionRaw = config('queue.default');
@@ -202,7 +204,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
      * Get recent email logs
      * Returns recent email sending logs (from cache or log files)
      */
-    public function recentJournal(Request $request): \Illuminate\Http\JsonResponse
+    public function recentJournal(Request $request): JsonResponse
     {
         try {
             $limitRaw = $request->get('limit', 10);
@@ -239,7 +241,7 @@ class EmailTestController extends \Modules\System\Http\Controllers\BaseApiContro
      * Validate email configuration
      * Validates the current email configuration settings
      */
-    public function validateConfig(Request $request): \Illuminate\Http\JsonResponse
+    public function validateConfig(Request $request): JsonResponse
     {
         try {
             $config = $this->getEmailConfig($request);

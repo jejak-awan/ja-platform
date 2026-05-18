@@ -2,10 +2,12 @@
 
 namespace Modules\Library\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Library\Models\Category;
-use Modules\System\Http\Controllers\BaseApiController;
 use Modules\Library\Services\LibraryCacheService;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\User;
 
 /**
  * @OA\Tag(name="Categories")
@@ -18,6 +20,7 @@ class CategoryController extends BaseApiController
         $this->middleware('permission:view content')->only(['tree']);
         $this->middleware('permission:manage categories')->only(['store', 'update', 'destroy', 'reorder', 'bulkDelete']);
     }
+
     /**
      * @OA\Get(
      *     path="/api/v1/categories",
@@ -51,7 +54,7 @@ class CategoryController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $request->user();
         $query = Category::query();
@@ -67,23 +70,23 @@ class CategoryController extends BaseApiController
                 ->where('is_active', true)
                 ->withCount(['contents' => function ($q): void {
                     $q->where('status', 'published')
-                      ->where('type', 'post')
-                      ->where(function ($sq): void {
-                          $sq->whereNull('published_at')
-                            ->orWhere('published_at', '<=', now()->toDateTimeString());
-                      });
+                        ->where('type', 'post')
+                        ->where(function ($sq): void {
+                            $sq->whereNull('published_at')
+                                ->orWhere('published_at', '<=', now()->toDateTimeString());
+                        });
                 }])
                 ->with(['children' => function ($q): void {
                     $q->where('is_active', true)
-                      ->withCount(['contents' => function ($sq): void {
-                          $sq->where('status', 'published')
-                            ->where('type', 'post')
-                            ->where(function ($ssq): void {
-                                $ssq->whereNull('published_at')
-                                  ->orWhere('published_at', '<=', now()->toDateTimeString());
-                            });
-                      }])
-                      ->orderBy('sort_order');
+                        ->withCount(['contents' => function ($sq): void {
+                            $sq->where('status', 'published')
+                                ->where('type', 'post')
+                                ->where(function ($ssq): void {
+                                    $ssq->whereNull('published_at')
+                                        ->orWhere('published_at', '<=', now()->toDateTimeString());
+                                });
+                        }])
+                        ->orderBy('sort_order');
                 }])
                 ->orderBy('sort_order')
                 ->get();
@@ -96,11 +99,11 @@ class CategoryController extends BaseApiController
             ->with('parent')
             ->withCount(['contents' => function ($q): void {
                 $q->where('status', 'published')
-                  ->where('type', 'post')
-                  ->where(function ($sq): void {
-                      $sq->whereNull('published_at')
-                        ->orWhere('published_at', '<=', now()->toDateTimeString());
-                  });
+                    ->where('type', 'post')
+                    ->where(function ($sq): void {
+                        $sq->whereNull('published_at')
+                            ->orWhere('published_at', '<=', now()->toDateTimeString());
+                    });
             }]);
 
         if ($request->filled('search')) {
@@ -108,7 +111,7 @@ class CategoryController extends BaseApiController
             $search = is_scalar($searchRaw) ? (string) $searchRaw : '';
             $query->where(function ($q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
@@ -163,10 +166,10 @@ class CategoryController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -243,13 +246,13 @@ class CategoryController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function show(Category $category): \Illuminate\Http\JsonResponse
+    public function show(Category $category): JsonResponse
     {
         $user = request()->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
 
         // Scope check for show?
-        if ($user && !$user->can('manage categories') && ($category->author_id && $category->author_id !== $user->id)) {
+        if ($user && ! $user->can('manage categories') && ($category->author_id && $category->author_id !== $user->id)) {
             return $this->forbidden('You do not have permission to view this category');
         }
 
@@ -291,10 +294,10 @@ class CategoryController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function update(Request $request, Category $category): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Category $category): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -377,10 +380,10 @@ class CategoryController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function destroy(Category $category): \Illuminate\Http\JsonResponse
+    public function destroy(Category $category): JsonResponse
     {
         $user = request()->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -394,6 +397,7 @@ class CategoryController extends BaseApiController
             if ($category->author_id && $category->author_id !== $user->id) {
                 return $this->forbidden('You do not have permission to delete this category');
             }
+
             // Global categories (null author) cannot be deleted by non-managers
             return $this->forbidden('You do not have permission to delete global categories');
         }
@@ -455,7 +459,7 @@ class CategoryController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function move(Request $request, Category $category): \Illuminate\Http\JsonResponse
+    public function move(Request $request, Category $category): JsonResponse
     {
         $user = $request->user();
         if (! $user) {
@@ -524,10 +528,10 @@ class CategoryController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function bulkDestroy(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkDestroy(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -603,7 +607,7 @@ class CategoryController extends BaseApiController
     /**
      * Restore a deleted category.
      */
-    public function restore(int|string $id): \Illuminate\Http\JsonResponse
+    public function restore(int|string $id): JsonResponse
     {
         /** @var Category $category */
         $category = Category::onlyTrashed()->findOrFail($id);
@@ -617,7 +621,7 @@ class CategoryController extends BaseApiController
     /**
      * Permanently delete a category.
      */
-    public function forceDelete(int|string $id): \Illuminate\Http\JsonResponse
+    public function forceDelete(int|string $id): JsonResponse
     {
         /** @var Category $category */
         $category = Category::onlyTrashed()->findOrFail($id);

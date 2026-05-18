@@ -2,13 +2,18 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Permission;
 use Modules\System\Models\Role;
+use Modules\System\Models\User;
 
-class RoleController extends \Modules\System\Http\Controllers\BaseApiController
+class RoleController extends BaseApiController
 {
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $limitRaw = $request->input('limit', 10);
         $limit = is_numeric($limitRaw) ? (int) $limitRaw : 10;
@@ -21,7 +26,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
             $query->where('name', 'like', "%{$search}%");
         }
 
-        /** @var \Illuminate\Pagination\LengthAwarePaginator<int, Role> $roles */
+        /** @var LengthAwarePaginator<int, Role> $roles */
         $roles = $query->paginate($limit);
 
         // Optimized: Batch fetch users count in one query to avoid N+1 issues
@@ -39,7 +44,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
             ->groupBy($columnName)
             ->pluck('total', $columnName);
 
-        $roles->getCollection()->transform(function (mixed $role) use ($userCounts): \Modules\System\Models\Role {
+        $roles->getCollection()->transform(function (mixed $role) use ($userCounts): Role {
             /** @var Role $role */
             $role->setAttribute('users_count', $userCounts[$role->id] ?? 0);
 
@@ -49,7 +54,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->success($roles, 'Roles retrieved successfully');
     }
 
-    public function bulkAction(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkAction(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'action' => 'required|string|in:delete',
@@ -76,7 +81,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
             }
 
             // Prevent deleting roles with users
-            /** @var \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Modules\System\Models\User, \Spatie\Permission\Models\Role> $usersRelation */
+            /** @var BelongsToMany<User, \Spatie\Permission\Models\Role> $usersRelation */
             $usersRelation = $role->users();
             if ($usersRelation->count() > 0) {
                 continue;
@@ -93,7 +98,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->success(null, ucfirst((string) $action)." completed for {$countStr} roles");
     }
 
-    public function show(Role $role): \Illuminate\Http\JsonResponse
+    public function show(Role $role): JsonResponse
     {
         $role->load('permissions');
 
@@ -110,7 +115,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->success($role, 'Role retrieved successfully');
     }
 
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:roles,name',
@@ -129,7 +134,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->success($role->load('permissions'), 'Role created successfully', 201);
     }
 
-    public function update(Request $request, Role $role): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Role $role): JsonResponse
     {
         // Prevent editing protected roles
         if ($role->name === 'super') {
@@ -153,7 +158,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->success($role->load('permissions'), 'Role updated successfully');
     }
 
-    public function destroy(Role $role): \Illuminate\Http\JsonResponse
+    public function destroy(Role $role): JsonResponse
     {
         // Prevent deleting protected roles
         if ($role->name === 'super') {
@@ -161,7 +166,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
         }
 
         // Check if role has users
-        /** @var \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Modules\System\Models\User, \Spatie\Permission\Models\Role> $usersRelation */
+        /** @var BelongsToMany<User, \Spatie\Permission\Models\Role> $usersRelation */
         $usersRelation = $role->users();
         if ($usersRelation->count() > 0) {
             return $this->error('Cannot delete role with assigned users', 400);
@@ -172,7 +177,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->success(null, 'Role deleted successfully');
     }
 
-    public function permissions(): \Illuminate\Http\JsonResponse
+    public function permissions(): JsonResponse
     {
         $permissions = Permission::orderBy('name')->get()->groupBy(function (Permission $permission): string {
             // Group by category (resource name - everything after the first word)
@@ -185,7 +190,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->success($permissions, 'Permissions retrieved successfully');
     }
 
-    public function syncPermissions(Request $request, Role $role): \Illuminate\Http\JsonResponse
+    public function syncPermissions(Request $request, Role $role): JsonResponse
     {
         // Prevent modifying super permissions
         if ($role->name === 'super') {
@@ -204,7 +209,7 @@ class RoleController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->success($role->load('permissions'), 'Permissions synced successfully');
     }
 
-    public function duplicate(Role $role): \Illuminate\Http\JsonResponse
+    public function duplicate(Role $role): JsonResponse
     {
         $newRole = Role::create([
             'name' => ($role->name).' (copy)',

@@ -2,9 +2,12 @@
 
 namespace Modules\System\Models;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Support\Carbon;
+use Modules\System\Database\Factories\LanguageFactory;
 
 /**
  * @property string $id
@@ -15,8 +18,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property bool $is_default
  * @property bool $is_active
  * @property int $sort_order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property bool|null $has_ui_translations
  * @property int $translation_keys
  */
@@ -25,20 +28,20 @@ class Language extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_languages';
 
-
-    /** @use HasFactory<\Modules\System\Database\Factories\LanguageFactory> */
+    /** @use HasFactory<LanguageFactory> */
     use HasFactory;
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\System\Database\Factories\LanguageFactory
+    protected static function newFactory(): LanguageFactory
     {
-        return \Modules\System\Database\Factories\LanguageFactory::new();
+        return LanguageFactory::new();
     }
 
     protected $fillable = [
@@ -64,9 +67,9 @@ class Language extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, self>
+     * @return Collection<int, self>
      */
-    public static function getActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getActive(): Collection
     {
         return static::where('is_active', true)->orderBy('sort_order')->get();
     }

@@ -3,8 +3,11 @@
 namespace Modules\Search\Console\Commands;
 
 use Illuminate\Console\Command;
-use Modules\Search\Services\SearchService;
+use Modules\Cms\Models\Content;
+use Modules\Library\Models\Category;
+use Modules\Library\Models\Tag;
 use Modules\Search\Models\SearchIndex;
+use Modules\Search\Services\SearchService;
 
 class ReindexSearch extends Command
 {
@@ -33,22 +36,22 @@ class ReindexSearch extends Command
 
         // 1. Reindex Contents
         $this->line('Indexing Published CMS Contents...');
-        $contentsCount = \Modules\Cms\Models\Content::where('status', 'published')->count();
+        $contentsCount = Content::where('status', 'published')->count();
         $this->info("Found {$contentsCount} published contents to index.");
-        
+
         // 2. Reindex Categories
         $this->line('Indexing Active Categories...');
-        $categoriesCount = \Modules\Library\Models\Category::where('is_active', true)->count();
+        $categoriesCount = Category::where('is_active', true)->count();
         $this->info("Found {$categoriesCount} active categories to index.");
 
         // 3. Reindex Tags
         $this->line('Indexing Tags...');
-        $tagsCount = \Modules\Library\Models\Tag::count();
+        $tagsCount = Tag::count();
         $this->info("Found {$tagsCount} tags to index.");
 
         $this->newLine();
         $this->info('Reindexing all items via SearchService...');
-        
+
         $stats = $searchService->reindexAll();
 
         $this->newLine();

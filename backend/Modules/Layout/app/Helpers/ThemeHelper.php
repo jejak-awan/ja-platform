@@ -2,6 +2,7 @@
 
 namespace Modules\Layout\Helpers;
 
+use Modules\Layout\Models\Menu;
 use Modules\Layout\Models\Theme;
 use Modules\Layout\Services\ThemeService;
 
@@ -19,7 +20,7 @@ class ThemeHelper
      */
     protected static function getThemeService(): ThemeService
     {
-        if (!self::$themeService instanceof \Modules\Layout\Services\ThemeService) {
+        if (! self::$themeService instanceof ThemeService) {
             self::$themeService = app(ThemeService::class);
         }
 
@@ -45,7 +46,7 @@ class ThemeHelper
     {
         try {
             $theme = self::getThemeService()->getActiveTheme($type);
-            if ($theme instanceof \Modules\Layout\Models\Theme) {
+            if ($theme instanceof Theme) {
                 return self::getThemeService()->getThemeSetting($theme, $key, $default);
             }
         } catch (\Exception) {
@@ -104,7 +105,7 @@ class ThemeHelper
     {
         try {
             $theme = self::getThemeService()->getActiveTheme($type);
-            if ($theme instanceof \Modules\Layout\Models\Theme) {
+            if ($theme instanceof Theme) {
                 return self::getThemeService()->getThemeCustomCss($theme);
             }
         } catch (\Exception) {
@@ -117,10 +118,10 @@ class ThemeHelper
     /**
      * Get menu by slug (for API use)
      */
-    public static function getMenu(string $slug): ?\Modules\Layout\Models\Menu
+    public static function getMenu(string $slug): ?Menu
     {
         try {
-            return \Modules\Layout\Models\Menu::where('slug', $slug)
+            return Menu::where('slug', $slug)
                 ->where('is_active', true)
                 ->with(['items' => function ($query): void {
                     $query->where('is_active', true)

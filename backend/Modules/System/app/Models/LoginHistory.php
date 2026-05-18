@@ -2,35 +2,36 @@
 
 namespace Modules\System\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $id
  * @property int|null $user_id
  * @property string|null $ip_address
  * @property string|null $user_agent
- * @property \Illuminate\Support\Carbon|null $login_at
- * @property \Illuminate\Support\Carbon|null $logout_at
+ * @property Carbon|null $login_at
+ * @property Carbon|null $logout_at
  * @property int|null $session_duration
  * @property string $status
  * @property string|null $failure_reason
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read int|null $ip_count
- * @property-read \Modules\System\Models\User|null $user
+ * @property-read User|null $user
  */
 class LoginHistory extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_login_histories';
-
-
 
     protected $fillable = [
         'user_id',
@@ -57,8 +58,8 @@ class LoginHistory extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     public function scopeSuccessful($query)
     {
@@ -66,8 +67,8 @@ class LoginHistory extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     public function scopeFailed($query)
     {
@@ -75,9 +76,9 @@ class LoginHistory extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
+     * @param  Builder<$this>  $query
      * @param  int|null  $days
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @return Builder<$this>
      */
     public function scopeRecent($query, $days = 30)
     {

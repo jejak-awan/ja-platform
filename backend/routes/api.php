@@ -7,7 +7,6 @@ Route::prefix('v1/install')->group(function () {
     Route::post('/', [InstallController::class, 'install']);
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | API Routes

@@ -2,13 +2,16 @@
 
 namespace Modules\School\Models\Logistics;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Modules\System\Traits\ScopedByWorkspace;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Modules\School\Models\HR\Staff;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
-use Modules\School\Models\HR\Staff;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -16,14 +19,14 @@ use Modules\School\Models\HR\Staff;
  * @property string $workspace_id
  * @property string $school_asset_id
  * @property int $reported_by
- * @property \Illuminate\Support\Carbon $date_reported
+ * @property Carbon $date_reported
  * @property string $issue_description
  * @property string $priority
  * @property string $status
  * @property string|null $resolution_notes
- * @property \Illuminate\Support\Carbon|null $date_resolved
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $date_resolved
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read School $school
  * @property-read SchoolUnit $level
  * @property-read SchoolAsset $asset
@@ -34,11 +37,12 @@ class MaintenanceTicket extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_log_maintenance_tickets';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -60,33 +64,33 @@ class MaintenanceTicket extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SchoolUnit, $this>
+     * @return BelongsTo<SchoolUnit, $this>
      */
-    public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function level(): BelongsTo
     {
         return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SchoolAsset, $this>
+     * @return BelongsTo<SchoolAsset, $this>
      */
-    public function asset(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function asset(): BelongsTo
     {
         return $this->belongsTo(SchoolAsset::class, 'school_asset_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Staff, $this>
+     * @return BelongsTo<Staff, $this>
      */
-    public function reporter(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function reporter(): BelongsTo
     {
         return $this->belongsTo(Staff::class, 'reported_by');
     }

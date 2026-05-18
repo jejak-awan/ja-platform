@@ -60,11 +60,13 @@ class CleanupAnalytics extends Command
 
         if ($totalRecords === 0) {
             $this->info('No records to delete.');
+
             return 0;
         }
 
         if ($dryRun) {
             $this->info("Would delete {$totalRecords} total records.");
+
             return 0;
         }
 

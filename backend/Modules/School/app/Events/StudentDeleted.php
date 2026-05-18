@@ -16,7 +16,5 @@ class StudentDeleted
     /**
      * Create a new event instance.
      */
-    public function __construct(public Student $student)
-    {
-    }
+    public function __construct(public Student $student) {}
 }

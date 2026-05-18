@@ -4,24 +4,26 @@ declare(strict_types=1);
 
 namespace Modules\School\Http\Requests\HR;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\School\Models\HR\Staff;
 
 class UpdateStaffRequest extends FormRequest
 {
     /**
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        /** @var \Modules\School\Models\HR\Staff|null $staff */
+        /** @var Staff|null $staff */
         $staff = $this->route('staff');
-        $id = $staff instanceof \Modules\School\Models\HR\Staff ? $staff->id : $this->input('id');
-        $staffId = is_numeric($id) ? (int)$id : 0;
+        $id = $staff instanceof Staff ? $staff->id : $this->input('id');
+        $staffId = is_numeric($id) ? (int) $id : 0;
 
         return [
             'full_name' => 'required|string|max:255',
             'nik' => 'nullable|string|size:16',
-            'nuptk' => 'nullable|string|size:16|unique:sch_hr_staff,nuptk,' . $staffId,
+            'nuptk' => 'nullable|string|size:16|unique:sch_hr_staff,nuptk,'.$staffId,
             'nip' => 'nullable|string|max:20',
             'ptk_type' => 'nullable|string',
             'gender' => 'required|in:L,P',

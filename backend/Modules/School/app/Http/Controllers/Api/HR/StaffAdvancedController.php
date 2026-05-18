@@ -2,25 +2,27 @@
 
 namespace Modules\School\Http\Controllers\Api\HR;
 
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
-use Modules\School\Models\HR\StaffShift;
 use Modules\School\Models\HR\LeaveRequest;
-use Modules\School\Models\HR\Staff;
 use Modules\School\Models\HR\Payroll;
 use Modules\School\Models\HR\SalaryStructure;
+use Modules\School\Models\HR\Staff;
 use Modules\School\Models\HR\StaffAttendance;
-use Carbon\Carbon;
+use Modules\School\Models\HR\StaffShift;
 
 class StaffAdvancedController extends BaseController
 {
-    public function shifts(): \Illuminate\Http\JsonResponse
+    public function shifts(): JsonResponse
     {
         $shifts = StaffShift::all();
+
         return $this->sendResponse($shifts, 'Staff shifts retrieved successfully.');
     }
 
-    public function storeShift(Request $request): \Illuminate\Http\JsonResponse
+    public function storeShift(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'school_id' => 'required|exists:schools,id',
@@ -31,10 +33,11 @@ class StaffAdvancedController extends BaseController
         ]);
 
         $shift = StaffShift::create($validated);
+
         return $this->sendResponse($shift, 'Staff shift created successfully.', 201);
     }
 
-    public function updateShift(Request $request, int|string $id): \Illuminate\Http\JsonResponse
+    public function updateShift(Request $request, int|string $id): JsonResponse
     {
         $shift = StaffShift::findOrFail($id);
         $validated = $request->validate([
@@ -45,17 +48,19 @@ class StaffAdvancedController extends BaseController
         ]);
 
         $shift->update($validated);
+
         return $this->sendResponse($shift, 'Staff shift updated successfully.');
     }
 
-    public function destroyShift(int|string $id): \Illuminate\Http\JsonResponse
+    public function destroyShift(int|string $id): JsonResponse
     {
         $shift = StaffShift::findOrFail($id);
         $shift->delete();
+
         return $this->sendResponse([], 'Staff shift deleted successfully.');
     }
 
-    public function leaveRequests(Request $request): \Illuminate\Http\JsonResponse
+    public function leaveRequests(Request $request): JsonResponse
     {
         $query = LeaveRequest::with(['staff', 'approver']);
 
@@ -64,12 +69,13 @@ class StaffAdvancedController extends BaseController
         }
 
         $perPageValue = $request->get('per_page', 20);
-        $perPage = is_numeric($perPageValue) ? (int)$perPageValue : 20;
+        $perPage = is_numeric($perPageValue) ? (int) $perPageValue : 20;
         $requests = $query->latest()->paginate($perPage);
+
         return $this->sendResponse($requests, 'Leave requests retrieved successfully.');
     }
 
-    public function storeLeaveRequest(Request $request): \Illuminate\Http\JsonResponse
+    public function storeLeaveRequest(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'school_id' => 'required|exists:schools,id',
@@ -82,10 +88,11 @@ class StaffAdvancedController extends BaseController
 
         $validated['status'] = 'pending';
         $leaveRequest = LeaveRequest::create($validated);
+
         return $this->sendResponse($leaveRequest, 'Leave request submitted.', 201);
     }
 
-    public function updateLeaveStatus(Request $request, int|string $id): \Illuminate\Http\JsonResponse
+    public function updateLeaveStatus(Request $request, int|string $id): JsonResponse
     {
         $leaveRequest = LeaveRequest::findOrFail($id);
         $validated = $request->validate([
@@ -100,7 +107,7 @@ class StaffAdvancedController extends BaseController
         return $this->sendResponse($leaveRequest, 'Leave status updated successfully.');
     }
 
-    /* 
+    /*
     // Salary Structures (Disabled for BOS compliance)
     public function salaryStructures(Request $request): \Illuminate\Http\JsonResponse
     {

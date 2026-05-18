@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\School\Policies;
 
-use Modules\System\Models\User;
 use Modules\School\Models\Institution\School;
+use Modules\System\Models\User;
 
 class SchoolPolicy
 {

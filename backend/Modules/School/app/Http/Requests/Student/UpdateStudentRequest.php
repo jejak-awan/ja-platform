@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Modules\School\Http\Requests\Student;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\School\Models\Student\Student;
 
 class UpdateStudentRequest extends FormRequest
 {
     /**
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        /** @var \Modules\School\Models\Student\Student|null $student */
+        /** @var Student|null $student */
         $student = $this->route('student');
-        $id = $student instanceof \Modules\School\Models\Student\Student ? $student->id : $this->input('id');
-        $studentId = is_numeric($id) ? (int)$id : 0;
+        $id = $student instanceof Student ? $student->id : $this->input('id');
+        $studentId = is_numeric($id) ? (int) $id : 0;
 
         return [
             'level_id' => 'nullable|exists:sch_ins_levels,id',
@@ -24,7 +26,7 @@ class UpdateStudentRequest extends FormRequest
 
             // Biography
             'full_name' => 'required|string|max:255',
-            'nisn' => 'nullable|string|size:10|unique:sch_std_students,nisn,' . $studentId,
+            'nisn' => 'nullable|string|size:10|unique:sch_std_students,nisn,'.$studentId,
             'nis' => 'nullable|string|max:20',
             'gender' => 'required|in:L,P',
             'place_of_birth' => 'nullable|string|max:100',

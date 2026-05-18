@@ -3,12 +3,19 @@
 namespace Modules\Cms\Http\Controllers\Api;
 
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Modules\Cms\Models\Content;
+use Modules\Cms\Services\CmsCacheService;
 use Modules\Cms\Services\ContentService;
 use Modules\System\Http\Controllers\BaseApiController;
-use Modules\Cms\Services\CmsCacheService;
+use Modules\System\Models\User;
 
 /**
  * @OA\Tag(name="Content")
@@ -62,7 +69,7 @@ class ContentController extends BaseApiController
             foreach ($tagsInput as $id) {
                 if (is_scalar($id)) {
                     $n = (string) $id;
-                    if ($n !== "") {
+                    if ($n !== '') {
                         $ids[] = $n;
                     }
                 }
@@ -99,12 +106,12 @@ class ContentController extends BaseApiController
      *     )
      * )
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $result = $this->contentService->getPublishedContents($request);
 
         if ($result['paginated']) {
-            /** @var \Illuminate\Pagination\LengthAwarePaginator<int, mixed> $paginator */
+            /** @var LengthAwarePaginator<int, mixed> $paginator */
             $paginator = $result['data'];
 
             return $this->paginated($paginator, 'Contents retrieved successfully');
@@ -134,7 +141,7 @@ class ContentController extends BaseApiController
      *     @OA\Response(response=404, description="Not found")
      * )
      */
-    public function show(\Illuminate\Http\Request $request, string $slug): \Illuminate\Http\JsonResponse
+    public function show(Request $request, string $slug): JsonResponse
     {
         $content = Content::with(['author', 'category', 'tags', 'menuItems.menu', 'comments' => function ($q): void {
             $q->where('status', 'approved')->latest();
@@ -157,7 +164,7 @@ class ContentController extends BaseApiController
 
         // If not published, verify permissions
         if (! $isPublished) {
-            /** @var \Modules\System\Models\User|null $user */
+            /** @var User|null $user */
             $user = auth('sanctum')->user();
 
             if (! $user) {
@@ -186,7 +193,7 @@ class ContentController extends BaseApiController
      *     @OA\Response(response=200, description="Related content retrieved successfully")
      * )
      */
-    public function related(string $slug): \Illuminate\Http\JsonResponse
+    public function related(string $slug): JsonResponse
     {
         $related = $this->contentService->getRelatedContent($slug);
 
@@ -205,10 +212,10 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function preview(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function preview(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -244,7 +251,7 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function adminIndex(Request $request): \Illuminate\Http\JsonResponse
+    public function adminIndex(Request $request): JsonResponse
     {
         $user = $request->user();
         if (! $user) {
@@ -277,7 +284,7 @@ class ContentController extends BaseApiController
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            
+
             // Clean and normalize UUID query if applicable
             $cleanSearch = preg_replace('/[^a-zA-Z0-9]/', '', $search);
             $isUuid = false;
@@ -296,9 +303,9 @@ class ContentController extends BaseApiController
 
             $query->where(function ($q) use ($search, $isUuid, $uuidQuery): void {
                 $searchStr = strtolower($search);
-                $q->where(\Illuminate\Support\Facades\DB::raw('lower(title)'), 'like', "%{$searchStr}%")
-                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(body)'), 'like', "%{$searchStr}%")
-                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(excerpt)'), 'like', "%{$searchStr}%");
+                $q->where(DB::raw('lower(title)'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(body)'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(excerpt)'), 'like', "%{$searchStr}%");
                 if ($isUuid) {
                     $q->orWhere('id', $uuidQuery);
                 }
@@ -329,10 +336,10 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function adminShow(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function adminShow(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -363,10 +370,10 @@ class ContentController extends BaseApiController
      * )
      * Get content statistics for dashboard cards.
      */
-    public function stats(Request $request): \Illuminate\Http\JsonResponse
+    public function stats(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -379,7 +386,7 @@ class ContentController extends BaseApiController
         $canManage = $user->can('manage content');
         $cacheKey = "content_stats_{$userId}_".($canManage ? 'all' : 'scoped');
 
-        return Cache::remember($cacheKey, 300, function () use ($canManage, $user): \Illuminate\Http\JsonResponse {
+        return Cache::remember($cacheKey, 300, function () use ($canManage, $user): JsonResponse {
             $query = Content::query();
 
             // Scope stats if not a content manager
@@ -424,10 +431,10 @@ class ContentController extends BaseApiController
      * )
      * Create new content.
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -463,18 +470,18 @@ class ContentController extends BaseApiController
                 'new_tags.*' => 'string|max:50',
                 'comment_status' => 'nullable|in:1,0,true,false,open,closed',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
         // Handle slug generation and uniqueness
         if (! isset($validated['slug']) || empty($validated['slug'])) {
-            $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
+            $validated['slug'] = Str::slug($validated['title']);
         }
         $validated['slug'] = $this->contentService->generateUniqueSlug($validated['slug']);
 
         // Approval Workflow: Authors cannot publish directly
-        if (!$user->can('publish content') && $validated['status'] === 'published') {
+        if (! $user->can('publish content') && $validated['status'] === 'published') {
             $validated['status'] = 'pending';
         }
 
@@ -508,10 +515,10 @@ class ContentController extends BaseApiController
      * )
      * Update the specified content.
      */
-    public function update(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -566,14 +573,14 @@ class ContentController extends BaseApiController
             }
 
             $validated = $request->validate($rules);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            \Illuminate\Support\Facades\Log::error('Content update validation failed', ['errors' => $e->errors(), 'input' => $request->all()]);
+        } catch (ValidationException $e) {
+            Log::error('Content update validation failed', ['errors' => $e->errors(), 'input' => $request->all()]);
 
             return $this->validationError($e->errors());
         }
 
         // Ownership check
-        if (! $user->can('manage content') && !$user->can('publish content') && $content->author_id !== $user->id) {
+        if (! $user->can('manage content') && ! $user->can('publish content') && $content->author_id !== $user->id) {
             return $this->forbidden('You can only update your own content');
         }
 
@@ -617,7 +624,7 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function toggleFeatured(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function toggleFeatured(Request $request, Content $content): JsonResponse
     {
         $isFeatured = $this->contentService->toggleFeatured($content);
 
@@ -638,10 +645,10 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function autosave(Request $request, ?Content $content = null): \Illuminate\Http\JsonResponse
+    public function autosave(Request $request, ?Content $content = null): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -671,14 +678,14 @@ class ContentController extends BaseApiController
                 'custom_fields' => 'nullable|array',
                 'comment_status' => 'nullable|in:1,0,true,false,open,closed',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
         // Keep published content published on autosave; only new/unpublished content defaults to draft.
         $validated['status'] = $content && $content->status === 'published' ? 'published' : 'draft';
 
-        if ($content instanceof \Modules\Cms\Models\Content) {
+        if ($content instanceof Content) {
             // Update existing content
             // Check if content is locked by another user
             if ($this->contentService->isLockedByOther($content, $user->id)) {
@@ -710,7 +717,7 @@ class ContentController extends BaseApiController
 
             // Generate slug if not provided
             if (! isset($validated['slug']) || empty($validated['slug'])) {
-                $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
+                $validated['slug'] = Str::slug($validated['title']);
             }
 
             // Ensure slug is unique for autosave check
@@ -742,7 +749,7 @@ class ContentController extends BaseApiController
      * )
      * Remove the specified content.
      */
-    public function destroy(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function destroy(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
         if (! $user) {
@@ -770,10 +777,10 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function duplicate(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function duplicate(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -795,10 +802,10 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function approve(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function approve(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -833,10 +840,10 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function reject(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function reject(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -878,10 +885,10 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function bulkAction(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkAction(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -893,7 +900,7 @@ class ContentController extends BaseApiController
                 'content_ids.*' => 'string',
                 'category_id' => 'required_if:action,change_category|exists:lib_categories,id',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
@@ -938,18 +945,19 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function lock(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function lock(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
 
         // Allow Admins/Super Admins to steal the lock
-        if ($this->contentService->isLockedByOther($content, (string) $user->id) && (!$user->hasRole('super') && ! $user->hasRole('admin'))) {
-            /** @var \Modules\System\Models\User|null $lockedBy */
+        if ($this->contentService->isLockedByOther($content, (string) $user->id) && (! $user->hasRole('super') && ! $user->hasRole('admin'))) {
+            /** @var User|null $lockedBy */
             $lockedBy = $content->lockedBy;
+
             return $this->error(
                 'Content is currently being edited by '.($lockedBy ? $lockedBy->name : 'another user'),
                 423,
@@ -977,10 +985,10 @@ class ContentController extends BaseApiController
     /**
      * Get current lock status of content.
      */
-    public function lockStatus(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function lockStatus(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -1014,10 +1022,10 @@ class ContentController extends BaseApiController
      *     security={{"sanctum":{}}}
      * )
      */
-    public function unlock(Request $request, Content $content): \Illuminate\Http\JsonResponse
+    public function unlock(Request $request, Content $content): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -1036,10 +1044,10 @@ class ContentController extends BaseApiController
      *
      * @param  int|string  $id
      */
-    public function restore(Request $request, $id): \Illuminate\Http\JsonResponse
+    public function restore(Request $request, $id): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -1058,10 +1066,10 @@ class ContentController extends BaseApiController
      *
      * @param  int|string  $id
      */
-    public function forceDelete(Request $request, $id): \Illuminate\Http\JsonResponse
+    public function forceDelete(Request $request, $id): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }
@@ -1078,10 +1086,10 @@ class ContentController extends BaseApiController
     /**
      * Empty trash.
      */
-    public function emptyTrash(Request $request): \Illuminate\Http\JsonResponse
+    public function emptyTrash(Request $request): JsonResponse
     {
         $user = $request->user();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         if (! $user) {
             return $this->unauthorized();
         }

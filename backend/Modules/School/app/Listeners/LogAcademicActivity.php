@@ -2,10 +2,10 @@
 
 namespace Modules\School\Listeners;
 
-use Modules\School\Events\AttendanceMarked;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
+use Modules\School\Events\AttendanceMarked;
 
 class LogAcademicActivity implements ShouldQueue
 {
@@ -29,7 +29,7 @@ class LogAcademicActivity implements ShouldQueue
             'student_id' => $event->attendance->student_id,
             'date' => $event->attendance->date,
             'status' => $event->attendance->status,
-            'user' => auth()->id() ?? 'system'
+            'user' => auth()->id() ?? 'system',
         ]);
     }
 }

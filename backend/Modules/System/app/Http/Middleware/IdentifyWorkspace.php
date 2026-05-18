@@ -31,6 +31,7 @@ class IdentifyWorkspace
             if ($headerWorkspaceId === '0' || $headerWorkspaceId === '') {
                 Context::add('bypass_unit_scope', true);
             }
+
             return $next($request);
         }
 
@@ -39,10 +40,11 @@ class IdentifyWorkspace
             $sessionVal = $request->session()->get('active_workspace_id');
             $workspaceId = is_scalar($sessionVal) ? (string) $sessionVal : '';
             Context::add('workspace_id', $workspaceId);
-            
+
             if ($workspaceId === '0' || empty($workspaceId)) {
                 Context::add('bypass_unit_scope', true);
             }
+
             return $next($request);
         }
 

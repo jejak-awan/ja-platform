@@ -232,7 +232,7 @@ class TrustProxies
             return true;
         }
 
-        $mask = (~(0xff >> $remainingBits)) & 0xff;
+        $mask = (~(0xFF >> $remainingBits)) & 0xFF;
 
         return (ord($ipBinary[$fullBytes]) & $mask) === (ord($subnetBinary[$fullBytes]) & $mask);
     }

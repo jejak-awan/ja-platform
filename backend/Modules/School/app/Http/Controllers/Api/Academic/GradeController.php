@@ -2,23 +2,21 @@
 
 namespace Modules\School\Http\Controllers\Api\Academic;
 
-use Modules\School\Http\Controllers\Api\Common\BaseController;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\School\Services\Academic\GradeService;
-use Modules\School\Models\Academic\Grade;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Context;
+use Modules\School\Http\Controllers\Api\Common\BaseController;
+use Modules\School\Models\Academic\Grade;
+use Modules\School\Services\Academic\GradeService;
 
 class GradeController extends BaseController
 {
-    public function __construct(protected GradeService $service)
-    {
-    }
+    public function __construct(protected GradeService $service) {}
 
     /**
      * Get student's grades for a specific academic year
      */
-    public function getStudentGrades(Request $request, string $studentId): \Illuminate\Http\JsonResponse
+    public function getStudentGrades(Request $request, string $studentId): JsonResponse
     {
         $this->authorize('view academic', Grade::class);
 
@@ -29,7 +27,7 @@ class GradeController extends BaseController
 
         try {
             $ayId = (string) $request->string('academic_year_id');
-            
+
             $semIdValue = (string) $request->string('semester_id');
             $semId = $semIdValue !== '' ? $semIdValue : null;
 
@@ -38,16 +36,17 @@ class GradeController extends BaseController
                 $ayId,
                 $semId
             );
+
             return $this->sendResponse($grades, 'Grades retrieved successfully.');
         } catch (\Exception $e) {
-             return $this->sendError('Failed to retrieve grades.', [$e->getMessage()], 500);
+            return $this->sendError('Failed to retrieve grades.', [$e->getMessage()], 500);
         }
     }
 
     /**
      * Save a single grade entry
      */
-    public function saveGrade(Request $request): \Illuminate\Http\JsonResponse
+    public function saveGrade(Request $request): JsonResponse
     {
         $this->authorize('manage academic', Grade::class);
 
@@ -69,14 +68,15 @@ class GradeController extends BaseController
         // Add context for school/level
         $contextSchoolId = Context::get('school_id');
         $contextLevelId = Context::get('workspace_id');
-        
-        $validated['school_id'] = is_numeric($contextSchoolId) ? (int)$contextSchoolId : null;
-        $validated['workspace_id'] = is_numeric($contextLevelId) ? (int)$contextLevelId : null;
+
+        $validated['school_id'] = is_numeric($contextSchoolId) ? (int) $contextSchoolId : null;
+        $validated['workspace_id'] = is_numeric($contextLevelId) ? (int) $contextLevelId : null;
 
         try {
             /** @var array<string, mixed> $gradeData */
             $gradeData = $validated;
             $grade = $this->service->saveGrade($gradeData);
+
             return $this->sendResponse($grade, 'Grade saved successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Failed to save grade.', [$e->getMessage()], 500);
@@ -86,7 +86,7 @@ class GradeController extends BaseController
     /**
      * Bulk save grades for a class
      */
-    public function bulkSaveGrades(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkSaveGrades(Request $request): JsonResponse
     {
         $this->authorize('manage academic', Grade::class);
 
@@ -101,22 +101,24 @@ class GradeController extends BaseController
 
         $contextSchoolId = Context::get('school_id');
         $contextLevelId = Context::get('workspace_id');
-        
-        $schoolId = is_numeric($contextSchoolId) ? (int)$contextSchoolId : '1';
-        $levelId = is_numeric($contextLevelId) ? (int)$contextLevelId : '1';
-        
+
+        $schoolId = is_numeric($contextSchoolId) ? (int) $contextSchoolId : '1';
+        $levelId = is_numeric($contextLevelId) ? (int) $contextLevelId : '1';
+
         /** @var array<int, array<string, mixed>> $rawGrades */
         $rawGrades = (array) $request->input('grades');
 
-        $gradesData = array_map(function(array $g) use ($schoolId, $levelId) {
+        $gradesData = array_map(function (array $g) use ($schoolId, $levelId) {
             /** @var array<string, mixed> $g */
             $g['school_id'] = $schoolId;
             $g['workspace_id'] = $levelId;
+
             return $g;
         }, $rawGrades);
 
         try {
             $count = $this->service->bulkSaveGrades($gradesData);
+
             return $this->sendResponse([], "$count grades saved successfully.");
         } catch (\Exception $e) {
             return $this->sendError('Failed to bulk save grades.', [$e->getMessage()], 500);

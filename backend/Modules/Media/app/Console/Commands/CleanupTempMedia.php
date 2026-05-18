@@ -3,6 +3,7 @@
 namespace Modules\Media\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 
 class CleanupTempMedia extends Command
@@ -31,6 +32,7 @@ class CleanupTempMedia extends Command
 
         if (! File::isDirectory($tempPath)) {
             $this->info('Temp directory does not exist. Nothing to cleanup.');
+
             return 0;
         }
 
@@ -40,7 +42,7 @@ class CleanupTempMedia extends Command
 
         foreach ($files as $file) {
             $lastModified = $file->getMTime();
-            $lastModifiedDate = \Illuminate\Support\Carbon::createFromTimestamp($lastModified);
+            $lastModifiedDate = Carbon::createFromTimestamp($lastModified);
 
             if ($lastModifiedDate->diffInHours($now) >= $hours) {
                 File::delete($file->getRealPath());

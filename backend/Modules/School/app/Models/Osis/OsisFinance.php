@@ -2,12 +2,14 @@
 
 namespace Modules\School\Models\Osis;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Modules\School\Models\Institution\School;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -16,9 +18,9 @@ use Modules\School\Models\Institution\School;
  * @property string $type
  * @property string $amount
  * @property string|null $description
- * @property \Illuminate\Support\Carbon $transaction_date
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon $transaction_date
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read School $school
  * @property-read OsisProgram $program
  */
@@ -27,9 +29,10 @@ class OsisFinance extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $table = 'sch_osis_finances';
@@ -49,17 +52,17 @@ class OsisFinance extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<OsisProgram, $this>
+     * @return BelongsTo<OsisProgram, $this>
      */
-    public function program(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function program(): BelongsTo
     {
         return $this->belongsTo(OsisProgram::class, 'program_id');
     }

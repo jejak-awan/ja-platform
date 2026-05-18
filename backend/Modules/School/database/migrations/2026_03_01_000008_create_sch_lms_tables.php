@@ -25,14 +25,14 @@ return new class extends Migration
             $table->string('level')->default('beginner');
             $table->json('metadata')->nullable();
             $table->uuid('author_id'); // User ID
-            
+
             // Academic Context
             $table->uuid('academic_year_id')->nullable();
             $table->uuid('semester_id')->nullable();
             $table->uuid('department_id')->nullable();
             $table->uuid('grade_id')->nullable();
             $table->boolean('is_global')->default(false);
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

@@ -7,6 +7,7 @@ namespace Modules\System\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
+use Modules\Security\Models\SecurityLog;
 
 /**
  * Anomaly Detection Service.
@@ -126,7 +127,7 @@ class AnomalyDetectionService
         $thresholds = [25, 50, 75];
         foreach ($thresholds as $t) {
             if ($oldScore < $t && $newScore >= $t) {
-                \Modules\Security\Models\SecurityLog::log(
+                SecurityLog::log(
                     'suspicious_behavior',
                     null,
                     $ip,

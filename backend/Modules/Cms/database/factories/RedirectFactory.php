@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Layout\Models\UrlRewrite;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Layout\Models\UrlRewrite>
+ * @extends Factory<UrlRewrite>
  */
 class RedirectFactory extends Factory
 {

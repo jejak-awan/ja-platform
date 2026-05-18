@@ -7,6 +7,7 @@ namespace Modules\Newsletter\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -19,9 +20,7 @@ class NewsletterWelcome extends Mailable implements ShouldQueue
     /**
      * Create a new message instance.
      */
-    public function __construct(public NewsletterSubscriber $subscriber)
-    {
-    }
+    public function __construct(public NewsletterSubscriber $subscriber) {}
 
     /**
      * Get the message envelope.
@@ -46,7 +45,7 @@ class NewsletterWelcome extends Mailable implements ShouldQueue
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {

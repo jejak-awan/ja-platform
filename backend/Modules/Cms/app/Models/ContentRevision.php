@@ -2,13 +2,14 @@
 
 namespace Modules\Cms\Models;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Modules\Cms\Database\Factories\ContentRevisionFactory;
 use Modules\System\Models\User;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
@@ -18,8 +19,8 @@ use Modules\System\Models\User;
  * @property string $body
  * @property array<string, mixed>|null $meta
  * @property string|null $reason
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Content $content
  * @property-read User|null $author
  * @property-read User|null $user
@@ -29,9 +30,10 @@ class ContentRevision extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    /** @use HasFactory<\Modules\Cms\Database\Factories\ContentRevisionFactory> */
+    /** @use HasFactory<ContentRevisionFactory> */
     use HasFactory, ScopedByWorkspace;
 
     protected $table = 'cms_content_revisions';
@@ -39,9 +41,9 @@ class ContentRevision extends Model
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Cms\Database\Factories\ContentRevisionFactory
+    protected static function newFactory(): ContentRevisionFactory
     {
-        return \Modules\Cms\Database\Factories\ContentRevisionFactory::new();
+        return ContentRevisionFactory::new();
     }
 
     protected $fillable = [

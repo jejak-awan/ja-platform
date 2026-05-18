@@ -4,8 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Modules\System\Models\User;
 
@@ -25,10 +26,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (! app()->isLocal()) {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
+            URL::forceScheme('https');
         }
 
-        RateLimiter::for('api', fn(Request $request) => Limit::perMinute(5000)->by($request->user()?->id ?: $request->ip()));
+        RateLimiter::for('api', fn (Request $request) => Limit::perMinute(5000)->by($request->user()?->id ?: $request->ip()));
 
         /**
          * Login: shared NAT (schools/offices) would hit a plain per-IP cap quickly.
@@ -75,9 +76,9 @@ class AppServiceProvider extends ServiceProvider
         });
 
         /** 2FA code step: same shared-IP issue as login when many staff authenticate. */
-        RateLimiter::for('two-factor-verify', fn(Request $request) => Limit::perMinute(60)->by('2fa-verify|'.$request->ip()));
+        RateLimiter::for('two-factor-verify', fn (Request $request) => Limit::perMinute(60)->by('2fa-verify|'.$request->ip()));
 
-        RateLimiter::for('admin', fn(Request $request) => Limit::perMinute(2000)->by($request->user()?->id ?: $request->ip()));
+        RateLimiter::for('admin', fn (Request $request) => Limit::perMinute(2000)->by($request->user()?->id ?: $request->ip()));
 
         RateLimiter::for('probe-paths', function (Request $request) {
             $fingerprint = $request->ip().'|'.substr((string) $request->userAgent(), 0, 120);
@@ -188,6 +189,6 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
-        Gate::define('viewApiDocs', fn(User $user) => $user->isAtLeastRole('admin'));
+        Gate::define('viewApiDocs', fn (User $user) => $user->isAtLeastRole('admin'));
     }
 }

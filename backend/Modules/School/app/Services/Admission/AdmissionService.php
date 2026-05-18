@@ -2,34 +2,34 @@
 
 namespace Modules\School\Services\Admission;
 
-use Modules\School\Models\Admission\Enrollment;
-use Modules\School\Models\Admission\EnrollmentDocument;
-use Modules\School\Models\Student\Student;
-use Illuminate\Support\Str;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Modules\School\Models\Admission\Enrollment;
+use Modules\School\Models\Student\Student;
 
 class AdmissionService
 {
     /**
      * Get enrollments with filters.
      *
-     * @param array<string, mixed> $filters
+     * @param  array<string, mixed>  $filters
      * @return LengthAwarePaginator<int, Enrollment>
      */
     public function getEnrollments(array $filters, int $perPage = 20): LengthAwarePaginator
     {
         $query = Enrollment::with(['documents', 'academicYear']);
-        
-        if (!empty($filters['status']) && is_string($filters['status'])) {
+
+        if (! empty($filters['status']) && is_string($filters['status'])) {
             $query->where('status', $filters['status']);
         }
 
-        if (!empty($filters['search']) && is_string($filters['search'])) {
+        if (! empty($filters['search']) && is_string($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search): void {
                 $searchStr = strtolower($search);
-                $q->where(\Illuminate\Support\Facades\DB::raw('lower(full_name)'), 'like', '%' . $searchStr . '%')
-                  ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(registration_number)'), 'like', '%' . $searchStr . '%');
+                $q->where(DB::raw('lower(full_name)'), 'like', '%'.$searchStr.'%')
+                    ->orWhere(DB::raw('lower(registration_number)'), 'like', '%'.$searchStr.'%');
             });
         }
 
@@ -39,15 +39,16 @@ class AdmissionService
     /**
      * Create a new enrollment.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function createEnrollment(array $data): Enrollment
     {
-        $data['registration_number'] = 'REG-' . strtoupper(Str::random(10));
+        $data['registration_number'] = 'REG-'.strtoupper(Str::random(10));
         $data['status'] = 'applied';
 
         /** @var Enrollment $enrollment */
         $enrollment = Enrollment::create($data);
+
         return $enrollment;
     }
 
@@ -78,7 +79,7 @@ class AdmissionService
 
         $enrollment->update([
             'status' => 'admitted',
-            'admitted_student_id' => $student->id
+            'admitted_student_id' => $student->id,
         ]);
 
         return $student;

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Modules\System\Models\Setting;
 
 /**
  * Security Notification Service.
@@ -275,7 +276,7 @@ class SecurityNotificationService
         return Cache::remember('security_notification_config', 300, function (): array {
             try {
                 /** @var array<string, string|null> $settings */
-                $settings = \Modules\System\Models\Setting::where('group', 'security')
+                $settings = Setting::where('group', 'security')
                     ->whereIn('key', [
                         'telegram_bot_token',
                         'telegram_chat_id',

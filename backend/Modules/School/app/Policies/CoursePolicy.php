@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\School\Policies;
 
-use Modules\System\Models\User;
-use Modules\School\Models\Lms\Course;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Modules\School\Models\Lms\Course;
+use Modules\System\Models\User;
 
 class CoursePolicy
 {
@@ -17,6 +17,7 @@ class CoursePolicy
         if ($user->isAtLeastRole('admin')) {
             return true;
         }
+
         return null;
     }
 

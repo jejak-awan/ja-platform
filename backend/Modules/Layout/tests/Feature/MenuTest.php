@@ -2,11 +2,10 @@
 
 namespace Modules\Layout\tests\Feature;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\System\Models\User;
 use Modules\Layout\Models\Menu;
-use Modules\Layout\Models\MenuItem;
+use Modules\System\Models\User;
+use Tests\TestCase;
 
 class MenuTest extends TestCase
 {

@@ -2,13 +2,14 @@
 
 namespace Modules\Media\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Media\Database\Factories\FolderFactory;
 use Modules\System\Traits\ScopedByWorkspace;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 /**
  * @property string $id
@@ -23,11 +24,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  */
 class Folder extends Model
 {
-    use HasFactory, SoftDeletes, ScopedByWorkspace, HasUuids;
+    use HasFactory, HasUuids, ScopedByWorkspace, SoftDeletes;
 
-    protected static function newFactory(): \Modules\Media\Database\Factories\FolderFactory
+    protected static function newFactory(): FolderFactory
     {
-        return \Modules\Media\Database\Factories\FolderFactory::new();
+        return FolderFactory::new();
     }
 
     protected $table = 'srv_media_folders';

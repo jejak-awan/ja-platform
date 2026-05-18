@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Integration;
 
+use Modules\Cms\Models\Content;
 use Modules\System\Models\Language;
 use Modules\System\Models\Translation;
 use Modules\System\Models\User;
@@ -26,7 +27,7 @@ class CoreTranslationsWithCmsModelIntegrationTest extends TestCase
     public function test_admin_can_get_translations_for_cms_entity(): void
     {
         $language = Language::factory()->create(['code' => 'es']);
-        $content = \Modules\Cms\Models\Content::factory()->create();
+        $content = Content::factory()->create();
 
         Translation::create([
             'translatable_type' => get_class($content),
@@ -49,7 +50,7 @@ class CoreTranslationsWithCmsModelIntegrationTest extends TestCase
     public function test_admin_can_set_translation_for_cms_entity(): void
     {
         $language = Language::factory()->create(['code' => 'es']);
-        $content = \Modules\Cms\Models\Content::factory()->create();
+        $content = Content::factory()->create();
 
         $translationData = [
             'translatable_type' => get_class($content),
@@ -70,4 +71,3 @@ class CoreTranslationsWithCmsModelIntegrationTest extends TestCase
         ]);
     }
 }
-

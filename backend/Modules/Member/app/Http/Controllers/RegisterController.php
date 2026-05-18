@@ -2,20 +2,22 @@
 
 namespace Modules\Member\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Modules\Member\Models\Member;
-use Modules\System\Http\Controllers\BaseApiController;
-use Modules\System\Models\User;
 use Modules\Security\Rules\StrongPassword;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Role;
+use Modules\System\Models\Setting;
+use Modules\System\Models\User;
 
 class RegisterController extends BaseApiController
 {
-    public function register(Request $request): \Illuminate\Http\JsonResponse
+    public function register(Request $request): JsonResponse
     {
         // Check if registration is enabled in settings
-        $registrationEnabled = \Modules\System\Models\Setting::get('enable_registration', true);
+        $registrationEnabled = Setting::get('enable_registration', true);
         if (! $registrationEnabled) {
             return $this->error('Registration is currently disabled.', 403, [], 'REGISTRATION_DISABLED');
         }

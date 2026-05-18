@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('school_id')->onDelete('cascade');
             $table->uuid('workspace_id')->nullable()->onDelete('set null');
             $table->uuid('user_id')->nullable()->onDelete('set null');
-            
+
             // Identity
             $table->string('nis', 20)->unique()->nullable();
             $table->string('nisn', 10)->unique()->nullable();
@@ -26,24 +26,24 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->enum('gender', ['L', 'P'])->nullable();
             $table->string('religion')->nullable();
-            
+
             // Address & Contact
             $table->text('address')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
-            
+
             // Parental Info
             $table->string('father_name')->nullable();
             $table->string('mother_name')->nullable();
             $table->string('guardian_name')->nullable();
-            
+
             // Status
             $table->string('status')->default('active'); // active, graduated, dropped_out, moved
             $table->date('entry_date')->nullable();
-            
+
             // Flex data
             $table->json('metadata')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

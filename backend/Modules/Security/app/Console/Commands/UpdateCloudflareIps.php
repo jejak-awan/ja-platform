@@ -55,10 +55,11 @@ class UpdateCloudflareIps extends Command
 
             if (empty($ips)) {
                 $this->error('No IPs received from Cloudflare.');
+
                 return 1;
             }
 
-            $content = "<?php\n\nreturn " . var_export(array_values($ips), true) . ";\n";
+            $content = "<?php\n\nreturn ".var_export(array_values($ips), true).";\n";
 
             // Ensure directory exists
             if (! File::isDirectory(dirname($this->cachePath))) {
@@ -67,11 +68,13 @@ class UpdateCloudflareIps extends Command
 
             File::put($this->cachePath, $content);
 
-            $this->info('Successfully updated Cloudflare IPs: ' . count($ips) . ' ranges.');
+            $this->info('Successfully updated Cloudflare IPs: '.count($ips).' ranges.');
+
             return 0;
 
         } catch (\Exception $e) {
-            $this->error('Failed to update Cloudflare IPs: ' . $e->getMessage());
+            $this->error('Failed to update Cloudflare IPs: '.$e->getMessage());
+
             return 1;
         }
     }

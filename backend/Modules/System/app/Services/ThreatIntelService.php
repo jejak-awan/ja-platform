@@ -7,6 +7,7 @@ namespace Modules\System\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Modules\System\Models\Setting;
 
 /**
  * Threat Intelligence Service.
@@ -138,7 +139,7 @@ class ThreatIntelService
      */
     public function getAutoBlockThreshold(): int
     {
-        $setting = \Modules\System\Models\Setting::get('threat_intel_auto_block_threshold', self::AUTO_BLOCK_THRESHOLD);
+        $setting = Setting::get('threat_intel_auto_block_threshold', self::AUTO_BLOCK_THRESHOLD);
 
         return is_numeric($setting) ? (int) $setting : self::AUTO_BLOCK_THRESHOLD;
     }
@@ -148,7 +149,7 @@ class ThreatIntelService
      */
     private function getApiKey(): ?string
     {
-        $key = \Modules\System\Models\Setting::get('abuseipdb_api_key');
+        $key = Setting::get('abuseipdb_api_key');
 
         return is_string($key) && $key !== '' ? $key : null;
     }

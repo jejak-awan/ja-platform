@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\School;
 
-use Modules\System\Models\User;
+use Modules\School\Database\Seeders\SchoolRoleSeeder;
 use Modules\School\Models\Institution\School;
-use Modules\System\Models\Role;
+use Modules\System\Models\User;
 use Tests\TestCase;
 
 /**
@@ -16,7 +16,7 @@ class SchoolModuleRbacTest extends TestCase
     {
         parent::setUp();
         $this->seedPermissionsAndRoles();
-        $this->seed(\Modules\School\Database\Seeders\SchoolRoleSeeder::class);
+        $this->seed(SchoolRoleSeeder::class);
     }
 
     public function test_admin_sarpras_can_access_sarpras_routes(): void

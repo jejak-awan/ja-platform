@@ -2,11 +2,11 @@
 
 namespace Modules\System\Models;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Modules\System\Traits\CoreLogsActivity;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -18,19 +18,21 @@ use Modules\System\Traits\CoreLogsActivity;
  * @property array<string, mixed>|null $variables
  * @property string|null $category
  * @property bool $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class EmailTemplate extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_email_templates';
-    use ScopedByWorkspace;
+
     use CoreLogsActivity;
+    use ScopedByWorkspace;
 
     protected $fillable = [
         'name',
@@ -78,7 +80,7 @@ class EmailTemplate extends Model
         }
 
         // Replace common variables
-        $siteName = \Modules\System\Models\Setting::get('site_name', 'CMS');
+        $siteName = Setting::get('site_name', 'CMS');
         $template = str_replace('{{ site_name }}', is_string($siteName) ? $siteName : 'CMS', $template);
         $template = str_replace('{{ site_url }}', url('/'), $template);
 

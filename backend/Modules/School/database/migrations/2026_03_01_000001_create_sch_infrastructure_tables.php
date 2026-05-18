@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('status_kepemilikan')->nullable();
             $table->boolean('is_multi_unit')->default(false);
             $table->boolean('is_multi_branch')->default(false);
-            
+
             // Contact & Legality
             $table->text('address')->nullable();
             $table->string('phone')->nullable();
@@ -28,13 +28,13 @@ return new class extends Migration
             $table->string('website')->nullable();
             $table->string('principal_name')->nullable();
             $table->string('principal_nip')->nullable();
-            
+
             // Advanced Details (Legality)
             $table->string('sk_pendirian')->nullable();
             $table->date('tgl_sk_pendirian')->nullable();
             $table->string('sk_operasional')->nullable();
             $table->date('tgl_sk_operasional')->nullable();
-            
+
             // Branding & Profile
             $table->string('logo_path')->nullable();
             $table->string('favicon_path')->nullable();
@@ -42,14 +42,14 @@ return new class extends Migration
             $table->text('vision')->nullable();
             $table->text('mission')->nullable();
             $table->text('history')->nullable();
-            
+
             // Foundation Info (For Swasta)
             $table->string('nama_yayasan')->nullable();
             $table->string('akta_pendirian_yayasan')->nullable();
             $table->date('tgl_akta_pendirian_yayasan')->nullable();
             $table->string('sk_kemenkumham')->nullable();
             $table->date('tgl_sk_kemenkumham')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

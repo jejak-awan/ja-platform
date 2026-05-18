@@ -2,10 +2,10 @@
 
 namespace Modules\Media\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Usage extends Model
 {
@@ -29,7 +29,7 @@ class Usage extends Model
     }
 
     /**
-     * @return MorphTo<\Illuminate\Database\Eloquent\Model, $this>
+     * @return MorphTo<Model, $this>
      */
     public function model(): MorphTo
     {

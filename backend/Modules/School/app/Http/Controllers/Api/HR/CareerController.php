@@ -2,21 +2,23 @@
 
 namespace Modules\School\Http\Controllers\Api\HR;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
-use Modules\School\Models\HR\JobVacancy;
 use Modules\School\Models\HR\JobApplication;
+use Modules\School\Models\HR\JobVacancy;
 use Modules\School\Models\Student\Student;
 
 class CareerController extends BaseController
 {
-    public function vacancies(): \Illuminate\Http\JsonResponse
+    public function vacancies(): JsonResponse
     {
         $vacancies = JobVacancy::withCount('applications')->latest()->get();
+
         return $this->sendResponse($vacancies, 'Job vacancies retrieved successfully.');
     }
 
-    public function storeVacancy(Request $request): \Illuminate\Http\JsonResponse
+    public function storeVacancy(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'school_id' => 'required|exists:schools,id',
@@ -27,19 +29,21 @@ class CareerController extends BaseController
         ]);
 
         $vacancy = JobVacancy::create($validated);
+
         return $this->sendResponse($vacancy, 'Job vacancy posted successfully.', 201);
     }
 
-    public function applications(?int $vacancyId = null): \Illuminate\Http\JsonResponse
+    public function applications(?int $vacancyId = null): JsonResponse
     {
         $query = JobApplication::with(['vacancy', 'student']);
         if ($vacancyId) {
             $query->where('vacancy_id', $vacancyId);
         }
+
         return $this->sendResponse($query->latest()->get(), 'Job applications retrieved successfully.');
     }
 
-    public function apply(Request $request): \Illuminate\Http\JsonResponse
+    public function apply(Request $request): JsonResponse
     {
         $user = $request->user();
         if (! $user) {
@@ -81,6 +85,7 @@ class CareerController extends BaseController
         }
 
         $application = JobApplication::create($validated);
+
         return $this->sendResponse($application, 'Application submitted successfully.', 201);
     }
 }

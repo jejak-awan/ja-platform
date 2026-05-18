@@ -2,10 +2,10 @@
 
 namespace Modules\School\Models\Admission;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -13,17 +13,19 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $document_type
  * @property int $document_id
  * @property array<string, mixed>|null $metadata
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class DocumentVerification extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
+
     protected $table = 'sch_adm_verifications';
 
     protected $fillable = [

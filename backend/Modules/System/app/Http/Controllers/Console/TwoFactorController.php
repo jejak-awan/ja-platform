@@ -2,13 +2,17 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\Setting;
 use Modules\System\Models\TwoFactorAuth;
 use Modules\System\Models\User;
 use PragmaRX\Google2FA\Google2FA;
 
-class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiController
+class TwoFactorController extends BaseApiController
 {
     protected Google2FA $google2fa;
 
@@ -20,13 +24,13 @@ class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiContro
     /**
      * Generate QR code and secret for 2FA setup
      */
-    public function generate(Request $request): \Illuminate\Http\JsonResponse
+    public function generate(Request $request): JsonResponse
     {
-        /** @var \Modules\System\Models\User $user */
+        /** @var User $user */
         $user = $request->user();
 
         // Check global 2FA setting
-        if (! \Modules\System\Models\Setting::get('enable_2fa', false)) {
+        if (! Setting::get('enable_2fa', false)) {
             return $this->error(
                 'Two-factor authentication is globally disabled.',
                 400,
@@ -49,7 +53,7 @@ class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiContro
         $secret = $this->google2fa->generateSecretKey();
 
         // Get or create 2FA record
-        /** @var \Modules\System\Models\TwoFactorAuth $twoFactorAuth */
+        /** @var TwoFactorAuth $twoFactorAuth */
         $twoFactorAuth = $user->twoFactorAuth ?? new TwoFactorAuth;
         if (! $twoFactorAuth->exists) {
             $twoFactorAuth->user_id = $user->id;
@@ -80,13 +84,13 @@ class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiContro
     /**
      * Verify TOTP code and enable 2FA
      */
-    public function verify(Request $request): \Illuminate\Http\JsonResponse
+    public function verify(Request $request): JsonResponse
     {
         $request->validate([
             'code' => 'required|string|size:6',
         ]);
 
-        if (! \Modules\System\Models\Setting::get('enable_2fa', false)) {
+        if (! Setting::get('enable_2fa', false)) {
             return $this->error(
                 'Two-factor authentication is globally disabled.',
                 400,
@@ -95,9 +99,9 @@ class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiContro
             );
         }
 
-        /** @var \Modules\System\Models\User $user */
+        /** @var User $user */
         $user = $request->user();
-        /** @var \Modules\System\Models\TwoFactorAuth|null $twoFactorAuth */
+        /** @var TwoFactorAuth|null $twoFactorAuth */
         $twoFactorAuth = $user->twoFactorAuth;
 
         if (! $twoFactorAuth || $twoFactorAuth->enabled) {
@@ -148,19 +152,19 @@ class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiContro
     /**
      * Disable 2FA
      */
-    public function disable(Request $request): \Illuminate\Http\JsonResponse
+    public function disable(Request $request): JsonResponse
     {
         $request->validate([
             'password' => 'required|string',
         ]);
 
-        /** @var \Modules\System\Models\User $user */
+        /** @var User $user */
         $user = $request->user();
 
         $password = is_string($request->input('password')) ? $request->input('password') : '';
 
         // Verify password
-        if (! \Illuminate\Support\Facades\Hash::check($password, (string) $user->password)) {
+        if (! Hash::check($password, (string) $user->password)) {
             return $this->validationError([
                 'password' => ['Invalid password'],
             ]);
@@ -176,7 +180,7 @@ class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiContro
             );
         }
 
-        /** @var \Modules\System\Models\TwoFactorAuth|null $twoFactorAuth */
+        /** @var TwoFactorAuth|null $twoFactorAuth */
         $twoFactorAuth = $user->twoFactorAuth;
         if ($twoFactorAuth) {
             $twoFactorAuth->enabled = false;
@@ -191,25 +195,25 @@ class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiContro
     /**
      * Regenerate backup codes
      */
-    public function regenerateBackupCodes(Request $request): \Illuminate\Http\JsonResponse
+    public function regenerateBackupCodes(Request $request): JsonResponse
     {
         $request->validate([
             'password' => 'required|string',
         ]);
 
-        /** @var \Modules\System\Models\User $user */
+        /** @var User $user */
         $user = $request->user();
 
         $password = is_string($request->input('password')) ? $request->input('password') : '';
 
         // Verify password
-        if (! \Illuminate\Support\Facades\Hash::check($password, (string) $user->password)) {
+        if (! Hash::check($password, (string) $user->password)) {
             return $this->validationError([
                 'password' => ['Invalid password'],
             ]);
         }
 
-        /** @var \Modules\System\Models\TwoFactorAuth|null $twoFactorAuth */
+        /** @var TwoFactorAuth|null $twoFactorAuth */
         $twoFactorAuth = $user->twoFactorAuth;
         if (! $twoFactorAuth || ! $twoFactorAuth->enabled) {
             return $this->error(
@@ -232,16 +236,16 @@ class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiContro
     /**
      * Verify TOTP code (for login)
      */
-    public function verifyCode(Request $request): \Illuminate\Http\JsonResponse
+    public function verifyCode(Request $request): JsonResponse
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'code' => 'required|string|size:6',
         ]);
 
-        /** @var \Modules\System\Models\User $user */
+        /** @var User $user */
         $user = User::findOrFail($request->input('user_id'));
-        /** @var \Modules\System\Models\TwoFactorAuth|null $twoFactorAuth */
+        /** @var TwoFactorAuth|null $twoFactorAuth */
         $twoFactorAuth = $user->twoFactorAuth;
 
         if (! $twoFactorAuth || ! $twoFactorAuth->enabled) {
@@ -291,11 +295,11 @@ class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiContro
     /**
      * Get 2FA status
      */
-    public function status(Request $request): \Illuminate\Http\JsonResponse
+    public function status(Request $request): JsonResponse
     {
-        /** @var \Modules\System\Models\User $user */
+        /** @var User $user */
         $user = $request->user();
-        /** @var \Modules\System\Models\TwoFactorAuth|null $twoFactorAuth */
+        /** @var TwoFactorAuth|null $twoFactorAuth */
         $twoFactorAuth = $user->twoFactorAuth;
 
         return $this->success([
@@ -303,7 +307,7 @@ class TwoFactorController extends \Modules\System\Http\Controllers\BaseApiContro
             'required' => $user->requiresTwoFactor(),
             'backup_codes_count' => $twoFactorAuth ? $twoFactorAuth->getRemainingBackupCodesCount() : 0,
             'enabled_at' => $twoFactorAuth?->enabled_at,
-            'global_enabled' => \Modules\System\Models\Setting::get('enable_2fa', false),
+            'global_enabled' => Setting::get('enable_2fa', false),
         ], '2FA status retrieved successfully');
     }
 

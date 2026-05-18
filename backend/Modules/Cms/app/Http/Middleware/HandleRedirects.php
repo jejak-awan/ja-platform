@@ -4,7 +4,6 @@ namespace Modules\Cms\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Modules\Layout\Models\UrlRewrite;
 use Symfony\Component\HttpFoundation\Response;
 
 class HandleRedirects

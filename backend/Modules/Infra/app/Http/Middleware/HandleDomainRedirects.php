@@ -22,6 +22,7 @@ class HandleDomainRedirects
 
         if ($redirect) {
             $targetUrl = $this->buildTargetUrl($request, $redirect);
+
             return redirect()->to($targetUrl, $redirect->status_code);
         }
 
@@ -38,7 +39,7 @@ class HandleDomainRedirects
         $path = $redirect->keep_path ? $request->getPathInfo() : ($redirect->target_path ?? '/');
         $query = $request->getQueryString();
 
-        $url = "{$scheme}://{$domain}" . ($path === '/' ? '' : $path);
+        $url = "{$scheme}://{$domain}".($path === '/' ? '' : $path);
 
         if ($query) {
             $url .= "?{$query}";

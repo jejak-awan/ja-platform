@@ -3,18 +3,21 @@
 namespace Modules\School\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\System\Models\User;
-use Modules\School\Models\HR\Staff;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Modules\School\Models\HR\Staff;
 use Modules\System\Models\Role;
+use Modules\System\Models\User;
 
 class StaffSampleSeeder extends Seeder
 {
     public function run(): void
     {
-        $school = \Illuminate\Support\Facades\DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
-        $unit = $school ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
-        if (!$school || !$unit) { return; }
+        $school = DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        $unit = $school ? DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
+        if (! $school || ! $unit) {
+            return;
+        }
         $schoolId = $school->id;
         $unitId = $unit->id;
 
@@ -77,7 +80,7 @@ class StaffSampleSeeder extends Seeder
             );
 
             // Assign 'guru' role if not already assigned
-            if (!$user->hasRole('guru')) {
+            if (! $user->hasRole('guru')) {
                 $user->assignRole('guru');
             }
 

@@ -2,15 +2,15 @@
 
 namespace Modules\School\Models\Lms\TopicContent;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Modules\School\Models\Lms\Topic;
-use Modules\School\Models\Lms\QuizQuestion;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Collection;
 use Modules\School\Models\Lms\QuizAttempt;
+use Modules\School\Models\Lms\QuizQuestion;
+use Modules\School\Models\Lms\Topic;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -18,17 +18,19 @@ use Modules\School\Models\Lms\QuizAttempt;
  * @property int|null $max_attempts
  * @property int|null $max_time
  * @property int|null $pass_score
- * @property-read \Illuminate\Support\Collection<int, QuizQuestion> $questions
- * @property-read \Illuminate\Support\Collection<int, QuizAttempt> $attempts
+ * @property-read Collection<int, QuizQuestion> $questions
+ * @property-read Collection<int, QuizAttempt> $attempts
  */
 class Quiz extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
+
     protected $table = 'sch_lms_topic_quizzes';
 
     protected $fillable = [

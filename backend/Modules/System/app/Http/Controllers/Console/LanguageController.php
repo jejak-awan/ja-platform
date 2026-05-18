@@ -2,25 +2,28 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Validation\ValidationException;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Language;
 use Modules\System\Services\LanguagePackService;
+use Symfony\Component\HttpFoundation\Response;
 
-class LanguageController extends \Modules\System\Http\Controllers\BaseApiController
+class LanguageController extends BaseApiController
 {
-    public function __construct(protected LanguagePackService $languagePackService)
-    {
-    }
+    public function __construct(protected LanguagePackService $languagePackService) {}
 
     /**
      * Get all active languages
      */
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(): JsonResponse
     {
         $languages = Language::getActive();
 
         // Add UI translation stats to each language
-        $languages = $languages->map(function ($lang): \Modules\System\Models\Language {
+        $languages = $languages->map(function ($lang): Language {
             $stats = $this->languagePackService->getLocaleStats($lang->code);
             $lang->has_ui_translations = $stats['exists'];
             $lang->translation_keys = $stats['total_keys'] ?? 0;
@@ -34,7 +37,7 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get a single language
      */
-    public function show(Language $language): \Illuminate\Http\JsonResponse
+    public function show(Language $language): JsonResponse
     {
         $stats = $this->languagePackService->getLocaleStats($language->code);
         $language->has_ui_translations = $stats['exists'];
@@ -46,7 +49,7 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Create a new language
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         try {
             $validated = $request->validate([
@@ -60,7 +63,7 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
                 'create_from_template' => 'boolean',
                 'template_locale' => 'string|max:10',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
@@ -98,7 +101,7 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Update a language
      */
-    public function update(Request $request, Language $language): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Language $language): JsonResponse
     {
         try {
             $validated = $request->validate([
@@ -110,7 +113,7 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
                 'is_active' => 'boolean',
                 'sort_order' => 'integer',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
@@ -127,7 +130,7 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Delete a language
      */
-    public function destroy(Language $language): \Illuminate\Http\JsonResponse
+    public function destroy(Language $language): JsonResponse
     {
         if ($language->is_default) {
             return $this->validationError(['language' => ['Cannot delete default language']], 'Cannot delete default language');
@@ -141,7 +144,7 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Set a language as default
      */
-    public function setDefault(Language $language): \Illuminate\Http\JsonResponse
+    public function setDefault(Language $language): JsonResponse
     {
         Language::where('is_default', true)->update(['is_default' => false]);
         $language->update(['is_default' => true]);
@@ -152,7 +155,7 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Export a language pack as ZIP
      */
-    public function exportPack(Language $language): \Symfony\Component\HttpFoundation\Response
+    public function exportPack(Language $language): Response
     {
         $zipPathRaw = $this->languagePackService->exportLanguagePack($language->code);
         $zipPath = is_string($zipPathRaw) ? $zipPathRaw : null;
@@ -169,19 +172,19 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Import a language pack from ZIP
      */
-    public function importPack(Request $request): \Illuminate\Http\JsonResponse
+    public function importPack(Request $request): JsonResponse
     {
         try {
             $request->validate([
                 'file' => 'required|file|mimes:zip|max:10240', // Max 10MB
                 'target_locale' => 'nullable|string|max:10',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
         $file = $request->file('file');
-        if (! ($file instanceof \Illuminate\Http\UploadedFile)) {
+        if (! ($file instanceof UploadedFile)) {
             return $this->error('Invalid file upload', 400);
         }
 
@@ -225,7 +228,7 @@ class LanguageController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get UI translation stats for all locales
      */
-    public function uiStats(): \Illuminate\Http\JsonResponse
+    public function uiStats(): JsonResponse
     {
         $locales = $this->languagePackService->getAvailableLocales();
         $stats = [];

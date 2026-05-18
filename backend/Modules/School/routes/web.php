@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,8 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/school', function (): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View {
+Route::get('/school', function (): Factory|View {
     /** @var view-string $view */
     $view = 'school::index';
+
     return view($view);
 });

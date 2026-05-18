@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\System\Traits;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\System\Models\ActivityLog;
 
 /**
@@ -15,7 +16,7 @@ trait CoreLogsActivity
 {
     public static function bootCoreLogsActivity(): void
     {
-        static::created(function (?\Illuminate\Database\Eloquent\Model $model): void {
+        static::created(function (?Model $model): void {
             ActivityLog::log(
                 'created',
                 $model,
@@ -23,7 +24,7 @@ trait CoreLogsActivity
             );
         });
 
-        static::updated(function (?\Illuminate\Database\Eloquent\Model $model): void {
+        static::updated(function (?Model $model): void {
             $changes = $model->getChanges();
             unset($changes['updated_at'], $changes['remember_token']);
 
@@ -43,7 +44,7 @@ trait CoreLogsActivity
             );
         });
 
-        static::deleted(function (?\Illuminate\Database\Eloquent\Model $model): void {
+        static::deleted(function (?Model $model): void {
             ActivityLog::log(
                 'deleted',
                 $model,

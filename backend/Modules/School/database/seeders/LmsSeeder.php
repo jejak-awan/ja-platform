@@ -3,13 +3,14 @@
 namespace Modules\School\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Modules\School\Models\Institution\School;
 use Modules\School\Models\Lms\Course;
-use Modules\School\Models\Lms\Section;
 use Modules\School\Models\Lms\Lesson;
+use Modules\School\Models\Lms\Section;
 use Modules\School\Models\Lms\Topic;
 use Modules\School\Models\Lms\TopicContent\RichText;
 use Modules\School\Models\Lms\TopicContent\Video;
-use Modules\School\Models\Institution\School;
 use Modules\System\Models\User;
 
 class LmsSeeder extends Seeder
@@ -20,10 +21,10 @@ class LmsSeeder extends Seeder
     public function run(): void
     {
         $school = School::first();
-        $unit = $school ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
-        $author = User::whereHas('roles', fn($q) => $q->where('name', 'super_admin'))->first() ?? User::first();
+        $unit = $school ? DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
+        $author = User::whereHas('roles', fn ($q) => $q->where('name', 'super_admin'))->first() ?? User::first();
 
-        if (!$school || !$unit || !$author) {
+        if (! $school || ! $unit || ! $author) {
             return;
         }
 
@@ -72,10 +73,10 @@ class LmsSeeder extends Seeder
         );
 
         // 4. Create Topics with Polymorphic Content
-        
+
         // Topic 1: RichText
         $text = RichText::create([
-            'value' => '<h1>Selamat Datang!</h1><p>HTML adalah bahasa standar untuk membuat halaman web.</p>'
+            'value' => '<h1>Selamat Datang!</h1><p>HTML adalah bahasa standar untuk membuat halaman web.</p>',
         ]);
         Topic::updateOrCreate(
             ['workspace_id' => $workspaceId, 'lesson_id' => $lesson1->id, 'title' => 'Apa itu HTML?'],

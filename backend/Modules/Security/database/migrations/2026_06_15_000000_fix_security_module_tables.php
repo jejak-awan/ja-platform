@@ -11,29 +11,29 @@ return new class extends Migration
         // Fix sec_csp_reports
         if (Schema::hasTable('sec_csp_reports')) {
             Schema::table('sec_csp_reports', function (Blueprint $table): void {
-                if (!Schema::hasColumn('sec_csp_reports', 'blocked_uri')) {
+                if (! Schema::hasColumn('sec_csp_reports', 'blocked_uri')) {
                     $table->string('blocked_uri')->nullable();
                 }
-                if (!Schema::hasColumn('sec_csp_reports', 'source_file')) {
+                if (! Schema::hasColumn('sec_csp_reports', 'source_file')) {
                     $table->string('source_file')->nullable();
                 }
-                if (!Schema::hasColumn('sec_csp_reports', 'line_number')) {
+                if (! Schema::hasColumn('sec_csp_reports', 'line_number')) {
                     $table->integer('line_number')->nullable();
                 }
-                if (!Schema::hasColumn('sec_csp_reports', 'user_agent')) {
+                if (! Schema::hasColumn('sec_csp_reports', 'user_agent')) {
                     $table->text('user_agent')->nullable();
                 }
-                if (!Schema::hasColumn('sec_csp_reports', 'ip_address')) {
+                if (! Schema::hasColumn('sec_csp_reports', 'ip_address')) {
                     $table->string('ip_address', 45)->nullable();
                 }
-                if (!Schema::hasColumn('sec_csp_reports', 'status')) {
+                if (! Schema::hasColumn('sec_csp_reports', 'status')) {
                     $table->string('status')->default('new')->index();
                 }
             });
         }
 
         // Add sec_file_integrity_baselines
-        if (!Schema::hasTable('sec_file_integrity_baselines')) {
+        if (! Schema::hasTable('sec_file_integrity_baselines')) {
             Schema::create('sec_file_integrity_baselines', function (Blueprint $table): void {
                 $table->uuid('id')->primary();
                 $table->string('file_path')->unique();

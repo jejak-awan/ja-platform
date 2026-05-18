@@ -2,8 +2,11 @@
 
 namespace Modules\System\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Modules\System\Events\PluginActivated;
+use Modules\System\Events\PluginDeactivated;
 
 /**
  * @property string $id
@@ -24,10 +27,10 @@ class Plugin extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_plugins';
-
 
     protected $fillable = [
         'name',
@@ -52,20 +55,20 @@ class Plugin extends Model
     {
         $this->update(['is_active' => true]);
         // Trigger plugin activation hook
-        event(new \Modules\System\Events\PluginActivated($this));
+        event(new PluginActivated($this));
     }
 
     public function deactivate(): void
     {
         $this->update(['is_active' => false]);
         // Trigger plugin deactivation hook
-        event(new \Modules\System\Events\PluginDeactivated($this));
+        event(new PluginDeactivated($this));
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, self>
+     * @return Collection<int, self>
      */
-    public static function getActivePlugins(): \Illuminate\Database\Eloquent\Collection
+    public static function getActivePlugins(): Collection
     {
         return self::where('is_active', true)
             ->orderBy('priority')

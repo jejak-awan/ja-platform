@@ -2,14 +2,19 @@
 
 namespace Modules\Analytics\Models;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Modules\System\Models\User;
+use Modules\System\Database\Factories\AnalyticsSessionFactory;
 use Modules\System\Helpers\IpHelper;
+use Modules\System\Models\User;
+use Modules\System\Services\GeoIpService;
 
 /**
  * @property int $id
@@ -24,25 +29,25 @@ use Modules\System\Helpers\IpHelper;
  * @property string|null $city
  * @property int $page_views
  * @property int $duration
- * @property \Illuminate\Support\Carbon|null $started_at
- * @property \Illuminate\Support\Carbon|null $ended_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\System\Models\User|null $user
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Analytics\Models\AnalyticsVisit> $visits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Analytics\Models\AnalyticsEvent> $events
+ * @property Carbon|null $started_at
+ * @property Carbon|null $ended_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User|null $user
+ * @property-read Collection<int, AnalyticsVisit> $visits
+ * @property-read Collection<int, AnalyticsEvent> $events
  */
 class AnalyticsSession extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'srv_analytics_sessions';
 
-
-    /** @use HasFactory<\Modules\System\Database\Factories\AnalyticsSessionFactory> */
+    /** @use HasFactory<AnalyticsSessionFactory> */
     use HasFactory;
 
     /**
@@ -52,7 +57,6 @@ class AnalyticsSession extends Model
     {
         return \Modules\Analytics\Database\Factories\AnalyticsSessionFactory::new();
     }
-
 
     protected $fillable = [
         'workspace_id',
@@ -83,7 +87,7 @@ class AnalyticsSession extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(\Modules\System\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -95,14 +99,14 @@ class AnalyticsSession extends Model
     }
 
     /**
-     * @return HasMany<\Modules\Analytics\Models\AnalyticsEvent, $this>
+     * @return HasMany<AnalyticsEvent, $this>
      */
     public function events(): HasMany
     {
-        return $this->hasMany(\Modules\Analytics\Models\AnalyticsEvent::class, 'session_id', 'session_id');
+        return $this->hasMany(AnalyticsEvent::class, 'session_id', 'session_id');
     }
 
-    public static function start(\Illuminate\Http\Request $request, ?string $sessionId = null): self
+    public static function start(Request $request, ?string $sessionId = null): self
     {
         $sessionId ??= session()->getId();
 
@@ -202,7 +206,7 @@ class AnalyticsSession extends Model
             return ['country' => null, 'city' => null];
         }
 
-        $geoService = app(\Modules\System\Services\GeoIpService::class);
+        $geoService = app(GeoIpService::class);
 
         return $geoService->getLocation($ipAddress);
     }

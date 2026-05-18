@@ -8,11 +8,12 @@ namespace Modules\Security\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Modules\Security\Services\SecurityService;
 use Modules\System\Helpers\IpHelper;
 use Modules\System\Services\AnomalyDetectionService;
 use Modules\System\Services\SecurityMaintenanceService;
-use Modules\Security\Services\SecurityService;
 use Modules\System\Traits\MaintenanceBypass;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,6 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 class WafMiddleware
 {
     use MaintenanceBypass;
+
     /** @var array<string> Routes that allow HTML content (CMS editor) */
     private const WHITELISTED_ROUTES = [
         // New Modular Paths
@@ -106,7 +108,7 @@ class WafMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(Request): Response  $next
+     * @param  Closure(Request): Response  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -353,11 +355,11 @@ class WafMiddleware
     private function escalateIfRepeatOffender(string $ip, string $violationType): void
     {
         $cacheKey = "waf_violations:{$ip}";
-        $raw = \Illuminate\Support\Facades\Cache::get($cacheKey, 0);
+        $raw = Cache::get($cacheKey, 0);
         $count = is_numeric($raw) ? (int) $raw : 0;
         $count++;
 
-        \Illuminate\Support\Facades\Cache::put($cacheKey, $count, now()->addHour());
+        Cache::put($cacheKey, $count, now()->addHour());
 
         // 5 WAF violations in 1 hour → permanent block
         if ($count >= 5) {
@@ -378,7 +380,7 @@ class WafMiddleware
                 'last_type' => $violationType,
             ]);
 
-            \Illuminate\Support\Facades\Cache::forget($cacheKey);
+            Cache::forget($cacheKey);
         }
     }
 }

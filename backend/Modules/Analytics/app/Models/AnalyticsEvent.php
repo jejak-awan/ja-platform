@@ -2,13 +2,15 @@
 
 namespace Modules\Analytics\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Modules\System\Database\Factories\AnalyticsEventFactory;
+use Modules\System\Helpers\IpHelper;
 use Modules\System\Models\User;
-
 
 /**
  * @property string $id
@@ -21,11 +23,12 @@ use Modules\System\Models\User;
  * @property string|null $url
  * @property string|null $content_id
  * @property string|null $ip_address
- * @property \Illuminate\Support\Carbon|null $occurred_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\System\Models\User|null $user
- * @property-read \Illuminate\Database\Eloquent\Model|null $content
+ * @property Carbon|null $occurred_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User|null $user
+ * @property-read Model|null $content
+ *
  * @method \Illuminate\Database\Eloquent\Relations\BelongsTo<\Illuminate\Database\Eloquent\Model, $this> content()
  */
 class AnalyticsEvent extends Model
@@ -33,12 +36,12 @@ class AnalyticsEvent extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'srv_analytics_events';
 
-
-    /** @use HasFactory<\Modules\System\Database\Factories\AnalyticsEventFactory> */
+    /** @use HasFactory<AnalyticsEventFactory> */
     use HasFactory;
 
     /**
@@ -48,7 +51,6 @@ class AnalyticsEvent extends Model
     {
         return \Modules\Analytics\Database\Factories\AnalyticsEventFactory::new();
     }
-
 
     protected $fillable = [
         'workspace_id',
@@ -77,15 +79,13 @@ class AnalyticsEvent extends Model
         return $this->belongsTo(User::class);
     }
 
-
-
     /**
      * @param  array<string, mixed>  $data
      * @param  int|string|null  $contentId
      */
     public static function track(string $eventType, string $eventName, array $data = [], $contentId = null): self
     {
-        $ip = \Modules\System\Helpers\IpHelper::getClientIp(request());
+        $ip = IpHelper::getClientIp(request());
 
         return self::create([
             'session_id' => session()->getId(),

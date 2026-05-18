@@ -3,9 +3,11 @@
 namespace Modules\System\Http\Controllers\Console;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Services\CaptchaService;
 
-class CaptchaController extends \Modules\System\Http\Controllers\BaseApiController
+class CaptchaController extends BaseApiController
 {
     /**
      * Generate a new captcha challenge.
@@ -21,7 +23,7 @@ class CaptchaController extends \Modules\System\Http\Controllers\BaseApiControll
     /**
      * Verify the captcha token and answer.
      */
-    public function verify(\Illuminate\Http\Request $request): JsonResponse
+    public function verify(Request $request): JsonResponse
     {
         $request->validate([
             'token' => 'required|string',

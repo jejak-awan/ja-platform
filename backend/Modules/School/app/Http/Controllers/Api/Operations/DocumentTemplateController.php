@@ -2,10 +2,11 @@
 
 namespace Modules\School\Http\Controllers\Api\Operations;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
+use Modules\School\Models\Institution\School;
 use Modules\School\Models\Operations\DocumentTemplate;
-use Illuminate\Http\JsonResponse;
 
 class DocumentTemplateController extends BaseController
 {
@@ -18,7 +19,7 @@ class DocumentTemplateController extends BaseController
         $templates = DocumentTemplate::where('school_id', $schoolId)
             ->latest()
             ->get();
-            
+
         return $this->sendResponse($templates, 'Templates retrieved successfully.');
     }
 
@@ -40,7 +41,7 @@ class DocumentTemplateController extends BaseController
         $validated['school_id'] = $this->resolveSchoolId($request);
 
         // If is_default is true, unset other defaults of same type
-        if (!empty($validated['is_default'])) {
+        if (! empty($validated['is_default'])) {
             DocumentTemplate::where('school_id', $validated['school_id'])
                 ->where('type', $validated['type'])
                 ->update(['is_default' => false]);
@@ -57,7 +58,7 @@ class DocumentTemplateController extends BaseController
     public function update(Request $request, string $id): JsonResponse
     {
         $template = DocumentTemplate::findOrFail($id);
-        
+
         $validated = $request->validate([
             'name' => 'required|string',
             'type' => 'required|string|in:certificate,skl,letter',
@@ -68,7 +69,7 @@ class DocumentTemplateController extends BaseController
             'is_default' => 'boolean',
         ]);
 
-        if (!empty($validated['is_default'])) {
+        if (! empty($validated['is_default'])) {
             DocumentTemplate::where('school_id', $template->school_id)
                 ->where('type', $validated['type'])
                 ->where('id', '!=', $id)
@@ -87,7 +88,7 @@ class DocumentTemplateController extends BaseController
     {
         $template = DocumentTemplate::findOrFail($id);
         $template->delete();
-        
+
         return $this->sendResponse(null, 'Template deleted successfully.');
     }
 
@@ -102,9 +103,9 @@ class DocumentTemplateController extends BaseController
             return (string) $schoolId;
         }
 
-        /** @var \Modules\School\Models\Institution\School|null $defaultSchool */
-        $defaultSchool = \Modules\School\Models\Institution\School::first();
-        if (!$defaultSchool) {
+        /** @var School|null $defaultSchool */
+        $defaultSchool = School::first();
+        if (! $defaultSchool) {
             return '1';
         }
 

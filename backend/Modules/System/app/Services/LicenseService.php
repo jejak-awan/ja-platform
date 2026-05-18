@@ -16,6 +16,7 @@ class LicenseService
     {
         // Check both keys for backward compatibility
         $tier = Setting::get('license_type') ?: Setting::get('app_license_tier', 'basic');
+
         return is_scalar($tier) ? (string) $tier : 'basic';
     }
 
@@ -25,6 +26,7 @@ class LicenseService
     public function hasWhiteLabel(): bool
     {
         $tier = $this->getLicenseTier();
+
         return in_array($tier, ['pro_plus', 'white_label']);
     }
 
@@ -39,7 +41,7 @@ class LicenseService
             'app_favicon',
             'app_identity',
             'powered_by_link',
-            'admin_footer_text'
+            'admin_footer_text',
         ];
 
         return in_array($key, $protectedKeys);

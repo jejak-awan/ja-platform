@@ -26,7 +26,7 @@ class ThemeCacheServiceTest extends TestCase
     {
         $theme = Theme::factory()->create(['is_active' => true, 'type' => 'frontend']);
 
-        $result = $this->service->getActiveTheme('frontend', fn() => $theme);
+        $result = $this->service->getActiveTheme('frontend', fn () => $theme);
 
         $this->assertInstanceOf(Theme::class, $result);
         $this->assertEquals($theme->id, $result->id);

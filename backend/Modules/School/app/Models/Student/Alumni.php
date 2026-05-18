@@ -2,11 +2,13 @@
 
 namespace Modules\School\Models\Student;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -14,8 +16,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $graduation_year
  * @property string|null $current_activity
  * @property string|null $institution_name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Student $student
  */
 class Alumni extends Model
@@ -23,9 +25,10 @@ class Alumni extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $table = 'sch_std_alumni';
@@ -38,9 +41,9 @@ class Alumni extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, $this>
+     * @return BelongsTo<Student, $this>
      */
-    public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
     }

@@ -4,13 +4,14 @@ namespace Modules\System\Http\Controllers\Console;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Setting;
 
 /**
  * Controller for public settings (no auth required)
  * Only exposes non-sensitive settings that the frontend needs before login
  */
-class PublicSettingsController extends \Modules\System\Http\Controllers\BaseApiController
+class PublicSettingsController extends BaseApiController
 {
     /**
      * Get public settings for the frontend
@@ -28,7 +29,7 @@ class PublicSettingsController extends \Modules\System\Http\Controllers\BaseApiC
             'site_logo' => Setting::get('site_logo', '/logo.png'),
             'site_favicon' => Setting::get('site_favicon', '/favicon.ico'),
             'admin_dashboard_slug' => Setting::get('admin_dashboard_slug', 'dash'),
-            
+
             // App Branding (Core)
             'app_name' => Setting::get('app_name', 'Janari App'),
             'app_logo' => Setting::get('app_logo', ''),

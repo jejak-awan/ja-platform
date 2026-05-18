@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+use Modules\Layout\Helpers\ThemeHelper;
+use Modules\Layout\Models\Menu;
+use Modules\Layout\Models\Theme;
 
 /**
  * Global Helper Functions for JA-Platform Theme System
@@ -13,9 +16,9 @@ if (! function_exists('theme')) {
      *
      * @param  string  $type  Theme type (frontend, admin, email)
      */
-    function theme(string $type = 'frontend'): ?\Modules\Layout\Models\Theme
+    function theme(string $type = 'frontend'): ?Theme
     {
-        return \Modules\Layout\Helpers\ThemeHelper::activeTheme($type);
+        return ThemeHelper::activeTheme($type);
     }
 }
 
@@ -29,7 +32,7 @@ if (! function_exists('theme_setting')) {
      */
     function theme_setting(string $key, $default = null, string $type = 'frontend'): mixed
     {
-        return \Modules\Layout\Helpers\ThemeHelper::setting($key, $default, $type);
+        return ThemeHelper::setting($key, $default, $type);
     }
 }
 
@@ -42,7 +45,7 @@ if (! function_exists('theme_asset')) {
      */
     function theme_asset(string $path, string $type = 'frontend'): ?string
     {
-        return \Modules\Layout\Helpers\ThemeHelper::asset($path, $type);
+        return ThemeHelper::asset($path, $type);
     }
 }
 
@@ -55,7 +58,7 @@ if (! function_exists('theme_supports')) {
      */
     function theme_supports(string $feature, string $type = 'frontend'): bool
     {
-        return \Modules\Layout\Helpers\ThemeHelper::supports($feature, $type);
+        return ThemeHelper::supports($feature, $type);
     }
 }
 
@@ -67,7 +70,7 @@ if (! function_exists('theme_custom_css')) {
      */
     function theme_custom_css(string $type = 'frontend'): string
     {
-        return \Modules\Layout\Helpers\ThemeHelper::customCss($type);
+        return ThemeHelper::customCss($type);
     }
 }
 
@@ -77,8 +80,8 @@ if (! function_exists('theme_menu')) {
      *
      * @param  string  $slug  Menu slug
      */
-    function theme_menu(string $slug): ?\Modules\Layout\Models\Menu
+    function theme_menu(string $slug): ?Menu
     {
-        return \Modules\Layout\Helpers\ThemeHelper::getMenu($slug);
+        return ThemeHelper::getMenu($slug);
     }
 }

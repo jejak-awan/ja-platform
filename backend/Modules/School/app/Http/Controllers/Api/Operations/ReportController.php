@@ -2,16 +2,14 @@
 
 namespace Modules\School\Http\Controllers\Api\Operations;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
 use Modules\School\Models\Student\Student;
-
-use Modules\School\Models\Institution\School;
 use Mpdf\Mpdf;
 
 class ReportController extends BaseController
 {
-    public function studentProfile(string $id): \Illuminate\Http\Response
+    public function studentProfile(string $id): Response
     {
         $this->authorize('view', Student::class);
         /** @var Student $student */
@@ -30,15 +28,13 @@ class ReportController extends BaseController
         ]);
 
         $mpdf->WriteHTML($html);
-        
-        return response((string)$mpdf->Output('student_profile.pdf', 'S'), 200)
+
+        return response((string) $mpdf->Output('student_profile.pdf', 'S'), 200)
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'inline; filename="student_profile.pdf"');
     }
 
-
-
-    public function studentIdCard(string $id): \Illuminate\Http\Response
+    public function studentIdCard(string $id): Response
     {
         $this->authorize('view', Student::class);
         /** @var Student $student */
@@ -58,12 +54,12 @@ class ReportController extends BaseController
 
         $mpdf->WriteHTML($html);
 
-        return response((string)$mpdf->Output('id_card.pdf', 'S'), 200)
+        return response((string) $mpdf->Output('id_card.pdf', 'S'), 200)
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'inline; filename="id_card.pdf"');
     }
 
-    public function graduationCertificate(string $id): \Illuminate\Http\Response
+    public function graduationCertificate(string $id): Response
     {
         $this->authorize('view', Student::class);
         /** @var Student $student */
@@ -83,7 +79,7 @@ class ReportController extends BaseController
 
         $mpdf->WriteHTML($html);
 
-        return response((string)$mpdf->Output('skl.pdf', 'S'), 200)
+        return response((string) $mpdf->Output('skl.pdf', 'S'), 200)
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'inline; filename="skl.pdf"');
     }

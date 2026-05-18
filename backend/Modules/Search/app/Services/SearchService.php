@@ -2,8 +2,16 @@
 
 namespace Modules\Search\Services;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Context;
+use Modules\Cms\Models\Content;
+use Modules\Library\Models\Category;
+use Modules\Library\Models\Tag;
 use Modules\Search\Models\SearchIndex;
 use Modules\Search\Models\SearchQuery;
+use Modules\System\Helpers\IpHelper;
 
 class SearchService
 {
@@ -13,7 +21,7 @@ class SearchService
      * @param  string  $query
      * @param  array<string, mixed>  $filters
      * @param  int  $limit
-     * @return array{results: \Illuminate\Support\Collection<int, array<string, mixed>>, total: int, query: string, suggestions: array<int, array{text: string, type: string, url?: string|null}>, is_loose?: bool}
+     * @return array{results: Collection<int, array<string, mixed>>, total: int, query: string, suggestions: array<int, array{text: string, type: string, url?: string|null}>, is_loose?: bool}
      */
     public function search($query, $filters = [], $limit = 20): array
     {
@@ -56,33 +64,33 @@ class SearchService
                 $allIndexQuery = SearchIndex::query();
                 $this->applyFilters($allIndexQuery, $filters);
                 $allIndexes = $allIndexQuery->get();
-                
+
                 $scored = [];
                 $queryLower = mb_strtolower($query, 'UTF-8');
-                
+
                 foreach ($allIndexes as $index) {
                     $titleLower = mb_strtolower($index->title, 'UTF-8');
                     $contentLower = mb_strtolower($index->content ?? '', 'UTF-8');
-                    
+
                     // Title distance
                     $distTitle = levenshtein($titleLower, $queryLower);
                     $maxLenTitle = max(strlen($titleLower), strlen($queryLower));
                     $simTitle = $maxLenTitle > 0 ? (1 - $distTitle / $maxLenTitle) : 0;
-                    
+
                     // Boost score if title or content has substring match
                     if (str_contains($titleLower, $queryLower) || str_contains($contentLower, $queryLower)) {
                         $simTitle = max($simTitle, 0.6);
                     }
-                    
+
                     if ($simTitle >= 0.4) {
                         $scored[] = [
                             'index' => $index,
-                            'score' => $simTitle
+                            'score' => $simTitle,
                         ];
                     }
                 }
-                
-                usort($scored, fn($a, $b) => $b['score'] <=> $a['score']);
+
+                usort($scored, fn ($a, $b) => $b['score'] <=> $a['score']);
                 $results = collect(array_column(array_slice($scored, 0, $limit), 'index'));
             }
 
@@ -120,7 +128,7 @@ class SearchService
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<SearchIndex>  $queryBuilder
+     * @param  Builder<SearchIndex>  $queryBuilder
      * @param  string  $query
      */
     protected function applySearchLogic($queryBuilder, $query, bool $strict = true): void
@@ -160,13 +168,13 @@ class SearchService
             // Fallback for SQLite/PostgreSQL (use ILIKE for PostgreSQL case-insensitivity)
             $driver = config('database.default');
             $operator = $driver === 'pgsql' ? 'ILIKE' : 'like';
-            
+
             // For PostgreSQL, if it's not strict (loose search), apply fuzzy wildcard
-            if ($driver === 'pgsql' && !$strict) {
+            if ($driver === 'pgsql' && ! $strict) {
                 $normalized = preg_replace('/[^a-zA-Z0-9]/', '', $query);
                 $chars = str_split(is_string($normalized) ? $normalized : '');
-                $fuzzyQuery = '%' . implode('%', $chars) . '%';
-                
+                $fuzzyQuery = '%'.implode('%', $chars).'%';
+
                 $queryBuilder->where(function ($q) use ($fuzzyQuery, $operator, $isUuid, $uuidQuery): void {
                     $q->where('title', $operator, $fuzzyQuery)
                         ->orWhere('content', $operator, $fuzzyQuery);
@@ -174,6 +182,7 @@ class SearchService
                         $q->orWhere('searchable_id', $uuidQuery);
                     }
                 });
+
                 return;
             }
 
@@ -184,7 +193,7 @@ class SearchService
                         // Gather synonyms and stemmed base for each search term
                         $stemsAndSynonyms = $this->getSynonyms($term);
                         $stemmed = $this->stemIndonesian($term);
-                        if (!in_array($stemmed, $stemsAndSynonyms, true)) {
+                        if (! in_array($stemmed, $stemsAndSynonyms, true)) {
                             $stemsAndSynonyms[] = $stemmed;
                         }
 
@@ -211,7 +220,7 @@ class SearchService
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<SearchIndex>  $queryBuilder
+     * @param  Builder<SearchIndex>  $queryBuilder
      * @param  array<string, mixed>  $filters
      */
     protected function applyFilters($queryBuilder, array $filters): void
@@ -237,7 +246,7 @@ class SearchService
      *
      * @param  string  $query
      * @param  string  $type
-     * @return array{results: \Illuminate\Support\Collection<int, array<string, mixed>>, total: int, query: string, suggestions: array<int, array{text: string, type: string}>, is_loose?: bool}
+     * @return array{results: Collection<int, array<string, mixed>>, total: int, query: string, suggestions: array<int, array{text: string, type: string}>, is_loose?: bool}
      */
     public function searchByType($query, $type, int $limit = 20): array
     {
@@ -261,9 +270,9 @@ class SearchService
 
         // Fetch user's personal recent search history matching the prefix
         $historySuggestions = [];
-        $userId = \Illuminate\Support\Facades\Auth::id();
-        $ip = \Modules\System\Helpers\IpHelper::getClientIp(request());
-        
+        $userId = Auth::id();
+        $ip = IpHelper::getClientIp(request());
+
         $historyQuery = SearchQuery::query();
         if ($userId) {
             $historyQuery->where('user_id', $userId);
@@ -272,7 +281,7 @@ class SearchService
         }
 
         $driver = config('database.default');
-        $historyQueryTerm = $driver === 'pgsql' ? "%{$queryClean}%" : "%" . mb_strtolower($queryClean, 'UTF-8') . "%";
+        $historyQueryTerm = $driver === 'pgsql' ? "%{$queryClean}%" : '%'.mb_strtolower($queryClean, 'UTF-8').'%';
         if ($driver === 'pgsql') {
             $historyQuery->where('query', 'ILIKE', $historyQueryTerm);
         } else {
@@ -289,7 +298,7 @@ class SearchService
             $historySuggestions[] = [
                 'text' => $queryText,
                 'type' => 'history',
-                'url' => '/ja-dash/search?q=' . urlencode($queryText),
+                'url' => '/ja-dash/search?q='.urlencode($queryText),
             ];
         }
         $cleanQuery = preg_replace('/[^a-zA-Z0-9]/', '', $queryClean);
@@ -350,8 +359,8 @@ class SearchService
                 // PostgreSQL: Ultra-loose matching (e.g., "lorm" -> "%l%o%r%m%")
                 $normalized = preg_replace('/[^a-zA-Z0-9]/', '', $queryClean);
                 $chars = str_split(is_string($normalized) ? $normalized : '');
-                $fuzzyQuery = '%' . implode('%', $chars) . '%';
-                
+                $fuzzyQuery = '%'.implode('%', $chars).'%';
+
                 if (count($chars) >= 2) {
                     $suggestionQuery = SearchIndex::query();
                     $suggestionQuery->where(function ($q) use ($fuzzyQuery): void {
@@ -403,32 +412,32 @@ class SearchService
             $allTitles = $allTitlesQuery->select('title', 'type', 'url')
                 ->distinct()
                 ->get();
-            
+
             $scored = [];
             $queryLower = mb_strtolower($queryClean, 'UTF-8');
-            
+
             foreach ($allTitles as $item) {
                 $titleLower = mb_strtolower($item->title, 'UTF-8');
-                
+
                 // Levenshtein distance
                 $dist = levenshtein($titleLower, $queryLower);
                 $maxLen = max(strlen($titleLower), strlen($queryLower));
                 $similarity = $maxLen > 0 ? (1 - $dist / $maxLen) : 0;
-                
+
                 // Boost for substring match
                 if (str_contains($titleLower, $queryLower) || str_contains($queryLower, $titleLower)) {
                     $similarity = max($similarity, 0.7);
                 }
-                
+
                 if ($similarity >= 0.4) {
                     $scored[] = [
                         'item' => $item,
-                        'score' => $similarity
+                        'score' => $similarity,
                     ];
                 }
             }
-            
-            usort($scored, fn($a, $b) => $b['score'] <=> $a['score']);
+
+            usort($scored, fn ($a, $b) => $b['score'] <=> $a['score']);
             $suggestions = collect(array_column(array_slice($scored, 0, $limit), 'item'));
         }
 
@@ -448,7 +457,7 @@ class SearchService
         $seen = [];
         foreach ($merged as $item) {
             $key = mb_strtolower($item['text'], 'UTF-8');
-            if (!in_array($key, $seen, true)) {
+            if (! in_array($key, $seen, true)) {
                 $seen[] = $key;
                 $unique[] = $item;
             }
@@ -474,7 +483,7 @@ class SearchService
                 // Gather synonyms and stemmed base
                 $stemsAndSynonyms = $this->getSynonyms($term);
                 $stemmed = $this->stemIndonesian($term);
-                if (!in_array($stemmed, $stemsAndSynonyms, true)) {
+                if (! in_array($stemmed, $stemsAndSynonyms, true)) {
                     $stemsAndSynonyms[] = $stemmed;
                 }
 
@@ -484,7 +493,7 @@ class SearchService
                 }
 
                 $prefix = $strict ? '+' : '';
-                $prepared[] = "{$prefix}(" . implode(' ', $groupedTerms) . ")";
+                $prepared[] = "{$prefix}(".implode(' ', $groupedTerms).')';
             }
         }
 
@@ -496,11 +505,12 @@ class SearchService
      */
     public function sync($model): void
     {
-        if ($model instanceof \Modules\Cms\Models\Content) {
+        if ($model instanceof Content) {
             if ($model->status !== 'published') {
                 SearchIndex::where('searchable_type', $model::class)
                     ->where('searchable_id', $model->id)
                     ->delete();
+
                 return;
             }
 
@@ -513,11 +523,12 @@ class SearchService
                     : url('/blog/'.$model->slug),
                 'type' => $model->type,
             ]);
-        } elseif ($model instanceof \Modules\Library\Models\Category) {
-            if (!$model->is_active) {
+        } elseif ($model instanceof Category) {
+            if (! $model->is_active) {
                 SearchIndex::where('searchable_type', $model::class)
                     ->where('searchable_id', $model->id)
                     ->delete();
+
                 return;
             }
 
@@ -527,7 +538,7 @@ class SearchService
                 'url' => url('/category/'.$model->slug),
                 'type' => 'category',
             ]);
-        } elseif ($model instanceof \Modules\Library\Models\Tag) {
+        } elseif ($model instanceof Tag) {
             SearchIndex::index($model, [
                 'title' => $model->name,
                 'content' => $model->description ?? '',
@@ -539,21 +550,19 @@ class SearchService
 
     /**
      * Dynamically crawls and indexes all frontend navigation menu items as system pages
-     *
-     * @return int
      */
     public function indexSystemPages(): int
     {
-        $workspaceId = \Illuminate\Support\Facades\Context::get('workspace_id');
+        $workspaceId = Context::get('workspace_id');
         $modulesPath = base_path('../frontend/src/modules');
-        
-        if (!is_dir($modulesPath)) {
+
+        if (! is_dir($modulesPath)) {
             // Fallback to absolute path if base_path is not matching
             $modulesPath = '/opt/ja-platform/frontend/src/modules';
         }
 
         $files = glob("{$modulesPath}/*/navigation.ts");
-        if (!$files) {
+        if (! $files) {
             return 0;
         }
 
@@ -561,7 +570,7 @@ class SearchService
 
         foreach ($files as $file) {
             $content = file_get_contents($file);
-            if (!$content) {
+            if (! $content) {
                 continue;
             }
 
@@ -588,14 +597,14 @@ class SearchService
                 preg_match('/permission\s*:\s*[\'"]([^\'"]+)[\'"]/', $objStr, $permMatch);
                 preg_match('/name\s*:\s*[\'"]([^\'"]+)[\'"]/', $objStr, $nameMatch);
 
-                if (!empty($toMatch[1]) && !empty($labelMatch[1])) {
+                if (! empty($toMatch[1]) && ! empty($labelMatch[1])) {
                     $url = $toMatch[1];
                     $label = $labelMatch[1];
                     $permission = $permMatch[1] ?? null;
                     $name = $nameMatch[1] ?? $label;
 
                     // Normalize frontend /dash/... to backend admin /ja/dash/... prefix
-                    $adminUrl = str_starts_with($url, '/dash') ? '/ja' . $url : $url;
+                    $adminUrl = str_starts_with($url, '/dash') ? '/ja'.$url : $url;
 
                     // Generate a stable, deterministic UUID from the URL path to ensure PostgreSQL UUID compatibility
                     $hash = md5($url);
@@ -613,7 +622,7 @@ class SearchService
                         'System Page', 'Admin Settings', 'Menu', 'Navigation',
                         $label, $name, $permission,
                     ];
-                    
+
                     // Split the label into words
                     $labelWords = explode(' ', $label);
                     foreach ($labelWords as $word) {
@@ -680,19 +689,19 @@ class SearchService
     public function reindexAll(): array
     {
         // Reindex all content
-        $contents = \Modules\Cms\Models\Content::where('status', 'published')->get();
+        $contents = Content::where('status', 'published')->get();
         foreach ($contents as $content) {
             $this->sync($content);
         }
 
         // Reindex categories
-        $categories = \Modules\Library\Models\Category::where('is_active', true)->get();
+        $categories = Category::where('is_active', true)->get();
         foreach ($categories as $category) {
             $this->sync($category);
         }
 
         // Reindex tags
-        $tags = \Modules\Library\Models\Tag::all();
+        $tags = Tag::all();
         foreach ($tags as $tag) {
             $this->sync($tag);
         }
@@ -711,13 +720,12 @@ class SearchService
     /**
      * Get synonyms for a given search term
      *
-     * @param string $term
      * @return array<int, string>
      */
     protected function getSynonyms(string $term): array
     {
         $termLower = mb_strtolower($term, 'UTF-8');
-        
+
         $synonymGroups = [
             ['keamanan', 'security', 'firewall', 'shield', 'botshield', 'bot-shield', 'proteksi', 'integrity'],
             ['artikel', 'konten', 'post', 'tulisan', 'berita', 'cms', 'studio', 'naskah'],
@@ -726,7 +734,7 @@ class SearchService
             ['log', 'journal', 'catatan', 'audit', 'riwayat', 'logs', 'journals', 'aktivitas'],
             ['backup', 'restore', 'cadangan', 'pulihkan', 'arsip', 'recovery'],
             ['cache', 'warming', 'bersihkan', 'clear', 'speed', 'performa', 'optimasi'],
-            ['analisis', 'analytics', 'statistik', 'laporan', 'traffic', 'pengunjung', 'visitor']
+            ['analisis', 'analytics', 'statistik', 'laporan', 'traffic', 'pengunjung', 'visitor'],
         ];
 
         $results = [$term];
@@ -743,14 +751,11 @@ class SearchService
 
     /**
      * Stem common Indonesian suffixes from a search term
-     *
-     * @param string $term
-     * @return string
      */
     protected function stemIndonesian(string $term): string
     {
         $termLower = mb_strtolower($term, 'UTF-8');
-        
+
         // Only stem words with a length greater than 4 characters to avoid over-stemming
         if (mb_strlen($termLower, 'UTF-8') <= 4) {
             return $term;

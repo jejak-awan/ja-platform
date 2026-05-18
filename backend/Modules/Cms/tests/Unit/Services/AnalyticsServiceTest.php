@@ -4,9 +4,10 @@ namespace Modules\Cms\Tests\Unit\Services;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Session;
-use Modules\Cms\Models\Content;
-use Modules\Analytics\Services\AnalyticsService;
 use Modules\Analytics\Models\AnalyticsEvent;
+use Modules\Analytics\Services\AnalyticsService;
+use Modules\Cms\Models\Content;
+use Modules\System\Services\GeoIpService;
 use Tests\TestCase;
 
 class AnalyticsServiceTest extends TestCase
@@ -20,9 +21,9 @@ class AnalyticsServiceTest extends TestCase
         Session::start();
 
         // Mock GeoIpService
-        $geoMock = $this->createMock(\Modules\System\Services\GeoIpService::class);
+        $geoMock = $this->createMock(GeoIpService::class);
         $geoMock->method('getLocation')->willReturn(['country' => 'US', 'city' => 'Sample City']);
-        $this->app->instance(\Modules\System\Services\GeoIpService::class, $geoMock);
+        $this->app->instance(GeoIpService::class, $geoMock);
     }
 
     public function test_track_event(): void

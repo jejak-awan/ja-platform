@@ -2,43 +2,44 @@
 
 namespace Modules\School\Http\Controllers\Api\Academic;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
+use Modules\School\Http\Requests\Academic\StoreJournalRequest;
+use Modules\School\Http\Requests\Academic\StoreScheduleRequest;
 use Modules\School\Models\Academic\AcademicYear;
+use Modules\School\Models\Academic\Department;
+use Modules\School\Models\Academic\Schedule;
+use Modules\School\Models\Academic\Semester;
 use Modules\School\Models\Academic\StudyGroup;
 use Modules\School\Models\Academic\Subject;
-use Modules\School\Models\Academic\Semester;
-use Modules\School\Models\Academic\Schedule;
 use Modules\School\Models\Academic\TeachingJournal;
-use Modules\School\Models\Academic\Department;
 use Modules\School\Services\Academic\AcademicService;
-use Modules\School\Http\Requests\Academic\StoreScheduleRequest;
-use Modules\School\Http\Requests\Academic\StoreJournalRequest;
-use Illuminate\Support\Facades\Storage;
 
 class AcademicController extends BaseController
 {
-    public function __construct(protected AcademicService $service)
-    {
-    }
+    public function __construct(protected AcademicService $service) {}
 
-    public function overview(): \Illuminate\Http\JsonResponse
+    public function overview(): JsonResponse
     {
         $this->authorize('viewAny', AcademicYear::class);
         $stats = $this->service->getOverviewStats();
+
         return $this->sendResponse($stats, 'Academic overview retrieved successfully.');
     }
 
     // --- Academic Years ---
 
-    public function years(): \Illuminate\Http\JsonResponse
+    public function years(): JsonResponse
     {
         $this->authorize('viewAny', AcademicYear::class);
         $years = $this->service->getAllYears();
+
         return $this->sendResponse($years, 'Academic years retrieved successfully.');
     }
 
-    public function storeYear(Request $request): \Illuminate\Http\JsonResponse
+    public function storeYear(Request $request): JsonResponse
     {
         $this->authorize('create', AcademicYear::class);
 
@@ -50,7 +51,7 @@ class AcademicController extends BaseController
 
         /** @var int|string $schoolId */
         $schoolId = $request->header('X-School-Id') ?? 1;
-        
+
         $yearData = array_merge($validated, ['school_id' => $schoolId]);
         /** @var array<string, mixed> $yearData */
         $year = $this->service->createYear($yearData);
@@ -58,7 +59,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($year, 'Academic year created successfully.', 201);
     }
 
-    public function updateYear(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateYear(Request $request, string $id): JsonResponse
     {
         /** @var AcademicYear $year */
         $year = AcademicYear::findOrFail($id);
@@ -75,7 +76,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($year, 'Academic year updated successfully.');
     }
 
-    public function destroyYear(string $id): \Illuminate\Http\JsonResponse
+    public function destroyYear(string $id): JsonResponse
     {
         /** @var AcademicYear $year */
         $year = AcademicYear::findOrFail($id);
@@ -87,15 +88,16 @@ class AcademicController extends BaseController
 
     // --- Semesters ---
 
-    public function semesters(Request $request): \Illuminate\Http\JsonResponse
+    public function semesters(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Semester::class);
         $ayId = (string) $request->string('academic_year_id');
         $semesters = $this->service->getSemesters($ayId);
+
         return $this->sendResponse($semesters, 'Semesters retrieved successfully.');
     }
 
-    public function storeSemester(Request $request): \Illuminate\Http\JsonResponse
+    public function storeSemester(Request $request): JsonResponse
     {
         $this->authorize('create', Semester::class);
 
@@ -113,7 +115,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($semester, 'Semester created successfully.', 201);
     }
 
-    public function updateSemester(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateSemester(Request $request, string $id): JsonResponse
     {
         /** @var Semester $semester */
         $semester = Semester::findOrFail($id);
@@ -130,7 +132,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($semester, 'Semester updated successfully.');
     }
 
-    public function destroySemester(string $id): \Illuminate\Http\JsonResponse
+    public function destroySemester(string $id): JsonResponse
     {
         /** @var Semester $semester */
         $semester = Semester::findOrFail($id);
@@ -142,14 +144,15 @@ class AcademicController extends BaseController
 
     // --- Subjects ---
 
-    public function subjects(): \Illuminate\Http\JsonResponse
+    public function subjects(): JsonResponse
     {
         $this->authorize('viewAny', Subject::class);
         $subjects = Subject::all();
+
         return $this->sendResponse($subjects, 'Subjects retrieved successfully.');
     }
 
-    public function storeSubject(Request $request): \Illuminate\Http\JsonResponse
+    public function storeSubject(Request $request): JsonResponse
     {
         $this->authorize('create', Subject::class);
 
@@ -167,7 +170,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($subject, 'Subject created successfully.', 201);
     }
 
-    public function updateSubject(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateSubject(Request $request, string $id): JsonResponse
     {
         /** @var Subject $subject */
         $subject = Subject::findOrFail($id);
@@ -186,7 +189,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($subject, 'Subject updated successfully.');
     }
 
-    public function destroySubject(string $id): \Illuminate\Http\JsonResponse
+    public function destroySubject(string $id): JsonResponse
     {
         /** @var Subject $subject */
         $subject = Subject::findOrFail($id);
@@ -198,14 +201,15 @@ class AcademicController extends BaseController
 
     // --- Study Groups ---
 
-    public function studyGroups(): \Illuminate\Http\JsonResponse
+    public function studyGroups(): JsonResponse
     {
         $this->authorize('viewAny', StudyGroup::class);
         $groups = $this->service->getAllStudyGroups();
+
         return $this->sendResponse($groups, 'Study groups retrieved successfully.');
     }
 
-    public function storeStudyGroup(Request $request): \Illuminate\Http\JsonResponse
+    public function storeStudyGroup(Request $request): JsonResponse
     {
         $this->authorize('create', StudyGroup::class);
 
@@ -226,7 +230,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($group, 'Study group created successfully.', 201);
     }
 
-    public function updateStudyGroup(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateStudyGroup(Request $request, string $id): JsonResponse
     {
         /** @var StudyGroup $group */
         $group = StudyGroup::findOrFail($id);
@@ -246,7 +250,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($group, 'Study group updated successfully.');
     }
 
-    public function destroyStudyGroup(string $id): \Illuminate\Http\JsonResponse
+    public function destroyStudyGroup(string $id): JsonResponse
     {
         /** @var StudyGroup $group */
         $group = StudyGroup::findOrFail($id);
@@ -258,7 +262,7 @@ class AcademicController extends BaseController
 
     // --- Study Group Members ---
 
-    public function groupMembers(string $groupId): \Illuminate\Http\JsonResponse
+    public function groupMembers(string $groupId): JsonResponse
     {
         /** @var StudyGroup $group */
         $group = StudyGroup::with('students')->findOrFail($groupId);
@@ -267,7 +271,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($group->students, 'Study group members retrieved successfully.');
     }
 
-    public function addGroupMember(Request $request, string $groupId): \Illuminate\Http\JsonResponse
+    public function addGroupMember(Request $request, string $groupId): JsonResponse
     {
         /** @var StudyGroup $group */
         $group = StudyGroup::findOrFail($groupId);
@@ -278,12 +282,12 @@ class AcademicController extends BaseController
             'student_id' => 'required|exists:sch_std_students,id',
         ]);
 
-        $group->students()->syncWithoutDetaching([(string)$validated['student_id']]);
+        $group->students()->syncWithoutDetaching([(string) $validated['student_id']]);
 
         return $this->sendResponse([], 'Student added to study group successfully.');
     }
 
-    public function removeGroupMember(Request $request, string $groupId, string $studentId): \Illuminate\Http\JsonResponse
+    public function removeGroupMember(Request $request, string $groupId, string $studentId): JsonResponse
     {
         /** @var StudyGroup $group */
         $group = StudyGroup::findOrFail($groupId);
@@ -296,7 +300,7 @@ class AcademicController extends BaseController
 
     // --- Departments ---
 
-    public function departments(Request $request): \Illuminate\Http\JsonResponse
+    public function departments(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Department::class);
 
@@ -309,7 +313,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($departments, 'Departments retrieved successfully.');
     }
 
-    public function storeDepartment(Request $request): \Illuminate\Http\JsonResponse
+    public function storeDepartment(Request $request): JsonResponse
     {
         $this->authorize('create', Department::class);
 
@@ -326,7 +330,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($department, 'Department created successfully.', 201);
     }
 
-    public function updateDepartment(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateDepartment(Request $request, string $id): JsonResponse
     {
         /** @var Department $department */
         $department = Department::findOrFail($id);
@@ -345,7 +349,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($department, 'Department updated successfully.');
     }
 
-    public function destroyDepartment(string $id): \Illuminate\Http\JsonResponse
+    public function destroyDepartment(string $id): JsonResponse
     {
         /** @var Department $department */
         $department = Department::findOrFail($id);
@@ -355,16 +359,17 @@ class AcademicController extends BaseController
         return $this->sendResponse([], 'Department deleted successfully.');
     }
 
-    public function schedules(Request $request): \Illuminate\Http\JsonResponse
+    public function schedules(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Schedule::class);
         /** @var array<string, mixed> $allInputs */
         $allInputs = $request->all();
         $schedules = $this->service->getSchedules($allInputs);
+
         return $this->sendResponse($schedules, 'Schedules retrieved successfully.');
     }
 
-    public function storeSchedule(StoreScheduleRequest $request): \Illuminate\Http\JsonResponse
+    public function storeSchedule(StoreScheduleRequest $request): JsonResponse
     {
         $this->authorize('create', Schedule::class);
 
@@ -380,7 +385,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($schedule, 'Schedule created successfully.', 201);
     }
 
-    public function updateSchedule(StoreScheduleRequest $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateSchedule(StoreScheduleRequest $request, string $id): JsonResponse
     {
         /** @var Schedule $schedule */
         $schedule = Schedule::findOrFail($id);
@@ -399,7 +404,7 @@ class AcademicController extends BaseController
         return $this->sendResponse($schedule, 'Schedule updated successfully.');
     }
 
-    public function destroySchedule(string $id): \Illuminate\Http\JsonResponse
+    public function destroySchedule(string $id): JsonResponse
     {
         /** @var Schedule $schedule */
         $schedule = Schedule::findOrFail($id);
@@ -411,7 +416,7 @@ class AcademicController extends BaseController
 
     // --- Teaching Journals ---
 
-    public function journals(Request $request): \Illuminate\Http\JsonResponse
+    public function journals(Request $request): JsonResponse
     {
         $this->authorize('viewAny', TeachingJournal::class);
         $query = TeachingJournal::with('schedule.subject', 'schedule.staff');
@@ -422,25 +427,25 @@ class AcademicController extends BaseController
         }
         if ($request->has('date')) {
             $dateValue = $request->input('date');
-            $query->whereDate('date', is_scalar($dateValue) ? (string)$dateValue : '');
+            $query->whereDate('date', is_scalar($dateValue) ? (string) $dateValue : '');
         }
 
         return $this->sendResponse($query->get(), 'Teaching journals retrieved successfully.');
     }
 
-    public function storeJournal(StoreJournalRequest $request): \Illuminate\Http\JsonResponse
+    public function storeJournal(StoreJournalRequest $request): JsonResponse
     {
         $this->authorize('create', TeachingJournal::class);
         /** @var array<string, mixed> $validated */
         $validated = $request->validated();
-        /** @var \Illuminate\Http\UploadedFile|null $file */
+        /** @var UploadedFile|null $file */
         $file = $request->file('evidence');
         $journal = $this->service->createJournal($validated, $file);
 
         return $this->sendResponse($journal, 'Teaching journal created successfully.', 201);
     }
 
-    public function updateJournal(StoreJournalRequest $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateJournal(StoreJournalRequest $request, string $id): JsonResponse
     {
         /** @var TeachingJournal $journal */
         $journal = TeachingJournal::findOrFail($id);
@@ -448,14 +453,14 @@ class AcademicController extends BaseController
 
         /** @var array<string, mixed> $validated */
         $validated = $request->validated();
-        /** @var \Illuminate\Http\UploadedFile|null $file */
+        /** @var UploadedFile|null $file */
         $file = $request->file('evidence');
         $journal = $this->service->updateJournal($journal, $validated, $file);
 
         return $this->sendResponse($journal, 'Teaching journal updated successfully.');
     }
 
-    public function destroyJournal(string $id): \Illuminate\Http\JsonResponse
+    public function destroyJournal(string $id): JsonResponse
     {
         /** @var TeachingJournal $journal */
         $journal = TeachingJournal::findOrFail($id);

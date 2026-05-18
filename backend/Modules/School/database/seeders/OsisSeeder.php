@@ -3,8 +3,9 @@
 namespace Modules\School\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\School\Models\Osis\OsisProgram;
+use Illuminate\Support\Facades\DB;
 use Modules\School\Models\Osis\OsisMember;
+use Modules\School\Models\Osis\OsisProgram;
 use Modules\School\Models\Osis\OsisSuggestion;
 use Modules\School\Models\Student\Student;
 
@@ -12,8 +13,10 @@ class OsisSeeder extends Seeder
 {
     public function run(): void
     {
-        $school = \Illuminate\Support\Facades\DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
-        if (!$school) { return; }
+        $school = DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        if (! $school) {
+            return;
+        }
         $schoolId = $school->id;
         $students = Student::where('school_id', $schoolId)->get();
 

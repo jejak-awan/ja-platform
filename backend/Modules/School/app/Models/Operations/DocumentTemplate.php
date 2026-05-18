@@ -2,11 +2,12 @@
 
 namespace Modules\School\Models\Operations;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Modules\School\Models\Institution\School;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -18,17 +19,19 @@ use Modules\School\Models\Institution\School;
  * @property array<string, string>|null $placeholders
  * @property bool $is_active
  * @property bool $is_default
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class DocumentTemplate extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
+
     protected $table = 'sch_doc_templates';
 
     protected $fillable = [
@@ -49,9 +52,9 @@ class DocumentTemplate extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
     }

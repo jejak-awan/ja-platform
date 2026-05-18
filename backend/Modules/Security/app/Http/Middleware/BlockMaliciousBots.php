@@ -6,7 +6,11 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Modules\Security\Services\SecurityService;
 use Modules\System\Helpers\IpHelper;
+use Modules\System\Models\Setting;
+use Modules\System\Services\AnomalyDetectionService;
+use Modules\System\Services\SecurityMaintenanceService;
 use Modules\System\Traits\MaintenanceBypass;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,14 +18,12 @@ class BlockMaliciousBots
 {
     use MaintenanceBypass;
 
-    public function __construct(protected \Modules\Security\Services\SecurityService $securityService, protected \Modules\System\Services\AnomalyDetectionService $anomalyService)
-    {
-    }
+    public function __construct(protected SecurityService $securityService, protected AnomalyDetectionService $anomalyService) {}
 
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -49,7 +51,7 @@ class BlockMaliciousBots
         }
 
         // Bypass scanner detection during maintenance mode or for whitelisted maintenance routes
-        if (app(\Modules\System\Services\SecurityMaintenanceService::class)->isModulePaused('scanner') || $this->shouldBypassMaintenance($request)) {
+        if (app(SecurityMaintenanceService::class)->isModulePaused('scanner') || $this->shouldBypassMaintenance($request)) {
             return $next($request);
         }
 
@@ -76,7 +78,7 @@ class BlockMaliciousBots
         ];
 
         // 2. Merge with learned paths from database/cache
-        $learnedPaths = \Modules\System\Models\Setting::get('security_learned_scanner_paths', []);
+        $learnedPaths = Setting::get('security_learned_scanner_paths', []);
         if (is_array($learnedPaths) && $learnedPaths !== []) {
             /** @var array<int, string> $learnedPathStrings */
             $learnedPathStrings = [];
@@ -104,12 +106,13 @@ class BlockMaliciousBots
                 ], 'malicious_scanner_blocked');
 
                 // Track in anomaly score
-                $safeSessionId = 'stateless_' . md5($ip . ($request->userAgent() ?? ''));
+                $safeSessionId = 'stateless_'.md5($ip.($request->userAgent() ?? ''));
                 try {
                     if ($request->hasSession()) {
                         $safeSessionId = $request->session()->getId();
                     }
-                } catch (\Throwable) {}
+                } catch (\Throwable) {
+                }
                 $this->anomalyService->trackEvent('sensitive_path', $ip, $safeSessionId);
 
                 $this->autoBlockIfThresholdReached($ip, $path, 'path');
@@ -196,7 +199,7 @@ class BlockMaliciousBots
             ]);
 
             // Clear the counter since IP is now permanently blocked
-            \Illuminate\Support\Facades\Cache::forget($cacheKey);
+            Cache::forget($cacheKey);
         }
     }
 }

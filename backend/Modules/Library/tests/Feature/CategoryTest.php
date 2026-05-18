@@ -2,8 +2,8 @@
 
 namespace Modules\Library\Tests\Feature;
 
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
+use Modules\Library\Models\Category;
 use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
@@ -284,6 +284,7 @@ class CategoryTest extends TestCase
 
         $response->assertStatus(403);
     }
+
     /**
      * Test admin can filter lib_categories by search.
      */
@@ -292,11 +293,11 @@ class CategoryTest extends TestCase
         $admin = $this->createAdminUser();
         $this->actingAs($admin, 'sanctum');
 
-        $uniqueName = 'UNIQUE_CAT_' . bin2hex(random_bytes(8));
+        $uniqueName = 'UNIQUE_CAT_'.bin2hex(random_bytes(8));
         Category::factory()->create(['name' => $uniqueName]);
-        Category::factory()->create(['name' => 'NON_MATCHING_' . bin2hex(random_bytes(8))]);
+        Category::factory()->create(['name' => 'NON_MATCHING_'.bin2hex(random_bytes(8))]);
 
-        $response = $this->getJson('/api/v1/manage/library/categories?search=' . $uniqueName);
+        $response = $this->getJson('/api/v1/manage/library/categories?search='.$uniqueName);
         TestHelpers::assertApiSuccess($response);
         $this->assertCount(1, $response->json('data'));
     }

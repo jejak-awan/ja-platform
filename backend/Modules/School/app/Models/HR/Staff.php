@@ -2,13 +2,17 @@
 
 namespace Modules\School\Models\HR;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\System\Traits\ScopedByWorkspace;
-use Modules\School\Traits\ScopedBySchool;
+use Illuminate\Support\Carbon;
 use Modules\School\Models\Institution\School;
+use Modules\School\Traits\ScopedBySchool;
+use Modules\System\Models\User;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -30,22 +34,23 @@ use Modules\School\Models\Institution\School;
  * @property string|null $last_education
  * @property string|null $major
  * @property bool $certification_status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\School\Models\Institution\School $school
- * @property-read \Modules\System\Models\User $user
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read School $school
+ * @property-read User $user
  */
 class Staff extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_hr_staff';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
-    use HasFactory, SoftDeletes, ScopedBySchool, ScopedByWorkspace;
+    /** @use HasFactory<Factory<static>> */
+    use HasFactory, ScopedBySchool, ScopedByWorkspace, SoftDeletes;
 
     protected $fillable = [
         'school_id',
@@ -80,18 +85,18 @@ class Staff extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\System\Models\User, $this>
+     * @return BelongsTo<User, $this>
      */
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(\Modules\System\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 }

@@ -7,6 +7,8 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Modules\System\Models\RedisSetting;
+use Modules\System\Models\Setting;
 
 class RedisConfigServiceProvider extends ServiceProvider
 {
@@ -60,7 +62,7 @@ class RedisConfigServiceProvider extends ServiceProvider
     protected function loadRedisSettingsFromDatabase(): void
     {
         // Use model collection to properly apply value accessor (decryption)
-        $redisSettings = \Modules\System\Models\RedisSetting::all();
+        $redisSettings = RedisSetting::all();
 
         if ($redisSettings->isEmpty()) {
             return;
@@ -125,7 +127,7 @@ class RedisConfigServiceProvider extends ServiceProvider
         // PerformanceTab writes `cache_driver` there, but runtime config reads cache.default.
         try {
             if (Schema::hasTable('sys_settings')) {
-                $selectedDriver = \Modules\System\Models\Setting::get('cache_driver');
+                $selectedDriver = Setting::get('cache_driver');
                 if (is_string($selectedDriver) && $selectedDriver !== '') {
                     // `redis_failover` is UI alias; safest runtime fallback is Redis.
                     $resolved = $selectedDriver === 'redis_failover' ? 'redis' : $selectedDriver;

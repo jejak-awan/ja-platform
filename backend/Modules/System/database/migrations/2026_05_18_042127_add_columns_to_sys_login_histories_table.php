@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sys_login_histories', function (Blueprint $table): void {
-            if (!Schema::hasColumn('sys_login_histories', 'logout_at')) {
+            if (! Schema::hasColumn('sys_login_histories', 'logout_at')) {
                 $table->timestamp('logout_at')->nullable()->after('login_at');
             }
-            if (!Schema::hasColumn('sys_login_histories', 'session_duration')) {
+            if (! Schema::hasColumn('sys_login_histories', 'session_duration')) {
                 $table->integer('session_duration')->nullable()->after('logout_at');
             }
-            if (!Schema::hasColumn('sys_login_histories', 'failure_reason')) {
+            if (! Schema::hasColumn('sys_login_histories', 'failure_reason')) {
                 $table->text('failure_reason')->nullable()->after('status');
             }
         });

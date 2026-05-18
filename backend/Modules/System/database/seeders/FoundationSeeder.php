@@ -3,13 +3,12 @@
 namespace Modules\System\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Modules\System\Models\User;
-use Modules\System\Models\RedisSetting;
-use Modules\System\Models\Setting;
 use Modules\System\Models\Language;
 use Modules\System\Models\Permission;
+use Modules\System\Models\RedisSetting;
 use Modules\System\Models\Role;
+use Modules\System\Models\Setting;
+use Modules\System\Models\User;
 use Spatie\Permission\PermissionRegistrar;
 
 class FoundationSeeder extends Seeder
@@ -44,20 +43,20 @@ class FoundationSeeder extends Seeder
         $permissions = [
             // Core Identity & Profile
             'view profile', 'edit profile',
-            
+
             // Media (Global Infrastructure)
             'view media', 'upload media', 'edit media', 'delete media', 'manage media',
-            
+
             // Users & RBAC
             'view users', 'create users', 'edit users', 'delete users', 'verify users', 'manage users',
             'view roles', 'create roles', 'edit roles', 'delete roles',
-            
+
             // System Governance
             'view settings', 'manage settings',
             'view system', 'manage system',
             'view logs', 'delete logs',
             'view activity logs',
-            
+
             // Security Operations
             'manage security operations',
             'manage security logs',
@@ -65,14 +64,14 @@ class FoundationSeeder extends Seeder
             'manage security integrity',
             'manage security maintenance',
             'view security logs',
-            
+
             // Infrastructure Services
             'view plugins', 'install plugins', 'manage plugins',
             'view redirects', 'manage redirects',
             'view scheduled tasks', 'manage scheduled tasks',
             'view backups', 'create backups', 'manage backups',
             'view analytics',
-            
+
             // Module Governance (Generic)
             'manage module access',
         ];

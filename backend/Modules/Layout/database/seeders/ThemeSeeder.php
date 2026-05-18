@@ -4,9 +4,9 @@ namespace Modules\Layout\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
 use Modules\Layout\Models\Theme;
+use Modules\Library\Models\Category;
 use Modules\System\Models\User;
 
 class ThemeSeeder extends Seeder
@@ -14,7 +14,7 @@ class ThemeSeeder extends Seeder
     public function run(): void
     {
         $user = User::first();
-        if (!$user) {
+        if (! $user) {
             return;
         }
 
@@ -34,7 +34,7 @@ class ThemeSeeder extends Seeder
                 'path' => 'themes/janari',
                 'version' => '1.0.0',
                 'is_active' => true,
-                'settings' => is_array(Theme::where('slug', 'janari')->first()?->settings) ? Theme::where('slug', 'janari')->first()->settings : []
+                'settings' => is_array(Theme::where('slug', 'janari')->first()?->settings) ? Theme::where('slug', 'janari')->first()->settings : [],
             ]
         );
     }
@@ -42,19 +42,19 @@ class ThemeSeeder extends Seeder
     private function seedThemeSettings(): void
     {
         $theme = Theme::withoutGlobalScopes()->whereIn('slug', ['janari', 'janari-education'])->first();
-        if (!$theme) {
+        if (! $theme) {
             return;
         }
 
         $manifestPath = base_path('../frontend/src/modules/Cms/views/themes/janari/theme.json');
-        
+
         if (File::exists($manifestPath)) {
             $manifest = json_decode(File::get($manifestPath), true);
             $settings = $theme->settings ?? [];
 
             if (isset($manifest['settings_schema'])) {
                 foreach ($manifest['settings_schema'] as $key => $schema) {
-                    if (isset($schema['default']) && !isset($settings[$key])) {
+                    if (isset($schema['default']) && ! isset($settings[$key])) {
                         $settings[$key] = $schema['default'];
                     }
                 }
@@ -86,7 +86,7 @@ class ThemeSeeder extends Seeder
                 [
                     'name' => $name,
                     'author_id' => $user->id,
-                    'is_active' => true
+                    'is_active' => true,
                 ]
             );
         }

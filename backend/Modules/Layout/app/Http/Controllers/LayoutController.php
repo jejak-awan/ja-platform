@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Modules\Layout\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class LayoutController extends Controller
@@ -12,7 +14,7 @@ class LayoutController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function index(): Factory|View
     {
         return view('layout::index');
     }
@@ -20,7 +22,7 @@ class LayoutController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function create(): Factory|View
     {
         return view('layout::create');
     }
@@ -33,7 +35,7 @@ class LayoutController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function show($id): Factory|View
     {
         return view('layout::show');
     }
@@ -41,7 +43,7 @@ class LayoutController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function edit($id): Factory|View
     {
         return view('layout::edit');
     }

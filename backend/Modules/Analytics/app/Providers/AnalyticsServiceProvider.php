@@ -4,6 +4,8 @@ namespace Modules\Analytics\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Analytics\Console\Commands\CleanupAnalytics;
+use Modules\Analytics\Console\Commands\CleanupSlowQueryLogs;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -44,8 +46,8 @@ class AnalyticsServiceProvider extends ServiceProvider
     protected function registerCommands(): void
     {
         $this->commands([
-            \Modules\Analytics\Console\Commands\CleanupSlowQueryLogs::class,
-            \Modules\Analytics\Console\Commands\CleanupAnalytics::class,
+            CleanupSlowQueryLogs::class,
+            CleanupAnalytics::class,
         ]);
     }
 
@@ -133,7 +135,7 @@ class AnalyticsServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
 
-        Blade::componentNamespace((string) config('modules.namespace').'\\' . $this->name . '\\View\\Components', $this->nameLower);
+        Blade::componentNamespace((string) config('modules.namespace').'\\'.$this->name.'\\View\\Components', $this->nameLower);
     }
 
     /**

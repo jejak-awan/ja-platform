@@ -15,9 +15,7 @@ use Modules\Security\Services\SecurityService;
  */
 class HoneypotService
 {
-    public function __construct(protected SecurityService $security)
-    {
-    }
+    public function __construct(protected SecurityService $security) {}
 
     /**
      * List of trap paths (bait).

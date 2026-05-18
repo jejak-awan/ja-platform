@@ -2,10 +2,12 @@
 
 namespace Modules\School\Models\Academic;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Modules\School\Models\Student\Student;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -14,9 +16,9 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $academic_year_id
  * @property string $status
  * @property string|null $notes
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\School\Models\Student\Student $student
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Student $student
  * @property-read StudyGroup $studyGroup
  * @property-read AcademicYear $academicYear
  */
@@ -25,9 +27,11 @@ class ClassHistory extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
+
     protected $table = 'sch_acad_class_histories';
 
     protected $fillable = [
@@ -39,25 +43,25 @@ class ClassHistory extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Student\Student, $this>
+     * @return BelongsTo<Student, $this>
      */
-    public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function student(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Student\Student::class);
+        return $this->belongsTo(Student::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<StudyGroup, $this>
+     * @return BelongsTo<StudyGroup, $this>
      */
-    public function studyGroup(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function studyGroup(): BelongsTo
     {
         return $this->belongsTo(StudyGroup::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<AcademicYear, $this>
+     * @return BelongsTo<AcademicYear, $this>
      */
-    public function academicYear(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function academicYear(): BelongsTo
     {
         return $this->belongsTo(AcademicYear::class);
     }

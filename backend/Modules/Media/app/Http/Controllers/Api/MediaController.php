@@ -2,21 +2,22 @@
 
 namespace Modules\Media\Http\Controllers\Api;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Modules\Media\Contracts\MediaServiceInterface;
 use Modules\Media\Models\File;
-use Modules\Media\Models\Folder;
+use Modules\System\Models\User;
 
 class MediaController extends Controller
 {
     use AuthorizesRequests;
 
-    public function __construct(protected MediaServiceInterface $mediaService)
-    {
-    }
+    public function __construct(protected MediaServiceInterface $mediaService) {}
 
     /**
      * Display a listing of the media files.
@@ -47,11 +48,11 @@ class MediaController extends Controller
         if ($request->has('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function($q) use ($search): void {
+            $query->where(function ($q) use ($search): void {
                 $searchStr = strtolower($search);
-                $q->where(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%")
-                  ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(file_name)'), 'like', "%{$searchStr}%")
-                  ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(alt)'), 'like', "%{$searchStr}%");
+                $q->where(DB::raw('lower(name)'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(file_name)'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(alt)'), 'like', "%{$searchStr}%");
             });
         }
 
@@ -61,7 +62,7 @@ class MediaController extends Controller
         return response()->json([
             'success' => true,
             'data' => $files,
-            'message' => 'Media retrieved successfully'
+            'message' => 'Media retrieved successfully',
         ]);
     }
 
@@ -81,7 +82,7 @@ class MediaController extends Controller
         ]);
 
         $file = $request->file('file');
-        
+
         $media = $this->mediaService->upload(
             $file,
             $request->input('folder_id'),
@@ -102,7 +103,7 @@ class MediaController extends Controller
                 'media' => $media->load('folder'),
                 'url' => $media->url,
             ],
-            'message' => 'Media uploaded successfully'
+            'message' => 'Media uploaded successfully',
         ], 201);
     }
 
@@ -112,10 +113,11 @@ class MediaController extends Controller
     public function show(File $file)
     {
         $this->authorize('view', $file);
+
         return response()->json([
             'success' => true,
             'data' => $file->load('folder'),
-            'message' => 'Media retrieved successfully'
+            'message' => 'Media retrieved successfully',
         ]);
     }
 
@@ -143,7 +145,7 @@ class MediaController extends Controller
         return response()->json([
             'success' => true,
             'data' => $file,
-            'message' => 'Media updated successfully'
+            'message' => 'Media updated successfully',
         ]);
     }
 
@@ -158,7 +160,7 @@ class MediaController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => $permanent ? 'Media permanently deleted' : 'Media moved to trash'
+            'message' => $permanent ? 'Media permanently deleted' : 'Media moved to trash',
         ]);
     }
 
@@ -187,7 +189,7 @@ class MediaController extends Controller
         return response()->json([
             'success' => true,
             'data' => $result,
-            'message' => 'Bulk action completed'
+            'message' => 'Bulk action completed',
         ]);
     }
 
@@ -197,14 +199,14 @@ class MediaController extends Controller
     public function restore(string $id)
     {
         $file = $this->mediaService->restore($id);
-        if (!$file instanceof \Modules\Media\Models\File) {
+        if (! $file instanceof File) {
             return response()->json(['success' => false, 'message' => 'Media not found or not in trash'], 404);
         }
 
         return response()->json([
             'success' => true,
             'data' => $file,
-            'message' => 'Media restored successfully'
+            'message' => 'Media restored successfully',
         ]);
     }
 
@@ -215,15 +217,15 @@ class MediaController extends Controller
     {
         $this->authorize('update', $file);
         $path = $this->mediaService->generateThumbnail($file);
-        
-        if (!$path) {
+
+        if (! $path) {
             return response()->json(['success' => false, 'message' => 'Failed to generate thumbnail'], 400);
         }
 
         return response()->json([
             'success' => true,
-            'data' => ['path' => $path, 'url' => \Illuminate\Support\Facades\Storage::disk($file->disk)->url($path)],
-            'message' => 'Thumbnail generated successfully'
+            'data' => ['path' => $path, 'url' => Storage::disk($file->disk)->url($path)],
+            'message' => 'Thumbnail generated successfully',
         ]);
     }
 
@@ -246,20 +248,20 @@ class MediaController extends Controller
             (int) ($request->input('quality') ?? 85)
         );
 
-        if (!$success) {
+        if (! $success) {
             return response()->json(['success' => false, 'message' => 'Failed to resize image'], 500);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Image resized successfully'
+            'message' => 'Image resized successfully',
         ]);
     }
 
     /**
      * Get media usage information.
      */
-    public function usage(File $file): \Illuminate\Http\JsonResponse
+    public function usage(File $file): JsonResponse
     {
         $this->authorize('view', $file);
         $usage = $this->mediaService->getUsageInfo($file);
@@ -267,14 +269,14 @@ class MediaController extends Controller
         return response()->json([
             'success' => true,
             'data' => $usage,
-            'message' => 'Media usage retrieved successfully'
+            'message' => 'Media usage retrieved successfully',
         ]);
     }
 
     /**
      * Empty trash.
      */
-    public function emptyTrash(): \Illuminate\Http\JsonResponse
+    public function emptyTrash(): JsonResponse
     {
         // This is a bulk action usually
         $files = File::onlyTrashed()->get();
@@ -284,14 +286,14 @@ class MediaController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Trash emptied successfully'
+            'message' => 'Trash emptied successfully',
         ]);
     }
 
     /**
      * Get media statistics.
      */
-    public function statistics(): \Illuminate\Http\JsonResponse
+    public function statistics(): JsonResponse
     {
         $this->authorize('viewAny', File::class);
         $stats = $this->mediaService->getStatistics();
@@ -299,14 +301,14 @@ class MediaController extends Controller
         return response()->json([
             'success' => true,
             'data' => $stats,
-            'message' => 'Statistics retrieved successfully'
+            'message' => 'Statistics retrieved successfully',
         ]);
     }
 
     /**
      * Get media filters.
      */
-    public function filters(): \Illuminate\Http\JsonResponse
+    public function filters(): JsonResponse
     {
         $this->authorize('viewAny', File::class);
 
@@ -314,14 +316,14 @@ class MediaController extends Controller
             ->distinct()
             ->pluck('author_id');
 
-        $authors = \Modules\System\Models\User::whereIn('id', $authorIds)
+        $authors = User::whereIn('id', $authorIds)
             ->select('id', 'name')
             ->get();
 
         return response()->json([
             'success' => true,
             'authors' => $authors,
-            'message' => 'Filters retrieved successfully'
+            'message' => 'Filters retrieved successfully',
         ]);
     }
 }

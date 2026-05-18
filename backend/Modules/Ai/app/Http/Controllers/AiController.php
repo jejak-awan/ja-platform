@@ -2,7 +2,12 @@
 
 namespace Modules\Ai\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Modules\Ai\Services\AiProviderFactory;
+use Modules\Ai\Services\Providers\DeepSeekService;
+use Modules\Ai\Services\Providers\GeminiService;
+use Modules\Ai\Services\Providers\OpenAiService;
 use Modules\System\Http\Controllers\BaseApiController;
 
 class AiController extends BaseApiController
@@ -10,15 +15,15 @@ class AiController extends BaseApiController
     /**
      * Get list of available AI providers
      */
-    public function getProviders(): \Illuminate\Http\JsonResponse
+    public function getProviders(): JsonResponse
     {
-        return $this->success(\Modules\Ai\Services\AiProviderFactory::getProviders());
+        return $this->success(AiProviderFactory::getProviders());
     }
 
     /**
      * Get available models for a provider
      */
-    public function getModels(Request $request, string $provider): \Illuminate\Http\JsonResponse
+    public function getModels(Request $request, string $provider): JsonResponse
     {
         try {
             // Instantiate service manually with the provided key (for setup) or null to use saved key
@@ -27,9 +32,9 @@ class AiController extends BaseApiController
 
             // Factory doesn't accept key in 'make', so we instantiate manually based on provider
             $service = match ($provider) {
-                'openai' => new \Modules\Ai\Services\Providers\OpenAiService($apiKey),
-                'deepseek' => new \Modules\Ai\Services\Providers\DeepSeekService($apiKey),
-                'gemini' => new \Modules\Ai\Services\Providers\GeminiService($apiKey),
+                'openai' => new OpenAiService($apiKey),
+                'deepseek' => new DeepSeekService($apiKey),
+                'gemini' => new GeminiService($apiKey),
                 default => throw new \Exception('Unknown provider'),
             };
 
@@ -44,7 +49,7 @@ class AiController extends BaseApiController
     /**
      * Test connection to a provider
      */
-    public function testConnection(Request $request): \Illuminate\Http\JsonResponse
+    public function testConnection(Request $request): JsonResponse
     {
         $request->validate([
             'provider' => 'required|string',
@@ -58,9 +63,9 @@ class AiController extends BaseApiController
             $apiKey = is_string($apiKeyRaw) ? $apiKeyRaw : null;
 
             $service = match ($provider) {
-                'openai' => new \Modules\Ai\Services\Providers\OpenAiService($apiKey),
-                'deepseek' => new \Modules\Ai\Services\Providers\DeepSeekService($apiKey),
-                'gemini' => new \Modules\Ai\Services\Providers\GeminiService($apiKey),
+                'openai' => new OpenAiService($apiKey),
+                'deepseek' => new DeepSeekService($apiKey),
+                'gemini' => new GeminiService($apiKey),
                 default => throw new \Exception('Unknown provider'),
             };
 
@@ -75,7 +80,7 @@ class AiController extends BaseApiController
     /**
      * Generate content using AI
      */
-    public function generate(Request $request): \Illuminate\Http\JsonResponse
+    public function generate(Request $request): JsonResponse
     {
         $request->validate([
             'prompt' => 'required|string|max:1000',
@@ -95,7 +100,7 @@ class AiController extends BaseApiController
             $context = is_string($contextRaw) ? $contextRaw : '';
 
             // Use Factory to get the active service
-            $service = \Modules\Ai\Services\AiProviderFactory::make($providerName);
+            $service = AiProviderFactory::make($providerName);
 
             $result = $service->generateText(
                 $prompt,

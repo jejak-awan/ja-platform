@@ -2,20 +2,20 @@
 
 namespace Modules\School\Http\Controllers\Api\Operations;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
-use Modules\School\Services\Student\StudentService;
-use Modules\School\Models\Student\Student;
+use Modules\School\Models\Operations\DocumentTemplate;
 use Modules\School\Models\Operations\GraduationResult;
 use Modules\School\Models\Operations\GraduationSetting;
-use Modules\School\Models\Operations\DocumentTemplate;
-use Illuminate\Http\JsonResponse;
+use Modules\School\Models\Student\Student;
+use Modules\School\Services\Operations\DocumentService;
+use Modules\School\Services\Student\StudentService;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class GraduationController extends BaseController
 {
-    public function __construct(protected StudentService $studentService, protected \Modules\School\Services\Operations\DocumentService $documentService)
-    {
-    }
+    public function __construct(protected StudentService $studentService, protected DocumentService $documentService) {}
 
     /**
      * Get graduation results.
@@ -23,12 +23,12 @@ class GraduationController extends BaseController
     public function indexResults(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Student::class);
-        
+
         $results = GraduationResult::with('student.level')
-            ->when($request->year, fn($q) => $q->where('graduation_year', $request->year))
+            ->when($request->year, fn ($q) => $q->where('graduation_year', $request->year))
             ->latest()
             ->paginate($request->integer('per_page', 50));
-            
+
         return $this->sendResponse($results, 'Graduation results retrieved successfully.');
     }
 
@@ -38,7 +38,7 @@ class GraduationController extends BaseController
     public function updateResult(Request $request): JsonResponse
     {
         $this->authorize('update', Student::class);
-        
+
         $validated = $request->validate([
             'student_id' => 'required|exists:sch_std_students,id',
             'status' => 'required|string|in:graduated,not_graduated,deferred',
@@ -62,13 +62,13 @@ class GraduationController extends BaseController
     public function eligibleStudents(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Student::class);
-        
+
         $filters = $request->only(['level_id', 'department_id', 'search']);
         // Default to active students
         $filters['status'] = 'active';
-        
+
         $students = $this->studentService->getStudentList($filters, $request->integer('per_page', 50));
-        
+
         return $this->sendResponse($students, 'Eligible students retrieved successfully.');
     }
 
@@ -78,12 +78,12 @@ class GraduationController extends BaseController
     public function batchGraduate(Request $request): JsonResponse
     {
         $this->authorize('update', Student::class);
-        
+
         $validated = $request->validate([
             'student_ids' => 'required|array',
             'student_ids.*' => 'exists:sch_std_students,id',
             'graduation_year' => 'required|integer',
-            'status' => 'required|string|in:graduated,not_graduated,deferred'
+            'status' => 'required|string|in:graduated,not_graduated,deferred',
         ]);
 
         $studentIds = (array) $validated['student_ids'];
@@ -96,7 +96,7 @@ class GraduationController extends BaseController
                 ['student_id' => $id, 'graduation_year' => $year],
                 ['status' => $status]
             );
-            
+
             // Also update student status if graduated
             if ($status === 'graduated') {
                 Student::where('id', $id)->update(['status' => 'graduated']);
@@ -114,7 +114,7 @@ class GraduationController extends BaseController
     {
         $request->validate([
             'identifier' => 'required|string', // NISN or NIS
-            'dob' => 'required|date'
+            'dob' => 'required|date',
         ]);
 
         $student = $this->studentService->findForGraduationCheck(
@@ -122,7 +122,7 @@ class GraduationController extends BaseController
             $request->string('dob')->toString()
         );
 
-        if (!$student instanceof \Modules\School\Models\Student\Student) {
+        if (! $student instanceof Student) {
             return $this->sendError('Data siswa tidak ditemukan. Pastikan NISN/NIS dan Tanggal Lahir sudah benar.', [], 404);
         }
 
@@ -134,15 +134,15 @@ class GraduationController extends BaseController
         $year = $result ? $result->graduation_year : date('Y');
         $setting = GraduationSetting::where('graduation_year', $year)->first();
 
-        if ($setting && !$setting->is_open) {
+        if ($setting && ! $setting->is_open) {
             // Check if there is an announcement date and it is in the future
             if ($setting->announcement_date && now()->lt($setting->announcement_date)) {
                 return $this->sendError('Pengumuman kelulusan belum dibuka.', [
-                    'announcement_date' => $setting->announcement_date
+                    'announcement_date' => $setting->announcement_date,
                 ], 403);
             }
-            
-            if (!$setting->announcement_date) {
+
+            if (! $setting->announcement_date) {
                 return $this->sendError('Pengumuman kelulusan ditutup oleh admin.', [], 403);
             }
         }
@@ -155,7 +155,7 @@ class GraduationController extends BaseController
             'status' => $status,
             'is_graduated' => $status === 'graduated',
             'grades' => $result ? $result->grades : null,
-            'certificate_url' => $status === 'graduated' ? url("/api/v1/public/graduation/certificate/{$student->id}") : null
+            'certificate_url' => $status === 'graduated' ? url("/api/v1/public/graduation/certificate/{$student->id}") : null,
         ], 'Graduation status retrieved successfully.');
     }
 
@@ -175,7 +175,7 @@ class GraduationController extends BaseController
             ->where('is_active', true)
             ->first();
 
-        if (!$template) {
+        if (! $template) {
             return $this->sendError('Template sertifikat belum diatur.', [], 404);
         }
 
@@ -190,7 +190,7 @@ class GraduationController extends BaseController
 
         return response($pdfBinary)
             ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'attachment; filename="SKL_' . $student->nisn . '.pdf"');
+            ->header('Content-Disposition', 'attachment; filename="SKL_'.$student->nisn.'.pdf"');
     }
 
     /**
@@ -228,10 +228,10 @@ class GraduationController extends BaseController
             }
         } elseif (in_array($ext, ['xlsx', 'xls'])) {
             // Use PhpSpreadsheet if available
-            if (!class_exists(\PhpOffice\PhpSpreadsheet\IOFactory::class)) {
+            if (! class_exists(IOFactory::class)) {
                 return $this->sendError('PhpSpreadsheet is required for Excel files. Please use CSV format instead.', [], 422);
             }
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file->getRealPath());
+            $spreadsheet = IOFactory::load($file->getRealPath());
             $worksheet = $spreadsheet->getActiveSheet();
             foreach ($worksheet->getRowIterator() as $row) {
                 $cellIterator = $row->getCellIterator();
@@ -249,7 +249,7 @@ class GraduationController extends BaseController
         }
 
         // First row = headers: NISN, Subject1, Subject2, ...
-        $headers = array_map(fn($v) => is_string($v) ? trim($v) : (is_scalar($v) ? (string) $v : ''), $rows[0]);
+        $headers = array_map(fn ($v) => is_string($v) ? trim($v) : (is_scalar($v) ? (string) $v : ''), $rows[0]);
         array_shift($rows); // Remove header
 
         $updated = 0;
@@ -263,8 +263,9 @@ class GraduationController extends BaseController
             }
 
             $student = Student::where('nisn', $nisn)->first();
-            if (!$student) {
-                $errors[] = "Row " . ($index + 2) . ": NISN '{$nisn}' not found.";
+            if (! $student) {
+                $errors[] = 'Row '.($index + 2).": NISN '{$nisn}' not found.";
+
                 continue;
             }
 
@@ -274,7 +275,7 @@ class GraduationController extends BaseController
             for ($i = 1; $i < $counter; $i++) {
                 $subjectName = $headers[$i];
                 $value = $row[$i] ?? null;
-                if (!empty($subjectName) && $value !== null && $value !== '') {
+                if (! empty($subjectName) && $value !== null && $value !== '') {
                     $grades[$subjectName] = is_numeric($value) ? (float) $value : $value;
                 }
             }

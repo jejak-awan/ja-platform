@@ -2,9 +2,13 @@
 
 namespace Modules\School\Models\Academic;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Modules\School\Models\Institution\School;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
@@ -14,20 +18,21 @@ use Modules\System\Traits\ScopedByWorkspace;
  * @property string $name
  * @property string|null $group
  * @property int|null $kkm
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\School\Models\Institution\School $school
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read School $school
  */
 class Subject extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_acad_subjects';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -39,10 +44,10 @@ class Subject extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Institution\School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\School::class);
+        return $this->belongsTo(School::class);
     }
 }

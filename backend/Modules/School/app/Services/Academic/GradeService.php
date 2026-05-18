@@ -2,8 +2,8 @@
 
 namespace Modules\School\Services\Academic;
 
-use Modules\School\Models\Academic\Grade;
 use Illuminate\Support\Collection;
+use Modules\School\Models\Academic\Grade;
 
 class GradeService
 {
@@ -24,6 +24,7 @@ class GradeService
 
         /** @var Collection<int, Grade> $result */
         $result = $query->get();
+
         return $result;
     }
 
@@ -41,13 +42,14 @@ class GradeService
             ->where('academic_year_id', $academicYearId)
             ->where('semester_id', $semesterId)
             ->get();
+
         return $result;
     }
 
     /**
      * Save or update a student's grade for a specific subject.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function saveGrade(array $data): Grade
     {
@@ -82,8 +84,8 @@ class GradeService
         }
 
         if ($grade->final_grade) {
-            $grade->grade_letter = Grade::getGradeLetter((float)$grade->final_grade);
-            $grade->predicate = Grade::getPredicate((float)$grade->final_grade);
+            $grade->grade_letter = Grade::getGradeLetter((float) $grade->final_grade);
+            $grade->predicate = Grade::getPredicate((float) $grade->final_grade);
         }
 
         $grade->save();
@@ -94,7 +96,7 @@ class GradeService
     /**
      * Bulk save grades for a class.
      *
-     * @param array<int, array<string, mixed>> $gradesData
+     * @param  array<int, array<string, mixed>>  $gradesData
      */
     public function bulkSaveGrades(array $gradesData): int
     {
@@ -103,6 +105,7 @@ class GradeService
             $this->saveGrade($data);
             $count++;
         }
+
         return $count;
     }
 }

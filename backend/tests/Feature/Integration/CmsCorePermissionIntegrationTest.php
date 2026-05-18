@@ -3,7 +3,6 @@
 namespace Tests\Feature\Integration;
 
 use Modules\Media\Models\File;
-use Modules\System\Models\User;
 use Modules\System\Models\Permission;
 use Modules\System\Models\Role;
 use Tests\Helpers\TestHelpers;
@@ -32,10 +31,10 @@ class CmsCorePermissionIntegrationTest extends TestCase
 
         // System endpoints
         TestHelpers::assertApiSuccess($this->getJson('/api/v1/manage/system/users'));
-        
+
         // Media endpoints
         TestHelpers::assertApiSuccess($this->getJson('/api/v1/manage/media'));
-        
+
         // Library endpoints
         TestHelpers::assertApiSuccess($this->getJson('/api/v1/manage/library/categories'));
     }

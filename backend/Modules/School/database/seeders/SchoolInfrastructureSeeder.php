@@ -3,7 +3,6 @@
 namespace Modules\School\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
 
@@ -33,6 +32,7 @@ class SchoolInfrastructureSeeder extends Seeder
         $school = School::where('npsn', '10000001')->first();
         if (! $school) {
             $this->command->error('Failed to create default school!');
+
             return;
         }
         $schoolId = $school->id;

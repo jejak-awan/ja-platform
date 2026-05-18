@@ -2,15 +2,15 @@
 
 namespace Modules\School\Services\Reports;
 
-use Modules\School\Models\Student\Student;
-
-use Modules\School\Models\Academic\Attendance;
 use Illuminate\Support\Facades\DB;
+use Modules\School\Models\Academic\Attendance;
+use Modules\School\Models\Student\Student;
 
 class ReportService
 {
     /**
      * Get student profile data for PDF report.
+     *
      * @return array{student: Student, attendance_stats: array<string, int>}
      */
     public function getStudentProfileData(string $studentId): array
@@ -21,9 +21,9 @@ class ReportService
             'level',
             'department',
             'studyGroups',
-            'attendances' => fn($q) => $q->latest()->limit(30),
-            'violations' => fn($q) => $q->latest()->limit(10),
-            'achievements' => fn($q) => $q->latest()->limit(10),
+            'attendances' => fn ($q) => $q->latest()->limit(30),
+            'violations' => fn ($q) => $q->latest()->limit(10),
+            'achievements' => fn ($q) => $q->latest()->limit(10),
         ])->findOrFail($studentId);
 
         /** @var array<string, int> $attendanceStats */
@@ -40,10 +40,9 @@ class ReportService
         ];
     }
 
-
-
     /**
      * Get student ID card data.
+     *
      * @return array{student: Student, verification_url: string}
      */
     public function getStudentIdCardData(string $studentId): array
@@ -59,6 +58,7 @@ class ReportService
 
     /**
      * Get graduation certificate (SKL) data.
+     *
      * @return array{student: Student, verification_url: string}
      */
     public function getGraduationCertificateData(string $studentId): array
@@ -74,12 +74,13 @@ class ReportService
 
     /**
      * Get attendance report data for a period.
+     *
      * @return array{total_records: int, stats: array<string, int>}
      */
     public function getAttendanceReport(string $schoolId, ?string $startDate = null, ?string $endDate = null): array
     {
         $query = Attendance::with('student')
-            ->whereHas('student', fn($q) => $q->where('school_id', $schoolId));
+            ->whereHas('student', fn ($q) => $q->where('school_id', $schoolId));
 
         if ($startDate) {
             $query->where('date', '>=', $startDate);
@@ -101,6 +102,4 @@ class ReportService
             'stats' => $stats,
         ];
     }
-
-
 }

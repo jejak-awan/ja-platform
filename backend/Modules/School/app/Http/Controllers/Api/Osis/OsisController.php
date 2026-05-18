@@ -2,32 +2,32 @@
 
 namespace Modules\School\Http\Controllers\Api\Osis;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
-use Modules\School\Models\Osis\OsisProgram;
-use Modules\School\Models\Osis\OsisMember;
 use Modules\School\Models\Osis\OsisFinance;
+use Modules\School\Models\Osis\OsisMember;
+use Modules\School\Models\Osis\OsisProgram;
 use Modules\School\Models\Osis\OsisSuggestion;
 use Modules\School\Services\Osis\OsisService;
 
 class OsisController extends BaseController
 {
-    public function __construct(protected OsisService $service)
-    {
-    }
+    public function __construct(protected OsisService $service) {}
 
     // --- Programs ---
-    public function programs(Request $request): \Illuminate\Http\JsonResponse
+    public function programs(Request $request): JsonResponse
     {
         $this->authorize('viewAny', OsisProgram::class);
         $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
-        $schoolId = (string)$schoolIdValue;
-        
+        $schoolId = (string) $schoolIdValue;
+
         $programs = $this->service->getPrograms($schoolId);
+
         return $this->sendResponse($programs, 'OSIS programs retrieved successfully.');
     }
 
-    public function storeProgram(Request $request): \Illuminate\Http\JsonResponse
+    public function storeProgram(Request $request): JsonResponse
     {
         $this->authorize('create', OsisProgram::class);
         /** @var array<string, mixed> $validated */
@@ -40,14 +40,14 @@ class OsisController extends BaseController
         ]);
 
         $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
-        $validated['school_id'] = (string)$schoolIdValue;
-        
+        $validated['school_id'] = (string) $schoolIdValue;
+
         $program = $this->service->createProgram($validated);
 
         return $this->sendResponse($program, 'OSIS program created successfully.', 201);
     }
 
-    public function updateProgram(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateProgram(Request $request, string $id): JsonResponse
     {
         /** @var OsisProgram $program */
         $program = OsisProgram::findOrFail($id);
@@ -63,29 +63,32 @@ class OsisController extends BaseController
         ]);
 
         $program = $this->service->updateProgram($program, $validated);
+
         return $this->sendResponse($program, 'OSIS program updated successfully.');
     }
 
-    public function destroyProgram(string $id): \Illuminate\Http\JsonResponse
+    public function destroyProgram(string $id): JsonResponse
     {
         /** @var OsisProgram $program */
         $program = OsisProgram::findOrFail($id);
         $this->authorize('delete', $program);
         $this->service->deleteProgram($program);
+
         return $this->sendResponse([], 'OSIS program deleted successfully.');
     }
 
     // --- Members ---
-    public function members(Request $request): \Illuminate\Http\JsonResponse
+    public function members(Request $request): JsonResponse
     {
         $this->authorize('viewAny', OsisMember::class);
         $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
-        $schoolId = (string)$schoolIdValue;
+        $schoolId = (string) $schoolIdValue;
         $members = $this->service->getMembers($schoolId);
+
         return $this->sendResponse($members, 'OSIS members retrieved successfully.');
     }
 
-    public function storeMember(Request $request): \Illuminate\Http\JsonResponse
+    public function storeMember(Request $request): JsonResponse
     {
         $this->authorize('create', OsisMember::class);
         /** @var array<string, mixed> $validated */
@@ -96,23 +99,24 @@ class OsisController extends BaseController
         ]);
 
         $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
-        $validated['school_id'] = (string)$schoolIdValue;
+        $validated['school_id'] = (string) $schoolIdValue;
         $member = $this->service->addMember($validated);
 
         return $this->sendResponse($member, 'OSIS member added successfully.', 201);
     }
 
     // --- Finances ---
-    public function finances(Request $request): \Illuminate\Http\JsonResponse
+    public function finances(Request $request): JsonResponse
     {
         $this->authorize('viewAny', OsisFinance::class);
         $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
-        $schoolId = (string)$schoolIdValue;
+        $schoolId = (string) $schoolIdValue;
         $finances = $this->service->getFinances($schoolId);
+
         return $this->sendResponse($finances, 'OSIS finances retrieved successfully.');
     }
 
-    public function storeFinance(Request $request): \Illuminate\Http\JsonResponse
+    public function storeFinance(Request $request): JsonResponse
     {
         $this->authorize('create', OsisFinance::class);
         /** @var array<string, mixed> $validated */
@@ -125,23 +129,24 @@ class OsisController extends BaseController
         ]);
 
         $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
-        $validated['school_id'] = (string)$schoolIdValue;
+        $validated['school_id'] = (string) $schoolIdValue;
         $finance = $this->service->createFinance($validated);
 
         return $this->sendResponse($finance, 'OSIS finance entry created successfully.', 201);
     }
 
     // --- Suggestions ---
-    public function suggestions(Request $request): \Illuminate\Http\JsonResponse
+    public function suggestions(Request $request): JsonResponse
     {
         $this->authorize('viewAny', OsisSuggestion::class);
         $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
-        $schoolId = (string)$schoolIdValue;
+        $schoolId = (string) $schoolIdValue;
         $suggestions = $this->service->getSuggestions($schoolId);
+
         return $this->sendResponse($suggestions, 'OSIS suggestions retrieved successfully.');
     }
 
-    public function updateSuggestion(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateSuggestion(Request $request, string $id): JsonResponse
     {
         /** @var OsisSuggestion $suggestion */
         $suggestion = OsisSuggestion::findOrFail($id);
@@ -154,6 +159,7 @@ class OsisController extends BaseController
         ]);
 
         $suggestion = $this->service->updateSuggestion($suggestion, $validated);
+
         return $this->sendResponse($suggestion, 'OSIS suggestion updated successfully.');
     }
 }

@@ -2,37 +2,41 @@
 
 namespace Modules\School\Models\Operations;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
  * @property int $library_book_id
  * @property int $borrower_id
  * @property string $borrower_type
- * @property \Illuminate\Support\Carbon $borrow_date
- * @property \Illuminate\Support\Carbon $due_date
- * @property \Illuminate\Support\Carbon|null $return_date
+ * @property Carbon $borrow_date
+ * @property Carbon $due_date
+ * @property Carbon|null $return_date
  * @property string|null $fine_amount
  * @property string $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read LibraryBook $book
- * @property-read \Illuminate\Database\Eloquent\Relations\MorphTo<\Illuminate\Database\Eloquent\Model, $this> $borrower
+ * @property-read MorphTo<Model, $this> $borrower
  */
 class LibraryCirculation extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_ops_library_circulations';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -54,17 +58,17 @@ class LibraryCirculation extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<LibraryBook, $this>
+     * @return BelongsTo<LibraryBook, $this>
      */
-    public function book(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function book(): BelongsTo
     {
         return $this->belongsTo(LibraryBook::class, 'library_book_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Illuminate\Database\Eloquent\Model, $this>
+     * @return MorphTo<Model, $this>
      */
-    public function borrower(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    public function borrower(): MorphTo
     {
         return $this->morphTo();
     }

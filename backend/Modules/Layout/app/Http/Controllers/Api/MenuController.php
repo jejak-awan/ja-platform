@@ -2,21 +2,21 @@
 
 namespace Modules\Layout\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Modules\Layout\Models\Menu;
 use Modules\Layout\Models\MenuItem;
-use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Contracts\LayoutRegistryInterface;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class MenuController extends BaseApiController
 {
-    public function __construct(protected LayoutRegistryInterface $registry)
-    {
-    }
+    public function __construct(protected LayoutRegistryInterface $registry) {}
 
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = Menu::withCount('items');
 
@@ -29,8 +29,8 @@ class MenuController extends BaseApiController
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
                 $searchStr = strtolower($search);
-                $q->where(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%")
-                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(slug)'), 'like', "%{$searchStr}%");
+                $q->where(DB::raw('lower(name)'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(slug)'), 'like', "%{$searchStr}%");
             });
         }
 
@@ -40,7 +40,7 @@ class MenuController extends BaseApiController
         return $this->success($menus, 'Menus retrieved successfully');
     }
 
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $scope = $request->input('module_scope', 'cms');
         $this->registry->getMenuLocations($scope);
@@ -54,7 +54,7 @@ class MenuController extends BaseApiController
         ]);
 
         if (empty($validated['slug'])) {
-            $validated['slug'] = \Illuminate\Support\Str::slug($validated['name']);
+            $validated['slug'] = Str::slug($validated['name']);
         }
 
         $menu = Menu::create($validated);
@@ -62,16 +62,16 @@ class MenuController extends BaseApiController
         return $this->success($menu, 'Menu created successfully', 201);
     }
 
-    public function show(Menu $menu): \Illuminate\Http\JsonResponse
+    public function show(Menu $menu): JsonResponse
     {
         return $this->success($menu->load('parentItems.children'), 'Menu retrieved successfully');
     }
 
-    public function update(Request $request, Menu $menu): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Menu $menu): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            'slug' => 'sometimes|required|string|unique:lay_menus,slug,' . $menu->id,
+            'slug' => 'sometimes|required|string|unique:lay_menus,slug,'.$menu->id,
             'location' => 'nullable|string',
             'description' => 'nullable|string',
             'is_active' => 'boolean',
@@ -86,13 +86,14 @@ class MenuController extends BaseApiController
         return $this->success($menu, 'Menu updated successfully');
     }
 
-    public function destroy(Menu $menu): \Illuminate\Http\JsonResponse
+    public function destroy(Menu $menu): JsonResponse
     {
         $menu->delete();
+
         return $this->success(null, 'Menu deleted successfully');
     }
 
-    public function addItem(Request $request, Menu $menu): \Illuminate\Http\JsonResponse
+    public function addItem(Request $request, Menu $menu): JsonResponse
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -117,7 +118,7 @@ class MenuController extends BaseApiController
         return $this->success($item, 'Menu item added successfully', 201);
     }
 
-    public function reorderItems(Request $request, Menu $menu): \Illuminate\Http\JsonResponse
+    public function reorderItems(Request $request, Menu $menu): JsonResponse
     {
         $request->validate([
             'items' => 'required|array',
@@ -144,11 +145,11 @@ class MenuController extends BaseApiController
         return $this->success(null, 'Menu items reordered successfully');
     }
 
-    public function getByLocation(string $location): \Illuminate\Http\JsonResponse
+    public function getByLocation(string $location): JsonResponse
     {
         $cacheKey = "menu_location_{$location}";
 
-        $menu = Cache::remember($cacheKey, 3600, fn() => Menu::where('location', $location)
+        $menu = Cache::remember($cacheKey, 3600, fn () => Menu::where('location', $location)
             ->where('is_active', true)
             ->with(['parentItems.children'])
             ->first());

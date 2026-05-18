@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\Ai\Tests\Unit;
 
-use Tests\TestCase;
 use Modules\Ai\Services\AiProviderFactory;
-use Modules\Ai\Services\Providers\OpenAiService;
-use Modules\Ai\Services\Providers\GeminiService;
 use Modules\Ai\Services\Providers\DeepSeekService;
+use Modules\Ai\Services\Providers\GeminiService;
+use Modules\Ai\Services\Providers\OpenAiService;
+use Tests\TestCase;
 
 class AiProviderFactoryTest extends TestCase
 {
@@ -17,7 +17,7 @@ class AiProviderFactoryTest extends TestCase
         $providers = AiProviderFactory::getProviders();
         $this->assertIsArray($providers);
         $this->assertCount(3, $providers);
-        
+
         $ids = array_column($providers, 'id');
         $this->assertContains('openai', $ids);
         $this->assertContains('gemini', $ids);
@@ -28,10 +28,10 @@ class AiProviderFactoryTest extends TestCase
     {
         $openai = AiProviderFactory::make('openai');
         $this->assertInstanceOf(OpenAiService::class, $openai);
-        
+
         $gemini = AiProviderFactory::make('gemini');
         $this->assertInstanceOf(GeminiService::class, $gemini);
-        
+
         $deepseek = AiProviderFactory::make('deepseek');
         $this->assertInstanceOf(DeepSeekService::class, $deepseek);
     }

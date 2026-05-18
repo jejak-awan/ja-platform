@@ -151,7 +151,7 @@ class CaptchaService
             $first = $movements[0];
             /** @var array{t?: mixed} $last */
             $last = end($movements);
-            
+
             $firstT = isset($first['t']) && is_numeric($first['t']) ? (float) $first['t'] : 0.0;
             $lastT = isset($last['t']) && is_numeric($last['t']) ? (float) $last['t'] : 0.0;
 

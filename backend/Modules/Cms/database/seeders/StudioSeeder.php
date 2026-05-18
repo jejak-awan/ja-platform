@@ -3,14 +3,12 @@
 namespace Modules\Cms\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
-use Modules\Library\Models\Category;
+use Modules\Cms\Models\Content;
 use Modules\Forms\Models\Form;
 use Modules\Forms\Models\FormField;
 use Modules\Layout\Models\Menu;
-use Modules\Layout\Models\MenuItem;
-use Modules\Cms\Models\Content;
-use Modules\Library\Models\Tag;
+use Modules\Library\Models\Category;
+use Modules\School\Models\Institution\SchoolUnit;
 use Modules\System\Models\User;
 
 class StudioSeeder extends Seeder
@@ -30,7 +28,7 @@ class StudioSeeder extends Seeder
         $this->seedUnitData($admin, null);
 
         // Then seed per-unit data
-        $units = \Modules\School\Models\Institution\SchoolUnit::all();
+        $units = SchoolUnit::all();
         foreach ($units as $unit) {
             $this->command->info("Seeding data for unit: {$unit->name}");
             $this->seedUnitData($admin, $unit->id);
@@ -57,7 +55,7 @@ class StudioSeeder extends Seeder
                 ['slug' => $cat['slug'], 'workspace_id' => $unitId],
                 array_merge($cat, [
                     'author_id' => $admin->id,
-                    'workspace_id' => $unitId
+                    'workspace_id' => $unitId,
                 ])
             );
             if ($category->trashed()) {
@@ -134,45 +132,45 @@ class StudioSeeder extends Seeder
                         'type' => 'page',
                         'target_id' => $pageMap['jurusan'] ?? null,
                         'url' => '/jurusan',
-                        'sort_order' => 1
+                        'sort_order' => 1,
                     ],
                     ['title' => 'Karir & BKK', 'url' => '/karir', 'sort_order' => 2, 'type' => 'custom'],
-                ]
+                ],
             ],
             [
                 'title' => 'Prestasi',
                 'type' => 'page',
                 'target_id' => $pageMap['prestasi'] ?? null,
                 'url' => '/prestasi',
-                'sort_order' => 4
+                'sort_order' => 4,
             ],
             [
                 'title' => 'PPDB',
                 'type' => 'page',
                 'target_id' => $pageMap['ppdb'] ?? null,
                 'url' => '/ppdb',
-                'sort_order' => 5
+                'sort_order' => 5,
             ],
             [
                 'title' => 'Kelulusan',
                 'type' => 'page',
                 'target_id' => $pageMap['graduation'] ?? null,
                 'url' => '/graduation',
-                'sort_order' => 6
+                'sort_order' => 6,
             ],
             [
                 'title' => 'Berita',
                 'type' => 'page',
                 'target_id' => $pageMap['blog'] ?? null,
                 'url' => '/blog',
-                'sort_order' => 7
+                'sort_order' => 7,
             ],
             [
                 'title' => 'Kontak',
                 'type' => 'page',
                 'target_id' => $pageMap['contact'] ?? null,
                 'url' => '/contact',
-                'sort_order' => 8
+                'sort_order' => 8,
             ],
         ];
 
@@ -223,18 +221,18 @@ class StudioSeeder extends Seeder
             $targetType = null;
 
             if ($type === 'page') {
-                $targetType = \Modules\Cms\Models\Content::class;
+                $targetType = Content::class;
             } elseif ($type === 'category') {
-                $targetType = \Modules\Library\Models\Category::class;
+                $targetType = Category::class;
             }
 
             $menuItem = $menu->items()->create(array_merge($itemData, [
                 'parent_id' => $parentId,
                 'type' => $type,
-                'target_type' => $targetType
+                'target_type' => $targetType,
             ]));
 
-            if (!empty($children)) {
+            if (! empty($children)) {
                 $this->seedMenuItems($menu, $children, $menuItem->id);
             }
         }

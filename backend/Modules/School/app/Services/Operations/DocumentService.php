@@ -2,22 +2,22 @@
 
 namespace Modules\School\Services\Operations;
 
-use Mpdf\Mpdf;
-use Modules\School\Models\Operations\DocumentTemplate;
 use Illuminate\Support\Facades\Blade;
+use Modules\School\Models\Operations\DocumentTemplate;
+use Mpdf\Mpdf;
 
 class DocumentService
 {
     /**
      * Generate PDF from template.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      * @return string PDF binary data
      */
     public function generatePdf(DocumentTemplate $template, array $data): string
     {
         $html = $this->renderTemplate($template, $data);
-        
+
         $mpdf = new Mpdf([
             'mode' => 'utf-8',
             'format' => 'A4',
@@ -36,7 +36,7 @@ class DocumentService
     /**
      * Render template with data using Blade engine.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     protected function renderTemplate(DocumentTemplate $template, array $data): string
     {

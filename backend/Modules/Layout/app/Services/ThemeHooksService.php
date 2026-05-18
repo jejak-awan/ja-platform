@@ -29,7 +29,7 @@ class ThemeHooksService
         ];
 
         // Sort by priority
-        usort($this->actions[$hook], fn(array $a, array $b) => $a['priority'] <=> $b['priority']);
+        usort($this->actions[$hook], fn (array $a, array $b) => $a['priority'] <=> $b['priority']);
     }
 
     /**
@@ -61,7 +61,7 @@ class ThemeHooksService
         ];
 
         // Sort by priority
-        usort($this->filters[$hook], fn(array $a, array $b) => $a['priority'] <=> $b['priority']);
+        usort($this->filters[$hook], fn (array $a, array $b) => $a['priority'] <=> $b['priority']);
     }
 
     /**
@@ -95,7 +95,7 @@ class ThemeHooksService
 
         $this->actions[$hook] = array_filter(
             $this->actions[$hook],
-            fn(array $action) => $action['callback'] !== $callback
+            fn (array $action) => $action['callback'] !== $callback
         );
     }
 
@@ -110,7 +110,7 @@ class ThemeHooksService
 
         $this->filters[$hook] = array_filter(
             $this->filters[$hook],
-            fn(array $filter) => $filter['callback'] !== $callback
+            fn (array $filter) => $filter['callback'] !== $callback
         );
     }
 

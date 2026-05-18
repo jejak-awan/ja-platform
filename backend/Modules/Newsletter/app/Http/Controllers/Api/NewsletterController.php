@@ -2,11 +2,17 @@
 
 namespace Modules\Newsletter\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Modules\Newsletter\Mail\NewsletterWelcome;
 use Modules\Newsletter\Models\NewsletterSubscriber;
+use Modules\System\Helpers\IpHelper;
 use Modules\System\Http\Controllers\BaseApiController;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class NewsletterController extends BaseApiController
 {
@@ -15,7 +21,8 @@ class NewsletterController extends BaseApiController
         $this->middleware('auth:sanctum')->except(['subscribe']);
         $this->middleware('permission:manage newsletter')->except(['subscribe']);
     }
-    public function subscribe(Request $request): \Illuminate\Http\JsonResponse
+
+    public function subscribe(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255',
@@ -47,7 +54,7 @@ class NewsletterController extends BaseApiController
                     'unsubscribed_at' => null,
                     'name' => $name ?? $existing->name,
                     'source' => $request->header('referer') ?? 'unknown',
-                    'ip_address' => \Modules\System\Helpers\IpHelper::getClientIp($request),
+                    'ip_address' => IpHelper::getClientIp($request),
                     'user_agent' => $request->userAgent(),
                 ]);
 
@@ -63,12 +70,12 @@ class NewsletterController extends BaseApiController
                 'status' => 'subscribed',
                 'subscribed_at' => now(),
                 'source' => $request->header('referer') ?? 'unknown',
-                'ip_address' => \Modules\System\Helpers\IpHelper::getClientIp($request),
+                'ip_address' => IpHelper::getClientIp($request),
                 'user_agent' => $request->userAgent(),
             ]);
 
             // Send welcome email
-            \Illuminate\Support\Facades\Mail::to($email)->send(new \Modules\Newsletter\Mail\NewsletterWelcome($subscriber));
+            Mail::to($email)->send(new NewsletterWelcome($subscriber));
 
             return $this->success([
                 'subscriber' => $subscriber,
@@ -80,7 +87,7 @@ class NewsletterController extends BaseApiController
         }
     }
 
-    public function unsubscribe(Request $request): \Illuminate\Http\JsonResponse
+    public function unsubscribe(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -119,7 +126,7 @@ class NewsletterController extends BaseApiController
     /**
      * Admin: Get paginated subscribers
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
             $query = NewsletterSubscriber::query();
@@ -130,8 +137,8 @@ class NewsletterController extends BaseApiController
                 $search = is_string($searchRaw) ? $searchRaw : '';
                 $query->where(function ($q) use ($search): void {
                     $searchStr = strtolower($search);
-                    $q->where(\Illuminate\Support\Facades\DB::raw('lower(email)'), 'like', "%{$searchStr}%")
-                        ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%");
+                    $q->where(DB::raw('lower(email)'), 'like', "%{$searchStr}%")
+                        ->orWhere(DB::raw('lower(name)'), 'like', "%{$searchStr}%");
                 });
             }
 
@@ -172,7 +179,7 @@ class NewsletterController extends BaseApiController
      *
      * @param  string|int  $id
      */
-    public function destroy($id): \Illuminate\Http\JsonResponse
+    public function destroy($id): JsonResponse
     {
         try {
             /** @var NewsletterSubscriber $subscriber */
@@ -188,7 +195,7 @@ class NewsletterController extends BaseApiController
     /**
      * @param  string|int  $id
      */
-    public function restore($id): \Illuminate\Http\JsonResponse
+    public function restore($id): JsonResponse
     {
         try {
             /** @var NewsletterSubscriber $subscriber */
@@ -204,7 +211,7 @@ class NewsletterController extends BaseApiController
     /**
      * @param  string|int  $id
      */
-    public function forceDelete($id): \Illuminate\Http\JsonResponse
+    public function forceDelete($id): JsonResponse
     {
         try {
             /** @var NewsletterSubscriber $subscriber */
@@ -220,7 +227,7 @@ class NewsletterController extends BaseApiController
     /**
      * Admin: Export subscribers (returns raw CSV data)
      */
-    public function export(Request $request): \Symfony\Component\HttpFoundation\StreamedResponse|\Illuminate\Http\JsonResponse
+    public function export(Request $request): StreamedResponse|JsonResponse
     {
         try {
             $query = NewsletterSubscriber::query();
@@ -269,7 +276,7 @@ class NewsletterController extends BaseApiController
         }
     }
 
-    public function bulkAction(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkAction(Request $request): JsonResponse
     {
         $request->validate([
             'ids' => 'required|array',

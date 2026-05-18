@@ -2,10 +2,12 @@
 
 namespace Modules\Ai\Services\Providers;
 
-use Modules\Ai\Contracts\AiProviderInterface;
-
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Modules\Ai\Contracts\AiProviderInterface;
+use Modules\System\Models\Setting;
 
 class GeminiService implements AiProviderInterface
 {
@@ -16,7 +18,7 @@ class GeminiService implements AiProviderInterface
     public function __construct(?string $apiKey = null)
     {
         // Allow passing key explicitly (for testing connection), otherwise use settings
-        $settingKey = \Modules\System\Models\Setting::get('gemini_api_key');
+        $settingKey = Setting::get('gemini_api_key');
         $defaultKey = is_string(config('services.gemini.api_key', '')) ? config('services.gemini.api_key', '') : '';
         $this->apiKey = $apiKey ?? (is_string($settingKey) ? $settingKey : $defaultKey);
     }
@@ -33,7 +35,7 @@ class GeminiService implements AiProviderInterface
         }
 
         // Use provided model or default to gemini-2.0-flash
-        $settingModel = \Modules\System\Models\Setting::get('gemini_model', '');
+        $settingModel = Setting::get('gemini_model', '');
         $model = $model ?: (is_string($settingModel) && $settingModel !== '' ? $settingModel : 'gemini-2.0-flash');
 
         // Normalize model string
@@ -142,7 +144,7 @@ class GeminiService implements AiProviderInterface
         return true;
     }
 
-    protected function withApiKeyHeaders(): \Illuminate\Http\Client\PendingRequest
+    protected function withApiKeyHeaders(): PendingRequest
     {
         return Http::withHeaders([
             'Content-Type' => 'application/json',
@@ -151,7 +153,7 @@ class GeminiService implements AiProviderInterface
     }
 
     /**
-     * @param  \Illuminate\Http\Client\Response  $response
+     * @param  Response  $response
      *
      * @throws \Exception
      */

@@ -2,13 +2,13 @@
 
 namespace Modules\School\Models\Lms;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Modules\School\Models\Lms\TopicContent\Quiz;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -18,16 +18,18 @@ use Modules\School\Models\Lms\TopicContent\Quiz;
  * @property int $score
  * @property int $order
  * @property-read Quiz $quiz
- * @property-read \Illuminate\Support\Collection<int, QuizOption> $options
+ * @property-read Collection<int, QuizOption> $options
  */
 class QuizQuestion extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
+
     protected $table = 'sch_lms_quiz_questions';
 
     protected $fillable = [

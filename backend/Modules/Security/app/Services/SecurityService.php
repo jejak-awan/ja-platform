@@ -3,12 +3,15 @@
 namespace Modules\Security\Services;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Modules\System\Helpers\IpHelper;
 use Modules\Security\Models\IpList;
 use Modules\Security\Models\SecurityLog;
+use Modules\System\Helpers\IpHelper;
+use Modules\System\Models\Setting;
 use Modules\System\Models\User;
+use Modules\System\Services\AnomalyDetectionService;
 
 class SecurityService
 {
@@ -29,8 +32,8 @@ class SecurityService
 
     public function __construct()
     {
-        $this->maxFailedAttempts = is_scalar($v1 = \Modules\System\Models\Setting::get('login_attempts_limit', 5)) ? (int) $v1 : 5;
-        $this->baseBlockMinutes = is_scalar($v2 = \Modules\System\Models\Setting::get('block_duration_minutes', 15)) ? (int) $v2 : 15;
+        $this->maxFailedAttempts = is_scalar($v1 = Setting::get('login_attempts_limit', 5)) ? (int) $v1 : 5;
+        $this->baseBlockMinutes = is_scalar($v2 = Setting::get('block_duration_minutes', 15)) ? (int) $v2 : 15;
         // Ensure baseBlockMinutes is at least 1 to avoid math issues or immediate expiry
         $this->baseBlockMinutes = max(1, $this->baseBlockMinutes);
         $this->accountLockMinutes = $this->baseBlockMinutes;
@@ -330,7 +333,7 @@ class SecurityService
     /**
      * Get all blocked IPs.
      *
-     * @return \Illuminate\Database\Eloquent\Collection<int, IpList>
+     * @return Collection<int, IpList>
      */
     public function getBlocklist()
     {
@@ -340,7 +343,7 @@ class SecurityService
     /**
      * Get all whitelisted IPs.
      *
-     * @return \Illuminate\Database\Eloquent\Collection<int, IpList>
+     * @return Collection<int, IpList>
      */
     public function getWhitelist()
     {
@@ -559,9 +562,9 @@ class SecurityService
         Cache::put($this->cachePrefix.$ipKey, true, now()->addMinutes($this->getShieldTrustTtlMinutes()));
 
         // We issue the cookie in the controller for better response handling
-        
+
         // Only log success if enabled in settings
-        if (\Modules\System\Models\Setting::get('shield_log_verification_success', false)) {
+        if (Setting::get('shield_log_verification_success', false)) {
             SecurityLog::log('shield_verified', null, $ipAddress, 'Security shield challenge passed', [
                 'user_agent' => $userAgent,
                 'fingerprint' => $fingerprint,
@@ -583,7 +586,7 @@ class SecurityService
      */
     public function getShieldTrustTtlMinutes(): int
     {
-        $raw = \Modules\System\Models\Setting::get('shield_trust_ttl_minutes', 10080);
+        $raw = Setting::get('shield_trust_ttl_minutes', 10080);
         $ttl = is_numeric($raw) ? (int) $raw : 10080;
 
         // Clamp between 1 hour and 30 days.
@@ -681,7 +684,7 @@ class SecurityService
      */
     public function getShieldDifficulty(?string $ip = null, ?string $sessionId = null): int
     {
-        $settingValue = \Modules\System\Models\Setting::get('shield_protection_difficulty', 4);
+        $settingValue = Setting::get('shield_protection_difficulty', 4);
         $baseDifficulty = is_numeric($settingValue) ? (int) $settingValue : 4;
 
         // 1. Global Scaling: Check for traffic spike in last minute
@@ -699,9 +702,9 @@ class SecurityService
         // 2. Individual Scaling: Increase difficulty for suspicious behavior
         $individualModifier = 0;
         if ($ip) {
-            $anomalyService = app(\Modules\System\Services\AnomalyDetectionService::class);
+            $anomalyService = app(AnomalyDetectionService::class);
             $score = $anomalyService->getScore($ip, $sessionId);
-            
+
             if ($score >= 75) {
                 $individualModifier = 2; // Very suspicious
             } elseif ($score >= 40) {

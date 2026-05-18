@@ -2,10 +2,11 @@
 
 namespace Modules\Ai\Services\Providers;
 
-use Modules\Ai\Contracts\AiProviderInterface;
-
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Modules\Ai\Contracts\AiProviderInterface;
+use Modules\System\Models\Setting;
 
 class OpenAiService implements AiProviderInterface
 {
@@ -15,7 +16,7 @@ class OpenAiService implements AiProviderInterface
 
     public function __construct(?string $apiKey = null)
     {
-        $val = \Modules\System\Models\Setting::get('openai_api_key', '');
+        $val = Setting::get('openai_api_key', '');
         $this->apiKey = $apiKey ?? (is_string($val) ? $val : '');
     }
 
@@ -30,7 +31,7 @@ class OpenAiService implements AiProviderInterface
             throw new \Exception('OpenAI API Key is not configured.');
         }
 
-        $val = \Modules\System\Models\Setting::get('openai_model', '');
+        $val = Setting::get('openai_model', '');
         $model = $model ?: (is_string($val) && $val !== '' ? $val : 'gpt-4o-mini');
 
         try {
@@ -121,7 +122,7 @@ class OpenAiService implements AiProviderInterface
     /**
      * Handle API errors
      *
-     * @param  \Illuminate\Http\Client\Response  $response
+     * @param  Response  $response
      *
      * @throws \Exception
      */

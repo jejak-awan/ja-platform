@@ -4,12 +4,12 @@ namespace Modules\Cms\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
+use Modules\Library\Models\Category;
 use Modules\System\Models\User;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Cms\Models\Content>
+ * @extends Factory<Content>
  */
 class ContentFactory extends Factory
 {

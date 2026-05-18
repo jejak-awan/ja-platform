@@ -2,16 +2,19 @@
 
 namespace Modules\Cms\Models;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Modules\Cms\Database\Factories\CommentFactory;
 use Modules\System\Models\User;
-use Spatie\Activitylog\LogOptions;
 use Modules\System\Traits\CoreLogsActivity;
+use Modules\System\Traits\ScopedByWorkspace;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * @property int $id
@@ -21,36 +24,37 @@ use Modules\System\Traits\CoreLogsActivity;
  * @property string $body
  * @property string $status
  * @property int|null $locked_by
- * @property \Illuminate\Support\Carbon|null $locked_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $locked_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $name
  * @property string|null $email
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Modules\Cms\Models\Content $content
- * @property-read \Modules\System\Models\User|null $user
+ * @property Carbon|null $deleted_at
+ * @property-read Content $content
+ * @property-read User|null $user
  * @property-read Comment|null $parent
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Comment> $replies
- * @property-read \Modules\System\Models\User|null $lockedBy
+ * @property-read Collection<int, Comment> $replies
+ * @property-read User|null $lockedBy
  */
 class Comment extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    /** @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Modules\Cms\Database\Factories\CommentFactory> */
-    use \Illuminate\Database\Eloquent\Factories\HasFactory, CoreLogsActivity, SoftDeletes, ScopedByWorkspace;
+    /** @use HasFactory<CommentFactory> */
+    use CoreLogsActivity, HasFactory, ScopedByWorkspace, SoftDeletes;
 
     protected $table = 'cms_comments';
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Cms\Database\Factories\CommentFactory
+    protected static function newFactory(): CommentFactory
     {
-        return \Modules\Cms\Database\Factories\CommentFactory::new();
+        return CommentFactory::new();
     }
 
     protected $fillable = [

@@ -8,6 +8,12 @@ const systemRoutes: RouteRecordRaw[] = [
         meta: { permission: 'manage settings' },
     },
     {
+        path: 'extensions',
+        name: 'extensions',
+        component: () => import('@/modules/System/views/settings/extensions/Index.vue'),
+        meta: { title: 'Extensions & App Store', permission: 'manage settings' },
+    },
+    {
         path: 'cache',
         name: 'cache',
         component: () => import('@/modules/System/views/settings/cache/Index.vue'),

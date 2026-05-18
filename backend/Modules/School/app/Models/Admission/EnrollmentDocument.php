@@ -2,11 +2,13 @@
 
 namespace Modules\School\Models\Admission;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -15,8 +17,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $file_path
  * @property string $status
  * @property string|null $notes
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Enrollment $enrollment
  */
 class EnrollmentDocument extends Model
@@ -24,11 +26,12 @@ class EnrollmentDocument extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_adm_documents';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -40,9 +43,9 @@ class EnrollmentDocument extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Enrollment, $this>
+     * @return BelongsTo<Enrollment, $this>
      */
-    public function enrollment(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function enrollment(): BelongsTo
     {
         return $this->belongsTo(Enrollment::class);
     }

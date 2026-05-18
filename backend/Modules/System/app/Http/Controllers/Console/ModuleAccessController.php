@@ -2,9 +2,13 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\System\Models\User;
+use Illuminate\Support\Collection;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Role;
+use Modules\System\Models\User;
 
 /**
  * Manage module-scoped access (RBAC) without granting Core governance.
@@ -13,11 +17,11 @@ use Modules\System\Models\Role;
  * - CMS roles must be prefixed: `cms:...`
  * - School roles are treated as "non-core, non-cms" roles (legacy)
  */
-class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiController
+class ModuleAccessController extends BaseApiController
 {
     private const MODULES = ['cms', 'school'];
 
-    public function roles(Request $request, string $module): \Illuminate\Http\JsonResponse
+    public function roles(Request $request, string $module): JsonResponse
     {
         if (! in_array($module, self::MODULES, true)) {
             return $this->notFound('Module');
@@ -28,7 +32,7 @@ class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiCon
         return $this->success($roles, 'Module roles retrieved successfully');
     }
 
-    public function users(Request $request, string $module): \Illuminate\Http\JsonResponse
+    public function users(Request $request, string $module): JsonResponse
     {
         if (! in_array($module, self::MODULES, true)) {
             return $this->notFound('Module');
@@ -48,8 +52,8 @@ class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiCon
         }
 
         $paginator = $query->paginate($perPage);
-        $paginator->getCollection()->transform(function (User $user) use ($module): \Modules\System\Models\User {
-            /** @var \Illuminate\Support\Collection<int, Role> $roles */
+        $paginator->getCollection()->transform(function (User $user) use ($module): User {
+            /** @var Collection<int, Role> $roles */
             $roles = $user->roles;
             $scoped = $roles->filter(fn (Role $r): bool => $this->roleMatchesModule($r, $module))->values();
             $user->setRelation('roles', $scoped);
@@ -61,7 +65,7 @@ class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiCon
         return $this->paginated($paginator, 'Module users retrieved successfully');
     }
 
-    public function updateUserRoles(Request $request, string $module, User $user): \Illuminate\Http\JsonResponse
+    public function updateUserRoles(Request $request, string $module, User $user): JsonResponse
     {
         if (! in_array($module, self::MODULES, true)) {
             return $this->notFound('Module');
@@ -83,6 +87,7 @@ class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiCon
             if (! $role) {
                 return false;
             }
+
             return ! $this->roleMatchesModule($role, $module);
         }));
 
@@ -99,9 +104,9 @@ class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiCon
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder<Role>
+     * @return Builder<Role>
      */
-    private function queryScopedRoles(string $module): \Illuminate\Database\Eloquent\Builder
+    private function queryScopedRoles(string $module): Builder
     {
         if ($module === 'cms') {
             return Role::query()->where('name', 'like', 'cms:%');
@@ -132,4 +137,3 @@ class ModuleAccessController extends \Modules\System\Http\Controllers\BaseApiCon
             && ! in_array($role->name, ['super', 'system-admin', 'security-officer', 'admin', 'editor', 'operator', 'member'], true);
     }
 }
-

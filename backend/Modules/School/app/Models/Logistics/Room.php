@@ -2,11 +2,15 @@
 
 namespace Modules\School\Models\Logistics;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -15,21 +19,22 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $name
  * @property int $capacity
  * @property string $condition
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Building $building
- * @property-read \Illuminate\Database\Eloquent\Collection<int, SchoolAsset> $assets
+ * @property-read Collection<int, SchoolAsset> $assets
  */
 class Room extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_log_rooms';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -41,17 +46,17 @@ class Room extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Building, $this>
+     * @return BelongsTo<Building, $this>
      */
-    public function building(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function building(): BelongsTo
     {
         return $this->belongsTo(Building::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<SchoolAsset, $this>
+     * @return HasMany<SchoolAsset, $this>
      */
-    public function assets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function assets(): HasMany
     {
         return $this->hasMany(SchoolAsset::class);
     }

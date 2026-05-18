@@ -2,18 +2,20 @@
 
 namespace Modules\Search\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\Search\Services\SearchService;
-use Modules\System\Http\Controllers\BaseApiController;
+use Illuminate\Support\Facades\Auth;
+use Modules\Cms\Models\Content;
 use Modules\Search\Models\SearchQuery;
+use Modules\Search\Services\SearchService;
+use Modules\System\Helpers\IpHelper;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class SearchController extends BaseApiController
 {
-    public function __construct(protected SearchService $searchService)
-    {
-    }
+    public function __construct(protected SearchService $searchService) {}
 
-    public function search(Request $request): \Illuminate\Http\JsonResponse
+    public function search(Request $request): JsonResponse
     {
         $request->validate([
             'q' => 'required|string|min:2|max:255',
@@ -43,13 +45,13 @@ class SearchController extends BaseApiController
         $limitRaw = $request->input('limit', 20);
         $limit = is_numeric($limitRaw) ? (int) $limitRaw : 20;
 
-        /** @var array<int, \Modules\Cms\Models\Content> $results */
+        /** @var array<int, Content> $results */
         $results = $this->searchService->search($query, $filters, $limit);
 
         return $this->success($results, 'Search results retrieved successfully');
     }
 
-    public function suggestions(Request $request): \Illuminate\Http\JsonResponse
+    public function suggestions(Request $request): JsonResponse
     {
         $request->validate([
             'q' => 'required|string|min:2|max:255',
@@ -73,7 +75,7 @@ class SearchController extends BaseApiController
         ], 'Search suggestions retrieved successfully');
     }
 
-    public function getQueries(Request $request): \Illuminate\Http\JsonResponse
+    public function getQueries(Request $request): JsonResponse
     {
         $limitRaw = $request->input('limit', 10);
         $limit = is_numeric($limitRaw) ? (int) $limitRaw : 10;
@@ -87,7 +89,7 @@ class SearchController extends BaseApiController
         return $this->success($queries, 'Search queries retrieved successfully');
     }
 
-    public function getStats(Request $request): \Illuminate\Http\JsonResponse
+    public function getStats(Request $request): JsonResponse
     {
         $daysRaw = $request->input('days', 30);
         $days = is_numeric($daysRaw) ? (int) $daysRaw : 30;
@@ -108,7 +110,7 @@ class SearchController extends BaseApiController
         return $this->success($stats, 'Search statistics retrieved successfully');
     }
 
-    public function reindex(Request $request): \Illuminate\Http\JsonResponse
+    public function reindex(Request $request): JsonResponse
     {
         $result = $this->searchService->reindexAll();
 
@@ -117,13 +119,13 @@ class SearchController extends BaseApiController
         ], 'Search index rebuilt successfully');
     }
 
-    public function deleteQuery(string $id): \Illuminate\Http\JsonResponse
+    public function deleteQuery(string $id): JsonResponse
     {
-        $userId = \Illuminate\Support\Facades\Auth::id();
-        $ip = \Modules\System\Helpers\IpHelper::getClientIp(request());
+        $userId = Auth::id();
+        $ip = IpHelper::getClientIp(request());
 
         $query = SearchQuery::query();
-        
+
         // If the parameter is a UUID, delete that specific row. Otherwise, delete all occurrences of that query term.
         if (preg_match('/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/', $id)) {
             $query->where('id', $id);
@@ -147,10 +149,10 @@ class SearchController extends BaseApiController
         return $this->error('Search history item not found or unauthorized', 404);
     }
 
-    public function clearQueries(Request $request): \Illuminate\Http\JsonResponse
+    public function clearQueries(Request $request): JsonResponse
     {
-        $userId = \Illuminate\Support\Facades\Auth::id();
-        $ip = \Modules\System\Helpers\IpHelper::getClientIp(request());
+        $userId = Auth::id();
+        $ip = IpHelper::getClientIp(request());
 
         $query = SearchQuery::query();
 

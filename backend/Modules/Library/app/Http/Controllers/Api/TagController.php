@@ -2,18 +2,20 @@
 
 namespace Modules\Library\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Modules\Library\Models\Tag;
 use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\User;
 
 class TagController extends BaseApiController
 {
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = Tag::orderBy('name');
 
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         $user = $request->user();
 
         // Scope by workspace
@@ -54,7 +56,7 @@ class TagController extends BaseApiController
         return $this->success($tags, 'Tags retrieved successfully');
     }
 
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -63,7 +65,7 @@ class TagController extends BaseApiController
             'metadata' => 'nullable|array',
         ]);
 
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         $user = $request->user();
 
         $type = $validated['type'] ?? 'content';
@@ -87,12 +89,12 @@ class TagController extends BaseApiController
         return $this->success($tag, 'Tag created successfully', 201);
     }
 
-    public function show(Tag $tag): \Illuminate\Http\JsonResponse
+    public function show(Tag $tag): JsonResponse
     {
         return $this->success($tag, 'Tag retrieved successfully');
     }
 
-    public function update(Request $request, Tag $tag): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Tag $tag): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
@@ -106,7 +108,7 @@ class TagController extends BaseApiController
         return $this->success($tag, 'Tag updated successfully');
     }
 
-    public function bulkDelete(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkDelete(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'ids' => 'required|array',
@@ -116,7 +118,7 @@ class TagController extends BaseApiController
         $ids = $validated['ids'];
         $query = Tag::whereIn('id', $ids);
 
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         $user = $request->user();
 
         if ($user && ! $user->can('manage tags')) {
@@ -128,10 +130,10 @@ class TagController extends BaseApiController
         return $this->success(['deleted_count' => $count], 'Tags deleted successfully');
     }
 
-    public function statistics(Request $request): \Illuminate\Http\JsonResponse
+    public function statistics(Request $request): JsonResponse
     {
         $query = Tag::query();
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         $user = $request->user();
 
         if ($user && ! $user->can('manage tags')) {
@@ -142,15 +144,16 @@ class TagController extends BaseApiController
             'total_tags' => $query->count(),
             'used_tags' => (clone $query)->where('usage_count', '>', 0)->count(),
             'total_usage' => (clone $query)->sum('usage_count'),
-            'types' => (clone $query)->select('type', \Illuminate\Support\Facades\DB::raw('count(*) as count'))->groupBy('type')->get(),
+            'types' => (clone $query)->select('type', DB::raw('count(*) as count'))->groupBy('type')->get(),
         ];
 
         return $this->success($stats, 'Tag statistics retrieved successfully');
     }
 
-    public function destroy(Tag $tag): \Illuminate\Http\JsonResponse
+    public function destroy(Tag $tag): JsonResponse
     {
         $tag->delete();
+
         return $this->success(null, 'Tag deleted successfully');
     }
 }

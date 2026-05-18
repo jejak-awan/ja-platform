@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\School\Http\Requests\Institution;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\School\Models\Institution\School;
 
 class UpdateSchoolRequest extends FormRequest
 {
@@ -12,21 +14,21 @@ class UpdateSchoolRequest extends FormRequest
      * Get the validation rules that apply to the request.
      */
     /**
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        /** @var \Modules\School\Models\Institution\School|null $school */
+        /** @var School|null $school */
         $school = $this->route('school');
-        $id = $school instanceof \Modules\School\Models\Institution\School ? $school->id : $this->input('id');
-        $schoolId = is_numeric($id) ? (int)$id : 0;
+        $id = $school instanceof School ? $school->id : $this->input('id');
+        $schoolId = is_numeric($id) ? (int) $id : 0;
 
         return [
             'name' => 'required|string|max:255',
             'type' => 'nullable|string|max:50',
             'is_multi_unit' => 'sometimes|boolean',
             'is_multi_branch' => 'sometimes|boolean',
-            'npsn' => 'nullable|string|size:8|unique:sch_ins_schools,npsn,' . $schoolId,
+            'npsn' => 'nullable|string|size:8|unique:sch_ins_schools,npsn,'.$schoolId,
             'nss' => 'nullable|string|max:20',
             'nds' => 'nullable|string|max:20',
             'status_kepemilikan' => 'nullable|string|max:100',

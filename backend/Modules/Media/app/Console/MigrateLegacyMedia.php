@@ -5,13 +5,12 @@ namespace Modules\Media\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Modules\Media\Models\File;
 use Modules\Media\Models\Folder;
-use Modules\Media\Models\Usage;
 
 class MigrateLegacyMedia extends Command
 {
     protected $signature = 'media:migrate-legacy';
+
     protected $description = 'Migrate data from legacy core_media tables to new srv_media tables';
 
     public function handle(): void
@@ -49,7 +48,7 @@ class MigrateLegacyMedia extends Command
                     ->update(['parent_id' => $folderMap[$oldFolder->parent_id]]);
             }
         }
-        $this->info('Folders migrated: ' . count($oldFolders));
+        $this->info('Folders migrated: '.count($oldFolders));
 
         // 2. Migrate Files
         $this->info('Migrating files...');
@@ -80,7 +79,7 @@ class MigrateLegacyMedia extends Command
             ]);
             $fileMap[$oldFile->id] = $newUuid;
         }
-        $this->info('Files migrated: ' . count($oldFiles));
+        $this->info('Files migrated: '.count($oldFiles));
 
         // 3. Migrate Usages
         $this->info('Migrating usages...');
@@ -97,13 +96,13 @@ class MigrateLegacyMedia extends Command
                 ]);
             }
         }
-        $this->info('Usages migrated: ' . count($oldUsages));
+        $this->info('Usages migrated: '.count($oldUsages));
 
         $this->info('Migration completed successfully!');
-        
+
         // Save the map for later reference
         $mapPath = storage_path('media_migration_map.json');
         file_put_contents($mapPath, json_encode(['files' => $fileMap, 'folders' => $folderMap], JSON_PRETTY_PRINT));
-        $this->info('Mapping saved to: ' . $mapPath);
+        $this->info('Mapping saved to: '.$mapPath);
     }
 }

@@ -3,17 +3,21 @@
 namespace Modules\Cms\Services;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Modules\Cms\Models\Content;
 use Modules\Cms\Models\ContentCustomField;
 use Modules\Cms\Models\ContentRevision;
-use Modules\Media\Models\Usage as MediaUsage;
+use Modules\Library\Models\CustomField;
 use Modules\Library\Models\Tag;
+use Modules\Media\Models\Usage as MediaUsage;
 use Modules\Search\Models\SearchIndex;
 use Modules\System\Models\Webhook;
-use Modules\Cms\Services\CmsCacheService;
 
 class ContentService
 {
@@ -27,17 +31,17 @@ class ContentService
     /**
      * Get published contents with filtering and caching
      *
-     * @return array{data: \Illuminate\Pagination\LengthAwarePaginator<int, Content>|\Illuminate\Database\Eloquent\Collection<int, Content>, paginated: bool}
+     * @return array{data: LengthAwarePaginator<int, Content>|Collection<int, Content>, paginated: bool}
      */
     public function getPublishedContents(Request $request): array
     {
         $cacheKey = 'contents_published_'.md5((string) $request->getQueryString());
 
         return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($request): array {
-            /** @var \Illuminate\Database\Eloquent\Builder<Content> $query */
+            /** @var Builder<Content> $query */
             $query = Content::with(['author', 'category', 'tags'])
                 ->where('status', 'published')
-                ->where(function (\Illuminate\Database\Eloquent\Builder $q): void {
+                ->where(function (Builder $q): void {
                     $q->whereNull('published_at')
                         ->orWhere('published_at', '<=', Carbon::now());
                 });
@@ -67,7 +71,7 @@ class ContentService
     /**
      * Apply common filters to content query
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<Content>  $query
+     * @param  Builder<Content>  $query
      */
     public function applyFilters($query, Request $request): void
     {
@@ -104,14 +108,14 @@ class ContentService
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
                 $searchStr = strtolower($search);
-                $q->where(\Illuminate\Support\Facades\DB::raw('lower(title)'), 'like', "%{$searchStr}%")
-                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(body)'), 'like', "%{$searchStr}%")
-                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(excerpt)'), 'like', "%{$searchStr}%")
+                $q->where(DB::raw('lower(title)'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(body)'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(excerpt)'), 'like', "%{$searchStr}%")
                     ->orWhereHas('category', function ($cq) use ($searchStr): void {
-                        $cq->where(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%");
+                        $cq->where(DB::raw('lower(name)'), 'like', "%{$searchStr}%");
                     })
                     ->orWhereHas('author', function ($aq) use ($searchStr): void {
-                        $aq->where(\Illuminate\Support\Facades\DB::raw('lower(name)'), 'like', "%{$searchStr}%");
+                        $aq->where(DB::raw('lower(name)'), 'like', "%{$searchStr}%");
                     });
             });
         }
@@ -120,7 +124,7 @@ class ContentService
     /**
      * Apply sorting to query
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<Content>  $query
+     * @param  Builder<Content>  $query
      */
     public function applySorting($query, Request $request): void
     {
@@ -498,7 +502,7 @@ class ContentService
     public function saveCustomFields(Content $content, array $customFields): void
     {
         foreach ($customFields as $fieldSlug => $value) {
-            $field = \Modules\Library\Models\CustomField::where('key', $fieldSlug)->first();
+            $field = CustomField::where('key', $fieldSlug)->first();
             if ($field) {
                 ContentCustomField::updateOrCreate(
                     [
@@ -542,10 +546,10 @@ class ContentService
     {
         $categoryName = $content->category !== null ? (string) $content->category->name : '';
         $authorName = (string) $content->author->name;
-        
+
         SearchIndex::index($content, [
             'title' => $content->title,
-            'content' => strip_tags($content->body ?? '') . " {$categoryName} {$authorName}",
+            'content' => strip_tags($content->body ?? '')." {$categoryName} {$authorName}",
             'excerpt' => $content->excerpt,
             'url' => url('/blog/'.$content->slug),
             'type' => $content->type,

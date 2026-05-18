@@ -2,19 +2,21 @@
 
 namespace Modules\Security\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Modules\System\Helpers\IpHelper;
 use Modules\Security\Models\CspReport;
+use Modules\System\Helpers\IpHelper;
+use Modules\System\Http\Controllers\BaseApiController;
 
-class CspReportController extends \Modules\System\Http\Controllers\BaseApiController
+class CspReportController extends BaseApiController
 {
     /**
      * Receive CSP violation reports from browsers
      * Public endpoint, no authentication required
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         try {
             $reportRaw = $request->input('csp-report');
@@ -64,7 +66,7 @@ class CspReportController extends \Modules\System\Http\Controllers\BaseApiContro
     /**
      * Get CSP reports for admin dashboard
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = CspReport::query();
 
@@ -102,7 +104,7 @@ class CspReportController extends \Modules\System\Http\Controllers\BaseApiContro
     /**
      * Bulk action on CSP reports
      */
-    public function bulkAction(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkAction(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'ids' => 'required|array',
@@ -126,7 +128,7 @@ class CspReportController extends \Modules\System\Http\Controllers\BaseApiContro
     /**
      * Get CSP report statistics
      */
-    public function statistics(): \Illuminate\Http\JsonResponse
+    public function statistics(): JsonResponse
     {
         $stats = [
             'total' => CspReport::count(),

@@ -2,9 +2,15 @@
 
 namespace Modules\School\Models\Institution;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
+use Modules\School\Database\Factories\SchoolUnitFactory;
+use Modules\School\Models\Academic\Department;
 
 /**
  * @property string $id
@@ -15,27 +21,28 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string|null $npsn
  * @property string|null $accreditation
  * @property array<string, mixed>|null $settings
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property bool $is_active
  * @property string|null $domain
  * @property string|null $subdomain
  * @property-read School $school
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\School\Models\Academic\Department> $departments
+ * @property-read Collection<int, Department> $departments
  */
 class SchoolUnit extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    /** @use HasFactory<\Modules\School\Database\Factories\SchoolUnitFactory> */
+    /** @use HasFactory<SchoolUnitFactory> */
     use HasFactory;
 
-    protected static function newFactory(): \Modules\School\Database\Factories\SchoolUnitFactory
+    protected static function newFactory(): SchoolUnitFactory
     {
-        return \Modules\School\Database\Factories\SchoolUnitFactory::new();
+        return SchoolUnitFactory::new();
     }
 
     protected $table = 'sch_ins_levels';
@@ -60,18 +67,18 @@ class SchoolUnit extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Academic\Department, $this>
+     * @return HasMany<Department, $this>
      */
-    public function departments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function departments(): HasMany
     {
-        return $this->hasMany(\Modules\School\Models\Academic\Department::class);
+        return $this->hasMany(Department::class);
     }
 }

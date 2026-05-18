@@ -1,17 +1,15 @@
 <?php
 
 namespace Modules\System\Models;
- 
- use Modules\Library\Models\Category;
- use Modules\Cms\Models\Content;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\System\Models\User;
+use Illuminate\Support\Carbon;
+use Modules\Cms\Models\Content;
+use Modules\Library\Models\Category;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -28,17 +26,18 @@ use Modules\System\Models\User;
  * @property bool $is_active
  * @property int $usage_count
  * @property int|null $author_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Modules\System\Models\User|null $author
- * @property-read \Modules\Library\Models\Category|null $category
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User|null $author
+ * @property-read Category|null $category
  */
 class ContentTemplate extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_content_templates';
@@ -88,7 +87,7 @@ class ContentTemplate extends Model
     /**
      * @param  array<string, mixed>  $data
      */
-    public function createContent(array $data = []): \Modules\Cms\Models\Content
+    public function createContent(array $data = []): Content
     {
         $title = $this->replaceTemplateVariables($this->title_template ?? '{{ title }}', $data);
         $body = $this->replaceTemplateVariables((string) $this->body_template, $data);
@@ -108,8 +107,8 @@ class ContentTemplate extends Model
         $contentData = array_merge($contentData, $data);
 
         // Create content
-        /** @var \Modules\Cms\Models\Content $content */
-        $content = \Modules\Cms\Models\Content::create($contentData);
+        /** @var Content $content */
+        $content = Content::create($contentData);
 
         // Apply default custom fields if any
         if (is_array($this->default_fields)) {

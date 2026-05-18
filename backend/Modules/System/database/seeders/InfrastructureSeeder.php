@@ -5,6 +5,7 @@ namespace Modules\System\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Modules\Library\Models\Tag;
+use Modules\Media\Models\Folder;
 use Modules\System\Models\User;
 
 class InfrastructureSeeder extends Seeder
@@ -42,7 +43,7 @@ class InfrastructureSeeder extends Seeder
         ];
 
         foreach ($folders as $folder) {
-            \Modules\Media\Models\Folder::withTrashed()->updateOrCreate(
+            Folder::withTrashed()->updateOrCreate(
                 ['slug' => $folder['slug']],
                 array_merge($folder, [
                     'author_id' => $admin->id,

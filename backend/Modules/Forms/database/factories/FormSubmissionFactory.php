@@ -7,7 +7,7 @@ use Modules\Forms\Models\Form;
 use Modules\Forms\Models\FormSubmission;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Forms\Models\FormSubmission>
+ * @extends Factory<FormSubmission>
  */
 class FormSubmissionFactory extends Factory
 {

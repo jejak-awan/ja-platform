@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Modules\System\Helpers\IpHelper;
+use Modules\System\Http\Controllers\BaseApiController;
 
-class FrontendLogController extends \Modules\System\Http\Controllers\BaseApiController
+class FrontendLogController extends BaseApiController
 {
     /**
      * Handle incoming frontend log entries.
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'message' => 'required|string',

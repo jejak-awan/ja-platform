@@ -3,12 +3,12 @@
 namespace Modules\Analytics\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\Cms\Models\Content;
 use Modules\Analytics\Models\AnalyticsEvent;
 use Modules\Analytics\Models\AnalyticsSession;
 use Modules\Analytics\Models\AnalyticsVisit;
-use Modules\System\Models\User;
+use Modules\Cms\Models\Content;
 use Modules\System\Models\Permission;
+use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
 
@@ -170,17 +170,17 @@ class AnalyticsTest extends TestCase
     public function test_admin_can_get_device_statistics(): void
     {
         // Create sessions from different devices
-        \Modules\Analytics\Models\AnalyticsSession::factory()->count(10)->create([
+        AnalyticsSession::factory()->count(10)->create([
             'device_type' => 'desktop',
             'started_at' => now()->subDays(1),
         ]);
 
-        \Modules\Analytics\Models\AnalyticsSession::factory()->count(5)->create([
+        AnalyticsSession::factory()->count(5)->create([
             'device_type' => 'mobile',
             'started_at' => now()->subDays(1),
         ]);
 
-        \Modules\Analytics\Models\AnalyticsSession::factory()->count(2)->create([
+        AnalyticsSession::factory()->count(2)->create([
             'device_type' => 'tablet',
             'started_at' => now()->subDays(1),
         ]);
@@ -200,17 +200,17 @@ class AnalyticsTest extends TestCase
     public function test_admin_can_get_browser_statistics(): void
     {
         // Create sessions from different browsers
-        \Modules\Analytics\Models\AnalyticsSession::factory()->count(8)->create([
+        AnalyticsSession::factory()->count(8)->create([
             'browser' => 'Chrome',
             'started_at' => now()->subDays(1),
         ]);
 
-        \Modules\Analytics\Models\AnalyticsSession::factory()->count(5)->create([
+        AnalyticsSession::factory()->count(5)->create([
             'browser' => 'Firefox',
             'started_at' => now()->subDays(1),
         ]);
 
-        \Modules\Analytics\Models\AnalyticsSession::factory()->count(3)->create([
+        AnalyticsSession::factory()->count(3)->create([
             'browser' => 'Safari',
             'started_at' => now()->subDays(1),
         ]);
@@ -230,17 +230,17 @@ class AnalyticsTest extends TestCase
     public function test_admin_can_get_country_statistics(): void
     {
         // Create sessions from different countries
-        \Modules\Analytics\Models\AnalyticsSession::factory()->count(10)->create([
+        AnalyticsSession::factory()->count(10)->create([
             'country' => 'United States',
             'started_at' => now()->subDays(1),
         ]);
 
-        \Modules\Analytics\Models\AnalyticsSession::factory()->count(5)->create([
+        AnalyticsSession::factory()->count(5)->create([
             'country' => 'United Kingdom',
             'started_at' => now()->subDays(1),
         ]);
 
-        \Modules\Analytics\Models\AnalyticsSession::factory()->count(3)->create([
+        AnalyticsSession::factory()->count(3)->create([
             'country' => 'Indonesia',
             'started_at' => now()->subDays(1),
         ]);

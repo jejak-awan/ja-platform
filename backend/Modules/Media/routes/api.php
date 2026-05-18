@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Modules\Media\Http\Controllers\Api\MediaController;
-use Modules\Media\Http\Controllers\Api\FolderController;
 use Modules\Infra\Http\Controllers\FileManagerController;
+use Modules\Media\Http\Controllers\Api\FolderController;
+use Modules\Media\Http\Controllers\Api\MediaController;
 
 Route::prefix('v1/manage')->middleware(['auth:sanctum'])->group(function (): void {
     // Media Routes

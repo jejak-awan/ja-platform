@@ -2,10 +2,11 @@
 
 namespace Modules\System\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $id
@@ -17,16 +18,17 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property array<string, mixed>|null $changes
  * @property string|null $ip_address
  * @property string|null $user_agent
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\System\Models\User|null $user
- * @property-read \Illuminate\Database\Eloquent\Model|null $model
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User|null $user
+ * @property-read Model|null $model
  */
 class ActivityLog extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'system_activity_logs';
@@ -65,14 +67,14 @@ class ActivityLog extends Model
     /**
      * @param  array<string, mixed>  $changes
      */
-    public static function log(string $action, ?\Illuminate\Database\Eloquent\Model $model = null, array $changes = [], ?User $user = null, ?string $description = null): self
+    public static function log(string $action, ?Model $model = null, array $changes = [], ?User $user = null, ?string $description = null): self
     {
         $user ??= auth()->user();
 
         return self::create([
             'user_id' => $user?->id,
             'action' => $action,
-            'model_type' => $model instanceof \Illuminate\Database\Eloquent\Model ? $model::class : null,
+            'model_type' => $model instanceof Model ? $model::class : null,
             'model_id' => $model?->getKey(),
             'description' => $description ?? self::generateDescription($action, $model),
             'changes' => $changes,
@@ -83,7 +85,7 @@ class ActivityLog extends Model
 
     protected static function generateDescription(string $action, ?Model $model = null): string
     {
-        $modelName = $model instanceof \Illuminate\Database\Eloquent\Model ? class_basename($model) : 'item';
+        $modelName = $model instanceof Model ? class_basename($model) : 'item';
 
         return match ($action) {
             'created' => "Created {$modelName}",

@@ -2,26 +2,27 @@
 
 namespace Modules\School\Http\Controllers\Api\Student;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
-use Modules\School\Models\Student\Student;
 use Modules\School\Models\Academic\Attendance;
-use Modules\School\Models\Academic\Schedule;
 use Modules\School\Models\Academic\Grade;
-use Modules\School\Models\Operations\GraduationResult;
+use Modules\School\Models\Academic\Schedule;
 use Modules\School\Models\Operations\DocumentTemplate;
+use Modules\School\Models\Operations\GraduationResult;
+use Modules\School\Models\Student\Student;
+use Modules\School\Services\Operations\DocumentService;
+use Modules\System\Models\User;
 
 class StudentPortalController extends BaseController
 {
-    public function __construct(protected \Modules\School\Services\Operations\DocumentService $documentService)
-    {
-    }
+    public function __construct(protected DocumentService $documentService) {}
 
     private function getStudent(): Student
     {
-        /** @var \Modules\System\Models\User|null $user */
+        /** @var User|null $user */
         $user = auth()->user();
-        if (!$user) {
+        if (! $user) {
             abort(401, 'Unauthenticated.');
         }
 
@@ -29,38 +30,37 @@ class StudentPortalController extends BaseController
 
         /** @var Student|null $student */
         $student = Student::where('user_id', $userId)->first();
-        if (!$student) {
+        if (! $student) {
             abort(403, 'Akses ditolak. Anda bukan siswa terdaftar.');
         }
+
         return $student;
     }
 
-    public function dashboard(): \Illuminate\Http\JsonResponse
+    public function dashboard(): JsonResponse
     {
         $student = $this->getStudent();
-        
+
         return $this->sendResponse([
             'student' => $student->only(['full_name', 'nisn', 'nis']),
             'summary' => [
-                'attendance_rate' => $this->calculateAttendanceRate((string)$student->id),
-                'gpa' => $this->calculateGPA((string)$student->id),
-            ]
+                'attendance_rate' => $this->calculateAttendanceRate((string) $student->id),
+                'gpa' => $this->calculateGPA((string) $student->id),
+            ],
         ], 'Dashboard data retrieved.');
     }
 
-
-
-    public function attendance(): \Illuminate\Http\JsonResponse
+    public function attendance(): JsonResponse
     {
         $student = $this->getStudent();
         $attendance = Attendance::where('student_id', $student->id)
             ->latest()
             ->paginate(30);
-            
+
         return $this->sendResponse($attendance, 'Attendance history retrieved.');
     }
 
-    public function grades(): \Illuminate\Http\JsonResponse
+    public function grades(): JsonResponse
     {
         $student = $this->getStudent();
         // Fetch actual E-Rapor Grades instead of LMS Exam Results
@@ -68,21 +68,21 @@ class StudentPortalController extends BaseController
             ->where('student_id', $student->id)
             ->latest('academic_year_id')
             ->get();
-            
+
         return $this->sendResponse($grades, 'Academic E-Rapor grades retrieved.');
     }
 
-    public function schedule(): \Illuminate\Http\JsonResponse
+    public function schedule(): JsonResponse
     {
         $student = $this->getStudent();
-        /** @var \Illuminate\Support\Collection<int, string> $groupIds */
+        /** @var Collection<int, string> $groupIds */
         $groupIds = $student->studyGroups()->pluck('sch_acad_study_groups.id');
-        
+
         $schedule = Schedule::with(['subject', 'staff', 'room'])
             ->whereIn('study_group_id', $groupIds)
             ->where('is_active', true)
             ->get();
-            
+
         return $this->sendResponse($schedule, 'Weekly schedule retrieved.');
     }
 
@@ -92,11 +92,11 @@ class StudentPortalController extends BaseController
         if ($total === 0) {
             return 0.0;
         }
-        
+
         $present = Attendance::where('student_id', $studentId)
             ->whereIn('status', ['h', 'i', 's']) // Hadir, Izin, Sakit are often counted as non-absent in basic stats
             ->count();
-            
+
         return round(($present / $total) * 100, 1);
     }
 
@@ -104,10 +104,11 @@ class StudentPortalController extends BaseController
     {
         // Calculate GPA based on E-Rapor final grades
         $avg = Grade::where('student_id', $studentId)->avg('final_grade');
-        return round((float)$avg, 2);
+
+        return round((float) $avg, 2);
     }
 
-    public function graduation(): \Illuminate\Http\JsonResponse
+    public function graduation(): JsonResponse
     {
         $student = $this->getStudent();
         $result = GraduationResult::where('student_id', $student->id)
@@ -116,7 +117,7 @@ class StudentPortalController extends BaseController
 
         return $this->sendResponse([
             'student' => $student->only(['full_name', 'nisn', 'nis']),
-            'result' => $result
+            'result' => $result,
         ], 'Graduation data retrieved.');
     }
 
@@ -133,7 +134,7 @@ class StudentPortalController extends BaseController
             ->where('is_active', true)
             ->first();
 
-        if (!$template) {
+        if (! $template) {
             return $this->sendError('Template sertifikat belum diatur oleh sekolah.', [], 404);
         }
 
@@ -148,6 +149,6 @@ class StudentPortalController extends BaseController
 
         return response($pdfBinary)
             ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'attachment; filename="SKL_' . $student->nisn . '.pdf"');
+            ->header('Content-Disposition', 'attachment; filename="SKL_'.$student->nisn.'.pdf"');
     }
 }

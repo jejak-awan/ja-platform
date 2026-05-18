@@ -2,31 +2,33 @@
 
 namespace Modules\Security\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Modules\System\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\System\Database\Factories\IpListFactory;
+use Modules\System\Models\User;
 
 class IpList extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sec_ip_lists';
 
-
-    /** @use HasFactory<\Modules\System\Database\Factories\IpListFactory> */
+    /** @use HasFactory<IpListFactory> */
     use HasFactory;
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\System\Database\Factories\IpListFactory
+    protected static function newFactory(): IpListFactory
     {
-        return \Modules\System\Database\Factories\IpListFactory::new();
+        return IpListFactory::new();
     }
 
     protected $fillable = [
@@ -37,8 +39,8 @@ class IpList extends Model
     ];
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     public function scopeBlocklist($query)
     {
@@ -46,8 +48,8 @@ class IpList extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     public function scopeWhitelist($query)
     {

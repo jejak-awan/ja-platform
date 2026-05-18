@@ -2,9 +2,18 @@
 
 namespace Modules\School\Models\Admission;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
+use Modules\School\Models\Academic\AcademicYear;
+use Modules\School\Models\Institution\School;
+use Modules\School\Models\Institution\SchoolUnit;
+use Modules\School\Models\Student\Student;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
@@ -16,31 +25,32 @@ use Modules\System\Traits\ScopedByWorkspace;
  * @property string $full_name
  * @property string $gender
  * @property string|null $place_of_birth
- * @property \Illuminate\Support\Carbon|null $date_of_birth
+ * @property Carbon|null $date_of_birth
  * @property string|null $nisn
  * @property string|null $phone
  * @property string|null $email
  * @property string|null $previous_school
  * @property string $status
  * @property int|null $admitted_student_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\School\Models\Institution\School $school
- * @property-read \Modules\School\Models\Institution\SchoolUnit $level
- * @property-read \Modules\School\Models\Academic\AcademicYear $academicYear
- * @property-read \Illuminate\Database\Eloquent\Collection<int, EnrollmentDocument> $documents
- * @property-read \Modules\School\Models\Student\Student|null $admittedStudent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read School $school
+ * @property-read SchoolUnit $level
+ * @property-read AcademicYear $academicYear
+ * @property-read Collection<int, EnrollmentDocument> $documents
+ * @property-read Student|null $admittedStudent
  */
 class Enrollment extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_adm_enrollments';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -65,42 +75,42 @@ class Enrollment extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Institution\School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\School::class);
+        return $this->belongsTo(School::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Institution\SchoolUnit, $this>
+     * @return BelongsTo<SchoolUnit, $this>
      */
-    public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function level(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'workspace_id');
+        return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Academic\AcademicYear, $this>
+     * @return BelongsTo<AcademicYear, $this>
      */
-    public function academicYear(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function academicYear(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Academic\AcademicYear::class);
+        return $this->belongsTo(AcademicYear::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<EnrollmentDocument, $this>
+     * @return HasMany<EnrollmentDocument, $this>
      */
-    public function documents(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function documents(): HasMany
     {
         return $this->hasMany(EnrollmentDocument::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Student\Student, $this>
+     * @return BelongsTo<Student, $this>
      */
-    public function admittedStudent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function admittedStudent(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Student\Student::class, 'admitted_student_id');
+        return $this->belongsTo(Student::class, 'admitted_student_id');
     }
 }

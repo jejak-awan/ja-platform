@@ -2,23 +2,25 @@
 
 namespace Modules\School\Services\Institution;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Context;
+use Modules\School\Models\Academic\Department;
+use Modules\School\Models\Academic\StudyGroup;
+use Modules\School\Models\HR\Staff;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
+use Modules\School\Models\Logistics\SchoolAsset;
 use Modules\School\Models\Student\Student;
-use Modules\School\Models\HR\Staff;
-use Modules\School\Models\Academic\StudyGroup;
-use Modules\School\Models\Academic\Department;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 
 class InstitutionService
 {
     /**
      * Get a paginated list of schools.
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<int, School>
+     * @return LengthAwarePaginator<int, School>
      */
-    public function getAllSchools(int $limit = 10): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function getAllSchools(int $limit = 10): LengthAwarePaginator
     {
         return School::latest()->paginate($limit);
     }
@@ -26,7 +28,7 @@ class InstitutionService
     /**
      * Create a new school and handle initial setup.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function createSchool(array $data): School
     {
@@ -35,7 +37,7 @@ class InstitutionService
         $school = School::create($schoolData);
 
         // Auto-create initial level if single-level or if initial_level is provided
-        if (!$school->is_multi_unit || isset($data['initial_level'])) {
+        if (! $school->is_multi_unit || isset($data['initial_level'])) {
             $initialLevel = $data['initial_level'] ?? 'smk';
             $initialLevelName = $data['initial_level_name'] ?? $school->name;
             $school->levels()->create([
@@ -53,7 +55,7 @@ class InstitutionService
     /**
      * Update school profile.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function updateSchool(School $school, array $data): School
     {
@@ -73,7 +75,7 @@ class InstitutionService
      */
     public function getSchoolStats(string $schoolId): array
     {
-        $rawUnitId = \Illuminate\Support\Facades\Context::get('workspace_id');
+        $rawUnitId = Context::get('workspace_id');
         $unitId = is_numeric($rawUnitId) ? (int) $rawUnitId : 0;
         $cacheKey = "school_stats_{$schoolId}_unit_{$unitId}";
 
@@ -94,7 +96,7 @@ class InstitutionService
                 ['title' => $unitId === 0 ? 'Total Siswa (Ecosystem)' : 'Total Siswa', 'value' => (string) $queryStudents->count(), 'icon' => 'Users'],
                 ['title' => $unitId === 0 ? 'Total Guru/PTK (Ecosystem)' : 'Total Guru/PTK', 'value' => (string) $queryStaff->count(), 'icon' => 'UserSquare'],
                 ['title' => 'Rombel', 'value' => (string) $queryStudyGroups->count(), 'icon' => 'Layers'],
-                ['title' => 'Aset Sarpras', 'value' => (string) \Modules\School\Models\Logistics\SchoolAsset::query()->where('school_id', $schoolId)->count(), 'icon' => 'Package'],
+                ['title' => 'Aset Sarpras', 'value' => (string) SchoolAsset::query()->where('school_id', $schoolId)->count(), 'icon' => 'Package'],
             ];
 
             $breakdown = [];
@@ -102,7 +104,7 @@ class InstitutionService
                 // Aggregate counts per unit for the dashboard charts
                 $breakdown = SchoolUnit::where('school_id', $schoolId)
                     ->get()
-                    ->map(fn($unit) => [
+                    ->map(fn ($unit) => [
                         'unit_id' => $unit->id,
                         'name' => $unit->name,
                         'level' => $unit->level,
@@ -116,13 +118,14 @@ class InstitutionService
                 ->map(function (Staff $staff): array {
                     $names = explode(' ', $staff->full_name);
                     $firstName = $names[0];
-                    $initials = substr($firstName, 0, 1) . substr($names[1] ?? $firstName, 0, 1);
+                    $initials = substr($firstName, 0, 1).substr($names[1] ?? $firstName, 0, 1);
+
                     return [
                         'initials' => strtoupper($initials),
                         'name' => $staff->full_name,
                         'role' => $staff->ptk_type ?? 'Guru',
                         'time' => '07:00',
-                        'statusKey' => 'present'
+                        'statusKey' => 'present',
                     ];
                 })->toArray();
 
@@ -135,7 +138,7 @@ class InstitutionService
                 'stats' => $stats,
                 'breakdown' => $breakdown,
                 'personnel' => $personnel,
-                'alerts' => $alerts
+                'alerts' => $alerts,
             ];
         });
 
@@ -155,7 +158,7 @@ class InstitutionService
             $levelIds = $school->levels->pluck('id');
 
             $status = [
-                'school_profile' => !empty($school->npsn) && !empty($school->address),
+                'school_profile' => ! empty($school->npsn) && ! empty($school->address),
                 'school_units' => $levelIds->count() > 0,
                 'academic_year' => $school->activeAcademicYear !== null,
                 'semesters' => $school->activeAcademicYear?->semesters->count() > 0,
@@ -163,7 +166,7 @@ class InstitutionService
                 'study_groups' => StudyGroup::query()->where('school_id', $schoolId)->count() > 0,
             ];
 
-            $isCompleted = !in_array(false, $status, true);
+            $isCompleted = ! in_array(false, $status, true);
             $totalSteps = count($status);
             $completedSteps = count(array_filter($status));
 
@@ -173,11 +176,10 @@ class InstitutionService
             return [
                 'steps' => $status,
                 'is_completed' => $isCompleted,
-                'progress' => $progress
+                'progress' => $progress,
             ];
         });
 
         return $result;
     }
 }
-

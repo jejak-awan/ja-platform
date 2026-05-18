@@ -3,8 +3,8 @@
 namespace Modules\Cms\Tests\Unit\Models;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
+use Modules\Library\Models\Category;
 use Modules\Library\Models\Tag;
 use Modules\System\Models\User;
 use Tests\TestCase;

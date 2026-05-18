@@ -4,21 +4,31 @@ declare(strict_types=1);
 
 namespace Modules\Security\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Modules\System\Helpers\IpHelper;
+use Modules\Security\Models\FileIntegrityBaseline;
 use Modules\Security\Models\SecurityLog;
-use Modules\System\Services\SecurityAlertService;
+use Modules\Security\Services\SecurityNotificationService;
 use Modules\Security\Services\SecurityService;
+use Modules\System\Helpers\IpHelper;
+use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\Setting;
+use Modules\System\Services\AttackCorrelationService;
+use Modules\System\Services\FileIntegrityService;
+use Modules\System\Services\SecurityAlertService;
+use Modules\System\Services\SecurityAssessmentService;
+use Modules\System\Services\SecurityMaintenanceService;
 
-class SecurityController extends \Modules\System\Http\Controllers\BaseApiController
+class SecurityController extends BaseApiController
 {
-    public function __construct(protected SecurityService $securityService, protected SecurityAlertService $alertService, protected \Modules\System\Services\AttackCorrelationService $correlationService, protected \Modules\System\Services\FileIntegrityService $fileIntegrityService, protected \Modules\Security\Services\SecurityNotificationService $notificationService, protected \Modules\System\Services\SecurityAssessmentService $assessmentService)
-    {
-    }
+    public function __construct(protected SecurityService $securityService, protected SecurityAlertService $alertService, protected AttackCorrelationService $correlationService, protected FileIntegrityService $fileIntegrityService, protected SecurityNotificationService $notificationService, protected SecurityAssessmentService $assessmentService) {}
 
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = SecurityLog::with('user');
 
@@ -59,12 +69,12 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         return $this->paginated($logs, 'Security logs retrieved successfully');
     }
 
-    public function show(SecurityLog $securityLog): \Illuminate\Http\JsonResponse
+    public function show(SecurityLog $securityLog): JsonResponse
     {
         return $this->success($securityLog->load('user'), 'Security log retrieved successfully');
     }
 
-    public function stats(Request $request): \Illuminate\Http\JsonResponse
+    public function stats(Request $request): JsonResponse
     {
         $daysRaw = $request->input('days', 30);
         $days = is_numeric($daysRaw) ? (int) $daysRaw : 30;
@@ -76,7 +86,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get security alerts for suspicious activity
      */
-    public function alerts(): \Illuminate\Http\JsonResponse
+    public function alerts(): JsonResponse
     {
         $alerts = $this->alertService->getAlerts();
         $count = $this->alertService->getAlertCount();
@@ -91,14 +101,14 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     // Blocklist Management
     // =====================
 
-    public function getBlocklist(): \Illuminate\Http\JsonResponse
+    public function getBlocklist(): JsonResponse
     {
         $blocklist = $this->securityService->getBlocklist();
 
         return $this->success($blocklist, 'Blocklist retrieved successfully');
     }
 
-    public function blockIp(Request $request): \Illuminate\Http\JsonResponse
+    public function blockIp(Request $request): JsonResponse
     {
         $request->validate([
             'ip_address' => 'required|ip',
@@ -128,7 +138,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         return $this->success(null, 'IP address blocked successfully');
     }
 
-    public function unblockIp(Request $request): \Illuminate\Http\JsonResponse
+    public function unblockIp(Request $request): JsonResponse
     {
         $request->validate([
             'ip_address' => 'required|ip',
@@ -142,7 +152,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         return $this->success(null, 'IP address unblocked successfully');
     }
 
-    public function bulkBlock(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkBlock(Request $request): JsonResponse
     {
         $request->validate([
             'ip_addresses' => 'required|array',
@@ -175,7 +185,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         ], "{$blockedStr} IP addresses blocked, {$skippedStr} skipped (whitelisted)");
     }
 
-    public function bulkUnblock(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkUnblock(Request $request): JsonResponse
     {
         $request->validate([
             'ip_addresses' => 'required|array',
@@ -201,14 +211,14 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     // Whitelist Management
     // =====================
 
-    public function getWhitelist(): \Illuminate\Http\JsonResponse
+    public function getWhitelist(): JsonResponse
     {
         $whitelist = $this->securityService->getWhitelist();
 
         return $this->success($whitelist, 'Whitelist retrieved successfully');
     }
 
-    public function addToWhitelist(Request $request): \Illuminate\Http\JsonResponse
+    public function addToWhitelist(Request $request): JsonResponse
     {
         $request->validate([
             'ip_address' => 'required|ip',
@@ -225,7 +235,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         return $this->success(null, 'IP address added to whitelist');
     }
 
-    public function removeFromWhitelist(Request $request): \Illuminate\Http\JsonResponse
+    public function removeFromWhitelist(Request $request): JsonResponse
     {
         // Frontend sends { data: { ip_address: ... } } (likely from DELETE request structure)
         if ($request->has('data')) {
@@ -245,7 +255,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         return $this->success(null, 'IP address removed from whitelist');
     }
 
-    public function bulkWhitelist(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkWhitelist(Request $request): JsonResponse
     {
         $request->validate([
             'ip_addresses' => 'required|array',
@@ -270,7 +280,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         return $this->success(null, "{$countStr} IP addresses added to whitelist");
     }
 
-    public function bulkRemoveWhitelist(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkRemoveWhitelist(Request $request): JsonResponse
     {
         $request->validate([
             'ip_addresses' => 'required|array',
@@ -296,9 +306,9 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     // IP Check & Clear
     // =====================
 
-    public function checkIp(Request $request): \Illuminate\Http\JsonResponse
+    public function checkIp(Request $request): JsonResponse
     {
-        $ipAddressRaw = $request->input('ip_address', \Modules\System\Helpers\IpHelper::getClientIp($request));
+        $ipAddressRaw = $request->input('ip_address', IpHelper::getClientIp($request));
         $ipAddress = is_string($ipAddressRaw) ? $ipAddressRaw : '';
         $blockInfo = $this->securityService->getBlockInfo($ipAddress);
 
@@ -311,9 +321,9 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         ], 'IP status retrieved successfully');
     }
 
-    public function clearFailedAttempts(Request $request): \Illuminate\Http\JsonResponse
+    public function clearFailedAttempts(Request $request): JsonResponse
     {
-        $ipAddressRaw = $request->input('ip_address', \Modules\System\Helpers\IpHelper::getClientIp($request));
+        $ipAddressRaw = $request->input('ip_address', IpHelper::getClientIp($request));
         $ipAddress = is_string($ipAddressRaw) ? $ipAddressRaw : '';
 
         // Clear all security cache for IP
@@ -331,14 +341,14 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         return $this->success(null, 'Security cache cleared for IP: '.$ipAddress);
     }
 
-    public function clear(Request $request): \Illuminate\Http\JsonResponse
+    public function clear(Request $request): JsonResponse
     {
         try {
             $retainDaysRaw = $request->input('retain_days');
 
             if ($retainDaysRaw) {
                 $retainDays = is_numeric($retainDaysRaw) ? (int) $retainDaysRaw : 0;
-                $countRaw = \Modules\Security\Models\SecurityLog::where('created_at', '<', now()->subDays($retainDays))->delete();
+                $countRaw = SecurityLog::where('created_at', '<', now()->subDays($retainDays))->delete();
                 $count = is_numeric($countRaw) ? (int) $countRaw : 0;
 
                 $countStr = (string) $count;
@@ -347,11 +357,11 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
                 return $this->success(null, 'Cleared '.($count).' security logs older than '.($retainDays).' days');
             }
 
-            \Modules\Security\Models\SecurityLog::truncate();
+            SecurityLog::truncate();
 
             return $this->success(null, 'All security logs cleared successfully');
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Security logs clear error: '.$e->getMessage());
+            Log::error('Security logs clear error: '.$e->getMessage());
 
             return $this->error('Failed to clear security logs', 500);
         }
@@ -360,7 +370,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Verify the Proof-of-Work solution for the security shield.
      */
-    public function verifyConnection(Request $request): \Illuminate\Http\JsonResponse
+    public function verifyConnection(Request $request): JsonResponse
     {
         // 1. Honeypot check: If any honeypot field is filled, it's a bot.
         $ip = IpHelper::getClientIp($request);
@@ -387,36 +397,37 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         $this->securityService->trackShieldAttempt();
 
         if ($this->securityService->verifyShieldSolution($nonce, $solution, $ip)) {
-            \Illuminate\Support\Facades\Log::info("Shield Verification SUCCESS for IP: {$ip}");
+            Log::info("Shield Verification SUCCESS for IP: {$ip}");
             // Record verification in Trust Cache
             $ua = (string) $request->userAgent();
             $this->securityService->recordShieldVerification($ip, $ua, $fingerprint);
 
             // Create response with Trust Cookie for mobile/rotating IP support
             $token = $this->securityService->getShieldTrustCookieValue($ip, $ua);
-            
+
             return $this->success([
                 'verified' => true,
                 'redirect_to' => $request->input('redirect_to') ?? session()->pull('shield_redirect_to', '/'),
             ], 'Connection verified successfully')->cookie(
-                'shield_trust', 
-                $token, 
+                'shield_trust',
+                $token,
                 $this->securityService->getShieldTrustTtlMinutes(),
-                null, 
-                null, 
+                null,
+                null,
                 request()->secure(), // Secure (only true on HTTPS)
                 true  // HttpOnly
             );
         }
 
-        \Illuminate\Support\Facades\Log::warning("Shield Verification FAILED for IP: {$ip}. Nonce: {$nonce}, Solution: {$solution}");
+        Log::warning("Shield Verification FAILED for IP: {$ip}. Nonce: {$nonce}, Solution: {$solution}");
+
         return $this->error('Challenge verification failed', 422);
     }
 
     /**
      * Get the Bot Shield journal of security events.
      */
-    public function shieldJournal(Request $request): \Illuminate\Http\JsonResponse
+    public function shieldJournal(Request $request): JsonResponse
     {
         $perPageRaw = $request->input('per_page', 50);
         $perPage = is_numeric($perPageRaw) ? (int) $perPageRaw : 50;
@@ -449,7 +460,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get statistics for the Bot Shield protection.
      */
-    public function shieldStats(): \Illuminate\Http\JsonResponse
+    public function shieldStats(): JsonResponse
     {
         $stats = $this->securityService->getShieldStats();
 
@@ -459,7 +470,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Clear Bot Shield logs.
      */
-    public function clearShieldLogs(Request $request): \Illuminate\Http\JsonResponse
+    public function clearShieldLogs(Request $request): JsonResponse
     {
         try {
             $retainDaysRaw = $request->input('retain_days');
@@ -478,7 +489,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
 
             return $this->success(null, $message);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Shield logs clear error: '.$e->getMessage());
+            Log::error('Shield logs clear error: '.$e->getMessage());
 
             return $this->error('Failed to clear shield logs', 500);
         }
@@ -487,7 +498,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get security threat analysis (campaigns and high-risk IPs).
      */
-    public function threatAnalysis(Request $request): \Illuminate\Http\JsonResponse
+    public function threatAnalysis(Request $request): JsonResponse
     {
         $hoursRaw = $request->input('hours', 24);
         $hours = is_numeric($hoursRaw) ? (int) $hoursRaw : 24;
@@ -500,11 +511,11 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get file integrity status and baseline information.
      */
-    public function fileIntegrityStatus(): \Illuminate\Http\JsonResponse
+    public function fileIntegrityStatus(): JsonResponse
     {
         $verification = $this->fileIntegrityService->verify();
-        $baselinesCount = \Modules\Security\Models\FileIntegrityBaseline::count();
-        $lastIntegrityEvent = \Modules\Security\Models\SecurityLog::whereIn('event_type', [
+        $baselinesCount = FileIntegrityBaseline::count();
+        $lastIntegrityEvent = SecurityLog::whereIn('event_type', [
             'integrity_check',
             'integrity_baseline_resynced',
             'file_integrity_violation',
@@ -523,7 +534,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Run a manual file integrity check.
      */
-    public function runIntegrityCheck(): \Illuminate\Http\JsonResponse
+    public function runIntegrityCheck(): JsonResponse
     {
         $verification = $this->fileIntegrityService->verify(true);
 
@@ -533,7 +544,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Re-sync file integrity baseline after authorized updates.
      */
-    public function resyncFileIntegrity(Request $request): \Illuminate\Http\JsonResponse
+    public function resyncFileIntegrity(Request $request): JsonResponse
     {
         try {
             $request->validate([
@@ -546,14 +557,14 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
             $clearHistory = $request->boolean('clear_history', true);
 
             $baselineStats = $this->fileIntegrityService->generateBaseline();
-            $deletedMissingBaselines = \Illuminate\Support\Facades\DB::table('sec_file_integrity_baselines')
+            $deletedMissingBaselines = DB::table('sec_file_integrity_baselines')
                 ->get()
                 ->filter(static fn (object $row): bool => ! file_exists(base_path((string) $row->file_path)))
                 ->pluck('file_path')
                 ->values()
                 ->all();
             if ($deletedMissingBaselines !== []) {
-                \Illuminate\Support\Facades\DB::table('sec_file_integrity_baselines')
+                DB::table('sec_file_integrity_baselines')
                     ->whereIn('file_path', $deletedMissingBaselines)
                     ->delete();
             }
@@ -561,17 +572,17 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
             $verification = $this->fileIntegrityService->verify(true);
             $clearedLogs = 0;
             if ($clearHistory) {
-                $clearedLogs = \Modules\Security\Models\SecurityLog::whereIn('event_type', [
+                $clearedLogs = SecurityLog::whereIn('event_type', [
                     'integrity_check',
                     'file_integrity_violation',
                 ])->delete();
             }
 
             // Clear health cache so score updates immediately after resync.
-            \Illuminate\Support\Facades\Cache::forget('security_health_assessment');
+            Cache::forget('security_health_assessment');
 
             $user = $request->user();
-            \Modules\Security\Models\SecurityLog::log(
+            SecurityLog::log(
                 'integrity_baseline_resynced',
                 $user,
                 IpHelper::getClientIp($request),
@@ -593,7 +604,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
                 'deleted_missing_baselines' => count($deletedMissingBaselines),
             ], 'File integrity baseline re-synced successfully');
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('File integrity resync error: '.$e->getMessage());
+            Log::error('File integrity resync error: '.$e->getMessage());
 
             return $this->error('Failed to re-sync file integrity baseline', 500);
         }
@@ -602,12 +613,12 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get auto-tune history logs.
      */
-    public function autoTuneLogs(Request $request): \Illuminate\Http\JsonResponse
+    public function autoTuneLogs(Request $request): JsonResponse
     {
         $perPageRaw = $request->input('per_page', 20);
         $perPage = is_numeric($perPageRaw) ? (int) $perPageRaw : 20;
 
-        $logs = \Modules\Security\Models\SecurityLog::where('event_type', 'auto_tune')
+        $logs = SecurityLog::where('event_type', 'auto_tune')
             ->latest()
             ->paginate($perPage);
 
@@ -619,9 +630,9 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get security maintenance mode status.
      */
-    public function maintenanceStatus(): \Illuminate\Http\JsonResponse
+    public function maintenanceStatus(): JsonResponse
     {
-        $service = app(\Modules\System\Services\SecurityMaintenanceService::class);
+        $service = app(SecurityMaintenanceService::class);
 
         return response()->json([
             'success' => true,
@@ -632,11 +643,11 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Activate security maintenance mode.
      */
-    public function maintenanceActivate(Request $request): \Illuminate\Http\JsonResponse
+    public function maintenanceActivate(Request $request): JsonResponse
     {
         $request->validate([
             'modules' => 'array',
-            'modules.*' => 'string|in:all,'.implode(',', \Modules\System\Services\SecurityMaintenanceService::MODULES),
+            'modules.*' => 'string|in:all,'.implode(',', SecurityMaintenanceService::MODULES),
             'duration' => 'integer|min:1|max:240',
         ]);
 
@@ -645,7 +656,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         $durationRaw = $request->input('duration', 60);
         $duration = is_numeric($durationRaw) ? (int) $durationRaw : 60;
 
-        $service = app(\Modules\System\Services\SecurityMaintenanceService::class);
+        $service = app(SecurityMaintenanceService::class);
         $result = $service->activate(
             $modules,
             $duration
@@ -660,9 +671,9 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Deactivate security maintenance mode.
      */
-    public function maintenanceDeactivate(): \Illuminate\Http\JsonResponse
+    public function maintenanceDeactivate(): JsonResponse
     {
-        $service = app(\Modules\System\Services\SecurityMaintenanceService::class);
+        $service = app(SecurityMaintenanceService::class);
         $result = $service->deactivate();
 
         return response()->json([
@@ -674,7 +685,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get security health assessment.
      */
-    public function health(): \Illuminate\Http\JsonResponse
+    public function health(): JsonResponse
     {
         return $this->success([
             'assessment' => $this->assessmentService->calculateScore(),
@@ -685,13 +696,13 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Send a test notification.
      */
-    public function testNotification(): \Illuminate\Http\JsonResponse
+    public function testNotification(): JsonResponse
     {
         $this->notificationService->send(
             'test_notification',
             'Sistem Keamanan Aktif 🛡️',
             'Ini adalah notifikasi uji coba dari sistem keamanan JA-Platform. Koneksi Anda berhasil dikonfigurasi!',
-            \Modules\Security\Services\SecurityNotificationService::SEVERITY_INFO,
+            SecurityNotificationService::SEVERITY_INFO,
             [
                 'server' => gethostname(),
                 'ip' => IpHelper::getClientIp(request()),
@@ -705,7 +716,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get KPI snapshot for security operations dashboard.
      */
-    public function kpi(Request $request): \Illuminate\Http\JsonResponse
+    public function kpi(Request $request): JsonResponse
     {
         $daysRaw = $request->input('days', 30);
         $days = is_numeric($daysRaw) ? max(1, (int) $daysRaw) : 30;
@@ -841,12 +852,12 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Get current security settings.
      */
-    public function getSettings(): \Illuminate\Http\JsonResponse
+    public function getSettings(): JsonResponse
     {
-        $securityRetention = \Modules\System\Models\Setting::get('security_log_retention_days', 90);
-        $activityRetention = \Modules\System\Models\Setting::get('activity_log_retention_days', 90);
-        $loginRetention = \Modules\System\Models\Setting::get('login_history_retention_days', 180);
-        $frequencyRaw = \Modules\System\Models\Setting::get('security_autotune_frequency', 'weekly');
+        $securityRetention = Setting::get('security_log_retention_days', 90);
+        $activityRetention = Setting::get('activity_log_retention_days', 90);
+        $loginRetention = Setting::get('login_history_retention_days', 180);
+        $frequencyRaw = Setting::get('security_autotune_frequency', 'weekly');
 
         $settings = [
             'security_log_retention_days' => is_numeric($securityRetention) ? (int) $securityRetention : 90,
@@ -861,7 +872,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Update security settings.
      */
-    public function updateSettings(Request $request): \Illuminate\Http\JsonResponse
+    public function updateSettings(Request $request): JsonResponse
     {
         $request->validate([
             'security_log_retention_days' => 'sometimes|integer|min:7|max:365',
@@ -882,7 +893,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
             if ($request->has($key)) {
                 $raw = $request->input($key);
                 $value = is_numeric($raw) ? (int) $raw : $default;
-                \Modules\System\Models\Setting::set($key, $value, 'integer', 'security');
+                Setting::set($key, $value, 'integer', 'security');
                 $updated[$key] = $value;
             }
         }
@@ -890,7 +901,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
         if ($request->has('security_autotune_frequency')) {
             $freqRaw = $request->input('security_autotune_frequency');
             $freq = is_string($freqRaw) ? $freqRaw : 'weekly';
-            \Modules\System\Models\Setting::set('security_autotune_frequency', $freq, 'string', 'security');
+            Setting::set('security_autotune_frequency', $freq, 'string', 'security');
             $updated['security_autotune_frequency'] = $freq;
         }
 
@@ -900,12 +911,12 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
     /**
      * Store frontend logs/journal.
      */
-    public function storeFrontendLog(Request $request): \Illuminate\Http\JsonResponse
+    public function storeFrontendLog(Request $request): JsonResponse
     {
         $logData = $request->all();
-        
+
         // Log to Laravel logs for now
-        \Illuminate\Support\Facades\Log::channel('frontend')->info('Frontend Journal:', $logData);
+        Log::channel('frontend')->info('Frontend Journal:', $logData);
 
         // Also record as a security log if it's an error
         if (($logData['level'] ?? '') === 'error' || ($logData['level'] ?? '') === 'critical') {

@@ -40,16 +40,16 @@ class StaffFactory extends Factory
 
     public function guru(): static
     {
-        return $this->state(fn(): array => ['ptk_type' => 'Guru Mapel']);
+        return $this->state(fn (): array => ['ptk_type' => 'Guru Mapel']);
     }
 
     public function pns(): static
     {
-        return $this->state(fn(): array => ['employment_status' => 'PNS']);
+        return $this->state(fn (): array => ['employment_status' => 'PNS']);
     }
 
     public function forSchool(School $school): static
     {
-        return $this->state(fn(): array => ['school_id' => $school->id]);
+        return $this->state(fn (): array => ['school_id' => $school->id]);
     }
 }

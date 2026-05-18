@@ -2,10 +2,11 @@
 
 namespace Modules\Ai\Services\Providers;
 
-use Modules\Ai\Contracts\AiProviderInterface;
-
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Modules\Ai\Contracts\AiProviderInterface;
+use Modules\System\Models\Setting;
 
 class DeepSeekService implements AiProviderInterface
 {
@@ -15,7 +16,7 @@ class DeepSeekService implements AiProviderInterface
 
     public function __construct(?string $apiKey = null)
     {
-        $val = \Modules\System\Models\Setting::get('deepseek_api_key', '');
+        $val = Setting::get('deepseek_api_key', '');
         $this->apiKey = $apiKey ?? (is_string($val) ? $val : '');
     }
 
@@ -30,7 +31,7 @@ class DeepSeekService implements AiProviderInterface
             throw new \Exception('DeepSeek API Key is not configured.');
         }
 
-        $val = \Modules\System\Models\Setting::get('deepseek_model', '');
+        $val = Setting::get('deepseek_model', '');
         $model = $model ?: (is_string($val) && $val !== '' ? $val : 'deepseek-chat');
 
         try {
@@ -119,7 +120,7 @@ class DeepSeekService implements AiProviderInterface
     /**
      * Handle API errors
      *
-     * @param  \Illuminate\Http\Client\Response  $response
+     * @param  Response  $response
      *
      * @throws \Exception
      */

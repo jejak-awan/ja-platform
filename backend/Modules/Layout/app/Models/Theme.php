@@ -2,15 +2,17 @@
 
 namespace Modules\Layout\Models;
 
-use Modules\System\Traits\ScopedByWorkspace;
- 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory as EloquentHasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-
-use Modules\Layout\Support\ThemeViews;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Context;
+use Modules\Layout\Database\Factories\ThemeFactory;
 use Modules\Layout\Services\ThemeCacheService;
+use Modules\Layout\Support\ThemeViews;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
@@ -35,9 +37,9 @@ use Modules\Layout\Services\ThemeCacheService;
  * @property string|null $update_url
  * @property bool $auto_update
  * @property string|null $requires_cms_version
- * @property \Illuminate\Support\Carbon|null $last_updated_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $last_updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property array<string, mixed>|null $manifest
  * @property array<string, mixed> $assets
  */
@@ -46,19 +48,20 @@ class Theme extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'lay_themes';
 
-    /** @use HasFactory<\Modules\Layout\Database\Factories\ThemeFactory> */
+    /** @use HasFactory<ThemeFactory> */
     use EloquentHasFactory, ScopedByWorkspace;
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Layout\Database\Factories\ThemeFactory
+    protected static function newFactory(): ThemeFactory
     {
-        return \Modules\Layout\Database\Factories\ThemeFactory::new();
+        return ThemeFactory::new();
     }
 
     protected $fillable = [
@@ -109,7 +112,7 @@ class Theme extends Model
      */
     public static function getActiveTheme(string $type = 'frontend'): ?self
     {
-        $workspaceId = \Illuminate\Support\Facades\Context::get('workspace_id');
+        $workspaceId = Context::get('workspace_id');
 
         // 1. Try to find workspace-specific active theme
         if ($workspaceId) {
@@ -182,7 +185,7 @@ class Theme extends Model
             ]);
 
             // Only block if critical errors (invalid JSON)
-            $criticalErrors = array_filter($errors, fn($error) => str_contains((string) $error, 'Invalid theme.json format'));
+            $criticalErrors = array_filter($errors, fn ($error) => str_contains((string) $error, 'Invalid theme.json format'));
 
             if ($criticalErrors !== []) {
                 throw new \Exception("Theme '{$this->name}' is invalid and cannot be activated: ".implode(', ', $criticalErrors));
@@ -430,10 +433,10 @@ class Theme extends Model
     /**
      * Scope: Get themes by type
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<self>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<self>
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
-    public function scopeOfType(\Illuminate\Database\Eloquent\Builder $query, string $type): \Illuminate\Database\Eloquent\Builder
+    public function scopeOfType(Builder $query, string $type): Builder
     {
         if ($type === 'all') {
             return $query;
@@ -445,10 +448,10 @@ class Theme extends Model
     /**
      * Scope: Get active themes
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<self>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<self>
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
-    public function scopeActive(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
@@ -456,10 +459,10 @@ class Theme extends Model
     /**
      * Scope: Get themes by status
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<self>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<self>
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
-    public function scopeByStatus(\Illuminate\Database\Eloquent\Builder $query, string $status): \Illuminate\Database\Eloquent\Builder
+    public function scopeByStatus(Builder $query, string $status): Builder
     {
         return $query->where('status', $status);
     }

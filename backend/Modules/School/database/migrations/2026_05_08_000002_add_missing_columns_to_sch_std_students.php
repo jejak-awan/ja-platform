@@ -12,7 +12,7 @@ return new class extends Migration
             if (! Schema::hasColumn('sch_std_students', 'department_id')) {
                 $table->uuid('department_id')
                     ->nullable()
-                    
+
                     ->nullOnDelete()
                     ->after('workspace_id');
             }
@@ -52,4 +52,3 @@ return new class extends Migration
         });
     }
 };
-

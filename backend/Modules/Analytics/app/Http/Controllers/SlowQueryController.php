@@ -2,12 +2,14 @@
 
 namespace Modules\Analytics\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Analytics\Models\SlowQuery;
+use Modules\System\Http\Controllers\BaseApiController;
 
-class SlowQueryController extends \Modules\System\Http\Controllers\BaseApiController
+class SlowQueryController extends BaseApiController
 {
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = SlowQuery::with('user');
 
@@ -42,7 +44,7 @@ class SlowQueryController extends \Modules\System\Http\Controllers\BaseApiContro
         return $this->paginated($queries, 'Slow queries retrieved');
     }
 
-    public function statistics(): \Illuminate\Http\JsonResponse
+    public function statistics(): JsonResponse
     {
         /** @var mixed $avg */
         $avg = SlowQuery::avg('duration');

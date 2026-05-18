@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Modules\Analytics\Models\SlowQuery;
 use Modules\System\Services\QueryPerformanceService;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +24,7 @@ class LogSlowQueries
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -42,7 +43,7 @@ class LogSlowQueries
 
             // Log if total query time exceeds threshold
             if ($totalTime > $this->threshold) {
-                $slowQueries = array_filter($queries, fn(array $query) => ($query['time'] ?? 0) > $this->threshold);
+                $slowQueries = array_filter($queries, fn (array $query) => ($query['time'] ?? 0) > $this->threshold);
 
                 if ($slowQueries !== []) {
                     // Log to file
@@ -51,7 +52,7 @@ class LogSlowQueries
                         'method' => $request->method(),
                         'total_queries' => count($queries),
                         'total_time_ms' => round($totalTime, 2),
-                        'slow_queries' => array_map(fn(array $query) => [
+                        'slow_queries' => array_map(fn (array $query) => [
                             'query' => $query['query'],
                             'time' => $query['time'] ?? 0,
                             'bindings' => $query['bindings'],
@@ -61,7 +62,7 @@ class LogSlowQueries
                     // Store in database for analytics
                     if (config('database.store_slow_queries', true)) {
                         foreach ($slowQueries as $query) {
-                            \Modules\Analytics\Models\SlowQuery::create([
+                            SlowQuery::create([
                                 'query' => $query['query'],
                                 'bindings' => $query['bindings'],
                                 'duration' => (int) ($query['time'] ?? 0),

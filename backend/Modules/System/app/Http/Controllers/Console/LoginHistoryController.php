@@ -2,17 +2,22 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Modules\Security\Models\IpList;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\LoginHistory;
+use Modules\System\Models\User;
+use Symfony\Component\HttpFoundation\Response;
 
-class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiController
+class LoginHistoryController extends BaseApiController
 {
     /**
      * Get all login history for admin
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
             $query = LoginHistory::with('user');
@@ -63,7 +68,7 @@ class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiCon
     /**
      * Get login history statistics
      */
-    public function statistics(Request $request): \Illuminate\Http\JsonResponse
+    public function statistics(Request $request): JsonResponse
     {
         try {
             $stats = [
@@ -96,7 +101,7 @@ class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiCon
     /**
      * Get suspicious login activities.
      */
-    public function suspicious(): \Illuminate\Http\JsonResponse
+    public function suspicious(): JsonResponse
     {
         try {
             $alerts = [];
@@ -110,11 +115,11 @@ class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiCon
             if ($whitelistedIps !== []) {
                 $failedAttemptsQuery->whereNotIn('ip_address', $whitelistedIps);
             }
-            /** @var \Illuminate\Support\Collection<int, object{user_id: int|null, ip_address: string|null, fail_count: int}> $failedAttempts */
+            /** @var Collection<int, object{user_id: int|null, ip_address: string|null, fail_count: int}> $failedAttempts */
             $failedAttempts = $failedAttemptsQuery->get();
 
             foreach ($failedAttempts as $attempt) {
-                $user = $attempt->user_id ? \Modules\System\Models\User::find($attempt->user_id) : null;
+                $user = $attempt->user_id ? User::find($attempt->user_id) : null;
                 /** @var object{user_id: int|null, ip_address: string|null, fail_count: int} $attempt */
                 $alerts[] = [
                     'type' => 'brute_force',
@@ -151,7 +156,7 @@ class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiCon
                 // Only flag if they have successfully logged in before, but NOT from this IP.
                 // This prevents flagging a brand new user's very first login.
                 if ($hasPreviousLogins && ! $previouslyUsed) {
-                    $user = \Modules\System\Models\User::find($login->user_id);
+                    $user = User::find($login->user_id);
                     if ($user) {
                         $alerts[] = [
                             'type' => 'new_ip',
@@ -175,7 +180,7 @@ class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiCon
             if ($whitelistedIps !== []) {
                 $sharedIpsQuery->whereNotIn('ip_address', $whitelistedIps);
             }
-            /** @var \Illuminate\Support\Collection<int, object{ip_address: string|null, user_count: int}> $sharedIps */
+            /** @var Collection<int, object{ip_address: string|null, user_count: int}> $sharedIps */
             $sharedIps = $sharedIpsQuery->get();
 
             foreach ($sharedIps as $shared) {
@@ -190,7 +195,7 @@ class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiCon
 
             // Sort by severity (high first)
             $severityOrder = ['high' => 0, 'medium' => 1, 'low' => 2];
-            usort($alerts, fn(array $a, array $b) => $severityOrder[$a['severity']] <=> ($severityOrder[$b['severity']]));
+            usort($alerts, fn (array $a, array $b) => $severityOrder[$a['severity']] <=> ($severityOrder[$b['severity']]));
 
             return $this->success([
                 'alerts' => $alerts,
@@ -272,7 +277,7 @@ class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiCon
     /**
      * Export login history to CSV
      */
-    public function export(Request $request): \Symfony\Component\HttpFoundation\Response
+    public function export(Request $request): Response
     {
         try {
             $query = LoginHistory::with('user');
@@ -338,7 +343,7 @@ class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiCon
         }
     }
 
-    public function clear(Request $request): \Illuminate\Http\JsonResponse
+    public function clear(Request $request): JsonResponse
     {
         try {
             $retainDaysRaw = $request->input('retain_days');

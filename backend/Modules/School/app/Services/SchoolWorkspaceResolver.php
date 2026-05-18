@@ -4,9 +4,9 @@ namespace Modules\School\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
-use Modules\System\Contracts\WorkspaceResolver;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
+use Modules\System\Contracts\WorkspaceResolver;
 
 class SchoolWorkspaceResolver implements WorkspaceResolver
 {
@@ -27,6 +27,7 @@ class SchoolWorkspaceResolver implements WorkspaceResolver
 
         if ($unit) {
             $this->setSchoolDomainContext($unit);
+
             return (string) $unit->id;
         }
 
@@ -35,6 +36,7 @@ class SchoolWorkspaceResolver implements WorkspaceResolver
             $unit = SchoolUnit::where('is_active', true)->first();
             if ($unit) {
                 $this->setSchoolDomainContext($unit);
+
                 return (string) $unit->id;
             }
         }
@@ -49,7 +51,7 @@ class SchoolWorkspaceResolver implements WorkspaceResolver
     {
         // Still need school_id for ScopedBySchool to work
         Context::add('school_id', (string) $unit->school_id);
-        
+
         // Share with views if needed
         view()->share('activeUnit', $unit);
     }

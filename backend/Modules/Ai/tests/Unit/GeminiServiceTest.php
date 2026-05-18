@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\Ai\Tests\Unit;
 
-use Tests\TestCase;
-use Modules\Ai\Services\Providers\GeminiService;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Modules\Ai\Services\Providers\GeminiService;
+use Tests\TestCase;
 
 class GeminiServiceTest extends TestCase
 {
@@ -28,7 +27,7 @@ class GeminiServiceTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Gemini API Key is not configured.');
-        
+
         $service = new GeminiService('');
         $service->generateText('Test prompt');
     }
@@ -41,11 +40,11 @@ class GeminiServiceTest extends TestCase
                     [
                         'content' => [
                             'parts' => [
-                                ['text' => 'Generated gemini content.']
-                            ]
-                        ]
-                    ]
-                ]
+                                ['text' => 'Generated gemini content.'],
+                            ],
+                        ],
+                    ],
+                ],
             ], 200),
         ]);
 
@@ -60,7 +59,7 @@ class GeminiServiceTest extends TestCase
 
         Http::fake([
             'generativelanguage.googleapis.com/*' => Http::response([
-                'invalid' => 'format'
+                'invalid' => 'format',
             ], 200),
         ]);
 
@@ -74,7 +73,7 @@ class GeminiServiceTest extends TestCase
 
         Http::fake([
             'generativelanguage.googleapis.com/*' => Http::response([
-                'error' => ['message' => 'Quota Exceeded']
+                'error' => ['message' => 'Quota Exceeded'],
             ], 429),
         ]);
 
@@ -88,7 +87,7 @@ class GeminiServiceTest extends TestCase
 
         Http::fake([
             'generativelanguage.googleapis.com/*' => Http::response([
-                'error' => ['message' => 'Invalid Request']
+                'error' => ['message' => 'Invalid Request'],
             ], 400),
         ]);
 
@@ -103,13 +102,13 @@ class GeminiServiceTest extends TestCase
                     [
                         'name' => 'models/gemini-pro',
                         'displayName' => 'Gemini Pro',
-                        'supportedGenerationMethods' => ['generateContent']
+                        'supportedGenerationMethods' => ['generateContent'],
                     ],
                     [
                         'name' => 'models/unsupported',
-                        'supportedGenerationMethods' => ['otherMethod']
-                    ]
-                ]
+                        'supportedGenerationMethods' => ['otherMethod'],
+                    ],
+                ],
             ], 200),
         ]);
 
@@ -147,7 +146,7 @@ class GeminiServiceTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('API Key is missing.');
-        
+
         $service = new GeminiService('');
         $service->testConnection();
     }

@@ -2,15 +2,17 @@
 
 namespace Modules\Cms\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\View\View;
 
 class CmsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Illuminate\View\View
+    public function index(): View
     {
         return view('cms::index');
     }
@@ -18,7 +20,7 @@ class CmsController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): \Illuminate\View\View
+    public function create(): View
     {
         return view('cms::create');
     }
@@ -26,7 +28,7 @@ class CmsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         return redirect()->back();
     }
@@ -34,7 +36,7 @@ class CmsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string|int $id): \Illuminate\View\View
+    public function show(string|int $id): View
     {
         return view('cms::show');
     }
@@ -42,7 +44,7 @@ class CmsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string|int $id): \Illuminate\View\View
+    public function edit(string|int $id): View
     {
         return view('cms::edit');
     }
@@ -50,7 +52,7 @@ class CmsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string|int $id): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, string|int $id): RedirectResponse
     {
         return redirect()->back();
     }
@@ -58,7 +60,7 @@ class CmsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string|int $id): \Illuminate\Http\RedirectResponse
+    public function destroy(string|int $id): RedirectResponse
     {
         return redirect()->back();
     }

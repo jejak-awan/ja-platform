@@ -2,16 +2,18 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Translation;
 
-class TranslationController extends \Modules\System\Http\Controllers\BaseApiController
+class TranslationController extends BaseApiController
 {
     /**
      * Get translations for a specific entity.
      */
-    public function getTranslations(Request $request): \Illuminate\Http\JsonResponse
+    public function getTranslations(Request $request): JsonResponse
     {
         $request->validate([
             'translatable_type' => 'required|string',
@@ -28,7 +30,7 @@ class TranslationController extends \Modules\System\Http\Controllers\BaseApiCont
     /**
      * Set a translation for a specific entity.
      */
-    public function setTranslation(Request $request): \Illuminate\Http\JsonResponse
+    public function setTranslation(Request $request): JsonResponse
     {
         $request->validate([
             'translatable_type' => 'required|string',

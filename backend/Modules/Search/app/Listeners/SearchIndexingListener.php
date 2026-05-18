@@ -2,8 +2,9 @@
 
 namespace Modules\Search\Listeners;
 
-use Modules\Search\Services\SearchService;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Events\Dispatcher;
+use Modules\Search\Services\SearchService;
 
 class SearchIndexingListener implements ShouldQueue
 {
@@ -37,7 +38,7 @@ class SearchIndexingListener implements ShouldQueue
     /**
      * Register the listeners for the subscriber.
      *
-     * @param  \Illuminate\Events\Dispatcher  $events
+     * @param  Dispatcher  $events
      */
     public function subscribe($events): void
     {

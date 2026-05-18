@@ -2,20 +2,30 @@
 
 namespace Modules\School\Models\Student;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\System\Traits\ScopedByWorkspace;
-use Modules\School\Traits\ScopedBySchool;
-use Modules\School\Traits\HasVerificationHash;
+use Illuminate\Support\Carbon;
+use Modules\School\Database\Factories\StudentFactory;
+use Modules\School\Models\Academic\Attendance;
+use Modules\School\Models\Academic\Department;
+use Modules\School\Models\Academic\Grade;
+use Modules\School\Models\Academic\StudyGroup;
+use Modules\School\Models\Admission\Enrollment;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
-use Modules\School\Models\Academic\Department;
-use Modules\School\Models\Academic\StudyGroup;
-use Modules\School\Models\Academic\Attendance;
 use Modules\School\Models\Operations\UksVisit;
-
+use Modules\School\Traits\HasVerificationHash;
+use Modules\School\Traits\ScopedBySchool;
+use Modules\System\Models\User;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -58,39 +68,40 @@ use Modules\School\Models\Operations\UksVisit;
  * @property string|null $guardian_education
  * @property string|null $guardian_occupation
  * @property string|null $guardian_income
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read School $school
  * @property-read SchoolUnit $level
  * @property-read Department|null $department
- * @property-read \Illuminate\Database\Eloquent\Collection<int, StudyGroup> $studyGroups
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Attendance> $attendances
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Violation> $violations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Achievement> $achievements
- * @property-read \Illuminate\Database\Eloquent\Collection<int, UksVisit> $uksVisits
- * @property-read \Modules\System\Models\User|null $user
+ * @property-read Collection<int, StudyGroup> $studyGroups
+ * @property-read Collection<int, Attendance> $attendances
+ * @property-read Collection<int, Violation> $violations
+ * @property-read Collection<int, Achievement> $achievements
+ * @property-read Collection<int, UksVisit> $uksVisits
+ * @property-read User|null $user
  */
 class Student extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_std_students';
 
-    /** @use HasFactory<\Modules\School\Database\Factories\StudentFactory> */
-    use HasFactory, SoftDeletes, ScopedBySchool, ScopedByWorkspace, HasVerificationHash;
+    /** @use HasFactory<StudentFactory> */
+    use HasFactory, HasVerificationHash, ScopedBySchool, ScopedByWorkspace, SoftDeletes;
 
     protected $casts = [
         'date_of_birth' => 'date',
         'metadata' => 'array',
     ];
 
-    protected static function newFactory(): \Modules\School\Database\Factories\StudentFactory
+    protected static function newFactory(): StudentFactory
     {
-        return \Modules\School\Database\Factories\StudentFactory::new();
+        return StudentFactory::new();
     }
 
     protected $fillable = [
@@ -138,94 +149,90 @@ class Student extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SchoolUnit, $this>
+     * @return BelongsTo<SchoolUnit, $this>
      */
-    public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function level(): BelongsTo
     {
         return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Department, $this>
+     * @return BelongsTo<Department, $this>
      */
-    public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<StudyGroup, $this>
+     * @return BelongsToMany<StudyGroup, $this>
      */
-    public function studyGroups(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function studyGroups(): BelongsToMany
     {
         return $this->belongsToMany(StudyGroup::class, 'sch_acad_study_group_members');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Attendance, $this>
+     * @return HasMany<Attendance, $this>
      */
-    public function attendances(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function attendances(): HasMany
     {
         return $this->hasMany(Attendance::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Violation, $this>
+     * @return HasMany<Violation, $this>
      */
-    public function violations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function violations(): HasMany
     {
         return $this->hasMany(Violation::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Achievement, $this>
+     * @return HasMany<Achievement, $this>
      */
-    public function achievements(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function achievements(): HasMany
     {
         return $this->hasMany(Achievement::class);
     }
 
-
-
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<UksVisit, $this>
+     * @return MorphMany<UksVisit, $this>
      */
-    public function uksVisits(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    public function uksVisits(): MorphMany
     {
         return $this->morphMany(UksVisit::class, 'patient');
     }
 
-
-
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\System\Models\User, $this>
+     * @return BelongsTo<User, $this>
      */
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(\Modules\System\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Academic\Grade, $this>
+     * @return HasMany<Grade, $this>
      */
-    public function grades(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function grades(): HasMany
     {
-        return $this->hasMany(\Modules\School\Models\Academic\Grade::class);
+        return $this->hasMany(Grade::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne<\Modules\School\Models\Admission\Enrollment, $this>
+     * @return HasOne<Enrollment, $this>
      */
-    public function activeEnrollment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function activeEnrollment(): HasOne
     {
-        return $this->hasOne(\Modules\School\Models\Admission\Enrollment::class)->latest();
+        return $this->hasOne(Enrollment::class)->latest();
     }
 }

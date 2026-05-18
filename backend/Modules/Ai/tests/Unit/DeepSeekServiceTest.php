@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\Ai\Tests\Unit;
 
-use Tests\TestCase;
-use Modules\Ai\Services\Providers\DeepSeekService;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Modules\Ai\Services\Providers\DeepSeekService;
+use Tests\TestCase;
 
 class DeepSeekServiceTest extends TestCase
 {
@@ -28,7 +27,7 @@ class DeepSeekServiceTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('DeepSeek API Key is not configured.');
-        
+
         $service = new DeepSeekService('');
         $service->generateText('Test prompt');
     }
@@ -39,9 +38,9 @@ class DeepSeekServiceTest extends TestCase
             'api.deepseek.com/chat/completions' => Http::response([
                 'choices' => [
                     [
-                        'message' => ['content' => 'Generated deepseek content.']
-                    ]
-                ]
+                        'message' => ['content' => 'Generated deepseek content.'],
+                    ],
+                ],
             ], 200),
         ]);
 
@@ -56,7 +55,7 @@ class DeepSeekServiceTest extends TestCase
 
         Http::fake([
             'api.deepseek.com/chat/completions' => Http::response([
-                'error' => ['message' => 'Insufficient Balance']
+                'error' => ['message' => 'Insufficient Balance'],
             ], 402),
         ]);
 
@@ -70,7 +69,7 @@ class DeepSeekServiceTest extends TestCase
 
         Http::fake([
             'api.deepseek.com/chat/completions' => Http::response([
-                'error' => []
+                'error' => [],
             ], 400),
         ]);
 
@@ -87,8 +86,8 @@ class DeepSeekServiceTest extends TestCase
                     ],
                     [
                         'id' => 'deepseek-coder',
-                    ]
-                ]
+                    ],
+                ],
             ], 200),
         ]);
 
@@ -126,7 +125,7 @@ class DeepSeekServiceTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('API Key is missing.');
-        
+
         $service = new DeepSeekService('');
         $service->testConnection();
     }
@@ -135,7 +134,7 @@ class DeepSeekServiceTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid DeepSeek API Key.');
-        
+
         Http::fake([
             'api.deepseek.com/models' => Http::response(['error' => ['message' => 'Invalid key']], 401),
         ]);

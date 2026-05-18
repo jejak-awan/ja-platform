@@ -2,6 +2,7 @@
 
 namespace Modules\Cms\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Layout\Models\Theme;
 use Modules\Layout\Services\ThemeService;
@@ -16,10 +17,11 @@ class SettingController extends BaseApiController
         $this->middleware('permission:view settings')->only(['index', 'getGroup']);
         $this->middleware('permission:manage settings')->only(['bulkUpdate']);
     }
+
     /**
      * Get all CMS settings.
      */
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(): JsonResponse
     {
         $cmsGroups = ['general', 'seo', 'comments', 'analytics'];
         $settings = Setting::whereIn('group', $cmsGroups)
@@ -33,7 +35,7 @@ class SettingController extends BaseApiController
     /**
      * Get settings for a specific group.
      */
-    public function getGroup(string $group): \Illuminate\Http\JsonResponse
+    public function getGroup(string $group): JsonResponse
     {
         $settings = Setting::getGroup($group);
 
@@ -43,7 +45,7 @@ class SettingController extends BaseApiController
     /**
      * Bulk update CMS settings.
      */
-    public function bulkUpdate(Request $request): \Illuminate\Http\JsonResponse
+    public function bulkUpdate(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'settings' => 'required|array',

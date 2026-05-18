@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 class InstallController extends Controller
 {
@@ -15,7 +15,7 @@ class InstallController extends Controller
         return response()->json([
             'is_installed' => config('app.installed', false),
             'requirements' => $this->checkRequirements(),
-            'os' => $this->detectOS()
+            'os' => $this->detectOS(),
         ]);
     }
 
@@ -38,7 +38,7 @@ class InstallController extends Controller
 
         return [
             'family' => $family,
-            'distro' => $distro
+            'distro' => $distro,
         ];
     }
 
@@ -94,17 +94,17 @@ class InstallController extends Controller
             $this->createSuperUser();
 
             // 5. Finalize
-            File::put(storage_path('installed'), 'Web installation completed at: ' . now());
+            File::put(storage_path('installed'), 'Web installation completed at: '.now());
             $this->updateEnv(['APP_INSTALLED' => 'true']);
 
             return response()->json([
                 'message' => 'Installation successful!',
-                'redirect_url' => url('/')
+                'redirect_url' => url('/'),
             ]);
 
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Installation failed: ' . $e->getMessage(),
+                'message' => 'Installation failed: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -115,9 +115,9 @@ class InstallController extends Controller
     protected function checkRequirements(): array
     {
         $extensions = [
-            'bcmath', 'ctype', 'curl', 'dom', 'fileinfo', 'gd', 
-            'intl', 'json', 'mbstring', 'openssl', 'pdo_pgsql', 
-            'tokenizer', 'xml', 'zip'
+            'bcmath', 'ctype', 'curl', 'dom', 'fileinfo', 'gd',
+            'intl', 'json', 'mbstring', 'openssl', 'pdo_pgsql',
+            'tokenizer', 'xml', 'zip',
         ];
 
         $results = [
@@ -152,17 +152,17 @@ class InstallController extends Controller
                 );
             }
         } catch (\Exception $e) {
-            \Log::error('Failed to create super user: ' . $e->getMessage());
+            \Log::error('Failed to create super user: '.$e->getMessage());
         }
     }
 
     /**
-     * @param array<string, string> $data
+     * @param  array<string, string>  $data
      */
     protected function updateEnv(array $data): void
     {
         $path = base_path('.env');
-        if (!File::exists($path)) {
+        if (! File::exists($path)) {
             File::copy(base_path('.env.example'), $path);
         }
 

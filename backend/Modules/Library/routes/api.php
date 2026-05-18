@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Modules\Library\Http\Controllers\Api\TagController;
+use Modules\Library\Http\Controllers\Api\CategoryController;
 use Modules\Library\Http\Controllers\Api\CustomFieldController;
 use Modules\Library\Http\Controllers\Api\FieldGroupController;
-use Modules\Library\Http\Controllers\Api\CategoryController;
+use Modules\Library\Http\Controllers\Api\TagController;
 
 Route::prefix('v1')->group(function (): void {
     // Public Library API

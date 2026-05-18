@@ -2,12 +2,15 @@
 
 namespace Modules\Forms\Models;
 
-use Modules\System\Traits\ScopedByWorkspace;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Modules\Forms\Database\Factories\FormFieldFactory;
+use Modules\Security\Rules\SafeUrl;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
@@ -21,8 +24,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property array<string, mixed>|null $validation_rules
  * @property bool $is_required
  * @property int $sort_order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Form $form
  */
 class FormField extends Model
@@ -30,19 +33,21 @@ class FormField extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    use HasFactory, SoftDeletes, ScopedByWorkspace;
+    use HasFactory, ScopedByWorkspace, SoftDeletes;
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Forms\Database\Factories\FormFieldFactory
+    protected static function newFactory(): FormFieldFactory
     {
-        return \Modules\Forms\Database\Factories\FormFieldFactory::new();
+        return FormFieldFactory::new();
     }
 
     protected $table = 'frm_form_fields';
+
     protected $fillable = [
         'workspace_id',
         'form_id',
@@ -95,7 +100,7 @@ class FormField extends Model
                 $rules[] = 'email';
                 break;
             case 'url':
-                $rules[] = \Modules\Security\Rules\SafeUrl::class;
+                $rules[] = SafeUrl::class;
                 break;
             case 'number':
                 $rules[] = 'numeric';

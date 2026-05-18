@@ -16,6 +16,7 @@ class CommentSecurityService
         if ($this->containsBannedWords($content)) {
             return true;
         }
+
         // Future: Check against IP blocklist or spam APIs (Akismet)
         return $this->exceedsLinkLimit($content);
     }

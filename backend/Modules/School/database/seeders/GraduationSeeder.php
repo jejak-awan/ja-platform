@@ -1,16 +1,17 @@
 <?php
- 
+
 namespace Modules\School\Database\Seeders;
- 
+
 use Illuminate\Database\Seeder;
+use Modules\School\Models\Institution\School;
 use Modules\School\Models\Operations\GraduationSetting;
- 
+
 class GraduationSeeder extends Seeder
 {
     public function run(): void
     {
-        $school = \Modules\School\Models\Institution\School::first();
-        if (!$school) {
+        $school = School::first();
+        if (! $school) {
             return;
         }
 
@@ -29,7 +30,7 @@ class GraduationSeeder extends Seeder
                 'config' => [
                     'allow_download_skl' => true,
                     'require_all_subjects' => true,
-                ]
+                ],
             ]
         );
     }

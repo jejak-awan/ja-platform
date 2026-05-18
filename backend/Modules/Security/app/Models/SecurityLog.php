@@ -2,11 +2,12 @@
 
 namespace Modules\Security\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Modules\System\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Modules\System\Helpers\IpHelper;
+use Modules\System\Models\User;
 
 /**
  * @property int $id
@@ -16,20 +17,20 @@ use Modules\System\Helpers\IpHelper;
  * @property string|null $user_agent
  * @property string|null $description
  * @property array<string, mixed>|null $metadata
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read int|null $count
- * @property-read \Modules\System\Models\User|null $user
+ * @property-read User|null $user
  */
 class SecurityLog extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sec_logs';
-
 
     protected $fillable = [
         'user_id',

@@ -2,11 +2,16 @@
 
 namespace Modules\School\Models\Logistics;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
+use Modules\School\Models\Institution\School;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -15,21 +20,22 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string|null $area
  * @property string $ownership_status
  * @property string|null $certificate_info
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\School\Models\Institution\School $school
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Building> $buildings
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read School $school
+ * @property-read Collection<int, Building> $buildings
  */
 class LandAsset extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_log_land';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -41,17 +47,17 @@ class LandAsset extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Institution\School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\School::class);
+        return $this->belongsTo(School::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Building, $this>
+     * @return HasMany<Building, $this>
      */
-    public function buildings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function buildings(): HasMany
     {
         return $this->hasMany(Building::class);
     }

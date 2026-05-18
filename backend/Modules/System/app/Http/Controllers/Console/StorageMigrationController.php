@@ -2,16 +2,18 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Modules\System\Http\Controllers\BaseApiController;
 
-class StorageMigrationController extends \Modules\System\Http\Controllers\BaseApiController
+class StorageMigrationController extends BaseApiController
 {
     /**
      * List all files from local public storage that need migration
      */
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(): JsonResponse
     {
         try {
             // We specifically want to list files from the 'public' disk (local)
@@ -19,7 +21,7 @@ class StorageMigrationController extends \Modules\System\Http\Controllers\BaseAp
             $files = Storage::disk('public')->allFiles();
 
             // Filter out hidden files or specific system files if needed
-            $files = array_filter($files, fn(string $file) => ! str_starts_with($file, '.'));
+            $files = array_filter($files, fn (string $file) => ! str_starts_with($file, '.'));
 
             return $this->success(array_values($files), 'Files retrieved successfully');
         } catch (\Exception $e) {
@@ -30,7 +32,7 @@ class StorageMigrationController extends \Modules\System\Http\Controllers\BaseAp
     /**
      * Migrate a batch of files from public disk to the currently configured default disk
      */
-    public function migrate(Request $request): \Illuminate\Http\JsonResponse
+    public function migrate(Request $request): JsonResponse
     {
         $request->validate([
             'files' => 'required|array',

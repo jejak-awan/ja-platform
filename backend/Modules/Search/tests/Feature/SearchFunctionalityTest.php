@@ -119,7 +119,7 @@ class SearchFunctionalityTest extends TestCase
     public function test_search_is_rate_limited(): void
     {
         // Production limiter is generous (burst + 10‑min window); override for a fast, deterministic check.
-        RateLimiter::for('search-public', fn(Request $request) => Limit::perMinute(5)->by('search-public-test|'.$request->ip()));
+        RateLimiter::for('search-public', fn (Request $request) => Limit::perMinute(5)->by('search-public-test|'.$request->ip()));
 
         for ($i = 0; $i < 6; $i++) {
             $response = $this->getJson('/api/v1/public/search?q=test');

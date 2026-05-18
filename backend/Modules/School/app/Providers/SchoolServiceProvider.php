@@ -5,6 +5,39 @@ namespace Modules\School\Providers;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Modules\School\Models\Academic\AcademicYear;
+use Modules\School\Models\Academic\Attendance;
+use Modules\School\Models\Academic\Department;
+use Modules\School\Models\Academic\Schedule;
+use Modules\School\Models\Academic\Semester;
+use Modules\School\Models\Academic\StudyGroup;
+use Modules\School\Models\Academic\Subject;
+use Modules\School\Models\Academic\TeachingJournal;
+use Modules\School\Models\HR\Staff;
+use Modules\School\Models\Institution\School;
+use Modules\School\Models\Institution\SchoolUnit;
+use Modules\School\Models\Logistics\Building;
+use Modules\School\Models\Logistics\LandAsset;
+use Modules\School\Models\Logistics\MaintenanceTicket;
+use Modules\School\Models\Logistics\Room;
+use Modules\School\Models\Logistics\SchoolAsset;
+use Modules\School\Models\Operations\Visitor;
+use Modules\School\Models\Student\Achievement;
+use Modules\School\Models\Student\CounselingRecord;
+use Modules\School\Models\Student\Student;
+use Modules\School\Models\Student\Violation;
+use Modules\School\Policies\AcademicPolicy;
+use Modules\School\Policies\OperationsAttendancePolicy;
+use Modules\School\Policies\OperationsStudentAffairsPolicy;
+use Modules\School\Policies\OperationsVisitorPolicy;
+use Modules\School\Policies\SarprasResourcePolicy;
+use Modules\School\Policies\SchoolPolicy;
+use Modules\School\Policies\StaffPolicy;
+use Modules\School\Policies\StudentPolicy;
+use Modules\School\Services\SchoolWorkspaceResolver;
+use Modules\System\Contracts\LayoutRegistryInterface;
+use Modules\System\Contracts\WorkspaceResolver;
+use Modules\System\Models\User;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -28,7 +61,7 @@ class SchoolServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerPolicies();
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
 
         $this->registerUserModuleIntegrations();
     }
@@ -39,7 +72,7 @@ class SchoolServiceProvider extends ServiceProvider
     protected function registerUserModuleIntegrations(): void
     {
         // 1. Register School-specific role ranks
-        \Modules\System\Models\User::registerRoleRanks([
+        User::registerRoleRanks([
             'admin-yayasan' => 90,
             'operator-yayasan' => 85,
             'admin-unit' => 80,
@@ -54,11 +87,11 @@ class SchoolServiceProvider extends ServiceProvider
         ]);
 
         // 2. Register dynamic relationships
-        \Modules\System\Models\User::resolveRelationUsing('staff', fn($userModel) => $userModel->hasMany(\Modules\School\Models\HR\Staff::class));
+        User::resolveRelationUsing('staff', fn ($userModel) => $userModel->hasMany(Staff::class));
 
-        \Modules\System\Models\User::resolveRelationUsing('levels', fn($userModel) => $userModel->hasManyThrough(
-            \Modules\School\Models\Institution\SchoolUnit::class,
-            \Modules\School\Models\HR\Staff::class,
+        User::resolveRelationUsing('levels', fn ($userModel) => $userModel->hasManyThrough(
+            SchoolUnit::class,
+            Staff::class,
             'user_id',
             'id',
             'id',
@@ -66,8 +99,8 @@ class SchoolServiceProvider extends ServiceProvider
         ));
 
         // 3. Register Layout Locations
-        if ($this->app->bound(\Modules\System\Contracts\LayoutRegistryInterface::class)) {
-            $registry = $this->app->make(\Modules\System\Contracts\LayoutRegistryInterface::class);
+        if ($this->app->bound(LayoutRegistryInterface::class)) {
+            $registry = $this->app->make(LayoutRegistryInterface::class);
             $registry->registerMenuLocations('school', [
                 'portal-header', 'portal-footer', 'portal-sidebar',
             ]);
@@ -82,36 +115,32 @@ class SchoolServiceProvider extends ServiceProvider
      */
     protected function registerPolicies(): void
     {
-        $academicPolicy = \Modules\School\Policies\AcademicPolicy::class;
+        $academicPolicy = AcademicPolicy::class;
 
-        Gate::policy(\Modules\School\Models\Institution\School::class, \Modules\School\Policies\SchoolPolicy::class);
-        Gate::policy(\Modules\School\Models\Student\Student::class, \Modules\School\Policies\StudentPolicy::class);
-        Gate::policy(\Modules\School\Models\HR\Staff::class, \Modules\School\Policies\StaffPolicy::class);
+        Gate::policy(School::class, SchoolPolicy::class);
+        Gate::policy(Student::class, StudentPolicy::class);
+        Gate::policy(Staff::class, StaffPolicy::class);
 
+        Gate::policy(AcademicYear::class, $academicPolicy);
+        Gate::policy(Semester::class, $academicPolicy);
+        Gate::policy(Subject::class, $academicPolicy);
+        Gate::policy(StudyGroup::class, $academicPolicy);
+        Gate::policy(Schedule::class, $academicPolicy);
+        Gate::policy(TeachingJournal::class, $academicPolicy);
+        Gate::policy(Department::class, $academicPolicy);
 
+        Gate::policy(Attendance::class, OperationsAttendancePolicy::class);
+        Gate::policy(Violation::class, OperationsStudentAffairsPolicy::class);
+        Gate::policy(Achievement::class, OperationsStudentAffairsPolicy::class);
+        Gate::policy(CounselingRecord::class, OperationsStudentAffairsPolicy::class);
+        Gate::policy(Visitor::class, OperationsVisitorPolicy::class);
 
-        Gate::policy(\Modules\School\Models\Academic\AcademicYear::class, $academicPolicy);
-        Gate::policy(\Modules\School\Models\Academic\Semester::class, $academicPolicy);
-        Gate::policy(\Modules\School\Models\Academic\Subject::class, $academicPolicy);
-        Gate::policy(\Modules\School\Models\Academic\StudyGroup::class, $academicPolicy);
-        Gate::policy(\Modules\School\Models\Academic\Schedule::class, $academicPolicy);
-        Gate::policy(\Modules\School\Models\Academic\TeachingJournal::class, $academicPolicy);
-        Gate::policy(\Modules\School\Models\Academic\Department::class, $academicPolicy);
-
-
-
-        Gate::policy(\Modules\School\Models\Academic\Attendance::class, \Modules\School\Policies\OperationsAttendancePolicy::class);
-        Gate::policy(\Modules\School\Models\Student\Violation::class, \Modules\School\Policies\OperationsStudentAffairsPolicy::class);
-        Gate::policy(\Modules\School\Models\Student\Achievement::class, \Modules\School\Policies\OperationsStudentAffairsPolicy::class);
-        Gate::policy(\Modules\School\Models\Student\CounselingRecord::class, \Modules\School\Policies\OperationsStudentAffairsPolicy::class);
-        Gate::policy(\Modules\School\Models\Operations\Visitor::class, \Modules\School\Policies\OperationsVisitorPolicy::class);
-
-        $sarprasPolicy = \Modules\School\Policies\SarprasResourcePolicy::class;
-        Gate::policy(\Modules\School\Models\Logistics\LandAsset::class, $sarprasPolicy);
-        Gate::policy(\Modules\School\Models\Logistics\Building::class, $sarprasPolicy);
-        Gate::policy(\Modules\School\Models\Logistics\Room::class, $sarprasPolicy);
-        Gate::policy(\Modules\School\Models\Logistics\SchoolAsset::class, $sarprasPolicy);
-        Gate::policy(\Modules\School\Models\Logistics\MaintenanceTicket::class, $sarprasPolicy);
+        $sarprasPolicy = SarprasResourcePolicy::class;
+        Gate::policy(LandAsset::class, $sarprasPolicy);
+        Gate::policy(Building::class, $sarprasPolicy);
+        Gate::policy(Room::class, $sarprasPolicy);
+        Gate::policy(SchoolAsset::class, $sarprasPolicy);
+        Gate::policy(MaintenanceTicket::class, $sarprasPolicy);
     }
 
     /**
@@ -123,8 +152,8 @@ class SchoolServiceProvider extends ServiceProvider
         $this->app->register(RouteServiceProvider::class);
 
         // Bind Workspace Resolver
-        $this->app->bind(\Modules\System\Contracts\WorkspaceResolver::class, \Modules\School\Services\SchoolWorkspaceResolver::class);
-        $this->app->alias(\Modules\System\Contracts\WorkspaceResolver::class, 'workspace.resolver');
+        $this->app->bind(WorkspaceResolver::class, SchoolWorkspaceResolver::class);
+        $this->app->alias(WorkspaceResolver::class, 'workspace.resolver');
     }
 
     /**

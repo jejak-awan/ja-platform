@@ -2,15 +2,18 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
+use Modules\System\Helpers\IpHelper;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Services\CacheWarmingService;
 use Modules\System\Services\SystemService;
 
-class SystemController extends \Modules\System\Http\Controllers\BaseApiController
+class SystemController extends BaseApiController
 {
     protected SystemService $systemService;
 
@@ -19,12 +22,12 @@ class SystemController extends \Modules\System\Http\Controllers\BaseApiControlle
         $this->systemService = new SystemService;
     }
 
-    public function info(): \Illuminate\Http\JsonResponse
+    public function info(): JsonResponse
     {
         return $this->success($this->systemService->getSystemInfo(), 'System information retrieved successfully');
     }
 
-    public function health(): \Illuminate\Http\JsonResponse
+    public function health(): JsonResponse
     {
         $health = $this->systemService->getSystemHealth();
 
@@ -41,12 +44,12 @@ class SystemController extends \Modules\System\Http\Controllers\BaseApiControlle
         return $this->success($health, 'System health check completed');
     }
 
-    public function statistics(): \Illuminate\Http\JsonResponse
+    public function statistics(): JsonResponse
     {
         return $this->success($this->systemService->getStatistics(), 'System statistics retrieved successfully');
     }
 
-    public function cache(): \Illuminate\Http\JsonResponse
+    public function cache(): JsonResponse
     {
         return $this->success([
             'driver' => config('cache.default'),
@@ -54,14 +57,14 @@ class SystemController extends \Modules\System\Http\Controllers\BaseApiControlle
         ], 'Cache information retrieved successfully');
     }
 
-    public function cacheStatus(): \Illuminate\Http\JsonResponse
+    public function cacheStatus(): JsonResponse
     {
         $status = $this->systemService->getCacheStatus();
 
         return $this->success($status, 'Cache status retrieved successfully');
     }
 
-    public function clearCache(): \Illuminate\Http\JsonResponse
+    public function clearCache(): JsonResponse
     {
         \Artisan::call('cache:clear');
         \Artisan::call('config:clear');
@@ -74,7 +77,7 @@ class SystemController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Warm up application cache
      */
-    public function warmCache(Request $request): \Illuminate\Http\JsonResponse
+    public function warmCache(Request $request): JsonResponse
     {
         try {
             $warmingService = new CacheWarmingService;
@@ -109,7 +112,7 @@ class SystemController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Get cache warming statistics
      */
-    public function cacheWarmingStats(): \Illuminate\Http\JsonResponse
+    public function cacheWarmingStats(): JsonResponse
     {
         try {
             $warmingService = new CacheWarmingService;
@@ -123,7 +126,7 @@ class SystemController extends \Modules\System\Http\Controllers\BaseApiControlle
         }
     }
 
-    public function systemHealth(): \Illuminate\Http\JsonResponse
+    public function systemHealth(): JsonResponse
     {
         $health = $this->systemService->getSystemHealth();
 
@@ -136,10 +139,10 @@ class SystemController extends \Modules\System\Http\Controllers\BaseApiControlle
     /**
      * Clear rate limit for login attempts
      */
-    public function clearRateLimit(Request $request): \Illuminate\Http\JsonResponse
+    public function clearRateLimit(Request $request): JsonResponse
     {
         try {
-            $ipInput = $request->input('ip', \Modules\System\Helpers\IpHelper::getClientIp($request));
+            $ipInput = $request->input('ip', IpHelper::getClientIp($request));
             $ip = is_string($ipInput) ? $ipInput : '';
             $emailInput = $request->input('email');
             $email = is_string($emailInput) ? $emailInput : null;

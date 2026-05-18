@@ -2,11 +2,13 @@
 
 namespace Modules\School\Models\Logistics;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -17,19 +19,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $end_location
  * @property array<int, string>|null $stops
  * @property string $fee
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, TransportRegistration> $registrations
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Collection<int, TransportRegistration> $registrations
  */
 class VehicleRoute extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
+
     protected $table = 'sch_log_transport_routes';
 
     use SoftDeletes;
@@ -50,9 +54,9 @@ class VehicleRoute extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TransportRegistration, $this>
+     * @return HasMany<TransportRegistration, $this>
      */
-    public function registrations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function registrations(): HasMany
     {
         return $this->hasMany(TransportRegistration::class, 'route_id');
     }

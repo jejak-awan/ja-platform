@@ -3,8 +3,8 @@
 namespace Modules\School\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\School\Models\Institution\SchoolUnit;
 use Modules\School\Models\Institution\School;
+use Modules\School\Models\Institution\SchoolUnit;
 
 class SchoolUnitFactory extends Factory
 {
@@ -24,23 +24,23 @@ class SchoolUnitFactory extends Factory
         return [
             'school_id' => School::factory(),
             'level' => $selected['level'],
-            'name' => $selected['name'] . ' ' . $this->faker->company(),
+            'name' => $selected['name'].' '.$this->faker->company(),
             'type' => 'formal',
         ];
     }
 
     public function smk(): static
     {
-        return $this->state(fn(): array => ['level' => 'smk', 'name' => 'SMK ' . $this->faker->company()]);
+        return $this->state(fn (): array => ['level' => 'smk', 'name' => 'SMK '.$this->faker->company()]);
     }
 
     public function sma(): static
     {
-        return $this->state(fn(): array => ['level' => 'sma', 'name' => 'SMA ' . $this->faker->company()]);
+        return $this->state(fn (): array => ['level' => 'sma', 'name' => 'SMA '.$this->faker->company()]);
     }
 
     public function forSchool(School $school): static
     {
-        return $this->state(fn(): array => ['school_id' => $school->id]);
+        return $this->state(fn (): array => ['school_id' => $school->id]);
     }
 }

@@ -6,7 +6,10 @@ namespace Modules\System\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Modules\System\Models\Setting;
+use Modules\System\Models\User;
 use Modules\System\Traits\MaintenanceBypass;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,13 +20,13 @@ class CheckMaintenanceMode
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         // 1. Check if maintenance mode is enabled
         $maintenanceEnabled = filter_var(Setting::get('maintenance_mode', false), FILTER_VALIDATE_BOOLEAN);
-        
+
         if (! $maintenanceEnabled) {
             return $next($request);
         }
@@ -34,12 +37,14 @@ class CheckMaintenanceMode
 
         if ($endTime) {
             try {
-                $endDateTime = \Illuminate\Support\Carbon::parse($endTime);
+                $endDateTime = Carbon::parse($endTime);
                 if ($endDateTime->isPast()) {
                     Setting::set('maintenance_mode', false, 'boolean', 'general');
+
                     return $next($request);
                 }
-            } catch (\Exception) { }
+            } catch (\Exception) {
+            }
         }
 
         // 3. Allow access to specific bypass routes
@@ -56,7 +61,7 @@ class CheckMaintenanceMode
         return response()->json([
             'success' => false,
             'message' => Setting::get('maintenance_message', 'Under Maintenance'),
-            'maintenance' => true
+            'maintenance' => true,
         ], 503);
     }
 
@@ -67,14 +72,15 @@ class CheckMaintenanceMode
     {
         try {
             foreach (['sanctum', 'web'] as $guard) {
-                $user = \Illuminate\Support\Facades\Auth::guard($guard)->user();
+                $user = Auth::guard($guard)->user();
                 // Bypass maintenance if role rank is 90 or higher (System Admins)
-                if ($user instanceof \Modules\System\Models\User && $user->getRoleRank() >= 90) {
+                if ($user instanceof User && $user->getRoleRank() >= 90) {
                     return true;
                 }
             }
-        } catch (\Exception) { }
-        
+        } catch (\Exception) {
+        }
+
         return false;
     }
 }

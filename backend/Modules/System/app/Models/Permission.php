@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Modules\System\Models;
 
-use Spatie\Permission\Models\Permission as SpatiePermission;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 
 class Permission extends SpatiePermission
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 }

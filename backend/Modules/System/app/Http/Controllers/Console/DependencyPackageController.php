@@ -8,11 +8,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Modules\Security\Models\DependencyVulnerability;
+use Modules\System\Http\Controllers\BaseApiController;
 
 /**
  * Controller for listing all project dependencies (composer + npm)
  */
-class DependencyPackageController extends \Modules\System\Http\Controllers\BaseApiController
+class DependencyPackageController extends BaseApiController
 {
     /**
      * List all packages from composer.lock and package-lock.json

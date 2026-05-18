@@ -66,7 +66,7 @@ return new class extends Migration
             $table->uuid('semester_id')->onDelete('cascade');
             $table->uuid('study_group_id')->onDelete('cascade');
             $table->uuid('staff_id'); // Teacher who gave the grade
-            
+
             // Scores
             $table->float('daily_score')->nullable();
             $table->float('mid_score')->nullable();
@@ -74,11 +74,11 @@ return new class extends Migration
             $table->float('knowledge_score')->nullable();
             $table->float('skill_score')->nullable();
             $table->float('final_grade')->nullable();
-            
+
             $table->string('grade_letter', 2)->nullable();
             $table->string('predicate')->nullable();
             $table->text('description')->nullable();
-            
+
             $table->timestamps();
         });
 

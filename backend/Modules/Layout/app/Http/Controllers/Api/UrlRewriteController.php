@@ -2,13 +2,15 @@
 
 namespace Modules\Layout\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Modules\Layout\Models\UrlRewrite;
 use Modules\System\Http\Controllers\BaseApiController;
 
 class UrlRewriteController extends BaseApiController
 {
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = UrlRewrite::query();
 
@@ -21,8 +23,8 @@ class UrlRewriteController extends BaseApiController
             $search = is_string($searchRaw) ? $searchRaw : '';
             $query->where(function ($q) use ($search): void {
                 $searchStr = strtolower($search);
-                $q->where(\Illuminate\Support\Facades\DB::raw('lower(source_path)'), 'like', "%{$searchStr}%")
-                    ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(target_path)'), 'like', "%{$searchStr}%");
+                $q->where(DB::raw('lower(source_path)'), 'like', "%{$searchStr}%")
+                    ->orWhere(DB::raw('lower(target_path)'), 'like', "%{$searchStr}%");
             });
         }
 
@@ -31,7 +33,7 @@ class UrlRewriteController extends BaseApiController
         return $this->success($rewrites, 'URL rewrites retrieved successfully');
     }
 
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'source_path' => 'required|string|unique:lay_url_rewrites,source_path',
@@ -46,15 +48,15 @@ class UrlRewriteController extends BaseApiController
         return $this->success($rewrite, 'URL rewrite created successfully', 201);
     }
 
-    public function show(UrlRewrite $urlRewrite): \Illuminate\Http\JsonResponse
+    public function show(UrlRewrite $urlRewrite): JsonResponse
     {
         return $this->success($urlRewrite, 'URL rewrite retrieved successfully');
     }
 
-    public function update(Request $request, UrlRewrite $urlRewrite): \Illuminate\Http\JsonResponse
+    public function update(Request $request, UrlRewrite $urlRewrite): JsonResponse
     {
         $validated = $request->validate([
-            'source_path' => 'sometimes|required|string|unique:lay_url_rewrites,source_path,' . $urlRewrite->id,
+            'source_path' => 'sometimes|required|string|unique:lay_url_rewrites,source_path,'.$urlRewrite->id,
             'target_path' => 'sometimes|required|string',
             'status_code' => 'sometimes|required|integer',
             'is_active' => 'boolean',
@@ -65,13 +67,14 @@ class UrlRewriteController extends BaseApiController
         return $this->success($urlRewrite, 'URL rewrite updated successfully');
     }
 
-    public function destroy(UrlRewrite $urlRewrite): \Illuminate\Http\JsonResponse
+    public function destroy(UrlRewrite $urlRewrite): JsonResponse
     {
         $urlRewrite->delete();
+
         return $this->success(null, 'URL rewrite deleted successfully');
     }
 
-    public function statistics(): \Illuminate\Http\JsonResponse
+    public function statistics(): JsonResponse
     {
         $stats = [
             'total' => UrlRewrite::count(),

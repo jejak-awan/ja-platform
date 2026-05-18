@@ -76,7 +76,7 @@ class JournalControllerTest extends TestCase
                 'actions_by_type',
                 'actions_by_user',
                 'actions_by_model',
-            ]
+            ],
         ]);
     }
 
@@ -193,7 +193,7 @@ class JournalControllerTest extends TestCase
                 'unique_ips_today',
                 'active_sessions',
                 'suspicious_count',
-            ]
+            ],
         ]);
     }
 
@@ -224,7 +224,7 @@ class JournalControllerTest extends TestCase
             'data' => [
                 'alerts',
                 'total',
-            ]
+            ],
         ]);
         $this->assertGreaterThan(0, $response->json('data.total'));
     }

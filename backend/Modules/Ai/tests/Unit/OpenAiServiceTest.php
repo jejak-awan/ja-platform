@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\Ai\Tests\Unit;
 
-use Tests\TestCase;
-use Modules\Ai\Services\Providers\OpenAiService;
 use Illuminate\Support\Facades\Http;
+use Modules\Ai\Services\Providers\OpenAiService;
+use Tests\TestCase;
 
 class OpenAiServiceTest extends TestCase
 {
@@ -27,7 +27,7 @@ class OpenAiServiceTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('OpenAI API Key is not configured.');
-        
+
         $service = new OpenAiService('');
         $service->generateText('Test prompt');
     }
@@ -59,9 +59,9 @@ class OpenAiServiceTest extends TestCase
             'api.openai.com/v1/chat/completions' => Http::response([
                 'choices' => [
                     [
-                        'message' => ['content' => 'Generated content here.']
-                    ]
-                ]
+                        'message' => ['content' => 'Generated content here.'],
+                    ],
+                ],
             ], 200),
         ]);
 
@@ -76,7 +76,7 @@ class OpenAiServiceTest extends TestCase
 
         Http::fake([
             'api.openai.com/v1/chat/completions' => Http::response([
-                'error' => ['message' => 'Rate limit exceeded']
+                'error' => ['message' => 'Rate limit exceeded'],
             ], 429),
         ]);
 
@@ -89,8 +89,8 @@ class OpenAiServiceTest extends TestCase
             'api.openai.com/v1/models' => Http::response([
                 'data' => [
                     ['id' => 'gpt-4'],
-                    ['id' => 'gpt-3.5-turbo']
-                ]
+                    ['id' => 'gpt-3.5-turbo'],
+                ],
             ], 200),
         ]);
 

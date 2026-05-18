@@ -5,6 +5,15 @@ namespace Modules\System\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
+use Modules\Library\Models\Tag;
+use Modules\Media\Models\File;
+use Modules\Newsletter\Models\NewsletterSubscriber;
+use Modules\System\Jobs\QueueHeartbeatJob;
+use Modules\System\Models\Analytics;
+use Modules\System\Models\EmailTemplate;
+use Modules\System\Models\PageView;
+use Modules\System\Models\User;
 
 class SystemService
 {
@@ -61,7 +70,7 @@ class SystemService
         // Dispatch a heartbeat job for the next check
         if ($driver !== 'sync') {
             try {
-                \Modules\System\Jobs\QueueHeartbeatJob::dispatch();
+                QueueHeartbeatJob::dispatch();
             } catch (\Throwable) {
                 // Ignore dispatch errors here
             }
@@ -103,34 +112,34 @@ class SystemService
             // Get page views/visits count (if analytics exists)
             $totalVisits = 0;
             try {
-                if (class_exists(\Modules\System\Models\PageView::class)) {
-                    $totalVisits = \Modules\System\Models\PageView::count();
-                } elseif (class_exists(\Modules\System\Models\Analytics::class)) {
-                    $totalVisits = \Modules\System\Models\Analytics::count();
+                if (class_exists(PageView::class)) {
+                    $totalVisits = PageView::count();
+                } elseif (class_exists(Analytics::class)) {
+                    $totalVisits = Analytics::count();
                 }
             } catch (\Exception $e) {
                 // Visits tracking not available
             }
 
-            $registry = app(\Modules\System\Services\DashboardRegistry::class);
-            
+            $registry = app(DashboardRegistry::class);
+
             $stats = [
                 // Base Core Stats
-                'total_users' => \Modules\System\Models\User::count(),
-                'total_media' => \Modules\Media\Models\File::count(),
+                'total_users' => User::count(),
+                'total_media' => File::count(),
                 'total_visits' => $totalVisits,
                 'users' => [
-                    'total' => \Modules\System\Models\User::count(),
-                    'verified' => \Modules\System\Models\User::whereNotNull('email_verified_at')->count(),
+                    'total' => User::count(),
+                    'verified' => User::whereNotNull('email_verified_at')->count(),
                 ],
                 'media' => [
-                    'total' => \Modules\Media\Models\File::count(),
-                    'total_size' => \Modules\Media\Models\File::sum('size'),
+                    'total' => File::count(),
+                    'total_size' => File::sum('size'),
                 ],
-                'tags' => \Modules\Library\Models\Tag::count(),
+                'tags' => Tag::count(),
                 'email' => [
-                    'templates' => class_exists(\Modules\System\Models\EmailTemplate::class) ? \Modules\System\Models\EmailTemplate::count() : 0,
-                    'subscribers' => class_exists(\Modules\Newsletter\Models\NewsletterSubscriber::class) ? \Modules\Newsletter\Models\NewsletterSubscriber::count() : 0,
+                    'templates' => class_exists(EmailTemplate::class) ? EmailTemplate::count() : 0,
+                    'subscribers' => class_exists(NewsletterSubscriber::class) ? NewsletterSubscriber::count() : 0,
                     'smtp_status' => strtoupper(is_string($statusVal = Cache::get('email_smtp_status', 'active')) ? $statusVal : 'active'),
                 ],
             ];
@@ -143,7 +152,7 @@ class SystemService
             }
 
             // Backward compatibility for common flat keys if not provided by modules
-            if (!isset($stats['total_contents']) && isset($stats['contents']['total'])) {
+            if (! isset($stats['total_contents']) && isset($stats['contents']['total'])) {
                 $stats['total_contents'] = $stats['contents']['total'];
             }
 
@@ -464,9 +473,9 @@ class SystemService
     {
         try {
             // Check if Redis class exists and connection is configured
-            if (class_exists(\Illuminate\Support\Facades\Redis::class)) {
+            if (class_exists(Redis::class)) {
                 try {
-                    $redis = \Illuminate\Support\Facades\Redis::connection();
+                    $redis = Redis::connection();
                     $redis->ping();
 
                     return ['status' => 'ok', 'message' => 'Connected'];
@@ -540,7 +549,7 @@ class SystemService
         $driverStr = is_scalar($driver) ? (string) $driver : 'file';
         if (str_starts_with($driverStr, 'redis')) {
             try {
-                $redis = \Illuminate\Support\Facades\Redis::connection();
+                $redis = Redis::connection();
                 $redis->ping();
                 $enabled = true;
 
@@ -633,7 +642,7 @@ class SystemService
                 ORDER BY (data_length + index_length) DESC
                 LIMIT 10', [$database]);
 
-            return array_map(fn(\stdClass $table) => [
+            return array_map(fn (\stdClass $table) => [
                 'name' => $table->table_name,
                 'size_mb' => $table->size_mb,
                 'rows' => $table->table_rows,

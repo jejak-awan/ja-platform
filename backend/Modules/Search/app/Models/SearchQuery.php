@@ -2,24 +2,24 @@
 
 namespace Modules\Search\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Modules\System\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\System\Helpers\IpHelper;
+use Modules\System\Models\User;
 
 class SearchQuery extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'srch_queries';
-
-
 
     protected $fillable = [
         'query',
@@ -66,9 +66,9 @@ class SearchQuery extends Model
     /**
      * @param  int|null  $limit
      * @param  int|null  $days
-     * @return \Illuminate\Database\Eloquent\Collection<int, self>
+     * @return Collection<int, self>
      */
-    public static function getPopularQueries($limit = 10, $days = 30): \Illuminate\Database\Eloquent\Collection
+    public static function getPopularQueries($limit = 10, $days = 30): Collection
     {
         return self::where('searched_at', '>=', now()->subDays($days ?? 30))
             ->select('query', DB::raw('count(*) as count'))
@@ -81,9 +81,9 @@ class SearchQuery extends Model
     /**
      * @param  int|null  $limit
      * @param  int|null  $days
-     * @return \Illuminate\Database\Eloquent\Collection<int, self>
+     * @return Collection<int, self>
      */
-    public static function getNoResultsQueries($limit = 10, $days = 30): \Illuminate\Database\Eloquent\Collection
+    public static function getNoResultsQueries($limit = 10, $days = 30): Collection
     {
         return self::where('searched_at', '>=', now()->subDays($days ?? 30))
             ->where('results_count', 0)

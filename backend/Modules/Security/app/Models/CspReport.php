@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Modules\Security\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 
 class CspReport extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sec_csp_reports';
-
 
     protected $fillable = [
         'document_uri',
@@ -35,8 +36,8 @@ class CspReport extends Model
     ];
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     public function scopeNew($query)
     {
@@ -44,9 +45,9 @@ class CspReport extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
+     * @param  Builder<$this>  $query
      * @param  string  $directive
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @return Builder<$this>
      */
     public function scopeByDirective($query, $directive)
     {

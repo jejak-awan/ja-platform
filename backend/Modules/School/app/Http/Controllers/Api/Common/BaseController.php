@@ -3,12 +3,13 @@
 namespace Modules\School\Http\Controllers\Api\Common;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
 
 class BaseController extends Controller
 {
     use AuthorizesRequests;
+
     /**
      * success response method.
      */

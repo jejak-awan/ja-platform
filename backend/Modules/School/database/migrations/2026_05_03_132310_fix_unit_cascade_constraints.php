@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -43,10 +42,10 @@ return new class extends Migration
         ];
 
         foreach ($tables as $tableName) {
-            if (!Schema::hasTable($tableName)) {
+            if (! Schema::hasTable($tableName)) {
                 continue;
             }
-            
+
             $columnsToFix = [];
             if (Schema::hasColumn($tableName, 'workspace_id')) {
                 $columnsToFix['workspace_id'] = 'sch_ins_levels';
@@ -61,7 +60,7 @@ return new class extends Migration
 
                 // 1. Drop if exists
                 DB::statement("ALTER TABLE \"{$tableName}\" DROP CONSTRAINT IF EXISTS \"{$constraintName}\"");
-                
+
                 // 2. Add with cascade
                 DB::statement("ALTER TABLE \"{$tableName}\" ADD CONSTRAINT \"{$constraintName}\" FOREIGN KEY (\"{$column}\") REFERENCES \"{$parentTable}\" (\"id\") ON DELETE CASCADE");
             }
@@ -71,7 +70,5 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-    }
+    public function down(): void {}
 };

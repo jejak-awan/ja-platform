@@ -2,10 +2,24 @@
 
 namespace Modules\School\Models\Institution;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Modules\School\Database\Factories\SchoolFactory;
+use Modules\School\Models\Academic\AcademicYear;
+use Modules\School\Models\Academic\StudyGroup;
+use Modules\School\Models\Academic\Subject;
+use Modules\School\Models\HR\Staff;
+use Modules\School\Models\Logistics\LandAsset;
+use Modules\School\Models\Operations\GuestLog;
+use Modules\School\Models\Operations\LibraryBook;
+use Modules\School\Models\Operations\UksVisit;
+use Modules\School\Models\Student\Student;
 
 // use Modules\School\Database\Factories\SchoolFactory;
 
@@ -56,28 +70,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $goals
  * @property string|null $history
  * @property string|null $org_structure_path
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, SchoolUnit> $levels
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\School\Models\Academic\AcademicYear> $academicYears
- * @property-read \Modules\School\Models\Academic\AcademicYear|null $activeAcademicYear
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\School\Models\Student\Student> $students
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\School\Models\HR\Staff> $staff
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Collection<int, SchoolUnit> $levels
+ * @property-read Collection<int, AcademicYear> $academicYears
+ * @property-read AcademicYear|null $activeAcademicYear
+ * @property-read Collection<int, Student> $students
+ * @property-read Collection<int, Staff> $staff
  */
 class School extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    /** @use HasFactory<\Modules\School\Database\Factories\SchoolFactory> */
+    /** @use HasFactory<SchoolFactory> */
     use HasFactory, SoftDeletes;
 
-    protected static function newFactory(): \Modules\School\Database\Factories\SchoolFactory
+    protected static function newFactory(): SchoolFactory
     {
-        return \Modules\School\Database\Factories\SchoolFactory::new();
+        return SchoolFactory::new();
     }
 
     protected $table = 'sch_ins_schools';
@@ -143,92 +158,90 @@ class School extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<SchoolUnit, $this>
+     * @return HasMany<SchoolUnit, $this>
      */
-    public function levels(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function levels(): HasMany
     {
         return $this->hasMany(SchoolUnit::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Academic\AcademicYear, $this>
+     * @return HasMany<AcademicYear, $this>
      */
-    public function academicYears(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function academicYears(): HasMany
     {
-        return $this->hasMany(\Modules\School\Models\Academic\AcademicYear::class);
+        return $this->hasMany(AcademicYear::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne<\Modules\School\Models\Academic\AcademicYear, $this>
+     * @return HasOne<AcademicYear, $this>
      */
-    public function activeAcademicYear(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function activeAcademicYear(): HasOne
     {
-        return $this->hasOne(\Modules\School\Models\Academic\AcademicYear::class)->where('is_active', true);
+        return $this->hasOne(AcademicYear::class)->where('is_active', true);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Student\Student, $this>
+     * @return HasMany<Student, $this>
      */
-    public function students(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function students(): HasMany
     {
-        return $this->hasMany(\Modules\School\Models\Student\Student::class);
+        return $this->hasMany(Student::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\HR\Staff, $this>
+     * @return HasMany<Staff, $this>
      */
-    public function staff(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function staff(): HasMany
     {
-        return $this->hasMany(\Modules\School\Models\HR\Staff::class);
+        return $this->hasMany(Staff::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Logistics\LandAsset, $this>
+     * @return HasMany<LandAsset, $this>
      */
-    public function landAssets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function landAssets(): HasMany
     {
-        return $this->hasMany(\Modules\School\Models\Logistics\LandAsset::class);
+        return $this->hasMany(LandAsset::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Academic\Subject, $this>
+     * @return HasMany<Subject, $this>
      */
-    public function subjects(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function subjects(): HasMany
     {
-        return $this->hasMany(\Modules\School\Models\Academic\Subject::class);
+        return $this->hasMany(Subject::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Academic\StudyGroup, $this>
+     * @return HasMany<StudyGroup, $this>
      */
-    public function studyGroups(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function studyGroups(): HasMany
     {
-        return $this->hasMany(\Modules\School\Models\Academic\StudyGroup::class);
-    }
-
-
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Operations\LibraryBook, $this>
-     */
-    public function libraryBooks(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(\Modules\School\Models\Operations\LibraryBook::class);
+        return $this->hasMany(StudyGroup::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Operations\UksVisit, $this>
+     * @return HasMany<LibraryBook, $this>
      */
-    public function uksVisits(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function libraryBooks(): HasMany
     {
-        return $this->hasMany(\Modules\School\Models\Operations\UksVisit::class);
+        return $this->hasMany(LibraryBook::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\School\Models\Operations\GuestLog, $this>
+     * @return HasMany<UksVisit, $this>
      */
-    public function guestLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function uksVisits(): HasMany
     {
-        return $this->hasMany(\Modules\School\Models\Operations\GuestLog::class);
+        return $this->hasMany(UksVisit::class);
+    }
+
+    /**
+     * @return HasMany<GuestLog, $this>
+     */
+    public function guestLogs(): HasMany
+    {
+        return $this->hasMany(GuestLog::class);
     }
 }

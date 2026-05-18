@@ -2,11 +2,13 @@
 
 namespace Modules\School\Models\HR;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Modules\School\Models\Student\Student;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -15,20 +17,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $resume_path
  * @property string $status
  * @property string|null $notes
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read JobVacancy $vacancy
- * @property-read \Modules\School\Models\Student\Student|null $student
+ * @property-read Student|null $student
  */
 class JobApplication extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
+
     protected $table = 'sch_hr_job_applications';
 
     use SoftDeletes;
@@ -42,18 +46,18 @@ class JobApplication extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<JobVacancy, $this>
+     * @return BelongsTo<JobVacancy, $this>
      */
-    public function vacancy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function vacancy(): BelongsTo
     {
         return $this->belongsTo(JobVacancy::class, 'vacancy_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Student\Student, $this>
+     * @return BelongsTo<Student, $this>
      */
-    public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function student(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Student\Student::class, 'student_id');
+        return $this->belongsTo(Student::class, 'student_id');
     }
 }

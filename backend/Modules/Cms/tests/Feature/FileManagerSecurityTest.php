@@ -5,9 +5,9 @@ namespace Modules\Cms\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Modules\System\Models\User;
 use Modules\System\Models\Permission;
 use Modules\System\Models\Role;
+use Modules\System\Models\User;
 use Tests\TestCase;
 
 class FileManagerSecurityTest extends TestCase

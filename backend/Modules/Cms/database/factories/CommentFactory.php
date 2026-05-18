@@ -8,7 +8,7 @@ use Modules\Cms\Models\Content;
 use Modules\System\Models\User;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Cms\Models\Comment>
+ * @extends Factory<Comment>
  */
 class CommentFactory extends Factory
 {

@@ -2,9 +2,12 @@
 
 namespace Modules\School\Models\Academic;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Institution\SchoolUnit;
 use Modules\System\Traits\ScopedByWorkspace;
@@ -14,14 +17,14 @@ use Modules\System\Traits\ScopedByWorkspace;
  * @property string $school_id
  * @property string $workspace_id
  * @property int $schedule_id
- * @property \Illuminate\Support\Carbon $date
+ * @property Carbon $date
  * @property string $topic
  * @property string|null $materials
  * @property array<int, int>|null $absent_students
  * @property string|null $notes
  * @property string|null $evidence_path
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read School $school
  * @property-read SchoolUnit $level
  * @property-read Schedule $schedule
@@ -31,11 +34,12 @@ class TeachingJournal extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_acad_teaching_journals';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -56,25 +60,25 @@ class TeachingJournal extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SchoolUnit, $this>
+     * @return BelongsTo<SchoolUnit, $this>
      */
-    public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function level(): BelongsTo
     {
         return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Schedule, $this>
+     * @return BelongsTo<Schedule, $this>
      */
-    public function schedule(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function schedule(): BelongsTo
     {
         return $this->belongsTo(Schedule::class);
     }

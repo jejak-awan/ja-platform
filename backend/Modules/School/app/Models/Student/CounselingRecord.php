@@ -2,9 +2,15 @@
 
 namespace Modules\School\Models\Student;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Modules\School\Models\HR\Staff;
+use Modules\School\Models\Institution\School;
+use Modules\School\Models\Institution\SchoolUnit;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
@@ -13,28 +19,29 @@ use Modules\System\Traits\ScopedByWorkspace;
  * @property string $workspace_id
  * @property string $student_id
  * @property string $staff_id
- * @property \Illuminate\Support\Carbon $date
+ * @property Carbon $date
  * @property string $type
  * @property string $problem
  * @property string|null $solution
  * @property string $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\School\Models\Institution\School $school
- * @property-read \Modules\School\Models\Institution\SchoolUnit $level
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read School $school
+ * @property-read SchoolUnit $level
  * @property-read Student $student
- * @property-read \Modules\School\Models\HR\Staff $counselor
+ * @property-read Staff $counselor
  */
 class CounselingRecord extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_std_counseling_records';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -54,34 +61,34 @@ class CounselingRecord extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Institution\School, $this>
+     * @return BelongsTo<School, $this>
      */
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function school(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\School::class);
+        return $this->belongsTo(School::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Institution\SchoolUnit, $this>
+     * @return BelongsTo<SchoolUnit, $this>
      */
-    public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function level(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Institution\SchoolUnit::class, 'workspace_id');
+        return $this->belongsTo(SchoolUnit::class, 'workspace_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, $this>
+     * @return BelongsTo<Student, $this>
      */
-    public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\HR\Staff, $this>
+     * @return BelongsTo<Staff, $this>
      */
-    public function counselor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function counselor(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\HR\Staff::class, 'staff_id');
+        return $this->belongsTo(Staff::class, 'staff_id');
     }
 }

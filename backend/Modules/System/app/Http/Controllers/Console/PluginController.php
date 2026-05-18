@@ -2,19 +2,21 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Plugin;
 
-class PluginController extends \Modules\System\Http\Controllers\BaseApiController
+class PluginController extends BaseApiController
 {
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(): JsonResponse
     {
         $plugins = Plugin::latest()->get();
 
         return $this->success($plugins, 'Plugins retrieved successfully');
     }
 
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -34,12 +36,12 @@ class PluginController extends \Modules\System\Http\Controllers\BaseApiControlle
         return $this->success($plugin, 'Plugin created successfully', 201);
     }
 
-    public function show(Plugin $plugin): \Illuminate\Http\JsonResponse
+    public function show(Plugin $plugin): JsonResponse
     {
         return $this->success($plugin, 'Plugin retrieved successfully');
     }
 
-    public function update(Request $request, Plugin $plugin): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Plugin $plugin): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
@@ -59,7 +61,7 @@ class PluginController extends \Modules\System\Http\Controllers\BaseApiControlle
         return $this->success($plugin, 'Plugin updated successfully');
     }
 
-    public function destroy(Plugin $plugin): \Illuminate\Http\JsonResponse
+    public function destroy(Plugin $plugin): JsonResponse
     {
         if ($plugin->is_active) {
             return $this->validationError(['plugin' => ['Cannot delete active plugin. Deactivate it first.']], 'Cannot delete active plugin. Deactivate it first.');
@@ -70,7 +72,7 @@ class PluginController extends \Modules\System\Http\Controllers\BaseApiControlle
         return $this->success(null, 'Plugin deleted successfully');
     }
 
-    public function activate(Plugin $plugin): \Illuminate\Http\JsonResponse
+    public function activate(Plugin $plugin): JsonResponse
     {
         $plugin->activate();
 
@@ -79,7 +81,7 @@ class PluginController extends \Modules\System\Http\Controllers\BaseApiControlle
         ], 'Plugin activated successfully');
     }
 
-    public function deactivate(Plugin $plugin): \Illuminate\Http\JsonResponse
+    public function deactivate(Plugin $plugin): JsonResponse
     {
         $plugin->deactivate();
 
@@ -88,7 +90,7 @@ class PluginController extends \Modules\System\Http\Controllers\BaseApiControlle
         ], 'Plugin deactivated successfully');
     }
 
-    public function updateSettings(Request $request, Plugin $plugin): \Illuminate\Http\JsonResponse
+    public function updateSettings(Request $request, Plugin $plugin): JsonResponse
     {
         $validated = $request->validate([
             'settings' => 'required|array',
@@ -99,7 +101,7 @@ class PluginController extends \Modules\System\Http\Controllers\BaseApiControlle
         return $this->success($plugin, 'Plugin settings updated successfully');
     }
 
-    public function getActive(): \Illuminate\Http\JsonResponse
+    public function getActive(): JsonResponse
     {
         $plugins = Plugin::getActivePlugins();
 

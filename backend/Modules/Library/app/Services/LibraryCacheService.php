@@ -3,8 +3,8 @@
 namespace Modules\Library\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
+use Modules\Library\Models\Category;
 
 class LibraryCacheService
 {
@@ -68,7 +68,7 @@ class LibraryCacheService
     public function warmUp(): int
     {
         $count = 0;
-        
+
         // Warm categories
         $categories = Category::orderBy('sort_order')->get();
         Cache::put('categories:list', $categories, 86400);
@@ -79,7 +79,7 @@ class LibraryCacheService
             ->orderBy('views', 'desc')
             ->limit(50)
             ->get();
-        
+
         foreach ($popularContent as $content) {
             Cache::put("content:{$content->id}", $content, 3600);
             $count++;

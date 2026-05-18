@@ -1,11 +1,16 @@
 <?php
+
 namespace Modules\Analytics\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Modules\Analytics\Database\Factories\AnalyticsVisitFactory;
+use Modules\System\Helpers\IpHelper;
 use Modules\System\Models\User;
 
 /**
@@ -20,7 +25,7 @@ use Modules\System\Models\User;
  * @property string $method
  * @property int $status_code
  * @property int|null $duration
- * @property \Illuminate\Support\Carbon $visited_at
+ * @property Carbon $visited_at
  * @property int|null $visits_count
  * @property int|null $count
  */
@@ -29,19 +34,18 @@ class AnalyticsVisit extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'srv_analytics_visits';
 
-
-    /** @use HasFactory<\Modules\Analytics\Database\Factories\AnalyticsVisitFactory> */
+    /** @use HasFactory<AnalyticsVisitFactory> */
     use HasFactory;
 
-    protected static function newFactory(): \Modules\Analytics\Database\Factories\AnalyticsVisitFactory
+    protected static function newFactory(): AnalyticsVisitFactory
     {
-        return \Modules\Analytics\Database\Factories\AnalyticsVisitFactory::new();
+        return AnalyticsVisitFactory::new();
     }
-
 
     public $timestamps = true; // DB has created_at/updated_at
 
@@ -69,7 +73,7 @@ class AnalyticsVisit extends Model
     /**
      * Track a visit.
      */
-    public static function trackVisit(\Illuminate\Http\Request $request): self
+    public static function trackVisit(Request $request): self
     {
         $sessInput = $request->input('session_id') ?? session()->getId();
         $sessionId = is_scalar($sessInput) ? (string) $sessInput : '';
@@ -83,7 +87,7 @@ class AnalyticsVisit extends Model
         $visit = self::create([
             'session_id' => $sessionId,
             'user_id' => Auth::id(),
-            'ip_address' => \Modules\System\Helpers\IpHelper::getClientIp($request),
+            'ip_address' => IpHelper::getClientIp($request),
             'user_agent' => is_string($userAgent) ? $userAgent : null,
             'referer' => is_string($referer) ? $referer : null,
             'url' => is_string($urlInput = $request->input('url')) ? $urlInput : $request->fullUrl(),
@@ -101,7 +105,7 @@ class AnalyticsVisit extends Model
 
     /**
      * Get the session associated with the visit.
-     * 
+     *
      * @return BelongsTo<AnalyticsSession, $this>
      */
     public function session(): BelongsTo
@@ -111,7 +115,7 @@ class AnalyticsVisit extends Model
 
     /**
      * Get the user that made the visit.
-     * 
+     *
      * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo

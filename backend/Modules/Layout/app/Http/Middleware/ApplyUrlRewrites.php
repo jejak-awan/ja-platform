@@ -25,7 +25,7 @@ class ApplyUrlRewrites
 
         // Find rewrite for this path
         $path = $request->path();
-        
+
         $rewrite = UrlRewrite::where('source_path', $path)
             ->where('is_active', true)
             ->first();

@@ -16,7 +16,5 @@ class AttendanceMarked
     /**
      * Create a new event instance.
      */
-    public function __construct(public Attendance $attendance)
-    {
-    }
+    public function __construct(public Attendance $attendance) {}
 }

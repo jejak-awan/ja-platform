@@ -2,24 +2,30 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Redis\Connections\Connection;
+use Illuminate\Redis\Connectors\PhpRedisConnector;
+use Illuminate\Redis\Connectors\PredisConnector;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\RedisSetting;
 
-class RedisController extends \Modules\System\Http\Controllers\BaseApiController
+class RedisController extends BaseApiController
 {
     /**
      * Get all Redis settings.
      */
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(): JsonResponse
     {
         $settings = RedisSetting::orderBy('group')->orderBy('key')->get();
 
-        $grouped = $settings->groupBy('group')->map(function (\Illuminate\Support\Collection $items) {
-            /** @var \Illuminate\Support\Collection<int, \Modules\System\Models\RedisSetting> $items */
-            return $items->map(fn(\Modules\System\Models\RedisSetting $item) => [
+        $grouped = $settings->groupBy('group')->map(function (Collection $items) {
+            /** @var Collection<int, RedisSetting> $items */
+            return $items->map(fn (RedisSetting $item) => [
                 'id' => $item->id,
                 'key' => $item->key,
                 'value' => $this->presentSettingValue($item),
@@ -49,7 +55,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Update Redis settings.
      */
-    public function update(Request $request): \Illuminate\Http\JsonResponse
+    public function update(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'settings' => 'required|array',
@@ -82,11 +88,11 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Test Redis connection.
      */
-    public function testConnection(Request $request): \Illuminate\Http\JsonResponse
+    public function testConnection(Request $request): JsonResponse
     {
         try {
             $start = microtime(true);
-            
+
             $host = $request->input('host', '127.0.0.1');
             $portRaw = $request->input('port', 6379);
             $port = is_numeric($portRaw) ? (int) $portRaw : 6379;
@@ -105,48 +111,49 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
             ];
 
             // Use direct connector to bypass Laravel's connection manager constraints for testing
-            $connector = ($client === 'phpredis') 
-                ? new \Illuminate\Redis\Connectors\PhpRedisConnector()
-                : new \Illuminate\Redis\Connectors\PredisConnector();
+            $connector = ($client === 'phpredis')
+                ? new PhpRedisConnector
+                : new PredisConnector;
 
             try {
                 // For phpredis, we might need to handle options differently, but empty array is usually fine
                 $redis = $connector->connect($config, []);
-                
+
                 // Explicitly check connection by sending a PING
                 $pong = $redis->ping();
-                
+
                 // If ping() doesn't throw but returns something else
-                if (!$pong && $client === 'phpredis') {
+                if (! $pong && $client === 'phpredis') {
                     return $this->error('Redis server reachable but did not respond to PING. Check server status.', 500, [], 'REDIS_NO_PONG');
                 }
             } catch (\Exception $e) {
                 $msg = $e->getMessage();
-                
+
                 // Specific error mapping for better UX
                 if (str_contains($msg, 'NOAUTH') || str_contains($msg, 'Authentication required') || str_contains($msg, 'invalid password')) {
                     return $this->error('Redis Authentication Failed: The password provided is incorrect.', 401, [
                         'field' => 'password',
-                        'hint' => 'Check your Redis password setting.'
+                        'hint' => 'Check your Redis password setting.',
                     ], 'REDIS_AUTH_FAILED');
                 }
-                
+
                 if (str_contains($msg, 'Connection refused') || str_contains($msg, 'getaddrinfo failed')) {
                     $sHost = is_scalar($host) ? (string) $host : '127.0.0.1';
                     $sPort = (string) $port;
+
                     return $this->error('Redis Connection Refused: Could not reach the server at '.$sHost.':'.$sPort.'.', 500, [
                         'field' => 'host',
-                        'hint' => 'Verify the host address and port. Ensure Redis is running and firewall allows connections.'
+                        'hint' => 'Verify the host address and port. Ensure Redis is running and firewall allows connections.',
                     ], 'REDIS_CONN_REFUSED');
                 }
 
                 if (str_contains($msg, 'timed out')) {
                     return $this->error('Redis Connection Timeout: The server took too long to respond.', 500, [
-                        'hint' => 'Check network latency or if the Redis server is overloaded.'
+                        'hint' => 'Check network latency or if the Redis server is overloaded.',
                     ], 'REDIS_TIMEOUT');
                 }
-                
-                return $this->error('Redis connection failed: ' . $msg, 500, [], 'REDIS_CONN_FAILED');
+
+                return $this->error('Redis connection failed: '.$msg, 500, [], 'REDIS_CONN_FAILED');
             }
 
             $duration = round((microtime(true) - $start) * 1000, 2);
@@ -158,14 +165,14 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
             ], 'Connection test passed');
 
         } catch (\Exception $e) {
-            return $this->error('Redis test utility error: ' . $e->getMessage(), 500, [], 'REDIS_TEST_UTILITY_ERROR');
+            return $this->error('Redis test utility error: '.$e->getMessage(), 500, [], 'REDIS_TEST_UTILITY_ERROR');
         }
     }
 
     /**
      * Get Redis server info.
      */
-    public function info(): \Illuminate\Http\JsonResponse
+    public function info(): JsonResponse
     {
         try {
             $redis = Redis::connection();
@@ -210,7 +217,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Flush Redis cache.
      */
-    public function flushCache(Request $request): \Illuminate\Http\JsonResponse
+    public function flushCache(Request $request): JsonResponse
     {
         try {
             $type = $request->input('type', 'all'); // all, cache, config, route, view
@@ -256,7 +263,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Get cache statistics.
      */
-    public function cacheStats(): \Illuminate\Http\JsonResponse
+    public function cacheStats(): JsonResponse
     {
         try {
             $redis = Redis::connection('cache');
@@ -317,7 +324,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
 
                     // Remove prefix if present in keyNameStr
                     $cleanKey = $keyNameStr;
-                    if (!empty($prefix)) {
+                    if (! empty($prefix)) {
                         while (str_starts_with($cleanKey, $prefix)) {
                             $cleanKey = substr($cleanKey, strlen($prefix));
                         }
@@ -348,7 +355,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
                         $sizeVal /= 1024;
                         $unit++;
                     }
-                    $formattedSize = round($sizeVal, 2) . ' ' . $units[$unit];
+                    $formattedSize = round($sizeVal, 2).' '.$units[$unit];
 
                     $formattedTtl = 'Persistent';
                     if ($item['ttl_sec'] === -2) {
@@ -443,7 +450,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Helper: Get expired keys count.
      *
-     * @param  \Illuminate\Redis\Connections\Connection  $redis
+     * @param  Connection  $redis
      */
     private function getExpiredKeysCount($redis): int
     {
@@ -456,7 +463,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
         }
     }
 
-    private function getDatabaseSize(\Illuminate\Redis\Connections\Connection $redis): int
+    private function getDatabaseSize(Connection $redis): int
     {
         $size = $redis->dbsize();
 
@@ -484,7 +491,7 @@ class RedisController extends \Modules\System\Http\Controllers\BaseApiController
     /**
      * Warm up cache (optimize).
      */
-    public function warmCache(): \Illuminate\Http\JsonResponse
+    public function warmCache(): JsonResponse
     {
         try {
             $commands = [

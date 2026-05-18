@@ -3,18 +3,23 @@
 namespace Modules\School\database\seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Modules\School\Models\Academic\AcademicYear;
-use Modules\School\Models\Academic\Semester;
 use Modules\School\Models\Academic\Department;
+use Modules\School\Models\Academic\Semester;
 use Modules\School\Models\Academic\StudyGroup;
 
 class AcademicInfrastructureSeeder extends Seeder
 {
     public function run(): void
     {
-        $school = \Illuminate\Support\Facades\DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
-        $unit = $school ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
-        if (!$school || !$unit) { $this->command->warn('No school/unit found. Skipping AcademicInfrastructureSeeder.'); return; }
+        $school = DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        $unit = $school ? DB::table('sch_ins_levels')->where('school_id', $school->id)->first() : null;
+        if (! $school || ! $unit) {
+            $this->command->warn('No school/unit found. Skipping AcademicInfrastructureSeeder.');
+
+            return;
+        }
         $schoolId = $school->id;
         $levelId = $unit->id;
 
@@ -63,7 +68,7 @@ class AcademicInfrastructureSeeder extends Seeder
                 [
                     'school_id' => $schoolId,
                     'academic_year_id' => $year->id,
-                    'name' => $class['name']
+                    'name' => $class['name'],
                 ],
                 [
                     'workspace_id' => $levelId,

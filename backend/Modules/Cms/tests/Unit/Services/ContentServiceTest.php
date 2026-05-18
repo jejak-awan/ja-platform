@@ -5,10 +5,12 @@ namespace Modules\Cms\Tests\Unit\Services;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
-use Modules\Library\Models\Tag;
 use Modules\Cms\Services\ContentService;
+use Modules\Library\Models\Category;
+use Modules\Library\Models\CustomField;
+use Modules\Library\Models\FieldGroup;
+use Modules\Library\Models\Tag;
 use Modules\System\Models\User;
 use Tests\TestCase;
 
@@ -171,10 +173,10 @@ class ContentServiceTest extends TestCase
         $tag = Tag::factory()->create();
 
         // Manual creation since no factory
-        \Modules\Library\Models\FieldGroup::create([
+        FieldGroup::create([
             'name' => 'SEO',
         ]);
-        \Modules\Library\Models\CustomField::create([
+        CustomField::create([
             'name' => 'SEO Title',
             'key' => 'seo_title',
             'label' => 'SEO Title',

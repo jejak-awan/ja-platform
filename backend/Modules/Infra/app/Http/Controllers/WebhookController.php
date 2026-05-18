@@ -2,12 +2,16 @@
 
 namespace Modules\Infra\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Modules\Security\Rules\SafeUrl;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Webhook;
 
-class WebhookController extends \Modules\System\Http\Controllers\BaseApiController
+class WebhookController extends BaseApiController
 {
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = Webhook::query();
 
@@ -24,12 +28,12 @@ class WebhookController extends \Modules\System\Http\Controllers\BaseApiControll
         return $this->success($webhooks, 'Webhooks retrieved successfully');
     }
 
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'url' => ['required', 'url', new \Modules\Security\Rules\SafeUrl],
+                'url' => ['required', 'url', new SafeUrl],
                 'event' => 'required|string',
                 'method' => 'nullable|in:POST,PUT,PATCH',
                 'headers' => 'nullable|array',
@@ -37,7 +41,7 @@ class WebhookController extends \Modules\System\Http\Controllers\BaseApiControll
                 'timeout' => 'integer|min:1|max:300',
                 'max_retries' => 'integer|min:0|max:10',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
@@ -46,17 +50,17 @@ class WebhookController extends \Modules\System\Http\Controllers\BaseApiControll
         return $this->success($webhook, 'Webhook created successfully', 201);
     }
 
-    public function show(Webhook $webhook): \Illuminate\Http\JsonResponse
+    public function show(Webhook $webhook): JsonResponse
     {
         return $this->success($webhook, 'Webhook retrieved successfully');
     }
 
-    public function update(Request $request, Webhook $webhook): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Webhook $webhook): JsonResponse
     {
         try {
             $validated = $request->validate([
                 'name' => 'sometimes|required|string|max:255',
-                'url' => ['sometimes', 'required', 'url', new \Modules\Security\Rules\SafeUrl],
+                'url' => ['sometimes', 'required', 'url', new SafeUrl],
                 'event' => 'sometimes|required|string',
                 'method' => 'nullable|in:POST,PUT,PATCH',
                 'headers' => 'nullable|array',
@@ -65,7 +69,7 @@ class WebhookController extends \Modules\System\Http\Controllers\BaseApiControll
                 'timeout' => 'integer|min:1|max:300',
                 'max_retries' => 'integer|min:0|max:10',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->validationError($e->errors());
         }
 
@@ -74,14 +78,14 @@ class WebhookController extends \Modules\System\Http\Controllers\BaseApiControll
         return $this->success($webhook, 'Webhook updated successfully');
     }
 
-    public function destroy(Webhook $webhook): \Illuminate\Http\JsonResponse
+    public function destroy(Webhook $webhook): JsonResponse
     {
         $webhook->delete();
 
         return $this->success(null, 'Webhook deleted successfully');
     }
 
-    public function test(Webhook $webhook): \Illuminate\Http\JsonResponse
+    public function test(Webhook $webhook): JsonResponse
     {
         $testData = [
             'test' => true,
@@ -95,7 +99,7 @@ class WebhookController extends \Modules\System\Http\Controllers\BaseApiControll
         ], $result ? 'Webhook triggered successfully' : 'Webhook failed');
     }
 
-    public function statistics(): \Illuminate\Http\JsonResponse
+    public function statistics(): JsonResponse
     {
         $stats = [
             'total' => Webhook::count(),

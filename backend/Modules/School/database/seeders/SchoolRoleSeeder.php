@@ -3,8 +3,9 @@
 namespace Modules\School\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\System\Models\Role;
 use Modules\System\Models\Permission;
+use Modules\System\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class SchoolRoleSeeder extends Seeder
 {
@@ -14,26 +15,26 @@ class SchoolRoleSeeder extends Seeder
     public function run(): void
     {
         // Reset cached roles and permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = [
             // Institution
             'view schools', 'manage schools', 'manage organization',
-            
+
             // Academic & LMS
             'view academic', 'manage academic', 'manage curriculum', 'manage schedule',
             'grade assignments', 'input journal', 'manage lms',
-            
+
             // Students
             'view students', 'manage students', 'edit students', 'view attendance', 'manage attendance',
             'view student affairs', 'manage student affairs', 'view admission', 'manage admission',
-            
+
             // HR
             'view staff', 'manage staff', 'manage payroll',
-            
+
             // Logistics
             'view sarpras', 'manage sarpras', 'manage inventory', 'manage logistics',
-            
+
             // Others
             'view osis', 'manage osis', 'view visitors', 'manage visitors', 'view analytics',
         ];
@@ -61,7 +62,7 @@ class SchoolRoleSeeder extends Seeder
         $operatorUnit->syncPermissions([
             'view academic', 'manage schedule', 'input journal',
             'view students', 'manage students', 'view attendance', 'manage attendance',
-            'view staff', 'view visitors', 'manage visitors'
+            'view staff', 'view visitors', 'manage visitors',
         ]);
 
         // --- SPECIALIZED UNIT ROLES (Level 9 RBAC tests) ---
@@ -89,7 +90,7 @@ class SchoolRoleSeeder extends Seeder
 
         $waliKelas = Role::findOrCreate('wali-kelas', 'web');
         $waliKelas->syncPermissions(array_merge($guru->permissions->pluck('name')->toArray(), [
-            'view analytics', 'manage students'
+            'view analytics', 'manage students',
         ]));
 
         $pembinaEkskul = Role::findOrCreate('pembina-ekskul', 'web');

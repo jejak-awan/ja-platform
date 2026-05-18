@@ -8,12 +8,14 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Modules\System\Helpers\IpHelper;
 use Modules\Security\Models\IpList;
+use Modules\Security\Services\SecurityService;
+use Modules\System\Helpers\IpHelper;
 use Modules\System\Models\Setting;
+use Modules\System\Models\User;
 use Modules\System\Services\AnomalyDetectionService;
 use Modules\System\Services\GeoIpService;
-use Modules\Security\Services\SecurityService;
+use Modules\System\Services\SecurityMaintenanceService;
 use Modules\System\Traits\MaintenanceBypass;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,9 +38,7 @@ class VerifyConnection
         'Applebot' => ['applebot.apple.com'],
     ];
 
-    public function __construct(protected SecurityService $securityService, protected AnomalyDetectionService $anomalyService)
-    {
-    }
+    public function __construct(protected SecurityService $securityService, protected AnomalyDetectionService $anomalyService) {}
 
     /**
      * Handle an incoming request.
@@ -53,13 +53,13 @@ class VerifyConnection
         }
 
         // Bypass shield ONLY if the module is explicitly paused via emergency switch
-        if (app(\Modules\System\Services\SecurityMaintenanceService::class)->isModulePaused('shield')) {
+        if (app(SecurityMaintenanceService::class)->isModulePaused('shield')) {
             return $next($request);
         }
 
         // 1. Static assets, OPTIONS requests, and safe/public/auth API bypass
-        if ($request->isMethod('OPTIONS') || 
-            $this->isStaticAssetRequest($request) || 
+        if ($request->isMethod('OPTIONS') ||
+            $this->isStaticAssetRequest($request) ||
             $request->is('api/v1/manage/*') ||
             $request->is('api/v1/student/*') ||
             $request->is('api/v1/teacher/*') ||
@@ -95,7 +95,7 @@ class VerifyConnection
         // 4. Admin user bypass
         if (Auth::check()) {
             $authUser = Auth::user();
-            if ($authUser instanceof \Modules\System\Models\User && ($authUser->hasRole('admin') || $authUser->hasRole('super'))) {
+            if ($authUser instanceof User && ($authUser->hasRole('admin') || $authUser->hasRole('super'))) {
                 return $next($request);
             }
         }
@@ -112,7 +112,7 @@ class VerifyConnection
 
         // 7. Suspicious Only mode — challenge only genuinely suspicious requests
         if ($mode === 'suspicious') {
-            $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_' . md5($ip . ($request->userAgent() ?? ''));
+            $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_'.md5($ip.($request->userAgent() ?? ''));
 
             if ($this->anomalyService->shouldBlock($ip, $sessionId)) {
                 $this->securityService->blockIpPermanently($ip, 'Extreme statistical anomaly score detected');
@@ -133,19 +133,18 @@ class VerifyConnection
             return $next($request);
         }
 
-        if (Setting::get('shield_enable_ip_intelligence', false) || !empty(Setting::get('shield_allowed_countries', []))) {
-             // Check Global Blacklist
+        if (Setting::get('shield_enable_ip_intelligence', false) || ! empty(Setting::get('shield_allowed_countries', []))) {
+            // Check Global Blacklist
             if (Setting::get('shield_enable_ip_intelligence', false) && $this->securityService->isIpInGlobalBlacklist($ip)) {
                 $this->securityService->recordGlobalBlacklistHit($ip, 'Detected in global blacklist - Challenge required');
             }
 
             // Check Geolocation
             $geoIpService = app(GeoIpService::class);
-            if (!$geoIpService->isCountryAllowed($ip)) {
+            if (! $geoIpService->isCountryAllowed($ip)) {
                 $this->securityService->recordCountryBlock($ip, 'Geolocation mismatch detected; challenge required');
             }
         }
-
 
         // ISSUE CHALLENGE
         if ($request->expectsJson() || $request->is('api/*')) {
@@ -282,14 +281,14 @@ class VerifyConnection
         // 1. Missing or empty User-Agent (high signal)
         if ($userAgent === '' || $userAgent === '0') {
             $suspicionScore += 3;
-            $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_' . md5($ip);
+            $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_'.md5($ip);
             $this->anomalyService->trackEvent('suspicious_ua', $ip, $sessionId);
         }
 
         // 2. Missing Accept-Language header (browsers always send this)
         if (! $request->header('Accept-Language')) {
             $suspicionScore += 2;
-            $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_' . md5($ip);
+            $sessionId = $request->hasSession() ? $request->session()->getId() : 'stateless_'.md5($ip);
             $this->anomalyService->trackEvent('missing_headers', $ip, $sessionId);
         }
 
@@ -330,8 +329,8 @@ class VerifyConnection
     protected function issueAjaxChallenge(Request $request, string $ip): Response
     {
         $nonce = $this->securityService->generateShieldNonce($ip);
-        
-        $sessionId = 'stateless_' . md5($ip . ($request->userAgent() ?? ''));
+
+        $sessionId = 'stateless_'.md5($ip.($request->userAgent() ?? ''));
         try {
             if ($request->hasSession()) {
                 $sessionId = $request->session()->getId();
@@ -360,8 +359,8 @@ class VerifyConnection
     protected function issueHtmlChallenge(Request $request, string $ip): Response
     {
         $nonce = $this->securityService->generateShieldNonce($ip);
-        
-        $sessionId = 'stateless_' . md5($ip . ($request->userAgent() ?? ''));
+
+        $sessionId = 'stateless_'.md5($ip.($request->userAgent() ?? ''));
         try {
             if ($request->hasSession()) {
                 $sessionId = $request->session()->getId();

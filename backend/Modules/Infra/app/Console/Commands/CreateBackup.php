@@ -38,16 +38,19 @@ class CreateBackup extends Command
 
             if ($backup && $backup->status === 'completed') {
                 $this->info("Backup created successfully: {$backup->name}");
-                $this->info("Size: " . round($backup->size / 1024 / 1024, 2) . " MB");
+                $this->info('Size: '.round($backup->size / 1024 / 1024, 2).' MB');
                 $this->info("Path: {$backup->path}");
+
                 return 0;
             } else {
                 $err = $backup ? $backup->error_message : 'Unknown error';
                 $this->error("Backup failed: {$err}");
+
                 return 1;
             }
         } catch (\Throwable $e) {
-            $this->error("Backup execution failed: " . $e->getMessage());
+            $this->error('Backup execution failed: '.$e->getMessage());
+
             return 1;
         }
     }

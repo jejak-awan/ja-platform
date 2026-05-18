@@ -2,12 +2,14 @@
 
 namespace Modules\School\Models\Academic;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Modules\School\Models\Student\Student;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -18,9 +20,9 @@ use Modules\School\Models\Student\Student;
  * @property string $status
  * @property string|null $notes
  * @property string|null $attachment_path
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\School\Models\Student\Student $student
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Student $student
  * @property-read AcademicYear $academicYear
  * @property-read Semester $semester
  */
@@ -29,11 +31,12 @@ class Attendance extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sch_acad_attendances';
 
-    /** @use HasFactory<\Illuminate\Database\Eloquent\Factories\Factory<static>> */
+    /** @use HasFactory<Factory<static>> */
     use HasFactory, ScopedByWorkspace;
 
     protected $fillable = [
@@ -48,25 +51,25 @@ class Attendance extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, $this>
+     * @return BelongsTo<Student, $this>
      */
-    public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function student(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Student\Student::class);
+        return $this->belongsTo(Student::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<AcademicYear, $this>
+     * @return BelongsTo<AcademicYear, $this>
      */
-    public function academicYear(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function academicYear(): BelongsTo
     {
         return $this->belongsTo(AcademicYear::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Semester, $this>
+     * @return BelongsTo<Semester, $this>
      */
-    public function semester(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function semester(): BelongsTo
     {
         return $this->belongsTo(Semester::class);
     }

@@ -61,7 +61,7 @@ class ThemeHooksServiceTest extends TestCase
 
     public function test_add_and_apply_filter(): void
     {
-        $this->service->addFilter('test.filter', fn($value) => $value.' modified');
+        $this->service->addFilter('test.filter', fn ($value) => $value.' modified');
 
         $result = $this->service->applyFilter('test.filter', 'original');
         $this->assertEquals('original modified', $result);
@@ -69,9 +69,9 @@ class ThemeHooksServiceTest extends TestCase
 
     public function test_filter_priority(): void
     {
-        $this->service->addFilter('test.priority', fn($value) => $value.' 1', 20);
+        $this->service->addFilter('test.priority', fn ($value) => $value.' 1', 20);
 
-        $this->service->addFilter('test.priority', fn($value) => $value.' 2', 10);
+        $this->service->addFilter('test.priority', fn ($value) => $value.' 2', 10);
 
         $result = $this->service->applyFilter('test.priority', 'start');
         // 10 runs first (start 2), then 20 (start 2 1)
@@ -108,7 +108,7 @@ class ThemeHooksServiceTest extends TestCase
 
     public function test_remove_filter(): void
     {
-        $callback = (fn($val) => $val.'x');
+        $callback = (fn ($val) => $val.'x');
 
         $this->service->addFilter('test.remove', $callback);
         $this->assertEquals('ax', $this->service->applyFilter('test.remove', 'a'));
@@ -126,7 +126,7 @@ class ThemeHooksServiceTest extends TestCase
     public function test_has_action_filter(): void
     {
         $this->service->addAction('act', function (): void {});
-        $this->service->addFilter('filt', fn($v) => $v);
+        $this->service->addFilter('filt', fn ($v) => $v);
 
         $this->assertTrue($this->service->hasAction('act'));
         $this->assertFalse($this->service->hasAction('non'));
@@ -138,7 +138,7 @@ class ThemeHooksServiceTest extends TestCase
     public function test_get_registered_hooks(): void
     {
         $this->service->addAction('act1', function (): void {});
-        $this->service->addFilter('filt1', fn($v) => $v);
+        $this->service->addFilter('filt1', fn ($v) => $v);
 
         $hooks = $this->service->getRegisteredHooks();
         $this->assertContains('act1', $hooks['actions']);

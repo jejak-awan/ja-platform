@@ -2,6 +2,7 @@
 
 namespace Modules\Member\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Modules\System\Http\Controllers\BaseApiController;
@@ -9,7 +10,7 @@ use Modules\System\Models\User;
 
 class LoginController extends BaseApiController
 {
-    public function login(Request $request): \Illuminate\Http\JsonResponse
+    public function login(Request $request): JsonResponse
     {
         $request->validate([
             'email' => 'required|email',
@@ -41,7 +42,7 @@ class LoginController extends BaseApiController
         ], 'Login successful');
     }
 
-    public function logout(Request $request): \Illuminate\Http\JsonResponse
+    public function logout(Request $request): JsonResponse
     {
         $user = $request->user();
         if ($user) {

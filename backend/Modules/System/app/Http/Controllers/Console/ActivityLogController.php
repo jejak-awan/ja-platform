@@ -2,16 +2,21 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\ActivityLog;
+use Modules\System\Models\User;
 
-class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiController
+class ActivityLogController extends BaseApiController
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
             $query = ActivityLog::with('user');
@@ -93,9 +98,9 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
     /**
      * Export activity logs to CSV
      *
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @return Response|JsonResponse
      */
-    public function export(Request $request): \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+    public function export(Request $request): ResponseFactory|Response|JsonResponse
     {
         try {
             $query = ActivityLog::with('user');
@@ -163,7 +168,7 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
     /**
      * Display the specified resource.
      */
-    public function show(ActivityLog $activityLog): \Illuminate\Http\JsonResponse
+    public function show(ActivityLog $activityLog): JsonResponse
     {
         return $this->success($activityLog->load('user'), 'Activity log retrieved successfully');
     }
@@ -173,7 +178,7 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
      *
      * @param  int|string  $userId
      */
-    public function userActivity(Request $request, $userId): \Illuminate\Http\JsonResponse
+    public function userActivity(Request $request, $userId): JsonResponse
     {
         $logs = ActivityLog::where('user_id', $userId)
             ->with('user')
@@ -186,7 +191,7 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
     /**
      * Display a listing of the most recent resources.
      */
-    public function recent(Request $request): \Illuminate\Http\JsonResponse
+    public function recent(Request $request): JsonResponse
     {
         $limitRaw = $request->input('limit', 20);
         $limit = is_numeric($limitRaw) ? (int) $limitRaw : 20;
@@ -202,7 +207,7 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
     /**
      * Display statistics about activity logs.
      */
-    public function statistics(Request $request): \Illuminate\Http\JsonResponse
+    public function statistics(Request $request): JsonResponse
     {
         $query = ActivityLog::query();
 
@@ -238,9 +243,10 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
                 ->get()
                 ->map(function ($item): array {
                     $userId = $item->getAttribute('user_id');
-                    $user = (is_string($userId) && $userId !== '') ? \Modules\System\Models\User::find($userId) : null;
+                    $user = (is_string($userId) && $userId !== '') ? User::find($userId) : null;
 
                     $count = $item->getAttribute('count');
+
                     return [
                         'user' => $user ? ['id' => $user->id, 'name' => $user->name, 'email' => $user->email] : null,
                         'count' => is_scalar($count) ? intval($count) : 0,
@@ -258,7 +264,7 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
     /**
      * Clear activity logs.
      */
-    public function clear(Request $request): \Illuminate\Http\JsonResponse
+    public function clear(Request $request): JsonResponse
     {
         try {
             // Optional: retain last X days

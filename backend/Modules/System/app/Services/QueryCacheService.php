@@ -3,6 +3,7 @@
 namespace Modules\System\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Query Cache Service
@@ -77,9 +78,9 @@ class QueryCacheService
         if (str_contains($pattern, '*')) {
             // For Redis, use pattern matching
             if (config('cache.default') === 'redis') {
-                $keys = \Illuminate\Support\Facades\Redis::keys($pattern);
+                $keys = Redis::keys($pattern);
                 if (! empty($keys)) {
-                    \Illuminate\Support\Facades\Redis::del($keys);
+                    Redis::del($keys);
                 }
             } else {
                 // For file cache, just forget the exact key

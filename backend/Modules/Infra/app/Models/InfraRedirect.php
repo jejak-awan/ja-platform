@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\Infra\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Modules\System\Traits\ScopedByWorkspace;
 
 class InfraRedirect extends Model
@@ -13,6 +13,7 @@ class InfraRedirect extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;

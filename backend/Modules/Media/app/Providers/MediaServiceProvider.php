@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Modules\Media\Providers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Modules\Media\Console\Commands\CleanupTempMedia;
+use Modules\Media\Console\MigrateLegacyMedia;
 use Modules\Media\Contracts\MediaServiceInterface;
-use Modules\Media\Services\MediaService;
 use Modules\Media\Models\File;
 use Modules\Media\Policies\FilePolicy;
-use Illuminate\Support\Facades\Gate;
+use Modules\Media\Services\MediaService;
 
 class MediaServiceProvider extends ServiceProvider
 {
@@ -29,12 +31,12 @@ class MediaServiceProvider extends ServiceProvider
     {
         Gate::policy(File::class, FilePolicy::class);
         $this->registerConfig();
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                \Modules\Media\Console\MigrateLegacyMedia::class,
-                \Modules\Media\Console\Commands\CleanupTempMedia::class,
+                MigrateLegacyMedia::class,
+                CleanupTempMedia::class,
             ]);
         }
     }
@@ -45,10 +47,10 @@ class MediaServiceProvider extends ServiceProvider
     protected function registerConfig(): void
     {
         $this->publishes([
-            __DIR__ . '/../../config/config.php' => config_path('media.php'),
+            __DIR__.'/../../config/config.php' => config_path('media.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            __DIR__ . '/../../config/config.php', 'media'
+            __DIR__.'/../../config/config.php', 'media'
         );
     }
 }

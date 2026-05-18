@@ -2,11 +2,13 @@
 
 namespace Modules\School\Models\Logistics;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Modules\School\Models\Student\Student;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -17,10 +19,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $status
  * @property string $start_date
  * @property string|null $end_date
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Modules\School\Models\Student\Student $student
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Student $student
  * @property-read Vehicle $vehicle
  * @property-read VehicleRoute $route
  */
@@ -29,9 +31,11 @@ class TransportRegistration extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
+
     protected $table = 'sch_log_transport_registrations';
 
     use SoftDeletes;
@@ -47,25 +51,25 @@ class TransportRegistration extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\School\Models\Student\Student, $this>
+     * @return BelongsTo<Student, $this>
      */
-    public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function student(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Student\Student::class);
+        return $this->belongsTo(Student::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Vehicle, $this>
+     * @return BelongsTo<Vehicle, $this>
      */
-    public function vehicle(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function vehicle(): BelongsTo
     {
         return $this->belongsTo(Vehicle::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<VehicleRoute, $this>
+     * @return BelongsTo<VehicleRoute, $this>
      */
-    public function route(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function route(): BelongsTo
     {
         return $this->belongsTo(VehicleRoute::class, 'route_id');
     }

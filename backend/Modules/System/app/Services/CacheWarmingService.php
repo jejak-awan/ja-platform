@@ -5,8 +5,9 @@ namespace Modules\System\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Modules\Media\Models\File as Media;
+use Illuminate\Support\Facades\Redis;
 use Modules\Library\Models\Tag;
+use Modules\Media\Models\File as Media;
 use Modules\System\Models\Language;
 
 /**
@@ -32,17 +33,24 @@ class CacheWarmingService
      * Cache key prefixes
      */
     const PREFIX_TAG = 'tag:';
+
     const PREFIX_TAG_LIST = 'tags:list';
+
     const PREFIX_MEDIA = 'media:';
+
     const PREFIX_LANGUAGE = 'languages:active';
+
     const PREFIX_STATISTICS = 'statistics:';
 
     /**
      * Default TTL in seconds
      */
     const TTL_SHORT = 300;      // 5 minutes
+
     const TTL_MEDIUM = 1800;    // 30 minutes
+
     const TTL_LONG = 3600;      // 1 hour
+
     const TTL_VERY_LONG = 86400; // 24 hours
 
     /**
@@ -106,7 +114,7 @@ class CacheWarmingService
 
             foreach ($recentMedia as $media) {
                 $key = self::PREFIX_MEDIA.$media->id;
-                Cache::remember($key, self::TTL_MEDIUM, fn() => $media->load(['folder', 'usages']));
+                Cache::remember($key, self::TTL_MEDIUM, fn () => $media->load(['folder', 'usages']));
                 $count++;
             }
 
@@ -200,7 +208,7 @@ class CacheWarmingService
     {
         try {
             if (config('cache.default') === 'redis') {
-                $redis = \Illuminate\Support\Facades\Redis::connection();
+                $redis = Redis::connection();
                 /** @var string $cachePrefix */
                 $cachePrefix = config('cache.prefix', '');
                 $pattern = $cachePrefix.':'.$prefix.'*';

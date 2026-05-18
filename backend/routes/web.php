@@ -5,17 +5,19 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Modules\Security\Models\SecurityLog;
+use Modules\System\Models\Setting;
+use Symfony\Component\HttpFoundation\Response;
 
 Route::get('/', function () {
     return response()->json([
         'status' => 'ok',
-        'message' => 'JA-Platform Backend API is running'
+        'message' => 'JA-Platform Backend API is running',
     ]);
 });
 
 // Cloudflare RUM (Real User Monitoring) dummy route to prevent 404s on origin
 Route::any('/cdn-cgi/{path?}', function () {
-    \Illuminate\Support\Facades\Log::info('Cloudflare RUM hit: '.request()->path());
+    Log::info('Cloudflare RUM hit: '.request()->path());
 
     return response()->noContent();
 })->where('path', '.*');
@@ -49,7 +51,7 @@ $probePaths = [
     'manage',
 ];
 
-Route::middleware('throttle:probe-paths')->any('/{path}', function (Request $request): \Symfony\Component\HttpFoundation\Response {
+Route::middleware('throttle:probe-paths')->any('/{path}', function (Request $request): Response {
     $path = (string) $request->route('path', '');
     $ip = (string) $request->ip();
     $cacheKey = 'security:probe:'.sha1($ip.'|'.$path);
@@ -86,8 +88,8 @@ Route::fallback(function () {
     // Retrieve dynamic admin dashboard slug from settings
     $adminSlug = 'dash';
     try {
-        $adminSlug = \Modules\System\Models\Setting::get('admin_dashboard_slug', 'dash');
-    } catch (\Throwable $e) {
+        $adminSlug = Setting::get('admin_dashboard_slug', 'dash');
+    } catch (Throwable $e) {
         // Fallback
     }
 

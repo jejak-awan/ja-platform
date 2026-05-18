@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use Modules\Member\Http\Controllers\LoginController;
-use Modules\Member\Http\Controllers\RegisterController;
 use Modules\Member\Http\Controllers\MemberController;
+use Modules\Member\Http\Controllers\RegisterController;
 
 Route::prefix('v1')->group(function (): void {
     // Public Member API

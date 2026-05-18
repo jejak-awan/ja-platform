@@ -2,9 +2,10 @@
 
 namespace Modules\System\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
 /**
@@ -13,22 +14,21 @@ use Illuminate\Support\Facades\Crypt;
  * @property string|null $secret
  * @property array<int, string>|null $backup_codes
  * @property bool $enabled
- * @property \Illuminate\Support\Carbon|null $enabled_at
- * @property \Illuminate\Support\Carbon|null $recovery_codes_generated_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Modules\System\Models\User $user
+ * @property Carbon|null $enabled_at
+ * @property Carbon|null $recovery_codes_generated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User $user
  */
 class TwoFactorAuth extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_two_factor_auth';
-
-
 
     protected $fillable = [
         'user_id',
@@ -116,7 +116,7 @@ class TwoFactorAuth extends Model
      */
     public function setBackupCodes(array $codes): void
     {
-        $hashedCodes = array_map(fn(string $code) => password_hash($code, PASSWORD_BCRYPT), $codes);
+        $hashedCodes = array_map(fn (string $code) => password_hash($code, PASSWORD_BCRYPT), $codes);
 
         $this->backup_codes = $hashedCodes;
         $this->recovery_codes_generated_at = now();

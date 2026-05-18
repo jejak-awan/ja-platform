@@ -3,37 +3,36 @@
 namespace Modules\School\Http\Controllers\Api\Lms;
 
 use Illuminate\Http\Request;
-use Modules\School\Http\Controllers\Api\Common\BaseController;
 use Illuminate\Support\Facades\Storage;
+use Modules\School\Http\Controllers\Api\Common\BaseController;
 use Modules\School\Models\Lms\Course;
 use Modules\School\Models\Student\Student;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LmsFileController extends BaseController
 {
     /**
      * Stream a private file after checking permissions.
-     * 
+     *
      * URL pattern: api/v1/lms/files/private/{path}
      */
     public function stream(Request $request, string $path): mixed
     {
         // 1. Basic Path Validation
-        if (!Storage::disk('local')->exists($path)) {
+        if (! Storage::disk('local')->exists($path)) {
             return $this->sendError('File not found.', [], 404);
         }
 
         // 2. Extract School & Course ID from path for permission check
         // Path format: lms/school_{id}/course_{id}/...
         preg_match('/lms\/school_(\d+)\/course_(\d+)\//', $path, $matches);
-        
+
         if (count($matches) === 3) {
-            $schoolId = (int)$matches[1];
-            $courseId = (int)$matches[2];
+            $schoolId = (int) $matches[1];
+            $courseId = (int) $matches[2];
 
             // 3. Permission Check
             $user = auth()->user();
-            if (!$user) {
+            if (! $user) {
                 return $this->sendError('Unauthorized.', [], 401);
             }
 
@@ -47,9 +46,9 @@ class LmsFileController extends BaseController
             $student = Student::where('user_id', $user->id)->first();
             if ($student) {
                 $isEnrolled = Course::where('id', $courseId)
-                    ->whereHas('enrollments', fn($q) => $q->where('student_id', $student->id))
+                    ->whereHas('enrollments', fn ($q) => $q->where('student_id', $student->id))
                     ->exists();
-                
+
                 if ($isEnrolled) {
                     return Storage::disk('local')->response($path);
                 }

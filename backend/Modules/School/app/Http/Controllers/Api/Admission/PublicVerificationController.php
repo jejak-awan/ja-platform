@@ -2,26 +2,25 @@
 
 namespace Modules\School\Http\Controllers\Api\Admission;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
 use Modules\School\Models\Admission\DocumentVerification;
 use Modules\School\Models\Student\Student;
 
-
 class PublicVerificationController extends BaseController
 {
-    public function verify(string $hash): \Illuminate\Http\JsonResponse
+    public function verify(string $hash): JsonResponse
     {
         $verification = DocumentVerification::where('hash', $hash)->first();
 
-        if (!$verification) {
+        if (! $verification) {
             return $this->sendError('Document not found or invalid.', [], 404);
         }
 
         $data = [
             'type' => $verification->document_type,
             'verified_at' => $verification->created_at?->toDateTimeString() ?? date('Y-m-d H:i:s'),
-            'details' => []
+            'details' => [],
         ];
 
         if (in_array($verification->document_type, ['id_card', 'skl', 'profile'])) {
@@ -33,7 +32,7 @@ class PublicVerificationController extends BaseController
                     'School' => $student->school->name,
                     'Department' => $student->department?->name,
                     'Level' => $student->level->name,
-                    'Status' => 'Authentic Document'
+                    'Status' => 'Authentic Document',
                 ];
             }
         }

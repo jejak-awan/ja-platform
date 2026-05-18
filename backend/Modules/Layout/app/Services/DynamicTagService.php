@@ -4,6 +4,7 @@ namespace Modules\Layout\Services;
 
 use Modules\Cms\Models\Content;
 use Modules\System\Models\Setting;
+use Modules\System\Models\User;
 
 class DynamicTagService
 {
@@ -130,7 +131,7 @@ class DynamicTagService
         // 5. User tags
         if (str_starts_with($key, 'user_')) {
             $user = auth()->user();
-            if (! $user instanceof \Modules\System\Models\User) {
+            if (! $user instanceof User) {
                 return '';
             }
 

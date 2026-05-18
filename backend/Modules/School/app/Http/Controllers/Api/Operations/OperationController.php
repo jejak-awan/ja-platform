@@ -2,49 +2,48 @@
 
 namespace Modules\School\Http\Controllers\Api\Operations;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\School\Http\Controllers\Api\Common\BaseController;
-use Modules\School\Models\Academic\Attendance;
-use Modules\School\Models\Student\Violation;
-use Modules\School\Models\Student\Achievement;
-use Modules\School\Models\Student\CounselingRecord;
-use Modules\School\Models\Operations\Visitor;
-use Modules\School\Services\Academic\AcademicService;
-use Modules\School\Services\Student\StudentService;
-use Modules\School\Services\Operations\OperationsService;
 use Modules\School\Http\Requests\Academic\StoreAttendanceRequest;
 use Modules\School\Http\Requests\Academic\UpdateAttendanceRequest;
-use Modules\School\Http\Requests\Student\StoreViolationRequest;
+use Modules\School\Http\Requests\Operations\CheckInVisitorRequest;
 use Modules\School\Http\Requests\Student\StoreAchievementRequest;
 use Modules\School\Http\Requests\Student\StoreCounselingRecordRequest;
-use Modules\School\Http\Requests\Operations\CheckInVisitorRequest;
+use Modules\School\Http\Requests\Student\StoreViolationRequest;
+use Modules\School\Models\Academic\Attendance;
+use Modules\School\Models\Operations\Visitor;
+use Modules\School\Models\Student\Achievement;
+use Modules\School\Models\Student\CounselingRecord;
+use Modules\School\Models\Student\Violation;
+use Modules\School\Services\Academic\AcademicService;
+use Modules\School\Services\Operations\OperationsService;
+use Modules\School\Services\Student\StudentService;
 
 class OperationController extends BaseController
 {
-    public function __construct(protected AcademicService $academicService, protected StudentService $studentService, protected OperationsService $opsService)
-    {
-    }
+    public function __construct(protected AcademicService $academicService, protected StudentService $studentService, protected OperationsService $opsService) {}
 
     // --- Attendances ---
 
-    public function attendanceOverview(Request $request): \Illuminate\Http\JsonResponse
+    public function attendanceOverview(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Attendance::class);
         $schoolIdValue = $request->header('X-School-Id') ?? (string) $request->string('school_id');
-        $schoolId = is_numeric($schoolIdValue) ? (string)$schoolIdValue : "1";
-        
+        $schoolId = is_numeric($schoolIdValue) ? (string) $schoolIdValue : '1';
+
         $stats = $this->academicService->getAttendanceStats($schoolId);
 
         return $this->sendResponse($stats, 'Attendance overview retrieved successfully.');
     }
 
-    public function attendances(Request $request): \Illuminate\Http\JsonResponse
+    public function attendances(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Attendance::class);
         /** @var array<string, mixed> $filters */
         $filters = $request->all();
-        $perPage = $request->has('per_page') && is_numeric($request->input('per_page')) 
-            ? (int) $request->input('per_page') 
+        $perPage = $request->has('per_page') && is_numeric($request->input('per_page'))
+            ? (int) $request->input('per_page')
             : 20;
 
         $attendances = $this->academicService->getAttendances($filters, $perPage);
@@ -52,7 +51,7 @@ class OperationController extends BaseController
         return $this->sendResponse($attendances, 'Attendances retrieved successfully.');
     }
 
-    public function storeAttendance(StoreAttendanceRequest $request): \Illuminate\Http\JsonResponse
+    public function storeAttendance(StoreAttendanceRequest $request): JsonResponse
     {
         $this->authorize('create', Attendance::class);
         /** @var array<string, mixed> $validated */
@@ -62,7 +61,7 @@ class OperationController extends BaseController
         return $this->sendResponse($attendance, 'Attendance recorded successfully.', 201);
     }
 
-    public function updateAttendance(UpdateAttendanceRequest $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateAttendance(UpdateAttendanceRequest $request, string $id): JsonResponse
     {
         /** @var Attendance $attendance */
         $attendance = Attendance::findOrFail($id);
@@ -75,7 +74,7 @@ class OperationController extends BaseController
         return $this->sendResponse($attendance, 'Attendance updated successfully.');
     }
 
-    public function destroyAttendance(string $id): \Illuminate\Http\JsonResponse
+    public function destroyAttendance(string $id): JsonResponse
     {
         /** @var Attendance $attendance */
         $attendance = Attendance::findOrFail($id);
@@ -87,13 +86,13 @@ class OperationController extends BaseController
 
     // --- Violations ---
 
-    public function violations(Request $request): \Illuminate\Http\JsonResponse
+    public function violations(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Violation::class);
         /** @var array<string, mixed> $filters */
         $filters = $request->all();
-        $perPage = $request->has('per_page') && is_numeric($request->input('per_page')) 
-            ? (int) $request->input('per_page') 
+        $perPage = $request->has('per_page') && is_numeric($request->input('per_page'))
+            ? (int) $request->input('per_page')
             : 20;
 
         $violations = $this->studentService->getViolations($filters, $perPage);
@@ -101,7 +100,7 @@ class OperationController extends BaseController
         return $this->sendResponse($violations, 'Violations retrieved successfully.');
     }
 
-    public function studentViolationPoints(string $studentId): \Illuminate\Http\JsonResponse
+    public function studentViolationPoints(string $studentId): JsonResponse
     {
         $this->authorize('viewAny', Violation::class);
         $totalPoints = $this->studentService->getViolationPoints($studentId);
@@ -109,7 +108,7 @@ class OperationController extends BaseController
         return $this->sendResponse(['total_points' => $totalPoints], 'Student violation points calculated.');
     }
 
-    public function storeViolation(StoreViolationRequest $request): \Illuminate\Http\JsonResponse
+    public function storeViolation(StoreViolationRequest $request): JsonResponse
     {
         $this->authorize('create', Violation::class);
         /** @var array<string, mixed> $validated */
@@ -119,7 +118,7 @@ class OperationController extends BaseController
         return $this->sendResponse($violation, 'Violation recorded successfully.', 201);
     }
 
-    public function updateViolation(StoreViolationRequest $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateViolation(StoreViolationRequest $request, string $id): JsonResponse
     {
         /** @var Violation $violation */
         $violation = Violation::findOrFail($id);
@@ -132,7 +131,7 @@ class OperationController extends BaseController
         return $this->sendResponse($violation, 'Violation updated successfully.');
     }
 
-    public function destroyViolation(string $id): \Illuminate\Http\JsonResponse
+    public function destroyViolation(string $id): JsonResponse
     {
         /** @var Violation $violation */
         $violation = Violation::findOrFail($id);
@@ -144,13 +143,13 @@ class OperationController extends BaseController
 
     // --- Achievements ---
 
-    public function achievements(Request $request): \Illuminate\Http\JsonResponse
+    public function achievements(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Achievement::class);
         /** @var array<string, mixed> $filters */
         $filters = $request->all();
-        $perPage = $request->has('per_page') && is_numeric($request->input('per_page')) 
-            ? (int) $request->input('per_page') 
+        $perPage = $request->has('per_page') && is_numeric($request->input('per_page'))
+            ? (int) $request->input('per_page')
             : 20;
 
         $achievements = $this->studentService->getAchievements($filters, $perPage);
@@ -158,7 +157,7 @@ class OperationController extends BaseController
         return $this->sendResponse($achievements, 'Achievements retrieved successfully.');
     }
 
-    public function storeAchievement(StoreAchievementRequest $request): \Illuminate\Http\JsonResponse
+    public function storeAchievement(StoreAchievementRequest $request): JsonResponse
     {
         $this->authorize('create', Achievement::class);
         /** @var array<string, mixed> $validated */
@@ -168,7 +167,7 @@ class OperationController extends BaseController
         return $this->sendResponse($achievement, 'Achievement recorded successfully.', 201);
     }
 
-    public function updateAchievement(StoreAchievementRequest $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateAchievement(StoreAchievementRequest $request, string $id): JsonResponse
     {
         /** @var Achievement $achievement */
         $achievement = Achievement::findOrFail($id);
@@ -181,7 +180,7 @@ class OperationController extends BaseController
         return $this->sendResponse($achievement, 'Achievement updated successfully.');
     }
 
-    public function destroyAchievement(string $id): \Illuminate\Http\JsonResponse
+    public function destroyAchievement(string $id): JsonResponse
     {
         /** @var Achievement $achievement */
         $achievement = Achievement::findOrFail($id);
@@ -193,13 +192,13 @@ class OperationController extends BaseController
 
     // --- Counseling Records (BK) ---
 
-    public function counselingRecords(Request $request): \Illuminate\Http\JsonResponse
+    public function counselingRecords(Request $request): JsonResponse
     {
         $this->authorize('viewAny', CounselingRecord::class);
         /** @var array<string, mixed> $filters */
         $filters = $request->all();
-        $perPage = $request->has('per_page') && is_numeric($request->input('per_page')) 
-            ? (int) $request->input('per_page') 
+        $perPage = $request->has('per_page') && is_numeric($request->input('per_page'))
+            ? (int) $request->input('per_page')
             : 20;
 
         $records = $this->studentService->getCounselingRecords($filters, $perPage);
@@ -207,7 +206,7 @@ class OperationController extends BaseController
         return $this->sendResponse($records, 'Counseling records retrieved successfully.');
     }
 
-    public function storeCounselingRecord(StoreCounselingRecordRequest $request): \Illuminate\Http\JsonResponse
+    public function storeCounselingRecord(StoreCounselingRecordRequest $request): JsonResponse
     {
         $this->authorize('create', CounselingRecord::class);
         /** @var array<string, mixed> $validated */
@@ -217,7 +216,7 @@ class OperationController extends BaseController
         return $this->sendResponse($record, 'Counseling record added successfully.', 201);
     }
 
-    public function updateCounselingRecord(StoreCounselingRecordRequest $request, string $id): \Illuminate\Http\JsonResponse
+    public function updateCounselingRecord(StoreCounselingRecordRequest $request, string $id): JsonResponse
     {
         /** @var CounselingRecord $record */
         $record = CounselingRecord::findOrFail($id);
@@ -230,7 +229,7 @@ class OperationController extends BaseController
         return $this->sendResponse($record, 'Counseling record updated successfully.');
     }
 
-    public function destroyCounselingRecord(string $id): \Illuminate\Http\JsonResponse
+    public function destroyCounselingRecord(string $id): JsonResponse
     {
         /** @var CounselingRecord $record */
         $record = CounselingRecord::findOrFail($id);
@@ -242,13 +241,13 @@ class OperationController extends BaseController
 
     // --- Visitor Management (VMS) ---
 
-    public function visitors(Request $request): \Illuminate\Http\JsonResponse
+    public function visitors(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Visitor::class);
         $status = $request->input('status');
         $statusStr = is_string($status) ? $status : null;
-        $perPage = $request->has('per_page') && is_numeric($request->input('per_page')) 
-            ? (int) $request->input('per_page') 
+        $perPage = $request->has('per_page') && is_numeric($request->input('per_page'))
+            ? (int) $request->input('per_page')
             : 20;
 
         $visitors = $this->opsService->getVisitors($statusStr, $perPage);
@@ -256,7 +255,7 @@ class OperationController extends BaseController
         return $this->sendResponse($visitors, 'Visitors retrieved successfully.');
     }
 
-    public function checkInVisitor(CheckInVisitorRequest $request): \Illuminate\Http\JsonResponse
+    public function checkInVisitor(CheckInVisitorRequest $request): JsonResponse
     {
         $this->authorize('create', Visitor::class);
         try {
@@ -267,19 +266,21 @@ class OperationController extends BaseController
                 $request->file('photo'),
                 $request->file('id_card_photo')
             );
+
             return $this->sendResponse($visitor, 'Visitor checked in successfully.', 201);
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), [], 422);
         }
     }
 
-    public function checkOutVisitor(string $id): \Illuminate\Http\JsonResponse
+    public function checkOutVisitor(string $id): JsonResponse
     {
         try {
             /** @var Visitor $visitor */
             $visitor = Visitor::findOrFail($id);
             $this->authorize('update', $visitor);
             $visitor = $this->opsService->checkOutVisitor($visitor);
+
             return $this->sendResponse($visitor, 'Visitor checked out successfully.');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), [], 422);

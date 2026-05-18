@@ -3,8 +3,8 @@
 namespace Modules\School\Http\Controllers\Api\Operations;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Modules\School\Models\Operations\GraduationSetting;
 
 class GraduationSettingsController extends Controller
@@ -12,21 +12,23 @@ class GraduationSettingsController extends Controller
     public function index(): JsonResponse
     {
         $settings = GraduationSetting::orderBy('graduation_year', 'desc')->get();
+
         return response()->json([
             'status' => 'success',
-            'data' => $settings
+            'data' => $settings,
         ]);
     }
 
     /**
-     * @param int|string $year
+     * @param  int|string  $year
      */
     public function show($year): JsonResponse
     {
         $setting = GraduationSetting::where('graduation_year', $year)->firstOrFail();
+
         return response()->json([
             'status' => 'success',
-            'data' => $setting
+            'data' => $setting,
         ]);
     }
 
@@ -45,12 +47,12 @@ class GraduationSettingsController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Graduation setting created successfully.',
-            'data' => $setting
+            'data' => $setting,
         ]);
     }
 
     /**
-     * @param int|string $year
+     * @param  int|string  $year
      */
     public function update(Request $request, $year): JsonResponse
     {
@@ -68,12 +70,12 @@ class GraduationSettingsController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Graduation setting updated successfully.',
-            'data' => $setting
+            'data' => $setting,
         ]);
     }
 
     /**
-     * @param int|string $year
+     * @param  int|string  $year
      */
     public function destroy($year): JsonResponse
     {
@@ -82,7 +84,7 @@ class GraduationSettingsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Graduation setting deleted successfully.'
+            'message' => 'Graduation setting deleted successfully.',
         ]);
     }
 }

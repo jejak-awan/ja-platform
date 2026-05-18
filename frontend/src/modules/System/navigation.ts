@@ -71,6 +71,7 @@ export const systemNavigation: NavItem[] = [
         label: 'Infrastructure', labelKey: 'modules.system.navigation.sections.infrastructure', icon: 'settings', context: 'system', group: 'operations', priority: 90, children: [
             { name: 'system', to: '/dash/system', label: 'System Info', labelKey: 'modules.system.navigation.menu.systemInfo', permission: 'view system', role: 'super' },
             { name: 'settings', to: '/dash/settings', label: 'System Settings', labelKey: 'modules.system.navigation.menu.settings', permission: 'view settings' },
+            { name: 'extensions', to: '/dash/extensions', label: 'Extensions & App Store', labelKey: 'modules.system.navigation.menu.extensions', permission: 'manage settings', role: 'super' },
             { name: 'system-notifications', to: '/dash/system/notifications', label: 'Notifications', labelKey: 'modules.system.navigation.menu.systemNotifications', permission: 'manage system' },
             { name: 'backups', to: '/dash/backups', label: 'Backups', labelKey: 'modules.system.navigation.menu.backups', permission: 'view backups', role: 'super' },
             { name: 'redis', to: '/dash/redis', label: 'Redis Cache', labelKey: 'modules.system.navigation.menu.redis', permission: 'manage settings', role: 'super' },

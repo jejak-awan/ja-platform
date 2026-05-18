@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\System\Services;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Modules\Security\Models\SecurityLog;
 
@@ -45,7 +47,7 @@ class AttackCorrelationService
         $since = now()->subHours($hours);
 
         // 1. Build threat scores per IP
-        /** @var \Illuminate\Support\Collection<int, \stdClass> $ipEvents */
+        /** @var Collection<int, \stdClass> $ipEvents */
         $ipEvents = SecurityLog::where('created_at', '>=', $since)
             ->whereIn('event_type', array_keys(self::EVENT_WEIGHTS))
             ->whereNotNull('ip_address')
@@ -84,7 +86,7 @@ class AttackCorrelationService
         }
 
         // Sort by score descending
-        uasort($ipScores, fn(array $a, array $b): int => $b['score'] <=> $a['score']);
+        uasort($ipScores, fn (array $a, array $b): int => $b['score'] <=> $a['score']);
 
         // 2. Identify high-risk IPs (score >= 10)
         $highRiskIps = [];
@@ -122,7 +124,7 @@ class AttackCorrelationService
      *
      * @return array<array{type: string, description: string, ips: array<string>, event_count: int}>
      */
-    private function detectCampaigns(\Illuminate\Support\Carbon $since): array
+    private function detectCampaigns(Carbon $since): array
     {
         $campaigns = [];
 

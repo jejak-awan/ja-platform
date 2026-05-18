@@ -2,21 +2,22 @@
 
 namespace Modules\Layout\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\System\Traits\ScopedByWorkspace;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Menu extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
-    use HasFactory, SoftDeletes, ScopedByWorkspace;
+    use HasFactory, ScopedByWorkspace, SoftDeletes;
 
     protected $table = 'lay_menus';
 

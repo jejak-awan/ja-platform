@@ -2,13 +2,14 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\System\Models\EmailTemplate;
 use Modules\System\Http\Controllers\BaseApiController;
+use Modules\System\Models\EmailTemplate;
 
 class EmailTemplateController extends BaseApiController
 {
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $query = EmailTemplate::query();
 
@@ -27,7 +28,7 @@ class EmailTemplateController extends BaseApiController
         return $this->success($templates, 'Email templates retrieved successfully');
     }
 
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -45,12 +46,12 @@ class EmailTemplateController extends BaseApiController
         return $this->success($template, 'Email template created successfully', 201);
     }
 
-    public function show(EmailTemplate $emailTemplate): \Illuminate\Http\JsonResponse
+    public function show(EmailTemplate $emailTemplate): JsonResponse
     {
         return $this->success($emailTemplate, 'Email template retrieved successfully');
     }
 
-    public function update(Request $request, EmailTemplate $emailTemplate): \Illuminate\Http\JsonResponse
+    public function update(Request $request, EmailTemplate $emailTemplate): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
@@ -68,14 +69,14 @@ class EmailTemplateController extends BaseApiController
         return $this->success($emailTemplate, 'Email template updated successfully');
     }
 
-    public function destroy(EmailTemplate $emailTemplate): \Illuminate\Http\JsonResponse
+    public function destroy(EmailTemplate $emailTemplate): JsonResponse
     {
         $emailTemplate->delete();
 
         return $this->success(null, 'Email template deleted successfully');
     }
 
-    public function preview(Request $request, EmailTemplate $emailTemplate): \Illuminate\Http\JsonResponse
+    public function preview(Request $request, EmailTemplate $emailTemplate): JsonResponse
     {
         $dataRaw = $request->input('data', []);
         $data = is_array($dataRaw) ? $dataRaw : [];
@@ -84,7 +85,7 @@ class EmailTemplateController extends BaseApiController
         return $this->success($rendered, 'Email template preview generated successfully');
     }
 
-    public function sendTest(Request $request, EmailTemplate $emailTemplate): \Illuminate\Http\JsonResponse
+    public function sendTest(Request $request, EmailTemplate $emailTemplate): JsonResponse
     {
         $request->validate([
             'email' => 'required|email',

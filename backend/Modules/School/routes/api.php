@@ -6,32 +6,32 @@ use Illuminate\Support\Facades\Route;
 use Modules\School\Http\Controllers\Api\Academic\AcademicController;
 use Modules\School\Http\Controllers\Api\Academic\GradeController;
 use Modules\School\Http\Controllers\Api\Admission\AdmissionController;
-use Modules\School\Http\Controllers\Api\Logistics\FacilityController;
-
+use Modules\School\Http\Controllers\Api\Admission\PublicVerificationController;
+use Modules\School\Http\Controllers\Api\HR\CareerController;
+use Modules\School\Http\Controllers\Api\HR\StaffAdvancedController;
+use Modules\School\Http\Controllers\Api\HR\StaffController;
 use Modules\School\Http\Controllers\Api\Institution\SchoolController;
 use Modules\School\Http\Controllers\Api\Institution\SchoolUnitController;
-use Modules\School\Http\Controllers\Api\HR\StaffController;
-use Modules\School\Http\Controllers\Api\HR\StaffAdvancedController;
-use Modules\School\Http\Controllers\Api\HR\CareerController;
-use Modules\School\Http\Controllers\Api\Student\StudentController;
-use Modules\School\Http\Controllers\Api\Student\StudentPortalController;
+use Modules\School\Http\Controllers\Api\Lms\AdminLmsController;
+use Modules\School\Http\Controllers\Api\Lms\LmsFileController;
+use Modules\School\Http\Controllers\Api\Lms\StudentLmsController;
+use Modules\School\Http\Controllers\Api\Logistics\FacilityController;
 use Modules\School\Http\Controllers\Api\Logistics\HostelController;
-use Modules\School\Http\Controllers\Api\Logistics\TransportController;
 use Modules\School\Http\Controllers\Api\Logistics\InventoryController;
 use Modules\School\Http\Controllers\Api\Logistics\SarprasController;
-use Modules\School\Http\Controllers\Api\Operations\OperationController;
-use Modules\School\Http\Controllers\Api\Operations\AuditLogController;
-use Modules\School\Http\Controllers\Api\Operations\AnalyticsController;
-use Modules\School\Http\Controllers\Api\Operations\ReportController;
+use Modules\School\Http\Controllers\Api\Logistics\TransportController;
 use Modules\School\Http\Controllers\Api\Operations\AdminExtensionController;
-
-use Modules\School\Http\Controllers\Api\Osis\OsisController;
-use Modules\School\Http\Controllers\Api\Teacher\TeacherPortalController;
+use Modules\School\Http\Controllers\Api\Operations\AnalyticsController;
+use Modules\School\Http\Controllers\Api\Operations\AuditLogController;
+use Modules\School\Http\Controllers\Api\Operations\DocumentTemplateController;
 use Modules\School\Http\Controllers\Api\Operations\GraduationController;
 use Modules\School\Http\Controllers\Api\Operations\GraduationSettingsController;
-use Modules\School\Http\Controllers\Api\Lms\AdminLmsController;
-use Modules\School\Http\Controllers\Api\Lms\StudentLmsController;
-use Modules\School\Http\Controllers\Api\Lms\LmsFileController;
+use Modules\School\Http\Controllers\Api\Operations\OperationController;
+use Modules\School\Http\Controllers\Api\Operations\ReportController;
+use Modules\School\Http\Controllers\Api\Osis\OsisController;
+use Modules\School\Http\Controllers\Api\Student\StudentController;
+use Modules\School\Http\Controllers\Api\Student\StudentPortalController;
+use Modules\School\Http\Controllers\Api\Teacher\TeacherPortalController;
 
 Route::prefix('v1')->group(function (): void {
     // Console Management (School)
@@ -114,8 +114,6 @@ Route::prefix('v1')->group(function (): void {
             });
         });
 
-
-
         // Operations (split middleware: attendance vs student affairs vs visitors)
         Route::prefix('operations')->group(function (): void {
             Route::middleware('permission:view attendance|manage attendance|view students|manage students')->group(function (): void {
@@ -155,7 +153,7 @@ Route::prefix('v1')->group(function (): void {
                 Route::put('graduation/settings/{year}', [GraduationSettingsController::class, 'update']);
                 Route::delete('graduation/settings/{year}', [GraduationSettingsController::class, 'destroy']);
 
-                Route::apiResource('document-templates', \Modules\School\Http\Controllers\Api\Operations\DocumentTemplateController::class);
+                Route::apiResource('document-templates', DocumentTemplateController::class);
             });
 
             Route::middleware('permission:view visitors|manage visitors')->group(function (): void {
@@ -207,8 +205,8 @@ Route::prefix('v1')->group(function (): void {
                 Route::get('members', [OsisController::class, 'members']);
                 Route::post('members', [OsisController::class, 'storeMember']);
 
-//                Route::get('finances', [OsisController::class, 'finances']);
-//                Route::post('finances', [OsisController::class, 'storeFinance']);
+                //                Route::get('finances', [OsisController::class, 'finances']);
+                //                Route::post('finances', [OsisController::class, 'storeFinance']);
 
                 Route::get('suggestions', [OsisController::class, 'suggestions']);
                 Route::patch('suggestions/{id}', [OsisController::class, 'updateSuggestion']);
@@ -259,11 +257,11 @@ Route::prefix('v1')->group(function (): void {
                 Route::post('leaves', [StaffAdvancedController::class, 'storeLeaveRequest']);
                 Route::patch('leaves/{id}/status', [StaffAdvancedController::class, 'updateLeaveStatus']);
 
-//                Route::get('salary-structures', [StaffAdvancedController::class, 'salaryStructures']);
-//                Route::post('salary-structures', [StaffAdvancedController::class, 'storeSalaryStructure']);
+                //                Route::get('salary-structures', [StaffAdvancedController::class, 'salaryStructures']);
+                //                Route::post('salary-structures', [StaffAdvancedController::class, 'storeSalaryStructure']);
 
-//                Route::get('payrolls', [StaffAdvancedController::class, 'payrolls']);
-//                Route::post('payrolls/generate', [StaffAdvancedController::class, 'generatePayroll']);
+                //                Route::get('payrolls', [StaffAdvancedController::class, 'payrolls']);
+                //                Route::post('payrolls/generate', [StaffAdvancedController::class, 'generatePayroll']);
             });
         });
 
@@ -363,7 +361,7 @@ Route::prefix('v1')->group(function (): void {
     });
 
     // Public Verification (No Auth)
-    Route::get('public/verify/{hash}', [\Modules\School\Http\Controllers\Api\Admission\PublicVerificationController::class, 'verify']);
+    Route::get('public/verify/{hash}', [PublicVerificationController::class, 'verify']);
     Route::get('public/graduation/check', [GraduationController::class, 'publicCheck']);
     Route::get('public/graduation/certificate/{id}', [GraduationController::class, 'downloadCertificatePublic']);
 

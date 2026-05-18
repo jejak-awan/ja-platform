@@ -32,7 +32,7 @@ class DashboardRegistry
 
     /**
      * Get all registered stats.
-     * 
+     *
      * @return array<string, mixed>
      */
     public function getAllStats(): array
@@ -41,12 +41,13 @@ class DashboardRegistry
         foreach ($this->statsProviders as $key => $provider) {
             $stats[$key] = $provider();
         }
+
         return $stats;
     }
 
     /**
      * Get all registered charts.
-     * 
+     *
      * @return array<string, mixed>
      */
     public function getAllCharts(): array
@@ -55,6 +56,7 @@ class DashboardRegistry
         foreach ($this->chartProviders as $key => $provider) {
             $charts[$key] = $provider();
         }
+
         return $charts;
     }
 }

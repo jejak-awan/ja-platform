@@ -16,10 +16,10 @@ trait ScopedByWorkspace
             if (Context::get('bypass_unit_scope')) {
                 return;
             }
-            
+
             $workspaceId = Context::get('workspace_id');
             $model = $builder->getModel();
-            
+
             // Check if model explicitly enables shared scoping via property
             $hasShared = property_exists($model, 'isSharedScoped') && $model->isSharedScoped;
 
@@ -28,8 +28,8 @@ trait ScopedByWorkspace
                 if (Schema::hasColumn($table, 'workspace_id')) {
                     $builder->where(function ($query) use ($table, $workspaceId, $hasShared): void {
                         $query->where("{$table}.workspace_id", $workspaceId)
-                              ->orWhereNull("{$table}.workspace_id"); // Global records are always visible
-                        
+                            ->orWhereNull("{$table}.workspace_id"); // Global records are always visible
+
                         if ($hasShared) {
                             $query->orWhere("{$table}.is_shared", true);
                         }
@@ -39,7 +39,7 @@ trait ScopedByWorkspace
                 $table = $model->getTable();
                 if (Schema::hasColumn($table, 'workspace_id')) {
                     // If no workspace context is set (and not bypassed), only show global records
-                    $builder->whereNull($table . '.workspace_id');
+                    $builder->whereNull($table.'.workspace_id');
                 }
             }
         });

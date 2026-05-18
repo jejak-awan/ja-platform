@@ -5,6 +5,11 @@ declare(strict_types=1);
 namespace Modules\School\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Modules\School\Events\AttendanceMarked;
+use Modules\School\Events\StudentCreated;
+use Modules\School\Events\StudentDeleted;
+use Modules\School\Listeners\LogAcademicActivity;
+use Modules\School\Listeners\LogStudentActivity;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -14,15 +19,15 @@ class EventServiceProvider extends ServiceProvider
      * @var array<string, array<int, string>>
      */
     protected $listen = [
-        \Modules\School\Events\StudentCreated::class => [
-            \Modules\School\Listeners\LogStudentActivity::class . '@handleStudentCreated',
+        StudentCreated::class => [
+            LogStudentActivity::class.'@handleStudentCreated',
         ],
-        \Modules\School\Events\StudentDeleted::class => [
-            \Modules\School\Listeners\LogStudentActivity::class . '@handleStudentDeleted',
+        StudentDeleted::class => [
+            LogStudentActivity::class.'@handleStudentDeleted',
         ],
 
-        \Modules\School\Events\AttendanceMarked::class => [
-            \Modules\School\Listeners\LogAcademicActivity::class,
+        AttendanceMarked::class => [
+            LogAcademicActivity::class,
         ],
     ];
 

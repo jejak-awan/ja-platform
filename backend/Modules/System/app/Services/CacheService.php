@@ -3,6 +3,8 @@
 namespace Modules\System\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
+
 class CacheService
 {
     /**
@@ -88,7 +90,7 @@ class CacheService
         }
 
         try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
+            $redis = Redis::connection();
             /** @var string $prefix */
             $prefix = config('cache.prefix', '');
             $keys = $redis->keys($prefix.':'.$pattern);
@@ -118,7 +120,7 @@ class CacheService
         }
 
         try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
+            $redis = Redis::connection();
             $redis->ping();
 
             return true;

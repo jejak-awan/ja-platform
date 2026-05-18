@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\School\Policies;
 
-use Modules\System\Models\User;
 use Modules\School\Models\Academic\TeachingJournal;
+use Modules\System\Models\User;
 
 class AcademicPolicy
 {

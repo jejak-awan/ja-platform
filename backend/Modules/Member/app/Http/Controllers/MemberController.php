@@ -2,6 +2,7 @@
 
 namespace Modules\Member\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Member\Models\Member;
 use Modules\System\Http\Controllers\BaseApiController;
@@ -13,7 +14,7 @@ class MemberController extends BaseApiController
         $this->middleware('auth:sanctum');
     }
 
-    public function profile(Request $request): \Illuminate\Http\JsonResponse
+    public function profile(Request $request): JsonResponse
     {
         $user = $request->user();
         if (! $user) {
@@ -28,7 +29,7 @@ class MemberController extends BaseApiController
         ], 'Profile retrieved successfully');
     }
 
-    public function updateProfile(Request $request): \Illuminate\Http\JsonResponse
+    public function updateProfile(Request $request): JsonResponse
     {
         $user = $request->user();
         if (! $user) {

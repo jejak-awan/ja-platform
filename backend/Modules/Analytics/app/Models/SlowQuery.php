@@ -2,8 +2,10 @@
 
 namespace Modules\Analytics\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\System\Models\User;
 
 class SlowQuery extends Model
@@ -11,10 +13,10 @@ class SlowQuery extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'srv_analytics_slow_queries';
-
 
     protected $fillable = [
         'query',
@@ -31,17 +33,17 @@ class SlowQuery extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this>
+     * @return BelongsTo<User, $this>
      */
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
+     * @param  Builder<$this>  $query
      * @param  int|float|null  $threshold
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @return Builder<$this>
      */
     public function scopeSlow($query, $threshold = 1000)
     {
@@ -49,9 +51,9 @@ class SlowQuery extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
+     * @param  Builder<$this>  $query
      * @param  string  $route
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @return Builder<$this>
      */
     public function scopeByRoute($query, $route)
     {

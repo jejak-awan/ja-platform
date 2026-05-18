@@ -3,11 +3,13 @@
 namespace Modules\Cms\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Comment;
 use Modules\Cms\Models\Content;
-use Modules\Newsletter\Models\NewsletterSubscriber;
+use Modules\Cms\Models\FormSubmission;
+use Modules\Forms\Models\Form;
+use Modules\Library\Models\Category;
 use Modules\Library\Models\Tag;
+use Modules\Newsletter\Models\NewsletterSubscriber;
 use Modules\System\Models\User;
 
 class CmsSampleDataSeeder extends Seeder
@@ -54,7 +56,7 @@ class CmsSampleDataSeeder extends Seeder
             if ($categories->isNotEmpty()) {
                 $postData['category_id'] = $categories->random()->id;
             }
-            
+
             $content = Content::updateOrCreate(
                 ['slug' => $postData['slug']],
                 array_merge($postData, [
@@ -94,7 +96,7 @@ class CmsSampleDataSeeder extends Seeder
         }
 
         // 3. Sample Form Submissions
-        $contactForm = \Modules\Forms\Models\Form::where('slug', 'contact-form')->first();
+        $contactForm = Form::where('slug', 'contact-form')->first();
         if ($contactForm) {
             $submissions = [
                 [
@@ -115,7 +117,7 @@ class CmsSampleDataSeeder extends Seeder
             ];
 
             foreach ($submissions as $sub) {
-                \Modules\Cms\Models\FormSubmission::create([
+                FormSubmission::create([
                     'form_id' => $contactForm->id,
                     'data' => $sub['data'],
                     'ip_address' => $sub['ip_address'],

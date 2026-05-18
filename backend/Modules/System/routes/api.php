@@ -3,25 +3,27 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Modules\System\Http\Controllers\Console\DashboardController;
-use Modules\System\Http\Controllers\Console\UserController;
-use Modules\System\Http\Controllers\Console\RoleController;
+use Modules\System\Http\Controllers\Console\ActivityLogController;
 use Modules\System\Http\Controllers\Console\AuthController;
-use Modules\System\Http\Controllers\Console\SettingController;
-use Modules\System\Http\Controllers\Console\PublicSettingsController;
+use Modules\System\Http\Controllers\Console\CaptchaController;
+use Modules\System\Http\Controllers\Console\DashboardController;
+use Modules\System\Http\Controllers\Console\EmailTemplateController;
+use Modules\System\Http\Controllers\Console\EmailTestController;
+use Modules\System\Http\Controllers\Console\ExtensionController;
+use Modules\System\Http\Controllers\Console\LanguageController;
+use Modules\System\Http\Controllers\Console\LogController;
+use Modules\System\Http\Controllers\Console\LoginHistoryController;
 use Modules\System\Http\Controllers\Console\NotificationController;
 use Modules\System\Http\Controllers\Console\PluginController;
-use Modules\System\Http\Controllers\Console\LanguageController;
-use Modules\System\Http\Controllers\Console\ActivityLogController;
-use Modules\System\Http\Controllers\Console\LoginHistoryController;
+use Modules\System\Http\Controllers\Console\PublicSettingsController;
+use Modules\System\Http\Controllers\Console\RedisController;
+use Modules\System\Http\Controllers\Console\RoleController;
 use Modules\System\Http\Controllers\Console\ScheduledTaskController;
-use Modules\System\Http\Controllers\Console\EmailTestController;
-use Modules\System\Http\Controllers\Console\LogController;
-use Modules\System\Http\Controllers\Console\TranslationController;
-use Modules\System\Http\Controllers\Console\EmailTemplateController;
-use Modules\System\Http\Controllers\Console\TwoFactorController;
+use Modules\System\Http\Controllers\Console\SettingController;
 use Modules\System\Http\Controllers\Console\SystemController;
-use Modules\System\Http\Controllers\Console\CaptchaController;
+use Modules\System\Http\Controllers\Console\TranslationController;
+use Modules\System\Http\Controllers\Console\TwoFactorController;
+use Modules\System\Http\Controllers\Console\UserController;
 
 Route::prefix('v1')->group(function (): void {
     // Captcha endpoints
@@ -132,13 +134,13 @@ Route::prefix('v1')->group(function (): void {
 
     // Redis Management routes
     Route::prefix('manage/redis')->middleware(['auth:sanctum'])->group(function (): void {
-        Route::get('settings', [\Modules\System\Http\Controllers\Console\RedisController::class, 'index']);
-        Route::put('settings', [\Modules\System\Http\Controllers\Console\RedisController::class, 'update']);
-        Route::post('test-connection', [\Modules\System\Http\Controllers\Console\RedisController::class, 'testConnection']);
-        Route::get('info', [\Modules\System\Http\Controllers\Console\RedisController::class, 'info']);
-        Route::post('flush-cache', [\Modules\System\Http\Controllers\Console\RedisController::class, 'flushCache']);
-        Route::post('warm-cache', [\Modules\System\Http\Controllers\Console\RedisController::class, 'warmCache']);
-        Route::get('cache-stats', [\Modules\System\Http\Controllers\Console\RedisController::class, 'cacheStats']);
+        Route::get('settings', [RedisController::class, 'index']);
+        Route::put('settings', [RedisController::class, 'update']);
+        Route::post('test-connection', [RedisController::class, 'testConnection']);
+        Route::get('info', [RedisController::class, 'info']);
+        Route::post('flush-cache', [RedisController::class, 'flushCache']);
+        Route::post('warm-cache', [RedisController::class, 'warmCache']);
+        Route::get('cache-stats', [RedisController::class, 'cacheStats']);
     });
 
     // Activity Journal routes for frontend compatibility
@@ -157,5 +159,15 @@ Route::prefix('v1')->group(function (): void {
         Route::get('suspicious', [LoginHistoryController::class, 'suspicious']);
         Route::post('clear', [LoginHistoryController::class, 'clear']);
         Route::get('export', [LoginHistoryController::class, 'export']);
+    });
+
+    // Extension Store & Plugin Manager
+    Route::prefix('manage/infra/extensions')->middleware(['auth:sanctum'])->group(function (): void {
+        Route::get('', [ExtensionController::class, 'index']);
+        Route::post('upload', [ExtensionController::class, 'upload']);
+        Route::post('{slug}/activate', [ExtensionController::class, 'activate']);
+        Route::post('{slug}/deactivate', [ExtensionController::class, 'deactivate']);
+        Route::put('{slug}/settings', [ExtensionController::class, 'updateSettings']);
+        Route::delete('{slug}/uninstall', [ExtensionController::class, 'uninstall']);
     });
 });

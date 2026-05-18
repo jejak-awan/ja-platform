@@ -10,28 +10,28 @@ return new class extends Migration
     {
         // Fix sys_content_templates
         Schema::table('sys_content_templates', function (Blueprint $table): void {
-            if (!Schema::hasColumn('sys_content_templates', 'type')) {
+            if (! Schema::hasColumn('sys_content_templates', 'type')) {
                 $table->string('type')->default('post')->after('slug');
             }
-            if (!Schema::hasColumn('sys_content_templates', 'title_template')) {
+            if (! Schema::hasColumn('sys_content_templates', 'title_template')) {
                 $table->string('title_template')->nullable()->after('type');
             }
-            if (!Schema::hasColumn('sys_content_templates', 'body_template')) {
+            if (! Schema::hasColumn('sys_content_templates', 'body_template')) {
                 $table->longText('body_template')->nullable()->after('title_template');
             }
-            if (!Schema::hasColumn('sys_content_templates', 'excerpt_template')) {
+            if (! Schema::hasColumn('sys_content_templates', 'excerpt_template')) {
                 $table->text('excerpt_template')->nullable()->after('body_template');
             }
-            if (!Schema::hasColumn('sys_content_templates', 'default_fields')) {
+            if (! Schema::hasColumn('sys_content_templates', 'default_fields')) {
                 $table->json('default_fields')->nullable()->after('excerpt_template');
             }
-            if (!Schema::hasColumn('sys_content_templates', 'usage_count')) {
+            if (! Schema::hasColumn('sys_content_templates', 'usage_count')) {
                 $table->unsignedInteger('usage_count')->default(0)->after('is_active');
             }
-            if (!Schema::hasColumn('sys_content_templates', 'author_id')) {
+            if (! Schema::hasColumn('sys_content_templates', 'author_id')) {
                 $table->uuid('author_id')->nullable()->index()->after('usage_count');
             }
-            
+
             // Cleanup old column if it exists
             if (Schema::hasColumn('sys_content_templates', 'content')) {
                 // We keep it for now but it's redundant
@@ -40,32 +40,32 @@ return new class extends Migration
 
         // Fix sys_scheduled_tasks
         Schema::table('sys_scheduled_tasks', function (Blueprint $table): void {
-            if (!Schema::hasColumn('sys_scheduled_tasks', 'description')) {
+            if (! Schema::hasColumn('sys_scheduled_tasks', 'description')) {
                 $table->text('description')->nullable()->after('name');
             }
-            if (!Schema::hasColumn('sys_scheduled_tasks', 'status')) {
+            if (! Schema::hasColumn('sys_scheduled_tasks', 'status')) {
                 $table->string('status')->default('inactive')->after('is_active');
             }
-            if (!Schema::hasColumn('sys_scheduled_tasks', 'output')) {
+            if (! Schema::hasColumn('sys_scheduled_tasks', 'output')) {
                 $table->longText('output')->nullable()->after('status');
             }
-            if (!Schema::hasColumn('sys_scheduled_tasks', 'options')) {
+            if (! Schema::hasColumn('sys_scheduled_tasks', 'options')) {
                 $table->json('options')->nullable()->after('output');
             }
-            if (!Schema::hasColumn('sys_scheduled_tasks', 'usage_count')) {
+            if (! Schema::hasColumn('sys_scheduled_tasks', 'usage_count')) {
                 $table->unsignedInteger('usage_count')->default(0)->after('options');
             }
-            if (!Schema::hasColumn('sys_scheduled_tasks', 'author_id')) {
+            if (! Schema::hasColumn('sys_scheduled_tasks', 'author_id')) {
                 $table->uuid('author_id')->nullable()->index()->after('usage_count');
             }
         });
 
         // Fix sys_email_templates
         Schema::table('sys_email_templates', function (Blueprint $table): void {
-            if (!Schema::hasColumn('sys_email_templates', 'usage_count')) {
+            if (! Schema::hasColumn('sys_email_templates', 'usage_count')) {
                 $table->unsignedInteger('usage_count')->default(0)->after('is_active');
             }
-            if (!Schema::hasColumn('sys_email_templates', 'author_id')) {
+            if (! Schema::hasColumn('sys_email_templates', 'author_id')) {
                 $table->uuid('author_id')->nullable()->index()->after('usage_count');
             }
         });

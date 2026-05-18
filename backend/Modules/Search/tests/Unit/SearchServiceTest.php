@@ -3,12 +3,12 @@
 namespace Modules\Search\Tests\Unit\Services;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
+use Modules\Library\Models\Category;
 use Modules\Library\Models\Tag;
-use Modules\Search\Services\SearchService;
-use Modules\Search\Models\SearchQuery;
 use Modules\Search\Models\SearchIndex;
+use Modules\Search\Models\SearchQuery;
+use Modules\Search\Services\SearchService;
 use Tests\TestCase;
 
 class SearchServiceTest extends TestCase
@@ -139,7 +139,7 @@ class SearchServiceTest extends TestCase
     public function test_search_by_uuid(): void
     {
         $uuid = '019e3699-7fcf-7345-83c2-d81fcd29cc75';
-        
+
         SearchIndex::create([
             'searchable_type' => 'Post',
             'searchable_id' => $uuid,

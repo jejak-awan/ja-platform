@@ -2,8 +2,8 @@
 
 namespace Modules\System\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Translation extends Model
@@ -11,10 +11,10 @@ class Translation extends Model
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_translations';
-
 
     protected $fillable = [
         'translatable_type',
@@ -27,7 +27,7 @@ class Translation extends Model
     /**
      * Get the parent translatable model.
      *
-     * @return MorphTo<\Illuminate\Database\Eloquent\Model, $this>
+     * @return MorphTo<Model, $this>
      */
     public function translatable(): MorphTo
     {

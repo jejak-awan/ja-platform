@@ -5,9 +5,9 @@ namespace Modules\Cms\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Modules\Library\Models\Tag;
 use Modules\Media\Models\File as Media;
 use Modules\Media\Models\Folder as MediaFolder;
-use Modules\Library\Models\Tag;
 use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;
@@ -535,7 +535,7 @@ class MediaManagementTest extends TestCase
                 '*' => [
                     'id',
                     'name',
-                ]
+                ],
             ],
             'message',
         ]);

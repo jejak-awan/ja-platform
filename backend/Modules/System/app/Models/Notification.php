@@ -2,33 +2,34 @@
 
 namespace Modules\System\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $id
  * @property string $user_id
  * @property string $type
  * @property array<string, mixed> $data
- * @property \Illuminate\Support\Carbon|null $read_at
- * @property \Illuminate\Support\Carbon|null $created_at
+ * @property Carbon|null $read_at
+ * @property Carbon|null $created_at
  * @property string $title
  * @property string $message
  * @property string|null $action_url
  * @property string|null $action_text
  * @property bool $is_read
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $updated_at
  */
 class Notification extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_notifications';
-
 
     protected $fillable = [
         'user_id',
@@ -87,7 +88,7 @@ class Notification extends Model
      */
     public static function createForAll(string $type, string $title, string $message, ?string $actionUrl = null, ?string $actionText = null, array $data = []): array
     {
-        $users = \Modules\System\Models\User::all();
+        $users = User::all();
         $notifications = [];
 
         foreach ($users as $user) {

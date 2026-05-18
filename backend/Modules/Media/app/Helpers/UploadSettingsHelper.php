@@ -22,6 +22,7 @@ class UploadSettingsHelper
     public static function getAllowedExtensions(): array
     {
         $extensions = Setting::get('allowed_upload_extensions', 'jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,txt,zip');
+
         return explode(',', $extensions);
     }
 
@@ -33,6 +34,7 @@ class UploadSettingsHelper
     public static function getAllowedImageTypes(): array
     {
         $types = Setting::get('allowed_image_types', 'jpg,jpeg,png,gif,webp');
+
         return explode(',', $types);
     }
 

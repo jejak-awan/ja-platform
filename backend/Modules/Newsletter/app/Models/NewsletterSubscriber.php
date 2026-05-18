@@ -4,31 +4,33 @@ declare(strict_types=1);
 
 namespace Modules\Newsletter\Models;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property int $id
  * @property string $email
  * @property string|null $name
  * @property string $status
- * @property \Illuminate\Support\Carbon|null $subscribed_at
- * @property \Illuminate\Support\Carbon|null $unsubscribed_at
+ * @property Carbon|null $subscribed_at
+ * @property Carbon|null $unsubscribed_at
  * @property string|null $source
  * @property string|null $ip_address
  * @property string|null $user_agent
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  */
 class NewsletterSubscriber extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'nwl_subscribers';
@@ -53,8 +55,8 @@ class NewsletterSubscriber extends Model
     ];
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     public function scopeSubscribed($query)
     {
@@ -62,8 +64,8 @@ class NewsletterSubscriber extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<$this>
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
      */
     public function scopePending($query)
     {

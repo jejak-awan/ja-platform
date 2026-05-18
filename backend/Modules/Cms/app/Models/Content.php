@@ -2,19 +2,22 @@
 
 namespace Modules\Cms\Models;
 
-use Modules\System\Traits\ScopedByWorkspace;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Library\Models\Tag;
+use Illuminate\Support\Carbon;
+use Modules\Cms\Database\Factories\ContentFactory;
 use Modules\Layout\Models\MenuItem;
-use Modules\System\Models\User;
 use Modules\Library\Models\Category;
+use Modules\Library\Models\Tag;
+use Modules\System\Models\User;
 use Modules\System\Traits\CoreLogsActivity;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -29,7 +32,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $author_id
  * @property string $workspace_id
  * @property string|null $category_id
- * @property \Illuminate\Support\Carbon|null $published_at
+ * @property Carbon|null $published_at
  * @property array|null $meta
  * @property string|null $meta_title
  * @property string|null $meta_description
@@ -39,30 +42,31 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property int $views
  * @property string $comment_status
  * @property string|null $locked_by
- * @property \Illuminate\Support\Carbon|null $locked_at
+ * @property Carbon|null $locked_at
  */
 class Content extends Model
 {
     protected $table = 'cms_contents';
 
-    use HasFactory, CoreLogsActivity, SoftDeletes, ScopedByWorkspace, HasUuids;
+    use CoreLogsActivity, HasFactory, HasUuids, ScopedByWorkspace, SoftDeletes;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Cms\Database\Factories\ContentFactory
+    protected static function newFactory(): ContentFactory
     {
-        return \Modules\Cms\Database\Factories\ContentFactory::new();
+        return ContentFactory::new();
     }
 
     protected $fillable = [
         'title', 'slug', 'excerpt', 'intro', 'body', 'featured_image',
         'status', 'type', 'author_id', 'workspace_id', 'category_id',
         'published_at', 'meta', 'meta_title', 'meta_description',
-        'meta_keywords', 'og_image', 'is_featured', 'views', 'comment_status', 'locked_by', 'locked_at'
+        'meta_keywords', 'og_image', 'is_featured', 'views', 'comment_status', 'locked_by', 'locked_at',
     ];
 
     protected $casts = [
@@ -83,27 +87,27 @@ class Content extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function tags(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable', 'lib_taggables');
     }
 
-    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
 
-    public function allComments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function allComments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
 
-    public function revisions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function revisions(): HasMany
     {
         return $this->hasMany(ContentRevision::class);
     }
 
-    public function customFields(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function customFields(): HasMany
     {
         return $this->hasMany(ContentCustomField::class);
     }

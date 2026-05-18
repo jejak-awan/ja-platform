@@ -2,20 +2,18 @@
 
 namespace Modules\Cms\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Modules\Cms\Models\Content;
-use Modules\System\Http\Controllers\BaseApiController;
-
 use Modules\Cms\Services\SeoService;
+use Modules\System\Http\Controllers\BaseApiController;
 
 class SeoController extends BaseApiController
 {
-    public function __construct(protected SeoService $seoService)
-    {
-    }
+    public function __construct(protected SeoService $seoService) {}
 
-    public function stats(): \Illuminate\Http\JsonResponse
+    public function stats(): JsonResponse
     {
         return $this->success([
             'total_indexed' => Content::where('status', 'published')->count(),
@@ -23,16 +21,17 @@ class SeoController extends BaseApiController
         ], 'SEO stats retrieved successfully');
     }
 
-    public function checkUrl(Request $request): \Illuminate\Http\JsonResponse
+    public function checkUrl(Request $request): JsonResponse
     {
         $url = $request->input('url');
+
         return $this->success([
             'url' => $url,
             'is_available' => true,
         ], 'URL check completed');
     }
 
-    public function generateSitemap(): \Illuminate\Http\JsonResponse
+    public function generateSitemap(): JsonResponse
     {
         // Sitemap is generated on-the-fly by SitemapController
         return $this->success([
@@ -40,7 +39,7 @@ class SeoController extends BaseApiController
         ], 'Sitemap is available at /sitemap.xml');
     }
 
-    public function getRobotsTxt(): \Illuminate\Http\JsonResponse
+    public function getRobotsTxt(): JsonResponse
     {
         $path = public_path('robots.txt');
 
@@ -55,7 +54,7 @@ class SeoController extends BaseApiController
         ], 'Robots.txt retrieved successfully');
     }
 
-    public function updateRobotsTxt(Request $request): \Illuminate\Http\JsonResponse
+    public function updateRobotsTxt(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'content' => 'required|string',
@@ -73,7 +72,7 @@ class SeoController extends BaseApiController
     /**
      * Analyze content SEO using the SeoService.
      */
-    public function analyzeContent(Content $content): \Illuminate\Http\JsonResponse
+    public function analyzeContent(Content $content): JsonResponse
     {
         $analysis = $this->seoService->analyze($content);
 
@@ -83,7 +82,7 @@ class SeoController extends BaseApiController
     /**
      * Generate Schema markup using the SeoService.
      */
-    public function generateSchema(Content $content): \Illuminate\Http\JsonResponse
+    public function generateSchema(Content $content): JsonResponse
     {
         $schemaType = $content->type === 'post' ? 'BlogPosting' : 'Article';
         $schema = $this->seoService->generateSchema($content, $schemaType);

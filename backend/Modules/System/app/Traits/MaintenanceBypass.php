@@ -42,9 +42,9 @@ trait MaintenanceBypass
             if ($request->is($pattern)) {
                 return true;
             }
-            
+
             // If pattern doesn't start with api/, try matching with api/v1/ prefix
-            if (!str_starts_with($pattern, 'api/') && $request->is('api/v1/' . $pattern)) {
+            if (! str_starts_with($pattern, 'api/') && $request->is('api/v1/'.$pattern)) {
                 return true;
             }
         }

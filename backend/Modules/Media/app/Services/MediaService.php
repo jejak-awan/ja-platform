@@ -2,18 +2,21 @@
 
 namespace Modules\Media\Services;
 
+use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Modules\Media\Contracts\MediaServiceInterface;
-use Modules\Media\Models\File;
-use Modules\Media\Models\Folder;
-use Modules\Media\Models\Usage;
-use Modules\Media\Models\DeletedFile;
-use Modules\System\Models\Setting;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Interfaces\DriverInterface;
 use Modules\Library\Models\Tag;
+use Modules\Media\Contracts\MediaServiceInterface;
+use Modules\Media\Models\DeletedFile;
+use Modules\Media\Models\File;
+use Modules\Media\Models\Usage;
+use Modules\System\Models\Setting;
 
 class MediaService implements MediaServiceInterface
 {
@@ -55,9 +58,9 @@ class MediaService implements MediaServiceInterface
                 $webpPath = $this->convertToWebP($fullPath, $quality);
                 if ($webpPath) {
                     $fullPath = $webpPath;
-                    $path = $uploadPath . '/' . basename($fullPath);
+                    $path = $uploadPath.'/'.basename($fullPath);
                     $mimeType = 'image/webp';
-                    $fileName = pathinfo($fileName, PATHINFO_FILENAME) . '.webp';
+                    $fileName = pathinfo($fileName, PATHINFO_FILENAME).'.webp';
                 }
             }
         }
@@ -78,7 +81,7 @@ class MediaService implements MediaServiceInterface
         ]);
 
         // Sync Tags
-        if (!empty($metadata['tags']) && is_array($metadata['tags'])) {
+        if (! empty($metadata['tags']) && is_array($metadata['tags'])) {
             $this->syncTags($mediaFile, $metadata['tags']);
         }
 
@@ -95,17 +98,17 @@ class MediaService implements MediaServiceInterface
      */
     public function optimizeImage(string $fullPath, int $maxWidth = 1920, int $quality = 85): bool
     {
-        if (!class_exists(\Intervention\Image\ImageManager::class)) {
+        if (! class_exists(ImageManager::class)) {
             return false;
         }
 
         try {
             $driver = $this->getImageDriver();
-            if (!$driver instanceof \Intervention\Image\Interfaces\DriverInterface) {
+            if (! $driver instanceof DriverInterface) {
                 return false;
             }
 
-            $manager = new \Intervention\Image\ImageManager($driver);
+            $manager = new ImageManager($driver);
             $image = $manager->read($fullPath);
 
             if ($image->width() > $maxWidth) {
@@ -113,9 +116,11 @@ class MediaService implements MediaServiceInterface
             }
 
             $image->save($fullPath, quality: $quality);
+
             return true;
         } catch (\Exception $e) {
-            Log::channel('media')->warning('Image optimization failed: ' . $e->getMessage());
+            Log::channel('media')->warning('Image optimization failed: '.$e->getMessage());
+
             return false;
         }
     }
@@ -125,32 +130,34 @@ class MediaService implements MediaServiceInterface
      */
     public function convertToWebP(string $fullPath, int $quality = 85): ?string
     {
-        if (!class_exists(\Intervention\Image\ImageManager::class)) {
+        if (! class_exists(ImageManager::class)) {
             return null;
         }
 
         try {
             $driver = $this->getImageDriver();
-            if (!$driver instanceof \Intervention\Image\Interfaces\DriverInterface) {
+            if (! $driver instanceof DriverInterface) {
                 return null;
             }
 
-            $manager = new \Intervention\Image\ImageManager($driver);
+            $manager = new ImageManager($driver);
             $image = $manager->read($fullPath);
 
             $pathInfo = pathinfo($fullPath);
-            $newPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '.webp';
+            $newPath = $pathInfo['dirname'].'/'.$pathInfo['filename'].'.webp';
 
             $image->toWebp($quality)->save($newPath);
 
             if ($fullPath !== $newPath && file_exists($newPath)) {
                 unlink($fullPath);
+
                 return $newPath;
             }
 
             return $newPath;
         } catch (\Exception $e) {
-            Log::channel('media')->warning('WebP conversion failed: ' . $e->getMessage());
+            Log::channel('media')->warning('WebP conversion failed: '.$e->getMessage());
+
             return null;
         }
     }
@@ -167,16 +174,16 @@ class MediaService implements MediaServiceInterface
         $pathInfo = pathinfo($file->path);
         $fileName = $pathInfo['filename'];
         $extension = $pathInfo['extension'] ?? '';
-        $dirname = ($pathInfo['dirname'] === '.' || $pathInfo['dirname'] === '/') ? '' : $pathInfo['dirname'] . '/';
+        $dirname = ($pathInfo['dirname'] === '.' || $pathInfo['dirname'] === '/') ? '' : $pathInfo['dirname'].'/';
 
-        $thumbnailDir = Storage::disk($file->disk)->path($dirname . 'thumbnails');
-        if (!is_dir($thumbnailDir)) {
+        $thumbnailDir = Storage::disk($file->disk)->path($dirname.'thumbnails');
+        if (! is_dir($thumbnailDir)) {
             mkdir($thumbnailDir, 0755, true);
         }
 
         $isSvg = $file->mime_type === 'image/svg+xml' || strtolower($extension) === 'svg';
         $thumbnailExtension = $isSvg ? 'png' : $extension;
-        $thumbnailPath = $dirname . 'thumbnails/' . $fileName . '_thumb.' . $thumbnailExtension;
+        $thumbnailPath = $dirname.'thumbnails/'.$fileName.'_thumb.'.$thumbnailExtension;
         $thumbnailFullPath = Storage::disk($file->disk)->path($thumbnailPath);
 
         // Handle SVG with Imagick if available
@@ -188,20 +195,21 @@ class MediaService implements MediaServiceInterface
                 $imagick->setImageFormat('png');
                 $imagick->resizeImage($width, $height, \Imagick::FILTER_LANCZOS, 1, true);
                 $imagick->writeImage($thumbnailFullPath);
+
                 return $thumbnailPath;
             } catch (\Exception $e) {
-                Log::channel('media')->warning('SVG thumbnail generation failed: ' . $e->getMessage());
+                Log::channel('media')->warning('SVG thumbnail generation failed: '.$e->getMessage());
             }
         }
 
         // Fallback to Intervention
         $driver = $this->getImageDriver();
-        if (!$driver instanceof \Intervention\Image\Interfaces\DriverInterface) {
+        if (! $driver instanceof DriverInterface) {
             return null;
         }
 
         try {
-            $manager = new \Intervention\Image\ImageManager($driver);
+            $manager = new ImageManager($driver);
             $image = $manager->read($fullPath);
             $image->cover($width, $height);
 
@@ -213,7 +221,8 @@ class MediaService implements MediaServiceInterface
 
             return $thumbnailPath;
         } catch (\Exception $e) {
-            Log::channel('media')->warning('Thumbnail generation failed: ' . $e->getMessage());
+            Log::channel('media')->warning('Thumbnail generation failed: '.$e->getMessage());
+
             return null;
         }
     }
@@ -224,13 +233,13 @@ class MediaService implements MediaServiceInterface
     public function resize(File $file, int $width, ?int $height = null, int $quality = 85): bool
     {
         $driver = $this->getImageDriver();
-        if (!$driver instanceof \Intervention\Image\Interfaces\DriverInterface) {
+        if (! $driver instanceof DriverInterface) {
             return false;
         }
 
         try {
             $fullPath = Storage::disk($file->disk)->path($file->path);
-            $manager = new \Intervention\Image\ImageManager($driver);
+            $manager = new ImageManager($driver);
             $image = $manager->read($fullPath);
 
             if ($height) {
@@ -244,7 +253,8 @@ class MediaService implements MediaServiceInterface
 
             return true;
         } catch (\Exception $e) {
-            Log::channel('media')->error('Image resize failed: ' . $e->getMessage());
+            Log::channel('media')->error('Image resize failed: '.$e->getMessage());
+
             return false;
         }
     }
@@ -256,13 +266,14 @@ class MediaService implements MediaServiceInterface
     {
         if ($permanent) {
             $this->forceDelete($file);
+
             return;
         }
 
         $originalPath = $file->path;
         $disk = $file->disk ?: 'public';
         $fileName = basename($originalPath);
-        $trashPath = '.trash/' . uniqid() . '_' . $fileName;
+        $trashPath = '.trash/'.uniqid().'_'.$fileName;
 
         try {
             Storage::disk($disk)->makeDirectory('.trash');
@@ -271,7 +282,7 @@ class MediaService implements MediaServiceInterface
             }
 
             DeletedFile::create([
-                'original_path' => '/' . ltrim($originalPath, '/'),
+                'original_path' => '/'.ltrim($originalPath, '/'),
                 'trash_path' => $trashPath,
                 'disk' => $disk,
                 'name' => $file->name ?: $fileName,
@@ -287,7 +298,7 @@ class MediaService implements MediaServiceInterface
             $file->save();
             $file->delete();
         } catch (\Exception $e) {
-            Log::channel('media')->error('Soft delete move to trash failed: ' . $e->getMessage());
+            Log::channel('media')->error('Soft delete move to trash failed: '.$e->getMessage());
             $file->delete();
         }
     }
@@ -298,7 +309,7 @@ class MediaService implements MediaServiceInterface
     public function restore(string $fileId): ?File
     {
         $file = File::onlyTrashed()->find($fileId);
-        if (!$file) {
+        if (! $file) {
             return null;
         }
 
@@ -313,13 +324,15 @@ class MediaService implements MediaServiceInterface
                 $file->save();
                 $file->restore();
                 $deletedFile->delete();
+
                 return $file;
             } catch (\Exception $e) {
-                Log::channel('media')->error('Restore failed: ' . $e->getMessage());
+                Log::channel('media')->error('Restore failed: '.$e->getMessage());
             }
         }
-        
+
         $file->restore();
+
         return $file;
     }
 
@@ -333,15 +346,19 @@ class MediaService implements MediaServiceInterface
 
         foreach ($mediaIds as $id) {
             $file = File::withTrashed()->find($id);
-            if (!$file) {
+            if (! $file) {
                 continue;
             }
 
             switch ($action) {
-                case 'delete': $this->delete($file, false); break;
-                case 'delete_permanent': $this->delete($file, true); break;
-                case 'restore': $this->restore($file->id); break;
-                case 'move': $file->update(['folder_id' => $folderId]); break;
+                case 'delete': $this->delete($file, false);
+                    break;
+                case 'delete_permanent': $this->delete($file, true);
+                    break;
+                case 'restore': $this->restore($file->id);
+                    break;
+                case 'move': $file->update(['folder_id' => $folderId]);
+                    break;
             }
             $affectedMedia++;
         }
@@ -359,10 +376,10 @@ class MediaService implements MediaServiceInterface
             return null;
         }
 
-        $zipFileName = 'media-' . now()->format('Y-m-d-His') . '.zip';
-        $zipPath = storage_path('app/temp/' . $zipFileName);
+        $zipFileName = 'media-'.now()->format('Y-m-d-His').'.zip';
+        $zipPath = storage_path('app/temp/'.$zipFileName);
 
-        if (!is_dir(storage_path('app/temp'))) {
+        if (! is_dir(storage_path('app/temp'))) {
             mkdir(storage_path('app/temp'), 0755, true);
         }
 
@@ -378,6 +395,7 @@ class MediaService implements MediaServiceInterface
             }
         }
         $zip->close();
+
         return $zipPath;
     }
 
@@ -414,31 +432,32 @@ class MediaService implements MediaServiceInterface
     /**
      * Internal Helpers
      */
-    protected function getImageDriver(): ?\Intervention\Image\Interfaces\DriverInterface
+    protected function getImageDriver(): ?DriverInterface
     {
         if (extension_loaded('gd')) {
-            return new \Intervention\Image\Drivers\Gd\Driver;
+            return new Driver;
         }
         if (extension_loaded('imagick')) {
             return new \Intervention\Image\Drivers\Imagick\Driver;
         }
+
         return null;
     }
 
     protected function sanitizeSvg(string $filePath): void
     {
-        if (!class_exists(\enshrined\svgSanitize\Sanitizer::class)) {
+        if (! class_exists(Sanitizer::class)) {
             return;
         }
         try {
-            $sanitizer = new \enshrined\svgSanitize\Sanitizer;
+            $sanitizer = new Sanitizer;
             $content = file_get_contents($filePath);
             if ($content) {
                 $cleanContent = $sanitizer->sanitize($content);
                 file_put_contents($filePath, $cleanContent);
             }
         } catch (\Exception $e) {
-            Log::channel('media')->error('SVG sanitization failed: ' . $e->getMessage());
+            Log::channel('media')->error('SVG sanitization failed: '.$e->getMessage());
         }
     }
 
@@ -452,7 +471,7 @@ class MediaService implements MediaServiceInterface
             $tag = Tag::firstOrCreate(['name' => trim((string) $tagName)], ['slug' => Str::slug($tagName)]);
             $tagIds[] = $tag->id;
         }
-        
+
         $file->tags()->sync($tagIds);
     }
 

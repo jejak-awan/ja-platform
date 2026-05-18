@@ -2,8 +2,9 @@
 
 namespace Tests\Feature\School;
 
-use Modules\System\Models\User;
+use Modules\School\Database\Seeders\SchoolRoleSeeder;
 use Modules\System\Models\Role;
+use Modules\System\Models\User;
 use Tests\TestCase;
 
 /**
@@ -15,7 +16,7 @@ class SchoolOperationsRbacTest extends TestCase
     {
         parent::setUp();
         $this->seedPermissionsAndRoles();
-        $this->seed(\Modules\School\Database\Seeders\SchoolRoleSeeder::class);
+        $this->seed(SchoolRoleSeeder::class);
     }
 
     public function test_admin_sarpras_cannot_access_operations_attendance_or_affairs_or_visitors(): void
@@ -63,4 +64,3 @@ class SchoolOperationsRbacTest extends TestCase
         $this->actingAs($user, 'sanctum')->getJson('/api/v1/manage/school/operations/attendance/overview')->assertForbidden();
     }
 }
-

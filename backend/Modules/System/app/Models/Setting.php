@@ -2,10 +2,13 @@
 
 namespace Modules\System\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Context;
+use Modules\System\Database\Factories\SettingFactory;
 use Modules\System\Traits\ScopedByWorkspace;
 
 /**
@@ -17,22 +20,21 @@ use Modules\System\Traits\ScopedByWorkspace;
  * @property string|null $description
  * @property bool $is_public
  * @property int|null $workspace_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class Setting extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'sys_settings';
 
-
-    /** @use HasFactory<\Modules\System\Database\Factories\SettingFactory> */
+    /** @use HasFactory<SettingFactory> */
     use HasFactory, ScopedByWorkspace;
-
 
     protected $fillable = [
         'workspace_id',
@@ -51,9 +53,9 @@ class Setting extends Model
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\System\Database\Factories\SettingFactory
+    protected static function newFactory(): SettingFactory
     {
-        return \Modules\System\Database\Factories\SettingFactory::new();
+        return SettingFactory::new();
     }
 
     public static function get(string $key, mixed $default = null, ?int $workspaceId = null): mixed
@@ -64,16 +66,16 @@ class Setting extends Model
             $query = static::where('key', $key);
 
             if ($id) {
-                $query->where(function($q) use ($id): void {
+                $query->where(function ($q) use ($id): void {
                     $q->where('workspace_id', $id)
-                      ->orWhereNull('workspace_id');
+                        ->orWhereNull('workspace_id');
                 })->orderByRaw('workspace_id IS NULL ASC');
             } else {
                 $query->whereNull('workspace_id');
             }
 
             $setting = $query->first();
-        } catch (\Illuminate\Database\QueryException) {
+        } catch (QueryException) {
             // Table might not exist yet (e.g. during route registration in tests)
             return $default;
         }
@@ -88,7 +90,7 @@ class Setting extends Model
     public static function set(string $key, mixed $value, string $type = 'string', string $group = 'general', ?string $workspaceId = null): self
     {
         $id = $workspaceId ?? Context::get('workspace_id');
-        
+
         return static::withoutGlobalScope('workspace')->updateOrCreate(
             ['key' => $key, 'workspace_id' => $id],
             [
@@ -108,7 +110,7 @@ class Setting extends Model
             ->orderByRaw('workspace_id IS NULL DESC')
             ->get();
 
-        return $settings->mapWithKeys(fn($setting) => [(string) $setting->key => static::castValue($setting->value, (string) $setting->type)])->toArray();
+        return $settings->mapWithKeys(fn ($setting) => [(string) $setting->key => static::castValue($setting->value, (string) $setting->type)])->toArray();
     }
 
     protected static function castValue(mixed $value, string $type): mixed

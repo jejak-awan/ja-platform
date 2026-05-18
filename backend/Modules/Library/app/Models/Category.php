@@ -2,19 +2,20 @@
 
 namespace Modules\Library\Models;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Modules\System\Models\User;
+use Illuminate\Support\Carbon;
 use Modules\Cms\Models\Content;
-
-use Spatie\Activitylog\LogOptions;
+use Modules\Library\Database\Factories\CategoryFactory;
+use Modules\System\Models\User;
 use Modules\System\Traits\CoreLogsActivity;
+use Modules\System\Traits\ScopedByWorkspace;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * @property int $id
@@ -28,22 +29,23 @@ use Modules\System\Traits\CoreLogsActivity;
  * @property int $sort_order
  * @property int|null $author_id
  * @property int|null $locked_by
- * @property \Illuminate\Support\Carbon|null $locked_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Modules\System\Models\User|null $author
+ * @property Carbon|null $locked_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User|null $author
  * @property-read Category|null $parent
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Category> $children
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Cms\Models\Content> $contents
- * @property-read \Modules\System\Models\User|null $lockedBy
+ * @property-read Collection<int, Category> $children
+ * @property-read Collection<int, Content> $contents
+ * @property-read User|null $lockedBy
  */
 class Category extends Model
 {
-    /** @use HasFactory<\Modules\Library\Database\Factories\CategoryFactory> */
-    use HasFactory, CoreLogsActivity, SoftDeletes, ScopedByWorkspace, HasUuids;
+    /** @use HasFactory<CategoryFactory> */
+    use CoreLogsActivity, HasFactory, HasUuids, ScopedByWorkspace, SoftDeletes;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'lib_categories';
@@ -59,9 +61,9 @@ class Category extends Model
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \Modules\Library\Database\Factories\CategoryFactory
+    protected static function newFactory(): CategoryFactory
     {
-        return \Modules\Library\Database\Factories\CategoryFactory::new();
+        return CategoryFactory::new();
     }
 
     protected $fillable = [

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\System\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Modules\Security\Models\SecurityLog;
 
 /**
  * Security Maintenance Mode Service.
@@ -164,7 +166,7 @@ class SecurityMaintenanceService
         $remaining = 0;
 
         if (is_string($expiresAt)) {
-            $expiresCarbon = \Carbon\Carbon::parse($expiresAt);
+            $expiresCarbon = Carbon::parse($expiresAt);
             $remaining = max(0, (int) now()->diffInSeconds($expiresCarbon, false));
         }
 
@@ -212,7 +214,7 @@ class SecurityMaintenanceService
 
         // Log maintenance event in security journal
         try {
-            \Modules\Security\Models\SecurityLog::log(
+            SecurityLog::log(
                 'maintenance_ended',
                 null,
                 null,

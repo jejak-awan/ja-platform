@@ -11,6 +11,7 @@ class SchoolApiStandardizationTest extends TestCase
         parent::setUp();
         $this->seedPermissionsAndRoles();
     }
+
     /**
      * Test standardized response format for schools list.
      */

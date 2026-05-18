@@ -221,23 +221,23 @@ class SecurityHeaders
             $connectSrc[] = "wss://{$host}";
             $connectSrc[] = "ws://{$host}";
         }
-        
+
         // Add current origin explicitly
         $connectSrc[] = 'https://dev.smkn1cijulang.sch.id';
         $connectSrc[] = 'https://*.smkn1cijulang.sch.id';
         $connectSrc[] = 'https://smkn1cijulang.sch.id';
-        
+
         $portalUrl = config('app.url');
         if (is_string($portalUrl) && $portalUrl !== '') {
             $connectSrc[] = $portalUrl;
-            
+
             $portalHost = parse_url($portalUrl, PHP_URL_HOST);
             if (is_string($portalHost) && $portalHost !== '') {
                 $connectSrc[] = "https://{$portalHost}";
                 $connectSrc[] = "https://*.{$portalHost}";
             }
         }
-        
+
         $rootDomain = config('app.root_domain');
         if (is_string($rootDomain) && $rootDomain !== '') {
             $connectSrc[] = "https://{$rootDomain}";
@@ -321,9 +321,9 @@ class SecurityHeaders
     {
         $normalizedPolicy = strtolower($policy);
 
-        // 1. Critical Failure: connect-src 'none' or script-src 'none' 
+        // 1. Critical Failure: connect-src 'none' or script-src 'none'
         // This completely breaks an SPA's ability to load or communicate.
-        if (str_contains($normalizedPolicy, "connect-src 'none'") || 
+        if (str_contains($normalizedPolicy, "connect-src 'none'") ||
             str_contains($normalizedPolicy, "script-src 'none'")) {
             return false;
         }
@@ -339,6 +339,7 @@ class SecurityHeaders
         if (str_contains($normalizedPolicy, 'connect-src') && ! str_contains($normalizedPolicy, "'self'")) {
             return false;
         }
+
         // 4. Critical Failure: Policy is too short or missing key directives
         return strlen($policy) >= 20 && str_contains($normalizedPolicy, 'default-src');
     }

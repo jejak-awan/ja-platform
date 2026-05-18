@@ -19,7 +19,7 @@ class IpHelper
      */
     public static function ipInSubnet(string $ip, string $range): bool
     {
-        if (!str_contains($range, '/')) {
+        if (! str_contains($range, '/')) {
             return $ip === $range;
         }
 

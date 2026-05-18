@@ -3,11 +3,8 @@
 namespace Modules\System\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\System\Models\User;
-use Modules\System\Models\Setting;
 use Illuminate\Support\Facades\Hash;
-use Modules\System\Models\Role;
-use Modules\System\Models\Permission;
+use Modules\System\Models\User;
 
 class SystemDatabaseSeeder extends Seeder
 {
@@ -19,7 +16,7 @@ class SystemDatabaseSeeder extends Seeder
         // 2. Create Super Admin
         $superEmail = env('SUPER_ADMIN_EMAIL', 'super@jejakawan.com');
         $superPassword = env('SUPER_ADMIN_PASSWORD', 'ChangeMeOnFirstLogin!');
-        
+
         $superAdmin = User::firstOrCreate(
             ['email' => $superEmail],
             [

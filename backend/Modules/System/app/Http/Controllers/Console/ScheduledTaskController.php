@@ -2,20 +2,22 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\ScheduledTask;
 use Modules\System\Models\User;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 
-class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiController
+class ScheduledTaskController extends BaseApiController
 {
     /**
      * List all scheduled tasks
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $perPageInput = $request->input('per_page', 10);
         $perPage = is_numeric($perPageInput) ? (int) $perPageInput : 10;
@@ -25,7 +27,7 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
         return $this->paginated($tasks, 'Scheduled tasks retrieved successfully');
     }
 
-    public function allowedCommands(): \Illuminate\Http\JsonResponse
+    public function allowedCommands(): JsonResponse
     {
         return $this->success([
             'commands' => ScheduledTask::getAllowedCommands(),
@@ -36,7 +38,7 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
     /**
      * Create a new scheduled task
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -64,7 +66,7 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
             ]);
         }
 
-        /** @var \Modules\System\Models\ScheduledTask $task */
+        /** @var ScheduledTask $task */
         $task = ScheduledTask::create($validated);
 
         Log::info('Scheduled task created', [
@@ -79,9 +81,9 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
     /**
      * Update a scheduled task
      */
-    public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
-        /** @var \Modules\System\Models\ScheduledTask|null $task */
+        /** @var ScheduledTask|null $task */
         $task = ScheduledTask::find($id);
 
         if (! $task) {
@@ -122,7 +124,7 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
             'user_id' => Auth::id(),
         ]);
 
-        /** @var \Modules\System\Models\ScheduledTask $freshTask */
+        /** @var ScheduledTask $freshTask */
         $freshTask = $task->fresh();
 
         return $this->success($freshTask, 'Scheduled task updated successfully');
@@ -131,9 +133,9 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
     /**
      * Run a scheduled task manually
      */
-    public function run(string $id): \Illuminate\Http\JsonResponse
+    public function run(string $id): JsonResponse
     {
-        /** @var \Modules\System\Models\ScheduledTask|null $task */
+        /** @var ScheduledTask|null $task */
         $task = ScheduledTask::find($id);
 
         if (! $task) {
@@ -204,7 +206,7 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
                 'exit_code' => $exitCode,
             ]);
 
-            /** @var \Modules\System\Models\ScheduledTask $freshTask */
+            /** @var ScheduledTask $freshTask */
             $freshTask = $task->fresh();
 
             return $this->success([
@@ -254,9 +256,9 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
     /**
      * Delete a scheduled task
      */
-    public function destroy(string $id): \Illuminate\Http\JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        /** @var \Modules\System\Models\ScheduledTask|null $task */
+        /** @var ScheduledTask|null $task */
         $task = ScheduledTask::find($id);
 
         if (! $task) {
@@ -277,9 +279,9 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
     /**
      * Get task execution history
      */
-    public function show(string $id): \Illuminate\Http\JsonResponse
+    public function show(string $id): JsonResponse
     {
-        /** @var \Modules\System\Models\ScheduledTask|null $task */
+        /** @var ScheduledTask|null $task */
         $task = ScheduledTask::find($id);
 
         if (! $task) {
@@ -295,7 +297,7 @@ class ScheduledTaskController extends \Modules\System\Http\Controllers\BaseApiCo
     /**
      * Run an ad-hoc command without creating a permanent task record
      */
-    public function runAdhoc(Request $request): \Illuminate\Http\JsonResponse
+    public function runAdhoc(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'command' => 'required|string|max:500',

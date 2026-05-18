@@ -3,9 +3,25 @@
 namespace Modules\Cms\Providers;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
-use Modules\Cms\Console\Commands\BackfillThemeJanariParentCommand;
-use Modules\Cms\Console\Commands\ThemeMake;
+use Modules\Analytics\Models\AnalyticsEvent;
+use Modules\Cms\Models\Comment;
+use Modules\Cms\Models\Content;
+use Modules\Cms\Services\CmsCacheService;
+use Modules\Forms\Models\Form;
+use Modules\Forms\Models\FormSubmission;
+use Modules\Layout\Services\ThemeService;
+use Modules\Library\Models\Category;
+use Modules\Library\Models\Tag;
+use Modules\Newsletter\Models\NewsletterSubscriber;
+use Modules\System\Contracts\LayoutRegistryInterface;
+use Modules\System\Models\EmailTemplate;
+use Modules\System\Models\User;
+use Modules\System\Services\CacheService;
+use Modules\System\Services\CacheWarmingService;
+use Modules\System\Services\DashboardRegistry;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -28,7 +44,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
 
         $this->registerUserModuleIntegrations();
         $this->registerDashboardStats();
@@ -40,10 +56,10 @@ class CmsServiceProvider extends ServiceProvider
     protected function registerLayoutIntegrations(): void
     {
         $this->app->booted(function (): void {
-            if ($this->app->bound(\Modules\System\Contracts\LayoutRegistryInterface::class)) {
-                $registry = $this->app->make(\Modules\System\Contracts\LayoutRegistryInterface::class);
-                $themeService = $this->app->make(\Modules\Layout\Services\ThemeService::class);
-                
+            if ($this->app->bound(LayoutRegistryInterface::class)) {
+                $registry = $this->app->make(LayoutRegistryInterface::class);
+                $themeService = $this->app->make(ThemeService::class);
+
                 try {
                     $activeTheme = $themeService->getActiveTheme('frontend');
                 } catch (\Exception) {
@@ -67,11 +83,11 @@ class CmsServiceProvider extends ServiceProvider
      */
     protected function registerCacheIntegrations(): void
     {
-        \Modules\System\Services\CacheService::registerClearer('cms', function (): void {
-            app(\Modules\Cms\Services\CmsCacheService::class)->clearAll();
+        CacheService::registerClearer('cms', function (): void {
+            app(CmsCacheService::class)->clearAll();
         });
 
-        \Modules\System\Services\CacheWarmingService::registerWarmer('cms', fn() => app(\Modules\Cms\Services\CmsCacheService::class)->warmUp());
+        CacheWarmingService::registerWarmer('cms', fn () => app(CmsCacheService::class)->warmUp());
     }
 
     /**
@@ -79,9 +95,9 @@ class CmsServiceProvider extends ServiceProvider
      */
     protected function registerModelRelations(): void
     {
-        \Modules\Library\Models\Tag::resolveRelationUsing('contents', fn($tagModel) => $tagModel->belongsToMany(\Modules\Cms\Models\Content::class, 'content_tag'));
+        Tag::resolveRelationUsing('contents', fn ($tagModel) => $tagModel->belongsToMany(Content::class, 'content_tag'));
 
-        \Modules\Analytics\Models\AnalyticsEvent::resolveRelationUsing('content', fn($analyticsModel) => $analyticsModel->belongsTo(\Modules\Cms\Models\Content::class, 'content_id'));
+        AnalyticsEvent::resolveRelationUsing('content', fn ($analyticsModel) => $analyticsModel->belongsTo(Content::class, 'content_id'));
     }
 
     /**
@@ -90,35 +106,35 @@ class CmsServiceProvider extends ServiceProvider
     protected function registerDashboardStats(): void
     {
         $this->app->booted(function (): void {
-            $registry = $this->app->make(\Modules\System\Services\DashboardRegistry::class);
+            $registry = $this->app->make(DashboardRegistry::class);
 
-            $registry->registerStatsProvider('contents', fn() => [
-                'total' => \Modules\Cms\Models\Content::count(),
-                'published' => \Modules\Cms\Models\Content::where('status', 'published')->count(),
-                'draft' => \Modules\Cms\Models\Content::where('status', 'draft')->count(),
-                'pending' => \Modules\Cms\Models\Content::where('status', 'pending')->count(),
-                'archived' => \Modules\Cms\Models\Content::where('status', 'archived')->count(),
+            $registry->registerStatsProvider('contents', fn () => [
+                'total' => Content::count(),
+                'published' => Content::where('status', 'published')->count(),
+                'draft' => Content::where('status', 'draft')->count(),
+                'pending' => Content::where('status', 'pending')->count(),
+                'archived' => Content::where('status', 'archived')->count(),
             ]);
 
-            $registry->registerStatsProvider('cms_info', fn() => [
-                'categories' => \Modules\Library\Models\Category::count(),
-                'comments' => \Modules\Cms\Models\Comment::count(),
-                'forms' => \Modules\Forms\Models\Form::count(),
-                'form_submissions' => \Modules\Forms\Models\FormSubmission::count(),
-                'total_email_templates' => \Modules\System\Models\EmailTemplate::count(),
-                'newsletter_subscribers' => \Modules\Newsletter\Models\NewsletterSubscriber::count(),
+            $registry->registerStatsProvider('cms_info', fn () => [
+                'categories' => Category::count(),
+                'comments' => Comment::count(),
+                'forms' => Form::count(),
+                'form_submissions' => FormSubmission::count(),
+                'total_email_templates' => EmailTemplate::count(),
+                'newsletter_subscribers' => NewsletterSubscriber::count(),
                 'email' => [
-                    'templates' => \Modules\System\Models\EmailTemplate::count(),
-                    'subscribers' => \Modules\Newsletter\Models\NewsletterSubscriber::count(),
-                    'smtp_status' => \Illuminate\Support\Facades\Cache::get('email_smtp_status', 'unknown'),
+                    'templates' => EmailTemplate::count(),
+                    'subscribers' => NewsletterSubscriber::count(),
+                    'smtp_status' => Cache::get('email_smtp_status', 'unknown'),
                 ],
             ]);
 
-            $registry->registerChartProvider('contentByStatus', fn() => \Modules\Cms\Models\Content::select('status', \Illuminate\Support\Facades\DB::raw('count(*) as count'))
+            $registry->registerChartProvider('contentByStatus', fn () => Content::select('status', DB::raw('count(*) as count'))
                 ->groupBy('status')
                 ->get());
 
-            $registry->registerStatsProvider('viewer', fn() => \Modules\Cms\Models\Content::where('status', 'published')
+            $registry->registerStatsProvider('viewer', fn () => Content::where('status', 'published')
                 ->latest()
                 ->take(5)
                 ->select('id', 'title', 'slug', 'created_at')
@@ -132,7 +148,7 @@ class CmsServiceProvider extends ServiceProvider
     protected function registerUserModuleIntegrations(): void
     {
         // Register CMS-specific role ranks
-        \Modules\System\Models\User::registerRoleRanks([
+        User::registerRoleRanks([
             'editor' => 60,
             'author' => 40,
         ]);

@@ -2,14 +2,17 @@
 
 namespace Modules\System\Http\Controllers\Console;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Modules\System\Helpers\IpHelper;
+use Modules\System\Http\Controllers\BaseApiController;
+use Symfony\Component\HttpFoundation\Response;
 
-class LogController extends \Modules\System\Http\Controllers\BaseApiController
+class LogController extends BaseApiController
 {
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $logPath = storage_path('logs');
         $files = [];
@@ -37,7 +40,7 @@ class LogController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->success($files, 'Log files retrieved successfully');
     }
 
-    public function show(string $filename): \Illuminate\Http\JsonResponse
+    public function show(string $filename): JsonResponse
     {
         $logFile = storage_path('logs/'.basename($filename));
 
@@ -51,7 +54,7 @@ class LogController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->success(['content' => $content], 'Log content retrieved successfully');
     }
 
-    public function download(string $filename): \Symfony\Component\HttpFoundation\Response
+    public function download(string $filename): Response
     {
         $logFile = storage_path('logs/'.basename($filename));
 
@@ -62,18 +65,19 @@ class LogController extends \Modules\System\Http\Controllers\BaseApiController
         return $this->notFoundResponse('Log file');
     }
 
-    protected function notFoundResponse(string $resource): \Illuminate\Http\JsonResponse
+    protected function notFoundResponse(string $resource): JsonResponse
     {
         return $this->error("{$resource} not found", 404);
     }
 
-    public function destroy(Request $request, string $filename): \Illuminate\Http\JsonResponse
+    public function destroy(Request $request, string $filename): JsonResponse
     {
         $request->merge(['filename' => $filename]);
+
         return $this->clear($request);
     }
 
-    public function clear(Request $request): \Illuminate\Http\JsonResponse
+    public function clear(Request $request): JsonResponse
     {
         $reasonRaw = $request->input('reason');
         $reason = is_string($reasonRaw) ? trim($reasonRaw) : '';

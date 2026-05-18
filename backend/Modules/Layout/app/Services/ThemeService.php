@@ -3,10 +3,13 @@
 namespace Modules\Layout\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Modules\Layout\Models\Theme;
-use Modules\Layout\Services\ThemeCacheService;
+use Modules\Layout\Support\ThemeViews;
+use Modules\System\Contracts\LayoutRegistryInterface;
+use Modules\System\Models\Plugin;
 
 class ThemeService
 {
@@ -26,7 +29,7 @@ class ThemeService
      */
     public function getActiveTheme(string $type = 'frontend'): ?Theme
     {
-        return $this->cache->getActiveTheme($type, fn() => Theme::getActiveTheme($type));
+        return $this->cache->getActiveTheme($type, fn () => Theme::getActiveTheme($type));
     }
 
     /**
@@ -44,7 +47,7 @@ class ThemeService
         // Check parent theme if exists
         if ($theme->hasParent()) {
             $parent = $theme->getParent();
-            if ($parent instanceof \Modules\Layout\Models\Theme) {
+            if ($parent instanceof Theme) {
                 return $this->getMenuLocations($parent);
             }
         }
@@ -67,7 +70,7 @@ class ThemeService
         // Check parent theme if exists
         if ($theme->hasParent()) {
             $parent = $theme->getParent();
-            if ($parent instanceof \Modules\Layout\Models\Theme) {
+            if ($parent instanceof Theme) {
                 return $this->getWidgetLocations($parent);
             }
         }
@@ -80,7 +83,7 @@ class ThemeService
      */
     public function activateTheme(Theme $theme): bool
     {
-        $levelId = \Illuminate\Support\Facades\Context::get('workspace_id');
+        $levelId = Context::get('workspace_id');
 
         // If theme is global and we have a unit context, we must ensure we activate/create a unit-specific record
         if ($theme->workspace_id === null && $levelId) {
@@ -117,7 +120,7 @@ class ThemeService
         }
 
         // Fire before activation hook
-        if ($this->hooks instanceof \Modules\Layout\Services\ThemeHooksService) {
+        if ($this->hooks instanceof ThemeHooksService) {
             $this->hooks->doAction('theme.before_activate', $theme);
         }
 
@@ -132,7 +135,7 @@ class ThemeService
             ]);
 
             // Only block activation if critical errors (like invalid JSON)
-            $criticalErrors = array_filter($errors, fn($error) => str_contains((string) $error, 'Invalid theme.json format'));
+            $criticalErrors = array_filter($errors, fn ($error) => str_contains((string) $error, 'Invalid theme.json format'));
 
             if ($criticalErrors !== []) {
                 throw new \Exception('Theme validation failed: '.implode(', ', $criticalErrors));
@@ -177,13 +180,13 @@ class ThemeService
         $this->clearThemeCache($theme);
 
         // Fire after activation hook
-        if ($this->hooks instanceof \Modules\Layout\Services\ThemeHooksService) {
+        if ($this->hooks instanceof ThemeHooksService) {
             $this->hooks->doAction('theme.activated', $theme);
         }
 
         // Sync locations with LayoutRegistry
-        if (app()->bound(\Modules\System\Contracts\LayoutRegistryInterface::class)) {
-            $registry = app(\Modules\System\Contracts\LayoutRegistryInterface::class);
+        if (app()->bound(LayoutRegistryInterface::class)) {
+            $registry = app(LayoutRegistryInterface::class);
             $registry->registerMenuLocations('cms', $this->getMenuLocations($theme));
             $registry->registerWidgetLocations('cms', $this->getWidgetLocations($theme));
         }
@@ -213,7 +216,7 @@ class ThemeService
         // Check current theme settings
         $value = $theme->getSetting($key);
         if ($value !== null) {
-            return $this->hooks instanceof \Modules\Layout\Services\ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
+            return $this->hooks instanceof ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
         }
 
         // Check parent theme if exists
@@ -222,7 +225,7 @@ class ThemeService
             if ($parent instanceof Theme) {
                 $value = $parent->getSetting($key);
                 if ($value !== null) {
-                    return $this->hooks instanceof \Modules\Layout\Services\ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
+                    return $this->hooks instanceof ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
                 }
             }
         }
@@ -236,12 +239,12 @@ class ThemeService
                 if (isset($schema['default'])) {
                     $value = $schema['default'];
 
-                    return $this->hooks instanceof \Modules\Layout\Services\ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
+                    return $this->hooks instanceof ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $value, $theme, $key, $default) : $value;
                 }
             }
         }
 
-        return $this->hooks instanceof \Modules\Layout\Services\ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $default, $theme, $key, $default) : $default;
+        return $this->hooks instanceof ThemeHooksService ? $this->hooks->applyFilter('theme.setting', $default, $theme, $key, $default) : $default;
     }
 
     /**
@@ -371,7 +374,7 @@ class ThemeService
                 if (! is_string($requiredPlugin)) {
                     continue;
                 }
-                $plugin = \Modules\System\Models\Plugin::where('slug', $requiredPlugin)->first();
+                $plugin = Plugin::where('slug', $requiredPlugin)->first();
                 if (! $plugin || ! $plugin->is_active) {
                     return false;
                 }
@@ -438,7 +441,7 @@ class ThemeService
      */
     public function clearThemeCache(?Theme $theme = null): void
     {
-        if ($theme instanceof \Modules\Layout\Models\Theme) {
+        if ($theme instanceof Theme) {
             $this->cache->clearTheme($theme);
         } else {
             $this->cache->clearAll();
@@ -450,7 +453,7 @@ class ThemeService
      */
     public function getThemeDirectory(): string
     {
-        return \Modules\Layout\Support\ThemeViews::rootPath();
+        return ThemeViews::rootPath();
     }
 
     /**
@@ -644,7 +647,7 @@ class ThemeService
     public function getActiveThemePublicPayload(string $type): ?array
     {
         $theme = $this->getActiveTheme($type);
-        if (!$theme instanceof \Modules\Layout\Models\Theme) {
+        if (! $theme instanceof Theme) {
             return null;
         }
 
@@ -654,7 +657,7 @@ class ThemeService
                 ThemeCacheService::TTL_LONG,
                 function () use ($type): array {
                     $fresh = $this->getActiveTheme($type);
-                    if (!$fresh instanceof \Modules\Layout\Models\Theme) {
+                    if (! $fresh instanceof Theme) {
                         throw new \LogicException('no_active_theme');
                     }
                     $this->normalizeThemeDataBindings($fresh);

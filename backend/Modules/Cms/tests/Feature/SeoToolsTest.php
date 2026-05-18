@@ -4,8 +4,8 @@ namespace Modules\Cms\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
-use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
+use Modules\Library\Models\Category;
 use Modules\System\Models\User;
 use Tests\Helpers\TestHelpers;
 use Tests\TestCase;

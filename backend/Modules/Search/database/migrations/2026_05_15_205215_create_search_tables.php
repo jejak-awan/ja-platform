@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -26,7 +27,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['searchable_type', 'searchable_id']);
-            if (\Illuminate\Support\Facades\DB::connection()->getDriverName() !== 'sqlite') {
+            if (DB::connection()->getDriverName() !== 'sqlite') {
                 $table->fulltext(['title', 'content']);
             }
         });

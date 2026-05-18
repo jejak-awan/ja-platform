@@ -2,12 +2,15 @@
 
 namespace Tests;
 
+use Illuminate\Auth\RequestGuard;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Modules\System\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Modules\System\Models\Permission;
 use Modules\System\Models\Role;
+use Modules\System\Models\User;
+use Spatie\Permission\PermissionRegistrar;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -24,7 +27,7 @@ abstract class TestCase extends BaseTestCase
             return;
         }
 
-        $files = glob($dir . '/*.php');
+        $files = glob($dir.'/*.php');
         if (is_array($files)) {
             foreach ($files as $path) {
                 @unlink($path);
@@ -45,7 +48,7 @@ abstract class TestCase extends BaseTestCase
         $this->withSession([]);
 
         // Add viaRemember macro to RequestGuard for AuthenticateSession compatibility
-        \Illuminate\Auth\RequestGuard::macro('viaRemember', function () {
+        RequestGuard::macro('viaRemember', function () {
             return false; // Token-based auth never uses "remember me"
         });
     }
@@ -56,10 +59,10 @@ abstract class TestCase extends BaseTestCase
     protected function seedPermissionsAndRoles(): void
     {
         // Clear cached permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Flush cache to reset rate limiters
-        \Illuminate\Support\Facades\Cache::flush();
+        Cache::flush();
 
         // If permissions already exist, we don't need to seed them again
         if (Permission::exists()) {

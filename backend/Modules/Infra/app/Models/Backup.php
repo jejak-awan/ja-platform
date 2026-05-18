@@ -2,8 +2,9 @@
 
 namespace Modules\Infra\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -14,18 +15,18 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $type
  * @property string $status
  * @property string|null $error_message
- * @property \Illuminate\Support\Carbon|null $completed_at
- * @property \Illuminate\Support\Carbon|null $created_at
+ * @property Carbon|null $completed_at
+ * @property Carbon|null $created_at
  */
 class Backup extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $table = 'infra_backups';
-
 
     protected $fillable = [
         'name',

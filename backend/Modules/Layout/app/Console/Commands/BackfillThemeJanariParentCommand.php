@@ -65,6 +65,7 @@ class BackfillThemeJanariParentCommand extends Command
 
         if ($this->input->isInteractive() && ! $this->confirm('Set parent_theme = "'.$parentSlug.'" untuk '.$candidates->count().' tema di atas?', true)) {
             $this->warn('Dibatalkan.');
+
             return self::SUCCESS;
         }
 

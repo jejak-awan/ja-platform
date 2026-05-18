@@ -2,16 +2,21 @@
 
 namespace Modules\School\Models\Lms;
 
-use Modules\System\Traits\ScopedByWorkspace;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Modules\System\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
+use Modules\School\Models\Academic\AcademicYear;
+use Modules\School\Models\Academic\Department;
+use Modules\School\Models\Academic\Grade;
+use Modules\School\Models\Academic\Semester;
 use Modules\School\Models\Institution\School;
 use Modules\School\Models\Student\Student;
+use Modules\System\Models\User;
+use Modules\System\Traits\ScopedByWorkspace;
 
 /**
  * @property string $id
@@ -33,13 +38,14 @@ use Modules\School\Models\Student\Student;
  * @property string|null $department_id
  * @property string|null $grade_id
  * @property bool $is_global
- * @property-read \Illuminate\Support\Collection<int, \Modules\School\Models\Lms\Lesson> $lessons
+ * @property-read Collection<int, Lesson> $lessons
  */
 class Course extends Model
 {
     use HasUuids;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     use ScopedByWorkspace;
@@ -109,41 +115,41 @@ class Course extends Model
     }
 
     /**
-     * @return BelongsTo<\Modules\School\Models\Academic\AcademicYear, $this>
+     * @return BelongsTo<AcademicYear, $this>
      */
     public function academicYear(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Academic\AcademicYear::class);
+        return $this->belongsTo(AcademicYear::class);
     }
 
     /**
-     * @return BelongsTo<\Modules\School\Models\Academic\Semester, $this>
+     * @return BelongsTo<Semester, $this>
      */
     public function semester(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Academic\Semester::class);
+        return $this->belongsTo(Semester::class);
     }
 
     /**
-     * @return BelongsTo<\Modules\School\Models\Academic\Department, $this>
+     * @return BelongsTo<Department, $this>
      */
     public function department(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Academic\Department::class);
+        return $this->belongsTo(Department::class);
     }
 
     /**
-     * @return BelongsTo<\Modules\School\Models\Academic\Grade, $this>
+     * @return BelongsTo<Grade, $this>
      */
     public function grade(): BelongsTo
     {
-        return $this->belongsTo(\Modules\School\Models\Academic\Grade::class);
+        return $this->belongsTo(Grade::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Student, $this>
+     * @return BelongsToMany<Student, $this>
      */
-    public function students(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function students(): BelongsToMany
     {
         return $this->belongsToMany(Student::class, 'sch_lms_enrollments', 'course_id', 'student_id');
     }

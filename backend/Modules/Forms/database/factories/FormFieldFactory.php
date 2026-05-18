@@ -7,7 +7,7 @@ use Modules\Forms\Models\Form;
 use Modules\Forms\Models\FormField;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Forms\Models\FormField>
+ * @extends Factory<FormField>
  */
 class FormFieldFactory extends Factory
 {

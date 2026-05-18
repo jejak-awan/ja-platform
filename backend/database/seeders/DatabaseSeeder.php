@@ -3,9 +3,13 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\System\Database\Seeders\SystemDatabaseSeeder;
-use Modules\Layout\Database\Seeders\LayoutDatabaseSeeder;
+use Illuminate\Support\Facades\DB;
 use Modules\Cms\Database\Seeders\CmsDatabaseSeeder;
+use Modules\Layout\Database\Seeders\LayoutDatabaseSeeder;
+use Modules\School\Database\Seeders\SchoolDatabaseSeeder;
+use Modules\School\Models\HR\Staff;
+use Modules\System\Database\Seeders\SystemDatabaseSeeder;
+use Modules\System\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,8 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->call(CmsDatabaseSeeder::class);
 
         // Call School module seeder if it exists
-        if (class_exists(\Modules\School\Database\Seeders\SchoolDatabaseSeeder::class)) {
-            $this->call(\Modules\School\Database\Seeders\SchoolDatabaseSeeder::class);
+        if (class_exists(SchoolDatabaseSeeder::class)) {
+            $this->call(SchoolDatabaseSeeder::class);
         }
 
         // Link Super Admin to Primary School Unit (Legacy backup logic)
@@ -29,14 +33,14 @@ class DatabaseSeeder extends Seeder
 
     private function linkSuperAdminToSchool()
     {
-        $admin = \Modules\System\Models\User::where('email', env('SUPER_ADMIN_EMAIL', 'super@jejakawan.com'))->first();
-        $primarySchool = \Illuminate\Support\Facades\DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
+        $admin = User::where('email', env('SUPER_ADMIN_EMAIL', 'super@jejakawan.com'))->first();
+        $primarySchool = DB::table('sch_ins_schools')->where('npsn', '10000001')->first();
         $primaryUnit = $primarySchool
-            ? \Illuminate\Support\Facades\DB::table('sch_ins_levels')->where('school_id', $primarySchool->id)->first()
+            ? DB::table('sch_ins_levels')->where('school_id', $primarySchool->id)->first()
             : null;
 
         if ($admin && $primarySchool && $primaryUnit) {
-            \Modules\School\Models\HR\Staff::withoutGlobalScopes()->updateOrCreate(
+            Staff::withoutGlobalScopes()->updateOrCreate(
                 ['user_id' => $admin->id],
                 [
                     'school_id' => $primarySchool->id,

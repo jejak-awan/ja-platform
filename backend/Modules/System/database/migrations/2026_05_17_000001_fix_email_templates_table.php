@@ -10,10 +10,10 @@ return new class extends Migration
     {
         // Fix sys_email_templates
         Schema::table('sys_email_templates', function (Blueprint $table): void {
-            if (!Schema::hasColumn('sys_email_templates', 'text_body')) {
+            if (! Schema::hasColumn('sys_email_templates', 'text_body')) {
                 $table->longText('text_body')->nullable()->after('body');
             }
-            if (!Schema::hasColumn('sys_email_templates', 'category')) {
+            if (! Schema::hasColumn('sys_email_templates', 'category')) {
                 $table->string('category')->nullable()->after('variables');
             }
         });

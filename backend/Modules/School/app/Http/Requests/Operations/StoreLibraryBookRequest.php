@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\School\Http\Requests\Operations;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreLibraryBookRequest extends FormRequest
 {
     /**
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\System\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 /**
  * File Integrity Monitoring Service.
@@ -59,7 +61,11 @@ class FileIntegrityService
 
             try {
                 $hash = hash_file('sha256', $absolutePath);
-                if ($hash === false) { $stats['errors']++; continue; }
+                if ($hash === false) {
+                    $stats['errors']++;
+
+                    continue;
+                }
 
                 $exists = DB::table('sec_file_integrity_baselines')->where('file_path', $relativePath)->exists();
 
@@ -74,7 +80,7 @@ class FileIntegrityService
                     $stats['updated']++;
                 } else {
                     DB::table('sec_file_integrity_baselines')->insert([
-                        'id' => \Illuminate\Support\Str::uuid()->toString(),
+                        'id' => Str::uuid()->toString(),
                         'file_path' => $relativePath,
                         'hash' => $hash,
                         'file_size' => filesize($absolutePath) ?: 0,
@@ -90,6 +96,7 @@ class FileIntegrityService
                 $stats['errors']++;
             }
         }
+
         return $stats;
     }
 
@@ -119,6 +126,7 @@ class FileIntegrityService
                 $stats['errors']++;
             }
         }
+
         return $stats;
     }
 
@@ -129,23 +137,27 @@ class FileIntegrityService
         if (! file_exists($src)) {
             return false;
         }
-        try { return copy($src, $dest); } catch (\Exception) { return false; }
+        try {
+            return copy($src, $dest);
+        } catch (\Exception) {
+            return false;
+        }
     }
 
     /**
      * Verify the integrity of monitored files.
      *
-     * @param bool $force Force a fresh check bypassing cache
+     * @param  bool  $force  Force a fresh check bypassing cache
      * @return array{ok: int, modified: array<int, array<string, string>>, missing: array<int, array<string, string>>, new: array<int, array<string, string>>, violations: array<int, array<string, string>>}
      */
     public function verify(bool $force = false): array
     {
         if ($force) {
-            \Illuminate\Support\Facades\Cache::forget('file_integrity_verification_result');
+            Cache::forget('file_integrity_verification_result');
         }
 
         /** @var array{ok: int, modified: array<int, array<string, string>>, missing: array<int, array<string, string>>, new: array<int, array<string, string>>, violations: array<int, array<string, string>>} $result */
-        $result = \Illuminate\Support\Facades\Cache::remember('file_integrity_verification_result', 60, function (): array {
+        $result = Cache::remember('file_integrity_verification_result', 60, function (): array {
             $stats = ['ok' => 0, 'modified' => [], 'missing' => [], 'new' => [], 'violations' => []];
             $baselines = DB::table('sec_file_integrity_baselines')->get()->keyBy('file_path');
             $currentFiles = $this->getMonitoredFiles();
@@ -158,6 +170,7 @@ class FileIntegrityService
                     if ($baseline->status !== 'missing') {
                         DB::table('sec_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'missing', 'checked_at' => now()]);
                     }
+
                     continue;
                 }
 
@@ -177,7 +190,7 @@ class FileIntegrityService
             }
 
             foreach ($currentFiles as $path) {
-                if (! isset($baselines[$path]) && file_exists(base_path((string)$path))) {
+                if (! isset($baselines[$path]) && file_exists(base_path((string) $path))) {
                     $stats['new'][] = ['path' => (string) $path, 'detail' => 'New file'];
                     $stats['violations'][] = ['path' => (string) $path, 'status' => 'new', 'detail' => 'New file'];
                 }
@@ -206,6 +219,7 @@ class FileIntegrityService
                 }
             }
         }
+
         return array_unique($files);
     }
 }
