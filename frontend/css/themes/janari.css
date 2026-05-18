@@ -1021,4 +1021,45 @@
     .janari-breadcrumb-current {
         @apply text-[9px] font-black uppercase tracking-[0.3em] text-foreground;
     }
+
+    /* ─── Premium Scrollbar Styling ─── */
+    .theme-janari {
+        scroll-behavior: smooth;
+    }
+
+    .theme-janari::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .theme-janari::-webkit-scrollbar-track {
+        background: hsl(var(--background) / 0.5);
+    }
+
+    .theme-janari::-webkit-scrollbar-thumb {
+        background: hsl(var(--primary) / 0.5);
+        border-radius: 5px;
+        transition: background-color 0.35s cubic-bezier(0.37, 0.01, 0, 0.98);
+    }
+
+    .theme-janari::-webkit-scrollbar-thumb:hover {
+        background: hsl(var(--primary) / 0.8);
+    }
+
+    /* Firefox scrollbar */
+    .theme-janari {
+        scrollbar-color: hsl(var(--primary) / 0.5) hsl(var(--background) / 0.5);
+        scrollbar-width: thin;
+    }
+
+    /* ─── Premium Link & Focus States ─── */
+    .theme-janari a:focus-visible {
+        outline: 2px solid hsl(var(--primary) / 0.5);
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
+
+    .theme-janari button:focus-visible {
+        outline: 2px solid hsl(var(--primary) / 0.5);
+        outline-offset: 2px;
+    }
 }
