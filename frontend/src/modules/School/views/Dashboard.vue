@@ -27,7 +27,7 @@ import { LucideIcon } from '@/shared/components/ui';
 const authStore = useAuthStore();
 
 // Dynamic Dashboard Components
-const SchoolConsoleDashboard = defineAsyncComponent(() => import('@/modules/School/components/dashboard/SchoolConsoleDashboard.vue'));
+const SchoolConsoleDashboard = defineAsyncComponent(() => import('@/modules/School/components/dashboard/SchoolAdminDashboard.vue'));
 const TeacherDashboard = defineAsyncComponent(() => import('@/modules/School/components/dashboard/TeacherDashboard.vue'));
 const StudentDashboard = defineAsyncComponent(() => import('@/modules/School/components/dashboard/StudentDashboard.vue'));
 const OsisDashboard = defineAsyncComponent(() => import('@/modules/School/components/dashboard/OsisDashboard.vue'));

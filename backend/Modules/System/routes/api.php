@@ -21,8 +21,16 @@ use Modules\System\Http\Controllers\Console\TranslationController;
 use Modules\System\Http\Controllers\Console\EmailTemplateController;
 use Modules\System\Http\Controllers\Console\TwoFactorController;
 use Modules\System\Http\Controllers\Console\SystemController;
+use Modules\System\Http\Controllers\Console\CaptchaController;
 
 Route::prefix('v1')->group(function (): void {
+    // Captcha endpoints
+    Route::prefix('captcha')->group(function (): void {
+        Route::get('settings', [CaptchaController::class, 'settings']);
+        Route::get('generate', [CaptchaController::class, 'generate']);
+        Route::post('verify', [CaptchaController::class, 'verify']);
+    });
+
     // Auth & Public (Surface canonical)
     Route::prefix('public/system/auth')->group(function (): void {
         Route::post('login', [AuthController::class, 'login']);
