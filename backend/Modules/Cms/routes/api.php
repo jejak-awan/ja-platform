@@ -80,5 +80,6 @@ Route::prefix('v1')->group(function (): void {
         // Settings
         Route::get('settings', [SettingController::class, 'index'])->middleware('permission:view settings');
         Route::put('settings', [SettingController::class, 'update'])->middleware('permission:edit settings');
+        Route::post('settings/bulk-update', [SettingController::class, 'bulkUpdate'])->middleware('permission:manage settings');
     });
 });
