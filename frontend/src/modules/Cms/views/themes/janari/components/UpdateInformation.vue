@@ -2,11 +2,11 @@
   <section class="py-24 bg-background relative border-y border-border overflow-hidden">
     <!-- Section Header Box -->
     <div class="container mx-auto px-6 mb-16 flex justify-center">
-      <div class="px-8 py-3 border border-border bg-background/95 relative group overflow-hidden">
-        <div class="absolute inset-0 bg-foreground/5 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
-        <div class="flex items-center gap-4 relative z-10">
-          <span class="w-8 h-px bg-primary" />
-          <h2 class="text-xs md:text-sm font-black tracking-[0.5em] uppercase text-foreground">
+      <div class="px-6 py-3 border border-primary/20 bg-primary/5 backdrop-blur-md rounded-full relative group overflow-hidden">
+        <div class="absolute inset-0 bg-primary/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 cubic-bezier(0.37, 0.01, 0, 0.98)" />
+        <div class="flex items-center gap-3 relative z-10">
+          <span class="w-1 h-1 bg-primary rounded-full" />
+          <h2 class="text-xs md:text-sm font-bold tracking-[0.5em] uppercase text-primary">
             Update Information
           </h2>
         </div>
@@ -23,7 +23,7 @@
         >
           <!-- Vertical Label (Absolute Gutter System) -->
           <div class="absolute top-16 left-8 hidden lg:block pointer-events-none">
-            <span class="inline-block [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-xs md:text-sm font-black tracking-[0.3em] uppercase text-foreground/65 group-hover/col:text-foreground transition-colors duration-500">
+            <span class="inline-block [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-xs md:text-sm font-black tracking-[0.3em] uppercase text-foreground/65 group-hover/col:text-foreground transition-colors duration-500 cubic-bezier(0.37, 0.01, 0, 0.98)">
               PENGUMUMAN
             </span>
           </div>
@@ -34,14 +34,14 @@
                 v-for="(item, idx) in announcements" 
                 :key="'ann-'+idx" 
                 :to="item?.url || '#'"
-                class="block group/item info-item w-full p-4 md:p-6 md:-mx-6 border border-transparent transition-all duration-500 hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)] relative z-10"
+                class="block group/item info-item w-full p-4 md:p-6 md:-mx-6 border border-transparent transition-all duration-500 cubic-bezier(0.37, 0.01, 0, 0.98) hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)] relative z-10"
               >
                 <div class="flex items-center justify-between gap-4 mb-3">
                   <div class="flex items-center gap-3">
                     <span class="w-2 h-px bg-foreground/30 group-hover/item:w-4 group-hover/item:bg-primary transition-all duration-500" />
                     <span class="text-[10px] font-bold tracking-[0.15em] text-foreground/80 group-hover/item:text-foreground transition-colors uppercase">{{ item?.date || '' }} update</span>
                   </div>
-                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/85 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-foreground group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300">
+                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/85 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-primary group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300 cubic-bezier(0.37, 0.01, 0, 0.98)">
                     {{ item?.category || 'INFO' }}
                   </span>
                 </div>
@@ -97,14 +97,14 @@
                 v-for="(item, idx) in agenda" 
                 :key="'age-'+idx" 
                 :to="item?.url || '#'"
-                class="block group/item info-item w-full p-4 md:p-6 md:-mx-6 border border-transparent transition-all duration-500 hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)] relative z-10"
+                class="block group/item info-item w-full p-4 md:p-6 md:-mx-6 border border-transparent transition-all duration-500 cubic-bezier(0.37, 0.01, 0, 0.98) hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)] relative z-10"
               >
                 <div class="flex items-center justify-between gap-4 mb-3">
                   <div class="flex items-center gap-3">
                     <span class="w-2 h-px bg-foreground/30 group-hover/item:w-4 group-hover/item:bg-primary transition-all duration-500" />
                     <span class="text-[10px] font-bold tracking-[0.15em] text-foreground/80 group-hover/item:text-foreground transition-colors uppercase">{{ item?.date || '' }} event</span>
                   </div>
-                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/85 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-foreground group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300">
+                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/85 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-primary group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300 cubic-bezier(0.37, 0.01, 0, 0.98)">
                     {{ item?.category || 'INFO' }}
                   </span>
                 </div>
@@ -159,14 +159,14 @@
                 v-for="(item, idx) in holidays" 
                 :key="'hol-'+idx" 
                 :to="item?.url || '#'"
-                class="block group/item info-item w-full p-4 md:p-6 md:-mx-6 border border-transparent transition-all duration-500 hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)] relative z-10"
+                class="block group/item info-item w-full p-4 md:p-6 md:-mx-6 border border-transparent transition-all duration-500 cubic-bezier(0.37, 0.01, 0, 0.98) hover:border-primary/60 hover:bg-primary/5 hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)] relative z-10"
               >
                 <div class="flex items-center justify-between gap-4 mb-3">
                   <div class="flex items-center gap-3">
                     <span class="w-2 h-px bg-foreground/30 group-hover/item:w-4 group-hover/item:bg-primary transition-all duration-500" />
                     <span class="text-[10px] font-bold tracking-[0.15em] text-foreground/80 group-hover/item:text-foreground transition-colors uppercase">{{ item?.date || '' }} day off</span>
                   </div>
-                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/85 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-foreground group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300">
+                  <span class="text-[9px] px-3 py-1 border border-border text-foreground/85 uppercase tracking-[0.2em] shrink-0 group-hover/item:border-primary group-hover/item:text-primary group-hover/item:shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300 cubic-bezier(0.37, 0.01, 0, 0.98)">
                     {{ item?.category || 'INFO' }}
                   </span>
                 </div>
@@ -319,4 +319,3 @@ watch([announcements, agenda, holidays], (newVal, oldVal) => {
 <style scoped>
 /* Scoped adjustments if needed */
 </style>
-

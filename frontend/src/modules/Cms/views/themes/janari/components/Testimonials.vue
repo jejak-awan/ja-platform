@@ -5,7 +5,10 @@
         ref="headerRef"
         class="mb-24"
       >
-        <span class="text-white font-black tracking-[0.5em] uppercase text-[10px] block mb-6">VOICES OF EXCELLENCE</span>
+        <span class="inline-flex items-center px-4 py-2 rounded-full border border-primary/30 bg-primary/5 font-black tracking-[0.5em] uppercase text-[9px] block mb-6 text-primary">
+          <span class="w-1 h-1 bg-primary rounded-full mr-2" />
+          VOICES OF EXCELLENCE
+        </span>
         <h2
           ref="headingRef"
           class="text-5xl md:text-7xl font-heading font-black leading-[0.85] uppercase tracking-tighter text-white"
@@ -16,12 +19,12 @@
 
       <div
         ref="gridRef"
-        class="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/10 divide-y md:divide-y-0 md:divide-x divide-white/10 bg-black"
+        class="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/5 divide-y md:divide-y-0 md:divide-x divide-white/10 bg-black/40 backdrop-blur-sm"
       >
-        <div 
-          v-for="(item, index) in items" 
+        <div
+          v-for="(item, index) in items"
           :key="index"
-          class="motion-testimonial p-12 group hover:bg-primary transition-all duration-700 cursor-default flex flex-col justify-between"
+          class="motion-testimonial p-12 group hover:bg-primary transition-all duration-500 cubic-bezier(0.37, 0.01, 0, 0.98) cursor-default flex flex-col justify-between border-l border-white/5 first:border-l-0"
         >
           <div>
             <div class="relative mb-12">
@@ -32,13 +35,13 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-6 mt-12 border-t border-white/5 pt-8 group-hover:border-primary-foreground/15 transition-colors">
-            <div class="w-14 h-14 border border-white/10 overflow-hidden group-hover:border-primary-foreground/25 shrink-0">
+          <div class="flex items-center gap-6 mt-12 border-t border-white/5 pt-8 group-hover:border-primary-foreground/20 transition-colors duration-500">
+            <div class="w-14 h-14 border border-white/10 overflow-hidden group-hover:border-primary-foreground/30 shrink-0 rounded-lg group-hover:shadow-xl group-hover:shadow-primary/20 transition-all duration-500">
               <img
                 v-if="item.avatar"
                 :src="item.avatar"
                 :alt="item.name"
-                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 cubic-bezier(0.37, 0.01, 0, 0.98)"
                 width="56"
                 height="56"
                 loading="lazy"

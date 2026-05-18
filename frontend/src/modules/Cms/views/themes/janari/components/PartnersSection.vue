@@ -9,13 +9,13 @@
       </h2>
       <div
         ref="marqueeRef"
-        class="flex items-center gap-24 whitespace-nowrap opacity-20 hover:opacity-100 transition-opacity duration-1000"
+        class="flex items-center gap-24 whitespace-nowrap opacity-40 hover:opacity-100 transition-opacity duration-700 cubic-bezier(0.37, 0.01, 0, 0.98)"
       >
         <!-- Duplicate items natively for seamless marquee loop -->
         <div
           v-for="(partner, idx) in [...items, ...items]"
           :key="partner.name + idx"
-          class="grayscale hover:grayscale-0 transition-all cursor-pointer"
+          class="grayscale hover:grayscale-0 transition-all duration-500 cubic-bezier(0.37, 0.01, 0, 0.98) cursor-pointer transform hover:scale-110"
         >
           <img
             v-if="partner.image"
