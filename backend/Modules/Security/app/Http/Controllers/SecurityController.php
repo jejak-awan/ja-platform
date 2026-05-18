@@ -404,7 +404,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
                 $this->securityService->getShieldTrustTtlMinutes(),
                 null, 
                 null, 
-                true, // Secure
+                request()->secure(), // Secure (only true on HTTPS)
                 true  // HttpOnly
             );
         }
