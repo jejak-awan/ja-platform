@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import { CmsService } from '@/modules/Cms/services/cmsService';
 import type { CMSState, Content } from '@/modules/Cms/types/cms';
+import { useSystemStore } from '@/modules/System/stores/system';
 
 
 export const useCmsStore = defineStore('cms', {
@@ -111,7 +112,15 @@ export const useCmsStore = defineStore('cms', {
         async fetchPublicSettings() {
             if (this.publicSettingsLoaded) return this.settings;
             try {
-                // Fetch basic CMS and Layout settings as "public" settings
+                if (!this.isAuthenticatedLocally()) {
+                    // Skip fetching /manage/ endpoints for guest users to prevent 401 redirect loops.
+                    // Instead, fetch canonical public settings.
+                    const systemStore = useSystemStore();
+                    await systemStore.fetchPublicSettings();
+                    this.publicSettingsLoaded = true;
+                    return this.settings;
+                }
+                // Fetch basic CMS and Layout settings as "public" settings (when logged in)
                 await Promise.all([
                     this.fetchSettingsGroup('cms'),
                     this.fetchSettingsGroup('layout')

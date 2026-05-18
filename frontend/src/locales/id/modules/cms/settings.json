@@ -43,6 +43,10 @@
             "title": "Pengaturan Diskusi",
             "description": "Konfigurasi sistem komentar"
         },
+        "moderation": {
+            "title": "Pengaturan Moderasi & Keamanan",
+            "description": "Konfigurasi kebijakan moderasi komentar, proteksi spam, dan captcha"
+        },
         "meta": {
             "title": "Tag Meta SEO",
             "description": "Konfigurasi default metadata dan kata kunci untuk SEO"

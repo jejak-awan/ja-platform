@@ -43,6 +43,10 @@
             "title": "Discussion Settings",
             "description": "Configure comment system behavior"
         },
+        "moderation": {
+            "title": "Moderation & Security Settings",
+            "description": "Configure comment moderation policies, spam protection, and captchas"
+        },
         "meta": {
             "title": "Meta Tags",
             "description": "Configure default metadata and keywords for SEO"

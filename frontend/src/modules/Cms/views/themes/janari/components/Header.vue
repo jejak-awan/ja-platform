@@ -445,7 +445,7 @@
               <ChevronRight class="w-3 h-3" /> Profile
             </router-link>
             <router-link
-              to="/kontak"
+              to="/contact"
               class="flex items-center gap-3 text-primary-foreground/70 hover:text-primary-foreground text-sm"
               @click="isOpen = false"
             >

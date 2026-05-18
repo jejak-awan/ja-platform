@@ -42,7 +42,7 @@
             KEMBALI KE BERANDA
           </router-link>
           <router-link
-            to="/kontak"
+            to="/contact"
             class="text-[10px] font-black tracking-[0.3em] uppercase text-foreground/40 hover:text-primary transition-colors"
           >
             HUBUNGI ADMIN

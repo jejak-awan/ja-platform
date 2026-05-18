@@ -146,6 +146,27 @@ This report documents the fundamental and comprehensive fixes applied to stabili
 
 ---
 
+### K. Missing Discussion Moderation Translations
+- **Root Cause:** Raw key leakages (`modules.cms.settings.groups.moderation.title` & `modules.cms.settings.groups.moderation.description`) were visible in the Discussion Moderation Settings group due to missing i18n translation strings under the `"moderation"` block.
+- **Solution:** Added corresponding translation keys for both English (`frontend/src/locales/en/modules/cms/settings.json`) and Indonesian (`frontend/src/locales/id/modules/cms/settings.json`) locales.
+
+### L. Unauthorized Redirect Loop on Public Contact / Kontak Pages for Guests
+- **Root Cause:**
+  1. The CMS settings and layout data hydration method `cmsStore.fetchPublicSettings()` executed protected `/api/v1/manage/system/settings/group/cms` and `/api/v1/manage/system/settings/group/layout` API endpoints.
+  2. Because guest users do not have active sessions or tokens, these `/manage/` endpoints returned `401 Unauthorized` responses.
+  3. These unauthorized responses triggered the global Axios client interceptor to force-redirect the guest browser to the sign-in page `/auth/portal-sign-in`.
+- **Solution:** Modified the `fetchPublicSettings()` action in [cms.ts](file:///opt/ja-platform/frontend/src/modules/Cms/stores/cms.ts) to verify local authentication (`isAuthenticatedLocally()`) before requesting protected endpoints. If unauthenticated, it seamlessly bypasses them and utilizes `systemStore.fetchPublicSettings()` to load the necessary public site identity settings without triggering 401 redirect loops.
+
+### M. Hardcoded Indonesian Path `/kontak` in Mobile Header & Page Disabled Links
+- **Root Cause:** The desktop navigation loaded correct routes, but the mobile menu in `Header.vue` and the admin link in `PageDisabled.vue` targeted a hardcoded Indonesian path `/kontak`. Since `/kontak` was resolved dynamically as a generic page route `:slug` with no explicit public access flags, it caused routing and layout inconsistencies.
+- **Solution:** Swapped the hardcoded mobile and fallback links to the canonical public route path `/contact`.
+
+### N. Laravel Log Append Write Permission Block (`Operation not permitted`)
+- **Root Cause:** Active runtime log files under `backend/storage/logs/` (such as `laravel-2026-05-18.log`) were owned by the `root` user after executing system seeds/tests from the console. Because the web server process runs as `nginx`, it threw an "Operation not permitted" permission block when attempting to write to or `chmod()` log files.
+- **Solution:** Corrected the ownership of `/opt/ja-platform/backend/storage/logs` to `nginx:nginx` with strict `775` permissions, completely resolving the logging permissions bug.
+
+---
+
 ## 3. Verification & Diagnostic Logs
 
 ### Route Registry Output
