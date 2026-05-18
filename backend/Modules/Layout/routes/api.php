@@ -40,6 +40,16 @@ Route::prefix('v1')->group(function (): void {
         Route::post('themes/{theme}/activate', [ThemeController::class, 'activate']);
         Route::post('themes/scan', [ThemeController::class, 'scan']);
         Route::post('themes/install', [ThemeController::class, 'install']);
+        
+        // Theme Customization & Metadata API Endpoints
+        Route::match(['put', 'patch'], 'themes/{theme}/customization', [ThemeController::class, 'updateCustomization']);
+        Route::match(['put', 'patch'], 'themes/{theme}/settings', [ThemeController::class, 'updateSettings']);
+        Route::match(['put', 'patch'], 'themes/{theme}/custom-css', [ThemeController::class, 'updateCustomCss']);
+        Route::get('themes/{theme}/components', [ThemeController::class, 'getComponents']);
+        Route::get('themes/{theme}/config', [ThemeController::class, 'getConfig']);
+        Route::get('themes/{theme}/composables', [ThemeController::class, 'getComposables']);
+        Route::post('themes/{theme}/validate', [ThemeController::class, 'validate']);
+        
         Route::apiResource('themes', ThemeController::class);
     });
 });

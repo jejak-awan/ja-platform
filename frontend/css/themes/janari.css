@@ -1061,7 +1061,7 @@
         border-radius: 2px;
     }
 
-    .theme-janari button:focus-visible {
+    .theme-janari button:not([class*="bg-transparent"]):focus-visible {
         outline: 2px solid hsl(var(--primary) / 0.5);
         outline-offset: 2px;
     }
