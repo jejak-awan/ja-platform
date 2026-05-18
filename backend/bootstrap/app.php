@@ -74,6 +74,11 @@ return Application::configure(basePath: dirname(__DIR__))
             '*/security/crep-collect*',
             'cdn-cgi/*',
         ]);
+
+        // Exempt Bot Shield cookie from encryption so early-stage middleware can read it
+        $middleware->encryptCookies(except: [
+            'shield_trust',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Advanced 429 response (Parity with ja-cms)
