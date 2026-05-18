@@ -97,7 +97,7 @@ const handleSubmit = async () => {
   
   loading.value = true;
   try {
-    await api.post('/admin/logistics/transport/vehicles', form.value);
+    await api.post('/manage/school/logistics/transport/vehicles', form.value);
     toast.success.action('Kendaraan berhasil didaftarkan');
     emit('save');
     emit('update:open', false);

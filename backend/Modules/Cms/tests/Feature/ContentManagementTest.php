@@ -536,4 +536,40 @@ class ContentManagementTest extends TestCase
             $this->assertDatabaseMissing('cms_contents', ['id' => $c->id]);
         }
     }
+
+    /**
+     * Test admin can search content by spaced or unformatted UUID.
+     */
+    public function test_admin_can_search_content_by_spaced_or_unformatted_uuid(): void
+    {
+        $admin = $this->createAdminUser();
+        $this->actingAs($admin, 'sanctum');
+
+        $content = Content::factory()->create([
+            'title' => 'Completely Random Title',
+            'body' => 'Random body text.',
+        ]);
+
+        $uuid = $content->id; // Format: 019e3699-78f2-72c6-9d31-f945474fd69d
+        
+        // 1. Search by exact UUID
+        $response = $this->getJson("/api/v1/manage/cms/contents?search={$uuid}");
+        TestHelpers::assertApiPaginated($response);
+        $this->assertCount(1, $response->json('data.data'));
+        $this->assertEquals($content->id, $response->json('data.data.0.id'));
+
+        // 2. Search by spaced UUID (019e3699 78f2 72c6 9d31 f945474fd69d)
+        $spacedUuid = str_replace('-', ' ', $uuid);
+        $responseSpaced = $this->getJson("/api/v1/manage/cms/contents?search={$spacedUuid}");
+        TestHelpers::assertApiPaginated($responseSpaced);
+        $this->assertCount(1, $responseSpaced->json('data.data'));
+        $this->assertEquals($content->id, $responseSpaced->json('data.data.0.id'));
+
+        // 3. Search by unformatted raw hex UUID (019e369978f272c69d31f945474fd69d)
+        $rawUuid = str_replace('-', '', $uuid);
+        $responseRaw = $this->getJson("/api/v1/manage/cms/contents?search={$rawUuid}");
+        TestHelpers::assertApiPaginated($responseRaw);
+        $this->assertCount(1, $responseRaw->json('data.data'));
+        $this->assertEquals($content->id, $responseRaw->json('data.data.0.id'));
+    }
 }

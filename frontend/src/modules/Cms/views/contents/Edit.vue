@@ -205,7 +205,7 @@ import {
 } from '@/shared/components/ui';
 import ActionToolbar from '@/modules/Cms/components/content/ActionToolbar.vue';
 import AutoSaveIndicator from '@/shared/components/AutoSaveIndicator.vue';
-import ContentPreviewModal from '@/modules/System/components/admin/ContentPreviewModal.vue';
+import ContentPreviewModal from '@/modules/System/components/console/ContentPreviewModal.vue';
 import ContentMain from '@/modules/Cms/components/content/ContentMain.vue';
 import ContentSidebar from '@/modules/Cms/components/content/ContentSidebar.vue';
 

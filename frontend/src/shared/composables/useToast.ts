@@ -1,5 +1,5 @@
 import { useI18n } from 'vue-i18n';
-import toast from '@/shared/services/legacy-toast';
+import toast from '@/shared/services/toastService';
 
 interface ToastSuccessHandlers {
     create: (item?: string) => void;

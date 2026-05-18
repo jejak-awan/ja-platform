@@ -1,4 +1,3 @@
-import '@/engine/legacy-bootstrap';
 import '../../../css/themes/janari.css';
 import '../../../css/base.css';
 
@@ -43,7 +42,7 @@ async function bootstrap() {
 
     if (resolveIsAdminEntrypoint(pathname) && window.__JA_GATE__ !== 'admin') {
         // Redirect to admin gate
-        window.location.href = `/admin.html${window.location.search || ''}`;
+        window.location.href = `/console.html${window.location.search || ''}`;
         return;
     }
 

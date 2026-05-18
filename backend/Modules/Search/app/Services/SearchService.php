@@ -125,13 +125,36 @@ class SearchService
      */
     protected function applySearchLogic($queryBuilder, $query, bool $strict = true): void
     {
+        $queryTrim = trim($query);
+        $cleanQuery = preg_replace('/[^a-zA-Z0-9]/', '', $queryTrim);
+        $isUuid = false;
+        $uuidQuery = $queryTrim;
+        if (is_string($cleanQuery) && preg_match('/^[0-9a-fA-F]{32}$/', $cleanQuery)) {
+            $isUuid = true;
+            $uuidQuery = sprintf(
+                '%s-%s-%s-%s-%s',
+                substr($cleanQuery, 0, 8),
+                substr($cleanQuery, 8, 4),
+                substr($cleanQuery, 12, 4),
+                substr($cleanQuery, 16, 4),
+                substr($cleanQuery, 20, 12)
+            );
+        }
+
         if (config('database.default') === 'mysql' || config('database.default') === 'mariadb') {
             $prepared = $this->prepareSearchQuery($query, $strict);
             if ($prepared !== '' && $prepared !== '0') {
-                $queryBuilder->whereRaw(
-                    'MATCH(title, content) AGAINST(? IN BOOLEAN MODE)',
-                    [$prepared]
-                );
+                $queryBuilder->where(function ($q) use ($prepared, $isUuid, $uuidQuery): void {
+                    $q->whereRaw(
+                        'MATCH(title, content) AGAINST(? IN BOOLEAN MODE)',
+                        [$prepared]
+                    );
+                    if ($isUuid) {
+                        $q->orWhere('searchable_id', $uuidQuery);
+                    }
+                });
+            } elseif ($isUuid) {
+                $queryBuilder->where('searchable_id', $uuidQuery);
             }
         } else {
             // Fallback for SQLite/PostgreSQL (use ILIKE for PostgreSQL case-insensitivity)
@@ -144,25 +167,44 @@ class SearchService
                 $chars = str_split(is_string($normalized) ? $normalized : '');
                 $fuzzyQuery = '%' . implode('%', $chars) . '%';
                 
-                $queryBuilder->where(function ($q) use ($fuzzyQuery, $operator): void {
+                $queryBuilder->where(function ($q) use ($fuzzyQuery, $operator, $isUuid, $uuidQuery): void {
                     $q->where('title', $operator, $fuzzyQuery)
                         ->orWhere('content', $operator, $fuzzyQuery);
+                    if ($isUuid) {
+                        $q->orWhere('searchable_id', $uuidQuery);
+                    }
                 });
                 return;
             }
 
             $terms = explode(' ', $query);
-            $queryBuilder->where(function ($q) use ($terms, $strict, $operator): void {
-                foreach ($terms as $term) {
-                    if ($strict) {
-                        $q->where(function ($sub) use ($term, $operator): void {
-                            $sub->where('title', $operator, "%{$term}%")
-                                ->orWhere('content', $operator, "%{$term}%");
-                        });
-                    } else {
-                        $q->orWhere('title', $operator, "%{$term}%")
-                            ->orWhere('content', $operator, "%{$term}%");
+            $queryBuilder->where(function ($q) use ($terms, $strict, $operator, $isUuid, $uuidQuery): void {
+                $q->where(function ($inner) use ($terms, $strict, $operator): void {
+                    foreach ($terms as $term) {
+                        // Gather synonyms and stemmed base for each search term
+                        $stemsAndSynonyms = $this->getSynonyms($term);
+                        $stemmed = $this->stemIndonesian($term);
+                        if (!in_array($stemmed, $stemsAndSynonyms, true)) {
+                            $stemsAndSynonyms[] = $stemmed;
+                        }
+
+                        if ($strict) {
+                            $inner->where(function ($sub) use ($stemsAndSynonyms, $operator): void {
+                                foreach ($stemsAndSynonyms as $syn) {
+                                    $sub->orWhere('title', $operator, "%{$syn}%")
+                                        ->orWhere('content', $operator, "%{$syn}%");
+                                }
+                            });
+                        } else {
+                            foreach ($stemsAndSynonyms as $syn) {
+                                $inner->orWhere('title', $operator, "%{$syn}%")
+                                    ->orWhere('content', $operator, "%{$syn}%");
+                            }
+                        }
                     }
+                });
+                if ($isUuid) {
+                    $q->orWhere('searchable_id', $uuidQuery);
                 }
             });
         }
@@ -212,20 +254,70 @@ class SearchService
      */
     public function getSuggestions($query, $limit = 5, array $filters = []): array
     {
-        if (in_array(trim($query), ['', '0'], true)) {
+        $queryClean = trim($query);
+        if (in_array($queryClean, ['', '0'], true)) {
             return [];
         }
 
-        $queryClean = trim($query);
+        // Fetch user's personal recent search history matching the prefix
+        $historySuggestions = [];
+        $userId = \Illuminate\Support\Facades\Auth::id();
+        $ip = \Modules\System\Helpers\IpHelper::getClientIp(request());
+        
+        $historyQuery = SearchQuery::query();
+        if ($userId) {
+            $historyQuery->where('user_id', $userId);
+        } else {
+            $historyQuery->where('ip_address', $ip);
+        }
+
+        $driver = config('database.default');
+        $historyQueryTerm = $driver === 'pgsql' ? "%{$queryClean}%" : "%" . mb_strtolower($queryClean, 'UTF-8') . "%";
+        if ($driver === 'pgsql') {
+            $historyQuery->where('query', 'ILIKE', $historyQueryTerm);
+        } else {
+            $historyQuery->whereRaw('LOWER(query) LIKE ?', [$historyQueryTerm]);
+        }
+
+        $historyLogs = $historyQuery->select('query')
+            ->distinct()
+            ->limit(3)
+            ->get();
+
+        foreach ($historyLogs as $log) {
+            $queryText = is_scalar($log->getAttribute('query')) ? (string) $log->getAttribute('query') : '';
+            $historySuggestions[] = [
+                'text' => $queryText,
+                'type' => 'history',
+                'url' => '/ja-dash/search?q=' . urlencode($queryText),
+            ];
+        }
+        $cleanQuery = preg_replace('/[^a-zA-Z0-9]/', '', $queryClean);
+        $isUuid = false;
+        $uuidQuery = $queryClean;
+        if (is_string($cleanQuery) && preg_match('/^[0-9a-fA-F]{32}$/', $cleanQuery)) {
+            $isUuid = true;
+            $uuidQuery = sprintf(
+                '%s-%s-%s-%s-%s',
+                substr($cleanQuery, 0, 8),
+                substr($cleanQuery, 8, 4),
+                substr($cleanQuery, 12, 4),
+                substr($cleanQuery, 16, 4),
+                substr($cleanQuery, 20, 12)
+            );
+        }
         $driver = config('database.default');
 
         // 1. Primary: Case-Insensitive search (ILIKE for PostgreSQL, LIKE for MySQL)
         if ($driver === 'pgsql') {
             // PostgreSQL: Use ILIKE (native case-insensitive)
             $suggestionQuery = SearchIndex::query();
-            $suggestionQuery->where(function ($q) use ($queryClean): void {
+            $suggestionQuery->where(function ($q) use ($queryClean, $isUuid, $uuidQuery): void {
                 $q->where('title', 'ILIKE', "%{$queryClean}%")
                     ->orWhere('content', 'ILIKE', "%{$queryClean}%");
+                if ($isUuid) {
+                    $q->orWhere('searchable_id', $uuidQuery);
+                }
             });
             $this->applyFilters($suggestionQuery, $filters);
             $suggestions = $suggestionQuery
@@ -237,9 +329,12 @@ class SearchService
             // MySQL/MariaDB: Use LOWER + LIKE
             $queryLower = mb_strtolower($queryClean, 'UTF-8');
             $suggestionQuery = SearchIndex::query();
-            $suggestionQuery->where(function ($q) use ($queryLower): void {
+            $suggestionQuery->where(function ($q) use ($queryLower, $isUuid, $uuidQuery): void {
                 $q->whereRaw('LOWER(title) LIKE ?', ["%{$queryLower}%"])
                     ->orWhereRaw('LOWER(content) LIKE ?', ["%{$queryLower}%"]);
+                if ($isUuid) {
+                    $q->orWhere('searchable_id', $uuidQuery);
+                }
             });
             $this->applyFilters($suggestionQuery, $filters);
             $suggestions = $suggestionQuery
@@ -347,7 +442,19 @@ class SearchService
             ];
         })->toArray();
 
-        return $result;
+        // Merge personal search history at the very top and deduplicate names
+        $merged = array_merge($historySuggestions, $result);
+        $unique = [];
+        $seen = [];
+        foreach ($merged as $item) {
+            $key = mb_strtolower($item['text'], 'UTF-8');
+            if (!in_array($key, $seen, true)) {
+                $seen[] = $key;
+                $unique[] = $item;
+            }
+        }
+
+        return array_slice($unique, 0, $limit);
     }
 
     /**
@@ -364,10 +471,20 @@ class SearchService
         foreach ($terms as $term) {
             $term = trim($term);
             if (strlen($term) >= 2) {
-                // Strict: +term* (must contain term)
-                // Loose: term* (optional)
+                // Gather synonyms and stemmed base
+                $stemsAndSynonyms = $this->getSynonyms($term);
+                $stemmed = $this->stemIndonesian($term);
+                if (!in_array($stemmed, $stemsAndSynonyms, true)) {
+                    $stemsAndSynonyms[] = $stemmed;
+                }
+
+                $groupedTerms = [];
+                foreach ($stemsAndSynonyms as $syn) {
+                    $groupedTerms[] = "{$syn}*";
+                }
+
                 $prefix = $strict ? '+' : '';
-                $prepared[] = "{$prefix}{$term}*";
+                $prepared[] = "{$prefix}(" . implode(' ', $groupedTerms) . ")";
             }
         }
 
@@ -421,9 +538,144 @@ class SearchService
     }
 
     /**
+     * Dynamically crawls and indexes all frontend navigation menu items as system pages
+     *
+     * @return int
+     */
+    public function indexSystemPages(): int
+    {
+        $workspaceId = \Illuminate\Support\Facades\Context::get('workspace_id');
+        $modulesPath = base_path('../frontend/src/modules');
+        
+        if (!is_dir($modulesPath)) {
+            // Fallback to absolute path if base_path is not matching
+            $modulesPath = '/opt/ja-platform/frontend/src/modules';
+        }
+
+        $files = glob("{$modulesPath}/*/navigation.ts");
+        if (!$files) {
+            return 0;
+        }
+
+        $indexedCount = 0;
+
+        foreach ($files as $file) {
+            $content = file_get_contents($file);
+            if (!$content) {
+                continue;
+            }
+
+            // Extract the array block: everything between first [ and last ]
+            $startPos = strpos($content, '[');
+            $endPos = strrpos($content, ']');
+            if ($startPos === false || $endPos === false) {
+                continue;
+            }
+
+            $arrayStr = substr($content, $startPos, $endPos - $startPos + 1);
+
+            // Extract objects that have both "to:" and "label:" fields
+            preg_match_all('/\{\s*([^{}]+)\s*\}/s', $arrayStr, $matches);
+
+            if (empty($matches[1])) {
+                continue;
+            }
+
+            foreach ($matches[1] as $objStr) {
+                // Parse properties inside the object string using clean regexes
+                preg_match('/to\s*:\s*[\'"]([^\'"]+)[\'"]/', $objStr, $toMatch);
+                preg_match('/label\s*:\s*[\'"]([^\'"]+)[\'"]/', $objStr, $labelMatch);
+                preg_match('/permission\s*:\s*[\'"]([^\'"]+)[\'"]/', $objStr, $permMatch);
+                preg_match('/name\s*:\s*[\'"]([^\'"]+)[\'"]/', $objStr, $nameMatch);
+
+                if (!empty($toMatch[1]) && !empty($labelMatch[1])) {
+                    $url = $toMatch[1];
+                    $label = $labelMatch[1];
+                    $permission = $permMatch[1] ?? null;
+                    $name = $nameMatch[1] ?? $label;
+
+                    // Normalize frontend /dash/... to backend admin /ja/dash/... prefix
+                    $adminUrl = str_starts_with($url, '/dash') ? '/ja' . $url : $url;
+
+                    // Generate a stable, deterministic UUID from the URL path to ensure PostgreSQL UUID compatibility
+                    $hash = md5($url);
+                    $uuid = sprintf(
+                        '%s-%s-%s-%s-%s',
+                        substr($hash, 0, 8),
+                        substr($hash, 8, 4),
+                        substr($hash, 12, 4),
+                        substr($hash, 16, 4),
+                        substr($hash, 20, 12)
+                    );
+
+                    // Build a comprehensive keywords content string
+                    $keywords = [
+                        'System Page', 'Admin Settings', 'Menu', 'Navigation',
+                        $label, $name, $permission,
+                    ];
+                    
+                    // Split the label into words
+                    $labelWords = explode(' ', $label);
+                    foreach ($labelWords as $word) {
+                        $wordClean = trim((string) preg_replace('/[^a-zA-Z0-9]/', '', $word));
+                        if (strlen($wordClean) >= 2) {
+                            $keywords[] = $wordClean;
+                        }
+                    }
+
+                    // Special custom keywords based on paths
+                    if (str_contains($url, 'security') || str_contains($url, 'journal')) {
+                        $keywords[] = 'shield';
+                        $keywords[] = 'botshield';
+                        $keywords[] = 'bot-shield';
+                        $keywords[] = 'firewall';
+                        $keywords[] = 'integrity';
+                        $keywords[] = 'vulnerabilities';
+                    }
+                    if (str_contains($url, 'backup')) {
+                        $keywords[] = 'restore';
+                        $keywords[] = 'recovery';
+                    }
+                    if (str_contains($url, 'redis') || str_contains($url, 'settings')) {
+                        $keywords[] = 'cache';
+                        $keywords[] = 'clear';
+                        $keywords[] = 'warming';
+                    }
+
+                    $contentKeywords = implode(', ', array_unique($keywords));
+
+                    SearchIndex::updateOrCreate(
+                        [
+                            'searchable_type' => 'SystemPage',
+                            'searchable_id' => $uuid,
+                        ],
+                        [
+                            'workspace_id' => $workspaceId,
+                            'title' => $label,
+                            'content' => $contentKeywords,
+                            'excerpt' => "Access the {$label} administrative panel and settings.",
+                            'url' => $adminUrl,
+                            'type' => 'page',
+                            'meta' => [
+                                'permission' => $permission,
+                                'frontend_route' => $url,
+                            ],
+                            'relevance_score' => 500, // High ranking relevance for admin shortcuts
+                        ]
+                    );
+
+                    $indexedCount++;
+                }
+            }
+        }
+
+        return $indexedCount;
+    }
+
+    /**
      * Reindex all searchable items
      *
-     * @return array{contents: int, categories: int, tags: int}
+     * @return array<string, int>
      */
     public function reindexAll(): array
     {
@@ -445,10 +697,86 @@ class SearchService
             $this->sync($tag);
         }
 
+        // Reindex system administrative pages
+        $systemPagesCount = $this->indexSystemPages();
+
         return [
             'cms_contents' => $contents->count(),
             'cms_categories' => $categories->count(),
             'cms_tags' => $tags->count(),
+            'system_pages' => $systemPagesCount,
         ];
+    }
+
+    /**
+     * Get synonyms for a given search term
+     *
+     * @param string $term
+     * @return array<int, string>
+     */
+    protected function getSynonyms(string $term): array
+    {
+        $termLower = mb_strtolower($term, 'UTF-8');
+        
+        $synonymGroups = [
+            ['keamanan', 'security', 'firewall', 'shield', 'botshield', 'bot-shield', 'proteksi', 'integrity'],
+            ['artikel', 'konten', 'post', 'tulisan', 'berita', 'cms', 'studio', 'naskah'],
+            ['kategori', 'category', 'rubrik', 'klasifikasi', 'grup'],
+            ['user', 'pengguna', 'admin', 'anggota', 'akun', 'profil', 'staff'],
+            ['log', 'journal', 'catatan', 'audit', 'riwayat', 'logs', 'journals', 'aktivitas'],
+            ['backup', 'restore', 'cadangan', 'pulihkan', 'arsip', 'recovery'],
+            ['cache', 'warming', 'bersihkan', 'clear', 'speed', 'performa', 'optimasi'],
+            ['analisis', 'analytics', 'statistik', 'laporan', 'traffic', 'pengunjung', 'visitor']
+        ];
+
+        $results = [$term];
+
+        foreach ($synonymGroups as $group) {
+            if (in_array($termLower, $group, true)) {
+                $results = array_merge($results, $group);
+                break;
+            }
+        }
+
+        return array_values(array_unique($results));
+    }
+
+    /**
+     * Stem common Indonesian suffixes from a search term
+     *
+     * @param string $term
+     * @return string
+     */
+    protected function stemIndonesian(string $term): string
+    {
+        $termLower = mb_strtolower($term, 'UTF-8');
+        
+        // Only stem words with a length greater than 4 characters to avoid over-stemming
+        if (mb_strlen($termLower, 'UTF-8') <= 4) {
+            return $term;
+        }
+
+        // 1. Strip possessive pronouns: -nya, -mu, -ku
+        if (str_ends_with($termLower, 'nya')) {
+            $termLower = substr($termLower, 0, -3);
+        } elseif (str_ends_with($termLower, 'mu') || str_ends_with($termLower, 'ku')) {
+            $termLower = substr($termLower, 0, -2);
+        }
+
+        // Re-check length
+        if (mb_strlen($termLower, 'UTF-8') <= 4) {
+            return $termLower;
+        }
+
+        // 2. Strip common suffixes: -kan, -an, -i
+        if (str_ends_with($termLower, 'kan')) {
+            $termLower = substr($termLower, 0, -3);
+        } elseif (str_ends_with($termLower, 'an')) {
+            $termLower = substr($termLower, 0, -2);
+        } elseif (str_ends_with($termLower, 'i')) {
+            $termLower = substr($termLower, 0, -1);
+        }
+
+        return $termLower;
     }
 }

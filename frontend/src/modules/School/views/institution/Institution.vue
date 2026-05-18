@@ -429,7 +429,7 @@ const unitForm = ref<any>({
 onMounted(async () => {
   loading.value = true;
   try {
-    // Initial data should already be loaded by AdminLayout.
+    // Initial data should already be loaded by ConsoleLayout.
     // We just need to ensure the local form is populated.
     if (school.value) {
       Object.assign(identityForm.value, school.value);
@@ -438,7 +438,7 @@ onMounted(async () => {
         selectedUnitId.value = String(firstLevel.id);
       }
     } else {
-        // Fallback for direct deep links if AdminLayout hasn't finished
+        // Fallback for direct deep links if ConsoleLayout hasn't finished
         await schoolStore.fetchSchools();
         // Re-read from the store directly to avoid TS narrowing from the outer `if`
         const freshSchool = schoolStore.schools.length > 0 ? schoolStore.schools[0] : null;

@@ -45,7 +45,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         public: resolve(__dirname, 'index.html'),
-        admin: resolve(__dirname, 'admin.html'),
+        console: resolve(__dirname, 'console.html'),
       },
       output: {
         chunkFileNames: 'assets/[hash].js',

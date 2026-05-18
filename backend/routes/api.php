@@ -14,14 +14,14 @@ Route::prefix('v1/install')->group(function () {
 |--------------------------------------------------------------------------
 |
 | All API routes have been moved to their respective modules:
-| - Modules/Core/routes/api.php
+| - Modules/System/routes/api.php
 | - Modules/Cms/routes/api.php
 | - Modules/School/routes/api.php
 |*/
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Modules\Core\Http\Controllers\Api\AuthController;
+use Modules\System\Http\Controllers\Console\AuthController;
 
 /*
 | Legacy entrypoint: same JSON contract as GET /api/v1/user (canonical for SPA).

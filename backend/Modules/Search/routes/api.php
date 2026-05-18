@@ -15,6 +15,8 @@ Route::prefix('v1')->group(function (): void {
     // Manage API
     Route::middleware(['auth:sanctum'])->prefix('manage/search')->group(function (): void {
         Route::get('queries', [SearchController::class, 'getQueries']);
+        Route::delete('queries/{id}', [SearchController::class, 'deleteQuery']);
+        Route::post('queries/clear', [SearchController::class, 'clearQueries']);
         Route::post('reindex', [SearchController::class, 'reindex']);
         Route::get('stats', [SearchController::class, 'getStats']);
     });

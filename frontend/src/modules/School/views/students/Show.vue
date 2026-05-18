@@ -359,7 +359,7 @@ const fetchData = async () => {
 
 const handlePrint = () => {
   if (!student.value) return;
-  window.open(`${api.defaults.baseURL}/admin/reports/students/${student.value.id}/pdf`, '_blank');
+  window.open(`${api.defaults.baseURL}/manage/school/reports/students/${student.value.id}/pdf`, '_blank');
 };
 
 onMounted(fetchData);

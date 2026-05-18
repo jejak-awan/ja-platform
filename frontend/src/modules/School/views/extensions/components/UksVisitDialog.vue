@@ -104,7 +104,7 @@ watch(() => props.initialData, (val) => {
 
 const fetchPatients = async () => {
     try {
-        const response = await api.get('/admin/students?per_page=100');
+        const response = await api.get('/manage/school/students?per_page=100');
         const { data } = parseResponse(response);
         patients.value = data || [];
     } catch (e) {

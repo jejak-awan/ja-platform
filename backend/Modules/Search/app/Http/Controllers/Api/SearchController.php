@@ -116,4 +116,53 @@ class SearchController extends BaseApiController
             'indexed' => $result,
         ], 'Search index rebuilt successfully');
     }
+
+    public function deleteQuery(string $id): \Illuminate\Http\JsonResponse
+    {
+        $userId = \Illuminate\Support\Facades\Auth::id();
+        $ip = \Modules\System\Helpers\IpHelper::getClientIp(request());
+
+        $query = SearchQuery::query();
+        
+        // If the parameter is a UUID, delete that specific row. Otherwise, delete all occurrences of that query term.
+        if (preg_match('/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/', $id)) {
+            $query->where('id', $id);
+        } else {
+            $query->where('query', $id);
+        }
+
+        // Scope the deletion to only the current user or active client IP
+        if ($userId) {
+            $query->where('user_id', $userId);
+        } else {
+            $query->where('ip_address', $ip);
+        }
+
+        $deleted = $query->delete();
+
+        if ($deleted) {
+            return $this->success(null, 'Search history item deleted successfully');
+        }
+
+        return $this->error('Search history item not found or unauthorized', 404);
+    }
+
+    public function clearQueries(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $userId = \Illuminate\Support\Facades\Auth::id();
+        $ip = \Modules\System\Helpers\IpHelper::getClientIp(request());
+
+        $query = SearchQuery::query();
+
+        // Scope the bulk clear to only the current user or active client IP
+        if ($userId) {
+            $query->where('user_id', $userId);
+        } else {
+            $query->where('ip_address', $ip);
+        }
+
+        $query->delete();
+
+        return $this->success(null, 'Search history cleared successfully');
+    }
 }

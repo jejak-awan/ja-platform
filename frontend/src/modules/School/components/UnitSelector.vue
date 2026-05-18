@@ -275,7 +275,7 @@ onMounted(async () => {
   if (!schoolStore.currentSchool) {
     await schoolStore.fetchSchool();
   }
-  // Rely on AdminLayout for fetchUnits
+  // Rely on ConsoleLayout for fetchUnits
 });
 
 const getUnitIcon = (type: string | undefined) => {

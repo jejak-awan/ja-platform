@@ -86,7 +86,7 @@ const baseRoutes: Array<RouteRecordRaw> = [
 // Dashboard wrapper with dynamic children
 const dashboardRoute: RouteRecordRaw = {
     path: '/:dashboard_slug?/:workspace_uuid(system|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?',
-    component: () => import('@/modules/System/layouts/AdminLayout.vue'),
+    component: () => import('@/modules/System/layouts/ConsoleLayout.vue'),
     meta: { auth: true },
     children: [
         // 1. Explicit Core Dashboard (Priority Resolution)

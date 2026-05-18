@@ -183,7 +183,7 @@ onMounted(async () => {
   try {
     if (!schoolStore.currentSchool) await schoolStore.fetchSchool();
     
-    // fetchUnits is handled by AdminLayout, but we can call it here if we need to 
+    // fetchUnits is handled by ConsoleLayout, but we can call it here if we need to 
     // ensure it's loaded, though the store lock handles concurrency.
     // However, to reduce churn, we rely on the parent's initialization.
 

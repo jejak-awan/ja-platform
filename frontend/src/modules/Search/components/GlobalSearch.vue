@@ -98,21 +98,52 @@
           No exact match. Showing similar results.
         </div>
 
-        <!-- Suggestions -->
+        <!-- Suggestions & Search History -->
         <div
           v-if="suggestions.length > 0 && results.length === 0"
           class="px-2"
         >
-          <div class="px-2 py-2 text-sm text-muted-foreground">
-            Did you mean:
+          <div class="flex items-center justify-between px-2 py-2">
+            <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              {{ hasHistorySuggestions ? 'Recent Searches' : 'Suggestions' }}
+            </span>
+            <button
+              v-if="hasHistorySuggestions"
+              class="text-xs text-muted-foreground hover:text-destructive transition-colors font-medium"
+              @click="clearSearchHistory"
+            >
+              Clear All
+            </button>
           </div>
-          <div 
-            v-for="(suggestion, idx) in suggestions" 
-            :key="'sug-' + idx"
-            class="px-2 py-1.5 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-sm text-primary font-medium"
-            @click="applySuggestion(suggestion.text)"
-          >
-            {{ suggestion.text }}
+          <div class="space-y-0.5">
+            <div 
+              v-for="(suggestion, idx) in suggestions" 
+              :key="'sug-' + idx"
+              class="group flex items-center justify-between px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md text-foreground transition-all duration-150"
+              @click="applySuggestion(suggestion.text)"
+            >
+              <div class="flex items-center min-w-0">
+                <Clock
+                  v-if="suggestion.type === 'history'"
+                  class="mr-2.5 h-4 w-4 text-muted-foreground shrink-0"
+                />
+                <Sparkles
+                  v-else
+                  class="mr-2.5 h-4 w-4 text-amber-500 shrink-0"
+                />
+                <span class="font-medium truncate" :class="{ 'text-muted-foreground': suggestion.type === 'history' }">
+                  {{ safeTranslate(suggestion.text) }}
+                </span>
+              </div>
+              
+              <button
+                v-if="suggestion.type === 'history'"
+                class="opacity-0 group-hover:opacity-100 p-1 hover:bg-muted-foreground/10 rounded text-muted-foreground hover:text-destructive transition-all shrink-0"
+                @click.stop="deleteHistoryItem(suggestion)"
+              >
+                <X class="h-3.5 w-3.5" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -153,7 +184,7 @@
               />
                     
               <div class="flex flex-col flex-1 min-w-0">
-                <span class="truncate">{{ item.title }}</span>
+                <span class="truncate">{{ safeTranslate(item.title) }}</span>
                 <span
                   v-if="item.description"
                   class="text-xs text-muted-foreground truncate"
@@ -204,7 +235,9 @@ import Monitor from 'lucide-vue-next/dist/esm/icons/monitor.js';
 import Calendar from 'lucide-vue-next/dist/esm/icons/calendar.js';
 import Globe from 'lucide-vue-next/dist/esm/icons/globe.js';
 import Database from 'lucide-vue-next/dist/esm/icons/database.js';
-
+import Clock from 'lucide-vue-next/dist/esm/icons/clock.js';
+import Sparkles from 'lucide-vue-next/dist/esm/icons/sparkles.js';
+import X from 'lucide-vue-next/dist/esm/icons/x.js';
 interface SearchItem {
     id?: string;
     type: string;
@@ -213,6 +246,7 @@ interface SearchItem {
     url?: string;
     route?: RouteLocationRaw;
     searchable_id?: string;
+    searchable_type?: string;
     score?: number;
     keywords?: string;
     icon?: Component;
@@ -222,6 +256,9 @@ interface SearchItem {
 
 interface SearchSuggestion {
     text: string;
+    type?: string;
+    url?: string | null;
+    id?: string;
 }
 
 // Props & Emitters
@@ -235,9 +272,23 @@ const emit = defineEmits<{
 
 // Utils
 const router = useRouter();
-const { t } = useI18n();
+const { t, te } = useI18n();
 const authStore = useAuthStore();
 const workspaceStore = useWorkspaceStore();
+
+const safeTranslate = (key: string): string => {
+    if (!key) return '';
+    // Translation keys usually contain only alphanumeric characters, dots, underscores, and dashes
+    // and no spaces. This prevents Vue I18n's path compiler from throwing a syntax error on arbitrary strings.
+    if (typeof key === 'string' && /^[a-zA-Z0-9._-]+$/.test(key)) {
+        try {
+            return te(key) ? t(key) : key;
+        } catch {
+            return key;
+        }
+    }
+    return key;
+};
 
 // State
 const open = ref(false);
@@ -259,6 +310,28 @@ watch(open, (isOpen) => {
         }, 100);
     }
 });
+
+const hasHistorySuggestions = computed(() => {
+    return suggestions.value.some(sug => sug.type === 'history');
+});
+
+const deleteHistoryItem = async (suggestion: SearchSuggestion) => {
+    try {
+        await SearchService.deleteQuery(suggestion.text);
+        suggestions.value = suggestions.value.filter(sug => sug.text !== suggestion.text);
+    } catch (err) {
+        logger.error('Failed to delete search history item:', err);
+    }
+};
+
+const clearSearchHistory = async () => {
+    try {
+        await SearchService.clearQueries();
+        suggestions.value = suggestions.value.filter(sug => sug.type !== 'history');
+    } catch (err) {
+        logger.error('Failed to clear search history:', err);
+    }
+};
 
 const applySuggestion = (text: string) => {
     searchQuery.value = text;
@@ -284,7 +357,7 @@ const staticActions = computed<SearchItem[]>(() => [
     { title: t('common.navigation.menu.tags'), icon: Tag, route: { name: 'tags' }, type: 'action', keywords: 'labels keywords tags', permission: 'manage content' },
     
     // Design & Config
-    { title: t('modules.cms.navigation.menu.themes'), icon: Settings, route: { name: 'theme-customizer' }, type: 'action', keywords: 'theme customizer design config appearance styling', permission: 'manage settings' },
+    { title: t('modules.cms.navigation.menu.themes'), icon: Settings, route: { name: 'themes' }, type: 'action', keywords: 'theme customizer design config appearance styling', permission: 'manage themes' },
     { title: t('modules.cms.navigation.menu.menus'), icon: Folder, route: { name: 'menus' }, type: 'action', keywords: 'menus navigation links headers footer', permission: 'manage settings' },
     { title: t('modules.cms.navigation.menu.widgets'), icon: Folder, route: { name: 'widgets' }, type: 'action', keywords: 'widgets blocks dashboard layout', permission: 'manage settings' },
     
@@ -293,7 +366,7 @@ const staticActions = computed<SearchItem[]>(() => [
     { title: t('modules.system.navigation.menu.roles'), icon: Settings, route: { name: 'roles' }, type: 'action', keywords: 'permissions access rbac roles', permission: 'view roles' },
     
     // SEO & Analytics
-    { title: t('modules.cms.navigation.menu.seoTools'), icon: Search, route: { name: 'seo' }, type: 'action', keywords: 'seo search engine optimize meta robots sitemap', permission: 'manage settings' },
+    { title: t('modules.cms.navigation.menu.seoTools'), icon: Search, route: { name: 'cms.seo' }, type: 'action', keywords: 'seo search engine optimize meta robots sitemap', permission: 'manage settings' },
     { title: t('modules.cms.navigation.menu.analytics'), icon: FileText, route: { name: 'analytics' }, type: 'action', keywords: 'stats visitors traffic analytics', permission: 'manage settings' },
     { title: t('modules.cms.navigation.menu.redirects'), icon: FileText, route: { name: 'redirects' }, type: 'action', keywords: '301 302 url forward redirects', permission: 'manage settings' },
     
@@ -563,6 +636,16 @@ const handleSelect = (item: SearchItem) => {
         router.push(item.route);
         return;
     } 
+
+    // 1.5 System Administrative Crawled Pages (Direct routing bypass)
+    if (item.searchable_type === 'SystemPage' && item.url) {
+        if (item.url.startsWith('http')) {
+             window.open(item.url, '_blank');
+        } else {
+             router.push(item.url);
+        }
+        return;
+    }
     
     // 2. Internal Admin Resources (Prioritize over generic URL)
     // Use searchable_id if available, otherwise fallback to id (just in case)

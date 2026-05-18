@@ -183,10 +183,10 @@ const fetchData = async () => {
     loading.value = true;
     try {
         const [pRes, mRes, sRes, fRes] = await Promise.all([
-            api.get('/admin/osis/programs'),
-            api.get('/admin/osis/members'),
-            api.get('/admin/osis/suggestions'),
-            api.get('/admin/osis/finances')
+            api.get('/manage/school/osis/programs'),
+            api.get('/manage/school/osis/members'),
+            api.get('/manage/school/osis/suggestions'),
+            api.get('/manage/school/osis/finances')
         ]);
         
         const programs = parseResponse(pRes).data || [];

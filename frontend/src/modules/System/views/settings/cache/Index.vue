@@ -160,7 +160,7 @@ import XCircle from 'lucide-vue-next/dist/esm/icons/circle-x.js';
 import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import Zap from 'lucide-vue-next/dist/esm/icons/zap.js';
-import toast from '@/shared/services/legacy-toast';
+import toast from '@/shared/services/toastService';
 import { useConfirm } from '@/shared/composables/useConfirm';
 
 interface CacheStats {

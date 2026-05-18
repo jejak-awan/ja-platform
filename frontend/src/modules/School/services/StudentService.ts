@@ -4,39 +4,39 @@ import type { Student, Violation, Achievement, CounselingRecord } from '@/module
 
 export const StudentService = {
     async getStudents(params: Record<string, any> = {}): Promise<AxiosResponse<Student[]>> {
-        return api.get('admin/students', { params });
+        return api.get('manage/school/students', { params });
     },
 
     async searchStudents(query: string): Promise<AxiosResponse<Student[]>> {
-        return api.get('admin/students', { params: { search: query, per_page: 20 } });
+        return api.get('manage/school/students', { params: { search: query, per_page: 20 } });
     },
 
     async getStudent(id: string): Promise<AxiosResponse<Student>> {
-        return api.get(`admin/students/${id}`);
+        return api.get(`manage/school/students/${id}`);
     },
 
     async createStudent(data: Partial<Student>): Promise<AxiosResponse<Student>> {
-        return api.post('admin/students', data);
+        return api.post('manage/school/students', data);
     },
 
     async updateStudent(id: string, data: Partial<Student>): Promise<AxiosResponse<Student>> {
-        return api.put(`admin/students/${id}`, data);
+        return api.put(`manage/school/students/${id}`, data);
     },
 
     async deleteStudent(id: string): Promise<AxiosResponse<void>> {
-        return api.delete(`admin/students/${id}`);
+        return api.delete(`manage/school/students/${id}`);
     },
 
     async getViolations(params: Record<string, any> = {}): Promise<AxiosResponse<Violation[]>> {
-        return api.get('admin/operations/violations', { params });
+        return api.get('manage/school/operations/violations', { params });
     },
 
     async getAchievements(params: Record<string, any> = {}): Promise<AxiosResponse<Achievement[]>> {
-        return api.get('admin/operations/achievements', { params });
+        return api.get('manage/school/operations/achievements', { params });
     },
 
     async getCounselingRecords(params: Record<string, any> = {}): Promise<AxiosResponse<CounselingRecord[]>> {
-        return api.get('admin/operations/counseling', { params });
+        return api.get('manage/school/operations/counseling', { params });
     }
 };
 

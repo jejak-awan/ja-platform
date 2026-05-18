@@ -264,7 +264,7 @@ import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
 import { parseSingleResponse, ensureArray } from '@/shared/utils/responseParser';
 
-import QuickActions from '@/modules/System/components/admin/QuickActions.vue';
+import QuickActions from '@/modules/System/components/console/QuickActions.vue';
 import {
     Card,
     CardHeader,

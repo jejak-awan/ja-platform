@@ -132,39 +132,61 @@ class FileIntegrityService
         try { return copy($src, $dest); } catch (\Exception) { return false; }
     }
 
-    public function verify(): array
+    /**
+     * Verify the integrity of monitored files.
+     *
+     * @param bool $force Force a fresh check bypassing cache
+     * @return array{ok: int, modified: array<int, array<string, string>>, missing: array<int, array<string, string>>, new: array<int, array<string, string>>, violations: array<int, array<string, string>>}
+     */
+    public function verify(bool $force = false): array
     {
-        $stats = ['ok' => 0, 'modified' => [], 'missing' => [], 'new' => [], 'violations' => []];
-        $baselines = DB::table('sec_file_integrity_baselines')->get()->keyBy('file_path');
-        $currentFiles = $this->getMonitoredFiles();
-
-        foreach ($baselines as $path => $baseline) {
-            $absolutePath = base_path((string) $path);
-            if (! file_exists($absolutePath)) {
-                $stats['missing'][] = ['path' => (string) $path, 'detail' => 'File has been deleted'];
-                $stats['violations'][] = ['path' => (string) $path, 'status' => 'missing', 'detail' => 'File has been deleted'];
-                DB::table('sec_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'missing', 'checked_at' => now()]);
-                continue;
-            }
-
-            $currentHash = hash_file('sha256', $absolutePath);
-            if ($currentHash !== $baseline->hash) {
-                $stats['modified'][] = ['path' => (string) $path, 'detail' => 'Modified', 'expected' => $baseline->hash, 'actual' => (string) $currentHash];
-                $stats['violations'][] = ['path' => (string) $path, 'status' => 'modified', 'detail' => 'Hash mismatch'];
-                DB::table('sec_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'modified', 'checked_at' => now()]);
-            } else {
-                $stats['ok']++;
-                DB::table('sec_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'ok', 'checked_at' => now()]);
-            }
+        if ($force) {
+            \Illuminate\Support\Facades\Cache::forget('file_integrity_verification_result');
         }
 
-        foreach ($currentFiles as $path) {
-            if (! isset($baselines[$path]) && file_exists(base_path((string)$path))) {
-                $stats['new'][] = ['path' => (string) $path, 'detail' => 'New file'];
-                $stats['violations'][] = ['path' => (string) $path, 'status' => 'new', 'detail' => 'New file'];
+        /** @var array{ok: int, modified: array<int, array<string, string>>, missing: array<int, array<string, string>>, new: array<int, array<string, string>>, violations: array<int, array<string, string>>} $result */
+        $result = \Illuminate\Support\Facades\Cache::remember('file_integrity_verification_result', 60, function (): array {
+            $stats = ['ok' => 0, 'modified' => [], 'missing' => [], 'new' => [], 'violations' => []];
+            $baselines = DB::table('sec_file_integrity_baselines')->get()->keyBy('file_path');
+            $currentFiles = $this->getMonitoredFiles();
+
+            foreach ($baselines as $path => $baseline) {
+                $absolutePath = base_path((string) $path);
+                if (! file_exists($absolutePath)) {
+                    $stats['missing'][] = ['path' => (string) $path, 'detail' => 'File has been deleted'];
+                    $stats['violations'][] = ['path' => (string) $path, 'status' => 'missing', 'detail' => 'File has been deleted'];
+                    if ($baseline->status !== 'missing') {
+                        DB::table('sec_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'missing', 'checked_at' => now()]);
+                    }
+                    continue;
+                }
+
+                $currentHash = hash_file('sha256', $absolutePath);
+                if ($currentHash !== $baseline->hash) {
+                    $stats['modified'][] = ['path' => (string) $path, 'detail' => 'Modified', 'expected' => $baseline->hash, 'actual' => (string) $currentHash];
+                    $stats['violations'][] = ['path' => (string) $path, 'status' => 'modified', 'detail' => 'Hash mismatch'];
+                    if ($baseline->status !== 'modified') {
+                        DB::table('sec_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'modified', 'checked_at' => now()]);
+                    }
+                } else {
+                    $stats['ok']++;
+                    if ($baseline->status !== 'ok') {
+                        DB::table('sec_file_integrity_baselines')->where('file_path', $path)->update(['status' => 'ok', 'checked_at' => now()]);
+                    }
+                }
             }
-        }
-        return $stats;
+
+            foreach ($currentFiles as $path) {
+                if (! isset($baselines[$path]) && file_exists(base_path((string)$path))) {
+                    $stats['new'][] = ['path' => (string) $path, 'detail' => 'New file'];
+                    $stats['violations'][] = ['path' => (string) $path, 'status' => 'new', 'detail' => 'New file'];
+                }
+            }
+
+            return $stats;
+        });
+
+        return $result;
     }
 
     private function getMonitoredFiles(): array

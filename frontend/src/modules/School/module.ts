@@ -14,7 +14,7 @@ export const SchoolModule: JanariModule = {
             priority: 90,
             routeName: 'schools.dashboard',
             condition: (_user, auth) => auth.hasPermission('view schools'),
-            component: defineAsyncComponent(() => import('./components/dashboard/SchoolAdminDashboard.vue'))
+            component: defineAsyncComponent(() => import('./components/dashboard/SchoolConsoleDashboard.vue'))
         },
         {
             id: 'school-teacher',

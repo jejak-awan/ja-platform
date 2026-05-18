@@ -55,9 +55,9 @@ const fetchData = async () => {
     loading.value = true;
     try {
         const [pRes, mRes, sRes] = await Promise.all([
-            axios.get('/api/v1/admin/osis/programs'),
-            axios.get('/api/v1/admin/osis/members'),
-            axios.get('/api/v1/admin/osis/suggestions')
+            axios.get('/api/v1/manage/school/osis/programs'),
+            axios.get('/api/v1/manage/school/osis/members'),
+            axios.get('/api/v1/manage/school/osis/suggestions')
         ]);
         programs.value = pRes.data.data;
         members.value = mRes.data.data;

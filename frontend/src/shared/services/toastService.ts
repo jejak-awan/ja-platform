@@ -1,6 +1,4 @@
 import { logger } from '@/shared/utils/logger';
-// Toast service for global toast notifications
-// Use this to show toasts from anywhere in the app
 
 export interface ToastOptions {
     title: string;
@@ -34,7 +32,6 @@ export const toast = {
         if (instance?.addToast) {
             return instance.addToast(options);
         }
-        // Fallback to console if toast not available
         logger.warning('Toast not initialized:', options);
         return null;
     },
@@ -44,7 +41,7 @@ export const toast = {
     },
 
     error(title: string, description: string = '') {
-        return this.show({ title, description, variant: 'destructive' }); // 'error' maps to 'destructive' in UI components usually
+        return this.show({ title, description, variant: 'destructive' });
     },
 
     warning(title: string, description: string = '') {
@@ -55,7 +52,6 @@ export const toast = {
         return this.show({ title, description, variant: 'info' });
     },
 
-    // Special toast for session invalidation
     sessionExpired(message: string = 'Your session has been terminated due to a new login from another device.') {
         return this.show({
             title: 'Session Expired',

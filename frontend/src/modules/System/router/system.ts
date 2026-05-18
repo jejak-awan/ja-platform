@@ -83,6 +83,12 @@ const systemRoutes: RouteRecordRaw[] = [
         component: () => import('@/modules/System/views/pulse/system/Index.vue'),
         meta: { noCache: true },
     },
+    {
+        path: 'analytics',
+        name: 'analytics',
+        component: () => import('@/modules/System/views/analytics/Index.vue'),
+        meta: { title: 'Analytics', permission: 'manage settings' },
+    },
 ];
 
 export default systemRoutes;

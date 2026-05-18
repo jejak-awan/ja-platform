@@ -89,7 +89,7 @@ const handleSubmit = async () => {
   
   loading.value = true;
   try {
-    await api.post(`/admin/logistics/hostel/blocks/${props.blockId}/rooms`, form.value);
+    await api.post(`/manage/school/logistics/hostel/blocks/${props.blockId}/rooms`, form.value);
     toast.success.action('Kamar berhasil ditambahkan');
     emit('save');
     emit('update:open', false);

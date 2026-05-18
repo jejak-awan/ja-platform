@@ -103,7 +103,7 @@ const handleSubmit = async () => {
   
   loading.value = true;
   try {
-    await api.post('/admin/logistics/transport/routes', form.value);
+    await api.post('/manage/school/logistics/transport/routes', form.value);
     toast.success.action('Rute berhasil dibuat');
     emit('save');
     emit('update:open', false);

@@ -59,6 +59,7 @@ class ReindexSearch extends Command
                 ['CMS Contents', $stats['cms_contents'] ?? 0],
                 ['Library Categories', $stats['cms_categories'] ?? 0],
                 ['Library Tags', $stats['cms_tags'] ?? 0],
+                ['System Pages & Features', $stats['system_pages'] ?? 0],
             ]
         );
 

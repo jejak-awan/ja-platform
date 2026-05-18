@@ -310,13 +310,13 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, computed, defineAsyncComponent, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
-import toast from '@/shared/services/legacy-toast';
+import toast from '@/shared/services/toastService';
 import { useAuthStore } from '@/modules/System/stores/auth';
 import { isAxiosError } from 'axios';
 
 // Standardized Async Components
-const LoginHistory = defineAsyncComponent(() => import('@/modules/System/components/admin/LoginHistory.vue'));
-const TwoFactorSettings = defineAsyncComponent(() => import('@/modules/System/components/admin/TwoFactorSettings.vue'));
+const LoginHistory = defineAsyncComponent(() => import('@/modules/System/components/console/LoginHistory.vue'));
+const TwoFactorSettings = defineAsyncComponent(() => import('@/modules/System/components/console/TwoFactorSettings.vue'));
 const MediaPicker = defineAsyncComponent(() => import('@/modules/Media/components/picker/MediaPicker.vue'));
 
 // Shadcn Components

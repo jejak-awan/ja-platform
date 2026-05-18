@@ -421,7 +421,7 @@ import Award from 'lucide-vue-next/dist/esm/icons/award.js';
 import Briefcase from 'lucide-vue-next/dist/esm/icons/briefcase.js';
 
 import api from '@/engine/api/client'
-import toast from '@/shared/services/legacy-toast'
+import toast from '@/shared/services/toastService'
 import type { ThemeSection } from '@/modules/Cms/types/theme'
 import type { Theme } from '@/modules/Cms/types/theme'
 import type { SlotBinding } from '@/modules/Cms/composables/useThemeDataBindings'

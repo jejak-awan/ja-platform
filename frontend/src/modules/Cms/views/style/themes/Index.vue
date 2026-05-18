@@ -249,7 +249,7 @@ import { logger } from '@/shared/utils/logger';
 import { ref, onMounted, toRaw } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '@/engine/api/client';
-import toast from '@/shared/services/legacy-toast';
+import toast from '@/shared/services/toastService';
 import { useConfirm } from '@/shared/composables/useConfirm';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
 import Palette from 'lucide-vue-next/dist/esm/icons/palette.js';

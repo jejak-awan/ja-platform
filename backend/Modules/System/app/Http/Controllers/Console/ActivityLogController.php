@@ -238,7 +238,7 @@ class ActivityLogController extends \Modules\System\Http\Controllers\BaseApiCont
                 ->get()
                 ->map(function ($item): array {
                     $userId = $item->getAttribute('user_id');
-                    $user = (is_scalar($userId) && $userId) ? \Modules\System\Models\User::find(intval($userId)) : null;
+                    $user = (is_string($userId) && $userId !== '') ? \Modules\System\Models\User::find($userId) : null;
 
                     $count = $item->getAttribute('count');
                     return [

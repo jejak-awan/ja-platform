@@ -192,7 +192,7 @@ const fetchLogs = async () => {
       ...filters.value,
       page: pagination.value?.current_page || 1
     };
-    const response = await api.get('/admin/extensions/logs', { params });
+    const response = await api.get('/manage/school/extensions/logs', { params });
     const res = parseResponse(response);
     logs.value = res.data;
     if (res.pagination && pagination.value) pagination.value.total = res.pagination.total || 0;

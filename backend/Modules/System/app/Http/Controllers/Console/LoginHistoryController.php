@@ -214,13 +214,13 @@ class LoginHistoryController extends \Modules\System\Http\Controllers\BaseApiCon
         // Brute force attempts
         $bruteForceQuery = LoginHistory::where('status', 'failed')
             ->where('login_at', '>=', now()->subDay())
-            ->selectRaw("count(distinct CONCAT(COALESCE(user_id::text, ''), '-', COALESCE(ip_address, ''))) as cnt")
-            ->havingRaw('count(*) >= 3')
-            ->groupBy('user_id', 'ip_address');
+            ->select('user_id', 'ip_address')
+            ->groupBy('user_id', 'ip_address')
+            ->havingRaw('count(*) >= 3');
         if ($whitelistedIps !== []) {
             $bruteForceQuery->whereNotIn('ip_address', $whitelistedIps);
         }
-        $count += (int) $bruteForceQuery->count();
+        $count += count($bruteForceQuery->get());
 
         // New IPs (approximate — count distinct user-IP combos today not seen before)
         $todayNewIpsQuery = LoginHistory::where('status', 'success')

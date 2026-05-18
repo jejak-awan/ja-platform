@@ -215,9 +215,9 @@ const todaySchedule = computed(() => {
 const fetchData = async () => {
   try {
     const [statsRes, schedRes, journalsRes] = await Promise.all([
-        api.get('/school/admin/teacher/dashboard-stats'),
-        api.get('/school/admin/teacher/schedules'),
-        api.get('/school/admin/teacher/recent-journals')
+        api.get('/manage/school/teacher/dashboard-stats'),
+        api.get('/manage/school/teacher/schedules'),
+        api.get('/manage/school/teacher/recent-journals')
     ]);
     
     stats.value = parseResponse(statsRes).data;

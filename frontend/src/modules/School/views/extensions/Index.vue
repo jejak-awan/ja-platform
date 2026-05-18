@@ -311,7 +311,7 @@ const fetchData = async () => {
         alumni: 'alumni',
         'tracer-studies': 'tracer-studies'
     };
-    const response = await api.get(`/admin/extensions/${endpointMap[activeTab.value]}`);
+    const response = await api.get(`/manage/school/extensions/${endpointMap[activeTab.value]}`);
     const { data } = parseResponse(response);
     rows.value = data;
   } catch (e) {
@@ -351,10 +351,10 @@ const handleSave = async (formData: any) => {
         const type = activeTab.value === 'library-circulations' ? 'circulations' : 
                      activeTab.value === 'tracer-studies' ? 'tracer' : activeTab.value;
         if (selectedItem.value) {
-            await api.put(`/admin/extensions/${type}/${selectedItem.value.id}`, formData);
+            await api.put(`/manage/school/extensions/${type}/${selectedItem.value.id}`, formData);
             toast.success.action(t('modules.school.extensions.messages.saveSuccess'));
         } else {
-            await api.post(`/admin/extensions/${type}`, formData);
+            await api.post(`/manage/school/extensions/${type}`, formData);
             toast.success.action(t('modules.school.extensions.messages.saveSuccess'));
         }
         
@@ -378,7 +378,7 @@ const handleDelete = async (item: any) => {
         try {
             const type = activeTab.value === 'library-circulations' ? 'circulations' : 
                          activeTab.value === 'tracer-studies' ? 'tracer' : activeTab.value;
-            await api.delete(`/admin/extensions/${type}/${item.id}`);
+            await api.delete(`/manage/school/extensions/${type}/${item.id}`);
             toast.success.action(t('modules.school.extensions.messages.deleteSuccess'));
             fetchData();
         } catch (e) {

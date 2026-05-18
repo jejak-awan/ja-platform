@@ -45,7 +45,10 @@ return new class extends Migration
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->timestamp('login_at')->nullable();
+            $table->timestamp('logout_at')->nullable();
+            $table->integer('session_duration')->nullable();
             $table->string('status')->default('success');
+            $table->text('failure_reason')->nullable();
             $table->timestamps();
         });
 

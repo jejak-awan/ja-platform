@@ -285,8 +285,8 @@ const gradesDraft = ref<Record<string, any>>({}); // Key: student.id
 const fetchMeta = async () => {
     try {
         const [yearsRes, semRes] = await Promise.all([
-            api.get('/school/admin/academic/years'),
-            api.get('/school/admin/academic/semesters') // Usually requires academic_year_id but we fetch all or it defaults
+            api.get('/manage/school/academic/years'),
+            api.get('/manage/school/academic/semesters') // Usually requires academic_year_id but we fetch all or it defaults
         ]);
         academicYears.value = parseResponse(yearsRes).data || [];
         semesters.value = parseResponse(semRes).data || [];
@@ -306,7 +306,7 @@ const fetchMeta = async () => {
 
 const fetchSchedules = async () => {
   try {
-    const response = await api.get('/school/admin/teacher/schedules');
+    const response = await api.get('/manage/school/teacher/schedules');
     schedules.value = parseResponse(response).data || [];
   } catch (e: any) {
     toast.error.fromResponse(e);
@@ -347,7 +347,7 @@ const fetchStudentsInClass = async () => {
    students.value = [];
    gradesDraft.value = {};
    try {
-      const response = await api.get(`/school/admin/academic/study-groups/${selectedClassData.value.study_group_id}/members`);
+      const response = await api.get(`/manage/school/academic/study-groups/${selectedClassData.value.study_group_id}/members`);
       students.value = parseResponse(response).data || [];
       
       // Initialize draft
@@ -383,7 +383,7 @@ const saveGrades = async () => {
     }));
 
     try {
-        await api.post('/school/admin/academic/grades/bulk', { grades: records });
+        await api.post('/manage/school/academic/grades/bulk', { grades: records });
         toast.success.action('Nilai E-Rapor berhasil di-publish dan bisa dilihat siswa.');
     } catch(e) {
         toast.error.fromResponse(e);

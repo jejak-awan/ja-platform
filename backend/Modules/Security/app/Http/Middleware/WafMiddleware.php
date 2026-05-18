@@ -30,18 +30,18 @@ class WafMiddleware
     use MaintenanceBypass;
     /** @var array<string> Routes that allow HTML content (CMS editor) */
     private const WHITELISTED_ROUTES = [
-        'api/v1/admin/cms/contents',
-        'api/v1/admin/cms/content-templates',
-        'api/v1/admin/cms/menus',
-        'api/v1/admin/cms/widgets',
-        'api/v1/admin/core/settings',
-        'api/v1/admin/cms/forms',
-        'api/v1/admin/cms/ai/generate',
+        // New Modular Paths
+        'api/v1/manage/cms/contents',
+        'api/v1/manage/cms/content-templates',
+        'api/v1/manage/layout/menus',
+        'api/v1/manage/layout/widgets',
+        'api/v1/manage/system/settings',
+        'api/v1/manage/forms',
+        'api/v1/manage/ai/generate',
+        'api/v1/manage/media',
         // Frontend error journal: stacks often contain substrings the WAF treats as XSS
         // (e.g. window.location, script URLs) — scanning them produces false positives.
         'api/v1/journal/frontend',
-        // Media upload / edit: multipart fields and metadata can resemble WAF patterns; admin + auth only.
-        'api/v1/admin/cms/media',
     ];
 
     /** @var array<string> SQL injection patterns */

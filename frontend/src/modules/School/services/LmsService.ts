@@ -38,27 +38,27 @@ export interface Lesson {
 const LmsService = {
   // Admin Endpoints
   getAdminCourses() {
-    return api.get('/admin/lms/courses');
+    return api.get('/manage/school/lms/courses');
   },
   
   getCourseDetails(id: string) {
-    return api.get(`/admin/lms/courses/${id}`);
+    return api.get(`/manage/school/lms/courses/${id}`);
   },
 
   createCourse(data: any) {
-    return api.post('/admin/lms/courses', data);
+    return api.post('/manage/school/lms/courses', data);
   },
 
   createLesson(courseId: string, data: any) {
-    return api.post(`/admin/lms/courses/${courseId}/lessons`, data);
+    return api.post(`/manage/school/lms/courses/${courseId}/lessons`, data);
   },
 
   createTopic(lessonId: string, data: any) {
-    return api.post(`/admin/lms/lessons/${lessonId}/topics`, data);
+    return api.post(`/manage/school/lms/lessons/${lessonId}/topics`, data);
   },
 
   addQuestion(quizId: string, data: any) {
-    return api.post(`/admin/lms/quizzes/${quizId}/questions`, data);
+    return api.post(`/manage/school/lms/quizzes/${quizId}/questions`, data);
   },
 
   // Student Endpoints

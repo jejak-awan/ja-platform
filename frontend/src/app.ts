@@ -1,4 +1,3 @@
-import '@/engine/legacy-bootstrap';
 import '../css/base.css';
 
 import { createApp } from 'vue';
@@ -99,7 +98,7 @@ import { bootstrapApp } from '@/engine/bootstrap';
 async function bootstrap() {
     const [{ default: Logger, logger }, { default: RootComponent }] = await Promise.all([
         import('@/shared/utils/logger'),
-        isAdminRoute ? import('./AdminApp.vue') : import('./PublicApp.vue'),
+        isAdminRoute ? import('./ConsoleApp.vue') : import('./PublicApp.vue'),
     ]);
 
     const app = createApp(RootComponent);
@@ -124,7 +123,7 @@ async function bootstrap() {
     const { registry } = await bootstrapApp();
 
     // 2. Import Router (Registry is now full)
-    const { default: router } = await (isAdminRoute ? import('@/engine/router/admin') : import('@/engine/router/public'));
+    const { default: router } = await (isAdminRoute ? import('@/engine/router/console') : import('@/engine/router/public'));
     app.use(router);
 
     // 3. Sync Navigation & Dashboards from Registry to Global Stores

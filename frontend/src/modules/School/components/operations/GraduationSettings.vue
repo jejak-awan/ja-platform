@@ -141,7 +141,7 @@ const fetchSettings = async () => {
     if (!selectedYear.value) return;
     loading.value = true;
     try {
-        const response = await api.get(`admin/operations/graduation/settings/${selectedYear.value}`);
+        const response = await api.get(`manage/school/operations/graduation/settings/${selectedYear.value}`);
         const data = parseResponse(response) as any;
         if (data && data.data) {
             currentSetting.value = data.data;
@@ -172,7 +172,7 @@ const onYearChange = () => {
 const createSetting = async () => {
     saving.value = true;
     try {
-        await api.post(`admin/operations/graduation/settings`, {
+        await api.post(`manage/school/operations/graduation/settings`, {
             graduation_year: parseInt(selectedYear.value),
             is_open: false,
             subjects: ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris']
@@ -190,7 +190,7 @@ const saveSettings = async () => {
     if (!currentSetting.value) return;
     saving.value = true;
     try {
-        await api.put(`admin/operations/graduation/settings/${selectedYear.value}`, {
+        await api.put(`manage/school/operations/graduation/settings/${selectedYear.value}`, {
             is_open: form.value.is_open,
             announcement_date: form.value.announcement_date || null,
             subjects: form.value.subjects,

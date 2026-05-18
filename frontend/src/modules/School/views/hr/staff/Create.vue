@@ -40,7 +40,7 @@ const saving = ref(false);
 const handleSubmit = async (formData: any) => {
   saving.value = true;
   try {
-    await api.post('/admin/staff', formData);
+    await api.post('/manage/school/staff', formData);
     toast.success.action('Staff berhasil ditambahkan');
     router.push({ name: 'staff.index' });
   } catch (e) {

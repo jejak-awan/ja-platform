@@ -27,7 +27,7 @@ import { LucideIcon } from '@/shared/components/ui';
 const authStore = useAuthStore();
 
 // Dynamic Dashboard Components
-const SchoolAdminDashboard = defineAsyncComponent(() => import('@/modules/School/components/dashboard/SchoolAdminDashboard.vue'));
+const SchoolConsoleDashboard = defineAsyncComponent(() => import('@/modules/School/components/dashboard/SchoolConsoleDashboard.vue'));
 const TeacherDashboard = defineAsyncComponent(() => import('@/modules/School/components/dashboard/TeacherDashboard.vue'));
 const StudentDashboard = defineAsyncComponent(() => import('@/modules/School/components/dashboard/StudentDashboard.vue'));
 const OsisDashboard = defineAsyncComponent(() => import('@/modules/School/components/dashboard/OsisDashboard.vue'));
@@ -43,7 +43,7 @@ const dashboardComponent = computed(() => {
   const roles = authStore.user.roles?.map(r => r.name) || [];
 
   if (roles.some(r => ['super', 'admin-yayasan', 'admin-unit', 'admin', 'operator-unit'].includes(r))) {
-    return SchoolAdminDashboard;
+    return SchoolConsoleDashboard;
   }
   
   if (roles.includes('admin-kurikulum')) return CurriculumDashboard;
@@ -54,7 +54,7 @@ const dashboardComponent = computed(() => {
   if (roles.includes('orang-tua')) return ParentDashboard;
 
   // Fallback to Admin for high-rank roles
-  if (authStore.isAdmin) return SchoolAdminDashboard;
+  if (authStore.isAdmin) return SchoolConsoleDashboard;
 
   return null;
 });

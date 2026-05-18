@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Modules\Core\Models\SecurityLog;
+use Modules\Security\Models\SecurityLog;
 
 Route::get('/', function () {
     return response()->json([
@@ -92,8 +92,8 @@ Route::fallback(function () {
     }
 
     if ($firstSegment === $adminSlug || $firstSegment === 'auth') {
-        if (file_exists(public_path('admin.html'))) {
-            return file_get_contents(public_path('admin.html'));
+        if (file_exists(public_path('console.html'))) {
+            return file_get_contents(public_path('console.html'));
         }
     }
 

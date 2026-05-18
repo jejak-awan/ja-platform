@@ -198,7 +198,7 @@ const filteredSchedules = computed(() => {
 
 const fetchSchedules = async () => {
   try {
-    const response = await api.get('/school/admin/teacher/schedules');
+    const response = await api.get('/manage/school/teacher/schedules');
     schedules.value = parseResponse(response).data || [];
   } catch (e: any) {
     toast.error.fromResponse(e);
@@ -220,7 +220,7 @@ const openJournalDialog = (item: any) => {
 const submitJournal = async () => {
    submitLoading.value = true;
    try {
-      await api.post('/school/admin/academic/journals', {
+      await api.post('/manage/school/academic/journals', {
          school_id: schoolStore.currentSchool?.id,
          workspace_id: unitStore.activeUnitId,
          schedule_id: activeSchedule.value.id,

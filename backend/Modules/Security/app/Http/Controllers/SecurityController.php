@@ -525,7 +525,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
      */
     public function runIntegrityCheck(): \Illuminate\Http\JsonResponse
     {
-        $verification = $this->fileIntegrityService->verify();
+        $verification = $this->fileIntegrityService->verify(true);
 
         return $this->success($verification, 'Manual file integrity check completed');
     }
@@ -558,7 +558,7 @@ class SecurityController extends \Modules\System\Http\Controllers\BaseApiControl
                     ->delete();
             }
 
-            $verification = $this->fileIntegrityService->verify();
+            $verification = $this->fileIntegrityService->verify(true);
             $clearedLogs = 0;
             if ($clearHistory) {
                 $clearedLogs = \Modules\Security\Models\SecurityLog::whereIn('event_type', [

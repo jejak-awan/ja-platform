@@ -96,7 +96,7 @@ const handleSubmit = async () => {
   
   loading.value = true;
   try {
-    await api.post('/admin/logistics/hostel/blocks', form.value);
+    await api.post('/manage/school/logistics/hostel/blocks', form.value);
     toast.success.action('Blok berhasil ditambahkan');
     emit('save');
     emit('update:open', false);

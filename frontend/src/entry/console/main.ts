@@ -1,4 +1,3 @@
-import '@/engine/legacy-bootstrap';
 import '../../../css/admin.css';
 import '../../../css/editor.css';
 import '../../../css/base.css';
@@ -48,12 +47,12 @@ async function bootstrap() {
         return;
     }
 
-    const [{ default: Logger, logger }, { default: AdminApp }] = await Promise.all([
+    const [{ default: Logger, logger }, { default: ConsoleApp }] = await Promise.all([
         import('@/shared/utils/logger'),
-        import('@/AdminApp.vue'),
+        import('@/ConsoleApp.vue'),
     ]);
 
-    const app = createApp(AdminApp);
+    const app = createApp(ConsoleApp);
     app.config.errorHandler = (err) => {
         if (isChunkLoadError(err) && attemptChunkRecoveryReload()) return;
         if (import.meta.env.DEV) console.error('[ADMIN_ERROR]', err);
@@ -73,7 +72,7 @@ async function bootstrap() {
     const { registry } = await bootstrapApp();
 
     // 2. Import Admin Router
-    const { default: router } = await import('@/engine/router/admin');
+    const { default: router } = await import('@/engine/router/console');
     app.use(router);
 
     // 3. Sync Navigation & Dashboards

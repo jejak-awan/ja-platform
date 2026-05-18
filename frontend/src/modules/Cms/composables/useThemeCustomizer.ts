@@ -4,7 +4,7 @@
  */
 import { computed, ref, watch } from 'vue';
 import api from '@/engine/api/client';
-import toast from '@/shared/services/legacy-toast';
+import toast from '@/shared/services/toastService';
 import { JANARI_PRESETS, type JanariPresetKey } from '@/modules/Cms/config/janariPresets';
 import type { ComponentBindings } from '@/modules/Cms/composables/useThemeDataBindings';
 import { THEME_DATA_BINDINGS_KEY, isPlainSettingsObject } from '@/modules/Cms/constants/themeBindings';

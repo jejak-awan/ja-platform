@@ -44,7 +44,7 @@ const saving = ref(false);
 const handleSubmit = async (formData: any) => {
   saving.value = true;
   try {
-    await api.post('/admin/students', formData);
+    await api.post('/manage/school/students', formData);
     toast.success.action(t('modules.school.academic.messages.saveSuccess'));
     router.push({ name: 'students.index' });
   } catch (e) {

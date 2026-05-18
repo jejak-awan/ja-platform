@@ -13,6 +13,7 @@ use Modules\System\Http\Controllers\Console\NotificationController;
 use Modules\System\Http\Controllers\Console\PluginController;
 use Modules\System\Http\Controllers\Console\LanguageController;
 use Modules\System\Http\Controllers\Console\ActivityLogController;
+use Modules\System\Http\Controllers\Console\LoginHistoryController;
 use Modules\System\Http\Controllers\Console\ScheduledTaskController;
 use Modules\System\Http\Controllers\Console\EmailTestController;
 use Modules\System\Http\Controllers\Console\LogController;
@@ -130,5 +131,23 @@ Route::prefix('v1')->group(function (): void {
         Route::post('flush-cache', [\Modules\System\Http\Controllers\Console\RedisController::class, 'flushCache']);
         Route::post('warm-cache', [\Modules\System\Http\Controllers\Console\RedisController::class, 'warmCache']);
         Route::get('cache-stats', [\Modules\System\Http\Controllers\Console\RedisController::class, 'cacheStats']);
+    });
+
+    // Activity Journal routes for frontend compatibility
+    Route::prefix('manage/activity-journal')->middleware(['auth:sanctum'])->group(function (): void {
+        Route::get('', [ActivityLogController::class, 'index']);
+        Route::get('statistics', [ActivityLogController::class, 'statistics']);
+        Route::get('recent', [ActivityLogController::class, 'recent']);
+        Route::post('clear', [ActivityLogController::class, 'clear']);
+        Route::get('export', [ActivityLogController::class, 'export']);
+    });
+
+    // Access Journal / Login History routes for frontend compatibility
+    Route::prefix('manage/access-journal')->middleware(['auth:sanctum'])->group(function (): void {
+        Route::get('', [LoginHistoryController::class, 'index']);
+        Route::get('statistics', [LoginHistoryController::class, 'statistics']);
+        Route::get('suspicious', [LoginHistoryController::class, 'suspicious']);
+        Route::post('clear', [LoginHistoryController::class, 'clear']);
+        Route::get('export', [LoginHistoryController::class, 'export']);
     });
 });

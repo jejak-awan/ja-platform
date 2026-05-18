@@ -23,8 +23,8 @@ const fetchData = async () => {
     loading.value = true;
     try {
         const [aRes, tRes] = await Promise.all([
-            axios.get('/api/v1/admin/extensions/alumni'),
-            axios.get('/api/v1/admin/extensions/tracer-studies')
+            axios.get('/api/v1/manage/school/extensions/alumni'),
+            axios.get('/api/v1/manage/school/extensions/tracer-studies')
         ]);
         alumni.value = aRes.data.data || [];
         tracerStudies.value = tRes.data.data || [];

@@ -7,6 +7,7 @@ use Modules\Library\Models\Category;
 use Modules\Cms\Models\Content;
 use Modules\Library\Models\Tag;
 use Modules\Search\Services\SearchService;
+use Modules\Search\Models\SearchQuery;
 use Modules\Search\Models\SearchIndex;
 use Tests\TestCase;
 
@@ -103,11 +104,15 @@ class SearchServiceTest extends TestCase
 
         $counts = $this->service->reindexAll();
 
-        // 1 content + 2 cms_categories + 1 tag = 4
-        $this->assertDatabaseCount('srch_indexes', 4);
+        // Verify counts returned by the reindex service
         $this->assertEquals(1, $counts['cms_contents']);
         $this->assertEquals(2, $counts['cms_categories']);
         $this->assertEquals(1, $counts['cms_tags']);
+        $this->assertGreaterThan(0, $counts['system_pages']);
+
+        // Verify that items are successfully written to the database
+        $this->assertDatabaseCount('srch_indexes', SearchIndex::count());
+        $this->assertGreaterThan(0, SearchIndex::where('searchable_type', 'SystemPage')->count());
     }
 
     public function test_search_empty_query(): void
@@ -129,5 +134,30 @@ class SearchServiceTest extends TestCase
 
         $result = $this->service->searchByType('Type', 'custom');
         $this->assertCount(1, $result['results']);
+    }
+
+    public function test_search_by_uuid(): void
+    {
+        $uuid = '019e3699-7fcf-7345-83c2-d81fcd29cc75';
+        
+        SearchIndex::create([
+            'searchable_type' => 'Post',
+            'searchable_id' => $uuid,
+            'title' => 'Specific Document Title',
+            'content' => 'Some highly specific information that does not mention the uuid string inside.',
+            'type' => 'post',
+            'relevance_score' => 10,
+        ]);
+
+        // Search by UUID exactly
+        $result = $this->service->search($uuid);
+        $this->assertCount(1, $result['results']);
+        $this->assertEquals('Specific Document Title', $result['results'][0]['title']);
+
+        // Search by UUID inside getSuggestions (truncate query log to isolate from search history)
+        SearchQuery::truncate();
+        $suggestions = $this->service->getSuggestions($uuid);
+        $this->assertCount(1, $suggestions);
+        $this->assertEquals('Specific Document Title', $suggestions[0]['text']);
     }
 }

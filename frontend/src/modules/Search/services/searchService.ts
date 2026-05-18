@@ -15,6 +15,14 @@ export const SearchService = {
         return api.get(searchPaths.manageQueries, { params });
     },
 
+    deleteQuery(id: string): Promise<AxiosResponse> {
+        return api.delete(searchPaths.deleteQuery(id));
+    },
+
+    clearQueries(): Promise<AxiosResponse> {
+        return api.post(searchPaths.clearQueries);
+    },
+
     reindex(): Promise<AxiosResponse> {
         return api.post(searchPaths.reindex);
     },

@@ -371,7 +371,7 @@ import { useI18n } from 'vue-i18n';
 import api from '@/engine/api/client';
 import { parseSingleResponse } from '@/shared/utils/responseParser';
 import QRCode from 'qrcode';
-import toast from '@/shared/services/legacy-toast';
+import toast from '@/shared/services/toastService';
 
 
 // Shadcn Components

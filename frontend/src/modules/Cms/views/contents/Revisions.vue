@@ -253,7 +253,7 @@ import RotateCcw from 'lucide-vue-next/dist/esm/icons/rotate-ccw.js';
 import X from 'lucide-vue-next/dist/esm/icons/x.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import toast from '@/shared/services/legacy-toast';
+import toast from '@/shared/services/toastService';
 
 interface Revision {
     id: string;

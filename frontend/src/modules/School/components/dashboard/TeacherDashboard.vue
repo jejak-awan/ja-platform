@@ -226,9 +226,9 @@ const fetchData = async () => {
     loading.value = true;
     try {
         const [statsRes, schedulesRes, journalsRes] = await Promise.all([
-            api.get('/admin/teacher/dashboard-stats'),
-            api.get('/admin/teacher/schedules', { params: { day: dayjs().format('dddd') } }),
-            api.get('/admin/teacher/recent-journals')
+            api.get('/manage/school/teacher/dashboard-stats'),
+            api.get('/manage/school/teacher/schedules', { params: { day: dayjs().format('dddd') } }),
+            api.get('/manage/school/teacher/recent-journals')
         ]);
 
         const s = parseResponse(statsRes).data as any;

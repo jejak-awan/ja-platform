@@ -123,7 +123,7 @@ const handleSubmit = async () => {
   
   loading.value = true;
   try {
-    await api.post('/admin/logistics/inventory/items', form.value);
+    await api.post('/manage/school/logistics/inventory/items', form.value);
     toast.success.action('Barang berhasil disimpan');
     emit('save');
     emit('update:open', false);

@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6 animate-in fade-in duration-700">
-    <!-- Header Section: Clean & Flat (Consistent with Core Admin) -->
+    <!-- Header Section: Clean & Flat (Consistent with System Admin) -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2 px-2">
       <div>
         <h1 class="text-3xl font-bold tracking-tight text-foreground">

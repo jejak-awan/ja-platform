@@ -8,105 +8,105 @@ import type {
 
 export const LogisticsService = {
     async getSarprasData(type: string, params: Record<string, any> = {}): Promise<AxiosResponse<any>> {
-        return api.get(`admin/sarpras/${type}`, { params });
+        return api.get(`manage/school/sarpras/${type}`, { params });
     },
 
     async storeSarprasData(type: string, data: any): Promise<AxiosResponse<any>> {
-        return api.post(`admin/sarpras/${type}`, data);
+        return api.post(`manage/school/sarpras/${type}`, data);
     },
 
     async updateSarprasData(type: string, id: string | string, data: any): Promise<AxiosResponse<any>> {
-        return api.put(`admin/sarpras/${type}/${id}`, data);
+        return api.put(`manage/school/sarpras/${type}/${id}`, data);
     },
 
     async deleteSarprasData(type: string, id: string | string): Promise<AxiosResponse<void>> {
-        return api.delete(`admin/sarpras/${type}/${id}`);
+        return api.delete(`manage/school/sarpras/${type}/${id}`);
     },
 
     // Specific helpers if needed
     async getRooms(): Promise<AxiosResponse<HostelRoom[]>> {
-        return api.get('admin/sarpras/room');
+        return api.get('manage/school/sarpras/room');
     },
 
     async getAssets(): Promise<AxiosResponse<Asset[]>> {
-        return api.get('admin/sarpras/asset');
+        return api.get('manage/school/sarpras/asset');
     },
 
     async deleteAsset(id: string | string): Promise<AxiosResponse<void>> {
-        return api.delete(`admin/sarpras/asset/${id}`);
+        return api.delete(`manage/school/sarpras/asset/${id}`);
     },
 
     async getBuildings(): Promise<AxiosResponse<any[]>> {
-        return api.get('admin/sarpras/building');
+        return api.get('manage/school/sarpras/building');
     },
 
     async getLands(): Promise<AxiosResponse<any[]>> {
-        return api.get('admin/sarpras/land');
+        return api.get('manage/school/sarpras/land');
     },
 
     // Inventory
     async getInventoryCategories(): Promise<AxiosResponse<any[]>> {
-        return api.get('admin/logistics/inventory/categories');
+        return api.get('manage/school/logistics/inventory/categories');
     },
 
     async getInventoryItems(params: Record<string, any> = {}): Promise<AxiosResponse<InventoryItem[]>> {
-        return api.get('admin/logistics/inventory/items', { params });
+        return api.get('manage/school/logistics/inventory/items', { params });
     },
 
     async getInventoryTransactions(params: Record<string, any> = {}): Promise<AxiosResponse<any[]>> {
-        return api.get('admin/logistics/inventory/transactions', { params });
+        return api.get('manage/school/logistics/inventory/transactions', { params });
     },
 
     // Career / Job Portal
     async getSarprasRooms(): Promise<AxiosResponse<HostelRoom[]>> {
-        return api.get('admin/sarpras/room');
+        return api.get('manage/school/sarpras/room');
     },
 
     async getVacancies(params: Record<string, any> = {}): Promise<AxiosResponse<Vacancy[]>> {
-        return api.get('admin/logistics/career/vacancies', { params });
+        return api.get('manage/school/logistics/career/vacancies', { params });
     },
 
     async getApplications(params: Record<string, any> = {}): Promise<AxiosResponse<Application[]>> {
-        return api.get('admin/logistics/career/applications', { params });
+        return api.get('manage/school/logistics/career/applications', { params });
     },
 
     // Transport
     async getTransportVehicles(params: Record<string, any> = {}): Promise<AxiosResponse<TransportVehicle[]>> {
-        return api.get('admin/logistics/transport/vehicles', { params });
+        return api.get('manage/school/logistics/transport/vehicles', { params });
     },
 
     async getTransportRoutes(params: Record<string, any> = {}): Promise<AxiosResponse<TransportRoute[]>> {
-        return api.get('admin/logistics/transport/routes', { params });
+        return api.get('manage/school/logistics/transport/routes', { params });
     },
 
     async getTransportRegistrations(params: Record<string, any> = {}): Promise<AxiosResponse<any[]>> {
-        return api.get('admin/logistics/transport/registrations', { params });
+        return api.get('manage/school/logistics/transport/registrations', { params });
     },
 
     // Hostel
     async getHostelBlocks(): Promise<AxiosResponse<HostelBlock[]>> {
-        return api.get('admin/logistics/hostel/blocks');
+        return api.get('manage/school/logistics/hostel/blocks');
     },
 
     async getHostelRooms(blockId: string | Record<string, any>): Promise<AxiosResponse<HostelRoom[]>> {
         const id = typeof blockId === 'object' ? (blockId.block_id || '') : blockId;
-        return api.get(`admin/logistics/hostel/blocks/${id}/rooms`);
+        return api.get(`manage/school/logistics/hostel/blocks/${id}/rooms`);
     },
 
     async getHostelBeds(roomId: string): Promise<AxiosResponse<HostelBed[]>> {
-        return api.get(`admin/logistics/hostel/rooms/${roomId}/beds`);
+        return api.get(`manage/school/logistics/hostel/rooms/${roomId}/beds`);
     },
 
     async releaseBed(allocationId: string): Promise<AxiosResponse<void>> {
-        return api.post(`admin/logistics/hostel/release/${allocationId}`);
+        return api.post(`manage/school/logistics/hostel/release/${allocationId}`);
     },
 
     async allocateBed(data: Record<string, any>): Promise<AxiosResponse<any>> {
-        return api.post('admin/logistics/hostel/allocate', data);
+        return api.post('manage/school/logistics/hostel/allocate', data);
     },
 
     async registerTransport(data: Record<string, any>): Promise<AxiosResponse<any>> {
-        return api.post('admin/logistics/transport/register', data);
+        return api.post('manage/school/logistics/transport/register', data);
     }
 };
 

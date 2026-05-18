@@ -259,10 +259,10 @@ import BarChart3 from 'lucide-vue-next/dist/esm/icons/chart-bar-stacked.js';
 import Loader2 from 'lucide-vue-next/dist/esm/icons/loader-circle.js';
 
 const authStore = useAuthStore();
-const AsyncQuickActions = defineAsyncComponent(() => import('@/modules/System/components/admin/QuickActions.vue'));
-const AsyncSystemHealthWidget = defineAsyncComponent(() => import('@/modules/System/components/admin/SystemHealthWidget.vue'));
-const AsyncRecentActivityWidget = defineAsyncComponent(() => import('@/modules/System/components/admin/RecentActivityWidget.vue'));
-const AsyncEmailStatusWidget = defineAsyncComponent(() => import('@/modules/System/components/admin/EmailStatusWidget.vue'));
+const AsyncQuickActions = defineAsyncComponent(() => import('@/modules/System/components/console/QuickActions.vue'));
+const AsyncSystemHealthWidget = defineAsyncComponent(() => import('@/modules/System/components/console/SystemHealthWidget.vue'));
+const AsyncRecentActivityWidget = defineAsyncComponent(() => import('@/modules/System/components/console/RecentActivityWidget.vue'));
+const AsyncEmailStatusWidget = defineAsyncComponent(() => import('@/modules/System/components/console/EmailStatusWidget.vue'));
 const AsyncLineChart = defineAsyncComponent(() => import('@/modules/System/components/charts/LineChart.vue'));
 
 const stats = ref<SystemStats>({

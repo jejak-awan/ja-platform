@@ -76,7 +76,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import api from '@/engine/api/client';
 import { parseResponse, ensureArray } from '@/shared/utils/responseParser';
-import toast from '@/shared/services/legacy-toast';
+import toast from '@/shared/services/toastService';
 import Plus from 'lucide-vue-next/dist/esm/icons/plus.js';
 import type { Content, Category } from '@/modules/Cms/types/cms';
 import type { EventClickArg, EventContentArg, EventDropArg } from '@fullcalendar/core';

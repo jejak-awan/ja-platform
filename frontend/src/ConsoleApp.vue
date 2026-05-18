@@ -63,7 +63,7 @@ useHead({
 });
 
 onMounted(async () => {
-    // Standard initialization: Fetch unified public settings from Core
+    // Standard initialization: Fetch unified public settings from System
     await systemStore.fetchPublicSettings();
 });
 

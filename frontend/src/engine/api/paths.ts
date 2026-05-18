@@ -88,6 +88,8 @@ export const searchPaths = {
     public: '/public/search',
     manageStats: '/manage/search/stats',
     manageQueries: '/manage/search/queries',
+    deleteQuery: (id: string) => `/manage/search/queries/${id}`,
+    clearQueries: '/manage/search/queries/clear',
     reindex: '/manage/search/reindex',
 } as const;
 

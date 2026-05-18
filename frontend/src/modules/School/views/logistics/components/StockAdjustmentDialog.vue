@@ -113,7 +113,7 @@ const handleSubmit = async () => {
 
    loading.value = true;
    try {
-      await api.post('/admin/logistics/inventory/adjust', form.value);
+      await api.post('/manage/school/logistics/inventory/adjust', form.value);
       toast.success.action(t('modules.school.academic.messages.updateSuccess'));
       emit('save');
       emit('update:open', false);

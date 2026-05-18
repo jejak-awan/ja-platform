@@ -277,11 +277,31 @@ class ContentController extends BaseApiController
         if ($request->filled('search')) {
             $searchRaw = $request->input('search');
             $search = is_string($searchRaw) ? $searchRaw : '';
-            $query->where(function ($q) use ($search): void {
+            
+            // Clean and normalize UUID query if applicable
+            $cleanSearch = preg_replace('/[^a-zA-Z0-9]/', '', $search);
+            $isUuid = false;
+            $uuidQuery = $search;
+            if (is_string($cleanSearch) && preg_match('/^[0-9a-fA-F]{32}$/', $cleanSearch)) {
+                $isUuid = true;
+                $uuidQuery = sprintf(
+                    '%s-%s-%s-%s-%s',
+                    substr($cleanSearch, 0, 8),
+                    substr($cleanSearch, 8, 4),
+                    substr($cleanSearch, 12, 4),
+                    substr($cleanSearch, 16, 4),
+                    substr($cleanSearch, 20, 12)
+                );
+            }
+
+            $query->where(function ($q) use ($search, $isUuid, $uuidQuery): void {
                 $searchStr = strtolower($search);
                 $q->where(\Illuminate\Support\Facades\DB::raw('lower(title)'), 'like', "%{$searchStr}%")
                     ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(body)'), 'like', "%{$searchStr}%")
                     ->orWhere(\Illuminate\Support\Facades\DB::raw('lower(excerpt)'), 'like', "%{$searchStr}%");
+                if ($isUuid) {
+                    $q->orWhere('id', $uuidQuery);
+                }
             });
         }
 

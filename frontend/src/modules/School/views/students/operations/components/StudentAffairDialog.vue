@@ -241,7 +241,7 @@ watch(() => props.open, (isOpen) => {
 
 const fetchMetadata = async () => {
     try {
-        const response = await api.get('/admin/students?per_page=100');
+        const response = await api.get('/manage/school/students?per_page=100');
         const { data } = parseResponse<Student>(response);
         students.value = data;
     } catch (e) {

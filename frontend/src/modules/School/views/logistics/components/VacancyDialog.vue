@@ -89,7 +89,7 @@ const handleSubmit = async () => {
   
   loading.value = true;
   try {
-    await api.post('/admin/logistics/career/vacancies', form.value);
+    await api.post('/manage/school/logistics/career/vacancies', form.value);
     toast.success.action('Lowongan berhasil diposting');
     emit('save');
     emit('update:open', false);
