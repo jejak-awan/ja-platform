@@ -14,6 +14,13 @@
 
       <div class="flex items-center gap-2">
         <Button
+          class="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0"
+          @click="scaffolderModalOpen = true"
+        >
+          <Wand class="w-4 h-4" />
+          Scaffolder
+        </Button>
+        <Button
           variant="secondary"
           class="flex items-center gap-2 hover:bg-secondary/80"
           @click="openGitModal"
@@ -135,6 +142,16 @@
       @clone="cloneGitRepo"
       @clear-error="cloneError = ''"
     />
+
+    <!-- DeveloperKit Scaffolder Modal Component -->
+    <ScaffolderModal
+      v-model:open="scaffolderModalOpen"
+      :trans="trans"
+      :scaffolding="scaffolding"
+      :scaffold-error="scaffoldError"
+      @scaffold="scaffoldPlugin"
+      @clear-error="scaffoldError = ''"
+    />
   </div>
 </template>
 
@@ -152,12 +169,14 @@ import ExtensionCard from './components/ExtensionCard.vue';
 import UploadModal from './components/UploadModal.vue';
 import GitModal from './components/GitModal.vue';
 import ConfigureModal from './components/ConfigureModal.vue';
+import ScaffolderModal from './components/ScaffolderModal.vue';
 
 // Lucide icons
 import SearchIcon from 'lucide-vue-next/dist/esm/icons/search.js';
 import Puzzle from 'lucide-vue-next/dist/esm/icons/puzzle.js';
 import UploadIcon from 'lucide-vue-next/dist/esm/icons/upload.js';
 import GitBranch from 'lucide-vue-next/dist/esm/icons/git-branch.js';
+import Wand from 'lucide-vue-next/dist/esm/icons/wand.js';
 
 interface FeatureItem {
     id: string;
@@ -316,12 +335,16 @@ watch([searchQuery, activeTab], () => {
 const uploadModalOpen = ref(false);
 const settingsModalOpen = ref(false);
 const gitModalOpen = ref(false);
+const scaffolderModalOpen = ref(false);
 
 const uploading = ref(false);
 const uploadError = ref('');
 
 const cloning = ref(false);
 const cloneError = ref('');
+
+const scaffolding = ref(false);
+const scaffoldError = ref('');
 
 const activeExtConfig = ref<ExtensionItem | null>(null);
 const rawSettingsJson = ref('{}');
@@ -566,6 +589,38 @@ const cloneGitRepo = async (repoUrl: string) => {
         cloneError.value = err.response?.data?.message || 'Security gate: Banned keyword or Git signature validation failed!';
     } finally {
         cloning.value = false;
+    }
+};
+
+const scaffoldPlugin = async (payload: any) => {
+    scaffolding.value = true;
+    scaffoldError.value = '';
+    try {
+        if (payload.install_locally) {
+            const response = await api.post('/manage/infra/cck/scaffold', payload);
+            toast.success(response.data?.message || 'Plugin scaffolded and installed successfully! 🚀');
+            scaffolderModalOpen.value = false;
+            await fetchExtensions();
+        } else {
+            const response = await api.post('/manage/infra/cck/scaffold', payload, {
+                responseType: 'blob'
+            });
+            const blob = new Blob([response.data], { type: 'application/zip' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${payload.slug}.zip`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            toast.success('Boilerplate ZIP generated and downloaded successfully! 📦');
+            scaffolderModalOpen.value = false;
+        }
+    } catch (err: any) {
+        scaffoldError.value = err.response?.data?.message || 'Gagal melakukan scaffolding.';
+        toast.error(scaffoldError.value);
+    } finally {
+        scaffolding.value = false;
     }
 };
 
