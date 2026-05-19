@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\File;
 use Modules\System\Http\Controllers\BaseApiController;
 use Modules\System\Models\Extension;
 use Modules\System\Models\ExtensionLog;
+use Modules\System\Models\Feature;
+use Modules\System\Services\ExtensionSecurityScanner;
 use ZipArchive;
 
 class ExtensionController extends BaseApiController
@@ -23,7 +25,7 @@ class ExtensionController extends BaseApiController
     {
         $this->discoverExtensions();
 
-        $extensions = Extension::latest()->get();
+        $extensions = Extension::with('features')->latest()->get();
 
         return $this->success($extensions, 'Extensions retrieved successfully');
     }
@@ -223,8 +225,8 @@ class ExtensionController extends BaseApiController
         $tempPath = $uploadedFile->getPathname();
 
         try {
-            // 1. Run our Static Security Regex Scanner
-            $this->scanZipContents($tempPath);
+            // 1. Run our Static Security AST Scanner
+            (new ExtensionSecurityScanner())->scanZip($tempPath);
 
             // 2. Extract temporarily to inspect manifest.json
             $zip = new ZipArchive;
@@ -314,43 +316,7 @@ class ExtensionController extends BaseApiController
         }
     }
 
-    /**
-     * Run static regex checks on all ZIP PHP files before extraction (Sandbox Guard).
-     */
-    protected function scanZipContents(string $zipPath): void
-    {
-        $zip = new ZipArchive;
-        if ($zip->open($zipPath) !== true) {
-            throw new Exception('Gagal membuka file ZIP.');
-        }
 
-        $bannedPatterns = [
-            '/\bexec\s*\(/i',
-            '/\bshell_exec\s*\(/i',
-            '/\bsystem\s*\(/i',
-            '/\bpassthru\s*\(/i',
-            '/\beval\s*\(/i',
-            '/\bbase64_decode\s*\(/i',
-            '/`[^`]*`/', // Backticks execution operator
-        ];
-
-        for ($i = 0; $i < $zip->numFiles; $i++) {
-            $filename = $zip->getNameIndex($i);
-
-            if (pathinfo($filename, PATHINFO_EXTENSION) === 'php') {
-                $content = $zip->getFromIndex($i);
-
-                foreach ($bannedPatterns as $pattern) {
-                    if (preg_match($pattern, $content)) {
-                        $zip->close();
-                        throw new Exception("Security Gate: File {$filename} mengandung kode/fungsi terlarang.");
-                    }
-                }
-            }
-        }
-
-        $zip->close();
-    }
 
     /**
      * Automatically discover and synchronize newly added folders in Modules/ and Plugins/
@@ -380,6 +346,7 @@ class ExtensionController extends BaseApiController
                             'version' => $manifest['version'] ?? '1.0.0',
                             'author' => $manifest['author'] ?? 'Core',
                             'is_core' => in_array($slug, ['system', 'security', 'analytics', 'infra', 'ai', 'media', 'cms', 'school']),
+                            'features' => $manifest['features'] ?? [],
                         ];
                     }
                 }
@@ -401,6 +368,7 @@ class ExtensionController extends BaseApiController
                             'version' => $manifest['version'] ?? '1.0.0',
                             'author' => $manifest['author'] ?? 'Anonymous',
                             'is_core' => false,
+                            'features' => $manifest['features'] ?? [],
                         ];
                     }
                 }
@@ -409,7 +377,7 @@ class ExtensionController extends BaseApiController
 
         // 3. Synchronize with Database
         foreach ($discovered as $slug => $meta) {
-            Extension::updateOrCreate(
+            $extension = Extension::updateOrCreate(
                 ['slug' => $slug],
                 [
                     'type' => $meta['type'],
@@ -418,11 +386,182 @@ class ExtensionController extends BaseApiController
                     'database_version' => Extension::where('slug', $slug)->value('database_version') ?? '1.0.0',
                     'status' => Extension::where('slug', $slug)->value('status') ?? ($meta['is_core'] ? 'active' : 'inactive'),
                     'is_core' => $meta['is_core'],
-                    'author' => $meta['author'],
-                    'license' => 'MIT',
+                    'author' => 'jejakawan',
+                    'license' => 'Proprietary',
                     'requirements' => [],
                 ]
             );
+
+            // Synchronize sub-features
+            if (! empty($meta['features']) && is_array($meta['features'])) {
+                foreach ($meta['features'] as $feat) {
+                    if (isset($feat['slug'], $feat['name'])) {
+                        Feature::updateOrCreate(
+                            ['slug' => $feat['slug']],
+                            [
+                                'extension_slug' => $slug,
+                                'name' => $feat['name'],
+                                'description' => $feat['description'] ?? null,
+                                'category' => $feat['category'] ?? 'business',
+                                'is_active' => Feature::where('slug', $feat['slug'])->value('is_active') ?? true,
+                            ]
+                        );
+                    }
+                }
+            }
         }
     }
+
+    /**
+     * Toggle status of a specific sub-feature (Activate/Deactivate).
+     */
+    public function toggleFeature(Request $request, string $slug): JsonResponse
+    {
+        $feature = Feature::where('slug', $slug)->firstOrFail();
+        $extension = $feature->extension;
+
+        if ($extension && $extension->is_core && in_array($extension->slug, ['system', 'security', 'infra'])) {
+            return $this->error('Sub-features of critical core modules cannot be toggled');
+        }
+
+        $validated = $request->validate([
+            'is_active' => 'required|boolean',
+        ]);
+
+        $feature->update([
+            'is_active' => $validated['is_active'],
+        ]);
+
+        return $this->success($feature, 'Sub-feature status updated successfully');
+    }
+
+    /**
+     * Clone a plugin or module from a Git repository, scan it, and register it.
+     */
+    public function gitClone(Request $request): JsonResponse
+    {
+        $request->validate([
+            'repo_url' => 'required|string',
+        ]);
+
+        $repoUrl = $request->input('repo_url');
+
+        // Simple validation of git URL
+        if (!preg_match('/^(https?:\/\/|git@|ssh:\/\/)/', $repoUrl)) {
+            return $this->error('Security gate: Invalid Git repository URL format.');
+        }
+
+        // Create a temporary directory inside storage/framework
+        $tempDirName = 'git-clone-' . uniqid();
+        $tempPath = base_path('storage/framework/' . $tempDirName);
+
+        try {
+            // 1. Run git clone into temporary path
+            $escapedRepo = escapeshellarg($repoUrl);
+            $escapedPath = escapeshellarg($tempPath);
+            
+            $output = [];
+            $resultCode = 0;
+            exec("git clone --depth 1 {$escapedRepo} {$escapedPath} 2>&1", $output, $resultCode);
+
+            if ($resultCode !== 0) {
+                if (is_dir($tempPath)) {
+                    File::deleteDirectory($tempPath);
+                }
+                $errorStr = implode("\n", $output);
+                return $this->error('Failed to clone Git repository: ' . $errorStr);
+            }
+
+            // 2. Perform Static Security Scan on cloned PHP files using AST parser
+            (new ExtensionSecurityScanner())->scanDirectory($tempPath);
+
+            // 3. Verify manifest.json exists
+            $manifestFile = $tempPath . '/manifest.json';
+            if (!File::exists($manifestFile)) {
+                File::deleteDirectory($tempPath);
+                return $this->error('Security gate: Cloned repository is missing manifest.json.');
+            }
+
+            $manifest = json_decode(File::get($manifestFile), true);
+            if (json_last_error() !== JSON_ERROR_NONE || !isset($manifest['slug'], $manifest['type'], $manifest['name'], $manifest['version'])) {
+                File::deleteDirectory($tempPath);
+                return $this->error('Security gate: Invalid manifest.json schema in Git repository.');
+            }
+
+            $slug = $manifest['slug'];
+            $type = $manifest['type'];
+
+            if (!in_array($type, ['module', 'plugin'])) {
+                File::deleteDirectory($tempPath);
+                return $this->error('Security gate: Invalid extension type in manifest.');
+            }
+
+            // 4. Move cloned directory to its final location
+            $targetDir = $type === 'module'
+                ? base_path('Modules/' . str_replace(' ', '', ucwords(str_replace('-', ' ', $slug))))
+                : base_path('Plugins/' . $slug);
+
+            if (is_dir($targetDir)) {
+                File::deleteDirectory($tempPath);
+                return $this->error('An extension with this slug already exists.');
+            }
+
+            // Move the cloned repository
+            File::moveDirectory($tempPath, $targetDir);
+
+            // 5. Register in database
+            $extension = Extension::updateOrCreate(
+                ['slug' => $slug],
+                [
+                    'type' => $type,
+                    'name' => $manifest['name'],
+                    'version' => $manifest['version'],
+                    'database_version' => '0.0.0',
+                    'status' => 'inactive',
+                    'is_core' => false,
+                    'author' => $manifest['author'] ?? 'Anonymous',
+                    'license' => $manifest['license'] ?? 'MIT',
+                    'requirements' => $manifest['dependencies'] ?? [],
+                    'settings' => [],
+                ]
+            );
+
+            // Dynamically register sub-features from manifest if present
+            if (!empty($manifest['features']) && is_array($manifest['features'])) {
+                foreach ($manifest['features'] as $feat) {
+                    if (isset($feat['slug'], $feat['name'])) {
+                        Feature::updateOrCreate(
+                            ['slug' => $feat['slug']],
+                            [
+                                'extension_slug' => $slug,
+                                'name' => $feat['name'],
+                                'description' => $feat['description'] ?? null,
+                                'category' => $feat['category'] ?? 'business',
+                                'is_active' => true,
+                            ]
+                        );
+                    }
+                }
+            }
+
+            ExtensionLog::create([
+                'extension_slug' => $slug,
+                'action' => 'install',
+                'version_before' => null,
+                'version_after' => $manifest['version'],
+                'status' => 'success',
+                'performed_by' => auth()->id(),
+            ]);
+
+            return $this->success($extension, 'Extension cloned and installed successfully from Git repository!', 201);
+
+        } catch (Exception $e) {
+            if (is_dir($tempPath)) {
+                File::deleteDirectory($tempPath);
+            }
+            return $this->error('Failed to clone and install: ' . $e->getMessage());
+        }
+    }
+
+
 }

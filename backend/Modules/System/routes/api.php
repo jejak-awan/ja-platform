@@ -165,6 +165,8 @@ Route::prefix('v1')->group(function (): void {
     Route::prefix('manage/infra/extensions')->middleware(['auth:sanctum'])->group(function (): void {
         Route::get('', [ExtensionController::class, 'index']);
         Route::post('upload', [ExtensionController::class, 'upload']);
+        Route::post('git-clone', [ExtensionController::class, 'gitClone']);
+        Route::put('features/{slug}/toggle', [ExtensionController::class, 'toggleFeature']);
         Route::post('{slug}/activate', [ExtensionController::class, 'activate']);
         Route::post('{slug}/deactivate', [ExtensionController::class, 'deactivate']);
         Route::put('{slug}/settings', [ExtensionController::class, 'updateSettings']);

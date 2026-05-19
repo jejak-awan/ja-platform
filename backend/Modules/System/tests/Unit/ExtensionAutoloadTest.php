@@ -83,4 +83,46 @@ PHP;
         $dummyInstance = new DummyClass;
         $this->assertEquals('Hello from PnP Engine', $dummyInstance->greet());
     }
+
+    /**
+     * Test active extensions list caching and automatic invalidation.
+     */
+    public function test_caches_active_extensions_and_invalidates_on_model_events(): void
+    {
+        $cacheFile = storage_path('framework/cache/active_extensions.json');
+
+        // 1. Clear cache initially
+        @unlink($cacheFile);
+
+        // 2. Trigger cache generation by executing autoload active extensions
+        $provider = new ExtensionAutoloadServiceProvider(app());
+        
+        // Setup database record
+        $ext = Extension::create([
+            'slug' => 'test-plugin',
+            'type' => 'plugin',
+            'name' => 'Test Plugin Autoload',
+            'version' => '1.0.0',
+            'database_version' => '1.0.0',
+            'status' => 'active',
+            'is_core' => false,
+            'author' => 'Test Author',
+            'license' => 'MIT',
+        ]);
+
+        $provider->register();
+
+        // 3. Verify file cache was generated
+        $this->assertFileExists($cacheFile);
+
+        $cached = json_decode(file_get_contents($cacheFile), true);
+        $this->assertIsArray($cached);
+        
+        $slugs = array_column($cached, 'slug');
+        $this->assertContains('test-plugin', $slugs);
+
+        // 4. Update status to inactive and verify file cache is deleted
+        $ext->update(['status' => 'inactive']);
+        $this->assertFileDoesNotExist($cacheFile);
+    }
 }

@@ -26,7 +26,26 @@ class Extension extends Model
 {
     use HasUuids, SoftDeletes;
 
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            @unlink(storage_path('framework/cache/active_extensions.json'));
+        });
+
+        static::deleted(function () {
+            @unlink(storage_path('framework/cache/active_extensions.json'));
+        });
+    }
+
     protected $table = 'sys_extensions';
+
+    /**
+     * Get the features associated with this extension.
+     */
+    public function features(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Feature::class, 'extension_slug', 'slug');
+    }
 
     protected $keyType = 'string';
 

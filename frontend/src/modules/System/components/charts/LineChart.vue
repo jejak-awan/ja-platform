@@ -1,7 +1,7 @@
 <template>
   <div class="chart-container w-full h-full relative">
     <Line
-      v-if="hasData"
+      v-if="hasData && isMounted"
       :key="chartKey"
       :data="chartData"
       :options="chartOptions"

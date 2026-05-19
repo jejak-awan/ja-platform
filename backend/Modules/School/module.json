@@ -1,11 +1,50 @@
 {
     "name": "School",
     "alias": "school",
-    "description": "",
+    "description": "Comprehensive school administration software",
     "keywords": [],
     "priority": 0,
+    "version": "1.0.0",
     "providers": [
         "Modules\\School\\Providers\\SchoolServiceProvider"
     ],
-    "files": []
+    "files": [],
+    "features": [
+        {
+            "slug": "school-institution",
+            "name": "Institution Profiles",
+            "description": "Configure organizational metadata, logos, and School Levels.",
+            "category": "business"
+        },
+        {
+            "slug": "school-academic",
+            "name": "Academic & Grading",
+            "description": "Manage semesters, classes, teachers journals, and grading.",
+            "category": "business"
+        },
+        {
+            "slug": "school-operations",
+            "name": "Students Affairs & BK",
+            "description": "Track student attendance, violations (points), and counseling logs.",
+            "category": "business"
+        },
+        {
+            "slug": "school-graduation",
+            "name": "Graduation Certificate SKL",
+            "description": "Automated graduation eligibility metrics and SKL generator.",
+            "category": "business"
+        },
+        {
+            "slug": "school-ppdb",
+            "name": "PPDB New Student Admission",
+            "description": "Manage new enrollments, document verification, and admission pipelines.",
+            "category": "business"
+        },
+        {
+            "slug": "school-logistics",
+            "name": "Logistics & Hostels",
+            "description": "Track hostels allocations, dynamic route transport, inventory and vacancy careers.",
+            "category": "business"
+        }
+    ]
 }

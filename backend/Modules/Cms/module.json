@@ -1,11 +1,32 @@
 {
     "name": "Cms",
     "alias": "cms",
-    "description": "",
+    "description": "Premium Content Management System module",
     "keywords": [],
     "priority": 0,
+    "version": "1.0.0",
     "providers": [
         "Modules\\Cms\\Providers\\CmsServiceProvider"
     ],
-    "files": []
+    "files": [],
+    "features": [
+        {
+            "slug": "cms-content",
+            "name": "Content Management",
+            "description": "Create, edit, preview, and publish structured articles/pages.",
+            "category": "business"
+        },
+        {
+            "slug": "cms-comments",
+            "name": "Comments Moderation",
+            "description": "Approve, reject, and mark comments as spam.",
+            "category": "business"
+        },
+        {
+            "slug": "cms-seo",
+            "name": "SEO & Sitemap Tools",
+            "description": "Generate robots.txt, sitemaps, and analyze content density.",
+            "category": "business"
+        }
+    ]
 }

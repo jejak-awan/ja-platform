@@ -5,28 +5,28 @@
       <div>
         <h1 class="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
           <Puzzle class="w-7 h-7 text-indigo-500" />
-          Extensions & App Store
+          {{ trans.title }}
         </h1>
         <p class="text-sm text-muted-foreground mt-1">
-          Manage dynamic plug-and-play modules and plugins securely with sandbox gating.
+          {{ trans.subtitle }}
         </p>
       </div>
 
       <div class="flex items-center gap-2">
         <Button
           variant="secondary"
-          class="flex items-center gap-2"
+          class="flex items-center gap-2 hover:bg-secondary/80"
           @click="openGitModal"
         >
           <GitBranch class="w-4 h-4" />
-          Git Integration
+          {{ trans.gitBtn }}
         </Button>
         <Button
           class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white border-0"
           @click="openUploadModal"
         >
-          <Upload class="w-4 h-4" />
-          Upload ZIP
+          <UploadIcon class="w-4 h-4" />
+          {{ trans.uploadBtn }}
         </Button>
       </div>
     </div>
@@ -34,12 +34,12 @@
     <!-- Search & Filter Controls -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-card/30 backdrop-blur-md p-4 rounded-xl border border-border/50">
       <div class="relative flex-1 max-w-md">
-        <Search class="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+        <SearchIcon class="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="Search by name, slug, or author..."
-          class="w-full bg-background border border-border/70 rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+          :placeholder="trans.searchPlaceholder"
+          class="w-full bg-background border border-border/70 rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-foreground"
         />
       </div>
 
@@ -62,293 +62,112 @@
       class="flex flex-col items-center justify-center py-20"
     >
       <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500" />
-      <span class="text-sm text-muted-foreground mt-4">Scanning system extensions...</span>
+      <span class="text-sm text-muted-foreground mt-4">{{ trans.loading }}</span>
     </div>
 
     <!-- Extensions Grid List -->
     <div
       v-else-if="filteredExtensions.length === 0"
-      class="flex flex-col items-center justify-center py-16 bg-card/20 border border-dashed border-border rounded-xl"
+      class="flex flex-col items-center justify-center py-16 bg-card/20 border border-dashed border-border rounded-xl animate-fade-in"
     >
       <Puzzle class="w-12 h-12 text-muted-foreground/50 mb-3" />
-      <h3 class="text-base font-semibold text-foreground">No extensions found</h3>
+      <h3 class="text-base font-semibold text-foreground">{{ trans.noExtensions }}</h3>
       <p class="text-sm text-muted-foreground max-w-sm text-center mt-1">
-        Try searching for different keywords or upload a new ZIP package to install.
+        {{ trans.noExtensionsSub }}
       </p>
     </div>
 
-    <div
-      v-else
-      class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
-    >
-      <Card
-        v-for="ext in filteredExtensions"
-        :key="ext.slug"
-        class="group relative flex flex-col justify-between overflow-hidden bg-card/20 backdrop-blur-md border border-border/50 hover:border-indigo-500/40 transition-all duration-300 rounded-xl"
-      >
-        <CardContent class="p-6 flex-1">
-          <!-- Card Header Info -->
-          <div class="flex items-start justify-between gap-4">
-            <div class="flex items-center gap-3">
-              <div :class="['p-2.5 rounded-xl', ext.type === 'module' ? 'bg-indigo-500/10 text-indigo-400' : 'bg-emerald-500/10 text-emerald-400']">
-                <Layers
-                  v-if="ext.type === 'module'"
-                  class="w-5 h-5"
-                />
-                <Puzzle
-                  v-else
-                  class="w-5 h-5"
-                />
-              </div>
-              <div>
-                <h3 class="font-bold text-foreground text-base tracking-tight leading-none flex items-center gap-1.5">
-                  {{ ext.name }}
-                  <span class="text-xs text-muted-foreground font-normal">v{{ ext.version }}</span>
-                </h3>
-                <span class="text-xs text-indigo-400/80 font-mono mt-1 block">{{ ext.slug }}</span>
-              </div>
-            </div>
+    <div v-else class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <ExtensionCard
+          v-for="ext in paginatedExtensions"
+          :key="ext.slug"
+          :ext="ext"
+          :locale="locale"
+          :trans="trans"
+          :get-localized-description="getLocalizedDescription"
+          @toggle-feature="toggleFeatureStatus"
+          @toggle-status="toggleExtensionStatus"
+          @configure="openSettingsModal"
+          @uninstall="uninstallExtension"
+        />
+      </div>
 
-            <Badge :variant="ext.status === 'active' ? 'success' : 'secondary'">
-              {{ ext.status }}
-            </Badge>
-          </div>
-
-          <p class="text-sm text-muted-foreground mt-4 line-clamp-2">
-            Dynamic system {{ ext.type }} supporting modular platform features.
-          </p>
-
-          <!-- Meta Info Table -->
-          <div class="mt-6 space-y-1.5 border-t border-border/30 pt-4 text-xs">
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">Author:</span>
-              <span class="font-medium text-foreground">{{ ext.author || 'Jejakawan' }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">License:</span>
-              <span class="font-mono text-foreground">{{ ext.license || 'MIT' }}</span>
-            </div>
-            <div class="flex justify-between" v-if="ext.is_core">
-              <span class="text-muted-foreground">System Core:</span>
-              <span class="text-indigo-400 font-semibold">Yes</span>
-            </div>
-          </div>
-        </CardContent>
-
-        <!-- Card Footer Actions -->
-        <CardFooter class="px-6 py-4 bg-muted/20 border-t border-border/30 flex items-center justify-between gap-2">
-          <div>
-            <Button
-              v-if="ext.status === 'active'"
-              variant="secondary"
-              size="sm"
-              class="flex items-center gap-1.5"
-              @click="openSettingsModal(ext)"
-            >
-              <Settings class="w-3.5 h-3.5" />
-              Configure
-            </Button>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <!-- Uninstall Inactive Non-Core -->
-            <Button
-              v-if="ext.status === 'inactive' && !ext.is_core"
-              variant="destructive"
-              size="sm"
-              class="px-2"
-              @click="uninstallExtension(ext.slug)"
-            >
-              <Trash2 class="w-4 h-4" />
-            </Button>
-
-            <!-- Activate / Deactivate Toggle -->
-            <Button
-              v-if="!ext.is_core"
-              :variant="ext.status === 'active' ? 'destructive' : 'secondary'"
-              size="sm"
-              class="flex items-center gap-1.5 font-semibold text-xs border-0"
-              @click="toggleExtensionStatus(ext)"
-            >
-              <Power class="w-3.5 h-3.5" />
-              {{ ext.status === 'active' ? 'Deactivate' : 'Activate' }}
-            </Button>
-            <span
-              v-else
-              class="text-xs text-muted-foreground font-mono"
-            >Locked Core</span>
-          </div>
-        </CardFooter>
-      </Card>
+      <!-- Standard Shared Pagination Component -->
+      <div v-if="totalPages > 1" class="mt-8 pt-4 border-t border-border/30">
+        <Pagination
+          v-model:current-page="currentPage"
+          v-model:per-page="itemsPerPage"
+          :total-items="filteredExtensions.length"
+          :show-per-page="true"
+          :show-page-numbers="true"
+          :per-page-options="[6, 12, 18, 24, 30]"
+          class="bg-transparent border-0 px-0 py-0"
+        />
+      </div>
     </div>
 
-    <!-- ZIP Upload Modal -->
-    <Dialog v-model:open="uploadModalOpen">
-      <DialogContent class="sm:max-w-md bg-card border border-border/80 rounded-xl">
-        <DialogHeader>
-          <DialogTitle class="flex items-center gap-2">
-            <Upload class="w-5 h-5 text-indigo-500" />
-            Upload Extension ZIP
-          </DialogTitle>
-        </DialogHeader>
+    <!-- ZIP Upload Modal Component -->
+    <UploadModal
+      v-model:open="uploadModalOpen"
+      :trans="trans"
+      :uploading="uploading"
+      :upload-error="uploadError"
+      @upload="uploadZip"
+      @clear-error="uploadError = ''"
+    />
 
-        <!-- Security Scanner Notice -->
-        <div class="bg-indigo-500/10 border border-indigo-500/20 p-3 rounded-lg flex gap-3 text-xs text-indigo-400 mt-2">
-          <ShieldCheck class="w-6 h-6 shrink-0 mt-0.5" />
-          <div>
-            <span class="font-bold block">Sandbox Gate Scanner Enabled</span>
-            All PHP files inside the ZIP will be scanned in real-time for forbidden system commands (exec, eval, shell_exec) before extraction.
-          </div>
-        </div>
+    <!-- Configure Settings Modal Component -->
+    <ConfigureModal
+      v-model:open="settingsModalOpen"
+      v-model:raw-settings-json="rawSettingsJson"
+      :trans="trans"
+      :active-ext-config="activeExtConfig"
+      @save="saveSettings"
+    />
 
-        <div class="mt-6 space-y-4">
-          <div
-            class="border-2 border-dashed border-border/80 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500/50 transition-colors"
-            @dragover.prevent
-            @drop.prevent="handleFileDrop"
-            @click="triggerFileInput"
-          >
-            <input
-              ref="fileInput"
-              type="file"
-              accept=".zip"
-              class="hidden"
-              @change="handleFileSelect"
-            />
-            <Upload class="w-10 h-10 text-muted-foreground/60 mb-2 animate-bounce" />
-            <span class="text-sm font-semibold text-foreground text-center">
-              {{ selectedFile ? selectedFile.name : 'Drag & drop ZIP here, or click to browse' }}
-            </span>
-            <span class="text-xs text-muted-foreground mt-1">ZIP package must contain manifest.json</span>
-          </div>
-
-          <div
-            v-if="uploadError"
-            class="bg-rose-500/10 border border-rose-500/20 p-3 rounded-lg flex gap-2 text-xs text-rose-400"
-          >
-            <AlertTriangle class="w-5 h-5 shrink-0" />
-            <span>{{ uploadError }}</span>
-          </div>
-        </div>
-
-        <DialogFooter class="mt-6 flex items-center justify-end gap-2">
-          <Button
-            variant="secondary"
-            @click="uploadModalOpen = false"
-          >
-            Cancel
-          </Button>
-          <Button
-            :disabled="!selectedFile || uploading"
-            class="bg-indigo-600 hover:bg-indigo-700 text-white border-0"
-            @click="uploadZip"
-          >
-            <span v-if="uploading">Security Scanning & Extracting...</span>
-            <span v-else>Install Extension</span>
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-
-    <!-- Configure Settings Modal -->
-    <Dialog v-model:open="settingsModalOpen">
-      <DialogContent class="sm:max-w-lg bg-card border border-border/80 rounded-xl">
-        <DialogHeader>
-          <DialogTitle class="flex items-center gap-2">
-            <Settings class="w-5 h-5 text-indigo-500" />
-            Configure {{ activeExtConfig?.name }} Settings
-          </DialogTitle>
-        </DialogHeader>
-
-        <div class="mt-4 space-y-4">
-          <div class="space-y-1">
-            <label class="text-xs text-muted-foreground uppercase font-mono">Dynamic Settings Schema</label>
-            <p class="text-xs text-muted-foreground mb-4">Edit settings variables stored in database for this package.</p>
-            <textarea
-              v-model="rawSettingsJson"
-              rows="6"
-              class="w-full bg-background border border-border rounded-lg p-3 font-mono text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
-              placeholder="{}"
-            />
-          </div>
-        </div>
-
-        <DialogFooter class="mt-6 flex items-center justify-end gap-2">
-          <Button
-            variant="secondary"
-            @click="settingsModalOpen = false"
-          >
-            Cancel
-          </Button>
-          <Button
-            class="bg-indigo-600 hover:bg-indigo-700 text-white border-0"
-            @click="saveSettings"
-          >
-            Save Settings
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-
-    <!-- Git Integration Placeholder -->
-    <Dialog v-model:open="gitModalOpen">
-      <DialogContent class="sm:max-w-md bg-card border border-border/80 rounded-xl">
-        <DialogHeader>
-          <DialogTitle class="flex items-center gap-2">
-            <GitBranch class="w-5 h-5 text-indigo-500" />
-            Git Repository Integration
-          </DialogTitle>
-        </DialogHeader>
-
-        <div class="mt-4 space-y-4 text-sm text-muted-foreground leading-relaxed">
-          <p>
-            Pull and clone private/public Git extension repositories dynamically into the JA-Platform!
-          </p>
-          <div class="space-y-2">
-            <label class="text-xs text-foreground font-semibold">Repository URL</label>
-            <input
-              type="text"
-              placeholder="https://github.com/username/ja-plugin-whatsapp.git"
-              class="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none"
-              disabled
-            />
-          </div>
-          <div class="bg-amber-500/10 border border-amber-500/20 p-3 rounded-lg text-xs text-amber-400 mt-2">
-            Git dynamic pull integrations require SSH token configurations. Feature is currently running under dry-run console.
-          </div>
-        </div>
-
-        <DialogFooter class="mt-6">
-          <Button
-            class="bg-indigo-600 hover:bg-indigo-700 text-white border-0"
-            @click="gitModalOpen = false"
-          >
-            Understood
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <!-- Git Integration Modal Component -->
+    <GitModal
+      v-model:open="gitModalOpen"
+      :trans="trans"
+      :cloning="cloning"
+      :clone-error="cloneError"
+      @clone="cloneGitRepo"
+      @clear-error="cloneError = ''"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter, useRoute } from 'vue-router';
 import api from '@/engine/api/client';
 import toast from '@/shared/services/toastService';
 import { useConfirm } from '@/shared/composables/useConfirm';
-import { Card, CardContent, CardFooter, Badge, Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/shared/components/ui';
+import { Button, Pagination } from '@/shared/components/ui';
+
+// Sub-components
+import ExtensionCard from './components/ExtensionCard.vue';
+import UploadModal from './components/UploadModal.vue';
+import GitModal from './components/GitModal.vue';
+import ConfigureModal from './components/ConfigureModal.vue';
 
 // Lucide icons
-import Search from 'lucide-vue-next/dist/esm/icons/search.js';
+import SearchIcon from 'lucide-vue-next/dist/esm/icons/search.js';
 import Puzzle from 'lucide-vue-next/dist/esm/icons/puzzle.js';
-import Layers from 'lucide-vue-next/dist/esm/icons/layers.js';
-import Upload from 'lucide-vue-next/dist/esm/icons/upload.js';
+import UploadIcon from 'lucide-vue-next/dist/esm/icons/upload.js';
 import GitBranch from 'lucide-vue-next/dist/esm/icons/git-branch.js';
-import Settings from 'lucide-vue-next/dist/esm/icons/settings.js';
-import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
-import Power from 'lucide-vue-next/dist/esm/icons/power.js';
-import AlertTriangle from 'lucide-vue-next/dist/esm/icons/triangle-alert.js';
-import ShieldCheck from 'lucide-vue-next/dist/esm/icons/shield-check.js';
+
+interface FeatureItem {
+    id: string;
+    extension_slug: string;
+    slug: string;
+    name: string;
+    description?: string;
+    category: string;
+    is_active: boolean;
+}
 
 interface ExtensionItem {
     id: string;
@@ -361,31 +180,175 @@ interface ExtensionItem {
     author?: string;
     license?: string;
     settings?: Record<string, unknown>;
+    features?: FeatureItem[];
 }
+
+const { locale } = useI18n();
+const router = useRouter();
+const route = useRoute();
 
 const extensions = ref<ExtensionItem[]>([]);
 const loading = ref(false);
 const searchQuery = ref('');
 const activeTab = ref('all');
 
-const filterTabs = [
-    { label: 'All', value: 'all' },
-    { label: 'Modules', value: 'module' },
-    { label: 'Plugins', value: 'plugin' }
-];
+// Computed dictionary translations based on active locale
+const trans = computed(() => {
+    const isId = locale.value === 'id';
+    return {
+        title: isId ? 'Ekstensi & Galeri Aplikasi' : 'Extensions & App Store',
+        subtitle: isId 
+            ? 'Kelola modul dinamis dan plugin plug-and-play secara aman dengan gerbang sandbox.' 
+            : 'Manage dynamic plug-and-play modules and plugins securely with sandbox gating.',
+        searchPlaceholder: isId ? 'Cari berdasarkan nama, slug, atau pembuat...' : 'Search by name, slug, or author...',
+        gitBtn: isId ? 'Integrasi Git' : 'Git Integration',
+        uploadBtn: isId ? 'Unggah ZIP' : 'Upload ZIP',
+        all: isId ? 'Semua' : 'All',
+        modules: isId ? 'Modul' : 'Modules',
+        plugins: isId ? 'Plugin' : 'Plugins',
+        author: isId ? 'Pembuat' : 'Author',
+        license: isId ? 'Lisensi' : 'License',
+        core: isId ? 'Core Sistem' : 'System Core',
+        locked: isId ? 'Core Terkunci' : 'Locked Core',
+        activate: isId ? 'Aktifkan' : 'Activate',
+        deactivate: isId ? 'Nonaktifkan' : 'Deactivate',
+        uninstall: isId ? 'Copot Pemasangan' : 'Uninstall',
+        configure: isId ? 'Konfigurasi' : 'Configure',
+        constituentFeatures: isId ? 'Daftar Fitur Bawaan' : 'Constituent Features',
+        noFeatures: isId ? 'Tidak ada fitur terdaftar.' : 'No features registered.',
+        noExtensions: isId ? 'Ekstensi tidak ditemukan' : 'No extensions found',
+        noExtensionsSub: isId ? 'Coba cari dengan kata kunci lain atau unggah ZIP baru untuk memasangnya.' : 'Try searching for different keywords or upload a new ZIP package to install.',
+        yes: isId ? 'Ya' : 'Yes',
+        no: isId ? 'Tidak' : 'No',
+        page: isId ? 'Halaman' : 'Page',
+        next: isId ? 'Berikutnya' : 'Next',
+        prev: isId ? 'Sebelumnya' : 'Previous',
+        showing: isId ? 'Menampilkan' : 'Showing',
+        of: isId ? 'dari' : 'of',
+        loading: isId ? 'Memindai ekstensi sistem...' : 'Scanning system extensions...',
+
+        // Modals
+        uploadTitle: isId ? 'Unggah ZIP Ekstensi' : 'Upload Extension ZIP',
+        sandboxNoticeTitle: isId ? 'Pemindai Sandbox Aktif' : 'Sandbox Gate Scanner Enabled',
+        sandboxNoticeDesc: isId
+            ? 'Semua file PHP di dalam berkas ZIP akan dipindai secara real-time dari perintah sistem terlarang (exec, eval, shell_exec) sebelum diekstraksi.'
+            : 'All PHP files inside the ZIP will be scanned in real-time for forbidden system commands (exec, eval, shell_exec) before extraction.',
+        dragDropLabel: isId ? 'Seret & lepas file ZIP di sini, atau klik untuk memilih' : 'Drag & drop ZIP here, or click to browse',
+        manifestNotice: isId ? 'Paket ZIP harus berisi file manifest.json' : 'ZIP package must contain manifest.json',
+        cancel: isId ? 'Batal' : 'Cancel',
+        installing: isId ? 'Memindai Keamanan & Mengekstrak...' : 'Security Scanning & Extracting...',
+        installBtn: isId ? 'Pasang Ekstensi' : 'Install Extension',
+        
+        configTitle: isId ? 'Konfigurasi Pengaturan' : 'Configure Settings',
+        configDesc: isId ? 'Edit variabel pengaturan yang disimpan dalam database untuk paket ini.' : 'Edit settings variables stored in database for this package.',
+        saveBtn: isId ? 'Simpan Pengaturan' : 'Save Settings',
+        
+        gitTitle: isId ? 'Integrasi Repositori Git' : 'Git Repository Integration',
+        gitDesc: isId ? 'Tarik dan klon repositori ekstensi Git privat/publik secara dinamis ke dalam JA-Platform!' : 'Pull and clone private/public Git extension repositories dynamically into the JA-Platform!',
+        repoUrl: isId ? 'URL Repositori' : 'Repository URL',
+        gitNotice: isId ? 'Integrasi tarikan dinamis Git memerlukan konfigurasi token SSH. Fitur ini saat ini berjalan di bawah konsol simulasi dry-run.' : 'Git dynamic pull integrations require SSH token configurations. Feature is currently running under dry-run console.',
+        understood: isId ? 'Dimengerti' : 'Understood'
+    };
+});
+
+const getLocalizedDescription = (ext: ExtensionItem) => {
+    const isId = locale.value === 'id';
+    if (!isId) {
+        const descEnMap: Record<string, string> = {
+            system: 'Core system configurations, RBAC user/role permissions, pulse activity logs, settings, and dynamic localizations.',
+            security: 'Robust enterprise shield, featuring Multi-Factor Authentication (2FA), firewall rate limit challenge, honeypots, and file integrity check.',
+            analytics: 'High-performance visitor traffic auditing, dashboard stats trackers, and event lifecycle counters.',
+            infra: 'Mission-critical operations: dynamic Redis caching managers, scheduled cron automation, and database backups.',
+            ai: 'Intelligent copilot workspace powered by Gemini models for auto-translations and smart content generation.',
+            media: 'Central enterprise file explorer featuring drag-and-drop uploads, directory structures, and image cropper.',
+            cms: 'Premium publishing engine with draft autosaving, comment moderation gates, sitemaps, and layout templates.',
+            school: 'State-of-the-art academic scheduler, PPDB online admissions, BK student behavior logs, logistics and vacancies.',
+            forms: 'Dynamic drag-and-drop form designer with validator engines and response exports.',
+            layout: 'Section block layout customizer and widget builder.',
+            library: 'Smart book library circulation cataloguing and medical UKS log tracking.',
+            newsletter: 'Campaign email broadcast automation and dynamic subscriber newsletters.',
+            search: 'High-speed global full-text query indexer.',
+            member: 'Membership profile signups and premium subscription packages.'
+        };
+        return descEnMap[ext.slug] || `Dynamic system ${ext.type} supporting modular platform features.`;
+    }
+    const descIdMap: Record<string, string> = {
+        system: 'Pengaturan core sistem, perizinan pengguna (RBAC), log aktivitas pulse, dan lokalisasi terjemahan.',
+        security: 'Perisai keamanan enterprise kokoh, dilengkapi Otentikasi 2FA, rate limit firewall, honeypot, dan pengecekan integritas file.',
+        analytics: 'Audit lalu lintas pengunjung berkinerja tinggi, dasbor statistik, dan pelacak event interaksi.',
+        infra: 'Operasi kritikal: manajemen Redis cache, penjadwal cron otomatis, dan backup database.',
+        ai: 'Asisten kecerdasan buatan (AI Copilot) didukung model Gemini untuk auto-translate dan kreasi konten pintar.',
+        media: 'Manajer media pusat dengan drag-and-drop upload, struktur folder, dan pemotong gambar terintegrasi.',
+        cms: 'Mesin penerbitan konten premium dengan autosave draft, moderasi komentar, sitemap SEO, dan template tata letak.',
+        school: 'Sistem akademik sekolah cerdas, PPDB online, log BK kesiswaan, manajemen asrama logistik, dan lowongan karir.',
+        forms: 'Desainer formulir dinamis serbaguna dengan mesin validator dan ekspor repons excel.',
+        layout: 'Kustomisasi tata letak widget halaman depan dan pengelolaan blok seksi.',
+        library: 'Sirkulasi perpustakaan buku pintar, katalogisasi digital, dan pelacak rekam medis UKS.',
+        newsletter: 'Automasi broadcast email kampanye pemasaran dan pelacakan langganan newsletter.',
+        search: 'Mesin pencarian indeks teks penuh berkecepatan tinggi secara global.',
+        member: 'Pendaftaran keanggotaan dan paket berlangganan premium khusus.'
+    };
+    return descIdMap[ext.slug] || `Modul sistem dinamis untuk mendukung fitur-fitur modular platform.`;
+};
+
+const filterTabs = computed(() => [
+    { label: trans.value.all, value: 'all' },
+    { label: trans.value.modules, value: 'module' },
+    { label: trans.value.plugins, value: 'plugin' }
+]);
+
+// Pagination state
+const currentPage = ref(1);
+const itemsPerPage = ref(6);
+const totalPages = computed(() => Math.ceil(filteredExtensions.value.length / itemsPerPage.value));
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
+const endIndex = computed(() => startIndex.value + itemsPerPage.value);
+const paginatedExtensions = computed(() => {
+    return filteredExtensions.value.slice(startIndex.value, endIndex.value);
+});
+
+// Watch query search or active tab filters to reset current page back to 1
+watch([searchQuery, activeTab], () => {
+    currentPage.value = 1;
+});
 
 // Modals state
 const uploadModalOpen = ref(false);
 const settingsModalOpen = ref(false);
 const gitModalOpen = ref(false);
 
-const selectedFile = ref<File | null>(null);
-const fileInput = ref<HTMLInputElement | null>(null);
 const uploading = ref(false);
 const uploadError = ref('');
 
+const cloning = ref(false);
+const cloneError = ref('');
+
 const activeExtConfig = ref<ExtensionItem | null>(null);
 const rawSettingsJson = ref('{}');
+
+const togglingFeature = ref<Record<string, boolean>>({});
+
+const toggleFeatureStatus = async (feature: FeatureItem) => {
+    togglingFeature.value[feature.slug] = true;
+    const targetStatus = !feature.is_active;
+
+    try {
+        const response = await api.put(`/manage/infra/extensions/features/${feature.slug}/toggle`, {
+            is_active: targetStatus
+        });
+
+        if (response.data?.success) {
+            feature.is_active = targetStatus;
+            toast.success(`Feature ${feature.name} has been ${targetStatus ? 'enabled' : 'disabled'}!`);
+        } else {
+            toast.error(response.data?.message || 'Failed to update feature status.');
+        }
+    } catch (err: unknown) {
+        toast.error('Failed to toggle feature.');
+    } finally {
+        togglingFeature.value[feature.slug] = false;
+    }
+};
 
 const { confirm } = useConfirm();
 
@@ -394,7 +357,9 @@ const fetchExtensions = async () => {
     loading.value = true;
     try {
         const response = await api.get('/manage/infra/extensions');
-        if (response.data?.success) {
+        if (Array.isArray(response.data)) {
+            extensions.value = response.data;
+        } else if (response.data?.success) {
             extensions.value = response.data.data || [];
         }
     } catch (err: unknown) {
@@ -434,11 +399,12 @@ const toggleExtensionStatus = async (ext: ExtensionItem) => {
 
     try {
         const response = await api.post(`/manage/infra/extensions/${ext.slug}/${action}`);
-        if (response.data?.success) {
+        const isSuccess = response.status === 200 || response.status === 201 || response.data?.success || (response.data && response.data.slug === ext.slug);
+        if (isSuccess) {
             toast.success(`${ext.name} has been successfully ${isActivating ? 'activated' : 'deactivated'}!`);
             await fetchExtensions();
         } else {
-            toast.error(response.data?.message || `Failed to ${action} extension.`);
+            toast.error(`Failed to ${action} extension.`);
         }
     } catch (err: unknown) {
         toast.error(`Error performing action: ${action}`);
@@ -458,7 +424,8 @@ const uninstallExtension = async (slug: string) => {
 
     try {
         const response = await api.delete(`/manage/infra/extensions/${slug}/uninstall`);
-        if (response.data?.success) {
+        const isSuccess = response.status === 200 || response.status === 204 || response.data?.success || response.data === null;
+        if (isSuccess) {
             toast.success('Extension purged and deleted successfully!');
             await fetchExtensions();
         }
@@ -469,38 +436,16 @@ const uninstallExtension = async (slug: string) => {
 
 // ZIP uploader triggers
 const openUploadModal = () => {
-    selectedFile.value = null;
     uploadError.value = '';
     uploadModalOpen.value = true;
 };
 
-const triggerFileInput = () => {
-    fileInput.value?.click();
-};
-
-const handleFileSelect = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-        selectedFile.value = target.files[0] ?? null;
-        uploadError.value = '';
-    }
-};
-
-const handleFileDrop = (e: DragEvent) => {
-    if (e.dataTransfer && e.dataTransfer.files.length > 0) {
-        selectedFile.value = e.dataTransfer.files[0] ?? null;
-        uploadError.value = '';
-    }
-};
-
-const uploadZip = async () => {
-    if (!selectedFile.value) return;
-
+const uploadZip = async (file: File) => {
     uploading.value = true;
     uploadError.value = '';
 
     const formData = new FormData();
-    formData.append('file', selectedFile.value);
+    formData.append('file', file);
 
     try {
         const response = await api.post('/manage/infra/extensions/upload', formData, {
@@ -509,12 +454,13 @@ const uploadZip = async () => {
             }
         });
 
-        if (response.data?.success) {
+        const isSuccess = response.status === 200 || response.status === 201 || response.data?.success || (response.data && response.data.slug);
+        if (isSuccess) {
             toast.success('Dynamic plugin installed successfully! Sandbox guard scan PASSED! ✅');
             uploadModalOpen.value = false;
             await fetchExtensions();
         } else {
-            uploadError.value = response.data?.message || 'Failed to install ZIP.';
+            uploadError.value = 'Failed to install ZIP.';
         }
     } catch (err: any) {
         uploadError.value = err.response?.data?.message || 'Security gate: Banned keyword/command execution code detected!';
@@ -525,9 +471,46 @@ const uploadZip = async () => {
 
 // Configure Settings Modal
 const openSettingsModal = (ext: ExtensionItem) => {
-    activeExtConfig.value = ext;
-    rawSettingsJson.value = JSON.stringify(ext.settings || {}, null, 2);
-    settingsModalOpen.value = true;
+    // Check if the module has a dedicated settings page route
+    const routeMap: Record<string, { name: string; query?: Record<string, string> } | string> = {
+        system: { name: 'settings', query: { tab: 'system' } },
+        security: { name: 'settings', query: { tab: 'security' } },
+        infra: { name: 'settings', query: { tab: 'performance' } },
+        ai: { name: 'settings', query: { tab: 'ai' } },
+        media: { name: 'settings', query: { tab: 'media' } },
+        analytics: { name: 'settings', query: { tab: 'analytics' } },
+        cms: { name: 'cms-settings' },
+        school: { name: 'schools.index' }, // Links directly to School Unit Management!
+        forms: '/dash/forms', // Forms module settings
+        library: '/dash/library',
+        newsletter: '/dash/newsletter',
+        search: { name: 'settings', query: { tab: 'system' } } // Search sits under system settings
+    };
+
+    const target = routeMap[ext.slug];
+    if (target) {
+        toast.success(`Redirecting to ${ext.name} configuration...`);
+        if (typeof target === 'object' && target.name) {
+            router.push({
+                name: target.name,
+                params: {
+                    dashboard_slug: route.params.dashboard_slug || 'dash',
+                    workspace_uuid: route.params.workspace_uuid || 'system'
+                },
+                query: target.query
+            });
+        } else if (typeof target === 'string') {
+            const activeSlug = route.params.dashboard_slug || 'dash';
+            const activeWorkspace = route.params.workspace_uuid || 'system';
+            const resolvedPath = target.replace('/dash', `/${activeSlug}/${activeWorkspace}`);
+            router.push(resolvedPath);
+        }
+    } else {
+        // Fallback: If no dedicated path exists (e.g. customized plugin with raw config settings)
+        activeExtConfig.value = ext;
+        rawSettingsJson.value = JSON.stringify(ext.settings || {}, null, 2);
+        settingsModalOpen.value = true;
+    }
 };
 
 const saveSettings = async () => {
@@ -546,7 +529,8 @@ const saveSettings = async () => {
             settings: parsedSettings
         });
 
-        if (response.data?.success) {
+        const isSuccess = response.status === 200 || response.data?.success || (response.data && response.data.slug === activeExtConfig.value.slug);
+        if (isSuccess) {
             toast.success('Configuration parameters updated successfully!');
             settingsModalOpen.value = false;
             await fetchExtensions();
@@ -557,7 +541,32 @@ const saveSettings = async () => {
 };
 
 const openGitModal = () => {
+    cloneError.value = '';
     gitModalOpen.value = true;
+};
+
+const cloneGitRepo = async (repoUrl: string) => {
+    cloning.value = true;
+    cloneError.value = '';
+
+    try {
+        const response = await api.post('/manage/infra/extensions/git-clone', {
+            repo_url: repoUrl
+        });
+
+        const isSuccess = response.status === 200 || response.status === 201 || response.data?.success;
+        if (isSuccess) {
+            toast.success('Dynamic plugin cloned and installed successfully from Git! ✅');
+            gitModalOpen.value = false;
+            await fetchExtensions();
+        } else {
+            cloneError.value = 'Failed to clone extension.';
+        }
+    } catch (err: any) {
+        cloneError.value = err.response?.data?.message || 'Security gate: Banned keyword or Git signature validation failed!';
+    } finally {
+        cloning.value = false;
+    }
 };
 
 onMounted(() => {
