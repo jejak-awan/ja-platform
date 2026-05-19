@@ -46,6 +46,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn (Request $request) => ($request->is('api/*') || $request->expectsJson()) ? null : '/');
 
         $middleware->web(prepend: [
+            \Modules\System\Http\Middleware\LazyExtensionBootMiddleware::class,
             HandleDomainRedirects::class,
             IdentifyWorkspace::class,
             VerifyConnection::class,
@@ -61,6 +62,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->api(prepend: [
+            \Modules\System\Http\Middleware\LazyExtensionBootMiddleware::class,
             HandleDomainRedirects::class,
             IdentifyWorkspace::class,
             VerifyConnection::class,

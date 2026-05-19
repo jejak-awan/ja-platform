@@ -107,6 +107,35 @@ class HookRegistry extends BaseRegistry
     protected function invoke(mixed $callback, array $params): mixed
     {
         try {
+            // Lazy Activation Engine: On-demand boot for plugin service providers before executing hooks
+            if (is_string($callback)) {
+                $callbackClean = ltrim($callback, '\\');
+                if (str_starts_with($callbackClean, 'Extensions\\')) {
+                    $parts = explode('\\', $callbackClean);
+                    $studlyName = $parts[1] ?? null;
+                    if ($studlyName) {
+                        $providerClass = "Extensions\\{$studlyName}\\{$studlyName}ServiceProvider";
+                        if (class_exists($providerClass)) {
+                            app()->register($providerClass);
+                        }
+                    }
+                }
+            } elseif (is_array($callback) && isset($callback[0])) {
+                $classOrObject = $callback[0];
+                $class = is_object($classOrObject) ? get_class($classOrObject) : (is_string($classOrObject) ? $classOrObject : '');
+                $classClean = ltrim($class, '\\');
+                if (str_starts_with($classClean, 'Extensions\\')) {
+                    $parts = explode('\\', $classClean);
+                    $studlyName = $parts[1] ?? null;
+                    if ($studlyName) {
+                        $providerClass = "Extensions\\{$studlyName}\\{$studlyName}ServiceProvider";
+                        if (class_exists($providerClass)) {
+                            app()->register($providerClass);
+                        }
+                    }
+                }
+            }
+
             if (is_callable($callback)) {
                 return call_user_func_array($callback, $params);
             }
