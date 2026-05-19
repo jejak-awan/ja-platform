@@ -260,6 +260,165 @@
           </div>
         </div>
       </div>
+
+      <!-- System Care & Maintenance Centre -->
+      <div class="mt-6 bg-card border border-border/80 rounded-xl p-6 shadow-sm">
+        <div class="flex items-center gap-3 mb-4">
+          <Settings class="h-6 w-6 text-primary animate-spin-slow" />
+          <div>
+            <h2 class="text-lg font-bold text-foreground">
+              OS System Care & Maintenance Centre
+            </h2>
+            <p class="text-sm text-muted-foreground">
+              Kelola kesehatan kernel mikro, optimalisasi database, bersihkan file sampah virtual, dan reset sistem.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+          <!-- Clean Junk Files -->
+          <div class="bg-accent/25 border border-border rounded-lg p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <Trash2 class="h-5 w-5 text-red-500" />
+                <h3 class="font-semibold text-foreground text-sm">Pembersih File Sampah</h3>
+              </div>
+              <p class="text-xs text-muted-foreground mb-4">
+                Menghapus file temporary ZIP, sisa scaffolds dev, dan cache sandbox lama.
+              </p>
+            </div>
+            <button
+              @click="handleCleanJunk"
+              :disabled="actionLoading"
+              class="w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-xs font-semibold disabled:opacity-50 transition"
+            >
+              <Trash2 class="h-3.5 w-3.5" />
+              Bersihkan Junk
+            </button>
+          </div>
+
+          <!-- Optimize Database -->
+          <div class="bg-accent/25 border border-border rounded-lg p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <Database class="h-5 w-5 text-indigo-500" />
+                <h3 class="font-semibold text-foreground text-sm">Optimalisasi Database</h3>
+              </div>
+              <p class="text-xs text-muted-foreground mb-4">
+                Melakukan defragmentasi indeks skema dan membersihkan data CCK yatim piatu.
+              </p>
+            </div>
+            <button
+              @click="handleOptimizeDb"
+              :disabled="actionLoading"
+              class="w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs font-semibold disabled:opacity-50 transition"
+            >
+              <Database class="h-3.5 w-3.5" />
+              Optimasi Database
+            </button>
+          </div>
+
+          <!-- Performance Boost -->
+          <div class="bg-accent/25 border border-border rounded-lg p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <Zap class="h-5 w-5 text-amber-500" />
+                <h3 class="font-semibold text-foreground text-sm">Boost Kinerja (Cache)</h3>
+              </div>
+              <p class="text-xs text-muted-foreground mb-4">
+                Mengompilasi ulang config, route, dan view framework Laravel secara instan.
+              </p>
+            </div>
+            <button
+              @click="handleBoostPerf"
+              :disabled="actionLoading"
+              class="w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-xs font-semibold disabled:opacity-50 transition"
+            >
+              <Zap class="h-3.5 w-3.5" />
+              Akselerasi Kinerja
+            </button>
+          </div>
+
+          <!-- Factory Reset -->
+          <div class="bg-accent/25 border border-border rounded-lg p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <RefreshCw class="h-5 w-5 text-rose-600" />
+                <h3 class="font-semibold text-foreground text-sm">Factory Reset Sistem</h3>
+              </div>
+              <p class="text-xs text-muted-foreground mb-4">
+                Menghapus seluruh data kustom dan plugin, membersihkan sandbox, dan memuat ulang database.
+              </p>
+            </div>
+            <button
+              @click="openResetModal"
+              :disabled="actionLoading"
+              class="w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-md text-xs font-semibold disabled:opacity-50 transition"
+            >
+              <RefreshCw class="h-3.5 w-3.5" />
+              Reset Sistem
+            </button>
+          </div>
+        </div>
+
+        <!-- Operations Console Output -->
+        <div v-if="consoleOutput" class="mt-6 border border-border bg-black rounded-lg p-4 font-mono text-xs text-green-400 max-h-48 overflow-y-auto">
+          <div class="flex justify-between items-center mb-2 border-b border-green-900 pb-2">
+            <span>[SYS LOGS ENGINE OUTPUT]</span>
+            <button @click="consoleOutput = ''" class="text-red-400 hover:underline">Clear</button>
+          </div>
+          <pre class="whitespace-pre-wrap">{{ consoleOutput }}</pre>
+        </div>
+      </div>
+
+      <!-- Factory Reset Password Confirmation Modal -->
+      <div v-if="showResetModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-card border border-border/80 max-w-md w-full rounded-xl p-6 shadow-xl relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-tr from-rose-500/5 to-transparent pointer-events-none" />
+          
+          <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 rounded-lg bg-rose-500/10 text-rose-500">
+              <RefreshCw class="h-6 w-6 animate-spin" />
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-foreground">Factory Reset Konfirmasi</h3>
+              <p class="text-xs text-muted-foreground">Tindakan destruktif ini tidak dapat dibatalkan.</p>
+            </div>
+          </div>
+
+          <p class="text-xs text-foreground mb-4 leading-relaxed">
+            Ini akan menghapus seluruh data custom sandboxed, mereset struktur tabel database ke kondisi awal pabrik, menghapus plugin pihak ketiga, dan menyetel ulang credentials Administrator.
+          </p>
+
+          <div class="mb-4">
+            <label class="block text-xs font-semibold text-muted-foreground mb-1.5">
+              Masukkan Password Super-Admin Anda
+            </label>
+            <input
+              type="password"
+              v-model="resetPassword"
+              placeholder="••••••••"
+              class="w-full px-3 py-2 bg-accent/20 border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-rose-500"
+            />
+          </div>
+
+          <div class="flex justify-end gap-2 mt-6">
+            <button
+              @click="showResetModal = false"
+              class="px-4 py-2 bg-accent hover:bg-accent/80 text-foreground rounded-lg text-xs font-semibold transition"
+            >
+              Batal
+            </button>
+            <button
+              @click="handleFactoryReset"
+              :disabled="!resetPassword || actionLoading"
+              class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold disabled:opacity-50 transition"
+            >
+              Reset Sekarang
+            </button>
+          </div>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -280,9 +439,10 @@ import Download from 'lucide-vue-next/dist/esm/icons/download.js';
 import Database from 'lucide-vue-next/dist/esm/icons/database.js';
 import Clock from 'lucide-vue-next/dist/esm/icons/clock.js';
 import Terminal from 'lucide-vue-next/dist/esm/icons/terminal.js';
-import Bell from 'lucide-vue-next/dist/esm/icons/bell.js';
 import Mail from 'lucide-vue-next/dist/esm/icons/mail.js';
 import FileText from 'lucide-vue-next/dist/esm/icons/file-text.js';
+import Trash2 from 'lucide-vue-next/dist/esm/icons/trash-2.js';
+import RefreshCw from 'lucide-vue-next/dist/esm/icons/refresh-cw.js';
 
 interface DiskUsage {
     used: string;
@@ -380,6 +540,93 @@ const formatBytes = (bytes: number) : string => {
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+};
+
+// Maintenance Centre State & Handlers
+const actionLoading = ref(false);
+const consoleOutput = ref('');
+const showResetModal = ref(false);
+const resetPassword = ref('');
+
+const appendConsole = (msg: string): void => {
+    const timestamp = new Date().toLocaleTimeString();
+    consoleOutput.value += `[${timestamp}] ${msg}\n`;
+};
+
+const handleCleanJunk = async (): Promise<void> => {
+    actionLoading.value = true;
+    appendConsole('Memulai Pembersihan File Sampah (Temp & Dev Artifacts)...');
+    try {
+        const res = await api.post('/manage/system/maintenance/clean-junk');
+        const data = parseSingleResponse<{ deleted_files: number; freed_bytes: number }>(res);
+        appendConsole(`SUKSES: File sampah dibersihkan!`);
+        appendConsole(`  - Jumlah file dihapus: ${data?.deleted_files || 0}`);
+        appendConsole(`  - Total kapasitas yang dibebaskan: ${formatBytes(data?.freed_bytes || 0)}`);
+    } catch (err: any) {
+        logger.error('Failed to clean junk:', err);
+        appendConsole(`ERROR: Gagal membersihkan junk: ${err?.message || err}`);
+    } finally {
+        actionLoading.value = false;
+    }
+};
+
+const handleOptimizeDb = async (): Promise<void> => {
+    actionLoading.value = true;
+    appendConsole('Memulai Optimalisasi Database & Indeks CCK...');
+    try {
+        const res = await api.post('/manage/system/maintenance/optimize-db');
+        const data = parseSingleResponse<{ optimized_tables: number; purged_orphans: number }>(res);
+        appendConsole(`SUKSES: Indeks database berhasil didefragmentasi!`);
+        appendConsole(`  - Total tabel dioptimasi: ${data?.optimized_tables || 0}`);
+        appendConsole(`  - Total baris CCK yatim piatu yang dipurge: ${data?.purged_orphans || 0}`);
+    } catch (err: any) {
+        logger.error('Failed to optimize database:', err);
+        appendConsole(`ERROR: Gagal optimalisasi database: ${err?.message || err}`);
+    } finally {
+        actionLoading.value = false;
+    }
+};
+
+const handleBoostPerf = async (): Promise<void> => {
+    actionLoading.value = true;
+    appendConsole('Memulai Prekompilasi (Config, Route, & View Warming)...');
+    try {
+        await api.post('/manage/system/maintenance/boost');
+        appendConsole(`SUKSES: Cache internal kernel mikro dihangatkan!`);
+        appendConsole(`  - Mode cache: Router & Views Cache Warmup.`);
+    } catch (err: any) {
+        logger.error('Failed to boost performance:', err);
+        appendConsole(`ERROR: Gagal warming cache: ${err?.message || err}`);
+    } finally {
+        actionLoading.value = false;
+    }
+};
+
+const openResetModal = (): void => {
+    resetPassword.value = '';
+    showResetModal.value = true;
+};
+
+const handleFactoryReset = async (): Promise<void> => {
+    actionLoading.value = true;
+    appendConsole('Memulai Pemulihan Default Pabrik (FACTORY RESET)...');
+    showResetModal.value = false;
+    try {
+        await api.post('/manage/system/maintenance/factory-reset', {
+            password: resetPassword.value,
+        });
+        appendConsole('SUKSES: Seluruh data sandbox telah dibersihkan secara total.');
+        appendConsole('SUKSES: Database bermigrasi kembali dari nol secara aman.');
+        appendConsole('Sistem akan meredireksi Anda ke halaman login dalam 5 detik...');
+        setTimeout(() => {
+            window.location.href = '/login';
+        }, 5000);
+    } catch (err: any) {
+        logger.error('Failed to factory reset:', err);
+        appendConsole(`ERROR: Otorisasi gagal atau terjadi kesalahan: ${err?.message || err}`);
+    } finally {
+        actionLoading.value = false;
+    }
 };
 
 onMounted(() => {

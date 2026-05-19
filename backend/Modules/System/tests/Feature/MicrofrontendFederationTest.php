@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Modules\System\Models\Extension;
 use Modules\System\Models\User;
+use Modules\System\Providers\ExtensionAutoloadServiceProvider;
 use Tests\TestCase;
 
 class MicrofrontendFederationTest extends TestCase
@@ -45,8 +46,8 @@ class MicrofrontendFederationTest extends TestCase
                     [
                         'method' => 'GET',
                         'uri' => '/api/v1/federation-test-route',
-                        'action' => "Extensions\\TestFederationPlugin\\Http\\Controllers\\MockController@index",
-                    ]
+                        'action' => 'Extensions\\TestFederationPlugin\\Http\\Controllers\\MockController@index',
+                    ],
                 ],
                 'sidebar_menu' => [
                     [
@@ -55,9 +56,9 @@ class MicrofrontendFederationTest extends TestCase
                         'icon' => 'globe',
                         'group' => 'academic',
                         'route' => '/dashboard/federated',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         File::put("{$pluginPath}/manifest.json", json_encode($manifest));
@@ -110,7 +111,7 @@ class MicrofrontendFederationTest extends TestCase
      */
     public function test_routes_api_registers_manifest_driven_routes(): void
     {
-        $controllerClass = "Extensions\\TestFederationPlugin\\Http\\Controllers\\MockController";
+        $controllerClass = 'Extensions\\TestFederationPlugin\\Http\\Controllers\\MockController';
         if (! class_exists($controllerClass)) {
             eval("
                 namespace Extensions\\TestFederationPlugin\\Http\\Controllers;
@@ -123,7 +124,7 @@ class MicrofrontendFederationTest extends TestCase
         }
 
         // Re-register the autoload provider to trigger manifest scanning and static route registration
-        app()->register(\Modules\System\Providers\ExtensionAutoloadServiceProvider::class, true);
+        app()->register(ExtensionAutoloadServiceProvider::class, true);
 
         // Hit the federated static route
         $response = $this->get('/api/v1/federation-test-route');

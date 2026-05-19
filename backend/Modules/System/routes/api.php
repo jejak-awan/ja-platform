@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use Modules\System\Http\Controllers\Api\DynamicApiController;
+use Modules\System\Http\Controllers\Api\MaintenanceApiController;
 use Modules\System\Http\Controllers\Api\ScaffolderApiController;
 use Modules\System\Http\Controllers\Console\ActivityLogController;
 use Modules\System\Http\Controllers\Console\AuthController;
@@ -75,8 +76,13 @@ Route::prefix('v1')->group(function (): void {
         Route::post('cache/clear', [SystemController::class, 'clearCache']);
         Route::post('cache/warm', [SystemController::class, 'warmCache']);
         Route::get('cache-warming-stats', [SystemController::class, 'cacheWarmingStats']);
-        Route::get('system-health', [SystemController::class, 'systemHealth']);
         Route::post('clear-rate-limit', [SystemController::class, 'clearRateLimit']);
+
+        // OS Maintenance & Care Centre
+        Route::post('maintenance/clean-junk', [MaintenanceApiController::class, 'cleanJunk']);
+        Route::post('maintenance/optimize-db', [MaintenanceApiController::class, 'optimizeDatabase']);
+        Route::post('maintenance/boost', [MaintenanceApiController::class, 'boost']);
+        Route::post('maintenance/factory-reset', [MaintenanceApiController::class, 'factoryReset']);
 
         // Profile Management
         Route::get('profile', [UserController::class, 'profile']);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\System\Registries;
 
+use Illuminate\Support\Facades\Log;
+
 class HookRegistry extends BaseRegistry
 {
     /**
@@ -56,9 +58,7 @@ class HookRegistry extends BaseRegistry
     /**
      * Run all registered listeners for a specific filter hook, passing the value sequentially.
      *
-     * @param  mixed  $value
      * @param  mixed  ...$params
-     * @return mixed
      */
     public function filter(string $filterName, mixed $value, ...$params): mixed
     {
@@ -102,7 +102,6 @@ class HookRegistry extends BaseRegistry
      *
      * @param  (callable(): mixed)|string  $callback
      * @param  array<int, mixed>  $params
-     * @return mixed
      */
     protected function invoke(mixed $callback, array $params): mixed
     {
@@ -153,8 +152,8 @@ class HookRegistry extends BaseRegistry
             return null;
         } catch (\Throwable $e) {
             // IPC Error Isolation: Log the crash and isolate it to prevent system-wide segmentation fault
-            \Illuminate\Support\Facades\Log::error(sprintf(
-                "Kernel IPC Error [Segmentation Fault]: Hook callback crashed. Message: %s. File: %s:%d. Context: %s",
+            Log::error(sprintf(
+                'Kernel IPC Error [Segmentation Fault]: Hook callback crashed. Message: %s. File: %s:%d. Context: %s',
                 $e->getMessage(),
                 $e->getFile(),
                 $e->getLine(),

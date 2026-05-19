@@ -23,6 +23,10 @@ gantt
     DeveloperKit GUI Scaffolder :active, 2026-07-10, 2026-07-25
     Dynamic Meta-Field Engine (CCK) :active, 2026-07-25, 2026-08-10
     Dynamic Resource Controller CRUD :active, 2026-08-10, 2026-08-25
+    section Fase 4: OS System Care & Hardening (Selesai)
+    Junk Cleaner & DB Optimizer :active, 2026-08-25, 2026-09-10
+    Sandbox Isolated Logging :active, 2026-09-05, 2026-09-10
+    Safe Factory Reset Engine :active, 2026-09-08, 2026-09-10
 ```
 
 ---
@@ -78,9 +82,25 @@ Fase ini bertujuan menyamai keunggulan produktivitas October CMS dan kematangan 
 
 ---
 
+### 🟢 FASE 4: OS System Care & Hardening (Status: 100% SELESAI)
+Fase ini menyempurnakan ketangguhan mikro-kernel dengan membekali kemampuan pemeliharaan mandiri berskala sistem operasi.
+
+*   **4.1 OS-like System Maintenance Engine (`SysMaintenanceService`)**:
+    *   **Junk Cleaner**: Membersihkan file ZIP sisa unggahan scaffolds sementara dan cache usang secara rekursif.
+    *   **Database & CCK Index Optimizer**: VACUUM / defragmentasi indeks fisik database (driver-agnostic) serta pembersihan baris records CCK yatim piatu (`sys_dynamic_records`) secara aman.
+    *   **Performance Cache Warming**: Mengompilasi ulang router, view, dan konfigurasi cache secara internal.
+*   **4.2 Sandbox-Isolated Logging (`ExtensionLogger`)**:
+    *   Mengisolasi log transaksi/debug masing-masing plugin secara aman di dalam Virtual Filesystem Sandbox masing-masing (`storage/app/extensions/{slug}/sandbox/logs/extension.log`).
+*   **4.3 Multi-Layer Security Factory Reset**:
+    *   Restorasi sistem murni dari awal secara otonom dengan memverifikasi password super-admin, menghapus data sandbox, menonaktifkan ekstensi, melakukan Artisan fresh migrations, serta menyemai data administrative dasar secara aman.
+
+---
+
 ## 📈 Indikator Keberhasilan & Validasi Mutu
 
 *   **Zero-Crash Runtime**: Kegagalan modul tambahan tidak boleh memicu HTTP 500 error pada halaman inti dashboard.
 *   **Zero-Bypass Static Security**: Pengunggahan plugin berbahaya yang mengandung fungsi backdoor (seperti `shell_exec`, `passthru`, `eval`) wajib diblokir 100% oleh parser AST.
 *   **Zero-Compile Dynamic Frontend**: Penambahan halaman/menu dari plugin tidak boleh memaksa admin menjalankan perintah kompilasi aset frontend (`npm run build`) secara manual di server produksi.
 *   **Strict Standard Compliance**: Lolos analisis statis **PHPStan level 9** dan **100% test coverage** untuk setiap modul baru.
+
+

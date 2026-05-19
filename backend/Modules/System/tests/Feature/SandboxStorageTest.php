@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\System\Tests\Feature;
 
 use Illuminate\Support\Facades\File;
+use League\Flysystem\PathTraversalDetected;
 use Modules\System\Facades\SandboxStorage;
 use Tests\TestCase;
 
@@ -43,7 +44,7 @@ class SandboxStorageTest extends TestCase
         $this->assertEquals('Log output content', $disk->get('logs/app.log'));
 
         // 4. Try directory traversal and verify it is actively blocked by Flysystem
-        $this->expectException(\League\Flysystem\PathTraversalDetected::class);
+        $this->expectException(PathTraversalDetected::class);
         $disk->put('../traversal.txt', 'Illegal traversal write attempt');
     }
 }

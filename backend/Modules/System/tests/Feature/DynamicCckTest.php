@@ -55,8 +55,8 @@ class DynamicCckTest extends TestCase
                     'slug' => 'is_completed',
                     'type' => 'boolean',
                     'is_required' => false,
-                ]
-            ]
+                ],
+            ],
         ];
 
         $response = $this->actingAs($this->admin, 'sanctum')
@@ -128,8 +128,8 @@ class DynamicCckTest extends TestCase
                     'slug' => 'released_on',
                     'type' => 'date',
                     'is_required' => false,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         // 2. Attempt store validation failure (missing required title/price)

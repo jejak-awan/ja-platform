@@ -19,6 +19,7 @@ use Modules\System\Http\Middleware\BypassWorkspaceScope;
 use Modules\System\Http\Middleware\CheckMaintenanceMode;
 use Modules\System\Http\Middleware\CheckPermission;
 use Modules\System\Http\Middleware\IdentifyWorkspace;
+use Modules\System\Http\Middleware\LazyExtensionBootMiddleware;
 use Modules\System\Http\Middleware\NormalizePaginationParams;
 use Modules\System\Http\Middleware\TrustProxies;
 use Spatie\Permission\Middleware\RoleMiddleware;
@@ -46,7 +47,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn (Request $request) => ($request->is('api/*') || $request->expectsJson()) ? null : '/');
 
         $middleware->web(prepend: [
-            \Modules\System\Http\Middleware\LazyExtensionBootMiddleware::class,
+            LazyExtensionBootMiddleware::class,
             HandleDomainRedirects::class,
             IdentifyWorkspace::class,
             VerifyConnection::class,
@@ -62,7 +63,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->api(prepend: [
-            \Modules\System\Http\Middleware\LazyExtensionBootMiddleware::class,
+            LazyExtensionBootMiddleware::class,
             HandleDomainRedirects::class,
             IdentifyWorkspace::class,
             VerifyConnection::class,

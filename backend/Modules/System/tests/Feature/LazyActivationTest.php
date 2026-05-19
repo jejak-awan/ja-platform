@@ -49,7 +49,7 @@ class LazyActivationTest extends TestCase
 
         // Register a temporary test route
         Route::middleware(LazyExtensionBootMiddleware::class)->get('/api/test-lazy-route-temp', [
-            $controllerClass, "index"
+            $controllerClass, 'index',
         ]);
 
         // Hit the route - the middleware should trigger dynamic class loading and register the provider

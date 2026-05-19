@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\System\Providers;
 
 use Composer\Autoload\ClassLoader;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Modules\System\Models\Extension;
@@ -187,7 +188,7 @@ class ExtensionAutoloadServiceProvider extends ServiceProvider
                                     if ($uri !== '' && $action !== '') {
                                         $uriClean = ltrim($uri, '/');
                                         if (in_array($method, ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])) {
-                                            \Illuminate\Support\Facades\Route::match([$method], $uriClean, $action);
+                                            Route::match([$method], $uriClean, $action);
                                         }
                                     }
                                 }

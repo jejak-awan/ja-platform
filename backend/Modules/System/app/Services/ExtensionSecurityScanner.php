@@ -7,11 +7,18 @@ namespace Modules\System\Services;
 use Exception;
 use Illuminate\Support\Facades\File;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Eval_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\ShellExec;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\MagicConst\Dir;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
@@ -34,14 +41,14 @@ class ExtensionSecurityScanner
         'assert',
         'create_function',
         'dl',
-        
+
         // Low-level network socket bypassing
         'fsockopen',
         'pfsockopen',
         'stream_socket_client',
         'curl_exec',
         'curl_multi_exec',
-        
+
         // Raw, unsandboxed filesystem mutations (encouraging Storage facades)
         'file_put_contents',
         'fwrite',
@@ -140,9 +147,9 @@ class ExtensionSecurityScanner
 
                             // Detect call_user_func and call_user_func_array bypasses
                             if ($funcName === 'call_user_func' || $funcName === 'call_user_func_array') {
-                                if (isset($node->args[0]) && $node->args[0] instanceof \PhpParser\Node\Arg) {
+                                if (isset($node->args[0]) && $node->args[0] instanceof Arg) {
                                     $firstArg = $node->args[0]->value;
-                                    if ($firstArg instanceof \PhpParser\Node\Scalar\String_) {
+                                    if ($firstArg instanceof String_) {
                                         $targetFunc = strtolower($firstArg->value);
                                         if (in_array($targetFunc, $this->bannedFunctions)) {
                                             $this->violations[] = "Security Gate Violation: Pemanggilan tidak langsung fungsi terlarang '{$targetFunc}()' melalui call_user_func terdeteksi di baris {$node->getStartLine()} pada file: {$this->filePath}";
@@ -160,7 +167,7 @@ class ExtensionSecurityScanner
                     }
 
                     // 4. Detect dynamic include/require bypass vectors
-                    if ($node instanceof \PhpParser\Node\Expr\Include_) {
+                    if ($node instanceof Include_) {
                         if (! $this->isSafeIncludeExpr($node->expr)) {
                             $this->violations[] = "Security Gate Violation: Penggunaan pernyataan 'include/require' dinamis berbahaya terdeteksi di baris {$node->getStartLine()} pada file: {$this->filePath}. Pola ini dilarang untuk mencegah injeksi file luar.";
                         }
@@ -174,21 +181,22 @@ class ExtensionSecurityScanner
                  */
                 protected function isSafeIncludeExpr(Expr $expr): bool
                 {
-                    if ($expr instanceof \PhpParser\Node\Scalar\String_) {
+                    if ($expr instanceof String_) {
                         return true;
                     }
-                    if ($expr instanceof \PhpParser\Node\Expr\ConstFetch && in_array(strtolower($expr->name->toString()), ['true', 'false', 'null'])) {
+                    if ($expr instanceof ConstFetch && in_array(strtolower($expr->name->toString()), ['true', 'false', 'null'])) {
                         return true;
                     }
-                    if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+                    if ($expr instanceof ClassConstFetch) {
                         return true;
                     }
-                    if ($expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+                    if ($expr instanceof Concat) {
                         return $this->isSafeIncludeExpr($expr->left) && $this->isSafeIncludeExpr($expr->right);
                     }
-                    if ($expr instanceof \PhpParser\Node\Scalar\MagicConst\Dir || $expr instanceof \PhpParser\Node\Scalar\MagicConst\File) {
+                    if ($expr instanceof Dir || $expr instanceof Node\Scalar\MagicConst\File) {
                         return true;
                     }
+
                     return false;
                 }
             };

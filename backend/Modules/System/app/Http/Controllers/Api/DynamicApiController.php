@@ -310,7 +310,7 @@ class DynamicApiController extends BaseApiController
 
         $rules = [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:sys_content_types,slug,' . $id,
+            'slug' => 'required|string|max:255|unique:sys_content_types,slug,'.$id,
             'description' => 'nullable|string',
             'fields' => 'required|array',
             'fields.*.name' => 'required|string',

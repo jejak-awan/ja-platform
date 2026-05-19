@@ -7,6 +7,7 @@ namespace Modules\System\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
+use Modules\System\Facades\Hook;
 use Modules\System\Models\Extension;
 use Modules\System\Models\ExtensionLog;
 use Modules\System\Models\User;
@@ -345,7 +346,7 @@ class ExtensionControllerTest extends TestCase
             ->postJson("/api/v1/manage/infra/extensions/{$ext->slug}/activate");
 
         $response->assertStatus(400);
-        $this->assertStringContainsString("tidak terpasang", $response->json('message'));
+        $this->assertStringContainsString('tidak terpasang', $response->json('message'));
     }
 
     /**
@@ -381,7 +382,7 @@ class ExtensionControllerTest extends TestCase
             ->postJson("/api/v1/manage/infra/extensions/{$ext->slug}/activate");
 
         $response->assertStatus(400);
-        $this->assertStringContainsString("belum diaktifkan", $response->json('message'));
+        $this->assertStringContainsString('belum diaktifkan', $response->json('message'));
     }
 
     /**
@@ -417,7 +418,7 @@ class ExtensionControllerTest extends TestCase
             ->postJson("/api/v1/manage/infra/extensions/{$ext->slug}/activate");
 
         $response->assertStatus(400);
-        $this->assertStringContainsString("Konflik versi", $response->json('message'));
+        $this->assertStringContainsString('Konflik versi', $response->json('message'));
     }
 
     /**
@@ -426,13 +427,14 @@ class ExtensionControllerTest extends TestCase
     public function test_admin_can_retrieve_dynamic_navigation(): void
     {
         // Hook into sidebar_navigation and register a dynamic item
-        \Modules\System\Facades\Hook::listen('sidebar_navigation', function ($items) {
+        Hook::listen('sidebar_navigation', function ($items) {
             $items[] = [
                 'name' => 'dynamic-test',
                 'label' => 'Dynamic Test Page',
                 'icon' => 'activity',
                 'group' => 'academic',
             ];
+
             return $items;
         });
 

@@ -194,11 +194,11 @@ PHP;
             File::delete($zipFile);
         }
 
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
         if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
             $files = File::allFiles($tempDir);
             foreach ($files as $file) {
-                $relativeName = str_replace($tempDir . '/', '', $file->getPathname());
+                $relativeName = str_replace($tempDir.'/', '', $file->getPathname());
                 $zip->addFile($file->getPathname(), $relativeName);
             }
             $zip->close();

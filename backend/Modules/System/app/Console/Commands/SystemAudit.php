@@ -87,6 +87,7 @@ class SystemAudit extends Command
 
             if (! file_exists($absolutePath)) {
                 $deleted[] = $relativePath;
+
                 continue;
             }
 

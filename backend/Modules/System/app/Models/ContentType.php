@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\System\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,8 +20,8 @@ use Modules\System\Traits\ScopedByWorkspace;
  * @property string|null $description
  * @property array<mixed>|null $fields
  * @property bool $is_active
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class ContentType extends Model
 {

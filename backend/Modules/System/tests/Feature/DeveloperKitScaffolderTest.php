@@ -72,7 +72,7 @@ class DeveloperKitScaffolderTest extends TestCase
                     'method' => 'GET',
                     'uri' => '/api/v1/scaffolded-local-route',
                     'action' => 'MyTestController@index',
-                ]
+                ],
             ],
             'sidebar_menu' => [
                 [
@@ -81,8 +81,8 @@ class DeveloperKitScaffolderTest extends TestCase
                     'icon' => 'star',
                     'group' => 'academic',
                     'route' => '/dashboard/scaffolded',
-                ]
-            ]
+                ],
+            ],
         ];
 
         $response = $this->actingAs($this->admin, 'sanctum')
@@ -125,9 +125,9 @@ class DeveloperKitScaffolderTest extends TestCase
                     'method' => 'GET',
                     'uri' => '/api/v1/scaffolded-dl-route',
                     'action' => 'DlController@show',
-                ]
+                ],
             ],
-            'sidebar_menu' => []
+            'sidebar_menu' => [],
         ];
 
         $response = $this->actingAs($this->admin, 'sanctum')
