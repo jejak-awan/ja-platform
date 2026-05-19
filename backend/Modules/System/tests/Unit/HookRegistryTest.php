@@ -86,4 +86,58 @@ class HookRegistryTest extends TestCase
         // (100.0 - 10.0) * (1 + 0.1) = 90.0 * 1.1 = 99.0
         $this->assertEqualsWithDelta(99.0, $finalPrice, 0.0001);
     }
+
+    /**
+     * Test that a crashing action callback is isolated and does not stop other listeners.
+     */
+    public function test_hook_action_error_isolation_prevents_system_crash(): void
+    {
+        /** @var HookRegistry $registry */
+        $registry = app(HookRegistry::class);
+
+        $executionFlag = false;
+
+        // Register a listener that throws a fatal exception
+        $registry->listen('on_crash_action', function (): void {
+            throw new \RuntimeException('Simulated plugin failure');
+        });
+
+        // Register a second listener that should still execute
+        $registry->listen('on_crash_action', function () use (&$executionFlag): void {
+            $executionFlag = true;
+        }, 15);
+
+        // This call should not crash the PHP execution
+        $registry->action('on_crash_action');
+
+        $this->assertTrue($executionFlag);
+    }
+
+    /**
+     * Test that a crashing filter callback is isolated and the pipeline retains the previous state.
+     */
+    public function test_hook_filter_error_isolation_retains_previous_state(): void
+    {
+        /** @var HookRegistry $registry */
+        $registry = app(HookRegistry::class);
+
+        // Filter 1: Valid transformation
+        $registry->listen('format_isolated', function (string $val): string {
+            return $val.' Step1';
+        });
+
+        // Filter 2: Crashes
+        $registry->listen('format_isolated', function (string $val): string {
+            throw new \RuntimeException('Simulated filter failure');
+        }, 12);
+
+        // Filter 3: Valid transformation, should receive "Alexander Step1"
+        $registry->listen('format_isolated', function (string $val): string {
+            return $val.' Step3';
+        }, 15);
+
+        $result = $registry->filter('format_isolated', 'Alexander');
+
+        $this->assertEquals('Alexander Step1 Step3', $result);
+    }
 }
