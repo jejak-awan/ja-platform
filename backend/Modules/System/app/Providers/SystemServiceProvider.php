@@ -12,10 +12,12 @@ use Modules\System\Console\Commands\CleanupOldLogs;
 use Modules\System\Console\Commands\SystemAudit;
 use Modules\System\Contracts\LayoutRegistryInterface;
 use Modules\System\Facades\Hook;
+use Modules\System\Facades\SandboxStorage;
 use Modules\System\Http\Controllers\Console\DashboardController;
 use Modules\System\Registries\DashboardRegistry;
 use Modules\System\Registries\HookRegistry;
 use Modules\System\Registries\LayoutRegistry;
+use Modules\System\Services\SandboxStorage as SandboxStorageService;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -86,11 +88,13 @@ class SystemServiceProvider extends ServiceProvider
         $this->app->singleton(DashboardRegistry::class);
         $this->app->singleton(\Modules\System\Services\DashboardRegistry::class);
         $this->app->singleton(HookRegistry::class);
+        $this->app->singleton(SandboxStorageService::class);
         $this->app->singleton(LayoutRegistryInterface::class, LayoutRegistry::class);
 
-        // Register Global Hook Facade Alias
+        // Register Global Hook and Sandbox Facade Aliases
         if (class_exists(AliasLoader::class)) {
             AliasLoader::getInstance()->alias('Hook', Hook::class);
+            AliasLoader::getInstance()->alias('SandboxStorage', SandboxStorage::class);
         }
     }
 
