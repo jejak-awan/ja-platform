@@ -593,6 +593,58 @@ class ExtensionController extends BaseApiController
         $items = [];
         $items = \Modules\System\Facades\Hook::filter('sidebar_navigation', $items);
 
+        // Fetch static manifest contributions for active plugins without booting their code
+        try {
+            $activeExtensions = Extension::where('status', 'active')->get();
+            foreach ($activeExtensions as $ext) {
+                if ($ext->type !== 'plugin') {
+                    continue;
+                }
+
+                $manifestPath = base_path("Plugins/{$ext->slug}/manifest.json");
+                if (file_exists($manifestPath)) {
+                    $content = @file_get_contents($manifestPath);
+                    if ($content) {
+                        $manifest = json_decode($content, true);
+                        if (is_array($manifest)) {
+                            $contributionPoints = $manifest['contribution_points'] ?? null;
+                            $contributes = $manifest['contributes'] ?? null;
+
+                            $menuItems = null;
+                            if (is_array($contributionPoints)) {
+                                $menuItems = $contributionPoints['sidebar_menu'] ?? null;
+                            }
+                            if (! is_array($menuItems) && is_array($contributes)) {
+                                $menuItems = $contributes['sidebar_menu'] ?? null;
+                            }
+
+                            if (is_array($menuItems)) {
+                                foreach ($menuItems as $menuItem) {
+                                    if (is_array($menuItem)) {
+                                        $nameVal = $menuItem['name'] ?? $menuItem['id'] ?? null;
+                                        $labelVal = $menuItem['label'] ?? $menuItem['title'] ?? null;
+                                        $iconVal = $menuItem['icon'] ?? null;
+                                        $groupVal = $menuItem['group'] ?? null;
+                                        $toVal = $menuItem['to'] ?? $menuItem['route'] ?? null;
+
+                                        $items[] = [
+                                            'name' => is_scalar($nameVal) ? (string) $nameVal : $ext->slug,
+                                            'label' => is_scalar($labelVal) ? (string) $labelVal : $ext->name,
+                                            'icon' => is_scalar($iconVal) ? (string) $iconVal : 'settings',
+                                            'group' => is_scalar($groupVal) ? (string) $groupVal : 'operations',
+                                            'to' => is_scalar($toVal) ? (string) $toVal : "/dash/{$ext->slug}",
+                                        ];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // Fail-safe to guarantee stable platform booting
+        }
+
         return $this->success($items, 'Dynamic navigation retrieved successfully');
     }
 

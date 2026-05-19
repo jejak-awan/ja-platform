@@ -28,6 +28,7 @@ class ExtensionAutoloadServiceProvider extends ServiceProvider
             if (! app()->runningInConsole() || Schema::hasTable('sys_extensions')) {
                 $this->autoloadActiveExtensions();
                 $this->registerActiveExtensionProviders();
+                $this->registerActivePluginRoutes();
             }
         } catch (\Throwable $e) {
             // Fail silently to keep application bootable during migrations or schema setups
@@ -134,6 +135,66 @@ class ExtensionAutoloadServiceProvider extends ServiceProvider
 
             if (class_exists($providerClass)) {
                 $this->app->register($providerClass);
+            }
+        }
+    }
+
+    /**
+     * Map static route contributions for all active plugins.
+     */
+    protected function registerActivePluginRoutes(): void
+    {
+        $activeExtensions = $this->getActiveExtensions();
+        if (empty($activeExtensions)) {
+            return;
+        }
+
+        foreach ($activeExtensions as $ext) {
+            if (($ext['type'] ?? '') !== 'plugin') {
+                continue;
+            }
+
+            $slug = $ext['slug'];
+            $manifestPath = base_path("Plugins/{$slug}/manifest.json");
+
+            if (file_exists($manifestPath)) {
+                $content = @file_get_contents($manifestPath);
+                if ($content) {
+                    $manifest = json_decode($content, true);
+                    if (is_array($manifest)) {
+                        $contributionPoints = $manifest['contribution_points'] ?? null;
+                        $contributes = $manifest['contributes'] ?? null;
+
+                        $routes = null;
+                        if (is_array($contributionPoints)) {
+                            $routes = $contributionPoints['routes'] ?? null;
+                        }
+                        if (! is_array($routes) && is_array($contributes)) {
+                            $routes = $contributes['routes'] ?? null;
+                        }
+
+                        if (is_array($routes)) {
+                            foreach ($routes as $route) {
+                                if (is_array($route)) {
+                                    $methodVal = $route['method'] ?? null;
+                                    $uriVal = $route['uri'] ?? null;
+                                    $actionVal = $route['action'] ?? null;
+
+                                    $method = strtoupper(is_scalar($methodVal) ? (string) $methodVal : 'GET');
+                                    $uri = is_scalar($uriVal) ? (string) $uriVal : '';
+                                    $action = is_scalar($actionVal) ? (string) $actionVal : '';
+
+                                    if ($uri !== '' && $action !== '') {
+                                        $uriClean = ltrim($uri, '/');
+                                        if (in_array($method, ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])) {
+                                            \Illuminate\Support\Facades\Route::match([$method], $uriClean, $action);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
