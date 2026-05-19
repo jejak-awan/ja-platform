@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CheckIfInstalled;
+use App\Http\Middleware\CheckLicenseGate;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -36,6 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withProviders()
     ->withMiddleware(function (Middleware $middleware): void {
         // Security Layer: Order matters (TrustProxies first, then Domain enforcement, then WAF, etc.)
+        $middleware->prepend(CheckLicenseGate::class);
         $middleware->prepend(CheckIfInstalled::class);
         $middleware->prepend(TrustProxies::class);
 
