@@ -23,6 +23,7 @@ class ExtensionSecurityScanner
      * List of banned system and dangerous functions.
      */
     protected array $bannedFunctions = [
+        // Shell/System Executions
         'exec',
         'shell_exec',
         'system',
@@ -32,6 +33,24 @@ class ExtensionSecurityScanner
         'pcntl_exec',
         'assert',
         'create_function',
+        'dl',
+        
+        // Low-level network socket bypassing
+        'fsockopen',
+        'pfsockopen',
+        'stream_socket_client',
+        'curl_exec',
+        'curl_multi_exec',
+        
+        // Raw, unsandboxed filesystem mutations (encouraging Storage facades)
+        'file_put_contents',
+        'fwrite',
+        'touch',
+        'unlink',
+        'mkdir',
+        'rmdir',
+        'rename',
+        'copy',
     ];
 
     /**
@@ -39,7 +58,7 @@ class ExtensionSecurityScanner
      */
     public function scanZip(string $zipPath): void
     {
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
         if ($zip->open($zipPath) !== true) {
             throw new Exception('Gagal membuka file paket ZIP.');
         }
@@ -82,15 +101,16 @@ class ExtensionSecurityScanner
     public function scanCode(string $code, string $filePath = 'unknown'): void
     {
         try {
-            $parser = (new ParserFactory())->createForNewestSupportedVersion();
+            $parser = (new ParserFactory)->createForNewestSupportedVersion();
             $stmts = $parser->parse($code);
 
             if ($stmts === null) {
                 return;
             }
 
-            $traverser = new NodeTraverser();
-            $visitor = new class($this->bannedFunctions, $filePath) extends NodeVisitorAbstract {
+            $traverser = new NodeTraverser;
+            $visitor = new class($this->bannedFunctions, $filePath) extends NodeVisitorAbstract
+            {
                 public array $violations = [];
 
                 public function __construct(
@@ -117,13 +137,59 @@ class ExtensionSecurityScanner
                             $this->violations[] = "Security Gate Violation: Eksekusi fungsi dinamis terdeteksi di baris {$node->getStartLine()} pada file: {$this->filePath}. Pola ini dilarang untuk mencegah penyuntingan kode tersembunyi.";
                         } elseif ($node->name instanceof Name) {
                             $funcName = strtolower($node->name->toString());
+
+                            // Detect call_user_func and call_user_func_array bypasses
+                            if ($funcName === 'call_user_func' || $funcName === 'call_user_func_array') {
+                                if (isset($node->args[0]) && $node->args[0] instanceof \PhpParser\Node\Arg) {
+                                    $firstArg = $node->args[0]->value;
+                                    if ($firstArg instanceof \PhpParser\Node\Scalar\String_) {
+                                        $targetFunc = strtolower($firstArg->value);
+                                        if (in_array($targetFunc, $this->bannedFunctions)) {
+                                            $this->violations[] = "Security Gate Violation: Pemanggilan tidak langsung fungsi terlarang '{$targetFunc}()' melalui call_user_func terdeteksi di baris {$node->getStartLine()} pada file: {$this->filePath}";
+                                        }
+                                    } else {
+                                        $this->violations[] = "Security Gate Violation: Pemanggilan dinamis berbahaya melalui call_user_func terdeteksi di baris {$node->getStartLine()} pada file: {$this->filePath}";
+                                    }
+                                }
+                            }
+
                             if (in_array($funcName, $this->bannedFunctions)) {
                                 $this->violations[] = "Security Gate Violation: Panggilan fungsi sistem terlarang '{$funcName}()' terdeteksi di baris {$node->getStartLine()} pada file: {$this->filePath}";
                             }
                         }
                     }
 
+                    // 4. Detect dynamic include/require bypass vectors
+                    if ($node instanceof \PhpParser\Node\Expr\Include_) {
+                        if (! $this->isSafeIncludeExpr($node->expr)) {
+                            $this->violations[] = "Security Gate Violation: Penggunaan pernyataan 'include/require' dinamis berbahaya terdeteksi di baris {$node->getStartLine()} pada file: {$this->filePath}. Pola ini dilarang untuk mencegah injeksi file luar.";
+                        }
+                    }
+
                     return null;
+                }
+
+                /**
+                 * Helper to statically check if include expression is fully safe (literal strings or __DIR__ only)
+                 */
+                protected function isSafeIncludeExpr(Expr $expr): bool
+                {
+                    if ($expr instanceof \PhpParser\Node\Scalar\String_) {
+                        return true;
+                    }
+                    if ($expr instanceof \PhpParser\Node\Expr\ConstFetch && in_array(strtolower($expr->name->toString()), ['true', 'false', 'null'])) {
+                        return true;
+                    }
+                    if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+                        return true;
+                    }
+                    if ($expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+                        return $this->isSafeIncludeExpr($expr->left) && $this->isSafeIncludeExpr($expr->right);
+                    }
+                    if ($expr instanceof \PhpParser\Node\Scalar\MagicConst\Dir || $expr instanceof \PhpParser\Node\Scalar\MagicConst\File) {
+                        return true;
+                    }
+                    return false;
                 }
             };
 
@@ -136,7 +202,7 @@ class ExtensionSecurityScanner
 
         } catch (Exception $e) {
             // Rethrow or wrap parsing exceptions to secure the upload
-            throw new Exception("Analisis Keamanan Gagal pada {$filePath}: " . $e->getMessage());
+            throw new Exception("Analisis Keamanan Gagal pada {$filePath}: ".$e->getMessage());
         }
     }
 }

@@ -164,6 +164,7 @@ Route::prefix('v1')->group(function (): void {
     // Extension Store & Plugin Manager
     Route::prefix('manage/infra/extensions')->middleware(['auth:sanctum'])->group(function (): void {
         Route::get('', [ExtensionController::class, 'index']);
+        Route::get('navigation', [ExtensionController::class, 'navigation']);
         Route::post('upload', [ExtensionController::class, 'upload']);
         Route::post('git-clone', [ExtensionController::class, 'gitClone']);
         Route::put('features/{slug}/toggle', [ExtensionController::class, 'toggleFeature']);

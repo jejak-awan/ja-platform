@@ -120,7 +120,7 @@ async function bootstrap() {
     app.use(Logger);
 
     // 1. RUN DETERMINISTIC BOOTSTRAP (Kernel, Modules, Auth)
-    const { registry } = await bootstrapApp();
+    const { registry, authStore } = await bootstrapApp();
 
     // 2. Import Router (Registry is now full)
     const { default: router } = await (isAdminRoute ? import('@/engine/router/console') : import('@/engine/router/public'));
@@ -137,6 +137,19 @@ async function bootstrap() {
     Object.entries(registry.getNavigation()).forEach(([id, navs]) => {
         navStore.registerModuleNavigation(id, navs);
     });
+
+    // Fetch and register dynamic plugin navigation items from backend if authenticated
+    if (authStore.isAuthenticated && isAdminRoute) {
+        try {
+            const { default: apiClient } = await import('@/engine/api/client');
+            const dynamicNavs = await apiClient.get('/manage/infra/extensions/navigation');
+            if (Array.isArray(dynamicNavs.data)) {
+                navStore.registerModuleNavigation('dynamic_plugins', dynamicNavs.data);
+            }
+        } catch (error) {
+            logger.warning('[App] Failed to load dynamic plugin navigation items', error);
+        }
+    }
 
     // Sync Dashboards
     registry.getDashboards().forEach(db => {

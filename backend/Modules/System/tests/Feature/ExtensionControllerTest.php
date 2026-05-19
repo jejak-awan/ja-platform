@@ -238,4 +238,209 @@ class ExtensionControllerTest extends TestCase
         $this->assertFalse(is_dir(base_path('Plugins/malicious-plugin')));
         $this->assertFalse(Extension::where('slug', 'malicious-plugin')->exists());
     }
+
+    /**
+     * Test that the Static Security Scanner blocks packages attempting call_user_func RCE obfuscations.
+     */
+    public function test_security_scanner_blocks_obfuscated_call_user_func(): void
+    {
+        $this->evilZipPath = tempnam(sys_get_temp_dir(), 'zip').'.zip';
+        $zip = new ZipArchive;
+        $zip->open($this->evilZipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $manifest = [
+            'slug' => 'obfuscated-plugin',
+            'name' => 'Obfuscated Plugin',
+            'type' => 'plugin',
+            'version' => '1.0.0',
+        ];
+        $zip->addFromString('manifest.json', json_encode($manifest));
+        $zip->addFromString('src/Bypass.php', '<?php call_user_func("exec", "rm -rf /"); ?>');
+        $zip->close();
+
+        $uploadedFile = new UploadedFile($this->evilZipPath, 'obfuscated-plugin.zip', 'application/zip', null, true);
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->postJson('/api/v1/manage/infra/extensions/upload', ['file' => $uploadedFile]);
+
+        $response->assertStatus(400);
+        $this->assertStringContainsString('call_user_func', $response->json('message'));
+        $this->assertFalse(is_dir(base_path('Plugins/obfuscated-plugin')));
+    }
+
+    /**
+     * Test that the Static Security Scanner blocks packages containing raw, un-sandboxed filesystem modifications.
+     */
+    public function test_security_scanner_blocks_raw_filesystem_mutations(): void
+    {
+        $this->evilZipPath = tempnam(sys_get_temp_dir(), 'zip').'.zip';
+        $zip = new ZipArchive;
+        $zip->open($this->evilZipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $manifest = [
+            'slug' => 'filewrite-plugin',
+            'name' => 'File Write Plugin',
+            'type' => 'plugin',
+            'version' => '1.0.0',
+        ];
+        $zip->addFromString('manifest.json', json_encode($manifest));
+        $zip->addFromString('src/Hack.php', '<?php file_put_contents("/etc/passwd", "hack"); ?>');
+        $zip->close();
+
+        $uploadedFile = new UploadedFile($this->evilZipPath, 'filewrite-plugin.zip', 'application/zip', null, true);
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->postJson('/api/v1/manage/infra/extensions/upload', ['file' => $uploadedFile]);
+
+        $response->assertStatus(400);
+        $this->assertStringContainsString('file_put_contents', $response->json('message'));
+        $this->assertFalse(is_dir(base_path('Plugins/filewrite-plugin')));
+    }
+
+    /**
+     * Test that the Static Security Scanner blocks packages with dynamic file inclusions.
+     */
+    public function test_security_scanner_blocks_dynamic_file_inclusion(): void
+    {
+        $this->evilZipPath = tempnam(sys_get_temp_dir(), 'zip').'.zip';
+        $zip = new ZipArchive;
+        $zip->open($this->evilZipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $manifest = [
+            'slug' => 'inclusion-plugin',
+            'name' => 'Inclusion Plugin',
+            'type' => 'plugin',
+            'version' => '1.0.0',
+        ];
+        $zip->addFromString('manifest.json', json_encode($manifest));
+        $zip->addFromString('src/IncludeHack.php', '<?php include $dynamicPath; ?>');
+        $zip->close();
+
+        $uploadedFile = new UploadedFile($this->evilZipPath, 'inclusion-plugin.zip', 'application/zip', null, true);
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->postJson('/api/v1/manage/infra/extensions/upload', ['file' => $uploadedFile]);
+
+        $response->assertStatus(400);
+        $this->assertStringContainsString('include/require', $response->json('message'));
+        $this->assertFalse(is_dir(base_path('Plugins/inclusion-plugin')));
+    }
+
+    /**
+     * Test dependency verification prevents activation of plugin if required plugin is not installed.
+     */
+    public function test_dependency_verification_prevents_activation_if_requirement_not_installed(): void
+    {
+        $ext = Extension::create([
+            'slug' => 'dependent-plugin',
+            'type' => 'plugin',
+            'name' => 'Dependent Plugin',
+            'version' => '1.0.0',
+            'database_version' => '0.0.0',
+            'status' => 'inactive',
+            'is_core' => false,
+            'requirements' => [
+                'missing-plugin' => '>=1.0.0',
+            ],
+        ]);
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->postJson("/api/v1/manage/infra/extensions/{$ext->slug}/activate");
+
+        $response->assertStatus(400);
+        $this->assertStringContainsString("tidak terpasang", $response->json('message'));
+    }
+
+    /**
+     * Test dependency verification prevents activation of plugin if required plugin is installed but inactive.
+     */
+    public function test_dependency_verification_prevents_activation_if_requirement_inactive(): void
+    {
+        // Create required plugin (inactive)
+        Extension::create([
+            'slug' => 'required-plugin',
+            'type' => 'plugin',
+            'name' => 'Required Plugin',
+            'version' => '1.0.0',
+            'database_version' => '0.0.0',
+            'status' => 'inactive',
+            'is_core' => false,
+        ]);
+
+        $ext = Extension::create([
+            'slug' => 'dependent-plugin',
+            'type' => 'plugin',
+            'name' => 'Dependent Plugin',
+            'version' => '1.0.0',
+            'database_version' => '0.0.0',
+            'status' => 'inactive',
+            'is_core' => false,
+            'requirements' => [
+                'required-plugin' => '>=1.0.0',
+            ],
+        ]);
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->postJson("/api/v1/manage/infra/extensions/{$ext->slug}/activate");
+
+        $response->assertStatus(400);
+        $this->assertStringContainsString("belum diaktifkan", $response->json('message'));
+    }
+
+    /**
+     * Test dependency verification prevents activation of plugin if required plugin has version conflict.
+     */
+    public function test_dependency_verification_prevents_activation_if_requirement_version_conflict(): void
+    {
+        // Create required plugin with version 1.0.0 (active)
+        Extension::create([
+            'slug' => 'required-plugin',
+            'type' => 'plugin',
+            'name' => 'Required Plugin',
+            'version' => '1.0.0',
+            'database_version' => '1.0.0',
+            'status' => 'active',
+            'is_core' => false,
+        ]);
+
+        $ext = Extension::create([
+            'slug' => 'dependent-plugin',
+            'type' => 'plugin',
+            'name' => 'Dependent Plugin',
+            'version' => '1.0.0',
+            'database_version' => '0.0.0',
+            'status' => 'inactive',
+            'is_core' => false,
+            'requirements' => [
+                'required-plugin' => '^2.0.0', // Requires >=2.0.0 and <3.0.0
+            ],
+        ]);
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->postJson("/api/v1/manage/infra/extensions/{$ext->slug}/activate");
+
+        $response->assertStatus(400);
+        $this->assertStringContainsString("Konflik versi", $response->json('message'));
+    }
+
+    /**
+     * Test admin can retrieve dynamic navigation items registered via Hook filter.
+     */
+    public function test_admin_can_retrieve_dynamic_navigation(): void
+    {
+        // Hook into sidebar_navigation and register a dynamic item
+        \Modules\System\Facades\Hook::listen('sidebar_navigation', function ($items) {
+            $items[] = [
+                'name' => 'dynamic-test',
+                'label' => 'Dynamic Test Page',
+                'icon' => 'activity',
+                'group' => 'academic',
+            ];
+            return $items;
+        });
+
+        $response = $this->actingAs($this->admin, 'sanctum')
+            ->getJson('/api/v1/manage/infra/extensions/navigation');
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.0.name', 'dynamic-test');
+        $response->assertJsonPath('data.0.label', 'Dynamic Test Page');
+    }
 }

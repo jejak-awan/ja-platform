@@ -12,6 +12,13 @@ use Modules\System\Models\Extension;
 class ExtensionAutoloadServiceProvider extends ServiceProvider
 {
     /**
+     * List of cached active extensions loaded in current request lifecycle.
+     *
+     * @var array<int, array{slug: string, type: string}>|null
+     */
+    protected ?array $activeExtensions = null;
+
+    /**
      * Register services.
      */
     public function register(): void
@@ -20,6 +27,7 @@ class ExtensionAutoloadServiceProvider extends ServiceProvider
         try {
             if (! app()->runningInConsole() || Schema::hasTable('sys_extensions')) {
                 $this->autoloadActiveExtensions();
+                $this->registerActiveExtensionProviders();
             }
         } catch (\Throwable $e) {
             // Fail silently to keep application bootable during migrations or schema setups
@@ -27,25 +35,52 @@ class ExtensionAutoloadServiceProvider extends ServiceProvider
     }
 
     /**
+     * Get or fetch active extensions.
+     *
+     * @return array<int, array{slug: string, type: string}>
+     */
+    protected function getActiveExtensions(): array
+    {
+        if ($this->activeExtensions !== null) {
+            return $this->activeExtensions;
+        }
+
+        $cacheFile = storage_path('framework/cache/active_extensions.json');
+
+        if (file_exists($cacheFile)) {
+            $content = @file_get_contents($cacheFile);
+            if ($content !== false) {
+                $decoded = json_decode($content, true);
+                if (is_array($decoded)) {
+                    /** @var array<int, array{slug: string, type: string}> $decoded */
+                    $this->activeExtensions = $decoded;
+                }
+            }
+        }
+
+        if ($this->activeExtensions === null) {
+            try {
+                /** @var array<int, array{slug: string, type: string}> $extensions */
+                $extensions = Extension::where('status', 'active')
+                    ->get(['slug', 'type'])
+                    ->toArray();
+
+                $this->activeExtensions = $extensions;
+                @file_put_contents($cacheFile, json_encode($this->activeExtensions));
+            } catch (\Throwable $e) {
+                $this->activeExtensions = [];
+            }
+        }
+
+        return $this->activeExtensions;
+    }
+
+    /**
      * Autoload namespaces for all active modules/plugins dynamically.
      */
     protected function autoloadActiveExtensions(): void
     {
-        $cacheFile = storage_path('framework/cache/active_extensions.json');
-
-        if (file_exists($cacheFile)) {
-            $activeExtensions = json_decode(file_get_contents($cacheFile), true);
-        } else {
-            try {
-                $activeExtensions = Extension::where('status', 'active')
-                    ->get(['slug', 'type'])
-                    ->toArray();
-
-                @file_put_contents($cacheFile, json_encode($activeExtensions));
-            } catch (\Throwable $e) {
-                return;
-            }
-        }
+        $activeExtensions = $this->getActiveExtensions();
 
         if (empty($activeExtensions)) {
             return;
@@ -71,5 +106,35 @@ class ExtensionAutoloadServiceProvider extends ServiceProvider
         }
 
         $loader->register();
+    }
+
+    /**
+     * Register service providers for active plugins dynamically.
+     */
+    protected function registerActiveExtensionProviders(): void
+    {
+        $activeExtensions = $this->getActiveExtensions();
+
+        if (empty($activeExtensions)) {
+            return;
+        }
+
+        foreach ($activeExtensions as $ext) {
+            // Static local modules are already registered in bootstrap/providers.php.
+            // Dynamic plugins under Plugins/ need dynamic ServiceProvider booting.
+            if (($ext['type'] ?? '') !== 'plugin') {
+                continue;
+            }
+
+            $slug = $ext['slug'];
+            $studlyName = str_replace(' ', '', ucwords(str_replace('-', ' ', $slug)));
+
+            // Expected ServiceProvider pattern: Extensions\TelegramAlerts\TelegramAlertsServiceProvider
+            $providerClass = "Extensions\\{$studlyName}\\{$studlyName}ServiceProvider";
+
+            if (class_exists($providerClass)) {
+                $this->app->register($providerClass);
+            }
+        }
     }
 }

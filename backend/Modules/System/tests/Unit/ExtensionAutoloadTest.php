@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\System\Tests\Unit;
 
 use Extensions\TestPlugin\DummyClass;
+use Extensions\TestPlugin\TestPluginServiceProvider;
 use Illuminate\Support\Facades\File;
 use Modules\System\Models\Extension;
 use Modules\System\Providers\ExtensionAutoloadServiceProvider;
@@ -96,7 +97,7 @@ PHP;
 
         // 2. Trigger cache generation by executing autoload active extensions
         $provider = new ExtensionAutoloadServiceProvider(app());
-        
+
         // Setup database record
         $ext = Extension::create([
             'slug' => 'test-plugin',
@@ -117,12 +118,67 @@ PHP;
 
         $cached = json_decode(file_get_contents($cacheFile), true);
         $this->assertIsArray($cached);
-        
+
         $slugs = array_column($cached, 'slug');
         $this->assertContains('test-plugin', $slugs);
 
         // 4. Update status to inactive and verify file cache is deleted
         $ext->update(['status' => 'inactive']);
         $this->assertFileDoesNotExist($cacheFile);
+    }
+
+    /**
+     * Test dynamic service provider loading and lifecycle registration.
+     */
+    public function test_can_dynamically_register_service_providers_for_active_plugins(): void
+    {
+        // 1. Create a dummy ServiceProvider PHP class in the test-plugin folder
+        $srcPath = $this->tempPluginPath.'/src';
+        File::makeDirectory($srcPath, 0755, true, true);
+
+        $providerContent = <<<'PHP'
+<?php
+
+namespace Extensions\TestPlugin;
+
+use Illuminate\Support\ServiceProvider;
+
+class TestPluginServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->app->singleton('test-plugin-service', function () {
+            return 'fully-integrated';
+        });
+    }
+}
+PHP;
+
+        File::put($srcPath.'/TestPluginServiceProvider.php', $providerContent);
+
+        // 2. Create the active extension record in database
+        Extension::create([
+            'slug' => 'test-plugin',
+            'type' => 'plugin',
+            'name' => 'Test Plugin Autoload',
+            'version' => '1.0.0',
+            'database_version' => '1.0.0',
+            'status' => 'active',
+            'is_core' => false,
+            'author' => 'Test Author',
+            'license' => 'MIT',
+        ]);
+
+        // Clear cached static extension data to force reload
+        @unlink(storage_path('framework/cache/active_extensions.json'));
+
+        // 3. Run the autoloader provider
+        $provider = new ExtensionAutoloadServiceProvider(app());
+        $provider->register();
+
+        // 4. Verify class is registered in autoloader and container binding is active!
+        $this->assertTrue(class_exists(TestPluginServiceProvider::class));
+        $this->assertTrue(app()->bound('test-plugin-service'));
+        $this->assertEquals('fully-integrated', app('test-plugin-service'));
     }
 }

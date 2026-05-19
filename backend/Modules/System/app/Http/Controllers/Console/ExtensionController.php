@@ -44,6 +44,9 @@ class ExtensionController extends BaseApiController
         $versionBefore = $extension->version;
 
         try {
+            // 0. Verify cross-dependencies before activation
+            $this->verifyDependencies($extension);
+
             // 1. Run dynamic migrations if any exist in the package folder
             $migrationPath = $extension->type === 'module'
                 ? base_path('Modules/'.str_replace(' ', '', ucwords(str_replace('-', ' ', $extension->slug))).'/database/migrations')
@@ -158,7 +161,7 @@ class ExtensionController extends BaseApiController
     /**
      * Uninstall and physically delete an extension.
      */
-    public function uninstall(string $slug): JsonResponse
+    public function uninstall(string $slug, Request $request): JsonResponse
     {
         $extension = Extension::where('slug', $slug)->firstOrFail();
 
@@ -173,6 +176,21 @@ class ExtensionController extends BaseApiController
         try {
             // 1. Trigger onUninstall lifecycle event/hook
             \Hook::action('extension_uninstalled', $extension);
+
+            // 1b. Run dynamic database rollback migrations (if not keeping data)
+            $keepData = $request->boolean('keep_data');
+            if (! $keepData) {
+                $migrationPath = $extension->type === 'module'
+                    ? base_path('Modules/'.str_replace(' ', '', ucwords(str_replace('-', ' ', $extension->slug))).'/database/migrations')
+                    : base_path('Plugins/'.$extension->slug.'/database/migrations');
+
+                if (is_dir($migrationPath)) {
+                    Artisan::call('migrate:rollback', [
+                        '--path' => str_replace(base_path().'/', '', $migrationPath),
+                        '--force' => true,
+                    ]);
+                }
+            }
 
             // 2. Delete physical folder files
             $folderPath = $extension->type === 'module'
@@ -226,7 +244,7 @@ class ExtensionController extends BaseApiController
 
         try {
             // 1. Run our Static Security AST Scanner
-            (new ExtensionSecurityScanner())->scanZip($tempPath);
+            (new ExtensionSecurityScanner)->scanZip($tempPath);
 
             // 2. Extract temporarily to inspect manifest.json
             $zip = new ZipArchive;
@@ -315,8 +333,6 @@ class ExtensionController extends BaseApiController
             return $this->error('Failed to upload/install package: '.$e->getMessage());
         }
     }
-
-
 
     /**
      * Automatically discover and synchronize newly added folders in Modules/ and Plugins/
@@ -447,19 +463,19 @@ class ExtensionController extends BaseApiController
         $repoUrl = $request->input('repo_url');
 
         // Simple validation of git URL
-        if (!preg_match('/^(https?:\/\/|git@|ssh:\/\/)/', $repoUrl)) {
+        if (! preg_match('/^(https?:\/\/|git@|ssh:\/\/)/', $repoUrl)) {
             return $this->error('Security gate: Invalid Git repository URL format.');
         }
 
         // Create a temporary directory inside storage/framework
-        $tempDirName = 'git-clone-' . uniqid();
-        $tempPath = base_path('storage/framework/' . $tempDirName);
+        $tempDirName = 'git-clone-'.uniqid();
+        $tempPath = base_path('storage/framework/'.$tempDirName);
 
         try {
             // 1. Run git clone into temporary path
             $escapedRepo = escapeshellarg($repoUrl);
             $escapedPath = escapeshellarg($tempPath);
-            
+
             $output = [];
             $resultCode = 0;
             exec("git clone --depth 1 {$escapedRepo} {$escapedPath} 2>&1", $output, $resultCode);
@@ -469,40 +485,45 @@ class ExtensionController extends BaseApiController
                     File::deleteDirectory($tempPath);
                 }
                 $errorStr = implode("\n", $output);
-                return $this->error('Failed to clone Git repository: ' . $errorStr);
+
+                return $this->error('Failed to clone Git repository: '.$errorStr);
             }
 
             // 2. Perform Static Security Scan on cloned PHP files using AST parser
-            (new ExtensionSecurityScanner())->scanDirectory($tempPath);
+            (new ExtensionSecurityScanner)->scanDirectory($tempPath);
 
             // 3. Verify manifest.json exists
-            $manifestFile = $tempPath . '/manifest.json';
-            if (!File::exists($manifestFile)) {
+            $manifestFile = $tempPath.'/manifest.json';
+            if (! File::exists($manifestFile)) {
                 File::deleteDirectory($tempPath);
+
                 return $this->error('Security gate: Cloned repository is missing manifest.json.');
             }
 
             $manifest = json_decode(File::get($manifestFile), true);
-            if (json_last_error() !== JSON_ERROR_NONE || !isset($manifest['slug'], $manifest['type'], $manifest['name'], $manifest['version'])) {
+            if (json_last_error() !== JSON_ERROR_NONE || ! isset($manifest['slug'], $manifest['type'], $manifest['name'], $manifest['version'])) {
                 File::deleteDirectory($tempPath);
+
                 return $this->error('Security gate: Invalid manifest.json schema in Git repository.');
             }
 
             $slug = $manifest['slug'];
             $type = $manifest['type'];
 
-            if (!in_array($type, ['module', 'plugin'])) {
+            if (! in_array($type, ['module', 'plugin'])) {
                 File::deleteDirectory($tempPath);
+
                 return $this->error('Security gate: Invalid extension type in manifest.');
             }
 
             // 4. Move cloned directory to its final location
             $targetDir = $type === 'module'
-                ? base_path('Modules/' . str_replace(' ', '', ucwords(str_replace('-', ' ', $slug))))
-                : base_path('Plugins/' . $slug);
+                ? base_path('Modules/'.str_replace(' ', '', ucwords(str_replace('-', ' ', $slug))))
+                : base_path('Plugins/'.$slug);
 
             if (is_dir($targetDir)) {
                 File::deleteDirectory($tempPath);
+
                 return $this->error('An extension with this slug already exists.');
             }
 
@@ -527,7 +548,7 @@ class ExtensionController extends BaseApiController
             );
 
             // Dynamically register sub-features from manifest if present
-            if (!empty($manifest['features']) && is_array($manifest['features'])) {
+            if (! empty($manifest['features']) && is_array($manifest['features'])) {
                 foreach ($manifest['features'] as $feat) {
                     if (isset($feat['slug'], $feat['name'])) {
                         Feature::updateOrCreate(
@@ -559,9 +580,100 @@ class ExtensionController extends BaseApiController
             if (is_dir($tempPath)) {
                 File::deleteDirectory($tempPath);
             }
-            return $this->error('Failed to clone and install: ' . $e->getMessage());
+
+            return $this->error('Failed to clone and install: '.$e->getMessage());
         }
     }
 
+    /**
+     * Get dynamic sidebar navigation items registered by active extensions/plugins via Hook filter.
+     */
+    public function navigation(): JsonResponse
+    {
+        $items = [];
+        $items = \Modules\System\Facades\Hook::filter('sidebar_navigation', $items);
 
+        return $this->success($items, 'Dynamic navigation retrieved successfully');
+    }
+
+    /**
+     * Verify all cross-dependencies for the given extension before activation.
+     *
+     * @throws Exception
+     */
+    protected function verifyDependencies(Extension $extension): void
+    {
+        $requirements = $extension->requirements;
+        if (empty($requirements) || ! is_array($requirements)) {
+            return;
+        }
+
+        foreach ($requirements as $reqSlug => $constraint) {
+            $reqSlugStr = (string) $reqSlug;
+            $constraintStr = (string) $constraint;
+            $requiredExt = Extension::where('slug', $reqSlugStr)->first();
+
+            if (! $requiredExt) {
+                throw new Exception("Dependensi tidak terpenuhi: Ekstensi '{$reqSlugStr}' tidak terpasang di sistem.");
+            }
+
+            if ($requiredExt->status !== 'active') {
+                throw new Exception("Dependensi tidak terpenuhi: Ekstensi '{$reqSlugStr}' ('{$requiredExt->name}') terpasang tetapi belum diaktifkan.");
+            }
+
+            $currentVersion = $requiredExt->version;
+            if (! $this->checkVersionConstraint($currentVersion, $constraintStr)) {
+                throw new Exception("Konflik versi dependensi: Ekstensi '{$reqSlugStr}' membutuhkan versi '{$constraintStr}', tetapi versi yang aktif saat ini adalah '{$currentVersion}'.");
+            }
+        }
+    }
+
+    /**
+     * Helper to verify a version matches standard semver constraints.
+     */
+    protected function checkVersionConstraint(string $version, string $constraint): bool
+    {
+        $constraint = trim($constraint);
+        if (empty($constraint) || $constraint === '*') {
+            return true;
+        }
+
+        // Handle basic operators: >=, <=, >, <, =
+        if (preg_match('/^([>=<]+)?\s*([0-9a-zA-Z\.\-]+)$/', $constraint, $matches)) {
+            $operator = ! empty($matches[1]) ? $matches[1] : '=';
+            $reqVersion = $matches[2];
+
+            return version_compare($version, $reqVersion, $operator);
+        }
+
+        // Handle caret operator: ^1.2.3 -> >=1.2.3 and <2.0.0
+        if (str_starts_with($constraint, '^')) {
+            $reqVersion = substr($constraint, 1);
+            if (version_compare($version, $reqVersion, '<')) {
+                return false;
+            }
+            $parts = explode('.', $reqVersion);
+            $nextMajor = ((int) $parts[0]) + 1;
+
+            return version_compare($version, (string) $nextMajor, '<');
+        }
+
+        // Handle tilde operator: ~1.2.3 -> >=1.2.3 and <1.3.0
+        if (str_starts_with($constraint, '~')) {
+            $reqVersion = substr($constraint, 1);
+            if (version_compare($version, $reqVersion, '<')) {
+                return false;
+            }
+            $parts = explode('.', $reqVersion);
+            if (count($parts) >= 2) {
+                $nextMinor = ((int) $parts[1]) + 1;
+
+                return version_compare($version, $parts[0].'.'.$nextMinor.'.0', '<');
+            }
+
+            return true;
+        }
+
+        return version_compare($version, $constraint, '>=');
+    }
 }

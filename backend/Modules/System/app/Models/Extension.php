@@ -6,6 +6,7 @@ namespace Modules\System\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -42,7 +43,7 @@ class Extension extends Model
     /**
      * Get the features associated with this extension.
      */
-    public function features(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function features(): HasMany
     {
         return $this->hasMany(Feature::class, 'extension_slug', 'slug');
     }

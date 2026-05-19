@@ -9,7 +9,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Modules\System\Models\Extension;
 use Modules\System\Models\User;
-use Modules\System\Services\ExtensionSecurityScanner;
 use Tests\TestCase;
 use ZipArchive;
 

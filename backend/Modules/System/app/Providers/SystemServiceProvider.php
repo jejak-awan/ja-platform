@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Modules\System\Console\Commands\CleanupOldLogs;
+use Modules\System\Console\Commands\SystemAudit;
 use Modules\System\Contracts\LayoutRegistryInterface;
 use Modules\System\Facades\Hook;
 use Modules\System\Http\Controllers\Console\DashboardController;
@@ -100,6 +101,7 @@ class SystemServiceProvider extends ServiceProvider
     {
         $this->commands([
             CleanupOldLogs::class,
+            SystemAudit::class,
         ]);
     }
 
