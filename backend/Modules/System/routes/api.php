@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Modules\System\Http\Controllers\Api\DynamicApiController;
 use Modules\System\Http\Controllers\Console\ActivityLogController;
 use Modules\System\Http\Controllers\Console\AuthController;
 use Modules\System\Http\Controllers\Console\CaptchaController;
@@ -172,5 +173,23 @@ Route::prefix('v1')->group(function (): void {
         Route::post('{slug}/deactivate', [ExtensionController::class, 'deactivate']);
         Route::put('{slug}/settings', [ExtensionController::class, 'updateSettings']);
         Route::delete('{slug}/uninstall', [ExtensionController::class, 'uninstall']);
+    });
+
+    // CCK Dynamic Content Type Schema Builder
+    Route::prefix('manage/infra/cck/types')->middleware(['auth:sanctum'])->group(function (): void {
+        Route::get('', [DynamicApiController::class, 'listTypes']);
+        Route::post('', [DynamicApiController::class, 'storeType']);
+        Route::get('{id}', [DynamicApiController::class, 'showType']);
+        Route::put('{id}', [DynamicApiController::class, 'updateType']);
+        Route::delete('{id}', [DynamicApiController::class, 'destroyType']);
+    });
+
+    // Instant API Generation EAV Endpoints
+    Route::prefix('dynamic/{slug}')->group(function (): void {
+        Route::get('', [DynamicApiController::class, 'index']);
+        Route::post('', [DynamicApiController::class, 'store']);
+        Route::get('{id}', [DynamicApiController::class, 'show']);
+        Route::put('{id}', [DynamicApiController::class, 'update']);
+        Route::delete('{id}', [DynamicApiController::class, 'destroy']);
     });
 });
