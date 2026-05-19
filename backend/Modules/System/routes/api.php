@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use Modules\System\Http\Controllers\Api\DynamicApiController;
+use Modules\System\Http\Controllers\Api\ScaffolderApiController;
 use Modules\System\Http\Controllers\Console\ActivityLogController;
 use Modules\System\Http\Controllers\Console\AuthController;
 use Modules\System\Http\Controllers\Console\CaptchaController;
@@ -175,13 +176,14 @@ Route::prefix('v1')->group(function (): void {
         Route::delete('{slug}/uninstall', [ExtensionController::class, 'uninstall']);
     });
 
-    // CCK Dynamic Content Type Schema Builder
-    Route::prefix('manage/infra/cck/types')->middleware(['auth:sanctum'])->group(function (): void {
-        Route::get('', [DynamicApiController::class, 'listTypes']);
-        Route::post('', [DynamicApiController::class, 'storeType']);
-        Route::get('{id}', [DynamicApiController::class, 'showType']);
-        Route::put('{id}', [DynamicApiController::class, 'updateType']);
-        Route::delete('{id}', [DynamicApiController::class, 'destroyType']);
+    // CCK Dynamic Content Type Schema Builder & Scaffolder
+    Route::prefix('manage/infra/cck')->middleware(['auth:sanctum'])->group(function (): void {
+        Route::get('types', [DynamicApiController::class, 'listTypes']);
+        Route::post('types', [DynamicApiController::class, 'storeType']);
+        Route::get('types/{id}', [DynamicApiController::class, 'showType']);
+        Route::put('types/{id}', [DynamicApiController::class, 'updateType']);
+        Route::delete('types/{id}', [DynamicApiController::class, 'destroyType']);
+        Route::post('scaffold', [ScaffolderApiController::class, 'scaffold']);
     });
 
     // Instant API Generation EAV Endpoints
