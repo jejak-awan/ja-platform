@@ -64,4 +64,3 @@ backend/public/stats.html
 backend/bootstrap/cache/*.php
 
 # Private documentation
-docs/
